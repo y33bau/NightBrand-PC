@@ -739,6 +739,7 @@ ${AS}.nbh-touch .active-slot:nth-child(2){left:${SC}90px);bottom:${SC}132px)}
 ${AS}.nbh-touch .active-slot:nth-child(3){right:${SC}84px);bottom:calc(var(--btns-top,170px) + 26px)}
 ${AS}.nbh-touch .active-slot:nth-child(4){right:${SC}18px);bottom:calc(var(--btns-top,170px) + 26px)}
 ${AS}.nbh-touch .active-slot:nth-child(5){right:${SC}150px);bottom:calc(var(--btns-top,170px) + 26px)}
+${AS}.nbh-touch .active-slot:nth-child(6){left:${SC}156px);bottom:${SC}132px)}
 ${NB}.touch .nbh-vitals{left:8px;top:8px;width:205px;padding:3px 5px 5px}
 ${NB}.touch .nbh-id{height:24px}
 ${NB}.touch .nbh-lv{width:24px;height:26px;font-size:18px}
@@ -1678,12 +1679,14 @@ ${J} .premium-map .m2-ch:not(:disabled):is(:hover,:focus-visible,.pf) .pc-chapte
  const GM=[[[159,63,441,122],[224,238,319,120],[208,409,342,119],[201,575,360,109],[154,733,450,128],[249,901,263,139]],[[875,62,397,113],[892,240,367,125],[922,403,304,118],[865,574,418,117],[937,736,274,114],[884,899,377,144]]][EN?1:0];
  const GH=[[[51,61,564,86],[94,218,488,93],[241,368,199,85],[142,518,396,90],[140,664,401,92],[224,811,234,91],[184,951,316,97],[223,1102,235,90]],[[726,59,461,92],[723,217,467,86],[844,368,196,86],[736,518,436,90],[824,664,252,92],[849,809,198,93],[851,951,190,95],[831,1102,231,89]]][EN?1:0];
  const GP=[[[316,170,278,186],[48,558,801,170]],[[1181,170,284,186],[1024,558,652,149]]][EN?1:0];
+ GF.flow='assets/6b815f425dabd30ab5e49be218020322005e78942fd7257f551ddb3c8209d62b.png';
+ const GN=[[[92,161,727,183],[188,538,519,204]],[[991,163,678,174],[1009,548,656,191]]][EN?1:0];
  function glyph(el,atlas,index,text,kind){
   if(!el)return;
-  const box=(atlas==='menu'?GM:atlas==='play'?GP:GH)[index],key=atlas+':'+index;
+  const box=(atlas==='menu'?GM:atlas==='play'?GP:atlas==='flow'?GN:GH)[index],key=atlas+':'+index;
   let im=el.querySelector(':scope>.pcg-glyph');
   if(!im){im=make('span','pcg-glyph');im.setAttribute('aria-hidden','true');el.append(im)}
-  if(im.dataset.key!==key){const [x,y,w,h]=box,W=atlas==='menu'?1448:atlas==='play'?1774:1254,H=atlas==='menu'?1086:atlas==='play'?887:1254;im.dataset.key=key;im.style.backgroundImage=`url('${atlas==='menu'?GF.menu:atlas==='play'?GF.play:GF.heads}')`;for(const [n,v] of Object.entries({r:w/h,bw:W/h,bh:H/h,bx:-x/h,by:-y/h}))im.style.setProperty('--pcg-'+n,String(v))}
+  if(im.dataset.key!==key){const [x,y,w,h]=box,W=atlas==='menu'?1448:['play','flow'].includes(atlas)?1774:1254,H=atlas==='menu'?1086:['play','flow'].includes(atlas)?887:1254;im.dataset.key=key;im.style.backgroundImage=`url('${atlas==='menu'?GF.menu:atlas==='play'?GF.play:atlas==='flow'?GF.flow:GF.heads}')`;for(const [n,v] of Object.entries({r:w/h,bw:W/h,bh:H/h,bx:-x/h,by:-y/h}))im.style.setProperty('--pcg-'+n,String(v))}
   if(!el.classList.contains('pcg-'+kind))el.classList.add('pcg-'+kind);
   const extra=kind==='menu'&&el.id==='kronBtn'?el.querySelector('.nbk-new')?.getAttribute('aria-label'):kind==='mode'?el.querySelector('.pc-mode-note')?.textContent:'';
   const label=text+(extra?' · '+extra:'');if(el.getAttribute('aria-label')!==label)el.setAttribute('aria-label',label);
@@ -1704,6 +1707,9 @@ ${J} .premium-map .m2-ch:not(:disabled):is(:hover,:focus-visible,.pf) .pc-chapte
    [journeyTitle,'play',1,T('Wybór rozdziału','Act selection')]
   ])glyph(el,a,n,text,'heading');
   glyph($('sFab'),'heads',6,T('Fabularny','Story'),'mode');glyph($('sArc'),'heads',7,'Arcade','mode');
+  glyph(home,'flow',0,T('Menu główne','Main menu'),'action');
+  glyph(modeInfo.querySelector('small'),'flow',1,T('Tryb gry','Game mode'),'action');
+  glyph(modeInfo.querySelector('strong'),'heads',STORYMODE?6:7,STORYMODE?T('Fabularny','Story'):'Arcade','action');
   for(const [el,n,text] of [[prepare,4,T('Przygotuj się','Prepare')],[$('prepGo'),5,T('Gotowy','Ready')]]){
    // Loading/error feedback remains live text, with the original handler and timing.
    if(el.textContent.trim()===text)glyph(el,'heads',n,text,'action');else{el.classList.remove('pcg-action');el.querySelector(':scope>.pcg-glyph')?.remove();el.setAttribute('aria-label',el.textContent.trim())}
@@ -1927,6 +1933,9 @@ ${CJ} .pc-route-edge{display:block!important;position:absolute!important;inset:0
 ${CJ} .pc-home-button{display:flex!important;align-items:center!important;justify-content:center!important;left:0!important;top:50%!important;transform:translateY(-50%)!important;width:${SU(230)}!important;height:${SU(70)}!important;padding:${SU(12)} ${SU(20)}!important;font:500 ${ST(23)}/1.2 'Grenze Gotisch',Georgia,serif!important;color:#ead9bc!important;background:linear-gradient(140deg,#19131ae8,#0d0b10bb)!important;border:0!important;border-image:none!important;outline:0!important;box-shadow:none!important}
 ${CJ} .pc-home-button:is(:hover,:focus-visible,.pf){filter:brightness(1.22)!important;outline:0!important}
 ${CJ} .pc-home-button:after{content:none!important;display:none!important}
+${CJ} .pc-home-button.pcg-action{font-size:0!important;color:transparent!important}
+${CJ} .pc-home-button.pcg-action .pcg-glyph{--pcg-h:${ST(27)}}
+${CJ} .pc-home-button.pcg-action:before{content:'←'!important;display:block!important;position:absolute!important;left:${SU(16)}!important;top:50%!important;transform:translateY(-50%)!important;font:400 ${ST(19)}/1 Georgia,serif!important;color:#cfb98e!important;background:none!important;width:auto!important;height:auto!important}
 ${CJ} .pc-profile{right:${SU(175)}!important}
 ${CJ} #optsBtn,${CJ} #optsBtn:is(:hover,:focus-visible,.pf,:active){display:grid!important;place-items:center!important;right:${SU(70)}!important;top:${SU(27)}!important;width:${SU(80)}!important;height:${SU(80)}!important;min-width:0!important;min-height:0!important;padding:${SU(12)}!important;margin:0!important;border:0!important;border-image:none!important;border-radius:0!important;background:none!important;background-image:none!important;box-shadow:none!important;outline:0!important;filter:none!important}
 ${CJ} #optsBtn:before,${CJ} #optsBtn:after{content:none!important;display:none!important;background:none!important}
@@ -1937,12 +1946,20 @@ ${CJ} .pc-shortcuts-space{display:block!important;grid-column:1!important;height
 ${CJ} .pc-journey-mode{position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:${SU(4)}!important;grid-column:2!important;min-width:0!important;width:100%!important;height:${SU(70)}!important;padding:${SU(10)} ${SU(20)}!important;text-align:center!important;background:linear-gradient(140deg,#19131ae8,#0d0b10bb)!important;border:0!important;box-shadow:none!important}
 ${CJ} .pc-journey-mode small{font:400 ${ST(13)}/1.2 Georgia,serif!important;text-align:center!important;color:#bda780!important}
 ${CJ} .pc-journey-mode strong{font:500 ${ST(28)}/1.15 'Grenze Gotisch',Georgia,serif!important;text-align:center!important;color:#ead9bc!important}
+${CJ} .pc-journey-mode{padding:${SU(5)} ${SU(20)}!important}
+${CJ} .pc-journey-mode :is(small,strong).pcg-action{display:flex!important;align-items:center!important;justify-content:center!important;font-size:0!important;color:transparent!important;padding:0!important;background:none!important;border:0!important;min-height:0!important}
+${CJ} .pc-journey-mode small .pcg-glyph{--pcg-h:${ST(14)}}
+${CJ} .pc-journey-mode strong .pcg-glyph{--pcg-h:${ST(28)};filter:brightness(1.65) saturate(.5)!important}
 ${CJ} #premiumPrepare{grid-column:3!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:${SU(70)}!important;min-height:0!important;position:relative!important;margin:0!important;padding:${SU(12)} ${SU(20)}!important;border:0!important;border-image:none!important;background:linear-gradient(140deg,#19131ae8,#0d0b10bb)!important;outline:0!important;box-shadow:none!important}
 ${CJ} #premiumPrepare .pcg-glyph{--pcg-h:${ST(33)}}
 ${CJ} :is(#kapBtn,#kronBtn){display:flex!important;align-items:center!important;justify-content:center!important;position:absolute!important;top:auto!important;bottom:calc(37.5 * var(--pc-u) - .5px)!important;height:${SU(70)}!important;width:calc((100% - 196 * var(--pc-u)) / 6 - 9 * var(--pc-u))!important;min-width:0!important;min-height:0!important;left:${SU(70)}!important;padding:${SU(12)} ${SU(20)}!important;background:linear-gradient(140deg,#19131ae8,#0d0b10bb)!important;border:0!important;border-image:none!important;box-shadow:none!important;outline:0!important;text-align:center!important}
 ${CJ} #kronBtn{left:calc(70 * var(--pc-u) + (100% - 196 * var(--pc-u)) / 6 + 9 * var(--pc-u))!important}
 ${CJ} :is(#kapBtn,#kronBtn) .pcg-glyph{--pcg-h:${ST(33)}}
 ${CJ} :is(#kapBtn,#kronBtn,#premiumPrepare):is(:hover,:focus-visible,.pf){filter:brightness(1.22)!important;outline:0!important;background:linear-gradient(140deg,#19131ae8,#0d0b10bb)!important}
+${CJ} #premiumPrepare{background:radial-gradient(ellipse at 50% 0,#82364544,transparent 80%),linear-gradient(140deg,#51232ee8,#281219ed)!important;box-shadow:inset 0 0 0 1px #a0566355,0 0 ${SU(18)} #63243122!important}
+${CJ} #premiumPrepare>.pc-route-edge{filter:sepia(1) saturate(2.4) hue-rotate(308deg) brightness(1.4)!important}
+${CJ} #premiumPrepare .pcg-glyph{filter:brightness(2.15) saturate(.4) drop-shadow(0 1px 1px #000)!important;opacity:1!important}
+${CJ} #premiumPrepare:is(:hover,:focus-visible,.pf){background:linear-gradient(140deg,#6a2b3a,#35151f)!important;filter:none!important;box-shadow:inset 0 0 0 1px #ce7a8788,0 0 ${SU(20)} #8d314133!important}
 ${CJ} :is(#kapBtn,#kronBtn,#premiumPrepare):after{content:none!important;display:none!important}
 ${CJ} .premium-map .m2-ch{border:0!important;border-image:none!important;outline:0!important;box-shadow:none!important}
 ${CJ} .premium-map .m2-ch:is(:hover,:focus-visible,.pf){outline:0!important;box-shadow:none!important}
@@ -1972,6 +1989,8 @@ ${CJ} .premium-map .pc-chapter-label:before,${CJ} .premium-map .pc-chapter-label
  `<div class="pch-wallet"><span class="pch-cell pch-coins" title="${T('Monety','Coins')}"><img alt="" src="${PREMIUM_ICONS['kaplica-purse']}"><b></b></span><span class="pch-cell pch-ashes" title="${T('Popioły','Ashes')}"><img alt="" src="assets/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp"><b></b></span></div>`+
  `<div class="pch-dock"><i class="pch-rail"></i><div class="pch-level"><small>${T('POZIOM NOCY','NIGHT LEVEL')}</small><strong></strong></div><div class="pch-enchants"></div><div class="pch-actions"><span class="pch-cell pch-attack"><i></i><kbd></kbd></span><span class="pch-cell pch-block"><i></i><kbd></kbd></span></div><div class="pch-stamina" role="meter" aria-label="Stamina" aria-valuemin="0"><i></i><small></small></div><div class="pch-experience" role="meter" aria-label="${T('Doświadczenie','Experience')}" aria-valuemin="0"><i></i></div></div><div class="pch-effects"></div><div class="pch-challenge"></div>`);
  old.append(root);const q=s=>root.querySelector(s),health=q('.pch-health'),mana=q('.pch-mana'),stamina=q('.pch-stamina'),xp=q('.pch-experience');
+ // Zloty luk staminy biegnie po wewnetrznej stronie kuli many; EXP zostaje na listwie.
+ stamina.innerHTML='<svg viewBox="0 0 156 156" aria-hidden="true"><defs><linearGradient id="pch-st-gold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f4d77a"/><stop offset=".5" stop-color="#cfac48"/><stop offset="1" stop-color="#9e7730"/></linearGradient></defs><path class="pch-st-track" d="M80.3 20 A59.7 59.7 0 0 0 80.3 139.4"/><path class="pch-st-fill" pathLength="100" d="M80.3 20 A59.7 59.7 0 0 0 80.3 139.4"/></svg><small></small>';mana.append(stamina);
  const text=(e,v)=>{v=String(v);if(e.textContent!==v)e.textContent=v};
  const meter=(e,v,m)=>{v=Math.max(0,Math.min(m,v));const n=String(Math.ceil(v)),mx=String(m),fill=(100*v/(m||1)).toFixed(2)+'%';if(e.getAttribute('aria-valuenow')!==n)e.setAttribute('aria-valuenow',n);if(e.getAttribute('aria-valuemax')!==mx)e.setAttribute('aria-valuemax',mx);if(e.style.getPropertyValue('--fill')!==fill)e.style.setProperty('--fill',fill);return n+' / '+Math.round(m)};
  const gain=old.querySelector('.nbh-gain'),night=old.querySelector('.nbh-night'),wallet=q('.pch-wallet');
@@ -1979,7 +1998,7 @@ ${CJ} .premium-map .pc-chapter-label:before,${CJ} .premium-map .pc-chapter-label
  hud=function(){oldHud();const on=enabled&&!coarse&&!$('hud').classList.contains('mp2')&&innerWidth>=innerHeight*1.3;scr.classList.toggle('pc-hud',on);if(gain&&gain.parentElement!==(on?wallet:night))(on?wallet:night).append(gain);const show=on&&!active.hidden;root.hidden=!show;scr.classList.toggle('pc-hud-visible',show);if(!show)return;
   const sk=innerWidth+'x'+innerHeight;if(sk!==scaleKey){scaleKey=sk;const r=scr.getBoundingClientRect();scr.style.setProperty('--hu',Math.min(r.width/1040,r.height/577)+'px')}
   text(health.querySelector('strong'),meter(health,pl.hp,pl.max||1));text(mana.querySelector('strong'),meter(mana,pl.mana||0,pl.manaMax||SL.mana.max));
-  const st=meter(stamina,pl.sta||0,pl.staMax||1);stamina.title='Stamina · '+st;text(stamina.querySelector('small'),'STA · '+st);
+  const st=meter(stamina,pl.sta||0,pl.staMax||1);stamina.title='Stamina · '+st;text(stamina.querySelector('small'),'STA · '+st);const dash=parseFloat(stamina.style.getPropertyValue('--fill'))+' 100';if(stamina._dash!==dash){stamina._dash=dash;stamina.querySelector('.pch-st-fill').style.strokeDasharray=dash}
   meter(xp,S.xp,S.need||1);xp.title=T('Doświadczenie','Experience')+' · '+S.xp+' / '+S.need;
   for(const [e,id] of [[health,'hpbar'],[stamina,'stam'],[mana,'mana']]){e.classList.toggle('pch-flash',!!SETT.flash&&$(id).classList.contains('flash'));e.classList.toggle('pch-low',!!SETT.flash&&parseFloat(e.style.getPropertyValue('--fill'))<=25)}
   text(q('.pch-level strong'),S.lvl);text(q('.pch-coins b'),S.coins);text(q('.pch-ashes b'),EMB.e);
@@ -2029,15 +2048,17 @@ ${H} .pch-level{position:absolute;left:50%;bottom:${u(30)};width:${u(55)};height
 ${H} .pch-level strong{font:500 ${u(24)}/1 Grenze,Georgia,serif;color:#efe7d8}
 ${H} .pch-level small{position:absolute;bottom:${u(52)};left:50%;transform:translateX(-50%);font:${u(8)}/1 Grenze,Georgia,serif;color:#c5bda4;white-space:nowrap;letter-spacing:${u(.5)}}
 ${H} .pch-enchants,${H} .pch-actions{position:absolute;bottom:${u(24)};display:flex;gap:${u(3)}}
-${H} .pch-enchants{left:${u(263)}}${H} .pch-actions{right:${u(4)}}
+${H} .pch-enchants{left:${u(257)}}${H} .pch-actions{right:${u(1)}}
 ${H} .pch-actions kbd{position:absolute;bottom:${u(-3)};font:${u(8)}/1 Grenze,Georgia,serif;color:#c8bda7;padding:0 ${u(2)};background:#0a0c0ddd;border:0}
 ${H} .pch-actions i{width:65%;height:65%;opacity:.72;background:center/contain no-repeat}
 ${H} .pch-attack i{background-image:url('${PREMIUM_ICONS['skille-ostrze']}')}${H} .pch-block i{background-image:url('${PREMIUM_ICONS['skille-garda']}')}
-${H} .pch-stamina,${H} .pch-experience{position:absolute;left:${u(5)};right:${u(5)};height:${u(4)};bottom:${u(4)};border:1px solid #8b754b;box-shadow:0 1px 2px #000,inset 0 0 0 1px #080a0c;background:#0b0e10;pointer-events:auto}
-${H} .pch-stamina{height:${u(3)};bottom:${u(12)};border-color:#3f493f}
-${H} .pch-stamina i,${H} .pch-experience i{display:block;height:100%;width:var(--fill,0%);background:linear-gradient(#e6c987,#9b7940);transition:width .1s linear}
-${H} .pch-stamina i{background:linear-gradient(#b1b690,#566c4e)}
-${H} .pch-stamina small{position:absolute;right:0;bottom:${u(4)};font:${u(7)}/1 Grenze,Georgia,serif;color:#bcc4aa;background:#080a0cc0;padding:0 ${u(2)}}
+${H} .pch-experience{position:absolute;left:${u(5)};right:${u(5)};height:${u(4)};bottom:${u(4)};border:1px solid #8b754b;box-shadow:0 1px 2px #000,inset 0 0 0 1px #080a0c;background:#0b0e10;pointer-events:auto}
+${H} .pch-experience i{display:block;height:100%;width:var(--fill,0%);background:linear-gradient(#e6c987,#9b7940);transition:width .1s linear}
+${H} .pch-stamina{position:absolute;inset:0;z-index:4;background:none;border:0;box-shadow:none;pointer-events:none}
+${H} .pch-stamina svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;fill:none;stroke-linecap:round}
+${H} .pch-st-track{stroke:#171a1dd9;stroke-width:5}
+${H} .pch-st-fill{stroke:url('#pch-st-gold');stroke-width:2.6;filter:drop-shadow(0 0 ${u(1)} #e0b74155)}
+${H} .pch-stamina small{position:absolute;left:51.5%;top:65%;transform:translateX(-50%);font:${u(8)}/1 Grenze,Georgia,serif;color:#dfc878;white-space:nowrap}
 ${AS}{left:calc(50% - ${u(185)})!important;right:auto!important;bottom:${u(24)}!important;top:auto!important;transform:none!important;zoom:1!important;transform-origin:50% 100%!important;padding:0!important;gap:${u(3)}!important;background:none!important;border:0!important;display:flex!important;align-items:center!important;z-index:6}
 ${AS}[hidden]{display:none!important}${AS}:after{content:none!important}
 ${AS} .active-slot{position:relative!important;flex:none!important;width:${u(36)}!important;height:${u(36)}!important;padding:${u(4)}!important;min-width:0!important;min-height:0!important;aspect-ratio:1!important;border:0!important;border-radius:0!important;border-image:none!important;box-shadow:none!important;background:url('${A.slot}') center/120% 120% no-repeat!important;overflow:visible!important;opacity:1!important}
@@ -2049,7 +2070,8 @@ ${AS} .active-slot small{left:auto!important;right:${u(3)}!important;bottom:auto
 ${AS} .active-slot .slot-cd{inset:${u(3)}!important;border-radius:0!important;font:500 ${u(16)}/1 Grenze,Georgia,serif!important;background:#070a11b8!important;box-shadow:inset 0 0 0 1px #a18b5e55!important}
 ${AS} .active-slot.no-mana .ic{filter:grayscale(.8) brightness(.55)}
 ${AS} .active-slot:is(:hover,:focus-visible){outline:1px solid #9d4c55!important;outline-offset:-2px!important;filter:brightness(1.2)}
-${AS}.pch-five .active-slot:last-child{position:absolute!important;right:calc(100% + ${u(3)})!important}
+${AS}.pch-five .active-slot:nth-child(5){position:absolute!important;right:calc(100% + ${u(3)})!important}
+${AS} .active-slot:nth-child(6){position:absolute!important;left:${u(295)}!important;right:auto!important}
 ${H} .pch-effects{position:absolute;right:${u(15)};bottom:${u(143)};width:${u(124)};display:flex;flex-wrap:wrap-reverse;flex-direction:row-reverse;justify-content:flex-start;gap:${u(3)}}
 ${H} .pch-effects .pch-cell{width:${u(25)};height:${u(25)}}
 ${H} .pch-challenge{position:absolute;top:${u(25)};left:${u(20)};width:${u(235)};border-left:1px solid #8c7953;padding:${u(5)} ${u(9)};font:${u(12)}/1.25 Grenze,Georgia,serif;color:#d8c9ac;background:linear-gradient(90deg,#0a0c1099,transparent)}
