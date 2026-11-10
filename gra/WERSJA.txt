@@ -643,3 +643,4 @@ cache565 · PC: szlif menu, gotyckie naglowki na tkaninie, nagrody z ikonami wal
 cache566 · PC: nowa Podroz i karty rozdzialow, Popioly obok poziomu, tryby tylko w menu tytulowym, opcje pod kolem zebatym (bez fizycznego pada, odsluchu i pelnych nocy)
 cache567 · Graficzny standard PC: naglowki PL/EN, subtelne przyciski, ramki i separatory. Bez zmian mechanik. Nie sprawdzono fizycznego pada, dzwieku i pelnych nocy.
 cache568 · PC: symetryczne kafelki, wyrownane ramki przygotowania, wybor konturem, jasnosc w Grafice. Bez zmian mechanik. Nie sprawdzono fizycznego pada, odsluchu ani pelnych nocy.
+cache569 · PC: Graj > wybor rozdzialu > przygotowanie; wspolny powrot ESC/B, bordowy kontur map i wieksze ustawienia bez kwadratu. Nie sprawdzono fizycznego pada, odsluchu ani pelnych nocy.
