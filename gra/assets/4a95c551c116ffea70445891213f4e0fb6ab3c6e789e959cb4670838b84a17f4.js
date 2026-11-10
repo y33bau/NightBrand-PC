@@ -7686,6 +7686,110 @@ ${J} .premium-map .m2-ch:not(:disabled):is(:hover,:focus-visible,.pf) .pc-chapte
  // The original accessibility switch continues to scale text, without scaling artwork twice.
  s.textContent=s.textContent.replace(/(font(?:-size)?\s*:[^;{}]*?)calc\((\d+) \* var\(--pc-u\)\)/g,'$1calc($2 * var(--pc-u) * var(--nbts,1))');
  document.head.append(s);
+ // Approved graphical family. Original PNG atlases stay intact; CSS selects their alpha bounds.
+ if(new URLSearchParams(location.search).get('pcgfx')==='0')return;
+ root.classList.add('pc-gfx');
+ const GF={menu:'assets/312d55c97b1cf9d5b855da5b159a1c08ba4a94da86e03eefe20e382c6302cea2.png',heads:'assets/0feb5f7b6fa5faf685551209ad13e7e268c3a89afed074de179287851d767fff.png',panel:'assets/2e6c2d60621704b366ab4a96a93626d10a2e0b040841f03d4833a890d54f3203.png',idle:'assets/270f1ffe61905a5191c71634cd1a3b723502a1ace335d0607a6b07dc3f71a33a.png',selected:'assets/bb4b3cd2510833299ef03f2c59686902263bbe6a4fa9a9906b974d3c3a167fd8.png',divider:'assets/a1ab25049eefdca890c62690c24911780f5d4f5105719bca27640107f13fd44f.png'};
+ const GM=[[[159,63,441,122],[224,238,319,120],[208,409,342,119],[201,575,360,109],[154,733,450,128],[249,901,263,139]],[[875,62,397,113],[892,240,367,125],[922,403,304,118],[865,574,418,117],[937,736,274,114],[884,899,377,144]]][EN?1:0];
+ const GH=[[[51,61,564,86],[94,218,488,93],[241,368,199,85],[142,518,396,90],[140,664,401,92],[224,811,234,91],[184,951,316,97],[223,1102,235,90]],[[726,59,461,92],[723,217,467,86],[844,368,196,86],[736,518,436,90],[824,664,252,92],[849,809,198,93],[851,951,190,95],[831,1102,231,89]]][EN?1:0];
+ function glyph(el,atlas,index,text,kind){
+  if(!el)return;
+  const box=(atlas==='menu'?GM:GH)[index],key=atlas+':'+index;
+  let im=el.querySelector(':scope>.pcg-glyph');
+  if(!im){im=make('span','pcg-glyph');im.setAttribute('aria-hidden','true');el.append(im)}
+  if(im.dataset.key!==key){const [x,y,w,h]=box,W=atlas==='menu'?1448:1254,H=atlas==='menu'?1086:1254;im.dataset.key=key;im.style.backgroundImage=`url('${atlas==='menu'?GF.menu:GF.heads}')`;for(const [n,v] of Object.entries({r:w/h,bw:W/h,bh:H/h,bx:-x/h,by:-y/h}))im.style.setProperty('--pcg-'+n,String(v))}
+  if(!el.classList.contains('pcg-'+kind))el.classList.add('pcg-'+kind);
+  const extra=kind==='menu'&&el.id==='kronBtn'?el.querySelector('.nbk-new')?.getAttribute('aria-label'):kind==='mode'?el.querySelector('.pc-mode-note')?.textContent:'';
+  const label=text+(extra?' · '+extra:'');if(el.getAttribute('aria-label')!==label)el.setAttribute('aria-label',label);
+ }
+ const panelSelector='#title .premium-banner,#title .pc-profile,#prep .pc-detail-copy,#kap #kapDet,#opts .pc-option-section,#opts .nbo-card,#manual .premium-page-content,#pause #skillLoadout,#pause .slot-tab,#pause .nbp-audio,#lvl .level-panel,#shop .shopc,#end .nbs-grid,#conf';
+ let gfxScheduled=false;
+ function decorateGraphics(){
+  gfxScheduled=false;
+  const menu=[['.pc-continue',0,T('Kontynuuj','Continue')],['.premium-journey',1,T('Podróż','Journey')],['#kapBtn',2,T('Kaplica','Shrine')],['#kronBtn',3,T('Kronika','Chronicle')],['#manBtn',4,T('Instrukcja','Guide')],['#optsBtn',5,T('Opcje','Options')]];
+  for(const [sel,n,text] of menu)glyph(title.querySelector(sel),'menu',n,text,'menu');
+  for(const [el,a,n,text] of [
+   [prep.querySelector('.pc-prep-title'),'heads',0,T('Przygotowanie do nocy','Before Nightfall')],
+   [$('kapH'),KAPMODE==='kron'?'menu':'heads',KAPMODE==='kron'?3:1,KAPMODE==='kron'?T('Kronika','Chronicle'):T('Kaplica Popiołów','Shrine of Ashes')],
+   [$('manual').querySelector('.premium-page-heading'),'menu',4,T('Instrukcja','Guide')],
+   [$('opts').querySelector('.premium-page-heading'),'menu',5,T('Opcje','Options')],
+   [$('pause').querySelector('.premium-pause-title'),'heads',2,T('Pauza','Pause')],
+   [$('shop').querySelector('.lvlhead h2'),'heads',3,T('Kram Margi',"Marga’s Stall")],
+   [journeyTitle,'menu',1,T('Podróż','Journey')]
+  ])glyph(el,a,n,text,'heading');
+  glyph($('sFab'),'heads',6,T('Fabularny','Story'),'mode');glyph($('sArc'),'heads',7,'Arcade','mode');
+  for(const [el,n,text] of [[prepare,4,T('Przygotuj się','Prepare')],[$('prepGo'),5,T('Gotowy','Ready')]]){
+   // Loading/error feedback remains live text, with the original handler and timing.
+   if(el.textContent.trim()===text)glyph(el,'heads',n,text,'action');else{el.classList.remove('pcg-action');el.querySelector(':scope>.pcg-glyph')?.remove();el.setAttribute('aria-label',el.textContent.trim())}
+  }
+  for(const el of root.querySelectorAll(panelSelector)){
+   if(!el.classList.contains('pcg-panel'))el.classList.add('pcg-panel');if(!el.querySelector(':scope>.pcg-edge')){const edge=make('span','pcg-edge');edge.setAttribute('aria-hidden','true');el.append(edge)}
+  }
+ }
+ function scheduleGraphics(){if(gfxScheduled)return;gfxScheduled=true;requestAnimationFrame(decorateGraphics)}
+ for(const id of ['title','prep','kap','manual','opts','pause','lvl','shop','end','conf','lang'])new MutationObserver(scheduleGraphics).observe($(id),{childList:true,subtree:true,characterData:true});
+ decorateGraphics();
+ const gs=make('style','');gs.id='pc-graphic-standard';const G='#orient'.repeat(24)+'.pc-menu.pc-gfx',SG=G+' :is(#title,#prep,#kap,#manual,#opts,#pause,#lvl,#shop,#end,#conf,#lang)';
+ gs.textContent=`
+${G}{--pc-cloth:url('${GF.selected}');--pcg-idle:url('${GF.idle}');--pcg-selected:url('${GF.selected}');--pc-line:#a68b5e44;--pc-paper:#e6d6b8}
+${SG} .pcg-glyph{--pcg-h:calc(44 * var(--pc-u) * var(--nbts,1));display:inline-block!important;position:relative!important;width:calc(var(--pcg-h) * var(--pcg-r))!important;max-width:none!important;height:var(--pcg-h)!important;min-height:0!important;flex:none!important;background-repeat:no-repeat!important;background-size:calc(var(--pcg-h) * var(--pcg-bw)) calc(var(--pcg-h) * var(--pcg-bh))!important;background-position:calc(var(--pcg-h) * var(--pcg-bx)) calc(var(--pcg-h) * var(--pcg-by))!important;pointer-events:none!important;filter:brightness(1.18) saturate(.65)!important;vertical-align:middle!important;padding:0!important;margin:0!important;border:0!important;box-shadow:none!important}
+${G} #title .pcg-menu{font-size:0!important;color:transparent!important}
+${G} #title :is(#kapBtn,#manBtn).pcg-menu>:not(.pcg-glyph):not(.nbk-new){display:none!important}
+${G} #title .pcg-menu>.premium-nav-icon{display:none!important}
+${G} #title.pc-home .pcg-menu .pcg-glyph{--pcg-h:calc(40 * var(--pc-u) * var(--nbts,1))}
+${G} #title.pc-home .premium-nav>.pcg-menu{background:var(--pcg-idle) center/100% 180% no-repeat!important;padding:calc(8 * var(--pc-u)) calc(42 * var(--pc-u))!important;display:flex!important;align-items:center!important;justify-content:center!important}
+${G} #title.pc-home .premium-nav>.pcg-menu:is(:hover,:focus-visible,.pf){background:var(--pcg-selected) center/100% 180% no-repeat!important}
+${G} #title.pc-home .premium-nav>.pcg-menu:after{content:none!important;display:none!important}
+${G} #title:not(.pc-home) .pcg-menu .pcg-glyph{--pcg-h:calc(27 * var(--pc-u) * var(--nbts,1))}
+${G} #title:not(.pc-home) #optsBtn.pcg-menu>.pcg-glyph{display:none!important}
+${G} #title:not(.pc-home) #optsBtn.pcg-menu>.pc-journey-gear{display:block!important}
+${G} #title:not(.pc-home) :is(#kapBtn,#kronBtn){display:flex!important;align-items:center!important}
+${SG} .pcg-heading{display:flex!important;align-items:center!important;justify-content:center!important;gap:0!important;font-size:0!important;line-height:0!important;color:transparent!important;background:var(--pcg-idle) center/100% 180% no-repeat!important;border:0!important;border-image:none!important;box-shadow:none!important;min-height:0!important;height:auto!important;width:fit-content!important;max-width:88%!important;margin:0!important;padding:calc(16 * var(--pc-u)) calc(48 * var(--pc-u))!important;text-indent:0!important;text-shadow:none!important}
+${SG} .pcg-heading>:not(.pcg-glyph){display:none!important}
+${SG} .pcg-heading .pcg-glyph{--pcg-h:calc(46 * var(--pc-u) * var(--nbts,1))}
+${G} #prep .pcg-heading .pcg-glyph{--pcg-h:calc(43 * var(--pc-u) * var(--nbts,1))}
+${G} #title .pc-journey-head .pcg-heading .pcg-glyph{--pcg-h:calc(47 * var(--pc-u) * var(--nbts,1))}
+${G} #shop .pcg-heading .pcg-glyph{--pcg-h:calc(39 * var(--pc-u) * var(--nbts,1))}
+${SG} .pcg-action{font-size:0!important;line-height:0!important;color:transparent!important;background:var(--pcg-selected) center/100% 180% no-repeat!important;display:flex!important;align-items:center!important;justify-content:center!important}
+${SG} .pcg-action .pcg-glyph{--pcg-h:calc(29 * var(--pc-u) * var(--nbts,1))}
+${SG} .pcg-action:after{content:none!important;display:none!important}
+${G} #title .pcg-mode>.nb-mode__title{display:none!important}
+${G} #title .pcg-mode>.pcg-glyph{--pcg-h:calc(26 * var(--pc-u) * var(--nbts,1));order:-1!important}
+${G} #title .pcg-mode .pc-mode-note{font-family:Georgia,serif!important}
+${SG} .pcg-panel:not(.pc-profile):not(#conf){position:relative!important}
+${SG} .pcg-panel{border:0!important;border-image:none!important;border-radius:0!important}
+${SG} .pcg-edge{display:block!important;position:absolute!important;inset:0!important;width:auto!important;height:auto!important;max-width:none!important;min-height:0!important;pointer-events:none!important;box-sizing:border-box!important;border:calc(19 * var(--pc-u)) solid transparent!important;border-image:url('${GF.panel}') 128 /calc(19 * var(--pc-u)) stretch!important;background:none!important;box-shadow:none!important;opacity:.9!important;filter:brightness(1.3) saturate(.65)!important;z-index:2!important;margin:0!important;padding:0!important}
+${G} #title .pc-profile{background:#0e0c10a6!important}
+${G} #title .pc-profile .pcg-edge{border-width:calc(11 * var(--pc-u))!important;border-image-width:calc(11 * var(--pc-u))!important}
+${SG} :is(.tabs .tab,.nbp-tab,.stab,.pc-prep-tab){background:var(--pcg-idle) center/100% 180% no-repeat!important;border:0!important;border-image:none!important}
+${SG} :is(.tab.on,.nbp-tab[aria-pressed=true],.pc-prep-tab[aria-pressed=true],.stab.on){background:var(--pcg-selected) center/100% 180% no-repeat!important;color:#f0d9ac!important}
+${SG} button:is(:hover,:focus-visible,.pf):not(:disabled):after{background-image:var(--pcg-selected)!important;filter:brightness(.9) saturate(.75)!important}
+${G} #prep .pc-prep-tab{border-bottom:0!important}
+${G} #prep .pc-detail-copy{background:#100d12a6!important;padding:calc(27 * var(--pc-u)) calc(26 * var(--pc-u))!important}
+${G} #opts :is(.pc-option-section,.nbo-card){background:#100d12a6!important}
+${G} #pause #skillLoadout{background:linear-gradient(140deg,#121015a6,#0b0a0d66)!important}
+${G} #pause .slot-tab{background:#110e1466!important}
+${G} #pause .slot-tab.chosen{background:linear-gradient(135deg,#3f1a21a6,#160e1499)!important;box-shadow:none!important}
+${G} #pause .slot-tab:after{content:none!important;display:none!important}
+${G} #pause .slot-tab:is(.chosen,:focus-visible,.pf)>.pcg-edge{filter:brightness(1.8) saturate(.65)!important}
+${G} #lvl .level-panel{background:linear-gradient(120deg,#100e1288,#100e1244)!important}
+${G} #shop .shopc{padding:calc(22 * var(--pc-u))!important;background:#100d1266!important}
+${G} #end .nbs-grid{padding:calc(16 * var(--pc-u))!important;background:#100d1255!important}
+${SG} :is(table,.pcg-table){border-collapse:collapse!important;border:0!important;background:#0e0c1044!important}
+${SG} th{font-family:'Grenze Gotisch',Georgia,serif!important;font-weight:500!important;color:#d6bc8f!important;border-bottom:1px solid #a68b5e55!important}
+${SG} td{border-bottom:1px solid #a68b5e25!important;padding:.6em .8em!important}
+${SG} :is(.pc-heading-rule,.opsep){display:block!important;height:calc(10 * var(--pc-u))!important;min-height:0!important;border:0!important;background:url('${GF.divider}') center/115% 872% no-repeat!important;opacity:.85!important;box-shadow:none!important}
+${SG} .pc-heading-rule{width:calc(235 * var(--pc-u))!important;bottom:calc(-12 * var(--pc-u))!important}
+${SG} :is(.pc-heading-rule,.opsep):before,${SG} :is(.pc-heading-rule,.opsep):after{content:none!important;display:none!important}
+${SG} .pc-section-separator,${SG} .pc-option-section .opsep,${SG} .opsep[hidden]{display:none!important}
+${SG} .pcg-heading{min-width:calc(320 * var(--pc-u))!important;flex:0 0 auto!important}
+${SG} .pcg-glyph[data-key^="heads:"]{filter:brightness(1.5) saturate(.65)!important}
+${SG} :is(.tabs .tab,.nbp-tab,.stab,.pc-prep-tab){background-size:100% 170%!important;font-family:'Grenze Gotisch',Georgia,serif!important;font-weight:500!important;letter-spacing:.015em!important}
+${SG} button:is(:hover,:focus-visible,.pf):not(:disabled):after{background-size:100% 170%!important}
+${G} #lvl #lvlTitle,${G} #conf h1{font-family:'Grenze Gotisch',Georgia,serif!important;font-weight:500!important;color:#e6d2aa!important}
+`;
+ document.head.append(gs);
+
 })();
 
 requestAnimationFrame(frame);
