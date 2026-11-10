@@ -1,0 +1,8 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-11-10",
+  "transparent_background": true,
+  "prompt": "Use case: style-transfer. The supplied PNG is a STYLE REFERENCE ONLY: the approved NightBrand Gothic lettering, especially “Wybór rozdziału”. Generate a NEW production typography sprite atlas matching that same elegant pointed blackletter, warm aged bone ivory, fine etched ink texture, natural proportions and crisp angular capitals. Real transparent alpha background. NO banners, borders, scene, decoration, logos, icons, arrows, grid, shadows outside letters or extra text. Do not reproduce colored preview-alpha artifacts. Exactly TWO COLUMNS and TWO ROWS with generous transparent gutters. Every phrase is a SINGLE HORIZONTAL LINE centered in its cell. Left column Polish, right English. Row 1 left exact text “Menu główne”, row 1 right “Main menu”. Row 2 left exact text “Tryb gry”, row 2 right “Game mode”. Only these four phrases, each once. Polish diacritics must be accurate and readable. Match the reference lettering rather than an ordinary computer font. Landscape atlas, ideally 1536×768. This transparent asset will be layered over the existing dark game menu frames.",
+  "source": "exec-ddf536d2-009d-4b51-b03e-dd37dc9d97bd.png",
+  "note": "Original PNG copied unchanged; CSS uses alpha bounds."
+}
