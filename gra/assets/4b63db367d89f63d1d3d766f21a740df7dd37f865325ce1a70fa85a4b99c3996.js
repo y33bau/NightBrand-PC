@@ -6673,7 +6673,7 @@ function scale(){const t=!!coarse,W=innerWidth,H=innerHeight,s=t?Math.min(W/844,
 addEventListener('resize',()=>requestAnimationFrame(scale));
 // PC: pozioma os listwy bossa pokrywa sie z osia srodkow kol umiejetnosci
 let alignT=0;
-function alignBoss(){if(coarse||V.boss.hidden)return;const sk=ash.querySelector('.active-slot'),tr=V.boss.querySelector('.nbh-btr');if(!sk||ash.hidden)return;
+function alignBoss(){if(coarse||scr.classList.contains('pc-hud')||V.boss.hidden)return;const sk=ash.querySelector('.active-slot'),tr=V.boss.querySelector('.nbh-btr');if(!sk||ash.hidden)return;
  const a=tr.getBoundingClientRect(),b=sk.getBoundingClientRect();if(!a.height||!b.height)return;const cur=parseFloat(getComputedStyle(V.boss).bottom)||0,nb=cur+(a.top+a.height/2)-(b.top+b.height/2);
  if(Math.abs(nb-cur)>.5)V.boss.style.setProperty('--boss-bottom',nb.toFixed(1)+'px')}
 let last='',lastB='',mp=null,shown=false;
@@ -8005,6 +8005,124 @@ ${CJ} .premium-map .pc-chapter-label:before,${CJ} .premium-map .pc-chapter-label
 
 
 
+})();
+
+// ===== PC HUD: osobna, odwracalna oprawa wedlug referencji autora =====
+// Wylacznie odczyt stanu i prezentacja; natywne przyciski slotow zachowuja zdarzenia.
+// ?pchud=0 przywraca poprzednia oprawe. Dotyk i drugi gracz zachowuja swoj HUD.
+(()=>{
+ const scr=$('screen'),old=$('nbHud'),active=$('activeSkillHud'),T=(p,e)=>EN?e:p;
+ const enabled=new URLSearchParams(location.search).get('pchud')!=='0';
+ const A={orb:'assets/aa1a0ab45685e4e1031a4d181294d8b33586e462b5a09757e88163a0aa71e9dc.png',glass:'assets/1241cdaa75462141414601587b061d6014bc6784a1d3565147cb57cdb0c71eec.png',rail:'assets/816505b27574c9f151a4e0de1484ea111bc11e1fbd3397f5e9503b16f8c6fc3b.png',slot:'assets/3a4a3c72472c165554dca7d22f74a4836fd5c5eb886bcade73fe7837e9e5df6d.png',clock:'assets/a14509e55193f2cedca6747eea48dbaca03f3b176a219684b95f57c66f745d1e.png',map:'assets/636940933215ef7f5db551f320db8f87a6b628a6063ac51f854904eeb253cdd4.png'};
+ const make=(tag,c,h)=>{const e=document.createElement(tag);e.className=c;if(h!==undefined)e.innerHTML=h;return e};
+ const orb=(c,label)=>`<div class="pch-orb pch-${c}" role="meter" aria-label="${label}" aria-valuemin="0"><div class="pch-glass"><img class="pch-liquid" alt="" src="${A.glass}"></div><i class="pch-thorns"></i><strong></strong></div>`;
+ const root=make('div','pch',orb('health',T('Zdrowie','Health'))+orb('mana','Mana')+
+ `<div class="pch-wallet"><span class="pch-cell pch-coins" title="${T('Monety','Coins')}"><img alt="" src="${PREMIUM_ICONS['kaplica-purse']}"><b></b></span><span class="pch-cell pch-ashes" title="${T('Popioły','Ashes')}"><img alt="" src="assets/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp"><b></b></span></div>`+
+ `<div class="pch-dock"><i class="pch-rail"></i><div class="pch-level"><small>${T('POZIOM NOCY','NIGHT LEVEL')}</small><strong></strong></div><div class="pch-enchants"></div><div class="pch-actions"><span class="pch-cell pch-attack"><i></i><kbd></kbd></span><span class="pch-cell pch-block"><i></i><kbd></kbd></span></div><div class="pch-stamina" role="meter" aria-label="Stamina" aria-valuemin="0"><i></i><small></small></div><div class="pch-experience" role="meter" aria-label="${T('Doświadczenie','Experience')}" aria-valuemin="0"><i></i></div></div><div class="pch-effects"></div><div class="pch-challenge"></div>`);
+ old.append(root);const q=s=>root.querySelector(s),health=q('.pch-health'),mana=q('.pch-mana'),stamina=q('.pch-stamina'),xp=q('.pch-experience');
+ const text=(e,v)=>{v=String(v);if(e.textContent!==v)e.textContent=v};
+ const meter=(e,v,m)=>{v=Math.max(0,Math.min(m,v));const n=String(Math.ceil(v)),mx=String(m),fill=(100*v/(m||1)).toFixed(2)+'%';if(e.getAttribute('aria-valuenow')!==n)e.setAttribute('aria-valuenow',n);if(e.getAttribute('aria-valuemax')!==mx)e.setAttribute('aria-valuemax',mx);if(e.style.getPropertyValue('--fill')!==fill)e.style.setProperty('--fill',fill);return n+' / '+Math.round(m)};
+ const gain=old.querySelector('.nbh-gain'),night=old.querySelector('.nbh-night'),wallet=q('.pch-wallet');
+ const oldHud=hud;let key='',buffKey='',scaleKey='';
+ hud=function(){oldHud();const on=enabled&&!coarse&&!$('hud').classList.contains('mp2')&&innerWidth>=innerHeight*1.3;scr.classList.toggle('pc-hud',on);if(gain&&gain.parentElement!==(on?wallet:night))(on?wallet:night).append(gain);const show=on&&!active.hidden;root.hidden=!show;scr.classList.toggle('pc-hud-visible',show);if(!show)return;
+  const sk=innerWidth+'x'+innerHeight;if(sk!==scaleKey){scaleKey=sk;const r=scr.getBoundingClientRect();scr.style.setProperty('--hu',Math.min(r.width/1040,r.height/577)+'px')}
+  text(health.querySelector('strong'),meter(health,pl.hp,pl.max||1));text(mana.querySelector('strong'),meter(mana,pl.mana||0,pl.manaMax||SL.mana.max));
+  const st=meter(stamina,pl.sta||0,pl.staMax||1);stamina.title='Stamina · '+st;text(stamina.querySelector('small'),'STA · '+st);
+  meter(xp,S.xp,S.need||1);xp.title=T('Doświadczenie','Experience')+' · '+S.xp+' / '+S.need;
+  for(const [e,id] of [[health,'hpbar'],[stamina,'stam'],[mana,'mana']]){e.classList.toggle('pch-flash',!!SETT.flash&&$(id).classList.contains('flash'));e.classList.toggle('pch-low',!!SETT.flash&&parseFloat(e.style.getPropertyValue('--fill'))<=25)}
+  text(q('.pch-level strong'),S.lvl);text(q('.pch-coins b'),S.coins);text(q('.pch-ashes b'),EMB.e);
+  q('.pch-coins').setAttribute('aria-label',T('Monety: ','Coins: ')+S.coins);q('.pch-ashes').setAttribute('aria-label',T('Popioły: ','Ashes: ')+EMB.e);
+  const en=ENCH.filter(k=>S.sk[k]).sort((a,b)=>(b===S.mainEnchant)-(a===S.mainEnchant));
+  const k=en.map(k=>k+S.sk[k]).join('|')+'|'+PAD.on+'|'+S.activeSlots.length;
+  if(k!==key){key=k;q('.pch-enchants').innerHTML=[0,1].map(i=>{const k=en[i],label=k?SK[k].name+' · '+S.sk[k]:T('Wolne zaklęcie ostrza','Empty blade spell');return `<span class="pch-cell" title="${label}" aria-label="${label}">${k?`<img alt="" src="${PREMIUM_ICONS['skille-'+k]}"><b>${S.sk[k]}</b>`:''}</span>`}).join('');
+   text(q('.pch-attack kbd'),PAD.on?'RT':T('LPM','LMB'));text(q('.pch-block kbd'),PAD.on?'LB':T('PPM','RMB'));q('.pch-attack').title=T('Szybki atak · przytrzymaj: silny atak','Quick attack · hold: strong attack');q('.pch-block').title=T('Blok i parowanie','Block and parry');active.classList.toggle('pch-five',S.activeSlots.length>4)}
+  for(const e of active.querySelectorAll('.active-slot.empty')){e.title=T('Wolny slot — wyposaż w pauzie','Empty slot — equip in pause');e.setAttribute('aria-label',e.querySelector('kbd').textContent+': '+T('wolny slot','empty slot'))}
+  // Statusy zachowuja pelne opisy i pozostaly czas w podpowiedziach.
+  const b=$('buffs').innerHTML,c=$('chal'),bk=b+'|'+c.hidden+'|'+c.textContent+'|'+(S.sk.aard||0);
+  if(bk!==buffKey){buffKey=bk;const temp=make('div','');temp.innerHTML=b.replace(/<br\s*\/?\s*>/gi,'\n');const labels=temp.textContent.split('\n').filter(Boolean),icons=['kaplica-lastch','kaplica-elite','kaplica-vigor','kaplica-venge','kaplica-breath','skille-bloodblade','skille-retaliation','skille-stoneguard','perki-riposta','skille-garda','kaplica-vigor','skille-iceblade','skille-aard'];
+   const flags=[S.rebirth,S.trial,S.bless,S.fury>0,S.heri>0,S.bloodPrimed>0,S.retaliate>0,S.swordGuardian,pl.riposte>0,pl.broken>0,S.herb>0,S.slowT>0,S.snare>0];let i=0;const effects=q('.pch-effects');effects.replaceChildren();flags.forEach((v,j)=>{if(!v)return;const e=make('span','pch-cell');e.title=labels[i]||'';e.setAttribute('aria-label',labels[i++]||'');const im=make('img','');im.alt='';im.src=PREMIUM_ICONS[icons[j]];e.append(im);effects.append(e)});
+   if(S.sk.aard){const e=make('span','pch-cell');e.title=SK.aard.name+' · '+S.sk.aard;e.setAttribute('aria-label',e.title);const im=make('img','');im.src=PREMIUM_ICONS['skille-aard'];im.alt='';e.append(im);effects.append(e)}
+   const ch=q('.pch-challenge');ch.hidden=c.hidden;text(ch,c.textContent);ch.classList.toggle('done',c.classList.contains('done'))}
+ };
+ const O='#orient'.repeat(14)+' #screen.pc-hud',N=O+' #nbHud',H=O+' .pch',AS=O+' #activeSkillHud',u=n=>`calc(var(--hu,1px)*${n})`;
+ const style=make('style','pc-hud-style');style.textContent=`
+${O}{--hu:1px}
+${H}{position:absolute;inset:0;pointer-events:none;font-family:Grenze,Georgia,serif;color:#e7dfd1;text-shadow:0 1px 3px #000,0 0 4px #000;font-variant-numeric:tabular-nums}
+${H}[hidden],${H} [hidden]{display:none!important}
+${N} .nbh-vitals,${N} .nbh-coins{display:none!important}
+${O}:not(.pc-hud-visible) #nbHud .nbh-night,${O}:not(.pc-hud-visible) #nbHud .nbh-radar,${O}:not(.pc-hud-visible) #nbHud .nbh-boss{visibility:hidden!important}
+${H}:before{content:'';position:absolute;inset:auto 0 0;height:${u(125)};background:linear-gradient(0deg,#07090ccc,transparent);pointer-events:none}
+${H} .pch-orb{position:absolute;bottom:${u(-13)};width:${u(156)};height:${u(156)};pointer-events:auto}
+${H} .pch-health{left:${u(-9)}}${H} .pch-mana{right:${u(-9)}}
+${H} .pch-thorns{position:absolute;inset:0;background:url('${A.orb}') center/100% 100% no-repeat;filter:drop-shadow(0 2px 2px #000c);z-index:2}
+${H} .pch-mana .pch-thorns{transform:scaleX(-1)}
+${H} .pch-glass{position:absolute;left:13.9%;top:16%;width:69.2%;height:70.2%;overflow:hidden;border-radius:50%;background:radial-gradient(circle at 28% 24%,#3e434e,#0a0b11 45%,#030509 80%);box-shadow:inset 0 0 ${u(8)} #000}
+${H} .pch-mana .pch-glass{left:16.9%}
+${H} .pch-glass:after{content:'';position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 ${u(5)} #000a,inset 0 ${u(-2)} ${u(4)} #ffffff12;background:radial-gradient(ellipse at 29% 24%,#ffffff1c,transparent 16%);pointer-events:none}
+${H} .pch-liquid{position:absolute!important;max-width:none!important;width:250.56%!important;height:122.34%!important;left:-11.86%;top:-11.31%;object-fit:fill!important;clip-path:inset(calc(9.24% + (100% - var(--fill,100%))*.8174) 0 0);transition:clip-path .12s linear}
+${H} .pch-mana .pch-liquid{left:-137.71%}
+${H} .pch-orb strong{position:absolute;z-index:3;top:51.1%;left:48.5%;transform:translate(-50%,-50%);font:500 ${u(13)}/1 Grenze,Georgia,serif;white-space:nowrap;color:#f5eadd}
+${H} .pch-mana strong{left:51.5%}
+${H} .pch-orb.pch-low .pch-glass{box-shadow:0 0 ${u(9)} #951c3644,inset 0 0 ${u(8)} #000}
+${H} .pch-cell{position:relative;display:flex;align-items:center;justify-content:center;width:${u(36)};height:${u(36)};box-sizing:border-box;pointer-events:auto;background:url('${A.slot}') center/120% 120% no-repeat}
+${H} .pch-cell img{position:absolute;width:76%;height:76%;object-fit:contain;filter:drop-shadow(0 1px 2px #000)}
+${H} .pch-cell b{position:absolute;right:${u(4)};bottom:${u(2)};font:500 ${u(10)}/1 Grenze,Georgia,serif;color:#ede4cd}
+${H} .pch-wallet{position:absolute;left:${u(137)};bottom:${u(18)};display:flex;gap:${u(4)}}
+${H} .pch-wallet .pch-cell{width:${u(32)};height:${u(34)}}
+${H} .pch-wallet img{width:65%;height:65%;top:7%}
+${H} .pch-wallet b{left:0;right:0;bottom:${u(1)};text-align:center;background:#08090bac;line-height:1.1;font-size:${u(10)}}
+${H} .pch-dock{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:${u(450)};height:${u(96)}}
+${H} .pch-rail{position:absolute;left:${u(-10)};bottom:${u(-29)};width:${u(470)};height:${u(156.67)};background:url('${A.rail}') center/100% 100% no-repeat;mask-image:linear-gradient(#000 0 54%,transparent 54%),radial-gradient(ellipse ${u(35)} ${u(45)} at 50% 52%,#000 98%,transparent);pointer-events:none}
+${H} .pch-level{position:absolute;left:50%;bottom:${u(30)};width:${u(55)};height:${u(42)};transform:translateX(-50%);display:flex;align-items:center;justify-content:center;text-align:center}
+${H} .pch-level strong{font:500 ${u(24)}/1 Grenze,Georgia,serif;color:#efe7d8}
+${H} .pch-level small{position:absolute;bottom:${u(52)};left:50%;transform:translateX(-50%);font:${u(8)}/1 Grenze,Georgia,serif;color:#c5bda4;white-space:nowrap;letter-spacing:${u(.5)}}
+${H} .pch-enchants,${H} .pch-actions{position:absolute;bottom:${u(24)};display:flex;gap:${u(3)}}
+${H} .pch-enchants{left:${u(263)}}${H} .pch-actions{right:${u(4)}}
+${H} .pch-actions kbd{position:absolute;bottom:${u(-3)};font:${u(8)}/1 Grenze,Georgia,serif;color:#c8bda7;padding:0 ${u(2)};background:#0a0c0ddd;border:0}
+${H} .pch-actions i{width:65%;height:65%;opacity:.72;background:center/contain no-repeat}
+${H} .pch-attack i{background-image:url('${PREMIUM_ICONS['skille-ostrze']}')}${H} .pch-block i{background-image:url('${PREMIUM_ICONS['skille-garda']}')}
+${H} .pch-stamina,${H} .pch-experience{position:absolute;left:${u(5)};right:${u(5)};height:${u(4)};bottom:${u(4)};border:1px solid #8b754b;box-shadow:0 1px 2px #000,inset 0 0 0 1px #080a0c;background:#0b0e10;pointer-events:auto}
+${H} .pch-stamina{height:${u(3)};bottom:${u(12)};border-color:#3f493f}
+${H} .pch-stamina i,${H} .pch-experience i{display:block;height:100%;width:var(--fill,0%);background:linear-gradient(#e6c987,#9b7940);transition:width .1s linear}
+${H} .pch-stamina i{background:linear-gradient(#b1b690,#566c4e)}
+${H} .pch-stamina small{position:absolute;right:0;bottom:${u(4)};font:${u(7)}/1 Grenze,Georgia,serif;color:#bcc4aa;background:#080a0cc0;padding:0 ${u(2)}}
+${AS}{left:calc(50% - ${u(185)})!important;right:auto!important;bottom:${u(24)}!important;top:auto!important;transform:none!important;zoom:1!important;transform-origin:50% 100%!important;padding:0!important;gap:${u(3)}!important;background:none!important;border:0!important;display:flex!important;align-items:center!important;z-index:6}
+${AS}[hidden]{display:none!important}${AS}:after{content:none!important}
+${AS} .active-slot{position:relative!important;flex:none!important;width:${u(36)}!important;height:${u(36)}!important;padding:${u(4)}!important;min-width:0!important;min-height:0!important;aspect-ratio:1!important;border:0!important;border-radius:0!important;border-image:none!important;box-shadow:none!important;background:url('${A.slot}') center/120% 120% no-repeat!important;overflow:visible!important;opacity:1!important}
+${AS} .active-slot:before,${AS} .active-slot:after{content:none!important}
+${AS} .active-slot .ic{width:${u(27)}!important;height:${u(27)}!important;border-radius:0!important;opacity:1}
+${AS} .active-slot.empty>span{display:none!important}
+${AS} .active-slot kbd{top:auto!important;bottom:${u(-3)}!important;left:50%!important;padding:0 ${u(2)}!important;min-width:0!important;font:500 ${u(8)}/1 Grenze,Georgia,serif!important;color:#c8bda7!important;background:#0a0c0ddd!important;border:0!important;border-radius:0!important;transform:translateX(-50%)!important}
+${AS} .active-slot small{left:auto!important;right:${u(3)}!important;bottom:auto!important;top:${u(2)}!important;transform:none!important;min-width:0!important;padding:0 ${u(1)}!important;border:0!important;border-radius:0!important;background:#08090bdb!important;font:${u(7)}/1 Grenze,Georgia,serif!important;z-index:3}
+${AS} .active-slot .slot-cd{inset:${u(3)}!important;border-radius:0!important;font:500 ${u(16)}/1 Grenze,Georgia,serif!important;background:#070a11b8!important;box-shadow:inset 0 0 0 1px #a18b5e55!important}
+${AS} .active-slot.no-mana .ic{filter:grayscale(.8) brightness(.55)}
+${AS} .active-slot:is(:hover,:focus-visible){outline:1px solid #9d4c55!important;outline-offset:-2px!important;filter:brightness(1.2)}
+${AS}.pch-five .active-slot:last-child{position:absolute!important;right:calc(100% + ${u(3)})!important}
+${H} .pch-effects{position:absolute;right:${u(15)};bottom:${u(143)};width:${u(124)};display:flex;flex-wrap:wrap-reverse;flex-direction:row-reverse;justify-content:flex-start;gap:${u(3)}}
+${H} .pch-effects .pch-cell{width:${u(25)};height:${u(25)}}
+${H} .pch-challenge{position:absolute;top:${u(25)};left:${u(20)};width:${u(235)};border-left:1px solid #8c7953;padding:${u(5)} ${u(9)};font:${u(12)}/1.25 Grenze,Georgia,serif;color:#d8c9ac;background:linear-gradient(90deg,#0a0c1099,transparent)}
+${H} .pch-challenge.done{color:#c4d4aa}
+${N} .nbh-night{left:50%!important;right:auto!important;top:${u(4)}!important;width:${u(69)}!important;height:${u(69)}!important;transform:translateX(-50%)!important;transform-origin:50% 0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;padding:${u(12)} 0 0!important;box-sizing:border-box!important}
+${N} .nbh-night:before{content:'';position:absolute;inset:-7% -14% -21%;background:url('${A.clock}') center/100% 100% no-repeat;z-index:-1;filter:drop-shadow(0 2px 2px #000b)}
+${N} .nbh-night>small{font:${u(6.7)}/1.15 Grenze,Georgia,serif!important;letter-spacing:${u(.3)}!important;max-width:${u(57)}!important;color:#c8bfa9!important}
+${N} .nbh-night>strong{font:500 ${u(19)}/1 Grenze,Georgia,serif!important;letter-spacing:0!important;margin-top:${u(2)}}
+${N} .nbh-night>strong.txt{font-size:${u(10)}!important;line-height:1.05!important;max-width:${u(59)}!important;white-space:normal!important;overflow:visible!important;text-wrap:balance;overflow-wrap:anywhere}
+${H} .nbh-gain{position:absolute!important;top:auto!important;left:0!important;right:auto!important;bottom:calc(100% + ${u(8)})!important;font-size:${u(11)}!important;white-space:nowrap}
+${N} .nbh-radar{top:${u(14)}!important;right:${u(16)}!important;width:${u(116)}!important;height:${u(116)}!important;transform:none!important}
+${N} .nbh-radar:after{inset:-7.5%!important;background:url('${A.map}') center/100% 100% no-repeat!important;filter:drop-shadow(0 1px 2px #000b)!important}
+${N} .nbh-radar #mini{inset:3.5%!important;left:3.5%!important;top:3.5%!important;width:93%!important;height:93%!important;border-radius:50%!important}
+${O} #msg{top:${u(84)}!important;transform:translateX(-50%)!important;width:${u(560)}!important;max-width:65%!important;padding:${u(11)} ${u(18)}!important;font-size:${u(17)}!important;line-height:1.2!important}
+${O} #msg:after{font-size:${u(7)}!important;letter-spacing:${u(2)}!important}
+${N} .nbh-boss{left:50%!important;bottom:${u(106)}!important;width:${u(445)}!important;min-width:0!important;transform:translateX(-50%)!important;padding:${u(3)} ${u(8)}!important}
+${N} .nbh-bh{gap:${u(8)}!important;margin-bottom:${u(1)}!important}
+${N} .nbh-bh small{display:none!important}${N} .nbh-bh strong{font-size:${u(15)}!important;letter-spacing:${u(1)}!important}${N} .nbh-bh span{font-size:${u(11)}!important}
+${N} .nbh-btr{height:${u(18)}!important;padding:${u(4)} 10%!important}${N} .nbh-btr:before{inset:${u(4)} 10%!important}${N} .nbh-poise{margin:${u(2)} ${u(40)} 0!important;height:${u(2)}!important}
+${H} .pch-flash{animation:pchFlash .35s steps(2) infinite}@keyframes pchFlash{50%{filter:brightness(1.7)}}
+@media(prefers-reduced-motion:reduce){${H} .pch-flash{animation:none}${H} .pch-liquid{transition:none}}
+`;
+ // Rozmiar tekstu zmienia litery, bez powiekszania i przesuwania calej listwy.
+ style.textContent=style.textContent.replace(/(font(?:-size)?\s*:[^;{}]*?)calc\(var\(--hu,1px\)\*([\d.]+)\)/g,'$1calc(var(--hu,1px)*$2*var(--nbts,1))');
+ document.head.append(style);
 })();
 
 requestAnimationFrame(frame);
