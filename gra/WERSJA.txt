@@ -645,3 +645,4 @@ cache567 · Graficzny standard PC: naglowki PL/EN, subtelne przyciski, ramki i s
 cache568 · PC: symetryczne kafelki, wyrownane ramki przygotowania, wybor konturem, jasnosc w Grafice. Bez zmian mechanik. Nie sprawdzono fizycznego pada, odsluchu ani pelnych nocy.
 cache569 · PC: Graj > wybor rozdzialu > przygotowanie; wspolny powrot ESC/B, bordowy kontur map i wieksze ustawienia bez kwadratu. Nie sprawdzono fizycznego pada, odsluchu ani pelnych nocy.
 cache570 · HUD PC według referencji: szklane kule, cierniowe ramy, centralne sloty, zegar i minimapa; Monety i Popioły z gry (bez fizycznego pada, odsłuchu i pełnych nocy)
+cache571 · Zloty luk staminy przy manie, 5 slotow od startu i 6. z Daru pieczeci; gotycki powrot/tryb i wyroznione Przygotuj sie (bez fizycznego pada, odsluchu i recznego testu pelnych nocy)
