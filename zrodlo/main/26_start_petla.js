@@ -1121,14 +1121,12 @@ ${Z} .nbo-note{margin:0!important;text-align:center!important;color:#8c7f6c!impo
  Object.assign(PREMIUM_ASSETS,{'portret-rycerz':'assets/5b34b85844e657eca2c40af65c5a8744f7175b81ebe8b37e9614215ef8cda24e.png','portret-kat':'assets/5496889094dbd50b342769c840ab925bcac7c6da2bea4b64307a20dce787cffa.png','portret-zabojczyni':'assets/3a7c4c89940259420bcc50b5647ff9d712a117a9d5f3ea4915a67034db1f5df3.png'});
  const T=(pl,en)=>EN?en:pl,make=(tag,cls,text)=>{const e=document.createElement(tag);e.className=cls;if(text)e.textContent=text;return e};
  const home=make('button','pc-home-button',T('Menu główne','Main menu'));home.type='button';
- const cont=make('button','pc-continue',T('Kontynuuj','Continue'));cont.type='button';
- const nav=title.querySelector('.premium-nav'),journey=nav.querySelector('.premium-journey');nav.prepend(cont);nav.append(home);
+ const nav=title.querySelector('.premium-nav'),journey=nav.querySelector('.premium-journey');nav.append(home);journey.textContent=T('Graj','Play');journey.classList.add('pc-play');
  const lang=make('button','pc-language','PL / EN');lang.type='button';lang.addEventListener('click',()=>{$('lang').hidden=false;$('lang').querySelector('button')?.focus()});title.append(lang);const guideLabel=make('span','pc-guide-label',T('Instrukcja','Guide'));$('manBtn').append(guideLabel);
  title.classList.add('pc-home');
- const showJourney=()=>{title.classList.remove('pc-home');$('start1')?.focus()};
+ const showJourney=()=>{title.classList.remove('pc-home');const ch=chLocked(last)?1:last;$('start'+ch)?.focus()};
  journey.addEventListener('click',showJourney);home.addEventListener('click',()=>{title.classList.add('pc-home');journey.focus()});
  let last=1;try{last=Number(localStorage.getItem('nb_pc_last_chapter'))||1}catch(e){}last=Math.max(1,Math.min(5,Math.floor(last)));
- cont.addEventListener('click',()=>{const ch=chLocked(last)?1:last;openPrep(ch)});
  new MutationObserver(()=>{if(!prep.hidden){last=PREP.ch||1;try{localStorage.setItem('nb_pc_last_chapter',String(last))}catch(e){}}}).observe(prep,{attributes:true,attributeFilter:['hidden']});
  // Existing lists and handlers stay intact; only panel visibility and contextual copy change.
  const grid=prep.querySelector('.prepgrid'),tabs=make('nav','pc-prep-tabs'),detail=make('aside','pc-perk-detail');
@@ -1181,7 +1179,7 @@ ${Z} .nbo-note{margin:0!important;text-align:center!important;color:#8c7f6c!impo
  if(loadout){new MutationObserver(polishLoadout).observe(loadout,{childList:true});polishLoadout()}
  // PC Journey is a chapter hub. Reuse the real chapter buttons and their existing handlers.
  const map=title.querySelector('.premium-map'),banner=title.querySelector('.premium-banner'),chapterList=map.querySelector('.m2-right'),caption=map.querySelector('.premium-caption'),oldAshes=title.querySelector('.premium-ashes');
- const journeyHead=make('header','pc-journey-head'),journeyTitle=make('h2','pc-fantasy-title',T('Podróż','Journey'));
+ const journeyHead=make('header','pc-journey-head'),journeyTitle=make('h2','pc-fantasy-title',T('Wybór rozdziału','Act selection'));
  journeyHead.append(home,journeyTitle);title.prepend(journeyHead);map.prepend(chapterList);
  const profile=make('aside','pc-profile'),ashIcon=make('img','pc-profile-ash'),ashBlock=make('div','pc-profile-stat'),ashValue=make('strong','',String(EMB.e)),levelBlock=make('div','pc-profile-stat'),levelValue=make('strong','',String(prog().lv));
  ashIcon.src='assets/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp';ashIcon.alt='';
@@ -1204,13 +1202,46 @@ ${Z} .nbo-note{margin:0!important;text-align:center!important;color:#8c7f6c!impo
    if(!label){label=make('span','pc-chapter-label');label.append(make('small','',T('Rozdział ','Act ')+CHR[i-1]),make('strong','',CHN[i-1]));b.append(label)}
   }
   const chosen=title.querySelector('.premium-selected'),ch=Number(chosen?.id.slice(5))||1,r=SETT.save['s'+ch];
+  if(!title.classList.contains('pc-home')){last=ch;try{localStorage.setItem('nb_pc_last_chapter',String(ch))}catch(e){}}
   put(factValues[0],chosen?.dataset.status||T('Dostępny','Available'));put(factValues[1],r?.t?mmss(r.t):'—');put(factValues[2],r?String(r.kills||0):'—');
  }
  new MutationObserver(refreshJourney).observe(chapterList,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-status']});
  new MutationObserver(refreshJourney).observe(oldAshes,{childList:true,subtree:true,characterData:true});
  new MutationObserver(refreshJourney).observe(title,{attributes:true,attributeFilter:['hidden','class']});
  $('storyTgl').addEventListener('change',refreshJourney);refreshJourney();
- addEventListener('keydown',e=>{if(e.key==='Escape'&&e.target.closest?.('#title')&&padMenuId()==='title'&&!title.classList.contains('pc-home')){e.preventDefault();home.click()}});
+ // The same menu hierarchy serves Escape, controller B and visible Back buttons.
+ const backOrigins={},backScreens=['lang','conf','opts','manual','kap','prep','pause','lvl','shop','end'];let forwardingBack=false,backTicket=0;
+ const currentBackScreen=()=>{for(const id of backScreens)if(!$(id).hidden)return id;return !title.hidden?(title.classList.contains('pc-home')?'home':'chapters'):null};
+ function nativeBack(id){forwardingBack=true;try{$(id).click()}finally{forwardingBack=false}}
+ function focusBack(el,screen){const ticket=++backTicket;setTimeout(()=>{if(ticket!==backTicket||currentBackScreen()!==screen)return;const parent=screen==='home'||screen==='chapters'?title:$(screen),target=el&&el.offsetParent!==null?el:[...parent.querySelectorAll('button,input,summary')].find(b=>!b.disabled&&b.offsetParent!==null);target?.focus({preventScroll:true})},70)}
+ function restoreBackOrigin(id){const origin=backOrigins[id]||{screen:title.classList.contains('pc-home')?'home':'chapters'};if(origin.screen==='home'||origin.screen==='chapters'){title.hidden=false;title.classList.toggle('pc-home',origin.screen==='home')}else if($(origin.screen)){title.hidden=true;$(origin.screen).hidden=false}focusBack(origin.focus,origin.screen)}
+ const backOpeners=[['#optsBtn','opts'],['#manBtn','manual'],['#kapBtn','kap'],['#kronBtn','kap'],['.pc-language','lang']];
+ title.addEventListener('click',e=>{for(const [selector,id] of backOpeners){const button=e.target.closest?.(selector);if(!button)continue;const screen=currentBackScreen();if(screen&&screen!==id)backOrigins[id]={screen,focus:button};break}},true);
+ title.addEventListener('click',e=>{for(const [selector,id] of backOpeners){if(!e.target.closest?.(selector))continue;const from=backOrigins[id]?.screen;if(from&&from!=='home'&&from!=='chapters'&&from!==id&&$(from))$(from).hidden=true;break}});
+ pcMenuBack=()=>{
+  if(recoveryActive||!$('finale').hidden||S?.intro)return false;
+  const screen=currentBackScreen();if(!screen)return false;
+  const parent=screen==='home'||screen==='chapters'?title:$(screen);
+  if(PAD.grab&&parent.contains(PAD.grab)){const input=PAD.grab;PAD.grab=null;for(const r of parent.querySelectorAll('.rng.grab'))r.classList.remove('grab');input.focus();return true}
+  const expanded=[...parent.querySelectorAll('details[open]')].filter(e=>e.offsetParent!==null).reverse();
+  if(expanded.length){const d=expanded.find(d=>d.contains(document.activeElement))||expanded[0];d.open=false;d.querySelector('summary')?.focus();return true}
+  const record=parent.querySelector('#datInfo .ban.open');if(record){record.click();return true}
+  if(screen==='lang'){$('lang').hidden=true;restoreBackOrigin('lang');return true}
+  if(screen==='conf'){nativeBack('confNo');return true}
+  if(screen==='opts'){nativeBack('optsBack');restoreBackOrigin('opts');return true}
+  if(screen==='manual'){nativeBack('manBack');restoreBackOrigin('manual');return true}
+  if(screen==='kap'){nativeBack('kapBack');restoreBackOrigin('kap');return true}
+  if(screen==='prep'){nativeBack('prepBack');title.classList.remove('pc-home');focusBack($('start'+(PREP.ch||1)),'chapters');return true}
+  if(screen==='chapters'){nativeBack(home.id);return true}
+  if(screen==='pause'){togglePause(false);return true}
+  if(screen==='shop'){closeShop();return true}
+  if(screen==='end'){nativeBack('menuBtn');return true}
+  return false; // Compulsory level choices and in-game dialogs keep their original rules.
+ };
+ home.id='pcMainMenuBack';
+ for(const button of [home,$('prepBack'),$('optsBack'),$('manBack'),$('kapBack'),$('confNo')])button.addEventListener('click',e=>{if(forwardingBack)return;if(pcMenuBack()){e.preventDefault();e.stopImmediatePropagation()}},true);
+ addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(e.repeat&&currentBackScreen()){e.preventDefault();e.stopImmediatePropagation();return}if(!e.repeat&&pcMenuBack()){e.preventDefault();e.stopImmediatePropagation()}},true);
+
  const s=make('style','');s.id='pc-menu-design';const Z='#orient'.repeat(20)+'.pc-menu',P=Z+' :is(#title,#prep,#kap,#manual,#opts,#pause,#lvl,#shop,#end,#conf)',J=Z+' #title:not(.pc-home)';
  s.textContent=`
 /* PC concept 2: material, rhythm and typography. All rules stay inside .pc-menu. */
@@ -1643,15 +1674,16 @@ ${J} .premium-map .m2-ch:not(:disabled):is(:hover,:focus-visible,.pf) .pc-chapte
  // Approved graphical family. Original PNG atlases stay intact; CSS selects their alpha bounds.
  if(new URLSearchParams(location.search).get('pcgfx')==='0')return;
  root.classList.add('pc-gfx');
- const GF={menu:'assets/312d55c97b1cf9d5b855da5b159a1c08ba4a94da86e03eefe20e382c6302cea2.png',heads:'assets/0feb5f7b6fa5faf685551209ad13e7e268c3a89afed074de179287851d767fff.png',panel:'assets/2e6c2d60621704b366ab4a96a93626d10a2e0b040841f03d4833a890d54f3203.png',idle:'assets/270f1ffe61905a5191c71634cd1a3b723502a1ace335d0607a6b07dc3f71a33a.png',selected:'assets/bb4b3cd2510833299ef03f2c59686902263bbe6a4fa9a9906b974d3c3a167fd8.png',divider:'assets/a1ab25049eefdca890c62690c24911780f5d4f5105719bca27640107f13fd44f.png'};
+ const GF={play:'assets/fcd1dc2f86b4932e3c706c70e446b7554315edfeaf6c00d3455c3da0c7b64d84.png',menu:'assets/312d55c97b1cf9d5b855da5b159a1c08ba4a94da86e03eefe20e382c6302cea2.png',heads:'assets/0feb5f7b6fa5faf685551209ad13e7e268c3a89afed074de179287851d767fff.png',panel:'assets/2e6c2d60621704b366ab4a96a93626d10a2e0b040841f03d4833a890d54f3203.png',idle:'assets/270f1ffe61905a5191c71634cd1a3b723502a1ace335d0607a6b07dc3f71a33a.png',selected:'assets/bb4b3cd2510833299ef03f2c59686902263bbe6a4fa9a9906b974d3c3a167fd8.png',divider:'assets/a1ab25049eefdca890c62690c24911780f5d4f5105719bca27640107f13fd44f.png'};
  const GM=[[[159,63,441,122],[224,238,319,120],[208,409,342,119],[201,575,360,109],[154,733,450,128],[249,901,263,139]],[[875,62,397,113],[892,240,367,125],[922,403,304,118],[865,574,418,117],[937,736,274,114],[884,899,377,144]]][EN?1:0];
  const GH=[[[51,61,564,86],[94,218,488,93],[241,368,199,85],[142,518,396,90],[140,664,401,92],[224,811,234,91],[184,951,316,97],[223,1102,235,90]],[[726,59,461,92],[723,217,467,86],[844,368,196,86],[736,518,436,90],[824,664,252,92],[849,809,198,93],[851,951,190,95],[831,1102,231,89]]][EN?1:0];
+ const GP=[[[316,170,278,186],[48,558,801,170]],[[1181,170,284,186],[1024,558,652,149]]][EN?1:0];
  function glyph(el,atlas,index,text,kind){
   if(!el)return;
-  const box=(atlas==='menu'?GM:GH)[index],key=atlas+':'+index;
+  const box=(atlas==='menu'?GM:atlas==='play'?GP:GH)[index],key=atlas+':'+index;
   let im=el.querySelector(':scope>.pcg-glyph');
   if(!im){im=make('span','pcg-glyph');im.setAttribute('aria-hidden','true');el.append(im)}
-  if(im.dataset.key!==key){const [x,y,w,h]=box,W=atlas==='menu'?1448:1254,H=atlas==='menu'?1086:1254;im.dataset.key=key;im.style.backgroundImage=`url('${atlas==='menu'?GF.menu:GF.heads}')`;for(const [n,v] of Object.entries({r:w/h,bw:W/h,bh:H/h,bx:-x/h,by:-y/h}))im.style.setProperty('--pcg-'+n,String(v))}
+  if(im.dataset.key!==key){const [x,y,w,h]=box,W=atlas==='menu'?1448:atlas==='play'?1774:1254,H=atlas==='menu'?1086:atlas==='play'?887:1254;im.dataset.key=key;im.style.backgroundImage=`url('${atlas==='menu'?GF.menu:atlas==='play'?GF.play:GF.heads}')`;for(const [n,v] of Object.entries({r:w/h,bw:W/h,bh:H/h,bx:-x/h,by:-y/h}))im.style.setProperty('--pcg-'+n,String(v))}
   if(!el.classList.contains('pcg-'+kind))el.classList.add('pcg-'+kind);
   const extra=kind==='menu'&&el.id==='kronBtn'?el.querySelector('.nbk-new')?.getAttribute('aria-label'):kind==='mode'?el.querySelector('.pc-mode-note')?.textContent:'';
   const label=text+(extra?' · '+extra:'');if(el.getAttribute('aria-label')!==label)el.setAttribute('aria-label',label);
@@ -1660,8 +1692,8 @@ ${J} .premium-map .m2-ch:not(:disabled):is(:hover,:focus-visible,.pf) .pc-chapte
  let gfxScheduled=false;
  function decorateGraphics(){
   gfxScheduled=false;
-  const menu=[['.pc-continue',0,T('Kontynuuj','Continue')],['.premium-journey',1,T('Podróż','Journey')],['#kapBtn',2,T('Kaplica','Shrine')],['#kronBtn',3,T('Kronika','Chronicle')],['#manBtn',4,T('Instrukcja','Guide')],['#optsBtn',5,T('Opcje','Options')]];
-  for(const [sel,n,text] of menu)glyph(title.querySelector(sel),'menu',n,text,'menu');
+  const menu=[['.premium-journey',0,T('Graj','Play')],['#kapBtn',2,T('Kaplica','Shrine')],['#kronBtn',3,T('Kronika','Chronicle')],['#manBtn',4,T('Instrukcja','Guide')],['#optsBtn',5,T('Opcje','Options')]];
+  for(const [sel,n,text] of menu)glyph(title.querySelector(sel),sel==='.premium-journey'?'play':'menu',n,text,'menu');
   for(const [el,a,n,text] of [
    [prep.querySelector('.pc-prep-title'),'heads',0,T('Przygotowanie do nocy','Before Nightfall')],
    [$('kapH'),KAPMODE==='kron'?'menu':'heads',KAPMODE==='kron'?3:1,KAPMODE==='kron'?T('Kronika','Chronicle'):T('Kaplica Popiołów','Shrine of Ashes')],
@@ -1669,7 +1701,7 @@ ${J} .premium-map .m2-ch:not(:disabled):is(:hover,:focus-visible,.pf) .pc-chapte
    [$('opts').querySelector('.premium-page-heading'),'menu',5,T('Opcje','Options')],
    [$('pause').querySelector('.premium-pause-title'),'heads',2,T('Pauza','Pause')],
    [$('shop').querySelector('.lvlhead h2'),'heads',3,T('Kram Margi',"Marga’s Stall")],
-   [journeyTitle,'menu',1,T('Podróż','Journey')]
+   [journeyTitle,'play',1,T('Wybór rozdziału','Act selection')]
   ])glyph(el,a,n,text,'heading');
   glyph($('sFab'),'heads',6,T('Fabularny','Story'),'mode');glyph($('sArc'),'heads',7,'Arcade','mode');
   for(const [el,n,text] of [[prepare,4,T('Przygotuj się','Prepare')],[$('prepGo'),5,T('Gotowy','Ready')]]){
@@ -1879,6 +1911,50 @@ ${U} #shop .lvlhead{position:relative!important;justify-content:center!important
 ${U} #shop #shopCoins{position:absolute!important;right:0!important;top:50%!important;transform:translateY(-50%)!important}
 `;
  document.head.append(ts);
+ // One Play entry, a centered mode field, and only the full chapter contour selected.
+ root.classList.add('pc-flow');home.textContent=T('← Menu główne','← Main menu');
+ const shortcutSpace=make('span','pc-shortcuts-space');shortcutSpace.setAttribute('aria-hidden','true');journeyFooter.prepend(shortcutSpace);
+ function routeFrame(el){if(!el)return;if(!el.querySelector(':scope>.pc-route-edge')){const edge=make('span','pc-route-edge');edge.setAttribute('aria-hidden','true');el.append(edge)}}
+ function refreshRouteFrames(){for(const el of [home,$('kapBtn'),$('kronBtn'),prepare,modeInfo])routeFrame(el)}
+ for(const el of [home,nav,prepare,modeInfo])new MutationObserver(refreshRouteFrames).observe(el,{childList:true,subtree:true});refreshRouteFrames();
+ const fs=make('style','');fs.id='pc-play-navigation';const W='#orient'.repeat(32)+'.pc-menu.pc-gfx.pc-flow',CJ=W+' #title:not(.pc-home)',SU=n=>`calc(${n} * var(--pc-u))`,ST=n=>`calc(${n} * var(--pc-u) * var(--nbts,1))`;
+ fs.textContent=`
+${W} #title.pc-home .pc-play .pcg-glyph{--pcg-h:${ST(46)}}
+${W} #title.pc-home .pc-play{height:${SU(76)}!important}
+${W} #title.pc-home .pc-route-edge{display:none!important}
+${CJ} .pc-journey-head .pcg-heading .pcg-glyph{--pcg-h:${ST(50)}}
+${CJ} .pc-route-edge{display:block!important;position:absolute!important;inset:0!important;width:auto!important;height:auto!important;margin:0!important;padding:0!important;background:none!important;pointer-events:none!important;box-sizing:border-box!important;border:${SU(15)} solid transparent!important;border-image:url('${GF.panel}') 128 /${SU(15)} stretch!important;opacity:.95!important;filter:brightness(1.55) saturate(.65)!important;z-index:2!important}
+${CJ} .pc-home-button{display:flex!important;align-items:center!important;justify-content:center!important;left:0!important;top:50%!important;transform:translateY(-50%)!important;width:${SU(230)}!important;height:${SU(70)}!important;padding:${SU(12)} ${SU(20)}!important;font:500 ${ST(23)}/1.2 'Grenze Gotisch',Georgia,serif!important;color:#ead9bc!important;background:linear-gradient(140deg,#19131ae8,#0d0b10bb)!important;border:0!important;border-image:none!important;outline:0!important;box-shadow:none!important}
+${CJ} .pc-home-button:is(:hover,:focus-visible,.pf){filter:brightness(1.22)!important;outline:0!important}
+${CJ} .pc-home-button:after{content:none!important;display:none!important}
+${CJ} .pc-profile{right:${SU(175)}!important}
+${CJ} #optsBtn,${CJ} #optsBtn:is(:hover,:focus-visible,.pf,:active){display:grid!important;place-items:center!important;right:${SU(70)}!important;top:${SU(27)}!important;width:${SU(80)}!important;height:${SU(80)}!important;min-width:0!important;min-height:0!important;padding:${SU(12)}!important;margin:0!important;border:0!important;border-image:none!important;border-radius:0!important;background:none!important;background-image:none!important;box-shadow:none!important;outline:0!important;filter:none!important}
+${CJ} #optsBtn:before,${CJ} #optsBtn:after{content:none!important;display:none!important;background:none!important}
+${CJ} #optsBtn .pc-journey-gear{display:block!important;width:${SU(52)}!important;height:${SU(52)}!important;object-fit:contain!important;filter:brightness(1.18)!important}
+${CJ} #optsBtn:is(:hover,:focus-visible,.pf) .pc-journey-gear{filter:brightness(1.65) drop-shadow(0 0 ${SU(4)} #d2a96a33)!important}
+${CJ} .pc-journey-footer{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:${SU(28)}!important;align-items:center!important;height:${SU(100)}!important;min-height:0!important;padding:${SU(15)} 0 0!important;margin:0!important;width:100%!important;border-top:1px solid #a68b5e55!important}
+${CJ} .pc-shortcuts-space{display:block!important;grid-column:1!important;height:${SU(70)}!important;min-width:0!important}
+${CJ} .pc-journey-mode{position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:${SU(4)}!important;grid-column:2!important;min-width:0!important;width:100%!important;height:${SU(70)}!important;padding:${SU(10)} ${SU(20)}!important;text-align:center!important;background:linear-gradient(140deg,#19131ae8,#0d0b10bb)!important;border:0!important;box-shadow:none!important}
+${CJ} .pc-journey-mode small{font:400 ${ST(13)}/1.2 Georgia,serif!important;text-align:center!important;color:#bda780!important}
+${CJ} .pc-journey-mode strong{font:500 ${ST(28)}/1.15 'Grenze Gotisch',Georgia,serif!important;text-align:center!important;color:#ead9bc!important}
+${CJ} #premiumPrepare{grid-column:3!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:${SU(70)}!important;min-height:0!important;position:relative!important;margin:0!important;padding:${SU(12)} ${SU(20)}!important;border:0!important;border-image:none!important;background:linear-gradient(140deg,#19131ae8,#0d0b10bb)!important;outline:0!important;box-shadow:none!important}
+${CJ} #premiumPrepare .pcg-glyph{--pcg-h:${ST(33)}}
+${CJ} :is(#kapBtn,#kronBtn){display:flex!important;align-items:center!important;justify-content:center!important;position:absolute!important;top:auto!important;bottom:calc(37.5 * var(--pc-u) - .5px)!important;height:${SU(70)}!important;width:calc((100% - 196 * var(--pc-u)) / 6 - 9 * var(--pc-u))!important;min-width:0!important;min-height:0!important;left:${SU(70)}!important;padding:${SU(12)} ${SU(20)}!important;background:linear-gradient(140deg,#19131ae8,#0d0b10bb)!important;border:0!important;border-image:none!important;box-shadow:none!important;outline:0!important;text-align:center!important}
+${CJ} #kronBtn{left:calc(70 * var(--pc-u) + (100% - 196 * var(--pc-u)) / 6 + 9 * var(--pc-u))!important}
+${CJ} :is(#kapBtn,#kronBtn) .pcg-glyph{--pcg-h:${ST(33)}}
+${CJ} :is(#kapBtn,#kronBtn,#premiumPrepare):is(:hover,:focus-visible,.pf){filter:brightness(1.22)!important;outline:0!important;background:linear-gradient(140deg,#19131ae8,#0d0b10bb)!important}
+${CJ} :is(#kapBtn,#kronBtn,#premiumPrepare):after{content:none!important;display:none!important}
+${CJ} .premium-map .m2-ch{border:0!important;border-image:none!important;outline:0!important;box-shadow:none!important}
+${CJ} .premium-map .m2-ch:is(:hover,:focus-visible,.pf){outline:0!important;box-shadow:none!important}
+${CJ} .premium-map .m2-ch.premium-selected{outline:2px solid #783039!important;outline-offset:-2px!important;border:0!important;box-shadow:inset 0 0 ${SU(20)} #69233233!important}
+${CJ} .premium-map .m2-ch.premium-selected>.pcg-edge{filter:sepia(1) saturate(3) hue-rotate(315deg) brightness(.92)!important;opacity:1!important}
+${CJ} .premium-map .m2-ch:after{content:attr(data-status)!important;display:block!important;background:none!important;border:0!important;box-shadow:none!important}
+${CJ} .premium-map .m2-ch.premium-selected:before{background:none!important;border:0!important;box-shadow:none!important}
+${CJ} .premium-map .pc-chapter-label{background:none!important;border:0!important;border-image:none!important;box-shadow:none!important;outline:0!important}
+${CJ} .premium-map .pc-chapter-label:before,${CJ} .premium-map .pc-chapter-label:after{content:none!important;display:none!important;background:none!important;border:0!important;box-shadow:none!important}
+`;
+ document.head.append(fs);
+
 
 
 })();

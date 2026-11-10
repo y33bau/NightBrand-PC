@@ -1,4 +1,5 @@
 // ---- pad Xbox (Gamepad API): ruch, walka i nawigacja po menu ----
+let pcMenuBack=null;
 const PAD={x:0,y:0,ax:0,ay:0,aimT:-99,prev:[],cur:[],atk:false,blk:false,on:false,g:null,menu:'',lock:0,nav:0,navD:0};
 function padRumble(s,w,ms,g0){if(SETT.rumble===false)return;try{const g=g0||PAD.g;if(g&&g.vibrationActuator)g.vibrationActuator.playEffect('dual-rumble',{duration:ms,strongMagnitude:s,weakMagnitude:w})}catch(e){}}
 function padDz(x,y,dz){const m=Math.hypot(x,y);if(m<dz)return [0,0];const k=Math.min(1,(m-dz)/(1-dz))/m;return [x*k,y*k]}
@@ -25,6 +26,7 @@ function padNav(id,dt,pr,g){
     else navMove(id,d===1?'d':d===-1?'u':d===2?'r':'l')}
   if(pr(0)){if(cur.type==='range'){if(PAD.grab===cur)grabOff();else{PAD.grab=cur;if(cur.parentNode)cur.parentNode.classList.add('grab')}}else cur.click()}
   if(pr(1)&&PAD.grab){grabOff();return}
+  if(pr(1)&&pcMenuBack&&pcMenuBack())return;
   // LB / RB: przełączanie zakładek w Opcjach i Instrukcji
   if((pr(4)||pr(5))&&(id==='opts'||id==='manual'||id==='kap')){const tb=[...root.querySelectorAll('.tabs .tab')],ci=tb.findIndex(b=>b.classList.contains('on'));if(tb.length){const nx=tb[(ci+(pr(5)?1:-1)+tb.length)%tb.length];nx.click();nx.focus()}}
   if(pr(1)){if(id==='pause')togglePause(false);else if(id==='shop')closeShop();else if(id==='opts')$('optsBack').click();else if(id==='manual')$('manBack').click();else if(id==='conf')$('confNo').click();else if(id==='prep')$('prepBack').click();else if(id==='kap')closeKap();else if(id==='end')$('menuBtn').click();else if(id==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home'))$('title').querySelector('.pc-home-button')?.click()}
@@ -53,7 +55,7 @@ function padTick0(dt){
   // menu / sklep / wybór umiejętności / koniec
   if(mid){PAD.x=PAD.y=0;PAD.atk=PAD.blk=false;
     if(PAD.lock>0)return;
-    if(PAD.fresh){PAD.fresh=false;const f=(mid==='title'&&$('start1')&&$('start1').offsetParent!==null&&!$('start1').disabled?$('start1'):null)||[...$(mid).querySelectorAll('button,input')].filter(e=>!e.disabled&&e.offsetParent!==null)[0];if(f)f.focus();return}
+    if(PAD.fresh){PAD.fresh=false;const f=(mid==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home')?$('title').querySelector('.premium-selected:not(:disabled)'):null)||(mid==='title'&&$('start1')&&$('start1').offsetParent!==null&&!$('start1').disabled?$('start1'):null)||[...$(mid).querySelectorAll('button,input')].filter(e=>!e.disabled&&e.offsetParent!==null)[0];if(f)f.focus();return}
     if(mid==='lvl'){const lv=$('lvl'),ready=performance.now()>=levelReadyAt;if(!lv.contains(document.activeElement)){const f=$('card0')||lv.querySelector('button:not(:disabled)');if(f)f.focus({preventScroll:true})}if(!ready&&(pr(0)||pr(3))){play('empty',0);return}if(pr(3)){rerollLevelCards();return}}
     padNav(mid,dt,pr,g);if(pr(9)&&mid==='pause')togglePause(false);return}
   if(!S||S.phase!=='play'){PAD.x=PAD.y=0;PAD.atk=PAD.blk=false;return}
