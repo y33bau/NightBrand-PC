@@ -641,3 +641,4 @@ cache563 · PC etap 1: menu i przygotowanie, przelacznik stylu; bez fizycznego p
 cache564 · PC: cala oprawa menu koncepcja 2, tkanina i portrety alpha (bez fizycznego pada, telefonu, odsluchu i pelnych nocy)
 cache565 · PC: szlif menu, gotyckie naglowki na tkaninie, nagrody z ikonami walut, pauza i ustawienia; bez logo w przygotowaniu (bez fizycznego pada, odsluchu i pelnych nocy)
 cache566 · PC: nowa Podroz i karty rozdzialow, Popioly obok poziomu, tryby tylko w menu tytulowym, opcje pod kolem zebatym (bez fizycznego pada, odsluchu i pelnych nocy)
+cache567 · Graficzny standard PC: naglowki PL/EN, subtelne przyciski, ramki i separatory. Bez zmian mechanik. Nie sprawdzono fizycznego pada, dzwieku i pelnych nocy.
