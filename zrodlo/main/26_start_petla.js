@@ -1136,7 +1136,28 @@ ${Z} .nbo-note{margin:0!important;text-align:center!important;color:#8c7f6c!impo
  const panels=[['prepPerks',T('Perki','Perks')],['prepCh',T('Wyzwania','Challenges')],['prepCurseL',T('Klątwy','Curses')]];let active='prepPerks';const observed=new WeakSet();
  const setPanel=id=>{active=id;sync()};
  for(const [id,label] of panels){const b=make('button','pc-prep-tab',label);b.type='button';b.dataset.panel=id;b.addEventListener('click',()=>setPanel(id));tabs.append(b)}
- function describe(b){if(!b)return;const content=make('div','pc-detail-copy');for(const child of b.children){if(child.matches('img')){const im=child.cloneNode(true);im.className='pc-detail-icon';content.append(im)}else if(!child.matches('i')){const p=make(child.matches('b')?'h3':'p','',child.textContent);content.append(p)}}detail.replaceChildren(content)}
+ function describe(b){
+  if(!b)return;
+  const content=make('div','pc-detail-copy'),kind=panels.find(([id])=>b.closest('#'+id));
+  if(kind)content.append(make('small','pc-detail-kicker',kind[1]));
+  for(const child of b.children){
+   if(child.matches('img')){const im=child.cloneNode(true);im.className='pc-detail-icon';content.append(im)}
+   else if(child.matches('.nb-rw')){
+    // Keep the original reward amounts and icon classes; textContent loses currency identity.
+    const rewards=make('section','pc-detail-rewards'),row=make('div','pc-reward-row');
+    rewards.append(make('h4','',T('Nagroda','Reward')));
+    for(const icon of child.querySelectorAll(':scope > i')){
+     const ash=icon.classList.contains('nb-ash'),label=T(ash?'Popioły':'Monety',ash?'Ashes':'Coins');
+     const item=make('span','pc-reward'),im=icon.cloneNode(true);
+     im.setAttribute('aria-hidden','true');item.append(im,make('strong','pc-reward-value',icon.nextSibling?.textContent.trim()||''),make('small','pc-reward-name',label));row.append(item);
+    }
+    rewards.append(row);const note=child.querySelector('small');if(note)rewards.append(make('p','pc-reward-note',note.textContent));content.append(rewards);
+   }else if(!child.matches('i')&&child.textContent.trim()){
+    content.append(make(child.matches('b')?'h3':'p',child.matches('small')?'pc-lock-note':'',child.textContent.replace(/^✓\s*/,'')));
+   }
+  }
+  detail.replaceChildren(content);
+ }
  function sync(){for(const [id] of panels){const list=$(id);if(list&&!observed.has(list)){new MutationObserver(sync).observe(list,{childList:true});observed.add(list)}const box=list?.closest('.prepgrid>.prepbox');if(box)box.classList.toggle('pc-panel-hidden',id!==active)}for(const b of tabs.children){b.hidden=!$(b.dataset.panel);b.setAttribute('aria-pressed',String(b.dataset.panel===active))}const list=$(active);describe(list?.querySelector('.opt.on')||list?.querySelector('.opt'));}
  prep.addEventListener('focusin',e=>{const b=e.target.closest('.opt');if(b&&b.closest('#prepPerks,#prepCh,#prepCurseL'))describe(b)});
  prep.addEventListener('pointerover',e=>{const b=e.target.closest('.opt');if(b&&b.closest('#prepPerks,#prepCh,#prepCurseL'))describe(b)});
@@ -1151,6 +1172,13 @@ ${Z} .nbo-note{margin:0!important;text-align:center!important;color:#8c7f6c!impo
  const assists=make('details','pc-popover'),as=make('summary','',T('Ustawienia','Settings')),ab=make('div','');ab.append(prep.querySelector('.premium-prep-control-scroll'));assists.append(as,ab);controls.insertBefore(assists,info);
  for(const pop of [difficulty,assists])pop.addEventListener('keydown',e=>{if(e.key==='Escape'&&pop.open){e.stopImmediatePropagation();pop.open=false;pop.querySelector('summary').focus()}});
  const kap=$('kap'),markKron=()=>kap.classList.toggle('pc-chronicle',KAPMODE==='kron');new MutationObserver(markKron).observe(kap,{attributes:true,attributeFilter:['hidden']});new MutationObserver(markKron).observe($('kapH'),{childList:true,subtree:true});markKron();
+ const badgeLabel=()=>{const b=$('kronBtn')?.querySelector('.nbk-new');if(b){const label=T('Nowe wpisy','New entries')+': '+b.textContent;b.setAttribute('aria-label',label);b.title=label}};
+ new MutationObserver(badgeLabel).observe(nav,{childList:true,subtree:true,characterData:true});badgeLabel();
+ for(const head of document.querySelectorAll('#opts .premium-page-head,#manual .premium-page-head,#kap .m2-top,#pause .nbp-head')){const rule=make('span','pc-heading-rule');rule.setAttribute('aria-hidden','true');head.append(rule)}
+ for(const heading of document.querySelectorAll('.premium-page-heading,#kapH,.premium-pause-title,.pc-prep-title'))heading.classList.add('pc-fantasy-title');
+ for(const id of ['pane-set','pane-gfx']){const pane=$(id);if(!pane)continue;let section=null;for(const child of [...pane.children]){if(child.matches('.opsep')){child.classList.add('pc-section-separator');continue}if(child.matches('.nbts-wrap')){child.classList.add('pc-option-section');section=null;continue}if(child.matches('h3')){section=make('section','pc-option-section');child.before(section)}if(section)section.append(child)}}
+ const loadout=$('skillLoadout'),polishLoadout=()=>{const inv=loadout?.querySelector('.slot-inventory');if(inv?.querySelector('[data-equip]:not([data-equip=""])')&&!loadout.querySelector('.pc-loadout-reserve')){const focused=document.activeElement,restore=inv.contains(focused),reserve=make('section','pc-loadout-reserve');inv.before(reserve);reserve.append(make('h3','pc-reserve-title',T('Zdobyte umiejętności','Learned skills')),inv);if(restore)focused.focus({preventScroll:true})}};
+ if(loadout){new MutationObserver(polishLoadout).observe(loadout,{childList:true});polishLoadout()}
  const s=make('style','');s.id='pc-menu-design';const Z='#orient'.repeat(20)+'.pc-menu',P=Z+' :is(#title,#prep,#kap,#manual,#opts,#pause,#lvl,#shop,#end,#conf)';
  s.textContent=`
 /* PC concept 2: material, rhythm and typography. All rules stay inside .pc-menu. */
@@ -1163,8 +1191,8 @@ ${P} :is(button,summary):not(:disabled):is(:hover,:focus-visible,.pf),${P} :is(.
 ${P} button:disabled{opacity:.45!important;filter:saturate(.5)!important;cursor:default!important}
 ${P} :is(.chain-edge,.chain-side,.level-ornament,.m2-ico){display:none!important}
 ${P} :is(.premium-page-content,.m2k-row,#kapDet,.level-panel,.card,.pbox,.endbox,.nbp-panel,.mbox,.nbp-audio,.nbo-card,.premium-hero){border:0!important;border-image:none!important;border-radius:0!important;box-shadow:none!important;background:none!important}
-${P} :is(h1,h2,h3,.premium-page-heading,#kapH,.premium-pause-title){font-weight:400!important;color:var(--pc-paper)!important;line-height:1.2!important}
-${P} :is(.premium-page-heading,#kapH,.premium-pause-title){font-size:calc(46 * var(--pc-u))!important;margin:0!important}
+${P} :is(h1,h2,h3,.premium-page-heading,:where(#kapH),.premium-pause-title){font-weight:400!important;color:var(--pc-paper)!important;line-height:1.2!important}
+${P} :is(.premium-page-heading,:where(#kapH),.premium-pause-title){font-size:calc(46 * var(--pc-u))!important;margin:0!important}
 ${P} :is(p,.mbox li,.m2k-d,.figcap,.nbp-jp,.pc-detail-copy p){font:400 calc(21 * var(--pc-u))/1.6 Georgia,serif!important;color:#d2c3aa!important;overflow-wrap:anywhere!important}
 ${P} :is(.premium-page-head,.m2-top,.nbp-head){height:calc(72 * var(--pc-u))!important;min-height:0!important;flex:none!important;margin:0!important;padding:0!important;border:0!important;display:flex!important;justify-content:center!important;align-items:center!important;position:relative!important}
 ${P} :is(.backar,#kapBack,#prepBack){position:absolute!important;left:0!important;top:calc(16 * var(--pc-u))!important;inset-inline-start:0!important;transform:none!important;font:400 calc(20 * var(--pc-u))/1.2 Georgia!important;padding:calc(12 * var(--pc-u)) calc(20 * var(--pc-u))!important;height:auto!important;min-height:0!important;width:auto!important;max-width:none!important}
@@ -1368,7 +1396,7 @@ ${Z} #kap #kapTabs .tab{white-space:normal!important;text-align:center!important
 ${Z} #manual .premium-page-content{max-width:calc(1100 * var(--pc-u))!important;padding-right:calc(45 * var(--pc-u))!important}
 ${Z} #manual .mbox :is(p,li){max-width:75ch!important}
 
-${P} :is(h1:not(#endTitle),h2,h3){border:0!important;border-image:none!important;background:none!important;box-shadow:none!important;min-height:0!important;height:auto!important;max-width:100%!important;padding:0!important}
+${P} :is(h1:not(:where(#endTitle)),h2,h3){border:0!important;border-image:none!important;background:none!important;box-shadow:none!important;min-height:0!important;height:auto!important;max-width:100%!important;padding:0!important}
 ${Z} #kap :is(#kapH,#kapHd){text-transform:none!important}
 ${Z} #opts .nbo-ah h3{border:0!important;border-image:none!important;background:none!important;padding:0!important;height:auto!important;min-height:0!important}
 ${Z} #title .premium-banner{background-size:cover!important;background-position:center!important;border:0!important;border-image:none!important}
@@ -1416,6 +1444,99 @@ ${Z} #end .nbs-t i{min-height:0!important;font-size:calc(13 * var(--pc-u))!impor
 ${Z} #end .nbs-t i:empty{display:none!important}
 ${Z} #end .endbox{min-height:0!important;flex:0 1 auto!important;max-height:none!important}
 body.contrast ${Z}{--pc-paper:#fff3da;--pc-muted:#d7c9b0;--pc-line:#d9b77e88}
+
+/* Finishing pass: a clear heading hierarchy, currency identity and bounded loadout slots. */
+${P} :is(.premium-page-heading,:where(#kapH),.premium-pause-title,.pc-prep-title){font-weight:600!important;color:#f1d4a1!important;letter-spacing:.035em!important}
+${P} .pc-heading-rule{position:absolute!important;bottom:calc(-7 * var(--pc-u))!important;left:50%!important;transform:translateX(-50%)!important;display:block!important;width:calc(260 * var(--pc-u))!important;height:1px!important;background:linear-gradient(90deg,transparent,#ac8655 35%,#ac8655 65%,transparent)!important;pointer-events:none!important}
+${P} .pc-heading-rule:after{content:'';display:block;position:absolute;left:50%;top:50%;width:calc(6 * var(--pc-u));height:calc(6 * var(--pc-u));background:#bd965e;box-shadow:0 0 0 calc(5 * var(--pc-u)) #111013;transform:translate(-50%,-50%) rotate(45deg)}
+${Z} #opts .pane :is(h2,h3),${Z} #manual .mbox :is(h2,h3),${Z} #pause #skillLoadout>h2{font:600 calc(31 * var(--pc-u))/1.25 Georgia!important;color:#e6c58e!important;letter-spacing:.025em!important;text-align:left!important;margin:0 0 calc(16 * var(--pc-u))!important;padding:0 0 calc(16 * var(--pc-u))!important;border:0!important;border-bottom:1px solid var(--pc-line)!important;background:none!important}
+${Z} #opts .pane :is(p,.figcap),${Z} #manual .mbox :is(p,li){font-size:calc(19 * var(--pc-u))!important;line-height:1.65!important;color:#c5b69e!important}
+${Z} #opts .tgl{font-size:calc(19 * var(--pc-u))!important;line-height:1.45!important;padding:calc(9 * var(--pc-u)) 0!important}
+${Z} #opts .opsep{height:1px!important;background:linear-gradient(90deg,transparent,#9f7f4b66,transparent)!important;margin:calc(26 * var(--pc-u)) auto!important;width:100%!important}
+${Z} #prep :is(#prepCh,#prepCurseL) .opt{padding-left:calc(26 * var(--pc-u))!important;min-height:calc(90 * var(--pc-u))!important;gap:calc(10 * var(--pc-u))!important}
+${Z} #prep :is(#prepCh,#prepCurseL) .opt>.nb-rw{display:flex!important;align-items:center!important;justify-content:flex-start!important;flex-wrap:wrap!important;gap:calc(7 * var(--pc-u))!important;font:400 calc(17 * var(--pc-u))/1.2 Georgia!important;color:#c7ae7c!important;margin:0!important}
+${Z} #prep :is(.nb-rw,.pc-reward) i{display:inline-block!important;position:static!important;flex:none!important;width:calc(25 * var(--pc-u))!important;height:calc(25 * var(--pc-u))!important;margin:0!important;background-position:center!important;background-size:contain!important;background-repeat:no-repeat!important}
+${Z} #prep :is(.nb-rw,.pc-reward) .nb-ash{background-image:var(--ash-ic)!important}
+${Z} #prep :is(.nb-rw,.pc-reward) .nb-coin{background-image:var(--nb-coin-ic)!important;margin-left:calc(14 * var(--pc-u))!important}
+${Z} #prep .pc-perk-detail{padding:calc(12 * var(--pc-u)) 0 calc(12 * var(--pc-u)) calc(28 * var(--pc-u))!important}
+${Z} #prep .pc-detail-copy{position:relative!important;padding:calc(26 * var(--pc-u)) calc(24 * var(--pc-u))!important;background:linear-gradient(145deg,#131116c9,#0b0a0e70)!important;border-top:1px solid #b18a5355!important;border-bottom:1px solid #b18a5333!important;min-height:calc(340 * var(--pc-u))!important}
+${Z} #prep .pc-detail-kicker{display:block!important;font:400 calc(13 * var(--pc-u))/1.4 Georgia!important;letter-spacing:.18em!important;text-transform:uppercase!important;color:#a78a5e!important;margin-bottom:calc(18 * var(--pc-u))!important}
+${Z} #prep .pc-detail-copy h3{font:600 calc(31 * var(--pc-u))/1.3 Georgia!important;color:#efcf99!important;margin:0 0 calc(26 * var(--pc-u))!important;padding:0 0 calc(22 * var(--pc-u))!important;border-bottom:1px solid var(--pc-line)!important}
+${Z} #prep .pc-detail-copy p{font:400 calc(19 * var(--pc-u))/1.7 Georgia!important;color:#d6c8b1!important;margin:0 0 calc(17 * var(--pc-u))!important}
+${Z} #prep .pc-detail-copy .pc-lock-note{font-size:calc(16 * var(--pc-u))!important;color:#a89880!important;border-top:1px solid #a4895e25!important;padding-top:calc(18 * var(--pc-u))!important}
+${Z} #prep .pc-detail-rewards{margin-top:calc(32 * var(--pc-u))!important;padding-top:calc(22 * var(--pc-u))!important;border-top:1px solid var(--pc-line)!important}
+${Z} #prep .pc-detail-rewards h4{font:400 calc(13 * var(--pc-u))/1.3 Georgia!important;color:#ad9369!important;text-transform:uppercase!important;letter-spacing:.16em!important;margin:0 0 calc(20 * var(--pc-u))!important}
+${Z} #prep .pc-reward-row{display:flex!important;flex-wrap:wrap!important;gap:calc(24 * var(--pc-u))!important}
+${Z} #prep .pc-reward{display:grid!important;grid-template-columns:auto auto!important;grid-template-rows:auto auto!important;align-items:center!important;justify-content:start!important;gap:calc(6 * var(--pc-u)) calc(10 * var(--pc-u))!important}
+${Z} #prep .pc-reward i{grid-column:1!important;grid-row:1!important;width:calc(36 * var(--pc-u))!important;height:calc(36 * var(--pc-u))!important;margin:0!important}
+${Z} #prep .pc-reward-value{font:400 calc(29 * var(--pc-u))/1.2 Georgia!important;color:#f1d7a2!important;grid-column:2!important;grid-row:1!important}
+${Z} #prep .pc-reward-name{font:400 calc(15 * var(--pc-u))/1.3 Georgia!important;color:#c0ac89!important;grid-column:1/3!important;grid-row:2!important;text-align:center!important}
+${Z} #prep .pc-detail-copy .pc-reward-note{font-size:calc(14 * var(--pc-u))!important;margin:calc(16 * var(--pc-u)) 0 0!important;color:#ad9c81!important}
+${Z} #title #kronBtn .nbk-new{display:inline-grid!important;place-items:center!important;position:absolute!important;top:50%!important;right:calc(26 * var(--pc-u))!important;transform:translateY(-50%)!important;width:calc(27 * var(--pc-u))!important;height:calc(27 * var(--pc-u))!important;min-width:0!important;margin:0!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;font-size:0!important;line-height:0!important;color:#e9c584!important}
+${Z} #title #kronBtn .nbk-new:before{content:'✦'!important;font:400 calc(23 * var(--pc-u))/1 Georgia!important;color:#dfb76e!important;display:block!important}
+${Z} #pause .nbp-sub{font:400 calc(15 * var(--pc-u))/1.3 Georgia!important;margin-left:calc(18 * var(--pc-u))!important;color:#b09971!important}
+${Z} #pause #skillLoadout{max-width:calc(1250 * var(--pc-u))!important;margin:0 auto!important;padding:calc(24 * var(--pc-u)) calc(34 * var(--pc-u))!important;background:linear-gradient(145deg,#121015a8,#0b0a0e55)!important;border-top:1px solid #a4895e44!important;border-bottom:1px solid #a4895e33!important;text-align:left!important}
+${Z} #pause #skillLoadout>p{font:400 calc(18 * var(--pc-u))/1.65 Georgia!important;color:#b9aa91!important;text-align:left!important;margin:0 0 calc(23 * var(--pc-u))!important;max-width:82ch!important}
+${Z} #pause #skillLoadout .slot-pick{display:grid!important;grid-auto-flow:column!important;grid-auto-columns:minmax(0,1fr)!important;grid-template-columns:none!important;gap:calc(18 * var(--pc-u))!important;margin:calc(28 * var(--pc-u)) 0!important}
+${Z} #pause #skillLoadout .slot-tab{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto minmax(0,1fr) auto!important;align-items:center!important;justify-items:center!important;gap:calc(12 * var(--pc-u))!important;min-height:calc(165 * var(--pc-u))!important;height:auto!important;padding:calc(18 * var(--pc-u)) calc(15 * var(--pc-u))!important;border:1px solid #8c724744!important;background:linear-gradient(155deg,#2a211d80,#0c0b0d55)!important;box-shadow:inset 0 1px #d0ac6a0c!important}
+${Z} #pause #skillLoadout .slot-tab.chosen{border-color:#aa814a!important;box-shadow:inset 0 -2px #ac854e!important}
+${Z} #pause #skillLoadout .loadout-key{grid-column:1!important;grid-row:1!important;font:400 calc(14 * var(--pc-u))/1.2 Georgia!important;color:#bba17a!important}
+${Z} #pause #skillLoadout .loadout-name{grid-column:1!important;grid-row:3!important;font:400 calc(20 * var(--pc-u))/1.3 Georgia!important;color:#dfceb0!important;text-align:center!important}
+${Z} #pause #skillLoadout .slot-tab .ic{grid-column:1!important;grid-row:2!important;width:calc(52 * var(--pc-u))!important;height:calc(52 * var(--pc-u))!important;margin:0!important}
+${Z} #pause #skillLoadout .empty-name{grid-row:2/4!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:calc(12 * var(--pc-u))!important;color:#aa9a81!important;font-size:calc(18 * var(--pc-u))!important}
+${Z} #pause #skillLoadout .empty-name:before{content:'+';display:block;color:#98794e88;font:400 calc(38 * var(--pc-u))/1 Georgia}
+${Z} #pause #skillLoadout .loadout-state{border-left:2px solid #99744766!important;padding:calc(8 * var(--pc-u)) calc(18 * var(--pc-u))!important;margin:0 0 calc(18 * var(--pc-u))!important;font-size:calc(16 * var(--pc-u))!important}
+${Z} #pause #skillLoadout .loadout-state+.loadout-state{border:0!important;padding:calc(20 * var(--pc-u)) calc(24 * var(--pc-u))!important;background:#08070966!important;color:#d4c1a0!important;font-size:calc(18 * var(--pc-u))!important;max-width:none!important}
+${Z} #pause #skillLoadout .pc-reserve-title{font:600 calc(23 * var(--pc-u))/1.3 Georgia!important;color:#dfc18a!important;text-align:left!important;margin:calc(30 * var(--pc-u)) 0 calc(16 * var(--pc-u))!important;padding-top:calc(22 * var(--pc-u))!important;border-top:1px solid var(--pc-line)!important}
+${Z} #pause #skillLoadout .slot-inventory{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:calc(12 * var(--pc-u))!important}
+${Z} #pause #skillLoadout .slot-inventory button.go{min-height:calc(85 * var(--pc-u))!important;grid-template-columns:calc(48 * var(--pc-u)) minmax(0,1fr)!important;gap:calc(16 * var(--pc-u))!important;padding:calc(15 * var(--pc-u)) calc(18 * var(--pc-u))!important;border:0!important;border-bottom:1px solid #a4895e33!important;background:none!important}
+${Z} #pause #skillLoadout .slot-inventory button.go .ic{width:calc(48 * var(--pc-u))!important;height:calc(48 * var(--pc-u))!important}
+${Z} #pause #skillLoadout .loadout-copy{font:400 calc(22 * var(--pc-u))/1.4 Georgia!important;color:#e3ceb0!important;text-align:left!important;padding:0!important}
+${Z} #pause #skillLoadout .loadout-copy small{font:400 calc(14 * var(--pc-u))/1.45 Georgia!important;color:#ac9b80!important;margin-top:calc(7 * var(--pc-u))!important}
+${Z} #pause #skillLoadout .slot-inventory>[data-equip=""]{grid-column:1/-1!important;display:block!important;min-height:calc(40 * var(--pc-u))!important;font-size:calc(17 * var(--pc-u))!important;text-align:left!important;padding:calc(10 * var(--pc-u)) 0!important}
+${Z} #pause #skillLoadout .slot-inventory>[data-equip=""]:only-child:disabled{display:none!important}
+/* Page titles use the game's medieval face on the same torn burgundy cloth. */
+${P} .pc-fantasy-title{font:600 calc(52 * var(--pc-u))/1.05 Grenze,Georgia,serif!important;letter-spacing:.045em!important;color:#efd8ae!important;background:var(--pc-cloth) center/100% 190% no-repeat!important;padding:calc(10 * var(--pc-u)) calc(52 * var(--pc-u)) calc(15 * var(--pc-u))!important;width:fit-content!important;max-width:80%!important;text-align:center!important;text-shadow:0 2px 2px #070506!important}
+${Z} #prep .pc-fantasy-title{font-size:calc(46 * var(--pc-u))!important;line-height:1.05!important;padding:calc(8 * var(--pc-u)) calc(50 * var(--pc-u)) calc(12 * var(--pc-u))!important}
+${P} .pc-heading-rule{width:calc(200 * var(--pc-u))!important;bottom:calc(-9 * var(--pc-u))!important;opacity:.8!important}
+${Z} #prep .pc-detail-copy h3,${Z} #kap #kapHd{font-family:Grenze,Georgia,serif!important;font-weight:600!important;font-size:calc(36 * var(--pc-u))!important;line-height:1.2!important;color:#e8c995!important}
+${Z} #opts .pane :is(h2,h3),${Z} #manual .mbox :is(h2,h3),${Z} #pause #skillLoadout>h2{font-family:Grenze,Georgia,serif!important;font-weight:600!important;font-size:calc(30 * var(--pc-u))!important}
+/* Settings are grouped by their real headings; all controls and listeners stay on the same elements. */
+${Z} #opts :is(#pane-set,#pane-gfx):not([hidden]){display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:calc(24 * var(--pc-u)) calc(34 * var(--pc-u))!important;align-items:start!important}
+${Z} #opts .pc-section-separator,${Z} #opts .pc-option-section .opsep{display:none!important}
+${Z} #opts .pc-option-section{min-width:0!important;padding:calc(20 * var(--pc-u)) calc(24 * var(--pc-u))!important;background:linear-gradient(145deg,#161218bb,#0c0b0e55)!important;border-top:1px solid #a4895e55!important}
+${Z} #opts .pc-option-section h3.sth{font:600 calc(29 * var(--pc-u))/1.2 Grenze,Georgia,serif!important;color:#e8c995!important;text-align:left!important;margin:0 0 calc(16 * var(--pc-u))!important;padding:0 0 calc(13 * var(--pc-u))!important;border-bottom:1px solid #a4895e44!important}
+${Z} #opts .pc-option-section .figcap{font:400 calc(16 * var(--pc-u))/1.6 Georgia!important;text-align:left!important;margin:calc(12 * var(--pc-u)) 0!important;color:#b7a78b!important}
+${Z} #opts .pc-option-section :is(.qrow,.langrow,.modesw){justify-content:flex-start!important;flex-wrap:wrap!important;gap:calc(6 * var(--pc-u))!important;margin:calc(10 * var(--pc-u)) 0!important}
+${Z} #opts .pc-option-section button.go,${Z} #opts .pc-option-section #tsRow button{font-size:calc(19 * var(--pc-u))!important;min-height:calc(42 * var(--pc-u))!important;padding:calc(9 * var(--pc-u)) calc(13 * var(--pc-u))!important}
+${Z} #opts .pc-option-section .musrow{font-size:calc(19 * var(--pc-u))!important;gap:calc(10 * var(--pc-u))!important;padding:calc(8 * var(--pc-u)) 0!important}
+${Z} #opts .pc-option-section .tgl{font-size:calc(17 * var(--pc-u))!important;min-height:calc(34 * var(--pc-u))!important;padding:calc(5 * var(--pc-u)) 0!important;margin:calc(5 * var(--pc-u)) 0!important}
+${Z} #opts #pane-gfx>.pc-option-section:last-child{grid-column:1/-1!important}
+/* With learned skills, slots and reserve sit side by side instead of pushing the reserve below the fold. */
+${Z} #pause #skillLoadout:has(.pc-loadout-reserve){display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;column-gap:calc(30 * var(--pc-u))!important;row-gap:calc(14 * var(--pc-u))!important}
+${Z} #pause #skillLoadout:has(.pc-loadout-reserve)>h2{grid-column:1/-1!important;margin-bottom:0!important;padding-bottom:calc(12 * var(--pc-u))!important}
+${Z} #pause #skillLoadout:has(.pc-loadout-reserve)>p:not(.loadout-state){grid-column:1/-1!important;margin-bottom:calc(6 * var(--pc-u))!important;font-size:calc(17 * var(--pc-u))!important}
+${Z} #pause #skillLoadout:has(.pc-loadout-reserve) .slot-pick{grid-column:1!important;grid-row:3!important;grid-auto-flow:row!important;grid-auto-columns:auto!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:calc(12 * var(--pc-u))!important;margin:0!important;align-self:start!important}
+${Z} #pause #skillLoadout:has(.pc-loadout-reserve) .slot-tab{min-height:calc(120 * var(--pc-u))!important;padding:calc(12 * var(--pc-u))!important;gap:calc(8 * var(--pc-u))!important}
+${Z} #pause #skillLoadout:has(.pc-loadout-reserve) .slot-tab .ic{width:calc(42 * var(--pc-u))!important;height:calc(42 * var(--pc-u))!important}
+${Z} #pause #skillLoadout:has(.pc-loadout-reserve) .loadout-name{font-size:calc(18 * var(--pc-u))!important}
+${Z} #pause #skillLoadout:has(.pc-loadout-reserve)>.loadout-state{grid-column:1!important;grid-row:4!important;align-self:start!important;font-size:calc(15 * var(--pc-u))!important;margin:0!important}
+${Z} #pause .pc-loadout-reserve{grid-column:2!important;grid-row:3/5!important;border-left:1px solid var(--pc-line)!important;padding-left:calc(26 * var(--pc-u))!important;min-width:0!important}
+${Z} #pause #skillLoadout .pc-reserve-title{font:600 calc(26 * var(--pc-u))/1.2 Grenze,Georgia,serif!important;margin:0 0 calc(12 * var(--pc-u))!important;padding:0 0 calc(12 * var(--pc-u))!important;border:0!important;border-bottom:1px solid #a4895e44!important}
+${Z} #pause #skillLoadout .pc-loadout-reserve .slot-inventory{grid-template-columns:1fr!important;gap:calc(7 * var(--pc-u))!important}
+${Z} #pause #skillLoadout .pc-loadout-reserve .slot-inventory button.go{min-height:calc(65 * var(--pc-u))!important;padding:calc(8 * var(--pc-u)) calc(10 * var(--pc-u))!important;grid-template-columns:calc(36 * var(--pc-u)) minmax(0,1fr)!important;gap:calc(12 * var(--pc-u))!important}
+${Z} #pause #skillLoadout .pc-loadout-reserve .slot-inventory .ic{width:calc(36 * var(--pc-u))!important;height:calc(36 * var(--pc-u))!important}
+${Z} #pause #skillLoadout .pc-loadout-reserve .loadout-copy{font-size:calc(19 * var(--pc-u))!important}
+${Z} #pause #skillLoadout .pc-loadout-reserve .loadout-copy small{font-size:calc(13 * var(--pc-u))!important;margin-top:calc(3 * var(--pc-u))!important}
+${Z} #prep .premium-prep-head:before{content:none!important;display:none!important}
+${Z} #prep .premium-prep-head{height:calc(100 * var(--pc-u))!important;align-items:center!important;padding-bottom:0!important}
+${P} .pc-fantasy-title{font-family:'Grenze Gotisch',Georgia,serif!important;font-weight:600!important;letter-spacing:.025em!important}
+${Z} #prep .pc-detail-copy h3,${Z} #kap #kapHd,${Z} #opts .pane :is(h2,h3),${Z} #opts .pc-option-section h3.sth,${Z} #manual .mbox :is(h2,h3),${Z} #pause #skillLoadout>h2,${Z} #pause #skillLoadout .pc-reserve-title{font-family:'Grenze Gotisch',Georgia,serif!important;font-weight:600!important;letter-spacing:.015em!important}
+${Z} #pause #skillLoadout .pc-loadout-reserve .slot-inventory{gap:calc(5 * var(--pc-u))!important}
+${Z} #pause #skillLoadout .pc-loadout-reserve .slot-inventory button.go{min-height:calc(54 * var(--pc-u))!important;padding:calc(6 * var(--pc-u)) calc(10 * var(--pc-u))!important;grid-template-columns:calc(34 * var(--pc-u)) minmax(0,1fr)!important}
+${Z} #pause #skillLoadout .pc-loadout-reserve .slot-inventory button.go .ic{width:calc(34 * var(--pc-u))!important;height:calc(34 * var(--pc-u))!important}
+${Z} #pause #skillLoadout .pc-loadout-reserve .loadout-copy small{font-size:max(12px,calc(13 * var(--pc-u) * var(--nbts,1)))!important}
+${Z} #pause #skillLoadout:has(.pc-loadout-reserve){padding-top:calc(18 * var(--pc-u))!important;padding-bottom:calc(18 * var(--pc-u))!important;row-gap:calc(10 * var(--pc-u))!important}
 
 `;
  // The original accessibility switch continues to scale text, without scaling artwork twice.
