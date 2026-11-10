@@ -639,3 +639,4 @@ cache561 · 561: siatka bezpieczenstwa startu (blad zamiast paska na 40%), spopi
 cache562 · runda 562: wgrane zredagowane teksty fabuly i gry (246 wpisow, kanon 10.11); nie ogladane na telefonie
 cache563 · PC etap 1: menu i przygotowanie, przelacznik stylu; bez fizycznego pada i odsluchu
 cache564 · PC: cala oprawa menu koncepcja 2, tkanina i portrety alpha (bez fizycznego pada, telefonu, odsluchu i pelnych nocy)
+cache565 · PC: szlif menu, gotyckie naglowki na tkaninie, nagrody z ikonami walut, pauza i ustawienia; bez logo w przygotowaniu (bez fizycznego pada, odsluchu i pelnych nocy)
