@@ -7789,6 +7789,143 @@ ${SG} button:is(:hover,:focus-visible,.pf):not(:disabled):after{background-size:
 ${G} #lvl #lvlTitle,${G} #conf h1{font-family:'Grenze Gotisch',Georgia,serif!important;font-weight:500!important;color:#e6d2aa!important}
 `;
  document.head.append(gs);
+ // PC refinement: one tile contour, symmetric groups, and distinct focus/selection states.
+ root.classList.add('pc-tiles');
+ const settingGroup=make('div','pc-prep-settings');controls.prepend(settingGroup);settingGroup.append(difficulty,assists);
+ const runStatus=make('div','pc-run-status'),identity=make('div','pc-run-identity'),counts=make('div','pc-run-counts');
+ runStatus.setAttribute('role','status');runStatus.setAttribute('aria-live','polite');runStatus.append(identity,counts);info.append(runStatus);
+ const sourceSummary=info.querySelector('.premium-prep-summary');
+ const destination=make('section','pc-prep-destination');destination.append($('prepK'));controls.append(destination,runStatus,controls.querySelector(':scope>.btnrow'));info.hidden=true;prep.querySelector('.premium-prep-head').append(settingGroup);
+ function refreshTileSummary(){
+  if(prep.hidden)return;
+  const cls=({r:T('Rycerz','Knight'),k:T('Kat','Executioner'),z:T('Zabójczyni','Ash Dancer')})[charId()];
+  put(identity,cls+' · '+DF[DIFFK].n);
+  const values=[[T('Perki','Perks'),PREP.perks.length+'/1'],[T('Wyzwania','Challenges'),String(PREP.chal?1:0)],[T('Klątwy','Curses'),PREP.curses.length+'/3']];
+  for(let i=0;i<values.length;i++){let cell=counts.children[i];if(!cell){cell=make('span','');cell.append(make('small',''),make('strong',''));counts.append(cell)}put(cell.firstChild,values[i][0]);put(cell.lastChild,values[i][1])}
+ }
+ new MutationObserver(refreshTileSummary).observe(sourceSummary,{childList:true,characterData:true,subtree:true});
+ new MutationObserver(refreshTileSummary).observe(prep,{attributes:true,attributeFilter:['hidden']});refreshTileSummary();
+ // Move the existing slider with its listeners and explanation, without changing its value.
+ const brightness=$('briSl')?.closest('.pc-option-section');if(brightness){brightness.classList.add('pc-brightness-tile');$('pane-gfx').prepend(brightness);$('briSl').addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight')e.stopPropagation()})}
+ function tileFrame(el){
+  if(!el.classList.contains('pc-tile'))el.classList.add('pc-tile');
+  if(!el.querySelector(':scope>.pcg-edge')){const edge=make('span','pcg-edge');edge.setAttribute('aria-hidden','true');el.append(edge)}
+ }
+ function polishTiles(){
+  for(const card of $('cards').querySelectorAll(':scope>.card')){
+   const icon=card.querySelector('.cn>.ic');if(icon){icon.classList.add('pc-card-icon');card.querySelector('.cn').before(icon)}tileFrame(card);
+  }
+  for(const card of root.querySelectorAll('#shop .card,#title .m2-ch'))tileFrame(card);
+  tileFrame(destination);tileFrame(runStatus);tileFrame($('prepGo'));
+ }
+ for(const box of [$('cards'),$('shop').querySelector('.shopc'),chapterList,$('prepGo')])if(box)new MutationObserver(polishTiles).observe(box,{childList:true,subtree:true});polishTiles();
+ const ts=make('style','');ts.id='pc-tile-refinement';const U='#orient'.repeat(28)+'.pc-menu.pc-gfx.pc-tiles',V=U+' :is(#title,#prep,#kap,#opts,#manual,#pause,#lvl,#shop,#end,#conf,#lang)',F=n=>`calc(${n} * var(--pc-u) * var(--nbts,1))`,D=n=>`calc(${n} * var(--pc-u))`;
+ ts.textContent=`
+${V} button:is(:hover,:focus-visible,.pf):not(:disabled){filter:none!important;outline:1px solid #b89b6877!important;outline-offset:${D(2)}!important;background-color:transparent!important}
+${V} button:is(:hover,:focus-visible,.pf):not(:disabled):after{content:none!important;display:none!important;background:none!important}
+${V} :is(.tab,.nbp-tab,.stab,.pc-prep-tab,.pcg-action,.btnrow>button,.lvbtns>button),${U} #title.pc-home .premium-nav>.pcg-menu,${U} #prep .pc-popover>summary{background:var(--pcg-idle) center/100% 170% no-repeat!important;filter:none!important}
+${V} :is(.tab.on,.nbp-tab[aria-pressed=true],.stab.on,.pc-prep-tab[aria-pressed=true]),${V} button:active:not(:disabled):not(.pc-tile){background:var(--pcg-selected) center/100% 170% no-repeat!important}
+${V} :is(.tab,.nbp-tab,.stab,.pc-prep-tab):is(:hover,:focus-visible,.pf){filter:brightness(1.16)!important}
+${V} :is(.pcg-action,.pcg-menu):is(:hover,:focus-visible,.pf):not(:disabled){outline:0!important;filter:brightness(1.3)!important}
+${V} .pcg-heading{background:var(--pcg-idle) center/100% 170% no-repeat!important;filter:none!important}
+${V} .pc-tile{position:relative!important;box-shadow:none!important;border:0!important;border-image:none!important;border-radius:0!important;isolation:isolate!important}
+${V} .pc-tile:not(.m2-ch){background:linear-gradient(145deg,#19131bec,#0d0b10d9)!important}
+${V} .pc-tile>.pcg-edge{border-image-width:${D(15)}!important;opacity:.85!important}
+${V} .pc-tile:is(:hover,:focus-visible,.pf)>.pcg-edge{filter:brightness(1.7) saturate(.6)!important}
+${V} .pc-tile:active{outline:2px solid #8d3548!important;outline-offset:-2px!important}
+${U} #title:not(.pc-home) :is(#kapBtn,#kronBtn){width:${D(175)}!important;height:${D(66)}!important;display:flex!important;justify-content:center!important;align-items:center!important;text-align:center!important;background:var(--pcg-idle) center/100% 170% no-repeat!important;padding:${D(12)} ${D(16)}!important}
+${U} #title:not(.pc-home) :is(#kapBtn,#kronBtn) .pcg-glyph{--pcg-h:${D(33)};filter:brightness(1.5) saturate(.55)!important}
+${U} #title .premium-map .m2-ch{border:0!important;outline:0!important;box-shadow:none!important;background-color:#100d13!important}
+${U} #title .premium-map .m2-ch:is(:hover,:focus-visible,.pf){outline:1px solid #bd9b6677!important;outline-offset:-1px!important}
+${U} #title .premium-map .m2-ch.premium-selected{outline:2px solid #783039!important;outline-offset:-2px!important;box-shadow:inset 0 0 ${D(18)} #77213944!important}
+${U} #title .premium-map .m2-ch.premium-selected>.pcg-edge{filter:sepia(1) saturate(4) hue-rotate(315deg) brightness(.9)!important}
+${U} #title .premium-map .m2-ch:after{content:attr(data-status)!important;display:block!important;background:none!important}
+${U} #title .pc-chapter-label:before{content:none!important;display:none!important}
+${U} #title .pc-chapter-label{background:none!important;border:0!important;box-shadow:none!important}
+${U} #prep .pc-prep-title .pcg-glyph{--pcg-h:${F(52)}}
+${U} #prep .pc-prep-tabs{grid-column:1/-1!important;justify-content:center!important;gap:${D(18)}!important}
+${U} #prep .prepgrid>#prepChar{grid-row:2!important}
+${U} #prep #prepChar .on .premium-class-art{height:calc(270 * var(--pc-u) / var(--nbts,1))!important}
+${U} #prep .pc-perk-detail{padding-top:0!important}
+${U} #prep .pc-prep-tab{flex:1 1 0!important;max-width:${D(200)}!important;min-width:0!important;text-align:center!important;font-family:'Grenze Gotisch',Georgia,serif!important;font-size:${F(24)}!important;font-weight:500!important;line-height:1.15!important;padding:${D(16)} ${D(12)}!important}
+${U} #prep .premium-prep-controls{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,2fr) minmax(0,1fr)!important;gap:${D(28)}!important;height:${D(128)}!important;padding:${D(15)} 0 0!important;align-items:center!important}
+${U} #prep .pc-prep-settings{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:${D(12)}!important;min-width:0!important}
+${U} #prep .pc-popover{min-width:0!important;width:100%!important}
+${U} #prep .pc-popover>summary{display:flex!important;align-items:center!important;justify-content:center!important;list-style:none!important;text-align:center!important;min-height:${D(66)}!important;padding:${D(14)} ${D(10)}!important;font:500 ${F(21)}/1.2 'Grenze Gotisch',Georgia,serif!important}
+${U} #prep .pc-popover>summary::-webkit-details-marker{display:none!important}
+${U} #prep .pc-popover[open]>summary{background:var(--pcg-selected) center/100% 170% no-repeat!important}
+${U} #prep .pc-popover>summary:is(:hover,:focus-visible){outline:1px solid #b89b6877!important;outline-offset:${D(2)}!important;filter:brightness(1.14)!important}
+${U} #prep .pc-footer-info{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:${D(5)}!important;padding:0 ${D(20)}!important;border-inline:1px solid #a68b5e33!important;text-align:center!important}
+${U} #prep .pc-footer-info #prepK{font:500 ${F(24)}/1.15 'Grenze Gotisch',Georgia,serif!important;text-transform:none!important;text-align:center!important;color:#ead7b3!important;margin:0!important;white-space:normal!important}
+${U} #prep .premium-prep-summary{display:none!important}
+${U} #prep .pc-run-status{display:flex!important;flex-direction:column!important;align-items:center!important;gap:${D(6)}!important;width:100%!important}
+${U} #prep .pc-run-identity{font:400 ${F(16)}/1.25 Georgia,serif!important;color:#c9bba4!important;text-align:center!important}
+${U} #prep .pc-run-counts{display:flex!important;justify-content:center!important;gap:${D(18)}!important;width:100%!important}
+${U} #prep .pc-run-counts>span{display:flex!important;align-items:baseline!important;gap:${D(7)}!important}
+${U} #prep .pc-run-counts small{font:400 ${F(14)}/1.2 Georgia,serif!important;color:#af9a79!important}
+${U} #prep .pc-run-counts strong{font:400 ${F(16)}/1.2 Georgia,serif!important;color:#ebd7af!important;font-variant-numeric:tabular-nums!important}
+${U} #prep .premium-prep-controls>.btnrow{width:100%!important;min-width:0!important}
+${U} #prep #prepGo{width:100%!important;min-height:${D(70)}!important}
+${U} #pause .nbp-pane[data-pane=controls]{width:100%!important;margin-inline:auto!important}
+${U} #pause #pauseKeys{width:min(100%,${D(1120)})!important;max-width:none!important;margin:0 auto!important}
+${U} #pause #pauseKeys .subtabs{justify-content:center!important;margin-inline:auto!important;width:100%!important}
+${U} #pause #pauseKeys .nb-ctl-img{width:auto!important;max-width:100%!important;max-height:calc(100vh - 540 * var(--pc-u))!important;height:auto!important;object-fit:contain!important;margin:0 auto!important}
+${U} #opts #pane-gfx>.pc-option-section:has(#fpsRow){grid-column:1/-1!important}
+${U} #opts .pc-option-section>h3{font-family:'Grenze Gotisch',Georgia,serif!important;text-align:center!important}
+${U} #lvl .level-panel{display:flex!important;flex-direction:column!important;gap:${D(12)}!important;height:100%!important;min-height:0!important;overflow:auto!important;padding:${D(24)}!important}
+${U} #lvl :is(.level-heading,#slots,#levelWait,.level-build,.lvbtns){flex:none!important;margin:0!important;text-align:center!important}
+${U} #lvl .level-heading{padding:0!important}
+${U} #lvl .level-heading .kicker{font-size:${F(13)}!important;letter-spacing:.2em!important;margin:0 0 ${D(5)}!important}
+${U} #lvl #lvlTitle{font:500 ${F(42)}/1.12 'Grenze Gotisch',Georgia,serif!important;margin:0!important}
+${U} #lvl #slots{font:400 ${F(17)}/1.4 Georgia,serif!important;padding:0 0 ${D(12)}!important;border-bottom:1px solid #a68b5e33!important}
+${U} #lvl #levelWait:empty{display:none!important}
+${U} #lvl #cards{flex:1 0 ${D(380)}!important;min-height:${D(380)}!important;grid-auto-rows:minmax(0,1fr)!important;gap:${D(20)}!important;padding:0!important;margin:0!important;align-items:stretch!important}
+${U} #lvl #cards .card{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:${D(10)}!important;height:100%!important;min-height:0!important;max-height:none!important;padding:${D(22)}!important;text-align:center!important;overflow:visible!important}
+${U} #lvl #cards .card>:not(.pcg-edge):not(.num){position:static!important;transform:none!important;inset:auto!important;order:5;flex:none;max-width:100%!important;margin:0!important;white-space:normal!important}
+${U} #lvl #cards .card .num{position:absolute!important;right:${D(13)}!important;top:${D(13)}!important;left:auto!important;bottom:auto!important;width:${D(25)}!important;height:${D(25)}!important;display:grid!important;place-items:center!important;font:400 ${F(13)}/1 Georgia,serif!important;color:#a98d64!important;border:1px solid #a68b5e33!important;background:#0d0b10!important;z-index:3!important}
+${U} #lvl #cards .card .ck{order:0!important;font:400 ${F(12)}/1.3 Georgia,serif!important;min-height:${D(24)}!important;padding:0 ${D(20)}!important;text-align:center!important;letter-spacing:.05em!important}
+${U} #lvl #cards .card .pc-card-icon{order:1!important;display:block!important;align-self:center!important;width:${D(76)}!important;height:${D(76)}!important;margin:${D(3)} auto!important;min-width:0!important}
+${U} #lvl #cards .card .cn{order:2!important;display:flex!important;align-items:center!important;justify-content:center!important;font:500 ${F(27)}/1.15 'Grenze Gotisch',Georgia,serif!important;min-height:${D(60)}!important;text-align:center!important}
+${U} #lvl #cards .card .cl{order:3!important;display:block!important;min-height:${D(28)}!important;font:400 ${F(15)}/1.3 Georgia,serif!important;text-align:center!important;color:#bda47b!important}
+${U} #lvl #cards .card .cd{order:4!important;display:block!important;flex:1 1 auto!important;min-height:${D(60)}!important;overflow:auto!important;padding:${D(10)} ${D(3)} 0!important;border-top:1px solid #a68b5e33!important;font:400 ${F(17)}/1.5 Georgia,serif!important;text-align:left!important;scrollbar-gutter:stable!important}
+${U} #lvl #cards .card .cd :is(ul,li){font:400 ${F(17)}/1.5 Georgia,serif!important}
+${U} #lvl #cards .card .fx{order:5!important;display:flex!important;flex-wrap:wrap!important;justify-content:center!important;align-items:center!important;gap:${D(6)}!important;padding:${D(9)}!important;border-block:1px solid #a68b5e33!important;background:#08070b88!important;text-align:center!important}
+${U} #lvl #cards .card .fx em{display:block!important;flex-basis:100%!important;font:400 ${F(12)}/1.3 Georgia,serif!important}
+${U} #lvl #cards .card .fx :is(b,s){font:400 ${F(18)}/1.2 Georgia,serif!important}
+${U} #lvl .level-build>summary{font:500 ${F(19)}/1.3 'Grenze Gotisch',Georgia,serif!important;padding:${D(10)}!important}
+${U} #lvl .lvbtns{display:flex!important;flex-direction:column!important;align-items:center!important;gap:${D(6)}!important;padding-top:${D(6)}!important}
+${U} #lvl .lvbtns #rerollBtn{font:500 ${F(21)}/1.25 'Grenze Gotisch',Georgia,serif!important;padding:${D(14)} ${D(30)}!important;min-height:${D(52)}!important}
+${U} #lvl .lvbtns .hint{font-size:${F(13)}!important}
+${U} #shop .shopc{gap:${D(20)}!important;background:none!important;padding:${D(5)}!important}
+${U} #shop .shopc>.pcg-edge{display:none!important}
+${U} #shop .card{padding:${D(24)}!important}
+${U} #prep .pc-prep-tabs{width:100%!important;border-bottom:1px solid #a68b5e55!important}
+${U} #prep .premium-prep-head{z-index:10!important}
+${U} #prep .premium-prep-head .pc-prep-settings{display:contents!important}
+${U} #prep .premium-prep-head .pc-popover{position:absolute!important;top:50%!important;transform:translateY(-50%)!important;width:${D(190)}!important}
+${U} #prep .premium-prep-head .pc-popover:first-child{left:${D(85)}!important}
+${U} #prep .premium-prep-head .pc-popover:last-child{right:${D(85)}!important}
+${U} #prep .premium-prep-head .pc-popover>div{top:100%!important;bottom:auto!important}
+${U} #prep .premium-prep-head .pc-popover:last-child>div{left:auto!important;right:0!important}
+${U} #prep #prepBack{top:${D(-16)}!important}
+${U} #prep .prepgrid>:is(#prepChar,.prepbox:not(.pc-panel-hidden),.pc-perk-detail){border:${D(12)} solid transparent!important;border-image:url('${GF.panel}') 128 /${D(12)} stretch!important;padding:${D(14)}!important;background:#0c0b1066!important}
+${U} #prep .pc-perk-detail{border-left-width:${D(12)}!important}
+${U} #prep .pc-detail-copy{background:none!important;min-height:100%!important;padding:${D(12)}!important}
+${U} #prep .pc-detail-copy>.pcg-edge{display:none!important}
+${U} #prep .pc-detail-copy :is(h3,.pc-detail-kicker){display:block!important;width:100%!important;text-align:center!important}
+${U} #prep .premium-prep-controls{grid-template-columns:repeat(3,minmax(0,1fr))!important;height:${D(105)}!important}
+${U} #prep .pc-footer-info[hidden]{display:none!important}
+${U} #prep :is(.pc-prep-destination,.pc-run-status){height:${D(80)}!important;padding:${D(12)} ${D(18)}!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:${D(7)}!important;min-width:0!important}
+${U} #prep .pc-prep-destination #prepK{font:500 ${F(26)}/1.15 'Grenze Gotisch',Georgia,serif!important;text-transform:none!important;text-align:center!important;margin:0!important;color:#ead7b3!important}
+${U} #prep .pc-run-identity{font:500 ${F(20)}/1.2 'Grenze Gotisch',Georgia,serif!important;color:#ead7b3!important}
+${U} #prep #prepGo{height:${D(80)}!important;min-height:${D(80)}!important}
+${U} #pause .nbp-head .nbp-sub{position:absolute!important;left:50%!important;top:calc(100% + 2 * var(--pc-u))!important;transform:translateX(-50%)!important;font:400 ${F(13)}/1.2 Georgia,serif!important;white-space:nowrap!important}
+${U} #pause .nbp-head>.pc-heading-rule{display:none!important}
+${U} #shop .lvlhead{position:relative!important;justify-content:center!important;text-align:center!important}
+${U} #shop #shopCoins{position:absolute!important;right:0!important;top:50%!important;transform:translateY(-50%)!important}
+`;
+ document.head.append(ts);
+
 
 })();
 
