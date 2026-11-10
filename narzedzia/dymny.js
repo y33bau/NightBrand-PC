@@ -14,7 +14,8 @@ const dir=process.argv[2]||'.',chs=(process.argv[3]||'1').split(',').map(Number)
   let st='OK';
   try{
    await p.goto('http://localhost:'+port+'/index.html');
-   await p.waitForSelector('#start1:not([disabled])',{timeout:240000});
+   await p.waitForSelector('#start1:not([disabled])',{state:'attached',timeout:240000});
+   if(await p.locator('#title.pc-home').count())await p.locator('.premium-journey').click();
    await p.evaluate(()=>{const a=document.querySelector('#sArc');if(a)a.click()});
    await p.waitForTimeout(2500);
    await p.click('#start'+n,{force:true});
