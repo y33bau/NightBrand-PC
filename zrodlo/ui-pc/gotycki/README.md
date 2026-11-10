@@ -9,6 +9,7 @@ Sześć nowych, osobno wygenerowanych PNG stanowi materiały produkcyjne. Nie wy
 - `przycisk.png`, `przycisk-wybrany.png`: tła przycisków bez napisów; drugi wariant sygnalizuje fokus lub wybór.
 - `ramka-panel.png`: przezroczysty środek; cienka ramka rozciągana przez CSS border-image.
 - `separator.png`: delikatna linia z ornamentem.
+- `powrot-tryb-atlas.png` (runda HUD 2): Menu główne / Main menu i Tryb gry / Game mode, w rodzinie graficznej nagłówka wyboru rozdziału. Oryginalny PNG bez obróbki; dokładny prompt w `powrot-tryb-prompty.json`, granice alfa w `powrot-tryb-atlas-map.json`. Nazwy Fabularny/Arcade korzystają z istniejącego atlasu nagłówków.
 
 Warstwa w `zrodlo/main/26_start_petla.js` wybiera obszary atlasów przez pozycję tła CSS. Same PNG nie są cięte ani rozciągane w nierównych proporcjach liter. Graficzne napisy zachowują dostępne nazwy przycisków. Opisy, nagrody, poziomy, ceny i komunikaty ładowania pozostają prawdziwym tekstem gry. Zakładki używają istniejącego fontu Grenze Gotisch; treść ma zachować czytelność.
 
