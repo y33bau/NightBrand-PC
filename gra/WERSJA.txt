@@ -638,3 +638,4 @@ cache560 · 560: pauza na telefonie: lista przyciskow po lewej przewija sie doty
 cache561 · 561: siatka bezpieczenstwa startu (blad zamiast paska na 40%), spopielenie jako rozpad pikseli, test dymny z zapisanym profilem
 cache562 · runda 562: wgrane zredagowane teksty fabuly i gry (246 wpisow, kanon 10.11); nie ogladane na telefonie
 cache563 · PC etap 1: menu i przygotowanie, przelacznik stylu; bez fizycznego pada i odsluchu
+cache564 · PC: cala oprawa menu koncepcja 2, tkanina i portrety alpha (bez fizycznego pada, telefonu, odsluchu i pelnych nocy)
