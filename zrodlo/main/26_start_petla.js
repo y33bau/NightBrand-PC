@@ -1179,7 +1179,39 @@ ${Z} .nbo-note{margin:0!important;text-align:center!important;color:#8c7f6c!impo
  for(const id of ['pane-set','pane-gfx']){const pane=$(id);if(!pane)continue;let section=null;for(const child of [...pane.children]){if(child.matches('.opsep')){child.classList.add('pc-section-separator');continue}if(child.matches('.nbts-wrap')){child.classList.add('pc-option-section');section=null;continue}if(child.matches('h3')){section=make('section','pc-option-section');child.before(section)}if(section)section.append(child)}}
  const loadout=$('skillLoadout'),polishLoadout=()=>{const inv=loadout?.querySelector('.slot-inventory');if(inv?.querySelector('[data-equip]:not([data-equip=""])')&&!loadout.querySelector('.pc-loadout-reserve')){const focused=document.activeElement,restore=inv.contains(focused),reserve=make('section','pc-loadout-reserve');inv.before(reserve);reserve.append(make('h3','pc-reserve-title',T('Zdobyte umiejętności','Learned skills')),inv);if(restore)focused.focus({preventScroll:true})}};
  if(loadout){new MutationObserver(polishLoadout).observe(loadout,{childList:true});polishLoadout()}
- const s=make('style','');s.id='pc-menu-design';const Z='#orient'.repeat(20)+'.pc-menu',P=Z+' :is(#title,#prep,#kap,#manual,#opts,#pause,#lvl,#shop,#end,#conf)';
+ // PC Journey is a chapter hub. Reuse the real chapter buttons and their existing handlers.
+ const map=title.querySelector('.premium-map'),banner=title.querySelector('.premium-banner'),chapterList=map.querySelector('.m2-right'),caption=map.querySelector('.premium-caption'),oldAshes=title.querySelector('.premium-ashes');
+ const journeyHead=make('header','pc-journey-head'),journeyTitle=make('h2','pc-fantasy-title',T('Podróż','Journey'));
+ journeyHead.append(home,journeyTitle);title.prepend(journeyHead);map.prepend(chapterList);
+ const profile=make('aside','pc-profile'),ashIcon=make('img','pc-profile-ash'),ashBlock=make('div','pc-profile-stat'),ashValue=make('strong','',String(EMB.e)),levelBlock=make('div','pc-profile-stat'),levelValue=make('strong','',String(prog().lv));
+ ashIcon.src='assets/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp';ashIcon.alt='';
+ ashBlock.append(make('small','',T('Popioły','Ashes')),ashValue);levelBlock.append(make('small','',T('Poziom','Level')),levelValue);profile.append(ashIcon,ashBlock,levelBlock);title.append(profile);
+ const facts=make('div','pc-destination-facts'),factValues=[];
+ for(const label of [T('Dostępność','Availability'),T('Najdłuższa noc','Longest night'),T('Rekord zabójstw','Most kills')]){const cell=make('div',''),value=make('strong','','—');cell.append(make('small','',label),value);facts.append(cell);factValues.push(value)}banner.append(facts);
+ const journeyFooter=make('footer','pc-journey-footer'),modeInfo=make('div','pc-journey-mode'),modeName=make('strong','','');modeInfo.append(make('small','',T('Tryb gry','Game mode')),modeName);
+ const prepare=$('premiumPrepare');prepare.textContent=T('Przygotuj się','Prepare');journeyFooter.append(modeInfo,prepare);title.append(journeyFooter);
+ const opts=$('optsBtn'),gear=make('img','pc-journey-gear');gear.src=PREMIUM_ICONS['nawigacja-opcje'];gear.alt='';gear.setAttribute('aria-hidden','true');opts.append(gear);opts.setAttribute('aria-label',T('Opcje','Options'));opts.title=T('Opcje','Options');
+ // The original multiplayer checkbox belongs with preparation, not the chapter atlas.
+ const multiplayer=$('mpTglL');if(multiplayer)ab.append(multiplayer);
+ for(const [id,note] of [['sFab',T('Rozdziały po kolei','Acts in order')],['sArc',T('Wszystkie rozdziały','All acts available')]]){const b=$(id),n=make('small','pc-mode-note',note),check=make('span','pc-mode-check','◆');check.setAttribute('aria-hidden','true');b.append(n,check)}
+ const put=(el,text)=>{if(el.textContent!==text)el.textContent=text};
+ function refreshJourney(){
+  if(title.hidden)return;
+  put(ashValue,String(EMB.e));put(levelValue,String(prog().lv));levelBlock.title=prog().lv>=PMAX?T('Poziom maksymalny','Max level'):prog().xp+' / '+PNEED(prog().lv)+' XP';
+  put(modeName,STORYMODE?T('Fabularny','Story'):'Arcade');
+  for(let i=1;i<=5;i++){
+   const b=$('start'+i);let label=b.querySelector('.pc-chapter-label');
+   if(!label){label=make('span','pc-chapter-label');label.append(make('small','',T('Rozdział ','Act ')+CHR[i-1]),make('strong','',CHN[i-1]));b.append(label)}
+  }
+  const chosen=title.querySelector('.premium-selected'),ch=Number(chosen?.id.slice(5))||1,r=SETT.save['s'+ch];
+  put(factValues[0],chosen?.dataset.status||T('Dostępny','Available'));put(factValues[1],r?.t?mmss(r.t):'—');put(factValues[2],r?String(r.kills||0):'—');
+ }
+ new MutationObserver(refreshJourney).observe(chapterList,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-status']});
+ new MutationObserver(refreshJourney).observe(oldAshes,{childList:true,subtree:true,characterData:true});
+ new MutationObserver(refreshJourney).observe(title,{attributes:true,attributeFilter:['hidden','class']});
+ $('storyTgl').addEventListener('change',refreshJourney);refreshJourney();
+ addEventListener('keydown',e=>{if(e.key==='Escape'&&e.target.closest?.('#title')&&padMenuId()==='title'&&!title.classList.contains('pc-home')){e.preventDefault();home.click()}});
+ const s=make('style','');s.id='pc-menu-design';const Z='#orient'.repeat(20)+'.pc-menu',P=Z+' :is(#title,#prep,#kap,#manual,#opts,#pause,#lvl,#shop,#end,#conf)',J=Z+' #title:not(.pc-home)';
  s.textContent=`
 /* PC concept 2: material, rhythm and typography. All rules stay inside .pc-menu. */
 ${Z}{--pc-u:min(.05981vw,.10627vh);--pc-paper:#eadcc4;--pc-muted:#b4a58f;--pc-line:#a4895e55;--pc-cloth:url('assets/bae550b007bbde68fdd77839e6acb93db400b5495fb63bdb9a0767d695475275.png')}
@@ -1538,7 +1570,73 @@ ${Z} #pause #skillLoadout .pc-loadout-reserve .slot-inventory button.go .ic{widt
 ${Z} #pause #skillLoadout .pc-loadout-reserve .loadout-copy small{font-size:max(12px,calc(13 * var(--pc-u) * var(--nbts,1)))!important}
 ${Z} #pause #skillLoadout:has(.pc-loadout-reserve){padding-top:calc(18 * var(--pc-u))!important;padding-bottom:calc(18 * var(--pc-u))!important;row-gap:calc(10 * var(--pc-u))!important}
 
+/* PC chapter atlas: a single destination, a readable chapter rail, no duplicate mobile sidebar. */
+${Z} #title .pc-profile{position:absolute!important;right:calc(70 * var(--pc-u))!important;top:calc(38 * var(--pc-u))!important;display:flex!important;align-items:center!important;gap:calc(16 * var(--pc-u))!important;padding:calc(12 * var(--pc-u)) calc(20 * var(--pc-u))!important;border-top:1px solid #a4895e55!important;border-bottom:1px solid #a4895e33!important;background:linear-gradient(110deg,#141014bb,#09090b44)!important;z-index:3!important}
+${Z} #title .pc-profile-ash{width:calc(42 * var(--pc-u))!important;height:calc(42 * var(--pc-u))!important;object-fit:contain!important}
+${Z} #title .pc-profile-stat{display:flex!important;flex-direction:column!important;gap:calc(4 * var(--pc-u))!important;min-width:calc(62 * var(--pc-u))!important;text-align:left!important}
+${Z} #title .pc-profile-stat:last-child{border-left:1px solid var(--pc-line)!important;padding-left:calc(22 * var(--pc-u))!important;margin-left:calc(10 * var(--pc-u))!important}
+${Z} #title .pc-profile-stat small{font:400 calc(13 * var(--pc-u))/1.2 Georgia!important;color:#bca177!important}
+${Z} #title .pc-profile-stat strong{font:400 calc(29 * var(--pc-u))/1 Georgia!important;color:#f0dbb3!important;font-variant-numeric:tabular-nums!important}
+${Z} #title.pc-home :is(.pc-journey-head,.pc-journey-footer,.pc-journey-gear){display:none!important}
+${J}{gap:calc(22 * var(--pc-u))!important;padding-top:calc(30 * var(--pc-u))!important;padding-bottom:calc(30 * var(--pc-u))!important}
+${J} .pc-profile{right:calc(135 * var(--pc-u))!important;top:calc(31 * var(--pc-u))!important}
+${J} .premium-mast,${J} .premium-hero,${J} .premium-mode-dock,${J} .premium-controls{display:none!important}
+${J} .pc-journey-head{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;height:calc(100 * var(--pc-u))!important;min-height:0!important;flex:none!important;width:100%!important}
+${J} .pc-journey-head .pc-fantasy-title{font-size:calc(50 * var(--pc-u))!important;padding:calc(10 * var(--pc-u)) calc(55 * var(--pc-u)) calc(14 * var(--pc-u))!important;margin:0!important}
+${J} .pc-home-button{position:absolute!important;left:0!important;top:calc(22 * var(--pc-u))!important;width:auto!important;height:auto!important;min-height:0!important;padding:calc(13 * var(--pc-u)) calc(18 * var(--pc-u))!important;font:400 calc(20 * var(--pc-u))/1.2 Georgia!important}
+${J} .premium-body{display:flex!important;position:static!important;transform:none!important;filter:none!important;contain:none!important;flex:1!important;min-height:0!important;gap:0!important;width:100%!important;padding:0!important;background:none!important;box-shadow:none!important}
+${J} .premium-rail,${J} .premium-nav{display:contents!important}
+${J} .premium-nav>button:not(:is(#kapBtn,#kronBtn,#optsBtn)){display:none!important}
+${J} .premium-nav :is(.premium-nav-icon,.m2-ico){display:none!important}
+${J} #kapBtn,${J} #kronBtn{position:absolute!important;bottom:calc(45 * var(--pc-u))!important;left:calc(70 * var(--pc-u))!important;width:calc(175 * var(--pc-u))!important;height:calc(60 * var(--pc-u))!important;min-height:0!important;padding:calc(15 * var(--pc-u)) calc(20 * var(--pc-u))!important;font:400 calc(25 * var(--pc-u))/1.2 Georgia!important;text-align:left!important;z-index:2!important}
+${J} #kronBtn{left:calc(265 * var(--pc-u))!important}
+${J} #kapBtn>:not(.premium-kap-label){display:none!important}
+${J} #kapBtn .premium-kap-label{display:block!important;font:inherit!important}
+${J} #kapBtn:after{content:''!important;font-size:0!important}
+${J} #optsBtn{position:absolute!important;right:calc(70 * var(--pc-u))!important;top:calc(45 * var(--pc-u))!important;display:grid!important;place-items:center!important;padding:0!important;width:calc(48 * var(--pc-u))!important;height:calc(48 * var(--pc-u))!important;min-height:0!important;font-size:0!important;border:1px solid #a4895e55!important;z-index:4!important}
+${J} #optsBtn .pc-journey-gear{display:block!important;width:calc(32 * var(--pc-u))!important;height:calc(32 * var(--pc-u))!important;object-fit:contain!important}
+${J} .premium-map{display:grid!important;grid-template-columns:calc(340 * var(--pc-u)) minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important;gap:calc(28 * var(--pc-u))!important;flex:1!important;min-width:0!important;min-height:0!important;height:100%!important}
+${J} .premium-map .m2-right{display:flex!important;flex-direction:column!important;gap:calc(12 * var(--pc-u))!important;grid-column:1!important;grid-row:1!important;min-height:0!important;height:100%!important;max-height:none!important;width:100%!important;overflow:auto!important;padding:0!important}
+${J} .premium-map .m2-ch{display:flex!important;align-items:center!important;position:relative!important;min-height:calc(104 * var(--pc-u))!important;height:auto!important;flex:1 0 calc(104 * var(--pc-u))!important;width:100%!important;max-width:none!important;padding:calc(14 * var(--pc-u)) calc(14 * var(--pc-u)) calc(25 * var(--pc-u)) calc(117 * var(--pc-u))!important;border:1px solid #a4895e44!important;border-image:none!important;border-radius:0!important;font-size:0!important;text-shadow:none!important;overflow:hidden!important;background-position:center!important;background-size:cover!important;filter:none!important;opacity:1!important;box-shadow:none!important}
+${J} .premium-map .m2-ch.lk{opacity:.55!important}
+${J} .premium-map .m2-ch.premium-selected{border-color:#c4a16a!important;box-shadow:inset calc(3 * var(--pc-u)) 0 #c4a16a!important}
+${J} .premium-map .m2-ch:before{content:attr(data-roman)!important;position:absolute!important;left:calc(14 * var(--pc-u))!important;top:calc(13 * var(--pc-u))!important;bottom:auto!important;right:auto!important;padding:0!important;background:none!important;color:#f0d3a0!important;font:400 calc(19 * var(--pc-u))/1 Georgia!important}
+${J} .premium-map .m2-ch.premium-selected:before{content:'◆'!important;font-size:calc(14 * var(--pc-u))!important}
+${J} .premium-map .m2-ch:after{content:attr(data-status)!important;position:absolute!important;left:calc(117 * var(--pc-u))!important;right:calc(10 * var(--pc-u))!important;bottom:calc(10 * var(--pc-u))!important;top:auto!important;width:auto!important;height:auto!important;background:none!important;padding:0!important;color:#b69e74!important;font:400 calc(12 * var(--pc-u))/1.1 Georgia!important;filter:none!important;transform:none!important;z-index:0!important;text-align:left!important}
+${J} .premium-map .m2-ch .pc-chapter-label{display:flex!important;position:relative!important;flex-direction:column!important;align-items:flex-start!important;gap:calc(7 * var(--pc-u))!important;width:100%!important;z-index:1!important}
+${J} .pc-chapter-label small{display:block!important;font:400 calc(11 * var(--pc-u))/1.2 Georgia!important;letter-spacing:.12em!important;color:#a98a5b!important;text-transform:uppercase!important}
+${J} .pc-chapter-label strong{display:block!important;font:400 calc(22 * var(--pc-u))/1.2 Georgia!important;color:#e9d9bc!important;white-space:normal!important;text-align:left!important;overflow-wrap:normal!important}
+${J} .premium-map .premium-banner{grid-column:2!important;grid-row:1!important;min-height:0!important;width:100%!important;height:100%!important;position:relative!important;border:1px solid #a4895e44!important;border-image:none!important;mask-image:none!important;overflow:hidden!important;background-size:cover!important;background-position:center!important;box-shadow:inset 0 0 calc(65 * var(--pc-u)) #08070a55!important}
+${J} .premium-caption{position:absolute!important;left:calc(42 * var(--pc-u))!important;right:calc(30 * var(--pc-u))!important;bottom:calc(153 * var(--pc-u))!important;font:500 calc(52 * var(--pc-u))/1.1 'Grenze Gotisch',Georgia,serif!important;color:#f2d9af!important;margin:0!important;padding:0!important;text-align:left!important;text-shadow:0 2px 3px #000!important;max-width:none!important}
+${J} .premium-caption:before{content:attr(data-k)!important;display:block!important;margin:0 0 calc(17 * var(--pc-u))!important;font:400 calc(14 * var(--pc-u))/1.1 Georgia!important;letter-spacing:.2em!important;color:#c4a06c!important}
+${J} .premium-caption:after{content:none!important;display:none!important}
+${J} .pc-destination-facts{position:absolute!important;left:calc(42 * var(--pc-u))!important;right:calc(42 * var(--pc-u))!important;bottom:calc(35 * var(--pc-u))!important;display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:calc(22 * var(--pc-u))!important;padding-top:calc(20 * var(--pc-u))!important;border-top:1px solid #a4895e77!important}
+${J} .pc-destination-facts>div{display:flex!important;flex-direction:column!important;gap:calc(12 * var(--pc-u))!important;min-width:0!important}
+${J} .pc-destination-facts small{font:400 calc(13 * var(--pc-u))/1.3 Georgia!important;color:#c0aa85!important}
+${J} .pc-destination-facts strong{font:400 calc(24 * var(--pc-u))/1.2 Georgia!important;color:#e7d7b9!important}
+${J} .pc-journey-footer{display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:calc(32 * var(--pc-u))!important;width:100%!important;height:calc(90 * var(--pc-u))!important;min-height:0!important;flex:none!important;padding:calc(18 * var(--pc-u)) 0 0 calc(410 * var(--pc-u))!important;border-top:1px solid var(--pc-line)!important}
+${J} .pc-journey-mode{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:calc(7 * var(--pc-u))!important;margin-right:auto!important}
+${J} .pc-journey-mode small{font:400 calc(13 * var(--pc-u))/1.2 Georgia!important;color:#a78f69!important}
+${J} .pc-journey-mode strong{font:400 calc(23 * var(--pc-u))/1.2 Georgia!important;color:#ddc8a6!important}
+${J} #premiumPrepare{width:calc(305 * var(--pc-u))!important;height:calc(65 * var(--pc-u))!important;min-height:0!important;margin:0!important;flex:none!important;padding:calc(16 * var(--pc-u)) calc(28 * var(--pc-u))!important;font:400 calc(29 * var(--pc-u))/1.2 Georgia!important;letter-spacing:0!important}
+${Z} #title.pc-home .premium-mode-dock{margin-top:calc(20 * var(--pc-u))!important}
+${Z} #title.pc-home .nb-mode-select{gap:calc(16 * var(--pc-u))!important}
+${Z} #title.pc-home .nb-mode{display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;gap:calc(5 * var(--pc-u))!important;position:relative!important;width:calc(222 * var(--pc-u))!important;height:calc(82 * var(--pc-u))!important;min-height:0!important;padding:calc(12 * var(--pc-u)) calc(16 * var(--pc-u)) calc(12 * var(--pc-u)) calc(68 * var(--pc-u))!important;border:1px solid #94744855!important;background:linear-gradient(120deg,#19141bcc,#0c0b0d55)!important;text-align:left!important}
+${Z} #title.pc-home .nb-mode[aria-checked=true]{border-color:#b18c51!important;box-shadow:inset 0 -2px #ad874b!important;background:linear-gradient(110deg,#50232a88,#1c151a88)!important}
+${Z} #title.pc-home .nb-mode>.nb-mode__icon{display:block!important;position:absolute!important;width:calc(34 * var(--pc-u))!important;height:calc(34 * var(--pc-u))!important;left:calc(18 * var(--pc-u))!important;top:50%!important;transform:translateY(-50%)!important;object-fit:contain!important}
+${Z} #title.pc-home .nb-mode .nb-mode__title{font:500 calc(26 * var(--pc-u))/1.1 'Grenze Gotisch',Georgia,serif!important;color:#ead7b4!important}
+${Z} #title.pc-home .nb-mode .pc-mode-note{display:block!important;font:400 max(11px,calc(12 * var(--pc-u) * var(--nbts,1)))/1.3 Georgia!important;color:#b9a17c!important;white-space:normal!important}
+${Z} #title.pc-home .nb-mode .pc-mode-check{display:none!important;position:absolute!important;right:calc(10 * var(--pc-u))!important;top:calc(10 * var(--pc-u))!important;font:400 calc(10 * var(--pc-u))/1 Georgia!important;color:#d7b476!important}
+${Z} #title.pc-home .nb-mode[aria-checked=true] .pc-mode-check{display:block!important}
+${J} .premium-map .m2-ch{min-height:calc(104 * var(--pc-u) * var(--nbts,1))!important;flex-basis:calc(104 * var(--pc-u) * var(--nbts,1))!important}
+${Z} #title.pc-home .nb-mode{height:auto!important;min-height:calc(82 * var(--pc-u))!important}
+${Z} #title .pc-profile-stat small,${J} .pc-destination-facts small{font-size:max(12px,calc(13 * var(--pc-u) * var(--nbts,1)))!important}
+${J} .premium-map .m2-ch:after{font-size:max(11px,calc(12 * var(--pc-u) * var(--nbts,1)))!important}
+${J} .pc-chapter-label{isolation:isolate!important}
+${J} .premium-map .m2-ch:not(:disabled):is(:hover,:focus-visible,.pf) .pc-chapter-label:before{content:'';position:absolute;inset:calc(-12 * var(--pc-u));background:var(--pc-cloth) center/100% 190% no-repeat;z-index:-1;pointer-events:none;filter:brightness(.7) saturate(.65)}
+
 `;
+ for(let i=1;i<=5;i++)s.textContent+=`${J} .premium-map #start${i}{background-image:linear-gradient(90deg,#09090b18 0%,#0d0b10a6 25%,#0d0b10f5 38%,#0d0b10dc 100%),url('${PREMIUM_ASSETS['rozdzial-'+i+'-mini']}')!important}`;
  // The original accessibility switch continues to scale text, without scaling artwork twice.
  s.textContent=s.textContent.replace(/(font(?:-size)?\s*:[^;{}]*?)calc\((\d+) \* var\(--pc-u\)\)/g,'$1calc($2 * var(--pc-u) * var(--nbts,1))');
  document.head.append(s);

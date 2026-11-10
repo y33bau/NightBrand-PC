@@ -27,7 +27,7 @@ function padNav(id,dt,pr,g){
   if(pr(1)&&PAD.grab){grabOff();return}
   // LB / RB: przełączanie zakładek w Opcjach i Instrukcji
   if((pr(4)||pr(5))&&(id==='opts'||id==='manual'||id==='kap')){const tb=[...root.querySelectorAll('.tabs .tab')],ci=tb.findIndex(b=>b.classList.contains('on'));if(tb.length){const nx=tb[(ci+(pr(5)?1:-1)+tb.length)%tb.length];nx.click();nx.focus()}}
-  if(pr(1)){if(id==='pause')togglePause(false);else if(id==='shop')closeShop();else if(id==='opts')$('optsBack').click();else if(id==='manual')$('manBack').click();else if(id==='conf')$('confNo').click();else if(id==='prep')$('prepBack').click();else if(id==='kap')closeKap();else if(id==='end')$('menuBtn').click()}
+  if(pr(1)){if(id==='pause')togglePause(false);else if(id==='shop')closeShop();else if(id==='opts')$('optsBack').click();else if(id==='manual')$('manBack').click();else if(id==='conf')$('confNo').click();else if(id==='prep')$('prepBack').click();else if(id==='kap')closeKap();else if(id==='end')$('menuBtn').click();else if(id==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home'))$('title').querySelector('.pc-home-button')?.click()}
   if(pr(9)){if(id==='prep')$('prepGo').click();else if(id==='shop')closeShop()}
 }
 function padMark(){for(const e of document.querySelectorAll('.pf'))e.classList.remove('pf');if(!PAD.menu||!document.body.classList.contains('padnav'))return;const a=document.activeElement,root=$(PAD.menu);if(!a||!root||!root.contains(a))return;const t=a.type==='range'?a.parentNode:a.type==='checkbox'?(a.closest('label')||a):a;t.classList.add('pf')}
