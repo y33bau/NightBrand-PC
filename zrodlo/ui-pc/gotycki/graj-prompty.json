@@ -1,0 +1,8 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-11-10",
+  "purpose": "Graj / Play and Wybór rozdziału / Act selection, NightBrand PC",
+  "prompt": "Use case: style-transfer. The two supplied images are STYLE REFERENCES ONLY: the approved NightBrand UI lettering. Generate a NEW production typography sprite atlas, not a mockup. Real transparent alpha background, no background color or checkerboard. Match the same restrained slim pointed Gothic blackletter, warm aged bone ivory, delicate ink texture, elegant angular capitals and crisp finely cut stems. Preserve excellent readability and Polish diacritics. Absolutely no frames, banners, illustrations, flames, icons, shadows outside lettering, grid lines, logos, labels or additional text. Only four isolated text phrases. Arrange exactly TWO COLUMNS and TWO ROWS, with very generous transparent gutters and outer margins. Each phrase must be a SINGLE HORIZONTAL LINE centered in its own cell, never touching adjacent cells. Uniform lettering style and natural letter proportions, no perspective. Landscape atlas ideally 1536 by 768. LEFT COLUMN Polish, RIGHT COLUMN English. ROW 1 LEFT exact text \"Graj\", ROW 1 RIGHT exact text \"Play\". ROW 2 LEFT exact text \"Wybór rozdziału\", ROW 2 RIGHT exact text \"Act selection\". Only these four phrases, each once. The text should look like the clean pale-ivory Gothic labels when composited onto the game's dark charcoal background. Do not reproduce any colored preview-alpha artifacts from the references. This is a production PNG for a PC game's main menu and chapter-selection heading.",
+  "source": "exec-76819746-e44b-4bf7-966e-cb0aa3e2ab40.png",
+  "note": "Original RGBA PNG copied unchanged; CSS uses measured alpha bounds."
+}
