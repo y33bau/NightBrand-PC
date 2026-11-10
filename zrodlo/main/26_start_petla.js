@@ -2053,6 +2053,9 @@ ${ui} #title.pc-home .nb-mode{width:100%!important;padding:calc(10 * var(--pc-u)
 ${ui} #title.pc-home .nb-mode :is(img,.nb-mode__icon,.premium-nav-icon,.nb-mode__marker){display:none!important}
 ${ui} #title.pc-home .nb-mode::before,${ui} #title.pc-home .nb-mode::after{content:none!important}
 ${ui} #title.pc-home .nb-mode .pc-mode-note{margin-inline:0!important;text-align:center!important}
+/* Aktywna zakladka: staly bordowy kontur, niezalezny od wskazania kursorem. */
+${menus} :is(.tab.on,.stab.on,.nbp-tab[aria-pressed=true],.pc-prep-tab[aria-pressed=true]):not(#pc-tab-unused){background:linear-gradient(145deg,#61303bea,#351c25f5)!important;outline:2px solid #b45b6c!important;outline-offset:-2px!important;box-shadow:inset 0 0 0 4px #6e303e,inset 0 0 22px #7f344533!important;color:#fff0d5!important}
+${menus} :is(.tab,.stab,.nbp-tab,.pc-prep-tab):is(:focus-visible,.pf):not(#pc-tab-unused){outline:2px solid #efd09b!important;outline-offset:2px!important}
 `;document.head.append(polish);
 
 
