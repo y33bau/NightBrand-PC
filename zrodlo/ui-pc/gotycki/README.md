@@ -15,3 +15,5 @@ Warstwa w `zrodlo/main/26_start_petla.js` wybiera obszary atlasów przez pozycj�
 Przełączniki porównania: `?pcgfx=0` przywraca poprzedni wygląd PC (566), `?pcmenu=0` wyłącza całą warstwę PC. Nowe reguły są ograniczone klasą `.pc-gfx`, nie obejmują HUD-u rozgrywki.
 
 Podgląd PNG należy oceniać w przeglądarce na ciemnym tle: niektóre podglądarki błędnie prezentują kolory w półprzezroczystych pikselach. W grze zweryfikowano rzeczywiste renderowanie i polskie znaki.
+
+Runda 568: `tileFrame()` stosuje ten sam kontur na osobnych kafelkach kart i rozdziałów. Przygotowanie ma trzy panele z identyczną górną/dolną linią, wspólną osią nagłówka i trzech zakładek oraz trzy równe pola stopki. Skala geometrii pochodzi z `--pc-u`, tekst dodatkowo z `--nbts`. Większy tekst odzyskuje miejsce przez mniejszy portret; długie opisy kart mogą przewijać się wewnątrz kafelka. Najechanie/fokus rozjaśnia kontur, bordo oznacza aktywną zakładkę lub wybór. W rozdziałach wyróżniony jest cały kontur ilustracji, bez banera na samym podpisie.
