@@ -6,7 +6,7 @@ function releaseWorld(ch){const old=WORLDS[ch];if(!old)return;scene.remove(old.g
 function releaseDungeon(){releaseWorld(9)}
 function makeDungeon(){releaseDungeon();initWorld(9);useWorld(9);ROOT=W.group;buildDungeon(IMGS);fitWorldProps(W,9);finishWorldArt(W);ROOT=scene;buildMini()}
 // everything lying around belongs to the level we leave; coins on the ground are picked up on the way
-function stashEntities(){clearSwordTransient();S.swordTrails=[];for(const p of S.picks)if(p.k==='c'){if(p.returned)S.coins+=p.v||1;else awardCoins(p.v||1)}
+function stashEntities(){if(pl2)asP2(clearSwordTransient);clearSwordTransient();S.swordTrails=[];for(const p of S.picks)if(p.k==='c'){if(p.returned)S.coins+=p.v||1;else awardCoins(p.v||1)}
   for(const m of [...S.enemies.map(e=>e.mesh),...S.picks.flatMap(p=>[p.mesh,p.glow]),...S.vfx.map(f=>f.mesh),...S.corpses.map(c=>c.mesh),...S.zones.map(z=>z.mesh),...(S.eproj||[]).map(f=>f.mesh)])if(m)scene.remove(m);
   for(const c of S.corpses)if(c.own)c.mesh.material.dispose();S.enemies=[];S.picks=[];S.vfx=[];S.waves=[];S.corpses=[];S.zones=[];S.eproj=[];S.quakes=[];S.delayed=[];S.parts=[];S.leszy=null;S.collector=null;S.merchant=null;
   for(const g of S.golems){g.x=pl.x+rnd(-10,10);g.y=pl.y+rnd(-6,6)}
