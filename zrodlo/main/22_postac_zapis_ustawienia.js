@@ -111,7 +111,7 @@ const EMBU=[
  {id:'arm_z_otch',who:'z',tab:2,tier:2,cos:1,n:(EN?'Abyss of Hell':'Otchłań piekła'),s:(EN?'Armour set (with weapon)':'Komplet zbroi (z bronią)'),d:(EN?'Black armour forged in the abyss of hell. Recolours the armour and the weapon of this character.':'Czarna zbroja wykuta w otchłani piekła. Zmienia kolor zbroi i broni tej postaci.'),cost:[600],val:()=>EN?'owned':'posiadane'},
  {id:'arm_z_zloto',who:'z',tab:2,tier:3,cos:1,n:(EN?'Celestial Gold':'Niebiańskie złoto'),s:(EN?'Armour set (with weapon)':'Komplet zbroi (z bronią)'),d:(EN?'Gold armour from the celestial mines. Recolours the armour and the weapon of this character.':'Złota zbroja z niebiańskich kopalń. Zmienia kolor zbroi i broni tej postaci.'),cost:[750],val:()=>EN?'owned':'posiadane'},
  {id:'arm_z_plat',who:'z',tab:2,tier:3,cos:1,n:(EN?'Platinum':'Platyna'),s:(EN?'Armour set (with weapon)':'Komplet zbroi (z bronią)'),d:(EN?'Armour of pure platinum. Recolours the armour and the weapon of this character.':'Zbroja z czystej platyny. Zmienia kolor zbroi i broni tej postaci.'),cost:[900],val:()=>EN?'owned':'posiadane'},
- {id:'cos_seal',tab:2,tier:3,cos:1,n:(EN?'Gift of the Seal':'Dar pieczęci'),s:(EN?'Extra active skill slot':'Dodatkowe miejsce na skill'),d:(EN?'One more slot for an active skill.':'Jedno dodatkowe miejsce na aktywną umiejętność.'),cost:[2000],val:()=>EN?'owned':'posiadane'}];
+ {id:'cos_seal',tab:2,tier:3,cos:1,n:(EN?'Gift of the Seal':'Dar pieczęci'),s:(EN?'Sixth active skill slot':'Szóste miejsce na umiejętność'),d:(EN?'Unlocks a sixth slot for an active skill.':'Odblokowuje szósty slot na aktywną umiejętność.'),cost:[2000],val:()=>EN?'owned':'posiadane'}];
 const EMB_TABS=[EN?'Body and Steel':'Ciało i stal',EN?'Pact and Cunning':'Pakt i spryt',EN?'Crypt of Prestige':'Krypta prestiżu'],EMB_TIER=[0,0,300,800],EMB_TIERN=[ '',EN?'Burning Lamp':'Płonący znicz',EN?'Iron Altar':'Żelazny ołtarz',EN?'Crypt of Fate':'Krypta przeznaczenia'];
 // stare ulepszenia (wersja 1 Kaplicy) -> zwrot wydanych Popiolow
 const EMB_OLD={hart:[20,35,55,80,110],ostrze:[25,40,60,90,130],wytrz:[20,40,70],magnes:[15,30,50],pamiec:[20,35,55,80,110],zapas:[15,30,50]};
@@ -130,7 +130,7 @@ const embU=id=>EMB.u[id]||0;
 const embSpent=(f=()=>true)=>EMBU.filter(f).reduce((a,d)=>{let s=0;for(let i=0;i<embU(d.id);i++)s+=d.cost[i];return a+s},0);
 const embTier=()=>{const s=embSpent();return s>=EMB_TIER[3]?3:s>=EMB_TIER[2]?2:1};
 function applyEmbers(k){pl.max=Math.round(pl.max*(1+.02*embU('vigor')));k.staRegen*=1+.02*embU('breath');k.blockSta*=1-.03*embU('bastion');k.rollCost*=1-.03*embU('nimble');k.heavyDmg*=1+.015*embU('exec');k.ripo*=1+.05*embU('venge');
-  S.magnet=(S.magnet||0)+.15*embU('magnet');S.coins+=[0,15,30,50][embU('purse')];S.rrBonus=embU('gaze');S.raven=embU('raven')>0;S.lastCh=embU('lastch')>0&&!pl2;S.eliteLoot=embU('elite')>0;if(embU('cos_seal')&&S.activeSlots&&S.activeSlots.length<5)S.activeSlots.push(null)}
+  S.magnet=(S.magnet||0)+.15*embU('magnet');S.coins+=[0,15,30,50][embU('purse')];S.rrBonus=embU('gaze');S.raven=embU('raven')>0;S.lastCh=embU('lastch')>0&&!pl2;S.eliteLoot=embU('elite')>0;if(embU('cos_seal')&&S.activeSlots&&S.activeSlots.length<6)S.activeSlots.push(null)}
 const embCos=id=>!!(embU(id)&&EMB.eq&&EMB.eq[id]);
 const embTrail=()=>{for(const p of [['cos_tr_fire','fire'],['cos_tr_blood','blood'],['cos_tr_rot','poison'],['cos_tr_ice','ice']])if(embCos(p[0]))return p[1];return null};
 let HERO_SKIN='000',HERO_ORIG=null;
