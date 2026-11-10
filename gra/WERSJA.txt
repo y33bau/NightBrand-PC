@@ -649,3 +649,4 @@ cache571 · Zloty luk staminy przy manie, 5 slotow od startu i 6. z Daru pieczec
 cache572 · Smukla typografia RPG w interfejsie PL/EN i czytelniejsze zablokowane rozdzialy (bez fizycznego pada i odsluchu)
 cache573 · PC: wspolne ramki, czytelny wybor opcji i kart, tryby, flagi, pominiecie wstepu i kolory kul (bez fizycznego pada i odsluchu)
 cache574 · PC: typografia przygotowania, Kroniki i Kaplicy, odstep przy powrocie i tekstowe kafle trybu (bez fizycznego pada i odsluchu)
+cache575 · Czytelne bordowe zaznaczenie aktywnych zakladek; sprawdzono Kronike i przygotowanie oraz fokus klawiatury i stan pada (bez fizycznego pada i odsluchu)
