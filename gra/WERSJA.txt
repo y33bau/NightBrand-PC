@@ -651,3 +651,4 @@ cache573 · PC: wspolne ramki, czytelny wybor opcji i kart, tryby, flagi, pomini
 cache574 · PC: typografia przygotowania, Kroniki i Kaplicy, odstep przy powrocie i tekstowe kafle trybu (bez fizycznego pada i odsluchu)
 cache575 · Czytelne bordowe zaznaczenie aktywnych zakladek; sprawdzono Kronike i przygotowanie oraz fokus klawiatury i stan pada (bez fizycznego pada i odsluchu)
 cache576 · PC: dyskretne komunikaty i rozmowy z miniaturami NPC, stronami i nawigacja A; PL/EN 1920/1280 oraz tekst 130% (bez fizycznego pada i odsluchu)
+cache577 · PC coop: symetryczny HUD, cztery aktywne sloty na gracza, osobne odnowienia i wybor wyposazenia w pauzie; Dar pieczeci tylko solo. PL/EN i symulacje padow/nocy OK (bez fizycznych padow i odsluchu)
