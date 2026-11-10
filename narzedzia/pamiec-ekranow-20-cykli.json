@@ -1,0 +1,1463 @@
+{
+  "method": "Unique visible image URLs; width*height*4. Not browser heap or Safari GPU/cache measurement.",
+  "results": [
+    {
+      "id": "title",
+      "bytes": 15907200,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/30ad16f5e6d855a7f89bfb3d4cd4585c5a811bacca366f2347db73519efa3f0a.webp",
+          "width": 1200,
+          "height": 378,
+          "bytes": 1814400
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/bd1261a9273a03aa57eae224e5f1a03d71678113fbb77674518648bf13aff1c2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/8f08bd944371bb357b2917aaa848ae7ecf7194a91030eeacdeb413f592fd653c.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/6f8540fa904dea00456661a5c5133563862df081eb44f48098e0b257e38b8cc2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/d6ab3fb5cd9fb00c532f12892adf75e30386ff01ef550db235e2083c3f32e262.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/3f2514729ee49610152e610b8c235e03731fd103c038f9bb31585bcd08c9eea2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/6072f51fb47a85fabbb546d2075331cadb1ef26ca78964e886b19968c2efa905.webp",
+          "width": 1280,
+          "height": 640,
+          "bytes": 3276800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/adeb0f42fe9fa54dc3e6e5b5765bb573bc958978ad5beb75e5b8df667b705035.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/51663086ee28e82464a8bcd5063739831060fb9259e02ff95e569b7f5843989f.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ff82f1cca2400afaa14d2162b5bce3bcf1b62bbf2b9984d30d026e819edb2227.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/b858e346f2c7f92ce61c4b57ba2ea2393492df7386093a38ef628c6879eb9793.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/093f9cc0c12ee927c7ff90660548789679498d12210ee9bb914af09ff8e6f86a.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/91c4700ceb9c0dca74c84d386dcff7b5c6dc8f060d182c552b9ae6daac7fb1bd.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        }
+      ]
+    },
+    {
+      "id": "prep",
+      "bytes": 14355968,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/91c4700ceb9c0dca74c84d386dcff7b5c6dc8f060d182c552b9ae6daac7fb1bd.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/2e521529cc87cb038d6f06ceadb3fef8431247cbed184308960de67c5afadfcf.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/414e60085060f7eae50b7c0b5adc88b9cefc049dfcd7a9f460966299e6d63cc4.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/a008195f254e3c8b5f1d42433d7ea95afdd915532c285027cf7521b615986765.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/7f9916982a17a397d677a2736442d8a10be7183b9182a25160edb20e3bf0ec69.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/1e314da297cf9aeccc9b86075fe528aaf4e727b6fc9b4b1ea4fd92da49de6910.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/07588cb3113e46431f0ea792e63cba8f2105d5d064d7263f2e9fb98d87e6e68a.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/26227810ae9a9cd0110a155516af07a2ab2b05c6f4a520112d168f835409c651.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/af84244812771fdade77ce658d0f39296880b0f5fab517391fe4527a171967dd.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/3c5abde805ef72aba9c07ff64bb88de7dc61bd9c2df985f279405911bbc45db7.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/f42c2d0efa8b95af6cef678c7133dc422a6c378603fd6233a39b6aa5d164a243.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        }
+      ]
+    },
+    {
+      "id": "kap",
+      "bytes": 7864320,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp",
+          "width": 256,
+          "height": 186,
+          "bytes": 190464
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/5d1b464ce56d975fa61103f41c8df5c073fb7372e95b0a2e62c05b7f7d163bc3.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/122e88fcebc0badae21dccd629429434e7c18382aea9593e669bbe98562a6395.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ae2b3267b6155e75833a29408402bc4541faddead590aafd794b1694c8b132aa.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/2825e3efad9a636a538a79b7672df0e35555a0fe82aa60fa7d6f96eb37b09dd2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ceacfb2a918abfc6b2a510bf98addd7896d8a18aeff452170917ee07029ace7d.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/381c7bc5e717920cb0b1b680ef2fdc9fd9c3001671e8306842ff0c1298e1c9a0.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        }
+      ]
+    },
+    {
+      "id": "opts",
+      "bytes": 13870768,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/bd7a716610b70f7033d1c143d0ed7be5a340cee78d94b0127a3537c6428f6557.webp",
+          "width": 1699,
+          "height": 628,
+          "bytes": 4267888
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/0f438eaca17c8d3106fd54970b7588efb39ac7d4d5238847b6d4833e543d2439.webp",
+          "width": 1700,
+          "height": 660,
+          "bytes": 4488000
+        }
+      ]
+    },
+    {
+      "id": "manual",
+      "bytes": 5114880,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        }
+      ]
+    },
+    {
+      "id": "prep",
+      "bytes": 14355968,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/91c4700ceb9c0dca74c84d386dcff7b5c6dc8f060d182c552b9ae6daac7fb1bd.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/2e521529cc87cb038d6f06ceadb3fef8431247cbed184308960de67c5afadfcf.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/414e60085060f7eae50b7c0b5adc88b9cefc049dfcd7a9f460966299e6d63cc4.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/a008195f254e3c8b5f1d42433d7ea95afdd915532c285027cf7521b615986765.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/7f9916982a17a397d677a2736442d8a10be7183b9182a25160edb20e3bf0ec69.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/1e314da297cf9aeccc9b86075fe528aaf4e727b6fc9b4b1ea4fd92da49de6910.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/07588cb3113e46431f0ea792e63cba8f2105d5d064d7263f2e9fb98d87e6e68a.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/26227810ae9a9cd0110a155516af07a2ab2b05c6f4a520112d168f835409c651.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/af84244812771fdade77ce658d0f39296880b0f5fab517391fe4527a171967dd.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/3c5abde805ef72aba9c07ff64bb88de7dc61bd9c2df985f279405911bbc45db7.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/f42c2d0efa8b95af6cef678c7133dc422a6c378603fd6233a39b6aa5d164a243.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        }
+      ]
+    },
+    {
+      "id": "kap",
+      "bytes": 7864320,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp",
+          "width": 256,
+          "height": 186,
+          "bytes": 190464
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/5d1b464ce56d975fa61103f41c8df5c073fb7372e95b0a2e62c05b7f7d163bc3.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/122e88fcebc0badae21dccd629429434e7c18382aea9593e669bbe98562a6395.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ae2b3267b6155e75833a29408402bc4541faddead590aafd794b1694c8b132aa.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/2825e3efad9a636a538a79b7672df0e35555a0fe82aa60fa7d6f96eb37b09dd2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ceacfb2a918abfc6b2a510bf98addd7896d8a18aeff452170917ee07029ace7d.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/381c7bc5e717920cb0b1b680ef2fdc9fd9c3001671e8306842ff0c1298e1c9a0.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        }
+      ]
+    },
+    {
+      "id": "opts",
+      "bytes": 13870768,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/bd7a716610b70f7033d1c143d0ed7be5a340cee78d94b0127a3537c6428f6557.webp",
+          "width": 1699,
+          "height": 628,
+          "bytes": 4267888
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/0f438eaca17c8d3106fd54970b7588efb39ac7d4d5238847b6d4833e543d2439.webp",
+          "width": 1700,
+          "height": 660,
+          "bytes": 4488000
+        }
+      ]
+    },
+    {
+      "id": "title",
+      "bytes": 15907200,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/30ad16f5e6d855a7f89bfb3d4cd4585c5a811bacca366f2347db73519efa3f0a.webp",
+          "width": 1200,
+          "height": 378,
+          "bytes": 1814400
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/bd1261a9273a03aa57eae224e5f1a03d71678113fbb77674518648bf13aff1c2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/8f08bd944371bb357b2917aaa848ae7ecf7194a91030eeacdeb413f592fd653c.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/6f8540fa904dea00456661a5c5133563862df081eb44f48098e0b257e38b8cc2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/d6ab3fb5cd9fb00c532f12892adf75e30386ff01ef550db235e2083c3f32e262.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/3f2514729ee49610152e610b8c235e03731fd103c038f9bb31585bcd08c9eea2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/6072f51fb47a85fabbb546d2075331cadb1ef26ca78964e886b19968c2efa905.webp",
+          "width": 1280,
+          "height": 640,
+          "bytes": 3276800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/adeb0f42fe9fa54dc3e6e5b5765bb573bc958978ad5beb75e5b8df667b705035.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/51663086ee28e82464a8bcd5063739831060fb9259e02ff95e569b7f5843989f.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ff82f1cca2400afaa14d2162b5bce3bcf1b62bbf2b9984d30d026e819edb2227.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/b858e346f2c7f92ce61c4b57ba2ea2393492df7386093a38ef628c6879eb9793.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/093f9cc0c12ee927c7ff90660548789679498d12210ee9bb914af09ff8e6f86a.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/91c4700ceb9c0dca74c84d386dcff7b5c6dc8f060d182c552b9ae6daac7fb1bd.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        }
+      ]
+    },
+    {
+      "id": "prep",
+      "bytes": 14355968,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/91c4700ceb9c0dca74c84d386dcff7b5c6dc8f060d182c552b9ae6daac7fb1bd.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/2e521529cc87cb038d6f06ceadb3fef8431247cbed184308960de67c5afadfcf.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/414e60085060f7eae50b7c0b5adc88b9cefc049dfcd7a9f460966299e6d63cc4.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/a008195f254e3c8b5f1d42433d7ea95afdd915532c285027cf7521b615986765.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/7f9916982a17a397d677a2736442d8a10be7183b9182a25160edb20e3bf0ec69.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/1e314da297cf9aeccc9b86075fe528aaf4e727b6fc9b4b1ea4fd92da49de6910.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/07588cb3113e46431f0ea792e63cba8f2105d5d064d7263f2e9fb98d87e6e68a.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/26227810ae9a9cd0110a155516af07a2ab2b05c6f4a520112d168f835409c651.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/af84244812771fdade77ce658d0f39296880b0f5fab517391fe4527a171967dd.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/3c5abde805ef72aba9c07ff64bb88de7dc61bd9c2df985f279405911bbc45db7.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/f42c2d0efa8b95af6cef678c7133dc422a6c378603fd6233a39b6aa5d164a243.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        }
+      ]
+    },
+    {
+      "id": "kap",
+      "bytes": 7864320,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp",
+          "width": 256,
+          "height": 186,
+          "bytes": 190464
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/5d1b464ce56d975fa61103f41c8df5c073fb7372e95b0a2e62c05b7f7d163bc3.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/122e88fcebc0badae21dccd629429434e7c18382aea9593e669bbe98562a6395.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ae2b3267b6155e75833a29408402bc4541faddead590aafd794b1694c8b132aa.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/2825e3efad9a636a538a79b7672df0e35555a0fe82aa60fa7d6f96eb37b09dd2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ceacfb2a918abfc6b2a510bf98addd7896d8a18aeff452170917ee07029ace7d.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/381c7bc5e717920cb0b1b680ef2fdc9fd9c3001671e8306842ff0c1298e1c9a0.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        }
+      ]
+    },
+    {
+      "id": "opts",
+      "bytes": 13870768,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/bd7a716610b70f7033d1c143d0ed7be5a340cee78d94b0127a3537c6428f6557.webp",
+          "width": 1699,
+          "height": 628,
+          "bytes": 4267888
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/0f438eaca17c8d3106fd54970b7588efb39ac7d4d5238847b6d4833e543d2439.webp",
+          "width": 1700,
+          "height": 660,
+          "bytes": 4488000
+        }
+      ]
+    },
+    {
+      "id": "title",
+      "bytes": 15907200,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/30ad16f5e6d855a7f89bfb3d4cd4585c5a811bacca366f2347db73519efa3f0a.webp",
+          "width": 1200,
+          "height": 378,
+          "bytes": 1814400
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/bd1261a9273a03aa57eae224e5f1a03d71678113fbb77674518648bf13aff1c2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/8f08bd944371bb357b2917aaa848ae7ecf7194a91030eeacdeb413f592fd653c.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/6f8540fa904dea00456661a5c5133563862df081eb44f48098e0b257e38b8cc2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/d6ab3fb5cd9fb00c532f12892adf75e30386ff01ef550db235e2083c3f32e262.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/3f2514729ee49610152e610b8c235e03731fd103c038f9bb31585bcd08c9eea2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/6072f51fb47a85fabbb546d2075331cadb1ef26ca78964e886b19968c2efa905.webp",
+          "width": 1280,
+          "height": 640,
+          "bytes": 3276800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/adeb0f42fe9fa54dc3e6e5b5765bb573bc958978ad5beb75e5b8df667b705035.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/51663086ee28e82464a8bcd5063739831060fb9259e02ff95e569b7f5843989f.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ff82f1cca2400afaa14d2162b5bce3bcf1b62bbf2b9984d30d026e819edb2227.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/b858e346f2c7f92ce61c4b57ba2ea2393492df7386093a38ef628c6879eb9793.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/093f9cc0c12ee927c7ff90660548789679498d12210ee9bb914af09ff8e6f86a.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/91c4700ceb9c0dca74c84d386dcff7b5c6dc8f060d182c552b9ae6daac7fb1bd.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        }
+      ]
+    },
+    {
+      "id": "prep",
+      "bytes": 14355968,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/91c4700ceb9c0dca74c84d386dcff7b5c6dc8f060d182c552b9ae6daac7fb1bd.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/2e521529cc87cb038d6f06ceadb3fef8431247cbed184308960de67c5afadfcf.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/414e60085060f7eae50b7c0b5adc88b9cefc049dfcd7a9f460966299e6d63cc4.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/a008195f254e3c8b5f1d42433d7ea95afdd915532c285027cf7521b615986765.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/7f9916982a17a397d677a2736442d8a10be7183b9182a25160edb20e3bf0ec69.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/1e314da297cf9aeccc9b86075fe528aaf4e727b6fc9b4b1ea4fd92da49de6910.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/07588cb3113e46431f0ea792e63cba8f2105d5d064d7263f2e9fb98d87e6e68a.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/26227810ae9a9cd0110a155516af07a2ab2b05c6f4a520112d168f835409c651.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/af84244812771fdade77ce658d0f39296880b0f5fab517391fe4527a171967dd.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/3c5abde805ef72aba9c07ff64bb88de7dc61bd9c2df985f279405911bbc45db7.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/f42c2d0efa8b95af6cef678c7133dc422a6c378603fd6233a39b6aa5d164a243.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        }
+      ]
+    },
+    {
+      "id": "kap",
+      "bytes": 7864320,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp",
+          "width": 256,
+          "height": 186,
+          "bytes": 190464
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/5d1b464ce56d975fa61103f41c8df5c073fb7372e95b0a2e62c05b7f7d163bc3.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/122e88fcebc0badae21dccd629429434e7c18382aea9593e669bbe98562a6395.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ae2b3267b6155e75833a29408402bc4541faddead590aafd794b1694c8b132aa.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/2825e3efad9a636a538a79b7672df0e35555a0fe82aa60fa7d6f96eb37b09dd2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ceacfb2a918abfc6b2a510bf98addd7896d8a18aeff452170917ee07029ace7d.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/381c7bc5e717920cb0b1b680ef2fdc9fd9c3001671e8306842ff0c1298e1c9a0.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        }
+      ]
+    },
+    {
+      "id": "opts",
+      "bytes": 13870768,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/bd7a716610b70f7033d1c143d0ed7be5a340cee78d94b0127a3537c6428f6557.webp",
+          "width": 1699,
+          "height": 628,
+          "bytes": 4267888
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/0f438eaca17c8d3106fd54970b7588efb39ac7d4d5238847b6d4833e543d2439.webp",
+          "width": 1700,
+          "height": 660,
+          "bytes": 4488000
+        }
+      ]
+    },
+    {
+      "id": "title",
+      "bytes": 15907200,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/30ad16f5e6d855a7f89bfb3d4cd4585c5a811bacca366f2347db73519efa3f0a.webp",
+          "width": 1200,
+          "height": 378,
+          "bytes": 1814400
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/bd1261a9273a03aa57eae224e5f1a03d71678113fbb77674518648bf13aff1c2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/8f08bd944371bb357b2917aaa848ae7ecf7194a91030eeacdeb413f592fd653c.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/6f8540fa904dea00456661a5c5133563862df081eb44f48098e0b257e38b8cc2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/d6ab3fb5cd9fb00c532f12892adf75e30386ff01ef550db235e2083c3f32e262.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/3f2514729ee49610152e610b8c235e03731fd103c038f9bb31585bcd08c9eea2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/6072f51fb47a85fabbb546d2075331cadb1ef26ca78964e886b19968c2efa905.webp",
+          "width": 1280,
+          "height": 640,
+          "bytes": 3276800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/adeb0f42fe9fa54dc3e6e5b5765bb573bc958978ad5beb75e5b8df667b705035.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/51663086ee28e82464a8bcd5063739831060fb9259e02ff95e569b7f5843989f.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ff82f1cca2400afaa14d2162b5bce3bcf1b62bbf2b9984d30d026e819edb2227.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/b858e346f2c7f92ce61c4b57ba2ea2393492df7386093a38ef628c6879eb9793.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/093f9cc0c12ee927c7ff90660548789679498d12210ee9bb914af09ff8e6f86a.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/91c4700ceb9c0dca74c84d386dcff7b5c6dc8f060d182c552b9ae6daac7fb1bd.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        }
+      ]
+    },
+    {
+      "id": "prep",
+      "bytes": 14355968,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/91c4700ceb9c0dca74c84d386dcff7b5c6dc8f060d182c552b9ae6daac7fb1bd.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/2e521529cc87cb038d6f06ceadb3fef8431247cbed184308960de67c5afadfcf.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/414e60085060f7eae50b7c0b5adc88b9cefc049dfcd7a9f460966299e6d63cc4.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/a008195f254e3c8b5f1d42433d7ea95afdd915532c285027cf7521b615986765.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/7f9916982a17a397d677a2736442d8a10be7183b9182a25160edb20e3bf0ec69.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/1e314da297cf9aeccc9b86075fe528aaf4e727b6fc9b4b1ea4fd92da49de6910.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/07588cb3113e46431f0ea792e63cba8f2105d5d064d7263f2e9fb98d87e6e68a.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/26227810ae9a9cd0110a155516af07a2ab2b05c6f4a520112d168f835409c651.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/af84244812771fdade77ce658d0f39296880b0f5fab517391fe4527a171967dd.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/3c5abde805ef72aba9c07ff64bb88de7dc61bd9c2df985f279405911bbc45db7.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/f42c2d0efa8b95af6cef678c7133dc422a6c378603fd6233a39b6aa5d164a243.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        }
+      ]
+    },
+    {
+      "id": "kap",
+      "bytes": 7864320,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp",
+          "width": 256,
+          "height": 186,
+          "bytes": 190464
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/5d1b464ce56d975fa61103f41c8df5c073fb7372e95b0a2e62c05b7f7d163bc3.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/122e88fcebc0badae21dccd629429434e7c18382aea9593e669bbe98562a6395.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ae2b3267b6155e75833a29408402bc4541faddead590aafd794b1694c8b132aa.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/2825e3efad9a636a538a79b7672df0e35555a0fe82aa60fa7d6f96eb37b09dd2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ceacfb2a918abfc6b2a510bf98addd7896d8a18aeff452170917ee07029ace7d.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/381c7bc5e717920cb0b1b680ef2fdc9fd9c3001671e8306842ff0c1298e1c9a0.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        }
+      ]
+    },
+    {
+      "id": "opts",
+      "bytes": 13870768,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/bd7a716610b70f7033d1c143d0ed7be5a340cee78d94b0127a3537c6428f6557.webp",
+          "width": 1699,
+          "height": 628,
+          "bytes": 4267888
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/0f438eaca17c8d3106fd54970b7588efb39ac7d4d5238847b6d4833e543d2439.webp",
+          "width": 1700,
+          "height": 660,
+          "bytes": 4488000
+        }
+      ]
+    },
+    {
+      "id": "title",
+      "bytes": 15907200,
+      "images": [
+        {
+          "url": "http://127.0.0.1:49968/assets/30ad16f5e6d855a7f89bfb3d4cd4585c5a811bacca366f2347db73519efa3f0a.webp",
+          "width": 1200,
+          "height": 378,
+          "bytes": 1814400
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp",
+          "width": 960,
+          "height": 236,
+          "bytes": 906240
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/bd1261a9273a03aa57eae224e5f1a03d71678113fbb77674518648bf13aff1c2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/8f08bd944371bb357b2917aaa848ae7ecf7194a91030eeacdeb413f592fd653c.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/6f8540fa904dea00456661a5c5133563862df081eb44f48098e0b257e38b8cc2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/d6ab3fb5cd9fb00c532f12892adf75e30386ff01ef550db235e2083c3f32e262.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/3f2514729ee49610152e610b8c235e03731fd103c038f9bb31585bcd08c9eea2.webp",
+          "width": 128,
+          "height": 128,
+          "bytes": 65536
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/6072f51fb47a85fabbb546d2075331cadb1ef26ca78964e886b19968c2efa905.webp",
+          "width": 1280,
+          "height": 640,
+          "bytes": 3276800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/30c8084840315d8a3bb933208205078da729fc040083c5a0e45496ef5aec5c49.webp",
+          "width": 1280,
+          "height": 822,
+          "bytes": 4208640
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/adeb0f42fe9fa54dc3e6e5b5765bb573bc958978ad5beb75e5b8df667b705035.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/51663086ee28e82464a8bcd5063739831060fb9259e02ff95e569b7f5843989f.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/ff82f1cca2400afaa14d2162b5bce3bcf1b62bbf2b9984d30d026e819edb2227.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/b858e346f2c7f92ce61c4b57ba2ea2393492df7386093a38ef628c6879eb9793.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/093f9cc0c12ee927c7ff90660548789679498d12210ee9bb914af09ff8e6f86a.webp",
+          "width": 320,
+          "height": 160,
+          "bytes": 204800
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/048c2ac6d026d124c645a80a772763d1538993b99b6997a9c8e95538b76d966e.webp",
+          "width": 640,
+          "height": 846,
+          "bytes": 2165760
+        },
+        {
+          "url": "http://127.0.0.1:49968/assets/91c4700ceb9c0dca74c84d386dcff7b5c6dc8f060d182c552b9ae6daac7fb1bd.webp",
+          "width": 640,
+          "height": 853,
+          "bytes": 2183680
+        }
+      ]
+    }
+  ]
+}

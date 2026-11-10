@@ -1,0 +1,639 @@
+FENIX nightbrand-codex-20261028-180 — nowe nagłówki-obrazki (PL i EN) złożone z liter alfabetu od autora: 11 polskich i 11 angielskich, w wersji EN obrazki zamiast tekstu (Claude). Opublikowano na GitHub.
+SHA-256 index.html: bddc14ffc0730636a7f763edbaa1afe17b1d8fd24b38e570a30bf105b4dfa6c3.
+SHA-256 sw.js: cc89de6d97e2f336cbcf8153c02bafafc2d65266b7edc065589a7cf547eb2cfb.
+FENIX nightbrand-codex-20261028-179 — wersja angielska: ekran wyboru języka (flagi) przy pierwszym uruchomieniu, zmiana w Opcjach → Ustawienia, ok. 800 tekstów gry i 150 napisów menu po angielsku wg docs/SLOWNIK_EN.md; polskie nazwy: Spalona Osada, Upadły Złotogród, Hrabia Ottokar (Claude). Opublikowano na GitHub.
+SHA-256 index.html: bddc14ffc0730636a7f763edbaa1afe17b1d8fd24b38e570a30bf105b4dfa6c3.
+SHA-256 sw.js: 77f4584ef35ef38b651b24a2794c505e158af65ad468defedb914a529983e71d.
+FENIX nightbrand-codex-20261028-178 — skille: Fala Mocy +10% za poziom (poz. 5: +20%, razem 60%), Zryw Ostrza co 6/4/3 trafienie, Kaskada cięć 25 many, Wir Ostrza 35 staminy; usunięte Czujne Oko, Dobicie, Krok przez cień i Egzekucja; instrukcja zaktualizowana (Claude). Opublikowano na GitHub.
+SHA-256 index.html: fbbf8b340696a3475f88cb0ecf255b8cb07e5108d71edf90473ef7ea29ec82b0.
+SHA-256 sw.js: 32bfa31ea0924b29df96a18e4ce6cfe7cad7c35494b4f94fc5eafe60d44e5621.
+FENIX nightbrand-codex-20261028-177 — wersja pionowa (telefon): bez samouczka i podpowiedzi, komunikaty fabularne i bossów jako przewijany pasek, rozmowy z postaciami bez zatrzymywania gry (Wit i Wolch nadal w oknie); wersja pozioma bez zmian (Claude). Opublikowano na GitHub.
+SHA-256 index.html: fbbf8b340696a3475f88cb0ecf255b8cb07e5108d71edf90473ef7ea29ec82b0.
+SHA-256 sw.js: 2689038fffba515ff55471191c6a0eca4e66aa81e171a99c9ce4f0238f58f5d2.
+FENIX nightbrand-codex-20261028-174 — umiejętności aktywne (7) i cechy (4): Kaskada cięć, Kula ognia, większy Odłamek szronu, Inteligencja; usunięte Jadowy kolec i Piętno krwi (Claude). Połączone z cache 173 chata. Opublikowano na GitHub.
+SHA-256 index.html: fbbf8b340696a3475f88cb0ecf255b8cb07e5108d71edf90473ef7ea29ec82b0.
+SHA-256 sw.js: b20953fc30058f940c8a4eb92a9a1b353ee90acf819272c1c29a6a9326070d2a.
+FENIX nightbrand-codex-20261028-169 — poprawka starego wyglądu po aktualizacji: lista plików (manifest) jest zawsze pobierana z serwera, service worker i loader nie biorą jej z pamięci podręcznej (Claude). Opublikowano na GitHub.
+SHA-256 index.html: fbbf8b340696a3475f88cb0ecf255b8cb07e5108d71edf90473ef7ea29ec82b0.
+SHA-256 sw.js: e8376318bffc9a7f71f3dc381fc8e68fa76663bf2bcd85441b267d6f12b57584.
+FENIX nightbrand-codex-20261028-168 — scalenie: efekty dźwiękowe TomMusic i Owlish (38 próbek) oraz nazwa OBDYP (chat, cache 163–167) z ekranem tytułowym, paskiem XP i większym przyciskiem Wyrusz (Claude). Opublikowano na GitHub.
+SHA-256 index.html: b66ffb1b5a95c33906f16d0f84e1cd988f36f254cefe4852c9c44151a6a845c8.
+
+FENIX nightbrand-codex-20261028-165 — (Claude) ekran tytułowy: pasek XP bez czarnego tła (maska xpmask.webp), większe logo w poziomie na telefonie.
+SHA-256 index.html: b66ffb1b5a95c33906f16d0f84e1cd988f36f254cefe4852c9c44151a6a845c8.
+
+FENIX nightbrand-codex-20261028-162 — czytelniejsza lewa kolumna ekranu tytułowego; wersja lokalna do oceny autora.
+SHA-256 index.html: b66ffb1b5a95c33906f16d0f84e1cd988f36f254cefe4852c9c44151a6a845c8.
+
+FENIX nightbrand-codex-20261028-159 — szybszy start, etap 2: core i kolejka grafik rozdziałów II–V.
+SHA-256 index.html: 5f0b3f1ce613a78579db81d3ae154d60cacedbba8ad3c6af793ec91f1bf7cae1.
+
+FENIX nightbrand-codex-20261028-157 — szybszy start, etap 1: muzyka i ilustracje rozdziałów pobierane na żądanie.
+SHA-256 index.html: 26b114dda220b758c687dd77893ae1f560d04c8aa83eb743dc499e823af4004a.
+
+FENIX nightbrand-codex-20261028-156 — spójne place/drogi, brak brązowych łatek, bezstratne HD obiektów i NPC.
+SHA-256 index.html: 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70.
+
+FENIX nightbrand-codex-20261028-153 — proporcje i porządek dekoracji; ciągłe podłoże pod obiektami.
+SHA-256 index.html: 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70.
+
+FENIX nightbrand-codex-20261028-150 — posadzki CC0 I–V i krypty; pełne 512/1024 px, bezstratny WebP.
+SHA-256 index.html: 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70.
+
+FENIX nightbrand-codex-20261028-147 — wyraźniejsze przyciski dotykowe i odstępy skilli 16 px.
+SHA-256 index.html: 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70.
+
+FENIX nightbrand-codex-20261028-146 — HD-2D: podłoża, ściany i dekoracje I–V oraz krypty (lokalnie).
+SHA-256 index.html: 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70.
+
+FENIX nightbrand-codex-20261028-144 — HD-2D etap 1: podłoża i próbkowanie atlasu.
+SHA-256 index.html: 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70.
+
+FENIX nightbrand-codex-20261028-142 — Wir Ostrza: mechanika i grafika Gemini, 29.10.2026.
+SHA-256 index.html: 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70 (loader bez zmian).
+
+FENIX nightbrand-codex-20261028-138 — mechanika Wiru Ostrza (stamina), 29.10.2026.
+SHA-256 index.html: 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70.
+
+FENIX nightbrand-codex-20261028-136 — oba zamachy -10% względem cache135; krycie 72%.
+SHA-256 index.html: 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70 (loader bez zmian).
+
+FENIX nightbrand-codex-20261028-135 — 29.10.2026: zamach lekki +30%, ciężki +35%, krycie smug 72%.
+SHA-256 index.html: 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70 (loader bez zmian).
+
+Nightbrand — FENIX
+Cache: nightbrand-codex-20261028-134
+SHA-256 index.html: 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70
+29.10.2026 — efekty trafień, bloku/parowania i smugi głównego żywiołu; wspólna skala zamachu. Bez zmian mechaniki.
+
+--- Historia ---
+29.10.2026 — FENIX: kolejne +20% napisu/paska poziomu i Przebiegu gry w menu. nightbrand-codex-20261028-132; SHA-256 index.html 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70. Lokalnie, bez publikacji.
+
+29.10.2026 — FENIX: napis i pasek poziomu w menu +14%; nieco większy Przebieg gry, zachowana wspólna oś. nightbrand-codex-20261028-130; SHA-256 index.html 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70. Lokalnie, bez publikacji.
+
+29.10.2026 — FENIX: poziom i Przebieg gry wyśrodkowane pod logo; sterowanie dotykowe pod Instrukcją, Samouczek pod Opcjami. nightbrand-codex-20261028-129; SHA-256 index.html 531537fc62b4fd42a3f1e20a4ed9465bb7e06a1d91c41218f0463867d8cc4a70. Lokalnie, bez publikacji.
+
+29.10.2026 — FENIX: menu rozsunięte ku krawędziom; logo i poziom w lewo, banery w prawo; podpis w lewym dolnym rogu z opacity 0,62. nightbrand-codex-20261028-128; SHA-256 index.html 8d774e55a520e34c18e2268662110de3d3f7b7566313a4085c88438c814ca249. Lokalnie, bez publikacji.
+
+29.10.2026 — FENIX: menu telefonu jako pomniejszona kompozycja desktopowa; logo/poziom po lewej, lista rozdziałów po prawej, kontrolki na dole. nightbrand-codex-20261028-126; SHA-256 index.html e34d13c5143a1b16d272d5931ac46d54cf5097376107af1b3dde47547ca506bb. Lokalnie, bez publikacji.
+
+FENIX — dopracowane proporcje i drobne teksty menu: 13 px na komputerze, 12 px na telefonie; wspólna oś kontrolek i stopki; większe logo w niskim poziomie. nightbrand-codex-20261028-122; SHA-256 index.html bca693d8859ed25060ac883d34dd139d70e2596917bb852629e885696b3135c2. Lokalnie, bez publikacji.
+
+28.10.2026 — FENIX: prawa kolumna menu wydłużona w dół o 14vh na komputerze, równe banery i odstępy. nightbrand-codex-20261028-119; SHA-256 index.html 9dbb1f0117d4ba68b0e0fc4b943fda00ca5a17d40bfe462b158aec042634249c. Lokalnie, bez publikacji.
+
+28.10.2026 — FENIX: prawa kolumna menu rozciągnięta w pionie, sześć równych wierszy i jednakowe odstępy; zachowane układy telefonu. nightbrand-codex-20261028-118; SHA-256 index.html 9dbb1f0117d4ba68b0e0fc4b943fda00ca5a17d40bfe462b158aec042634249c. Lokalnie, bez publikacji.
+
+28.10.2026 — FENIX: równych rozmiarów pola sterowania dotykowego i podpowiedzi; mniejszy Przebieg gry skrajnie po lewej; oczyszczone krawędzie logo. nightbrand-codex-20261028-117; SHA-256 index.html 8ec720539167f6d99beed45fdc9ef6805768003809ca59ce13dc0d21273263c5. Lokalnie, bez publikacji.
+
+28.10.2026 — FENIX: większe logo i przyciski menu, czytelne rekordy, mniejszy panel przebiegu gry i układ bez przewijania na czterech ekranach. nightbrand-codex-20261028-115; SHA-256 index.html 0679c95c54313a7dfe49655d7c041d1e2970f3c837517098a382bf4da2672f2c. Wersja lokalna, bez publikacji.
+
+28.10.2026 — FENIX: nowe przyciski, ramki, kontrolki i ikony Gemini; większe nagłówki, przezroczyste tło poziomu postaci, joystick 55% przezroczystości. nightbrand-codex-20261028-113; SHA-256 index.html 0679c95c54313a7dfe49655d7c041d1e2970f3c837517098a382bf4da2672f2c. Wersja lokalna, czeka na akceptację do publikacji.
+
+28.10.2026 — FENIX: nowe przezroczyste napisy nagłówków i logo Gemini, poprawne proporcje i etykiety dostępności. nightbrand-codex-20261028-103; SHA-256 index.html 0679c95c54313a7dfe49655d7c041d1e2970f3c837517098a382bf4da2672f2c. Wersja lokalna, bez publikacji.
+
+28.10.2026 — FENIX: naprawiono start z perkami/wyzwaniem (applyPrep przekazuje właściwą tabelę mnożników). Bez zmiany wartości perków. nightbrand-codex-20261028-99; index.html 20671 B; SHA-256 6da3e7fea8742fdaaea81a7e2f5478b6b75155725452cbab323217e1394e9189. Test kombinacji 10044/10044 PASS, Wyrusz/zapis 21/21 PASS. Wersja lokalna, czeka na akceptację do publikacji.
+
+28.10.2026 — FENIX: ramki, banery i łańcuchy Gemini z prawdziwą przezroczystością; wycentrowany panel i rząd kart awansu w poziomie. Kod rozgrywki bez zmian. nightbrand-codex-20261028-98; index.html 20671 B; SHA-256 6da3e7fea8742fdaaea81a7e2f5478b6b75155725452cbab323217e1394e9189. Krótki przegląd UI PASS. Wersja lokalna, bez publikacji.
+
+28.10.2026 — FENIX: tytuł karty „Nightbrand”; przyczyna śmierci na ekranie końca nocy, jawny sprawca każdego trafienia i pocisku. Bez zmian balansu. nightbrand-codex-20261028-96; index.html 20671 B; SHA-256 6da3e7fea8742fdaaea81a7e2f5478b6b75155725452cbab323217e1394e9189. Wersja lokalna, bez publikacji GitHub.
+
+FENIX — 28.10.2026. nightbrand-codex-20261028-94; index.html 20684 B; SHA-256 0dd66f734f8d9a11860d15428da0292428a49f0d47dea160dd1d8b416b4ee6f4. Gra z osobnych plików web/index.html + web/assets/. Publikacja obejmuje wyłącznie pliki gry; stare materiały itch/ wyłączone z precache.
+
+28.10.2026 — nowe okno awansu: lista w pionie, równe karty w poziomie, ochrona wyboru 2,5 s. „Trzeci cios combo”. nightbrand-codex-20261028-86; HTML 14368712 B; SHA-256 ad35b052c061b089d9d3fbbc0b157d91b0986ea20e54c65d5a5dd11dc512a493; testy 226 kontroli PASS, 9/9 widoków i 45/45 trafień.
+
+28.10.2026 Claude — rejestracja sw.js z .catch (bez fałszywego błędu w raporcie). nightbrand-claude-20261028-76; HTML 14362850 B; SHA-256 4a50d03a9e9b4d042d264785be810c5de3ab2e1436b74c7d104960cb150e9f56.
+
+28.10.2026 Claude — w opisach skilli „obr.” zamiast „dmg”. nightbrand-claude-20261028-75; HTML 14362830 B; SHA-256 a296d4c5ee5154c60b8ed6585507721ee2c34f9fb305a97838f8956322ea7e8a. Bez testów (tylko tekst).
+
+28.10.2026 Claude — zwięzłe opisy umiejętności, stylów i komunikatów o nowych skillach (tylko teksty). Baza: cache 73 czata. nightbrand-claude-20261028-74; HTML 14362826 B; SHA-256 49bc135fca017260f599e0c82303328b5dac0a0e64fec21fbb4c92c7d60bbff4.
+
+28.10.2026 — tekst komunikatów mniejszy o 25%, pozycja i czas bez zmian. nightbrand-codex-20261028-73; HTML 14364048 B; SHA-256 6b73a8f9cdfb46ac1adf06e10d9cf2ef31663cdf3db88104c12e6e316be9c1e9; messages 26/26 PASS.
+
+28.10.2026 — komunikaty 3–7 s zależnie od długości (próg 60, +0,025 s/znak), bez zmian wyglądu i braku pauzy. nightbrand-codex-20261028-72; HTML 14364008 B; SHA-256 f46a9e0fd7dfa1101f7b5dc71bd66a8b77ae30eb534722e7b656eb0cdd800418. Testy messages 26/26, power-fires 32/32, slasher-expansion 48/48, orientation 30/30 PASS.
+
+28.10.2026 — przejęcie Claude cache 69: pion i poziom według urządzenia, pełne okno, komunikaty bez pauzy. nightbrand-codex-20261028-70; HTML 14363830 B; SHA-256 a3a1e54bc0acfb62aafd16a026831753c5a46d22f7f47b8f8418e3853c6fa43d. Lokalne testy 18/18 komunikatów, 30/30 orientacji, 65/65 review, 15/15 no-horde PASS.
+
+28.10.2026 Claude — pasek komunikatu jeszcze niżej (4,3 em od góry), wyśrodkowanie bez zmian. nightbrand-claude-20261028-69; HTML 14363830 B; SHA-256 a3a1e54bc0acfb62aafd16a026831753c5a46d22f7f47b8f8418e3853c6fa43d. Bez testów (na prośbę autora; jedna wartość CSS).
+
+28.10.2026 Claude — pasek komunikatu przesunięty niżej (3,6 em od góry zamiast 2,4 em), żeby nie nachodził na pasek HP; wyśrodkowanie bez zmian. nightbrand-claude-20261028-68; HTML 14363830 B; SHA-256 e8e066603a83e990e86bc94b5e1ddddf5296785b07fc9edab28a40336fd81c3c. Bez testów (na prośbę autora; zmiana jednej wartości CSS).
+
+28.10.2026 Claude — komunikaty jako pasek u góry bez pauzy, 3 s, jeden po drugim; okno „Dalej” usunięte. nightbrand-claude-20261028-67; HTML 14363830 B; SHA-256 c87e2c0b2aa26f087ec181980ddfa56591a5fb48c94f3b093345314916140842. Testy messages 18/18, regresje PASS.
+
+28.10.2026 Claude — pion i poziom według telefonu (bez wymuszonego obrotu), gra wypełnia cały ekran przez poszerzenie widoku. Baza: cache 65 czata. nightbrand-claude-20261028-66; HTML 14362234 B; SHA-256 1fba33fa42e23f6e56438a4f8b65efb69cb481f1f3eeae57242b9ef85f62551b. Testy orientation 30/30, 81 ekranów w 9 kształtach okna, regresje PASS.
+
+28.10.2026 — mały złoty pasek życia golema 40×5 px, bez nazwy, 7 px nad głową. nightbrand-codex-20261028-65; HTML 14363076 B; SHA-256 4869e9d091a550ae6a47936430800d8a64cdfca0d1543b6238292bc5cca38c16; golem 31/31 PASS.
+
+28.10.2026 — przejęcie bazy Claude cache 63 z nowym golemem. Lokalny cache nightbrand-codex-20261028-64; HTML 14362155 B; SHA-256 2a2e7798b665574393a0605eb393d3048503c369d67051ea715f7131fb0c73b9. Lokalne testy golem 27/27, review 65/65, no-horde 15/15 PASS.
+
+28.10.2026 Claude — Kamienny obrońca ściąga wrogów: 34 many, 30 s, do 10 s, własne życie 80/100/120% HP, bossowie z dolnym paskiem najwyżej 5 s; stara osłona usunięta. Baza: cache 62 czata. nightbrand-claude-20261028-63; HTML 14362155 B; SHA-256 2a2e7798b665574393a0605eb393d3048503c369d67051ea715f7131fb0c73b9. Testy golem 27/27, regresje PASS, stability 20/20.
+
+28.10.2026 — stamina: pięć lekkich + unik lub dwa ciężkie + unik; Jadowy kolec, efekty żywiołów na ostrzu. Golem bez zmian. nightbrand-codex-20261028-62; HTML 14357905 B; SHA-256 1c0e92ef769fc5dcad2919f70e8940e00c584b5c15b33c30ccbddda3f942076f. Testy skills 24/24, review 65/65, mana 46/46, regresje PASS.
+
+28.10.2026 — stabilność: odzyskiwanie WebGL, raport 20 błędów i kopiowanie w Opcjach → Dane zapisu, limit nadrabiania low/dotyk 0,2 s. nightbrand-codex-20261028-57; HTML 14348741 B; SHA-256 b1ac1ca16031da8bb2e85edc476790c8e302edb558f07f41fd6486af9d81b2d6. Testy: review 65/65, no-horde 15/15, stability 19/19, mapy i Cytadela PASS.
+
+28.10.2026 — Heri: regeneracja staminy +15% przez 3 minuty. Tylko ten bonus i jego opisy; reszta prac odłożona. Cache nightbrand-codex-20261028-54; HTML 14344558 B; test Heriego 14/14 PASS.
+
+28.10.2026 — usunięcie trybu Hordy (Claude), scalenie lokalne Codex. Jeden tryb walki mieczem, bez zmiany balansu i grafik. Cache nightbrand-codex-20261028-53; HTML 14344520 B; zapas 655480 B. SHA-256 2f67b27e9fc26e7daeab76bac6d41262e9336abccc9d21ab13aa009d3c232b2a. Opis docs/USUNIECIE_HORDY.md.
+
+27.10.2026 — łagodniejsza krzywa II-V po uwagach testerów o Normalu. V: stare obrażenia i liczebność, maks. +6% HP. I i nerf ghuli zachowane. Cache nightbrand-codex-20261027-52; HTML 14365771 B, zapas 634229 B.
+
+27.10.2026 — rozdział I jako rozgrzewka, wolniejsze i rzadsze skoki ghuli z zapowiedzią, skalowanie map I-V. Niezależne odnowienia pocisków gracza i AI. Cache nightbrand-codex-20261027-51; HTML 14365778 B, zapas 634222 B. Szczegóły docs/SKALOWANIE_ROZDZIALOW.md.
+
+27.10.2026 — trzy aktywne sloty Slashera: Q/E/F i LT+X/Y/B, małe ikony HUD, wyposażenie w pauzie poza walką. Rozmowa Enter / Y; RT/RB/LB do walki. Cache nightbrand-codex-20261027-47; HTML 14364743 B, zapas 635257 B. Szczegóły docs/SLASHER_TRZY_SLOTY.md.
+
+27.10.2026 — dziewięć nowych skilli Slashera, ikony, efekty żywiołów ostrza i opisy samouczka. Ogień wyklucza lód; główny i wspierający żywioł. Horda pozostaje. Cache nightbrand-codex-20261027-42; HTML 14353661 B, zapas 646339 B. Testy nowych skilli 48/48, standardowe 73/73 PASS. Szczegóły docs/SLASHER_NOWE_UMIEJETNOSCI.md.
+
+27.10.2026 — czytelniejsze opisy umiejętności, spójny przegląd zestawów i układ mobilny. Paski bez zmian. Cache nightbrand-codex-20261027-36; HTML 14096496 B; zapas 903504 B.
+
+27.10.2026 — ogniska mocy, wskrzeszenie, wybór losu Wita, podpowiedzi i komunikaty zdarzeń. Ramki oraz klikalne elementy z łańcucha; paski zachowane. Dialog Wita: przyznanie się do spalenia ludzi żywcem i dobijania uciekających, usprawiedliwienie rozkazem, błaganie o śmierć.
+Cache nightbrand-codex-20261027-34; HTML 14094296 B; zapas 905704 B.
+
+27.10.2026 — spójniejsze menu i wybór Fabularny/Arcade na ekranie tytułowym.
+Cache nightbrand-codex-20261027-25; HTML 13825354 B; zapas 1174646 B, minimum 500000 B.
+Usunięto osobną małą studnię przy starcu w Brzeźnicy. Odświeżone panele menu, pauzy, przygotowania, rozwoju i sklepu. NPC, balans i muzyka zachowane. Review 73/73, mapy i UI komputer/telefon PASS. Galeria docs/MENU_UI.html.
+
+27.10.2026 — ukończone posadzki i kontakt rekwizytów z ziemią.
+Cache nightbrand-codex-20261027-22; HTML 13818165 B; zapas 1181835 B (minimum 500000 B).
+Testy gotowego pliku: 73/73 ogólne, mapy, grafika, bohater, walka, Cytadela, muzyka, intro, pamięć, plany wszystkich map, WebGL1 i WebGL2 — PASS. Galeria: docs/POSADZKI_V2.html. Nagrania MP3 i skale miksu zachowane; płynne zapętlenie I–II.
+
+27.10.2026 — posadzki z planem, cache nightbrand-codex-20261027-20.
+HTML 13 817 959 B; zapas 1 182 041 B. Obowiązkowa rezerwa: 500 000 B.
+Wszystkie rozdziały i krypta: spokojne strefy, połączone tory tylko w wybranych ciągach, zaplanowane linie i ornamenty, jednolity obóz, dywan bez przecinających go pasów. Rekwizyty osadzone według widocznej podstawy. Mapy, kolizje, położenie obiektów i balans zachowane. Muzyka MP3 i głośność zachowane; płynna pętla I–II bez cięcia nagrań.
+Galeria: docs/POSADZKI_V2.html. Starsze wpisy poniżej opisują historię.
+
+Nightbrand - wariant Codex 150, 27.10.2026.
+Niezależne poprawki walki, balansu, zapisu, czytelności i wydajności.
+Otwórz index.html. Na telefonie tryb wydajności jest domyślny.
+Pełne zestawienie w folderze projektu: docs/WARIANT_CODEX.md.
+Korekta zapowiedzi: podświetlenie postaci zamiast ikon nad przeciwnikami; kręgi na ziemi zachowane.
+Korekta kontaktu: odstęp między postaciami i poprawny kierunek bloku/parowania z bliska; unik przechodzi przez wrogów.
+Korekta Cytadeli: logiczna skala mebli i drobiazgów, mniej dekoracji oraz szerokie drogi między salami.
+Korekta Slashera: awans leczy 10%, Bez litości 5% (uzgodnione z autorem); częstsze ciosy wrogów, ograniczenie ciągłego przerywania lekkimi atakami, większy koszt staminy.
+Mapy I-IV i krypta: mniejsze i logiczniejsze rekwizyty, mniej przeszkód, chronione alejki i dojścia, poszerzone drzwi, most i przeprawy nad lawą.
+Oprawa graficzna: osobne światło i kolory rozdziałów, łagodniejsze cienie, światło palenisk na ziemi, spokojniejsze podłoże i kamień, płynąca woda i lawa, delikatny ruch koron drzew, subtelniejsze kontury NPC oraz czytelniejszy HUD.
+
+Grafiki HD, 27.10.2026: odnowiono 51 arkuszy bohatera, NPC, potworów, wszystkich bossów i otoczenia. Zachowano skalę świata, przejścia i balans. Limit HTML: 15 000 000 bajtów. Opis: docs/GRAFIKI_HD.md; porównanie: docs/PODGLAD_GRAFIK_HD.html.
+
+27.10.2026: optymalizacja CSS bez zmiany wyglądu (8 ekranów identycznych piksel po pikselu), usunięte duplikaty i stare ikony. Podłoża 64x64, ściany 32x32, obracane/odbijane warianty naturalnego terenu, łagodne łączenia i drobne ślady. Ciągła lamówka dywanu Cytadeli. Budżet HTML: 15 000 000 bajtów, obowiązkowo co najmniej 1 000 000 bajtów zapasu. Szczegóły i wyniki: docs/PODSUMOWANIE_PROJEKTU.md.
+
+27.10.2026: nowy bohater Slashera według wskazanego przez autora modelu klasycznego, miecz w dłoniach, czytelny chód, ataki, blok, parowanie i riposta. Pięć arkuszy / 120 klatek. Chód zależy od faktycznie pokonanej drogi. Balans i momenty trafienia zachowane. Podgląd: docs/BOHATER_ANIMACJE.html. Testy bohatera 19/19, regresji 73/73, 52 arkusze i 626 niepustych klatek. HTML około 13,05 MB.
+
+27.10.2026: dopracowane odgłosy miecza, trafienia w stal, bloku i parowania; skupione krótsze iskry kontaktu; krótka reakcja samej grafiki wroga; wspólna pozycja gotowości po ciosach. Mechanika i czasy walki zachowane. Testy: reakcje 17/17, bohater 19/19, regresja 73/73, widok telefonu i przełączanie jakości PASS. HTML około 13,06 MB.
+
+27.10.2026: intro/menu „The Final Toll” zastąpiono „Into the Abyss”. Całe 238,4 s bez skracania; MP3 48 kb/s mono 32 kHz, 1 431 044 bajty. Nowy oryginał zachowano, stary utwór usunięto z biblioteki. HTML 13 976 352 bajty, zapas 1 023 648. Sprawdzone próbki, osadzenie i odtwarzanie w przeglądarce.
+
+Korekta autora: „Into the Abyss” skrócone dokładnie do 2:55 (175 s), kompresja nadal MP3 48 kb/s mono 32 kHz. Plik 1 050 668 bajtów; HTML 13 469 184 bajty, zapas 1 530 816. Test próbek i przeglądarki zaliczony. Pełny nowy oryginał zachowano w bibliotece autora.
+
+27.10.2026: muzyka I–III i Dungeon wymieniona na utwory z MUZYKA/NEW, bez przycinania. MP3 mono 22,05 kHz, ABR21k (średnio około 20k), razem 2 452 262 bajty. Intro podniesione w miksie z 0,45 do 0,8 (~+5dB), jego koniec nadal 2:55. Suwak muzyki zachowany. Stare cztery oryginały i nieużywana muzyka dungeonu usunięte. HTML 13 714 559 bajtów; zapas 1 285 441. Minimum zapasu przy budowie 1,2 MB. Testy próbek, osadzenia i odtwarzania w przeglądarce zaliczone.
+
+27.10.2026 Codex: pięć nowych malarskich ilustracji fabularnych I–V w assets/intro-painted. Oryginały 1672x941; gra AVIF1600x900, awaryjny WebP384x216. Loader obsługuje brak AVIF, CSS intro używa auto zamiast pixelated; usunięto stary pikselowy canvas i migotanie. Fabula, muzyka i balans zachowane. Przygotowanie: tools/prepare-story-art.cjs; ogólny kompresor chroni nowe wpisy manifestu. HTML 13 798 890 B, zapas 1 201 110 B (uwaga: niemal pełny budżet). Testy story-art PASS, review73/73, HD52 arkusze/626 klatek/222 sekwencje. Galeria docs/ILUSTRACJE_FABULARNE.html. Szczegóły docs/PODSUMOWANIE_PROJEKTU.md. Cache story14.
+
+
+
+
+
+
+
+
+29.10.2026 — efekty TomMusic, cache163 (lokalnie, bez publikacji). 19 próbek / 188285 B zastępuje 18 zdarzeń: miecz, trafienia, blok/parowanie, unik, ogień/lód/kamień. Bez zmian mechaniki i muzyki. Build/składnia oraz test-fantasy-sfx PASS: dekodowanie 19/19, wyciszenie, odtwarzanie, start I, zero błędów JS. Bez odsłuchu, telefonu, pada i pełnej regresji. Szczegóły docs/SFX_TOMMUSIC.md.
+
+29.10.2026 — SFX Owlish Media, FENIX cache166, lokalnie bez publikacji. Dodano 19 próbek (233734 B); łącznie TomMusic+Owlish 38 próbek dla 30 zdarzeń. Menu, monety/EXP, awans, leczenie, błogosławieństwo, potwory, śmierć, obrażenia i dudnienie. Bez zmian zasad gry i muzyki. Testy audio i start I PASS; bez fizycznego odsłuchu/telefonu/pada i pełnej regresji.
+
+29.10.2026 — cache167: Jerzak → OBDYP we wszystkich widocznych tekstach (pasek bossa, komunikaty, przyczyna śmierci). Przydomek Kosmate Jądro Otchłani zachowany; identyfikatory i mechanika bez zmian. Build/składnia, szybki start I i nazwa na pasku PASS, zero błędów JS. Zrzut test-results/obdyp/obdyp.png. SHA index b66ffb1b5a95c33906f16d0f84e1cd988f36f254cefe4852c9c44151a6a845c8. Bez publikacji, pełnej regresji, fizycznego telefonu/pada i odsłuchu.
+
+29.10.2026 — wersja testowa cache170: kliknięcie i dotyk pobliskiego celu interakcji działa również przy ukrytym sterowaniu dotykowym (klawiatura/pad). Krótkie naciśnięcie NPC/ogniska korzysta z dotychczasowej akcji rozmowy; zasięg i priorytet interakcji zachowane (także handlarz/wyjście). Kliknięcie interakcji nie rozpoczyna ataku. Bez zmian start/newGame/applyPrep/openPrep. Na wyraźne polecenie autora wykonano tylko build, BEZ TESTÓW. Czeka na sprawdzenie i akceptację autora przed GH. Backup backup/pointer-interact-cache169. SHA index fbbf8b340696a3475f88cb0ecf255b8cb07e5108d71edf90473ef7ea29ec82b0.
+
+29.10.2026 — poprawka kliknięcia NPC/ognisk po zgłoszeniu autora, cache171. Wybór klikniętego pobliskiego celu zamiast pierwszego z listy; trafienie obejmuje sylwetkę od podstawy. Akcja bezpośrednio po zwolnieniu wskaźnika, bez krótkotrwałej flagi talkPress gubionej przez update przy komunikacie/hitstop. Bez zależności od hidden panelu dotyku; istniejący panel ma swoją obsługę. Zasięg bez zmian. Tylko build, bez testów i bez publikacji — czeka na ocenę autora.
+
+29.10.2026 — cache172: unik z Impacts/flip.wav (Owlish), gain 0,5 zamiast 0,8, normalizacja i limiter próbek Owlish. Ctrl+LPM wybiera NPC, od razu rozmawia w dotychczasowym zasięgu; dalej wskazany NPC czeka na ręczne podejście gracza. Kliknięcie z Ctrl nie atakuje, działa także przez panel dotykowy. Na wyraźne polecenie autora BEZ TESTÓW i publikacja od razu po buildzie/kontroli plików. Backup backup/ctrl-roll-cache171. SHA index fbbf8b340696a3475f88cb0ecf255b8cb07e5108d71edf90473ef7ea29ec82b0.
+
+29.10.2026 — decyzja autora: blokada wyboru i przerzutu umiejętności po każdym awansie skrócona z 2,5 s do 1 s (LEVEL_CHOICE_DELAY=1000). Zaktualizowany komunikat. Zastępuje wcześniejsze ustalenie 2,5 s; losowanie i leczenie bez zmian. Bez testów na polecenie autora.
+
+30.10.2026 — cache181: ekran przygotowania: „Gotowy”/„Ready” zamiast „Wyrusz”, nazwa wybranego rozdziału z liter zamiast „Nim zapadnie noc”, pasek poziomu postaci jak na ekranie tytułowym, „Poziom trudności” i poziomy trudności z liter na banerach, strzałka/baner „Wróć” w lewym górnym rogu (przygotowanie, opcje, instrukcja), ESC cofa do poprzedniego ekranu, „Poziom postaci” na ekranie tytułowym z liter. Bez testów (zmiana kosmetyczna).
+
+30.10.2026 — cache182: ekran przygotowania: „Poziom trudności” z konturem jak „Poziom postaci”, nazwy poziomów trudności czcionką przycisku „Gotowy”. Bez testów (kosmetyka).
+
+30.10.2026 — cache183: kontur w kolorze czcionki gry (#d8cfb8, 1 px) na wszystkich napisach z liter (nagłówki Pauza, Opcje, Instrukcja, Przygotowanie, nazwy rozdziałów, ekrany końca). Bez testów (kosmetyka).
+
+30.10.2026 — cache184: ekran przygotowania bez napisu „Przygotowanie”; na jego miejscu większa nazwa wybranej mapy (ta sama czcionka z liter), układ przeskalowany. Bez testów (kosmetyka).
+
+30.10.2026 — cache185: nowe animacje skilli i pocisków z arkuszy Gemini (atlas skill_fx): odłamek szronu (lot + trafienie), kula ognia (lot + wybuch), rozcięcie ziemi, kamienny obrońca, kaskada cięć, Odrzut Mocy, fale (Fala Mocy, Daleka Fala, Zryw Ostrza), wir ostrza (stal), zwykły atak, bełt kusznika (lot + trafienie), pocisk bossa, efekty statusów ostrza (zatrucie, podpalenie, zamrożenie, krwawienie). Stare efekty zostają jako zapas, gdyby atlas się nie wczytał. Bez testów mechanik (zmiana wizualna).
+
+30.10.2026 — cache186: pociski (odłamek szronu, kula ognia) lecą i rozbijają się dopiero na pierwszym wrogu lub ścianie; szron nie przebija już wielu celów; po wyczerpaniu zasięgu znikają bez wybuchu. Bez testów mechaniki.
+
+30.10.2026 — cache187: odłamek szronu znowu przebija kilka wrogów (jak przed cache186); rozbija się dopiero na ścianie lub po przebiciu maksymalnej liczby celów. Kula ognia bez zmian (wybucha na pierwszym wrogu/ścianie). Bez testów mechaniki.
+
+30.10.2026 — cache188: szron i kula ognia po wyczerpaniu zasięgu znowu rozbijają się/wybuchają (animacja trafienia na końcu lotu), jak przed cache186. Bez testów mechaniki.
+
+30.10.2026 — cache189: ekran tytułowy/przygotowania: większy napis „Poziom postaci”, cyfra poziomu bez zmian (wersja gotycka wycofana). Bez testów (kosmetyka).
+
+30.10.2026 — cache190: ekran przygotowania: nazwa mapy znacznie większa i dominuje; Poziom postaci, poziom trudności i przycisk GOTOWY pomniejszone. Bez testów (kosmetyka).
+
+30.10.2026 — cache191: miniradar okragly (rysowany kodem, bez nowych grafik): gracz w centrum, polnoc u gory, metalowa obwodka z naciecami i plakietka N, ping co 3 s, swiecace kropki wrogow (elity i bossowie pulsuja), strzalki na obwodzie dla bossow i kramu Margi poza zasiegiem, zasieg widoku ok. 19 kafli. Poprawka robiona bezposrednio w web/ (zrodlo demo-hd2d/zrodlo/ do synchronizacji). Bez testow gry (kosmetyka), sprawdzono tylko skladnie i probny przebieg funkcji.
+
+30.10.2026 — cache191 (poprawka manifestu): w repo 42 plików .webp było o 5768 B krótszych niż wpis w manifeście (brak bloku C2PA), co blokowało start gry na GitHub Pages („Niepełny plik”). Manifest przeliczony z plików w repo (bytes i sha256).
+
+30.10.2026 — cache192: usunięta prostokątna ramka (#miniF) nachodząca na okrągły radar. Bez testów (kosmetyka).
+
+30.10.2026 — cache193: (1) statusy broni widoczne na wrogach: zatrucie zielone, spopielenie pomarańczowe (migocze, żeby nie mylić z ostrzeżeniem), wykrwawienie karmazynowe, chłód jasnoniebieski, więcej cząsteczek; mocniejsza, pulsująca poświata miecza w kolorze zaklęcia + iskry. Przyczyna: efekty były tylko 2-pikselowymi cząsteczkami, a jedynie zamrożenie zmieniało sprite. (2) okno awansu: 4 karty (klawisze 1–4), układ 4 w rzędzie / 2×2 / kolumna na pionie. (3) nagłówek pola umiejętności czcionką gry. Poprawka bezpośrednio w web/ (źródło do synchronizacji). Bez testów gry; sprawdzono składnię.
+
+30.10.2026 — cache194: usunięta oderwana poświata miecza pod graczem (odbicie na ziemi); status zaklęcia zostaje na wrogach i w iskrach przy ostrzu. Bez testów gry; sprawdzono składnię.
+
+30.10.2026 — cache195: kolor zaklęcia leży na samym mieczu bohatera: szare piksele po stronie miecza w każdej klatce dostają kolor zatrucia/ognia/lodu/krwi i lekko świecą (przefarbowana tekstura liczona raz na klatkę, więc obraca się z postacią). Zastępuje usuniętą poświatę z cache193. Reguła geometryczna: w części klatek zamachu część klingi może zostać szara. Bez testów gry; sprawdzono składnię.
+
+30.10.2026 — cache196: krew: miecz z zaklęciem krwi ma głębszą, krwistą czerwień; animacja uderzenia krwią (smuga i wir) przefarbowana z brązu na krwistą czerwień w locie (bez zmiany plików graficznych). Kosmetyka, tylko build i składnia.
+
+30.10.2026 — cache197: poprawka: białe łuki Wirującego Ostrza (stalowy wir) nie znikają po zakończeniu techniki. releaseWhirlVisual teraz chowa też siatkę skWhirlMesh. Nie testowano w grze, tylko składnia.
+
+30.10.2026 — cache198: grafika HD ×2. 48 arkuszy z oryginałów assets/hd-work/generated (te same narzędzia prepare-hd / prepare-environment-hd / prepare-hero, tylko 2× gęstość): bohater, protagonista, wrogowie I–V, bossowie, NPC, pickupy, rekwizyty, drzewa Czarnoboru, przejścia, ściany I–V, podłoża Dolnego Miasta/Złotogrodu/Cytadeli. SPRITE_RES podwojone (logiczne współrzędne i skala świata bez zmian). Bez zmian: podłoża Brzeźnicy i Czarnoboru (podmienione rzędy hd2d), cy_big, decals. Obiekty/ściany/NPC bezstratne jak dotąd. Nowa opcja „Wyższa ostrość obrazu (wolniej)”: tryb wydajności 360→540 linii, zwykły do 720. Szybszy obrys postaci w procFrame (ten sam wynik, 2 przebiegi zamiast N). Całość ok. 43,2 MB. Poprawka bezpośrednio w web/ — źródło do synchronizacji.
+
+30.10.2026 — cache199: POPRAWKA błędu z cache198: groundPadded zakładał atlas podłoża 512 px, przez co w rozdz. II, III i V podłoga mogła pokazywać złe kafle (atlasy 1024 px). Teraz rozmiar liczony z obrazka (ten sam wynik dla 512); próg mipmap w shaderze 1024. Podłoża Brzeźnicy i Czarnoboru ×2 (density 8, rzędy hd2d z wariantów 128 px). Wszystkie atlasy podłóg i ścian I–V są teraz 1024 px. Tekstury CC0 już w pełnej rozdzielczości źródła (bez zmian).
+
+30.10.2026 — cache200: usunięte małe rekwizyty typu pal/słup z niewidzialnymi granicami: na mapie I głowy na palach i słupy z krukiem, na mapie III głowy na palach i słupy z krukiem (szubienice zostają), na mapie IV słupy z czaszkami (roślinność i reszta rekwizytów bez zmian). Generator mapy zostawia te same losowania, więc reszta układu map się nie zmienia. Nie sprawdzono na telefonie.
+
+30.10.2026 — cache200 (uzupełnienie): ciosy mieczem gracza (lekki/ciężki, kaskada, wir) zatrzymują tylko ściany i przepaście, nie rekwizyty z kolizją (wcześniej pełny kafel rekwizytu blokował cios, gdy stał na linii do moba). Nie sprawdzono na telefonie.
+
+30.10.2026 — cache201: nowa muzyka z folderu Nowe Utwory (MP3 112 kb/s, ok. 2,5 MB każdy, ok. 3 min): ekran tytułowy = Four-Note Omen, mapy I–V = Gloomeo, Motif, The Nightbrand Hymn, Lament, Death March. Muzyka krypty bez zmian. Nie sprawdzono odsłuchu (telefon, pad, głośność, zapętlenie).
+
+30.10.2026 — cache202: nowe ilustracje rozdziałów I–V (intro1–intro5) z folderu Nowe Tła rozdziałów, 1376×768, AVIF ok. 170–190 KB każda. Nie sprawdzono na telefonie.
+
+30.10.2026 — cache203: ekran awansu na komputerze większy (zoom 1,2–1,5 zależnie od wysokości okna; telefon bez zmian). Pad: karty awansu — pad czeka do końca 1 s blokady wyboru (z dźwiękiem odmowy zamiast cichego ignorowania), zawsze ma zaznaczoną kartę, a nieaktualne okno „notice” nie przejmuje już sterowania. Nie sprawdzono na padzie ani telefonie.
+
+30.10.2026 — cache204: wyzwanie nocy (np. „Mistrz riposty”) nie nachodzi już na listę efektów (Odrodzenie, Riposta) — oba teksty układają się jeden pod drugim. Zmiana tylko wyglądu (index.html + CSS). Nie sprawdzono na telefonie.
+
+31.10.2026 — cache204 (uzupełnienie): komunikaty efektów i wyzwania nocy w HUD zawsze w jednej linii (bez zawijania na dwie). Nie sprawdzono na telefonie.
+
+31.10.2026 — cache205 (zmiany balansu za zgodą autora): 1) Riposta: bazowo ×1,5, Śmiertelna Riposta poz. 1 = ×2, od poz. 2 = ×3 (wcześniej ×2,5 +0,4/poz.). 2) Doświadczenie od razu po zabiciu wroga — ogniki do zbierania usunięte (teksty instrukcji, podpowiedzi i Kamienia przyciągania poprawione). 3) Nowa umiejętność aktywna „Drugie Ja” (Wsparcie · Cień, 3 poziomy): 30 many, odnowienie 30/28/25 s, cień na 6/7/8 s powtarza lekkie i ciężkie ciosy po 0,8/0,65/0,5 s za 50/55/60% obrażeń, riposta cienia ×1,5, bez efektów ostrza i leczenia; ikona od autora. Nie sprawdzono na telefonie, padzie ani w odsłuchu.
+
+31.10.2026 — cache206: czwarty slot umiejętności aktywnej. Klawiatura R, pad LT + A, dotyk czwarta ikona; ekran wyposażenia w pauzie ma 4 sloty. Opisy sterowania poprawione (PL i EN). Nie sprawdzono na telefonie ani na padzie.
+
+31.10.2026 — cache207: wrogowie nie klinują się w domach (mapa I i inne): mapa odległości po kaflach od bohatera (co 0,35 s); wróg bez widoku na bohatera idzie po niej i wychodzi drzwiami lub dziurą w ścianie. Wrogowie nie pojawiają się już w środku domów (rozdz. I) ani w miejscach bez dojścia do bohatera. Rekwizyty z kolizją (m.in. Ognisko mocy po lewej na mapie II): po powiększeniu mapy kolizja tylko w dolnym rzędzie, u podstawy grafiki — koniec niewidzialnej blokady od góry. Nie sprawdzono na telefonie.
+
+31.10.2026 — cache208: mapa I wypełniona roślinnością bez kolizji (ok. 170 kęp, ok. 400 roślin: paprocie, jeżyny, grzyby, trzciny przy stawie), z dala od dróg, drzwi, postaci, ognisk i startu. Nie sprawdzono na telefonie (wydajność).
+
+31.10.2026 — cache209: nowa lawa w rozdziale II: tekstura CC0 lava_d (Stunt Rally / Nobiax, folder „skille claude”), 512 px, rozpięta w przestrzeni świata (powtórzenie co 5 kafli, bez widocznej siatki), z powolnym ruchem i pulsowaniem żaru. Stara lawa zostaje jako zapas, gdy obraz się nie wczyta. Nie sprawdzono na telefonie.
+
+31.10.2026 — cache210: nowe podłoża CC0 z folderu „skille claude” (przyciemnione i odbarwione do palety gry, 512 px, razem ok. 200 KB): rozdz. I popiół wokół spalonych domów (HPST 88) i płaty mchu (HPST 89); rozdz. II dno przepaści — skała (mntn_dark) zamiast pikselowego wzoru; rozdz. III zarośnięty bruk w slumsach i przy zgniłych kałużach (Ground_03); rozdz. IV mech w lesie (moss_ground). Na słabszych urządzeniach (mało jednostek tekstur) nowe podłoża zastępują starsze, bez błędu. Limit web/: 70 MB (decyzja autora 31.10.2026). Nie sprawdzono na telefonie.
+31.10.2026 — cache211: osobne ikony Gemini dla 8 umiejętności, które dzieliły grafikę z inną (Pakt Ciszy, Fala Mocy, Pakt Krwi, Odzysk Tchu, Śmiertelna Riposta, Rytm Śmierci, Daleka Fala, Zryw Ostrza); 128 px, razem ok. 90 KB.
+31.10.2026 — cache212: sparowana strzała lub pocisk wroga wraca i zawsze trafia najbliższego wroga (naprowadzana, obrażenia lekkiego cięcia × mnożnik riposty). Okno parowania bez zmian.
+31.10.2026 — cache213: nowa lawa HD (zastygła skorupa z pęknięciami) w rozdz. II i w kałużach rozdz. III; tekstura płynie, pęknięcia nierówno pulsują, miękka łuna wokół brzegów (bez prawdziwych świateł). Stara tekstura lawy usunięta. Nie sprawdzono na telefonie.
+31.10.2026 — cache214: nowa woda HD (tekstura od autora, przyciemniona; powolny przepływ, delikatne błyski, jaśniejsze brzegi). Dwa rodzaje: płytka (można chodzić i walczyć) jaśniejsza, zielonkawa; głęboka (blokuje) ciemnogranatowa. Rozdz. I: staw ma płytki brzeg i głęboki środek, nowe bajoro (sama płytka woda) na zachód od placu. Rozdz. IV: brody i bagna płytkie, środki dużych bagien głębokie (tylko tam, gdzie nie odcina to części mapy). Nie sprawdzono na telefonie.
+31.10.2026 — cache215: rozdz. II bez koksowników/ognisk w promieniu 3 pól od lawy (reszta zostaje).
+31.10.2026 — cache216: dodatkowe dekoracje bez kolizji na każdej mapie (I: zwłoki pod płótnem, siano, koła; II: kości krasnoludów; III: zwłoki żebraków, kości, zgniłe kwiaty; IV: kości i krzaki z czaszkami; V: księgi, krzesła, stojaki, zbroje, klatki), z dala od ścian, cieczy, obiektów, NPC, startu i korytarzy.
+31.10.2026 — cache217: mniej zwykłych ognisk — żadne dwa nie stoją bliżej niż 9 pól (bez zmian: ogniska mocy, koksowniki, pochodnie, latarnie, krąg ognisk wokół bożka w rozdz. IV).
+31.10.2026 — cache218: instrukcja/opcje bez osobnej zakładki „Mysz”; grafika myszy pod klawiaturą w zakładce „Klawiatura i mysz” (także w menu pauzy). + większe przełączniki „Sterowanie dotykowe” i „Samouczek” na ekranie startowym (pole dotyku min. 44 px). Nie sprawdzono: telefon.
+31.10.2026 — cache219: telefon (tryb oszczędny) renderuje 540 linii zamiast 360; „Wyższa ostrość obrazu” daje teraz 720. Nie sprawdzono: wydajność na telefonie.
+31.10.2026 — cache220: tryb 2 graczy, etap 1 (test): drugi pad = gracz 2 (ruch, unik, blok, ataki, niebieska peleryna), wrogowie celuja w najblizszego gracza, kamera na graczu 1. Wlacza sie tylko z adresem ?mp=1 i dwoma padami (do czasu przycisku "2 graczy"). Bez: skille/karty/smierc/strzalka/HUD gracza 2. Nie sprawdzono: prawdziwe pady.
+
+cache221 (runda 221, etap 2 trybu 2 graczy, test): gracz 2 ma pasek HP i staminy w rogu oraz male przezroczyste paski nad obiema postaciami; powalony gracz lezy, gdy partner zyje, i wstaje po ok. 3 s obok partnera lub kapliczki; noc konczy sie, gdy padna obaj; wrogowie i pociski celuja w najblizszego zywego gracza; kamera idzie za zywym. Nie sprawdzono: prawdziwe pady.
+
+cache222 (test): promien wskrzeszania 2 graczy zwiekszony do ok. 3,5 kratki.
+
+cache223 (test): tryb 2 graczy: TOTEM PRZYWOLANIA w srodku mapy (3 wskrzeszenia na noc, 5 s ladowania, zywy partner stoi przy totemie); kapliczki: odrodzenie jednorazowe dla kazdego gracza, tylko jesli sam ja aktywowal (drugi pad: przycisk Y); wskrzeszanie przy ciele usuniete. Nie sprawdzono: prawdziwe pady.
+
+cache224 (test): Drzewo Szeptuchy (duze drzewo z rozdz. 4) jako totem wskrzeszania, z zarem i ognikami dookola; gracz 2 ma te same paski co gracz 1 (HP, stamina, mana); obaj gracze widza info o totemie, gracz 2 tez o odrodzeniu; leczenie przy ognisku: 4% maks. HP na s (bylo 14 HP/s), do 60% (bylo 70%). Nie sprawdzono: prawdziwe pady.
+
+cache225 (test): Drzewo Szeptuchy mniejsze (ok. polowa), zamiast ostrego okregu miekka poswiata na ziemi, totem omija NPC, kapliczki i start (min. 9 kratek, wiec nie stoi przy studni), gracz 2 widzi nad soba napis "Odrodzenie gotowe". Nie sprawdzono: prawdziwe pady.
+
+cache226 (test): ognisko (kapliczka): zamiast ostrego pierscienia miekka cieplo-pomaranczowa poswiata na ziemi (tak samo jak przy Drzewie Szeptuchy); kolory stanow bez zmian (gotowe, aktywowane, zuzyte). Nie sprawdzono: telefon, pady.
+
+cache227 (test): Drzewo Szeptuchy zastapione totemem z Gemini (wariant 3: krwawy slup z czaszkami, 15 KB, nowy plik w assets/). Zar, ogniki i poswiata bez zmian; gdyby obrazek sie nie wczytal, pojawi sie prosty slup. Nazwa w grze nadal Drzewo Szeptuchy (do decyzji autora). Nie sprawdzono: telefon, pady.
+
+cache228 (test): totem w wysokiej rozdzielczosci (305x720 px, gestosc 5x, ok. 280 KB) zamiast malej wersji. Nie sprawdzono: telefon, pady.
+
+cache229 (test): ekran tytulowy: przelacznik "2 graczy (dwa pady)" (tylko na komputerze, zapamietywany), zastepuje adres ?mp=1 (ten dalej dziala); pod przelacznikiem podpowiedz, gdy brak drugiego pada. Nie sprawdzono: prawdziwe pady, wyglad na telefonie.
+
+cache230 (test): ekran tytulowy na komputerze: przelaczniki z powrotem w zwyklym rozmiarze (powiekszone zostaja tylko na ekranach dotykowych), zeby miescil sie przelacznik 2 graczy. Nie sprawdzono: telefon, pady.
+
+cache231 (test): ekran tytulowy na komputerze: trzy przelaczniki w jednym rzedzie (bez zawijania), krotsza podpowiedz "brak pad 2". Nie sprawdzono: telefon, pady.
+
+cache232 (test): ekran tytulowy na komputerze: rzad przelacznikow ma trzy kolumny (2 graczy miesci sie w jednym rzedzie). Nie sprawdzono: telefon, pady.
+
+cache233 (test): ekran tytulowy: przelaczniki "2 graczy" i "Sterowanie dotykowe" w lewej kolumnie miedzy poziomem postaci a przebiegiem gry; "Samouczek" przeniesiony na ekran Przygotowania. Nie sprawdzono: telefon, pady.
+
+cache234 (test): telefon w poziomie: logo i karty zmniejszone, zeby zmiescic rzad przelacznikow. Nie sprawdzono: prawdziwy telefon.
+
+cache235 (test): tryb 2 graczy: paski HUD zmniejszone do ok. 58% (mniej zaslaniaja ekran). Nie sprawdzono: pady.
+cache236 (test): fala po parowaniu oslabiona o 20% (takze Echo); okno parowania 0,20 s -> 0,15 s (pociski 0,26 -> 0,21 s). Nie sprawdzono: granie.
+cache237 (test): zar i ogniki przy ogniskach, pochodniach, piecach, zarzewiach i lawie; przy kapliczkach wskrzeszenia dodatkowo blekitne ogniki; wyrazniejsze leczenie przy ognisku (zielone czastki, blysk kapliczki, +HP co ok. 1 s); kazde parowanie leczy 1% maks. HP (max raz na 2,5 s). Nie sprawdzono w grze.
+cache238 (test): naprawa efektu zaru (pozycja odniesienia = cel kamery, wiekszy zasieg i punkty); nowa zasada: brak ognisk w pomieszczeniach - 6 ognisk w domach Brzeznicy (rozdz. I) przeniesione na zewnatrz. Nie sprawdzono w grze.
+cache239 (test): dachy domow Brzeznicy znikaja po wejsciu; stodola: szersze wejscie wschodnie + przejscie polnoc-poludnie; kapliczki mocy z pula leczenia (120% maks. HP na noc, kociolek). Nie sprawdzono w grze.
+cache240 (test): leczenie przy kociolku bez gornej granicy 60% HP (do pelna, ogranicza je pula), tempo 4% -> 6% maks. HP na sekunde. Nie sprawdzono w grze.
+cache241 (test): kociolek (grafika od autora, gulasz) zamiast ognia na kaplicach mocy; zar, ogniki i zielone leczenie bez zmian. Nie sprawdzono w grze.
+cache242 (test): kociolek mniejszy (wysokosc 1,6 pola); nazwa Ognisko mocy -> Sycacy Kociolek (EN: Nourishing Cauldron) we wszystkich tekstach i w podreczniku; dachy z tekstury autora (rooftiles_base_color_0), niebieski zmieniony na braz, mech zostaje. Nie sprawdzono w grze.
+cache243 (test): podpowiedz nad NPC/kociolkiem pokazuje Y przy ostatnim uzyciu pada, Enter przy klawiaturze, Enter / Y gdy pad podlaczony a nic jeszcze nie nacisnieto. Nie sprawdzono: pad.
+cache244 (test): dachy dwuspadowe (lamane) zamiast plaskich; kalenica ma maks. 0,9 pola wysokosci, zeby malo zaslaniac mape; ten sam brazowy wzor z mchem. Nie sprawdzono w grze.
+cache245 (test): okno parowania 0,18 s (bylo 0,15 s); pociski/strzaly maja to samo okno 0,18 s (bylo +0,06 s luzu, czyli 0,21 s). Nie sprawdzono w grze.
+cache246 (test): pasek postawy bossa (zloty, pod paskiem zycia; bije biale przy przelamaniu). Postawa bossa dalej nie regeneruje sie. Nie sprawdzono w grze.
+cache247 (test): tempo: bohater 72 -> 58 px/s; wrogowie x1,4 (zwykli), x1,18 (szybcy lekcy: nietoperz, kruk, szczur papierowy, wilk, ogar, strzygon), x1,15 (bossowie). Wynik: bohater ok. 2,0x szybszy od przecietnego wroga i ok. 1,4x od szybkich lekkich. Nie sprawdzono w grze.
+cache248 · Skrzydlate Buty (Winged Boots): skill +10% prędkości ruchu na poziom, max 3, gałąź Zabójca; ikona tymczasowa (but Zręczności)
+cache249 · ikona Skrzydlatych Butów (własna grafika, runda 234)
+cache250 · własne ikony Kuli ognia i Odłamka szronu (zamiast ikon miecza)
+cache251 · dźwięki: przełamanie postawy (Postawa), pętla kociołka zamiast dźwięku leczenia przy kociołku, trzask ognia w pobliżu ognisk/lawy (runda 235)
+cache252 · tryb 2 graczy, etap 3 (test): karty awansu wybierane na zmianę (gracz 1, gracz 2; pad gracza 2 w jego turze, atrybuty i pakty trafiają do wybierającego), ikony wybranych umiejętności pod paskami każdego gracza, strzałki do partnera poza ekranem. Umiejętności nadal wspólne dla drużyny. Wrogowie bez zmian. Nie sprawdzono: prawdziwe pady.
+cache253 · ikony umiejętności (pasek Q/E/F/R) większe o 25% we wszystkich układach (zoom), ikony graczy w trybie 2 graczy też większe. Nie sprawdzono na telefonie.
+cache254 · pula kociołka zależna od poziomu trudności (Łatwy 200%, Normalny 150%, Trudny 100% maks. HP leczącego; było 120%); gracz 2 też dostaje leczenie przy awansie (10% maks. HP); pasek ikon umiejętności na telefonie (dotyk) +15% zamiast +25%. Nie sprawdzono w grze ani na telefonie.
+cache255 · pula kociołka w stałych HP na kociołek na noc: Łatwy 200, Normalny 150, Trudny 100 (zamiast procentów maks. HP). Nie sprawdzono w grze.
+cache256 · HD tekstury podłoży od autora (Gemini, 1024 px, dopasowana jasność, szwy wygładzone): dirt3, dirt2, ground1, ground2, ash, moss1, forestmoss, zl_moss, zl_place, zl_street, abyss. Lawa i woda bez zmian (animowane shadery). Limit folderu web/ 80 MB. Nie sprawdzono w grze/na telefonie.
+cache257 · lawa i woda HD z nowych tekstur autora (lawa: skorupa z żarzącymi pęknięciami, woda: ciemna zieleń); animacja bez zmian (płynięcie, pulsowanie pęknięć, połyski, fale). Nie sprawdzono w grze.
+cache258 · zasada świata: żadnych ognisk (z gruzu, obozowych, stosów, koksowników) na lawie ani w promieniu 4 pól od niej, we wszystkich rozdziałach; ogniska mocy bez zmian. Nie sprawdzono w grze.
+cache259 · rozdz. I: stodoła rozebrana, w jej miejscu pogorzelisko (tekstury cc0_ash + cc0_lava jako żar); chaty bez ognisk w środku; tekstura lawy w grupie core (ładuje się od początku). Nie sprawdzono w grze.
+cache260 · zasada świata: żadnych ognisk w promieniu 6 pól od kociołka (we wszystkich rozdziałach); rozdz. I: kociołek przy domach na południowym wschodzie przesunięty o ok. 1 pole w lewo. Nie sprawdzono w grze.
+cache261 · cios i Wir Ostrza: animacje statusów ostrza (ogień, lód, trucizna, krew) to teraz te same animacje co stal, przebarwione na kolor statusu (stare osobne efekty statusów zostają tylko jako awaryjne). Nie sprawdzono w grze.
+cache262 · efekty ataków i umiejętności (cięcia, pociski, statusy, iskry trafień) rysowane zawsze na wierzchu podłoża, nie znikają pod podłogą (bez testu głębi, wyższa kolejność rysowania). Nie sprawdzono w grze.
+cache263 · pełny ekran na telefonie: usunięte podwójne marginesy bezpieczne (wycięcie ekranu) z kontenera gry, które dawały czarne pasy po bokach i na dole. Nie sprawdzono na telefonie.
+cache264 · ściany i dachy w rozdz. III i V z nowych tekstur HD od autora (Gemini): kamienice, katedra, kaplica, szopy, mury, korony murów, złote dachy. Tekstury próbkowane po współrzędnych świata (bez rozciągania). Nie sprawdzono na telefonie.
+cache265 · rozdz. III: drewniane domy (szopy) zamienione na kamienice: ściany z oknami, wyższe (2,8), złote dachy. Nie sprawdzono na telefonie.
+cache266 · rozdz. II: ściany hali, kuźni i kopalni, urwiska, kolumny i korony murów z nowych tekstur HD od autora (Gemini), próbkowane po współrzędnych świata. Stary atlas zostaje jako awaryjny. Nie sprawdzono na telefonie.
+cache267 · rozdz. IV: skalny brzeg doliny z koroną lasu, palisada obozu i ruina wieży z nowych tekstur HD od autora (Gemini), próbkowane po współrzędnych świata. Nie uruchamiano w przeglądarce (tylko kontrola składni), nie sprawdzono na telefonie.
+cache268 · rozdz. I: palisada, ściany chat i góry pali z nowych tekstur HD od autora (Gemini), próbkowane po współrzędnych świata (dachy chat bez zmian). Nie uruchamiano w przeglądarce (tylko kontrola składni), nie sprawdzono na telefonie.
+cache269 · rozdz. I: dachy chat z łupka HD (dach_lupek) i deski HD (deski_szopa) na podłodze wnętrz chat; podłoga skalowana tak, by deska miała ok. 0,4 pola. Nie uruchamiano w przeglądarce (tylko kontrola składni), nie sprawdzono na telefonie.
+cache270 · brzegi cieczy: zbocze niecki (rozdz. I woda głęboka obniżona, rozdz. II lawa), ciemny mokry pas gruntu i ciemniejszy brzeg wody/lawy/mazi; rozdz. III lawa zamieniona na szkarłatną maź (wolniejszy przepływ, karmazynowa poświata, światła i iskry). Sprawdzono tylko składnię i start rozdz. I w chmurze; nie sprawdzono rozdz. II, III, IV, telefonu ani pada.
+cache271 · rozdz. I: 16 rekwizytów HD od autora (Gemini) 1:1 zamiast starych z atlasu (dead_tree, impaled_head, grave_cross, tombstone, well, stocks, shrine, gallows, wheel, barrel, marga_cart, crow_post, covered_corpses, order_banner, burnt_hay, dead_horse): 192 px na pole, wycięte z cyjanu, dopasowane do dawnego rozmiaru i podstawy; kolizje, skala i ogniska bez zmian. Stare atlasy zostają dla ognia i innych rozdziałów. Sprawdzono składnię; nie sprawdzono telefonu ani pada.
+cache272 · rozdz. II: 14 rekwizytów HD od autora (Gemini) 1:1 zamiast starych z atlasu (posąg króla, kowadło, wózek, stojak na kilofy, kapliczka pełna i pusta, łańcuchy, powalona kolumna, kości krasnoluda, miech, sarkofag, latarnia run, proch, sztandar klanu), 192 px na pole. Posąg króla ma dodane przygaszone złote ornamenty (korona, naramiennik, opaski, pas z runami, młot, runy cokołu) i przycięty gruz u podstawy, żeby był wysoki jak dawniej. Piece, żar i bramy bez zmian. Kapliczka i latarnia są teraz bez niebieskiej poświaty. Sprawdzono składnię; nie sprawdzono telefonu ani pada.
+cache273 · łuna (poświata) nad wszystkimi źródłami światła: miękki halo + jasny rdzeń w kolorze ognia/runy/kapliczki, migocze razem ze światłem, większa plama na ziemi (limit 48); niebieska łuna wraca przy kapliczce i latarni runicznej w rozdz. II. Nie sprawdzono na telefonie, padzie ani z dźwiękiem.
+cache274 · rozdz. III: 15 rekwizytów HD od autora (z arkusza: fontanna, latarnia, drzwi, święty król, brama katedry, żebracy, wóz dżumy, kareta, szubienica z klatką, kapliczka pełna i pusta, sztandar, misa, dzwon, wejście z kośćmi) 1:1 zamiast starych z atlasu; animowane stosy, kwiaty zgnilizny i kosze bez zmian. Gęstość 8 (arkusz miał niższą rozdzielczość). Nie sprawdzono na telefonie, padzie ani z dźwiękiem.
+cache275 · rozdz. II: usunięte 3 obozowiska (9 ognisk) przy lawie; rozdz. I: skala rekwizytów wg wzrostu bohatera (180 cm ≈ 1,44 j.; 1 j. ≈ 125 cm): drzewo, szubienica, wóz Margi, sztandar, kapliczka, krzyż, nagrobek i in. Tylko mapa I. Nie sprawdzono na telefonie, padzie ani z dźwiękiem.
+cache276 · skala wszystkich rekwizytów wg wzrostu bohatera (180 cm ≈ 1,44 j.) w rozdz. II, III i IV: m.in. fontanna, latarnia, brama katedry, wóz dżumy, szubienica, klatka, sztandary, posąg świętego króla, sarkofag, kapliczka, namiot, wóz, bożek. Rozdz. V bez zmian (nie skalowany w kodzie). Nie sprawdzono na telefonie, padzie ani z dźwiękiem.
+cache278 · rozdz. IV: 18 nowych spritów 1:1 (namiot, wóz, szubienica, bożek, kapliczki, ul, koło, kości, drewno, skóry, słup, czaszki, świerk, brzoza, martwy dąb, paproć, jeżyny). Zmiany tylko w mapie IV, rozdz. I bez zmian. Nie sprawdzono na telefonie, padzie ani z dźwiękiem.
+cache279 · (runda 261 przeniesiona na main po 262) pad: ikona „Wróć” znika, gdy ostatnie sterowanie szło z pada; wraca po myszy, dotyku lub klawiaturze; cofanie przyciskiem B bez zmian. Błędu pada w menu awansu nie odtworzono, czeka na test autora. Nie sprawdzono na prawdziwym padzie ani telefonie.
+cache283 · łucznicy (kusznik w rozdz. IV, skryba w V): przerwa między strzałami 5–6 s (było 4–5), cofanie dopiero gdy gracz bliżej niż 45 px (było 70); o ok. 30% mniej łuczników w pojawianiach rozdz. IV (na ich miejsce strzygonie, bandyci, wilki) i skrybów w rozdz. V (kancelaria, sala, tron; na ich miejsce papierowe szczury, strażnicy, skazańcy, dłużnicy). Skrybowie przywoływani przez Arcysędziego bez zmian. Nie sprawdzono na telefonie ani padzie.
+cache284 · rozdz. IV: Boginka z Topieliska ma o 35% więcej życia (bazowe 320 → 432, mnożniki trudności bez zmian). Gałąź zawiera też rundę 264 (łucznicy). Nie sprawdzono w walce.
+cache285 · nowe sprity: drzewa rozdz. IV (martwy swierk, swiety dab, wysoka sosna, wiszace drzewo), kamienie (ciemny i swiecacy), nowe ogniska (rozdz. I, III, IV oraz order_bonfire), nowe wejscie do krypty (wieksze, szersza blokada). Nie sprawdzono w grze na telefonie ani padzie; krypta i rozdz. IV czekaja na test autora.
+cache286 · rozdz. IV: pomosty na bagnie wieksze (skala 0,85 -> 1,3) i przesuniete o jeden kafel nad sama wode. Nie sprawdzono w grze.
+cache287 · rozdz. II: usunieto schody (chapel_stairs) na lewym koncu korytarza startowego. Nie sprawdzono w grze.
+cache288 · rozdz. I: wejscie do krypty przeniesione na polnocny kraniec mapy, w sciane konczaca mape (nic juz nie zaslania). Nie sprawdzono na telefonie.
+cache289 · rozdz. I: w miejscu dawnej krypty dwa podesty z wisielcami w jednej linii (lewy i prawy). Nie sprawdzono na telefonie.
+cache290 · rozdz. I: krypta przesunieta w lewo, w ogrodzenie na polnocy (x ok. 76); usuniete drzewa, paprocie i kolo w dwoch prostokatach wokol dawnej krypty. Nie sprawdzono w grze.
+cache291 · rozdz. V: nowe sprite'y i rekwizyty (42); rozdz. I: brzeg przy wodzie jak w IV, drzewa i roslinnosc z rozdz. IV. Nie sprawdzono w grze ani na telefonie.
+cache292 · krypta (rozdz. IX): nowe sciany hali, kolumny i rekwizyty jak w rozdz. II. Nie sprawdzono w grze.
+cache293 · rozdz. II: lawa na dnie przepasci. Nie sprawdzono w grze (test na zrzucie nieczytelny).
+cache294 · rozdz. I: krypta mniejsza o 30% i przesunieta w dol (nie lewituje). Nie sprawdzono w grze.
+cache295 · rozdz. I: krypta 60% skali, przesunieta w prawo i nizej wg zielonego okregu. Nie sprawdzono w grze.
+cache296 · krypta i rozdz. II: szkielet krasnoluda w skali czlowieka (.35 -> .6). Nie sprawdzono w grze.
+cache297 · wszystkie rekwizyty: automatyczne zaglebienie o puste dolne wiersze sprite'a (koniec lewitowania). Nie sprawdzono w grze (test automatyczny nie wystartowal, do sprawdzenia przez autora).
+cache298 · rozdz. IV: 9 nowych rekwizytow + 24 rosliny (wd/sp) z ch4_rest; wszystkie mapy: 4 jasne rosliny barwione paleta mapy (z umiarem). Nie sprawdzono w grze.
+cache299 · poprawka bledu startu (Cannot read properties of undefined, width) z cache297: klonowana geometria rekwizytu tracila parametry. Rozdz. I startuje bez bledow w tescie automatycznym; rozdz. IV nie sprawdzony.
+cache300 · Poborca (i Leszy w rozdz. IV) pojawia sie po 6 min PRZED Marga; sklep Margi (minuta na handel) po jego pokonaniu; w rozdz. I stale miejsce sklepu w zielonym obszarze, Marga stoi tam, drugi woz kupiecki. Nie sprawdzono w grze.
+cache301 · sklep: 2 minuty na handel; rozdz. I: znak SHOP przy sklepie. Start rozdz. I bez bledow w tescie; wyglad nie sprawdzony.
+cache302 · podloze cc0_charcoal (rozdz. I i II) zastapione nowa tekstura z mocniejszym zarem; plik mniejszy (0,46 MB zamiast 0,9 MB). Nie sprawdzono w grze.
+cache303 · postacie (bohater, wrogowie, NPC, bossowie): delikatne swiatlo krawedziowe (ksiezyc z lewej-gory) wpiecie w procFrame. Start rozdz. I bez bledow; wyglad nie sprawdzony w grze.
+cache304 · usuniete szkielety krasnoluda ze wszystkich map; glebszy cien kontaktowy pod postaciami i rekwizytami. Rozdz. II startuje bez bledow; wyglad nie sprawdzony.
+cache305 · mapa 5 (Cytadela): rewizja rekwizytow (meble i posagi przy scianach, bez ksiazek na posadzce, duzy tron, skale poprawione); slabsze poswiaty NPC. Wyglad nie sprawdzony w grze.
+cache306 · neutralne rosliny na mapach 1-5: mocniej nasycone kolory (zolcien, turkus, zielen, fiolet) zamiast wyblaklych. Wyglad nie sprawdzony w grze.
+cache307 · lewitacja rekwizytow: wszystkie rekwizyty wpuszczone w ziemie o dodatkowe 5% wysokosci; ciemniejszy, szerszy cien kontaktowy. Wyglad nie sprawdzony w grze.
+cache308 · mapa 5: pochodnie zastapione ogniskami order_bonfire (ze swiatlem), tron wiekszy (skala 1.3), slabsza luna swiatel (wszystkie mapy). Wyglad nie sprawdzony w grze.
+cache309 · mapa 1: pas mchu (tekstura moss1) wzdluz brzegu wody, falista szerokosc 1-3 kafli, jak na mapie 4. Wyglad nie sprawdzony w grze.
+cache310 · mapa 1: dom Margi (sciany 10x5 przy cmentarzu, 4 wejscia), Marga i kram w srodku, znak SHOP przesuniety, usuniete drzewo przy prawej scianie. Start rozdz. I bez bledow; wyglad nie sprawdzony.
+cache311 · bazowa predkosc gracza +15% (58 -> 66.7). Nie testowane w grze.
+cache312 · nowe ikony monety i serca (sprite od autora, 32 px, osadzone w kodzie) wypadajace z wrogow zamiast starych. Start rozdz. I bez bledow; wyglad nie sprawdzony.
+cache313 · runda 294: dach domu Margi (zdejmowany po wejsciu), znak SHOP przesuniety przed dom (zielony okrag), dwa animowane ogniska (4 klatki z zalacznika, ze swiatlem) po bokach domu. Wyglad nie sprawdzony.
+cache314 · runda 295: nowe wejscie do krypty (schody z lampionem, rozdz. I) i nowe wyjscie z krypty (otwarta brama z niebieska poswiata, rozdz. IX); swiatlo wejscia cieple, wyjscia niebieskie. Wyglad nie sprawdzony.
+cache315 · runda 296: mapa 2 (Dolne Miasto): rekwizyty ustawione recznie przy scianach (dzielnice: sala, kuznia, kopalnia), bez losowego rozsiewania w srodku; ogniska przy domu Margi zmniejszone do skali .5 (reguła 180 cm). Wyglad nie sprawdzony.
+cache316 · runda 297: skale wg reguly 180 cm: mapa V (lawki, skrzynie, zloto, ksiegi, kandelabry mniejsze), powoz szlachecki w rozdz. III wiekszy. Wyglad nie sprawdzony.
+cache317 · runda 298: mapa 1 wg eksportu z edytora map (2.11.2026): przesuniete szubienice i krzyze na cmentarzu (nowa kwatera z nagrobkiem altarowym NE), dwa nowe wejscia do sklepu Margi (znak, ognisko, woz, siano), oboz zakonu o 1 pole, kilka drzew i zwlok, usuniete kolo; NPC: Umierajacy w centrum wsi, Brat Wit przy starcie, Chojrak w domu NW. Kapliczka bez zmian (do decyzji autora). Podloze i sciany bez zmian. Wyglad nie sprawdzony, test startu rozdz. I w trakcie.
+cache318 · runda 299: kapliczka lecznicza mapy 1 przeniesiona (rysunek i znacznik) z okolic (40,22) na (13,20), pod mur domu w polnocno-zachodnim rogu, wg eksportu z edytora map. Wyglad nie sprawdzony.
+cache319 · runda 300: nowe ikony gry (icon-180/192/512.png) z samego napisu NIGHTBRAND na ciemnym tle #050305, napis w ok. 76% szerokosci (bezpieczne dla ikon maskable). Wyglad na telefonie nie sprawdzony; na telefonie z dodana gra trzeba ja usunac i dodac ponownie.
+cache320 · runda 300 (poprawka): ikony gry z calym logiem (godlo + napis) na ciemnym tle #050305, logo w ok. 80% szerokosci; zastepuje wersje z samym napisem (cache319, niepublikowana). Wyglad na telefonie nie sprawdzony.
+cache321 · runda 301: osadzenie rekwizytow na podlozu: rekwizyty z okragla podstawa (drzewa, kopczyki, krzyze, kapliczki, filary, posagi) kotwiczone srodkiem podstawy (najszerszy wiersz dolnych 22%, zagłebienie do 16% wysokosci +1%), cien i styk z ziemia przy pniu; dotyczy wszystkich rozdzialow. Wyglad sprawdzony tylko na zrzucie z chmury (rozdz. I), telefon nie.
+cache322 · runda 302: fala ciecia po parowaniu (waveTick) rani najwyzej 4 wrogow i znika po czwartym trafieniu; serca i monety z wypadajacych przedmiotow o polowe mniejsze (rysunek .275/.3, wysokosc nad ziemia i poswiata x.5). Nie sprawdzone w grze (testuje autor); zbudowana na gałezi rundy 301 (osadzenie rekwizytow).
+cache323 · runda 303: mapa 2 (Dolne Miasto): zostaja tylko niebieskie rosliny (paleta NP_CFG[2]: usuniete turkusowe i zielone kepy; niebieskie w tych samych miejscach co dotad). Nie sprawdzone w grze (testuje autor).
+cache324 · runda 304: logo na ekranie tytulowym (letter_logo) bez zielonych iskier i zielonej poswiaty (usuniete zielonkawe piksele; plik webp podmieniony, CSS przeliczony). Nie sprawdzone na telefonie
+cache325 · runda 305: wydajnosc, krok 1: (1) ukryty licznik FPS (Opcje > Pokaz licznik FPS: klatki/s, czas logiki i rysowania, rozdzielczosc sceny i ekranu, liczba wywolan); (2) jakosc grafiki Auto/Wysoka/Srednia/Niska zamiast jednego przelacznika (Auto = jak dotad: telefon/tablet Srednia, komputer Wysoka; Srednia = dawny tryb wydajnosci; Niska = to samo + scena 75% rozdzielczosci; zapisane ustawienia sa przenoszone); (3) limit klatek 30/45/60/bez limitu (domyslnie bez limitu). Nie sprawdzone na telefonie ani tablecie.
+cache326 · runda 306: zakladka Grafika (Ultra/Wysoka/Srednia/Niska + osobne: cienie, swiatla, efekty, czasteczki, rozdzielczosc), limit 120 FPS, wylaczone swiatla nie licza sie w shaderze (nie testowano na telefonie ani tablecie)
+cache327 · runda 307: service worker z trwalym cache zasobow (aktualizacja nie pobiera calej gry od nowa), tlumaczenie EN naglowka Plynnosc, narzedzia sprawdz/wydaj
+cache328 · runda 308: dynamiczna rozdzielczosc sceny (trzyma limit FPS) i gestosc pikseli ekranu w zakladce Grafika (nie testowano na tablecie)
+cache329 · runda 309: tekstury ziemi 2048 px (Real-ESRGAN, 17 szt., ok. 12 MB) wczytywane tylko na Ultra lub po wlaczeniu; sw.js lista leniwych zasobow (nie testowano na telefonie ani tablecie)
+cache330 · runda 309: rozdzielczosc obrazu 1440p do wyboru (mocne komputery)
+cache331 · Rozmowa z NPC nad sterowaniem dotykowym (sterowanie chowa sie)
+cache332 · Propsy: opuszczenie proporcjonalne do wysokosci (ogniska, ciala nie zapadaja sie)
+cache333 · Popioly: stala waluta i ulepszenia w Kaplicy na ekranie przygotowania
+cache334 · Menu 2: nowy ekran glowny, banery rozdzialow, osobny ekran Kaplicy
+cache335 · Menu 2 (poprawki ukladu)
+cache336 · Menu 2: panoramy, portret, oltarz (grafiki Gemini), EN Ashes
+cache337 · Menu 2: nowe przyciski (4 stany) i ramka rozdzialow od Gemini
+cache338 · Menu 2: widoczna ramka banerow i wieksze przyciski (override na koncu CSS)
+cache339 · Menu 2: cienszа ramka banerow
+cache340 · Nowe przyciski Gemini we wszystkich ekranach (zamiast starego arkusza)
+cache341 · Menu spojne: arkusz 4 stanow przyciskow wszedzie, nowy uklad menu, karta postaci
+cache342 · Karty postaci i kaplicy: obraz dociagniety do lewej ramy
+cache343 · Wybrana opcja (aria-pressed) na czerwono; sw.js zawsze pobiera swieza strone glowna
+cache344 · Menu: logo i karty wg szkicu, czerwona luna wybranego rozdzialu (miekka luna)
+cache345 · Przygotowanie: Gotowy nad Samouczkiem, wiekszy
+cache346 · Menu: Kaplica nad Poziomem, karty w ramie banerow, obraz banerow w ramie z wtopionymi krawedziami; obraz pod belka ramy
+cache347 · Menu: napisy rozdzialow +50%, kart Kaplicy i Poziomu +30%
+cache348 · Nowe perki (8, wybor 1) i wyzwania (10, nagrody Popioly+monety), 3 elity na noc
+cache349 · Rytual berserka nie kasuje monet odlozonych z wyzwan (czekaja na noc bez perka)
+cache350 · Kaplica Popiolow 2: 3 zakladki, stopnie oltarza, 11 ulepszen, reset ze zwrotem, zwrot za stare ulepszenia, Oko kruka, pad w Kaplicy
+cache351 · Krypta prestizu aktywna: przemalowania rycerza (zbroja, peleryna, klinga) i Dar pieczeci (5. slot: G / LT+RB)
+cache352 · Calun plomienia: takze bialy material z przodu czarny z czerwonym konturem
+cache353 · Kaplica: uklad wg szkicu, naglowki i cyfry z alfabetu Nightbrand, obrazki nagrod; karta Kaplicy bez Ulepsz; cyfra poziomu nie sciskana
+cache354 · Alfabet: Q i V, rowne litery, kontur jak Poziom postaci; tytul Kaplicy z alfabetu
+cache355 · Kaplica: kafle w ramie rozdzialow z tekstura muru, wieksze napisy, Poziom x/y w zakladkach 1-2
+cache356 · Kaplica wg szkicu: duzy tytul, zakladki pod nim; napisy z alfabetu przyciete; Poziom postaci wiekszy z cyfra obok; cyfra poziomu rowna napisowi
+cache357 · Kaplica: lawa i rama rozdzialow takze w przyciskach, poswiata na calej ramie; menu pol na pol, wieksze logo i nazwy rozdzialow, mniejsze napisy kart
+cache358 · Kaplica/menu: nowe reguly na koncu arkusza (wygrywaja), jasniejsza lawa
+cache359 · Nazwy rozdzialow z powrotem 1,5x (miescily sie)
+cache360 · Cyfra poziomu rowna wysokosci napisu
+cache361 · Kaplica: napisy kafli +30%, bez Stopnia w Krypcie
+cache362 · Instrukcja: Popioly, Kaplica Popiolow (zakladki, stopnie, reset, Krypta)
+cache363 · Instrukcja: osobna zakladka Kaplica Popiolow
+cache364 · Powrot do wygladu sprzed PREMIUM
+cache365 · Powrot sprzed PREMIUM - nowy numer cache
+cache366 · Nowe tlo menu i Kaplicy
+cache367 · Nowa tekstura lawy (ciemna, podbite szczeliny) w banerach Kaplicy i kartach menu
+cache368 · Standard Kaplicy (rama rozdzialow, lawa, czerwona luna) w przygotowaniu, rozmowach, pauzie i awansie
+cache369 · Lawa siega pod rame (bez pustego pasa), bez medalionow na kartach awansu; slabsze cieniowanie, jasniejsza lawa
+cache370 · Rama nad krawedzia (lawa nie wystaje), mniejsza wysrodkowana cyfra w przygotowaniu
+cache371 · Przyciski i kafle: lawa ze szczelinami; panele z tekstem: bazalt
+cache372 · Odwrotnie: bazalt na przyciskach i kaflach, lawa na panelach
+cache373 · Male przyciski przygotowania, pauzy i awansu jak zakladki Kaplicy; pauza na bazalcie
+cache374 · Przygotowanie: bazalt pod poziomem i panelami, lawa na perkach i wyzwaniach, napis poziomu nizej
+cache375 · Przygotowanie: Poziom postaci i cyfra zwykla czcionka
+cache376 · Karty awansu i okna rozmow na bazalcie
+cache377 · Ikona Popiolow (stos zaru) i pieczec NightBrand przy Darze pieczeci
+cache378 · Kat: nowa postać (5 arkuszy), wybór Rycerz|Kat w przygotowaniu (odblokowanie po rozdziale I), 4 perki Kata, profil topora
+cache379 · Kat: stopy na linii podłoża, ciemna obwódka, bez cyjanowych resztek, odblokowany od razu
+cache380 · Rozdz. I sklep Margi: prawy znak przy ścianie symetrycznie do lewego, prawe ognisko symetrycznie do lewego
+cache381 · Kat: animacja smierci, wir ostrza, atak z doskoku
+cache382 · Kat: poprawka wpisu kat_def
+cache383 · runda 316: nowa pieczec w Kaplicy (znak pietna z czerwonym ksiezycem, 480x484, przezroczyste tlo) zamiast starej ikony; zmiana kosmetyczna, nie sprawdzono na telefonie
+cache384 · runda 316: nowe logo NightBrand (litery z zarem, runiczny krag, dym wtopiony w tlo) w menu, ekranie jezyka i pionie; pieczec w Kaplicy z nowego znaku; zmiana kosmetyczna, nie sprawdzono na telefonie
+cache385 · runda 316: nowe tlo ekranu tytulowego (pas z plonacym miastem u dolu, spokojne niebo pod logo); zmiana kosmetyczna, nie sprawdzono na telefonie
+cache386 · runda 316: logo i pieczec z miekko wygaszonymi brzegami dymu (bez ostrej krawedzi); zmiana kosmetyczna, nie sprawdzono na telefonie
+cache387 · runda 316: gra tylko poziomo: w pionie na telefonie ekran Obroc telefon, proba blokady orientacji (screen.orientation.lock), manifest landscape; nie sprawdzono na telefonie
+cache388 · runda 316: gra tylko poziomo: w pionie na telefonie ekran Obroc telefon, proba blokady orientacji (screen.orientation.lock), manifest landscape; nie sprawdzono na telefonie
+cache389 · runda 317: automatyczna pauza po obrocie telefonu w pion w trakcie gry; nie sprawdzono na telefonie
+cache390 · runda 318: Zabójczyni (Tancerka Popiołu), Hak Kata, 8 perków i 10 wyzwań, nowe umiejętności
+cache391 · runda 318b: Zabójczyni, poprawka unik/garda (zamienione wiersze arkusza)
+cache392 · runda 318c: wyostrzone arkusze Zabójczyni
+cache393 · Runda 319: nowe arkusze Zabójczyni (rend, wir, ciosy 4-5), nowe FX skilli, nowy golem (10 s, uderza co 2 s: 15/20/25)
+cache394 · Runda 319b: usuniete cyjanowe obwodki z arkuszy Kata i Zabojczyni, slabsze oswietlenie modeli postaci
+cache395 · Runda 319c: Zabojczyni podniesiona nad ziemie (0,1 jedn.)
+cache396 · Runda 319d: odrzut = wybuch ognia, kaskada ciec = nowe skrzyzowane ciecia
+cache397 · Runda 320: Kaplica: smugi ciec (zar, krew, zgnilizna, szron), Ostatnia szansa, Lup elity zamiast kosmetyki Rycerza
+cache398 · Nowy Rycerz: czarna zbroja, szkarlatna peleryna (arkusze knight_*: ruch, atak, obrona, smierc, wir)
+cache399 · Menu przygotowania: mala sylwetka postaci na kafelkach wyboru postaci
+cache400 · Ikony postaci wieksze, zloty kontur, uklad ikona obok tekstu
+cache401 · Kafelki postaci: ikona na srodku, klasa i bron zolta, opis wyjustowany
+cache402 · Rycerz: poprawiona kolejnosc klatek cieć (zamach, cios, powrot) wg nowych arkuszy
+cache403 · Rycerz: poprawione arkusze ciosow knight_db i knight_dc bez namalowanych smug
+cache404 · Nowe animacje skilli: Odrzut Mocy, Kaskada Ciec, Wirujace ostrze (realistyczne, stalowe)
+cache405 · Drugie Ja: biegnie do wroga i od razu powtarza ciosy tym samym ciecem; nowe smugi zywiolow (zar, szron, zgnilizna, krew)
+cache406 · Nowe logo jako ikona aplikacji (180, 192, 512, maskable)
+cache407 · Hotfix: IMGS null przy starcie (fixHeroD)
+cache408 · Krew: wiecej czastek, mgla, smugi na ziemi
+cache409 · Pojedynki bossow finalowych: bez mobkow, zycie x1.5, szybkosc +10%; mobki +10%
+cache410 · Cumlin: boss rozdzialu II zamiast Zrosta
+cache411 · Nowa Zabojczyni: arkusze pixel art (partia 1), twarde krawedzie, stopy wyrownane
+cache412 · Zabojczyni: nowy wir (whirl, 6 rzedow) i ciosy ukosne (hit45)
+cache413 · Kat: nowe arkusze pixel art (partia 1), twarde krawedzie, stopy wyrownane
+cache414 · Nowe sprite wrogow wioski (opetany, ghul, nietoperz)
+cache415 · Nowe sprite: rycerz Zakonu, krasnolud-gornik, golem
+cache416 · Nowe moby: Tarczownik (rozdz. I-II, tarcza), Kozioł (rozdz. IV, skok); nie sprawdzono na telefonie i w ruchu
+cache417 · Nowe sprite: Poborca (ulepszony) i Zrost (nowy uklad 4x4: chod 4 klatki, smierc 4 klatki)
+cache418 · Efekt ciecia o ok. 28% mniejszy u wszystkich postaci i przesuniety do przodu (nie zza plecow); nie sprawdzono w grze
+cache419 · Moby w rozdz. I i II podniesione o ok. 1,6 px (stopa zapadala sie w ziemie); nie sprawdzono w grze
+cache420 · runda trener: tryb testera w Opcjach (kod autora), panel trenera w pauzie: niesmiertelnosc, jeden cios, +1 poziom, +100 monet, +500 Popiolow, pelne zdrowie, przywolanie wroga, zabij wszystkich, nastepny etap (nie sprawdzono: telefon, pad, dzwiek; przeskok z przerwy w toku testu)
+cache421 · runda trener: napis u gory przy Cumlinie 'Pokonaj Cumlina' zamiast 'Pokonaj Zrosta' (nie sprawdzono: telefon)
+cache422 · runda podloze: nowa tekstura podloza takze pod paleniskami (tile 27) w rozdz. II, III, V (nie sprawdzono: telefon)
+cache423 · runda czyszczenie sprite: Zabojczyni i Kat bez turkusowego obrysu, bez luznych plamek i pionowej kreski w zab_whirl; czern pod przezroczystoscia (nie sprawdzono: telefon)
+cache424 · Nowe modele: NPC, bossowie, moby cytadeli i rozdzialu 3, Boginka za Pania Lasu
+cache425 · Skrybowie walcza w zwarciu, max 2 strzelcow naraz
+cache426 · Rekwizyty: podniesienie o ok. 1,3 px, cien kontaktowy i rozmyty dol sprite'a
+cache427 · mapa I: druga paczka zmian autora z edytora (podloze, strumien, studnia, cmentarz, Kaplica Popiolow, ogniska); wdrozone bez testu na polecenie autora
+cache428 · UI menu: robocza integracja Podrozy, dane postaci i przejscie do przygotowania
+cache429 · UI menu: ikony nawigacji i perkow, portrety klas i panel Przygotowania
+cache430 · UI menu: Kaplica, 18 ikon, panel szczegolow i pieczec autora
+cache431 · UI menu: Opcje i Instrukcja, wspolne ramki, zakladki i przewijanie
+cache432 · UI menu: komplet oprawy okien i ikon umiejetnosci, regresja integracji
+cache433 · UI: czytelna trudnosc, poprawiony powrot, opisy klas i ozdobne ramki kafelkow
+cache434 · UI: sterowanie i gracze nad wyborem Fabularny Arcade, wieksze kontrolki
+cache435 · UI: wieksze miniatury, separatory, czytelne skille pauzy i nowe suwaki oraz checkboxy
+cache436 · UI review: EN, Enter Y, manifest network-only, preserved tester hash
+cache437 · Offline: manifest network-first with last successful cached fallback
+cache438 · UI: prevent repeated chapter images under banner and thumbnail frames
+cache439 · Domyslnie wlaczone: wstrzasy kamery i intensywne blyski (takze przy ograniczeniu ruchu w systemie)
+cache440 · Wizualia (test): normalizacja palety postaci, zapowiedz ataku, hit-stop przy smierci elit i bossow, mocniejsza winieta
+cache441 · TEST (niepublikowane): nowy HUD (paski, radar, zegar, okragle umiejetnosci, boss) oraz rama i tlo z chmur w menu
+cache442 · TEST (niepublikowane): HUD, pauza (zakladki, Audio), menu z chmurami, przycisk GRAJ
+cache443 · TEST (niepublikowane): HUD, pauza (zakladki, Audio), menu z chmurami, przycisk GRAJ
+cache444 · TEST 444: banery pauzy jak przyciski, bez podpowiedzi sterowania
+cache445 · TEST 445: ikony menu/pauzy, klik w mape tylko zaznacza, komunikaty i dziennik
+cache446 · TEST 445: ikony menu/pauzy, klik w mape tylko zaznacza, komunikaty i dziennik
+cache447 · TEST 445: ikony menu/pauzy, klik w mape tylko zaznacza, komunikaty i dziennik
+cache448 · TEST 447: ikony menu/pauzy, klik w mape tylko zaznacza, komunikaty i dziennik
+cache449 · Mapa I (eksport 5.11) + HUD/pauza/menu/komunikaty z hud-oprawa
+cache450 · Mapa I: usuniete niewidzialne sciany po ogniskach
+cache451 · Skille na manie bez cooldownu (testowa)
+cache452 · Fabula: rozmowy Chojraka, kwestie bossow, ekran koncowy, sprite NPC z przodu (nie sprawdzono: telefon, pad, EN w grze, dlugie teksty)
+cache453 · Chojrak ciemniejszy (sprite -28%, slabsze swiatlo NPC)
+cache454 · Slabsza luna swiatla NPC
+cache455 · Nowe przyciski Fabularny/Arcade (paczka PRZYCISKI_TRYBOW). Nie sprawdzono: telefon, pad, dotyk
+cache456 · Wybor mapy tylko kliknieciem (hover nie zmienia)
+cache457 · Objetosc 2.5D: miekszy kontur postaci, ksiezycowa poswiata krawedzi, mocniejszy cien kontaktowy (galaz objetosc)
+cache458 · Slabsze swiatlo NPC (telefon), wyzwania Kata (kopia rycerza), NPC bez zmiekczonego konturu (galaz npc-swiatlo-wyzwania)
+cache459 · biala sylwetka bledu trafienia liczona shaderem z tekstury koloru (bez osobnego plotna na klatke); oszczednosc pamieci ok. 1/3 klatek; nie sprawdzono na telefonie
+cache460 · optymalizacja: stary bohater (protagonist) budowany dopiero przy uzyciu, materialy blysku/zamrozenia/elity leniwie, HUD zapisuje tylko zmiany, obrecz minimapy rysowana raz, bez alokacji w lunach i NPC, usuniety martwy kod; nie sprawdzono na telefonie
+cache461 · optymalizacja (2): heroFrame siega po starego bohatera tylko w galezi awaryjnej
+cache462 · grafiki: 48 obrazow bezstratnych przekodowanych (tekstury CC0 i sciany stratnie q88/q92, arkusze postaci i rekwizytow paleta 255 kolorow, alfa bez zmian): ok. -21 MB; nie sprawdzono na telefonie
+cache463 · ikona karty przegladarki (favicon) = icon-192.png; bez bledu 404 w serwerze testowym
+cache464 · wprowadzenie: tekst przewija sie sam (przytrzymanie przyspiesza), przycisk Pomin konczy calosc; rozdz. I bez powtorzonych plansz 6-8; nie sprawdzono na telefonie
+cache465 · wprowadzenie (2): tekst startuje w dolnej czesci okna, 16 znakow/s
+cache466 · obrazy wprowadzen intro1-5: oryginaly 1672x941 webp q90 zamiast AVIF 1376x768 ~60 KB (lepsza jakosc, +ok. 2 MB)
+cache467 · tlo ekranu tytulowego (chmury): oryginal 1672x941 webp q90 (40 KB) zamiast 1280x720 11 KB
+cache468 · pierwsza wizyta: grafiki rozdz. II-V i muzyka c2-c5 pobierane przy pierwszym uzyciu (lista L), nie w tle; ciche bledy zapisywane w pn_errors_quiet i w raporcie testera; tlo chmur w pelnej jakosci
+cache469 · Kat: 10 wlasnych wyzwan (Rzeznia, Topor kata, Jeden wyrok, Zywy mur, Ogluszony tlum, Krwawy krag, Spadajacy topor, Ciezki krok, Publiczna egzekucja, Nienaruszony pancerz) i 4 perki (Gilotyna, Pien katowski, Dlugie ostrze, Kaptur kata); nie sprawdzono balansu
+cache470 · zbroje: 4 komplety (kosc demonow, otchlan piekla, niebianskie zloto, platyna) dla Rycerza, Kata i Zabojczyni w Kaplicy Popiolow; przemalowanie arkuszy przed procFrame; nie sprawdzono na telefonie
+cache471 · zbroje: krotsze nazwy w Kaplicy
+cache472 · ikony 4 nowych perkow Kata (zlozone z istniejacych grafik), zbroje tansze: 450/600/750/900 Popiolow
+cache473 · meta: medale rozdzialow, Kronika (26 wpisow) z Bestiariuszem, Noc tygodnia, przeklenstwa nocy; egzekucje elit i bossow (spowolnienie, najazd kamery); druga faza bossow przy 50% zdrowia; nie sprawdzono na telefonie
+cache474 · meta (2): jeden przycisk Kronika w menu, Noc tygodnia jako pierwsza zakladka Kroniki
+cache475 · meta (3): poprawki Kroniki
+cache476 · przeklenstwa: wlasny panel na cala szerokosc, przyciski jak wyzwania
+cache477 · przeklenstwa: style jak wyzwania (poprawka selektorow)
+cache478 · ikona Kroniki w menu (zwoj z piorem od autora)
+cache479 · Kronika w stylu Kaplicy (ten sam ekran: zakladki, lista, panel szczegolow)
+cache480 · Kronika: odkryte potwory na gorze Bestiariusza
+cache481 · Kronika: bez ikon zwoju na listach, zostaja portrety postaci i obrazki potworow
+cache482 · Kronika: tekst bez ikon wyrownany do lewej
+cache483 · Kronika: wiekszy, wysrodkowany tekst w wierszach
+cache484 · Kronika: tekst w wierszach wysrodkowany (flex), umiarkowany rozmiar
+cache485 · Kronika: tekst w wierszach wysrodkowany
+cache486 · Wyzwanie dnia + 5 nowych przeklenstw
+cache487 · Wyzwanie dnia: poprawka losowania
+cache488 · Wyzwanie dnia: wyrownanie
+cache489 · Kronika: proporcje tekstu lista/szczegoly
+cache490 · Kronika: proporcje tekstu lista/szczegoly
+cache491 · Kronika: odstepy w szczegolach
+cache492 · Przygotowanie: 3 kolumny, piktogramy nagrod
+cache493 · Przygotowanie: ikona monet
+cache494 · Przygotowanie: mniejszy opis klatw
+cache495 · Karty awansu: opisy w punktach
+cache496 · Wir Ostrza: krotszy opis
+cache497 · Opisy Drugie Ja i Golem; klatwy wyrownane
+cache498 · Klatwy: wyrownanie do kolumn
+cache499 · Klatwy: mnoznik obok naglowka
+cache500 · Klatwy: ta sama struktura co perki
+cache501 · Karty: punkt rowniez przy jednej linii
+cache502 · Poprawki UI z audytu (D,E,F,I,J,L)
+cache503 · HUD: ikony zdobytych umiejetnosci jak na kartach
+cache504 · HUD 2 graczy: te same ikony umiejetnosci
+cache505 · UI etap 1: wspolne stany kontrolek, mosiezny wybor, jasny fokus i spokojniejsze opisy; bez zmian HUD i mechanik
+cache506 · UI etap 1: bez obwodek przyciskow, podswietlony baner z istniejacych grafik
+cache507 · UI: tylko jeden podswietlony kafelek, bez stalego podswietlenia wybranej zakladki
+cache508 · UI: stale oznaczenia wybranego rozdzialu, perkow, wyzwan i klatw
+cache509 · UI etap 2: wybor Fabularny / Arcade poza przewijaniem nawigacji, zawsze widoczny
+cache510 · UI pauza: skroty i nazwy slotow wewnatrz banera, bez nachodzenia na oprawe
+cache511 · UI: przypiety zakup Kaplicy, trwałe znaczniki i banery pauzy, typografia Kroniki 23/16/19
+cache512 · UI etap 3: kompaktowe klasy, stale naglowki trzech kolumn i podsumowanie przy GOTOWY
+cache513 · UI przygotowanie: uwagi nocy przed lista klatw, czytelny mnoznik, pojedynczy znacznik wyboru
+cache514 · UI: trwaly znacznik wybranego poziomu trudnosci niezalezny od kursora
+cache515 · UI: pelne skalowanie banerow, wyzsze kafelki bohaterow i czytelniejsze naglowki przygotowania
+cache516 · Menu: tekst skalowany do okienek, Instrukcja bez zakladki perkow, Porady w Zaczynamy
+cache517 · Menu: korekta proporcji
+cache518 · Menu: zwarty naglowek awansu, wieksze nazwy klas
+cache519 · Menu: ikony perkow wysrodkowane
+cache520 · Podsumowanie nocy: statystyki i rekordy
+cache521 · Podsumowanie: zwarte kafle
+cache522 · Podsumowanie: tytul miesci sie na ekranie
+cache523 · Podsumowanie: poprawka selektora
+cache524 · Podsumowanie: kompakt na niskich ekranach
+cache525 · Podsumowanie: przyciski zawsze widoczne
+cache526 · Podsumowanie: wysrodkowane przyciski
+cache527 · Kram Margi w nowym stylu
+cache528 · Kram: kompakt i wysrodkowanie
+cache529 · Nowa muzyka (rozdzialy I-V, krypta, menu) i nowe ikony kramu
+cache530 · Bestiariusz: opisy przeciwnikow
+cache531 · Bestiariusz: odstep po opisie
+cache532 · Bestiariusz: wiekszy odstep
+cache533 · Bestiariusz: odstep (poprawka kolejnosci regul)
+cache534 · Nowe schematy sterowania i ekran Audio
+cache535 · Audio: wysrodkowanie i pelne suwaki
+cache536 · Audio: bez wychodzenia za ramke
+cache537 · Schematy: mieszcza sie na ekranie
+cache538 · Schematy sterowania: wersje angielskie
+cache539 · Elity z imieniem, portrety w Bestiariuszu, przegląd EN
+cache540 · Rada po śmierci, szybki restart, Statystyki
+cache541 · Rekwizyty nie zapadają się w ziemię
+cache542 · Wibracje pada: przełącznik i nowe zdarzenia
+cache543 · Plansza bossa, zdarzenia nocy, zapiski, noc bez końca, mapa w pauzie, rozmiar tekstu
+cache544 · Wóz Margi bez niewidzialnej ściany, szyld poza wnęką
+cache545 · Oprawa: rozmycie HD-2D, poświata, drobinki, mgła, kałuże, rośliny, fala uderzeniowa
+cache546 · Parowanie: 0,6 s nietykalności, Mur obrońcy 0,9 s, odepchnięcie
+cache547 · Pauza po rozłączeniu pada, źródła obrażeń w podsumowaniu, znaczek NOWE w Kronice (nie sprawdzono: prawdziwy pad, telefon)
+cache548 · Obrażenia wg umiejętności, strzałki do bossa/elity/Łowów/Margi przy krawędzi ekranu, drganie powietrza nad lawą w rozdz. II (nie sprawdzono: telefon, prawdziwa walka)
+cache549 · Własne klawisze (Opcje, Sterowanie, Klawiatura) i Plac ćwiczeń (Instrukcja); nie sprawdzono: telefon, pad
+cache550 · Balans (decyzja autora): nietykalność po parowaniu 0,7 s; ciężki cios Kata (ładowanie) i Zabójczyni (zamach) 0,66 s
+cache551 · Balans (decyzja autora): szybszy ciężki cios Kata i Zabójczyni (0,66 s) tylko przy gotowej ripoście; nietykalność po parowaniu 0,7 s
+cache552 · Oprawa: paleta barw każdego rozdziału i ziarno, łagodniejsze ściany lawy (rozdz. II), drobna faktura podłoża, przyciemnienie przy murach, zwykli wrogowie bez długiego cienia (nie sprawdzono: telefon, wydajność)
+cache553 · Cofnięcie 553: stary arkusz Aurela; oprawa 552 zostaje
+cache554 · Cofnięcie arkusza Aurela (wersja 553); gra jak 552 z nowym numerem, żeby przeglądarki pobrały świeżą kopię
+cache555 · 555: poprawka startu: wlaczony Trener nie wiesza juz wczytywania na 40%
+cache556 · 556: spopielenie wrogow po smierci (bez ciala; platki popiolu); nie sprawdzono: wyglad na telefonie, bossy, tryb 2 graczy
+cache557 · 557: boss zostaje z cialem (spopielenie tylko zwykli wrogowie i elity)
+cache558 · 558: bez migania postaci przy parowaniu; paski zycia, staminy i many w 4 czesciach, pulsuja w ostatniej cwiartce
+cache559 · 559: postac miga tylko po otrzymaniu obrazen (nie przy parowaniu, riposcie, fali)
+cache560 · 560: pauza na telefonie: lista przyciskow po lewej przewija sie dotykiem (wyjscie do menu osiagalne)
+cache561 · 561: siatka bezpieczenstwa startu (blad zamiast paska na 40%), spopielenie jako rozpad pikseli, test dymny z zapisanym profilem
+cache562 · runda 562: wgrane zredagowane teksty fabuly i gry (246 wpisow, kanon 10.11); nie ogladane na telefonie

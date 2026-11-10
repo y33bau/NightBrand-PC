@@ -1,0 +1,12 @@
+{
+  "result": "PASS",
+  "firstOnlineLoad": true,
+  "offlineReload": true,
+  "actIStarted": true,
+  "serviceWorkerControlled": true,
+  "cachedManifest": true,
+  "serverRequestsBeforeOffline": 1121,
+  "serverRequestsAfterOffline": 1121,
+  "pageErrors": [],
+  "screenshot": "C:\\Users\\Admin\\Desktop\\A D R I A N\\Projekt GPT\\PietnoNocy\\zrodla-ui-menu\\narzedzia\\offline-start.png"
+}

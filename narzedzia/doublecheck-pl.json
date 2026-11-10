@@ -1,0 +1,545 @@
+{
+  "matrix": [
+    {
+      "cls": "r",
+      "n": 0,
+      "challenge": null
+    },
+    {
+      "cls": "r",
+      "n": 0,
+      "challenge": "rzeznik"
+    },
+    {
+      "cls": "r",
+      "n": 0,
+      "challenge": "pancerz"
+    },
+    {
+      "cls": "r",
+      "n": 0,
+      "challenge": "stal"
+    },
+    {
+      "cls": "r",
+      "n": 0,
+      "challenge": "egzekutor"
+    },
+    {
+      "cls": "r",
+      "n": 0,
+      "challenge": "oddech"
+    },
+    {
+      "cls": "r",
+      "n": 0,
+      "challenge": "wyrok"
+    },
+    {
+      "cls": "r",
+      "n": 0,
+      "challenge": "chciwosc"
+    },
+    {
+      "cls": "r",
+      "n": 0,
+      "challenge": "bezuniku"
+    },
+    {
+      "cls": "r",
+      "n": 0,
+      "challenge": "klinga"
+    },
+    {
+      "cls": "r",
+      "n": 0,
+      "challenge": "krawedz"
+    },
+    {
+      "cls": "r",
+      "n": 1,
+      "challenge": null
+    },
+    {
+      "cls": "r",
+      "n": 1,
+      "challenge": "rzeznik"
+    },
+    {
+      "cls": "r",
+      "n": 1,
+      "challenge": "pancerz"
+    },
+    {
+      "cls": "r",
+      "n": 1,
+      "challenge": "stal"
+    },
+    {
+      "cls": "r",
+      "n": 1,
+      "challenge": "egzekutor"
+    },
+    {
+      "cls": "r",
+      "n": 1,
+      "challenge": "oddech"
+    },
+    {
+      "cls": "r",
+      "n": 1,
+      "challenge": "wyrok"
+    },
+    {
+      "cls": "r",
+      "n": 1,
+      "challenge": "chciwosc"
+    },
+    {
+      "cls": "r",
+      "n": 1,
+      "challenge": "bezuniku"
+    },
+    {
+      "cls": "r",
+      "n": 1,
+      "challenge": "klinga"
+    },
+    {
+      "cls": "r",
+      "n": 1,
+      "challenge": "krawedz"
+    },
+    {
+      "cls": "r",
+      "n": 2,
+      "challenge": null
+    },
+    {
+      "cls": "r",
+      "n": 2,
+      "challenge": "rzeznik"
+    },
+    {
+      "cls": "r",
+      "n": 2,
+      "challenge": "pancerz"
+    },
+    {
+      "cls": "r",
+      "n": 2,
+      "challenge": "stal"
+    },
+    {
+      "cls": "r",
+      "n": 2,
+      "challenge": "egzekutor"
+    },
+    {
+      "cls": "r",
+      "n": 2,
+      "challenge": "oddech"
+    },
+    {
+      "cls": "r",
+      "n": 2,
+      "challenge": "wyrok"
+    },
+    {
+      "cls": "r",
+      "n": 2,
+      "challenge": "chciwosc"
+    },
+    {
+      "cls": "r",
+      "n": 2,
+      "challenge": "bezuniku"
+    },
+    {
+      "cls": "r",
+      "n": 2,
+      "challenge": "klinga"
+    },
+    {
+      "cls": "r",
+      "n": 2,
+      "challenge": "krawedz"
+    },
+    {
+      "cls": "r",
+      "n": 3,
+      "challenge": null
+    },
+    {
+      "cls": "r",
+      "n": 3,
+      "challenge": "rzeznik"
+    },
+    {
+      "cls": "r",
+      "n": 3,
+      "challenge": "pancerz"
+    },
+    {
+      "cls": "r",
+      "n": 3,
+      "challenge": "stal"
+    },
+    {
+      "cls": "r",
+      "n": 3,
+      "challenge": "egzekutor"
+    },
+    {
+      "cls": "r",
+      "n": 3,
+      "challenge": "oddech"
+    },
+    {
+      "cls": "r",
+      "n": 3,
+      "challenge": "wyrok"
+    },
+    {
+      "cls": "r",
+      "n": 3,
+      "challenge": "chciwosc"
+    },
+    {
+      "cls": "r",
+      "n": 3,
+      "challenge": "bezuniku"
+    },
+    {
+      "cls": "r",
+      "n": 3,
+      "challenge": "klinga"
+    },
+    {
+      "cls": "r",
+      "n": 3,
+      "challenge": "krawedz"
+    },
+    {
+      "cls": "k",
+      "n": 0,
+      "challenge": null
+    },
+    {
+      "cls": "k",
+      "n": 1,
+      "challenge": null
+    },
+    {
+      "cls": "k",
+      "n": 2,
+      "challenge": null
+    },
+    {
+      "cls": "k",
+      "n": 3,
+      "challenge": null
+    },
+    {
+      "cls": "z",
+      "n": 0,
+      "challenge": null
+    },
+    {
+      "cls": "z",
+      "n": 0,
+      "challenge": "z_rytm"
+    },
+    {
+      "cls": "z",
+      "n": 0,
+      "challenge": "z_krolowa"
+    },
+    {
+      "cls": "z",
+      "n": 0,
+      "challenge": "z_krok"
+    },
+    {
+      "cls": "z",
+      "n": 0,
+      "challenge": "z_kontra"
+    },
+    {
+      "cls": "z",
+      "n": 0,
+      "challenge": "z_slizg"
+    },
+    {
+      "cls": "z",
+      "n": 0,
+      "challenge": "z_wir"
+    },
+    {
+      "cls": "z",
+      "n": 0,
+      "challenge": "z_traf"
+    },
+    {
+      "cls": "z",
+      "n": 0,
+      "challenge": "z_cien"
+    },
+    {
+      "cls": "z",
+      "n": 0,
+      "challenge": "z_pogarda"
+    },
+    {
+      "cls": "z",
+      "n": 0,
+      "challenge": "z_hekatomba"
+    },
+    {
+      "cls": "z",
+      "n": 1,
+      "challenge": null
+    },
+    {
+      "cls": "z",
+      "n": 1,
+      "challenge": "z_rytm"
+    },
+    {
+      "cls": "z",
+      "n": 1,
+      "challenge": "z_krolowa"
+    },
+    {
+      "cls": "z",
+      "n": 1,
+      "challenge": "z_krok"
+    },
+    {
+      "cls": "z",
+      "n": 1,
+      "challenge": "z_kontra"
+    },
+    {
+      "cls": "z",
+      "n": 1,
+      "challenge": "z_slizg"
+    },
+    {
+      "cls": "z",
+      "n": 1,
+      "challenge": "z_wir"
+    },
+    {
+      "cls": "z",
+      "n": 1,
+      "challenge": "z_traf"
+    },
+    {
+      "cls": "z",
+      "n": 1,
+      "challenge": "z_cien"
+    },
+    {
+      "cls": "z",
+      "n": 1,
+      "challenge": "z_pogarda"
+    },
+    {
+      "cls": "z",
+      "n": 1,
+      "challenge": "z_hekatomba"
+    },
+    {
+      "cls": "z",
+      "n": 2,
+      "challenge": null
+    },
+    {
+      "cls": "z",
+      "n": 2,
+      "challenge": "z_rytm"
+    },
+    {
+      "cls": "z",
+      "n": 2,
+      "challenge": "z_krolowa"
+    },
+    {
+      "cls": "z",
+      "n": 2,
+      "challenge": "z_krok"
+    },
+    {
+      "cls": "z",
+      "n": 2,
+      "challenge": "z_kontra"
+    },
+    {
+      "cls": "z",
+      "n": 2,
+      "challenge": "z_slizg"
+    },
+    {
+      "cls": "z",
+      "n": 2,
+      "challenge": "z_wir"
+    },
+    {
+      "cls": "z",
+      "n": 2,
+      "challenge": "z_traf"
+    },
+    {
+      "cls": "z",
+      "n": 2,
+      "challenge": "z_cien"
+    },
+    {
+      "cls": "z",
+      "n": 2,
+      "challenge": "z_pogarda"
+    },
+    {
+      "cls": "z",
+      "n": 2,
+      "challenge": "z_hekatomba"
+    },
+    {
+      "cls": "z",
+      "n": 3,
+      "challenge": null
+    },
+    {
+      "cls": "z",
+      "n": 3,
+      "challenge": "z_rytm"
+    },
+    {
+      "cls": "z",
+      "n": 3,
+      "challenge": "z_krolowa"
+    },
+    {
+      "cls": "z",
+      "n": 3,
+      "challenge": "z_krok"
+    },
+    {
+      "cls": "z",
+      "n": 3,
+      "challenge": "z_kontra"
+    },
+    {
+      "cls": "z",
+      "n": 3,
+      "challenge": "z_slizg"
+    },
+    {
+      "cls": "z",
+      "n": 3,
+      "challenge": "z_wir"
+    },
+    {
+      "cls": "z",
+      "n": 3,
+      "challenge": "z_traf"
+    },
+    {
+      "cls": "z",
+      "n": 3,
+      "challenge": "z_cien"
+    },
+    {
+      "cls": "z",
+      "n": 3,
+      "challenge": "z_pogarda"
+    },
+    {
+      "cls": "z",
+      "n": 3,
+      "challenge": "z_hekatomba"
+    }
+  ],
+  "pad": [
+    {
+      "id": "title",
+      "order": [
+        "kapBtn",
+        "manBtn",
+        "optsBtn",
+        "touchTgl",
+        "mpTgl",
+        "sFab",
+        "sArc",
+        "start1",
+        "sArc",
+        "start1",
+        "sArc",
+        "start1"
+      ]
+    },
+    {
+      "id": "prep",
+      "order": [
+        "Rycerz, MieczSzybki i zwrotny,",
+        "Ciężar wyroku+30% obrażeń siln",
+        "Ostatnie słowopo udanym parowa",
+        "prepGo",
+        "prepBack",
+        "Rycerz, MieczSzybki i zwrotny,",
+        "Ciężar wyroku+30% obrażeń siln",
+        "Ostatnie słowopo udanym parowa",
+        "prepGo",
+        "prepBack",
+        "Rycerz, MieczSzybki i zwrotny,",
+        "Ciężar wyroku+30% obrażeń siln"
+      ]
+    },
+    {
+      "id": "kap",
+      "order": [
+        "1. Ciało i stal",
+        "Hart ciałaPoziom 0/3Maksymalne",
+        "Żelazny bastionPoziom 0/3Stami",
+        "Cięcie kataPoziom 0/3Obrażenia",
+        "Mściwa ripostaPoziom 0/3Obraże",
+        "kapBack",
+        "1. Ciało i stal",
+        "Hart ciałaPoziom 0/3Maksymalne",
+        "Żelazny bastionPoziom 0/3Stami",
+        "Cięcie kataPoziom 0/3Obrażenia"
+      ]
+    },
+    {
+      "id": "opts",
+      "order": [
+        "Sterowanie",
+        "Audio",
+        "Grafika",
+        "Ustawienia",
+        "Dane zapisu",
+        "Klawiatura i mysz",
+        "Audio",
+        "Grafika",
+        "Ustawienia",
+        "Dane zapisu"
+      ]
+    },
+    {
+      "id": "pause",
+      "order": [
+        "Opróżnij slot 1",
+        "Klawiatura i mysz",
+        "resumeBtn",
+        "pauseMenuBtn",
+        "",
+        "",
+        "2",
+        "pauseMenuBtn",
+        "Kontroler Xbox",
+        "pauseMenuBtn"
+      ]
+    }
+  ]
+}

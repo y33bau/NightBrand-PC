@@ -1,0 +1,1194 @@
+ZMIENIONE WPISY (246) względem pliku z gry w wersji 561
+
+[20_fabula.js:5#1]
+  było: PL: Jesteś Naznaczeńcem. Znak Paktu wgryza się w twoje ciało jak rozpalone żelazo i krwawi przy każdym uderzeniu serca. Gdy zapada zmrok, wyciąga z ziemi wszystko, co powinno w niej gnić.
+  jest: PL: Jesteś Naznaczonym. Znak Paktu siedzi w twoim ciele jak rozpalone żelazo i krwawi przy każdym uderzeniu serca. O zmroku wyciąga z ziemi wszystko, co miało w niej zgnić.
+  było: EN: You are the Branded. The mark of the Pact bites into your body like red-hot iron and bleeds with every heartbeat. When dusk falls, it drags from the earth everything that should be rotting in it.
+  jest: EN: You are the Branded. The mark of the Pact sits in your flesh like hot iron and bleeds with every heartbeat. At dusk it drags up from the earth everything that was meant to rot there.
+
+[20_fabula.js:5#2]
+  było: PL: Zmarli wydzierają się z błota z odsłoniętymi kośćmi, otwierając szczęki pełne ziemi. Potwory pełzną z mgły głodne twojego mięsa. Każdy z nich szuka tylko ciebie.
+  jest: PL: Zmarli wydzierają się z błota, kość na wierzchu, szczęki pełne ziemi. Z mgły pełznie reszta, głodna twojego mięsa. Wszyscy szukają tylko ciebie.
+  było: EN: The dead tear themselves out of the mud with bare bones, opening jaws full of dirt. Monsters crawl out of the mist, hungry for your flesh. Every one of them is looking only for you.
+  jest: EN: The dead claw their way out of the mud, bone showing, jaws packed with dirt. The rest come crawling out of the mist, hungry for your flesh. Every one of them is looking for you alone.
+
+[20_fabula.js:5#3]
+  było: PL: Ich pazury rozdzierają skórę, a ich krzyk wwierca się w czaszkę. Im głębiej cię ranią, tym mocniej piętno płonie i tym więcej ich przychodzi.
+  jest: PL: Pazury rozdzierają skórę, krzyk wwierca się w czaszkę. Im głębiej cię ranią, tym mocniej płonie Piętno i tym więcej ich przychodzi.
+  było: EN: Their claws tear your skin, and their screams drill into your skull. The deeper they wound you, the brighter the Brand burns, and the more of them come.
+  jest: EN: Claws open your skin. Screams drill into your skull. The deeper they cut, the hotter the Brand burns, and the more of them come.
+
+[20_fabula.js:5#4]
+  było: PL: Nie ma litości ani ucieczki. Jest noc, a w niej krew, twoja i cudza. Rozerwiesz ich na strzępy albo oni rozerwą ciebie.
+  jest: PL: Nie ma litości ani ucieczki. Jest noc, a w niej krew, twoja i cudza. Rozerwiesz ich na strzępy albo oni ciebie.
+  było: EN: There is no mercy and no escape. There is only the night, and in it blood, yours and theirs. You will tear them to shreds, or they will tear you.
+  jest: EN: No mercy, no way out. Only the night, and the blood in it, yours and theirs. You tear them apart, or they do the same to you.
+
+[20_fabula.js:5#5]
+  było: PL: Dawno temu Złotogród zawarł pakt z Nocą. Obfitość i władza za zastaw: każda kraina miała oddać jej coś, a dług spłacał jeden człowiek z piętnem w każdym pokoleniu.
+  jest: PL: Dawno temu Złotogród zawarł z Nocą Pakt. Dostatek i władza pod zastaw: każda kraina oddała coś swojego, ta osada ogień. Dług w każdym pokoleniu spłaca jeden człowiek z Piętnem.
+  było: EN: Long ago, Goldheim made a pact with the Night. Plenty and power in exchange for a pledge: every land was to give something up, and in every generation one branded man paid off the debt.
+  jest: EN: Long ago, Goldheim struck a Pact with the Night. Plenty and power, secured by pledge: each land gave up something of its own; this one gave fire. In every generation one bearer of the Brand pays down the debt.
+
+[20_fabula.js:5#6]
+  było: PL: Zakon nazywa piętno przekleństwem. Przychodzi nocą z pochodniami, wyważa drzwi i pali naznaczonych razem z ich domami. Osada oddała Nocy ogień, a pod zgliszczami wciąż leżą spalone dzieci.
+  jest: PL: Zakon nazywa Piętno przekleństwem. Przychodzi nocą z pochodniami i pali Naznaczonych razem z domami. Tu szukał ciebie. Byłeś daleko, zabijałeś za cudze złoto, więc spalił wszystkich. Pod zgliszczami wciąż leżą dzieci.
+  było: EN: The Holy Order calls the Brand a curse. It comes at night with torches, breaks down doors and burns the branded together with their homes. The settlement gave fire to the Night, and burned children still lie beneath the ashes.
+  jest: EN: The Holy Order calls the Brand a curse. It comes by night with torches and burns the Branded inside their homes. Here it came for you. You were far away, killing for other men's coin, so it burned everyone. The children are still under the rubble.
+
+[20_fabula.js:5#7]
+  było: PL: Wiatr niesie zapach zwęglonego mięsa. Zwłoki wstają z popiołu i ciągną za sobą resztki skóry, a w spalonych chatach coś szepcze twoje imię.
+  jest: PL: Wiatr niesie swąd zwęglonego mięsa. Zwłoki wstają z popiołu i wloką za sobą płaty skóry, a w spalonych chatach coś szepcze twoje imię.
+  było: EN: The wind carries the smell of charred flesh. Corpses rise from the ashes, dragging scraps of skin behind them, and something in the burned huts whispers your name.
+  jest: EN: The wind carries the reek of charred meat. Corpses rise from the ash trailing strips of skin, and in the burned huts something whispers your name.
+
+[20_fabula.js:5#8]
+  było: EN: You are the last debtor of this village. The fire is coming home. Survive until dawn.
+  jest: EN: You are this village's last debtor. The fire is coming home. Survive until dawn.
+
+[20_fabula.js:6#9]
+  było: PL: Pod Spaloną Osadą, głębiej niż sięgają korzenie, leży Dolne Miasto. Krasnoludy kopały tu przez wieki, aż trafiły na to, czego nie należało budzić. Noc oddała im złoto, a w zamian zabrała kamień, ich domy i ich dusze.
+  jest: PL: Pod Spaloną Osadą, głębiej, niż sięgają korzenie, leży Dolne Miasto. Gdy żyły zaczęły się kończyć, krasnoludy kopały dalej, aż dokopały się do tego, czego nie należało budzić. Król podpisał. Noc dała złoto i wzięła kamień, a kamień wziął górników.
+  było: EN: Beneath the Scorched Settlement, deeper than the roots reach, lies the Lower City. The dwarves dug here for centuries, until they struck what should never have been woken. The Night gave them gold, and in return took the stone, their homes and their souls.
+  jest: EN: Beneath the Scorched Settlement, deeper than any root goes, lies the Lower City. When the seams ran thin the dwarves kept digging, until they broke through to something that should have been left asleep. The king signed. The Night gave gold and took the stone, and the stone took the miners.
+
+[20_fabula.js:6#10]
+  było: PL: Korytarze cuchną siarką i zgniłym mięsem. W ścianach tkwią przemielone ciała górników, wciąż poruszają ustami, choć dawno nie mają języków. Pod lawą coś oddycha.
+  jest: PL: Korytarze cuchną siarką i gnijącym mięsem. Górnicy wrośli w ściany po ramiona. Wciąż kują i wciąż poruszają ustami, choć dawno nie mają języków. Pod lawą coś oddycha.
+  było: EN: The tunnels reek of sulphur and rotten flesh. Ground-up bodies of miners are stuck in the walls, still moving their mouths, though they lost their tongues long ago. Something breathes beneath the lava.
+  jest: EN: The tunnels stink of sulphur and spoiled meat. The miners have grown into the walls to the shoulder. They still swing their picks, mouths still working, though the tongues went long ago. Under the lava, something breathes.
+
+[20_fabula.js:6#11]
+  było: PL: Poborcy Zakonu schodzą tu po swój udział. Przychodzą w ciężkich zbrojach, z rejestrami w rękach, i zabijają każdego, kto nie zapłacił. Piętno na twojej ręce pali coraz mocniej, bo zastaw jest blisko.
+  jest: PL: Zakon wciąż odbiera urobek. Przy Wielkiej Wadze stoi Poborca z rejestrem i waży wszystko, co wydobędą. Kto zalega, tego dopisuje. Piętno na twojej piersi pali coraz mocniej. Zastaw jest blisko.
+  było: EN: The Order's collectors come down here for their share. They come in heavy armour, ledgers in hand, and kill everyone who has not paid. The Brand on your hand burns ever hotter, for the pledge is near.
+  jest: EN: The Holy Order still takes the yield. At the Great Scales stands its Collector, ledger in hand, weighing all they bring up. Whoever falls short is added to the book. The Brand on your chest burns hotter. The pledge is close.
+
+[20_fabula.js:6#12]
+  było: PL: Nie wracaj tą drogą, którą przyszedłeś. Tu nie ma powrotu, jest tylko głębiej, w ciemność.
+  jest: PL: Nie wracaj drogą, którą przyszedłeś. Do stolicy idzie się stąd w dół: przez kopalnię, do windy.
+  było: EN: Do not go back the way you came. There is no way back here, only deeper, into the darkness.
+  jest: EN: Do not go back the way you came. The road to the capital runs down: through the mine, to the lift.
+
+[20_fabula.js:7#13]
+  było: PL: Złotogród oddał Nocy krew. Stolica nie zbudowała swoich kopuł z kamienia, tylko z ciał, które setki lat temu wrzucono do fundamentów w imię spłaty długu.
+  jest: PL: Złotogród oddał Nocy krew. Kopuł stolicy nie wzniesiono na kamieniu, tylko na ciałach, które wieki temu zrzucono do fundamentów na poczet długu.
+  było: EN: Goldheim gave blood to the Night. The capital did not build its domes from stone, but from bodies thrown into the foundations centuries ago in the name of paying off the debt.
+  jest: EN: Goldheim gave the Night its blood. The capital's domes were raised not on stone but on bodies, tipped into the foundations centuries ago against the debt.
+
+[20_fabula.js:7#14]
+  było: PL: Ulice są wąskie od zakrzepłej krwi, a złote płyty lepią się do butów. Szaleńcy w ciemnych zaułkach liżą je do czysta i śmieją się, kiedy mijasz ich kilka kroków dalej.
+  jest: PL: Ulice zwęziły się od zakrzepłej krwi, złote płyty lepią się do butów. Szaleńcy w zaułkach liżą je do czysta i śmieją się, kiedy przechodzisz obok.
+  było: EN: The streets are narrow with clotted blood, and the golden flagstones stick to your boots. Madmen in dark alleys lick them clean and laugh when you pass a few steps away.
+  jest: EN: Clotted blood has narrowed the streets, and the golden flagstones pull at your boots. Madmen in the alleys lick them clean and laugh as you walk by.
+
+[20_fabula.js:7#15]
+  było: PL: Dzwony biją, choć nikt ich nie porusza. Pod każdym uderzeniem budzi się to, co leżało w ścianach: rzeźnie, ślady kajdan i kości w nieoznaczonych dołach. Morhad nie przestał liczyć.
+  jest: PL: Dzwony biją, choć nikt nie ciągnie za sznury. Z każdym uderzeniem budzi się to, co zamurowano: rzeźnie, ślady po kajdanach, kości w dołach bez tabliczek. Morhad nie przestał liczyć.
+  było: EN: The bells ring, though no one moves them. With every toll, what lay in the walls awakens: slaughterhouses, marks of shackles and bones in unmarked pits. Morhad never stopped counting.
+  jest: EN: The bells ring, though no hand is on the ropes. Each stroke wakes what was walled in: slaughterhouses, shackle scars, bones in pits no one marked. Morhad has not stopped counting.
+
+[20_fabula.js:7#16]
+  było: PL: Bestia czeka u stóp katedry. Wie, że przyjdziesz, bo zawsze przychodzi ten sam człowiek, w każdym pokoleniu.
+  jest: PL: Czeka pod bazyliką i trzyma sklepienie na karku. Wie, że przyjdziesz. W każdym pokoleniu przychodzi ten sam człowiek.
+  było: EN: The beast waits at the foot of the cathedral. It knows you will come, because the same man always comes, in every generation.
+  jest: EN: He waits beneath the basilica with the vault on his back. He knows you will come. In every generation, the same one comes.
+
+[20_fabula.js:8#17]
+  było: PL: Czarnobór oddał Nocy życie: las, korzenie, kości przodków pod mchem. To tu Pakt zapuścił najgłębsze korzenie, a drzewa rosną na tych, którzy mieli nadzieję uciec.
+  jest: PL: Czarnobór oddał Nocy życie: las, korzenie, kości przodków pod mchem. Tu Pakt wrósł najgłębiej, a drzewa rosną na tych, którzy liczyli, że uciekną.
+  było: EN: Blackwood gave life to the Night: the forest, the roots, the bones of ancestors beneath the moss. This is where the Pact sank its deepest roots, and the trees grow on those who hoped to escape.
+  jest: EN: Blackwood gave the Night its life: the forest, the roots, the bones of forebears under the moss. Here the Pact has grown in deepest, and the trees grow from those who hoped to get away.
+
+[20_fabula.js:8#18]
+  było: PL: Mgła zalega w dolinach jak gęsta zupa. Wilki wyją z oczami zalanymi czernią, utopce wyciągają szpony z bagien, a w kurhanach coś skrobie od środka paznokciami.
+  jest: PL: Mgła stoi w dolinach i nie schodzi. Wilki wyją, oczy mają zalane czernią. Utopce wyciągają szpony z bagien, a w kurhanach coś skrobie od środka paznokciami.
+  było: EN: Mist lies in the valleys like thick soup. Wolves howl with eyes flooded with black, drowners reach their claws out of the swamps, and something scratches at the barrows from within.
+  jest: EN: Mist stands in the valleys and will not lift. The wolves howl with eyes gone black. Drowners reach up out of the bogs, and inside the barrows something scrapes at the stone with its nails.
+
+[20_fabula.js:8#19]
+  było: PL: Na Łysej Górze palą się ogniska, choć nikt ich nie rozniecał. Leszy stoi na końcu ścieżki. Strzyga Matka czeka w jego cieniu i karmi swoje dzieci tym, co zostanie po tobie.
+  jest: PL: Na Łysej Górze płoną ogniska, których nikt nie rozpalał. Leszy pilnuje ścieżek. Pod kurhanami, w korzeniach Pani Lasu, śpi Strzyga Matka, a z nią wszystko, co las zatrzymał dla Nocy.
+  było: EN: Fires burn on Bleak Peak, though no one lit them. Leshy stands at the end of the path. Mother Striga waits in his shadow and feeds her children with whatever is left of you.
+  jest: EN: Fires burn on Bleak Peak that no one laid. Leshy keeps the paths. Under the barrows, in the Lady of the Forest's roots, Mother Striga sleeps with all the forest has kept for the Night.
+
+[20_fabula.js:8#20]
+  było: PL: Gdy upadnie ostatni zastaw, dług zostanie rozliczony. Albo ty. Las nie robi różnicy.
+  jest: PL: To ostatni zastaw. Gdy upadnie, zostanie tylko księga. Albo tylko ty. Lasowi wszystko jedno.
+  było: EN: When the last pledge falls, the debt will be settled. Or you will. The forest makes no distinction.
+  jest: EN: This is the last pledge. When it falls, only the ledger remains. Or only you. It is all one to the forest.
+
+[20_fabula.js:9#22]
+  było: PL: Wierzyciel milknie. Rejestr płonie, a piętno na twojej ręce blednie. Dług jest spłacony.
+  jest: PL: Wierzyciel milknie. Rejestr płonie, a Piętno na twojej piersi blednie. Dług wygasa.
+  było: EN: The Creditor falls silent. The ledger burns, and the Brand on your hand fades. The debt is paid.
+  jest: EN: The Creditor falls silent. The ledger burns, and the Brand on your chest fades. The debt lapses.
+
+[20_fabula.js:9#23]
+  było: EN: The Collector falls. A page drops from his ledger: "The Holy Order collects the debt for the Night."
+  jest: EN: The Collector falls. A page slips from his ledger: "The Holy Order collects on the Night's behalf."
+
+[20_fabula.js:9#24]
+  było: PL: Zrost milknie. Twarze spalonych szepczą: „Ogień spłacony”. Piętno na twojej ręce robi się cieplejsze.
+  jest: PL: Zrost milknie. Twarze spalonych szepczą: „Ogień spłacony”. Piętno na twojej piersi robi się cieplejsze.
+  było: EN: The Outgrowth falls silent. The faces of the burned whisper: "The fire is repaid." The Brand on your hand grows warmer.
+  jest: EN: The Conjoined falls silent. The faces of the burned whisper: "The fire is repaid." The Brand on your chest grows warmer.
+
+[20_fabula.js:9#25]
+  było: PL: Korona Cumlina gaśnie. Z głębi dobiega ostatni jęk. Kamień spłacony. Piętno rośnie.
+  jest: PL: Korona Cumlina gaśnie. Z głębi dobiega ostatni jęk. Kamień spłacony. Piętno ciężeje.
+  było: EN: Cumlin's crown goes dark. A last groan rises from the depths. The stone is repaid. The Brand grows.
+  jest: EN: Cumlin's crown goes dark. A last groan rises from the depths. The stone is repaid. The Brand grows heavy.
+
+[20_fabula.js:9#26]
+  było: PL: Z głębi dobiega ostatni jęk. Kamień spłacony. Piętno rośnie.
+  jest: PL: Z głębi dobiega ostatni jęk. Kamień spłacony. Piętno ciężeje.
+  było: EN: A last groan rises from the depths. The stone is repaid. The Brand grows.
+  jest: EN: A last groan rises from the depths. The stone is repaid. The Brand grows heavy.
+
+[20_fabula.js:9#27]
+  było: EN: Morhad stopped counting. The blood is repaid. The Night weakens.
+  jest: EN: Morhad has stopped counting. The blood is repaid. The Night weakens.
+
+[20_fabula.js:9#28]
+  było: PL: Leszy rozpada się w próchno. Życie spłacone. Został ostatni zastaw.
+  jest: PL: Leszy rozpada się w próchno. Ścieżki przestają krążyć. Zastaw leży głębiej.
+  było: EN: Leshy crumbles into rotten wood. Life is repaid. One pledge remains.
+  jest: EN: Leshy crumbles to rotten wood. The paths run straight. The pledge lies deeper.
+
+[20_fabula.js:9#29]
+  było: PL: Strzyga Matka pada. Dług rozliczony. Noc cofa się, a piętno milknie na twojej ręce.
+  jest: PL: Strzyga Matka pada. Kurhany milkną. To, co las trzymał w korzeniach, wraca do ziemi.
+  było: EN: Mother Striga falls. The debt is settled. The Night recedes, and the Brand falls silent on your hand.
+  jest: EN: Mother Striga falls. The barrows go quiet. What the forest held in its roots goes back to the earth.
+
+[FABULA_TXT:story.act1#1]
+  było: EN: The Holy Order sealed the villagers inside their homes and set the settlement ablaze before dawn. They were searching for one of the Branded. No one was left alive to say whether they had found their quarry.
+  jest: EN: The Holy Order sealed the villagers inside their homes and fired the settlement before dawn. They were looking for one of the Branded. No one was left in the ash to say whether they found him.
+
+[FABULA_TXT:story.act1#2]
+  było: EN: Now the Scorched wander among the ruins. They return to wells, yards and doorsteps that no longer exist. Only the light of your Brand breaks their last familiar routines.
+  jest: EN: Now the Scorched wander among the ruins. They return to wells, yards and doorsteps that no longer exist. Only the glow of your Brand breaks them out of those last habits.
+
+[FABULA_TXT:story.act1#3]
+  było: EN: In the granary on the hill, the embers never die. That is where the largest crowd was herded, and where the Outgrowth took shape — flesh bound to the beams of the fallen building. As long as it breathes, the settlement cannot cool.
+  jest: EN: In the granary on the hill, the embers never die. That is where the largest crowd was herded, and where the Conjoined took shape — flesh bound to the beams of the fallen building. As long as it breathes, the settlement cannot cool.
+
+[FABULA_TXT:story.act5#3]
+  było: EN: The Arch-Judge Auditor waits before the Great Ledger. He knows what you carry in your Brand: the settlement's fire, the weight of the mines, the blood of the foundations, and the lives held captive in the forest. Power kept apart for centuries has reached the Citadel in a single mortal.
+  jest: EN: The Arch-Judge Reckoner waits before the Great Ledger. He knows what you carry in your Brand: the settlement's fire, the weight of the mines, the blood of the foundations, and the lives held captive in the forest. Power kept apart for centuries has reached the Citadel in one person.
+
+[FABULA_TXT:boss.creditor.intro#1]
+  było: PL: Przynosisz moje zastawy. Sądzisz, że przyjmę je przeciw tobie?
+  jest: PL: Przynosisz moje zastawy. Sądzisz, że obrócisz je przeciwko mnie?
+  było: EN: You bring me my pledges. Do you think I will accept them as weapons against me?
+  jest: EN: You bring me my own pledges. Do you think you can turn them against me?
+
+[BOSS_WHO:outgrowth]
+  było: EN: The Outgrowth
+  jest: EN: The Conjoined
+
+[BOSS_WHO:auditor]
+  było: EN: Arch-Judge Auditor
+  jest: EN: Arch-Judge Reckoner
+
+[BOSS_TITLES:1:boss.imie]
+  było: EN: The Outgrowth
+  jest: EN: The Conjoined
+
+[BOSS_TITLES:5:boss.przydomek]
+  było: PL: Pan Cytadeli Długów
+  jest: PL: Pan Pierwszego Wpisu
+  było: EN: Master of the Citadel of Debts
+  jest: EN: Lord of the First Entry
+
+[BOSS_TITLES:5:collector.imie]
+  było: EN: Arch-Judge Auditor
+  jest: EN: Arch-Judge Reckoner
+
+[NAMED:1:bogumil.opis]
+  było: PL: Przysięgał bronić osady, a otworzył bramę Nocy. Do dziś nosi herb, którego się wyparł.
+  jest: PL: Przysięgał bronić osady, a otworzył bramę Zakonowi. Do dziś nosi herb, którego się wyparł.
+  było: EN: He swore to defend the settlement and opened its gate to the Night. He still wears the crest he betrayed.
+  jest: EN: He swore to hold the settlement, then opened its gate to the Holy Order. He still wears the crest he renounced.
+
+[NAMED:1:dobieslaw.opis]
+  było: PL: Spłonął razem z kaplicą, ale zbroja nie pozwoliła mu upaść. Sypie popiołem przy każdym kroku.
+  jest: PL: Spłonął razem z kaplicą, ale zbroja nie pozwoliła mu upaść. Przy każdym kroku sypie się z niej popiół.
+  było: EN: He burned with the chapel, but his armour would not let him fall. Ash pours from him with every step.
+  jest: EN: He burned with the chapel, but his armour would not let him fall. Ash sifts out of it with every step.
+
+[NAMED:1:wojmir.opis]
+  było: EN: The youngest knight of the settlement. The Night promised him glory and kept its word in its own way.
+  jest: EN: The youngest of the settlement's knights. The Night promised him glory, and kept its word in its own fashion.
+
+[NAMED:2:gromislaw.opis]
+  było: EN: He guarded the dwarven gate for a hundred winters. No one ever told him he could leave.
+  jest: EN: He guarded the dwarven gate for a hundred winters. No one has told him he may stand down.
+
+[NAMED:2:bolko.opis]
+  było: EN: He lost his hands in a cave-in and carved new ones from granite. Now he strikes anything that moves.
+  jest: EN: He lost his hands in a cave-in and cut new ones from granite. Now he uses them on anything that moves.
+
+[NAMED:2:mszczuj.opis]
+  było: EN: He wears the keys to every door of the Lower City. None of them open any more.
+  jest: EN: Round his neck hang the keys to every door in the Lower City. None of them opens now.
+
+[NAMED:3:gniewomir.opis]
+  było: EN: Goldheim paid him in gold, the Night pays in mould. He still fights for whoever pays more.
+  jest: EN: Goldheim paid him in gold; the Night pays in mould. He still fights for the higher bidder.
+
+[NAMED:3:radost.opis]
+  było: PL: Przyłbica nie ma już pod sobą twarzy, tylko ciemność. Słychać ją, gdy oddycha.
+  jest: PL: Pod przyłbicą nie ma już twarzy, tylko ciemność. Słychać, jak oddycha.
+  było: EN: There is no face behind his visor any more, only darkness. You can hear it breathe.
+  jest: EN: There is no face behind the visor now, only the dark. You can hear it breathing.
+
+[NAMED:3:czcibor.opis]
+  było: EN: His mail has grown into the mould. Every blow he takes releases a cloud of spores.
+  jest: EN: His mail has fused with the mycelium. Every blow he takes lets out a cloud of spores.
+
+[NAMED:4:jagna.opis]
+  było: EN: She led the Blackwood robbers until the wolves began to lead her. No one knows who serves whom.
+  jest: EN: She led the Blackwood robbers until the wolves began leading her. No one can say any more who serves whom.
+
+[NAMED:4:maciej.opis]
+  było: PL: Każdy nóż ma imię kogoś, kogo zdradził. Ostatni jeszcze czeka na imię.
+  jest: PL: Każdy nóż nosi imię kogoś, kogo zdradził. Siódmy wciąż jest bezimienny.
+  było: EN: Each knife bears the name of someone he betrayed. The last one is still waiting for a name.
+  jest: EN: Each knife bears the name of someone he betrayed. The seventh has no name yet.
+
+[NAMED:4:bartosz.opis]
+  było: PL: Wisiał na dębie trzy dni, aż Noc przecięła sznur. Od tamtej pory nie boi się już niczego.
+  jest: PL: Wisiał na dębie trzy dni, aż Noc przecięła sznur. Od tamtej pory nie boi się niczego.
+  było: EN: He hung from an oak for three days until the Night cut the rope. Since then he fears nothing.
+  jest: EN: He hung from an oak for three days before the Night cut him down. He has feared nothing since.
+
+[NAMED:5:wiktor.opis]
+  było: EN: He carried out the Citadel's first sentence and every one after. He counts heads, not years.
+  jest: EN: He carried out the Citadel's first sentence and every one since. He counts heads, not years.
+
+[NAMED:5:ignacy.opis]
+  było: EN: He taught executioners their trade. He says a clean blow is the only mercy he knows.
+  jest: EN: He taught executioners their trade. A clean stroke, he says, is the only mercy he knows.
+
+[NAMED:5:bezimienny.opis]
+  było: EN: The Citadel's ledgers list him only as a debt. He repays it with other people's heads.
+  jest: EN: The Citadel's ledgers list him only as a debt. He pays it off in other people's heads.
+
+[NOTES:1:modlitewnik.opis]
+  było: PL: Panie, odwróć od nas piętno. Jeśli już musisz kogoś wziąć, weź sąsiada, ale nie moje dzieci. W miejscu imienia jest tylko kleks, jakby pisząca w ostatniej chwili się zawstydziła.
+  jest: PL: Panie, odwróć od nas Piętno. A jeśli musisz kogoś wziąć, weź sąsiada, nie moje dzieci. W miejscu imienia jest kleks, jakby pisząca w ostatniej chwili się zawstydziła.
+  było: EN: Lord, turn the Brand away from us. If you must take someone, take the neighbour, but not my children. Where the name should be there is only a blot, as if the writer felt ashamed at the last moment.
+  jest: EN: Lord, turn the Brand from us. And if You must take someone, take the neighbour, not my children. Where the name should be there is only a blot, as if she grew ashamed at the last moment.
+
+[NOTES:1:rozkaz14.nazwa]
+  było: EN: Order of the Order, No. 14
+  jest: EN: Holy Order Edict No. 14
+
+[NOTES:1:rozkaz14.opis]
+  było: EN: Burn the Branded together with his house. Burn the neighbours who hid him as well. Gather the ash into a sack and label it: debt for fire, first instalment.
+  jest: EN: Burn the Branded with the house. Likewise any neighbours who hid him. Collect the ash in a sack and label it: debt for fire, first instalment.
+
+[NOTES:1:marga.opis]
+  było: EN: I came back with the cart, but the settlement is gone. Under the stone by the well I leave bread and a knife for anyone who survived. If you are reading this, do not trust the bells.
+  jest: EN: Came back with the cart. The settlement's gone. I've left bread and a knife under the stone by the well, for anyone still breathing. If you're reading this, don't trust the bells.
+
+[NOTES:1:grabarz.opis]
+  było: PL: Trzecią noc z rzędu kopię te same groby. Rano są puste, a łopata ciepła, jakby ktoś kopał od spodu. Przestałem liczyć, odkąd zaczęły odpowiadać.
+  jest: PL: Trzecią noc kopię te same groby. Rano są puste, a łopata ciepła, jakby ktoś kopał od spodu. Przestałem liczyć, odkąd zaczęły odpowiadać.
+  było: EN: For the third night in a row I dig the same graves. By morning they are empty and the shovel is warm, as if someone were digging from below. I stopped counting when they started answering.
+  jest: EN: Third night running I've dug the same graves. Come morning they're empty and the shovel's warm, like someone's been digging from underneath. I stopped counting when they started answering.
+
+[NOTES:1:rysunek.opis]
+  było: PL: Węglem na desce: dom, słońce i postać z czerwoną ręką. Pod spodem krzywe litery: TATA WRÓCI JAK ZGAŚNIE.
+  jest: PL: Węglem na desce: dom, słońce i postać z czerwoną plamą na piersi. Pod spodem krzywe litery: TATA WRÓCI JAK ZGAŚNIE.
+  było: EN: In charcoal on a plank: a house, a sun and a figure with a red hand. Underneath, crooked letters: DAD WILL COME BACK WHEN IT GOES OUT.
+  jest: EN: In charcoal on a plank: a house, a sun and a figure with a red blot on its chest. Underneath, in crooked letters: DADDY COMES BACK WHEN IT GOES OUT.
+
+[NOTES:2:zmiana.opis]
+  było: EN: Day 211: the gold vein widens on its own. The foreman says it is a blessing. Day 212: the foreman did not come back from the shaft. The vein is wider.
+  jest: EN: Day 211: the gold vein is widening by itself. The foreman calls it a blessing. Day 212: the foreman did not come up from the shaft. The vein is wider.
+
+[NOTES:2:runa.opis]
+  było: EN: Carved deep into the iron: The stone remembers. The stone does not forgive. The stone waits for you to pay.
+  jest: EN: Cut deep into the iron: The stone remembers. The stone does not forgive. The stone waits to be paid.
+
+[NOTES:2:pokwitowanie.opis]
+  było: EN: Received from the Irongate clan: 40 gold bars, 12 miners, 1 king. Balance: still negative. Signature illegible, seal of the Order.
+  jest: EN: Received of the Irongate clan: 40 gold bars, 12 miners, 1 king. Balance: still in deficit. Signature illegible, seal of the Holy Order.
+
+[NOTES:2:cumlin.opis]
+  było: EN: The king ordered the forge gates sealed from the inside. He said that if the Night wanted gold, it would get it together with him. We heard him laugh until the laughter became something else.
+  jest: EN: The king had the forge gates barred from within. If the Night wanted gold, he said, it could have it with him thrown in. We heard him laughing, until the laughter turned into something else.
+
+[NOTES:3:kopula.opis]
+  było: EN: Three hundred souls from the debtors' list were walled into the foundations of the Saint King's Dome. The architect kindly asks that his name be entered on the payroll, not on the list of victims.
+  jest: EN: Three hundred souls from the debtors' roll were walled into the foundations of the Saint King's Dome. The architect respectfully asks that his name be entered on the payroll, not the casualty list.
+
+[NOTES:3:uczta.opis]
+  było: EN: Pheasants in honey, wine from the valley, golden cakes. On the back, a note: the guests from the lower quarters never went home, but there was plenty of meat.
+  jest: EN: Pheasant in honey, valley wine, gilded cakes. A note on the back: the guests from the lower quarters did not go home, but there was meat in plenty.
+
+[NOTES:3:morhad.opis]
+  było: EN: Morhad the Butcher, the City Council commissions you to count the debtors. Every one of them. Payment: eternal.
+  jest: EN: Morhad the Butcher: the City Council commissions you to count the debtors. All of them. Remuneration: eternal.
+
+[NOTES:3:praczka.opis]
+  było: EN: I have scrubbed the same golden flagstones for years. The blood does not come off, it only changes colour. Today the queen walked by and said they shine more beautifully than ever.
+  jest: EN: Years I've scrubbed these same gold flags. The blood won't lift, it only changes colour. Today the queen walked past and said they'd never shone so fine.
+
+[NOTES:3:milosny.opis]
+  było: EN: Wait for me by the queen's fountain. If I do not come, it means the Order knocked first. Do not cry. The gold was only borrowed anyway.
+  jest: EN: Wait for me by the queen's fountain. If I don't come, the Holy Order knocked first. Don't cry. The gold was only ever borrowed.
+
+[NOTES:4:zbieg.opis]
+  było: EN: Third day walking west. Yesterday we found our own campfire, still warm. The forest is not leading us out, only around in circles.
+  jest: EN: Third day heading west. Yesterday we came on our own campfire, still warm. The forest isn't leading us out. It's leading us round.
+
+[NOTES:4:dziady.opis]
+  było: EN: On Forefathers' Eve leave a bowl of porridge for the dead and do not look back. If something eats it, it is yours. If it does not, it is hungry.
+  jest: EN: On the Forefathers' Eve, leave a bowl of groats for the dead and don't look back. If something eats it, it's yours. If it doesn't, it's hungry.
+
+[NOTES:4:jagna.opis]
+  było: EN: The wolves came on their own and will not leave. They obey me better than people do. I fear the day I start obeying them.
+  jest: EN: The wolves came of their own accord and they won't go. They mind me better than men do. I dread the day I start minding them.
+
+[NOTES:5:rejestr.opis]
+  było: EN: Item 1: the Settlement, fire. Item 2: the Lower City, stone. Item 3: Goldheim, blood. Item 4: Blackwood, life. Item 5: the Branded, the remainder.
+  jest: EN: Item 1: the Settlement, fire. Item 2: the Lower City, stone. Item 3: Goldheim, blood. Item 4: Blackwood, life. Item 5: the Branded, the balance.
+
+[NOTES:5:regulamin.opis]
+  było: EN: A scribe who errs in the accounts becomes an item in the accounts himself. Ink is issued by allowance. Blood as required.
+  jest: EN: A scribe who errs in the accounts becomes an entry in the accounts. Ink is issued by allocation. Blood, as required.
+
+[NOTES:5:umorzenie.opis]
+  było: EN: Esteemed Creditor, I request that repayment be deferred by one generation. Reply in the margin: rejected, interest added.
+  jest: EN: Esteemed Creditor, I beg leave to defer repayment by one generation. Reply in the margin: denied, interest applied.
+
+[NOTES:5:kat.opis]
+  było: EN: Today I beheaded the same man for the third time. The Arch-Judge says a debt does not die, so neither may the debtor. I request a transfer to the kitchens.
+  jest: EN: Beheaded the same man today, third time. The Arch-Judge says a debt does not die, so neither may the debtor. Requesting transfer to the kitchens.
+
+[NOTES:5:ostatnia.opis]
+  było: PL: Jeśli piętno zgaśnie, rejestr spłonie. Jeśli rejestr spłonie, Noc nie będzie miała czego liczyć. Zakon nigdy nie zapisał, co wtedy stanie się z nami.
+  jest: PL: Jeśli Piętno zgaśnie, rejestr spłonie. Jeśli rejestr spłonie, Noc nie będzie miała czego liczyć. Zakon nigdy nie zapisał, co wtedy stanie się z nami.
+  było: EN: If the Brand fades, the ledger will burn. If the ledger burns, the Night will have nothing left to count. The Order never wrote down what would then become of us.
+  jest: EN: If the Brand goes out, the ledger burns. If the ledger burns, the Night has nothing left to count. The Holy Order never wrote down what becomes of us then.
+
+[02_swiaty.js:90#1]
+  było: EN: Mila, The Amazon
+  jest: EN: Mila, the Amazon
+
+[02_swiaty.js:151#1]
+  było: EN: Marga, The Bone Trader
+  jest: EN: Marga, the Bone Trader
+
+[02_swiaty.js:153#1]
+  było: PL: Chojrak, szlachetny paladyn
+  jest: PL: Chojrak, paladyn bez Zakonu
+  było: EN: Chojrak, Noble Paladin
+  jest: EN: Chojrak, Lapsed Paladin
+
+[02_swiaty.js:226#1]
+  było: EN: Heri, The King's Guardian
+  jest: EN: Heri of the Royal Guard
+
+[02_swiaty.js:332#1]
+  było: EN: Anastasija, The Whispering Witch
+  jest: EN: Wierzchoslava, the Whisperer
+
+[02_swiaty.js:332#2]
+  było: EN: Bart The Scout
+  jest: EN: Bart the Scout
+
+[03_three_teren.js:4#1]
+  było: PL: <div id="err">Ta przeglądarka nie obsługuje WebGL, więc demo 3D nie ruszy.</div>
+  jest: PL: <div id="err">Ta przeglądarka nie obsługuje WebGL, więc gra 3D nie ruszy.</div>
+
+[07_swiatla_uklad_map.js:134#1]
+  było: EN: Graves of the burned stand at the four corners of the village. Spill the blood of their killers beside them and the souls will rest in peace.
+  jest: EN: The graves of the burned stand at the four corners of the village. Spill their killers' blood beside them, and the souls will go in peace.
+
+[07_swiatla_uklad_map.js:136#1]
+  było: PL: Od południowej drogi nadciąga krucjata zakonu. Fanatycy maszerują kolumną.
+  jest: PL: Od południowej drogi nadciąga krucjata Zakonu. Fanatycy maszerują kolumną.
+
+[07_swiatla_uklad_map.js:140#1]
+  było: EN: Four extinguished rune lanterns stand in the corners of the hall. Blood spilled nearby will wake the runes. Powder kegs explode when someone dies next to them.
+  jest: EN: Four dead rune lanterns stand in the corners of the hall. Blood spilled nearby will wake the runes. Powder kegs go off when someone dies beside them.
+
+[07_swiatla_uklad_map.js:150#1]
+  było: PL: W czterech dzielnicach stoją puste złote misy ofiarne. Krew wrogów przelana obok je napełni. Uważaj na kwiaty zgnilizny, pękają, gdy przechodzisz.
+  jest: PL: W czterech dzielnicach stoją puste złote misy ofiarne. Krew wrogów przelana obok je napełni. Uważaj na kwiaty zgnilizny: pękają, gdy przechodzisz.
+
+[07_swiatla_uklad_map.js:167#1]
+  było: PL: Chojrak, szlachetny paladyn
+  jest: PL: Chojrak, paladyn bez Zakonu
+  było: EN: Chojrak, Noble Paladin
+  jest: EN: Chojrak, Lapsed Paladin
+
+[07_swiatla_uklad_map.js:239#1]
+  było: EN: Missing graphics for chapter 
+  jest: EN: Missing graphics for act 
+
+[10_stan_gry.js:23#1]
+  było: PL: Żywy... w Dolnym Mieście. Ostatni raz widziałem żywego, gdy gasły nasze kuźnie.
+  jest: PL: Żywy… w Dolnym Mieście. Ostatni raz widziałem żywego, gdy gasły nasze kuźnie.
+  było: EN: Alive... in the Lower City. The last time I saw the living, our forges were going cold.
+  jest: EN: Alive… in the Lower City. I last saw a living man when our forges were going cold.
+
+[10_stan_gry.js:24#1]
+  było: PL: Stój, wędrowcze. Nie lękaj się, nie jestem jednym z nich.
+  jest: PL: Stój. Spokojnie, nie jestem jednym z nich.
+  było: EN: Halt, wanderer. Fear not, I am not one of them.
+  jest: EN: Hold. Easy. I'm not one of them.
+
+[10_stan_gry.js:24#2]
+  było: PL: Zakon splugawił wszystko, czemu przysięgałem. Ja wciąż pamiętam słowa przysięgi.
+  jest: PL: Zakon splugawił wszystko, na co przysięgałem. Słowa przysięgi pamiętam do dziś.
+  było: EN: The Holy Order defiled everything I swore to. I still remember the words of my oath.
+  jest: EN: The Holy Order fouled everything I swore to. I still remember the words.
+
+[10_stan_gry.js:24#3]
+  było: PL: Klęknij. Niech światło, którego tu już nie ma, przejdzie przez moje dłonie na ciebie.
+  jest: PL: Klęknij. Światła już tu nie ma. Co mi z niego zostało, przejdzie przez dłonie na ciebie.
+  było: EN: Kneel. May the light that no longer lives here pass through my hands into you.
+  jest: EN: Kneel. The light is gone from here. What's left of it passes from my hands to you.
+
+[10_stan_gry.js:24#4]
+  było: EN: Go. For three minutes no wound shall break you.
+  jest: EN: Go. For three minutes, no wound will break you.
+
+[10_stan_gry.js:25#1]
+  było: EN: Watch your step. The last one who surprised me lies over there in pieces.
+  jest: EN: Mind where you step. The last one to surprise me is over there, in pieces.
+
+[10_stan_gry.js:25#2]
+  było: EN: I am Mila. My sisters came down here for dwarven gold. Only I remain.
+  jest: EN: I'm Mila. My sisters came down here for dwarven gold. I'm what's left.
+
+[10_stan_gry.js:25#3]
+  było: EN: Words are cheap. Show me your worth: twenty dead in fifteen heartbeats.
+  jest: EN: Talk is cheap. Show me what you're worth: twenty dead in fifteen heartbeats.
+
+[10_stan_gry.js:25#4]
+  było: PL: Zaczynaj! Liczę.
+  jest: PL: Zaczynaj. Liczę.
+  było: EN: Begin! I am counting.
+  jest: EN: Begin. I'm counting.
+
+[10_stan_gry.js:25#5]
+  było: PL: Jeszcze raz? Dwudziestu martwych w piętnaście uderzeń serca. Zaczynaj!
+  jest: PL: Jeszcze raz? Dwudziestu martwych w piętnaście uderzeń serca. Zaczynaj.
+  było: EN: Once more? Twenty dead in fifteen heartbeats. Begin!
+  jest: EN: Again? Twenty dead in fifteen heartbeats. Begin.
+
+[10_stan_gry.js:26#1]
+  było: PL: Cicho... Nie jesteś strażnikiem. Strażnicy nie patrzą tak jak ty.
+  jest: PL: Cicho… Nie jesteś strażnikiem. Strażnicy nie patrzą tak jak ty.
+  było: EN: Quiet... You are no guard. Guards do not look at things the way you do.
+  jest: EN: Quiet… You're no guard. Guards don't look the way you do.
+
+[10_stan_gry.js:26#2]
+  było: PL: Spisywałem twoje długi przez dwadzieścia lat. Każdy rachunek, każdą nieopłaconą noc. Za to mnie tu zakuli.
+  jest: PL: Spisywałem twoje długi przez dwadzieścia lat. Każdy rachunek, każdą nieopłaconą noc. Raz się pomyliłem. Za to mnie zakuli.
+  było: EN: For twenty years I recorded your debts. Every bill, every unpaid night. That is why they chained me here.
+  jest: EN: Twenty years I kept your debts. Every bill, every night unpaid. I made one error. That's what they chained me for.
+
+[10_stan_gry.js:26#3]
+  było: EN: I know this ledger by heart. Let me slip you better cards before the guards return.
+  jest: EN: I know that ledger by heart. Let me slip you better cards before the guards come back.
+
+[10_stan_gry.js:27#1]
+  było: PL: Nie strzelaj. Rzuciłem służbę, zanim ta cytadela zdążyła mnie zjeść.
+  jest: PL: Nie strzelaj. Rzuciłem służbę, zanim ta Cytadela zdążyła mnie zjeść.
+  było: EN: Don't shoot. I deserted before this citadel could devour me.
+  jest: EN: Don't shoot. I quit the service before this Citadel could swallow me.
+
+[10_stan_gry.js:27#2]
+  było: EN: I carried out whatever I could. Amulets, seals, a few loans nobody ever recorded.
+  jest: EN: I carried out what I could. Amulets, seals, a few loans nobody put on the books.
+
+[10_stan_gry.js:27#3]
+  było: PL: Kram Margi ma ceny z księgi. Ja znam pewnego skarbnika. Tanio wyjdziesz.
+  jest: PL: Kram Margi ma ceny z księgi. Ja znam pewnego skarbnika. Wyjdzie cię taniej.
+  było: EN: Marga's stall charges ledger prices. I know a certain treasurer. You'll get it cheap.
+  jest: EN: Marga's stall charges book prices. I know a certain treasurer. You'll come out cheaper.
+
+[10_stan_gry.js:28#1]
+  było: EN: A seal, child. Every contract has one, and every life bears its stamp.
+  jest: EN: A seal, child. Every contract has one, and every life has its stamp.
+
+[10_stan_gry.js:28#2]
+  było: EN: I have been pressing them for a hundred years and I no longer remember what I sealed. Lately, I think, your sentence.
+  jest: EN: A hundred years I've been pressing them, and I no longer recall what I sealed. Most recently, I believe, your sentence.
+
+[10_stan_gry.js:29#1]
+  było: PL: Stój. Nie dobywaj miecza, nie jestem twoim wrogiem.
+  jest: PL: Stój. Nie dobywaj broni, nie jestem twoim wrogiem.
+  było: EN: Halt. Do not draw your sword, I am not your enemy.
+  jest: EN: Halt. Leave your blade where it is. I am not your enemy.
+
+[10_stan_gry.js:29#2]
+  było: EN: I am Heri, once standard-bearer of the royal guard. I swore loyalty to a crown that is no more.
+  jest: EN: I am Heri, once standard-bearer of the royal guard. I gave my oath to a crown that no longer exists.
+
+[10_stan_gry.js:29#3]
+  było: EN: Honour does not rot along with the city. As long as someone remembers it, it lives.
+  jest: EN: Honour does not rot with the city. While one man remembers it, it lives.
+
+[10_stan_gry.js:30#1]
+  było: PL: Ty... nosisz znak. Widzę, jak krwawi przez płaszcz.
+  jest: PL: Ty… nosisz znak. Widzę, jak krwawi przez płaszcz.
+  było: EN: You... bear the mark. I can see it bleeding through your cloak.
+  jest: EN: You… carry the mark. I can see it bleeding through your cloak.
+
+[10_stan_gry.js:30#2]
+  było: PL: Najpierw przyszedł zakon. Zamknęli ludzi w stodole i podpalili, żeby oczyścić wioskę.
+  jest: PL: Najpierw przyszedł Zakon. Spędzili ludzi do spichlerza i podpalili, żeby oczyścić wioskę.
+  było: EN: First came the Holy Order. They locked people in the barn and set it on fire to cleanse the village.
+  jest: EN: First came the Holy Order. They herded people into the granary and lit it, to cleanse the village.
+
+[10_stan_gry.js:30#3]
+  było: EN: And then our dead rose from the ashes. My daughter too. She still calls me by name.
+  jest: EN: Then our dead got up out of the ash. My daughter too. She still calls me by name.
+
+[10_stan_gry.js:30#4]
+  było: PL: Nie dożyję świtu. Kiedy wstanę... nie wahaj się.
+  jest: PL: Nie dożyję świtu. Kiedy wstanę… nie wahaj się.
+  było: EN: I will not live to see the dawn. When I rise... do not hesitate.
+  jest: EN: I won't see the dawn. When I get up… don't hesitate.
+
+[10_stan_gry.js:31#1]
+  było: PL: Hm. Piętnowany. Dawno nie widziałam żadnego żywego.
+  jest: PL: Hm. Naznaczony. Dawno nie widziałam żadnego żywego.
+  było: EN: Hm. Branded. I haven't seen a living one in a long time.
+  jest: EN: Hm. Branded. Been a long while since I saw one alive.
+
+[10_stan_gry.js:31#2]
+  było: EN: Gather gold from the corpses. The dead have no use for it, but I do.
+  jest: EN: Take the gold off the corpses. It's no use to the dead. It is to me.
+
+[10_stan_gry.js:31#3]
+  było: PL: O północy rozłożę kram. Za monety dostaniesz rzeczy, o których zakon woli milczeć.
+  jest: PL: O północy rozłożę kram. Za monety dostaniesz rzeczy, o których Zakon woli milczeć.
+  było: EN: At midnight I will set up my stall. For coin you'll get things the Holy Order would rather not speak of.
+  jest: EN: At midnight I set up my stall. Coin buys you things the Holy Order would rather not discuss.
+
+[10_stan_gry.js:31#4]
+  było: EN: Now go. They can already smell you.
+  jest: EN: Now go. They've already got your scent.
+
+[10_stan_gry.js:32#1]
+  było: PL: Najemniku... nie mam już siły. Posłuchaj, zanim odejdziesz.
+  jest: PL: Najemniku… nie mam już siły. Posłuchaj, zanim odejdziesz.
+  było: EN: Sellsword... I have no strength left. Listen before you go.
+  jest: EN: Sellsword… I've no strength left. Listen, before you go.
+
+[10_stan_gry.js:32#2]
+  było: PL: Spaliłem ludzi żywcem w ich domu. Dobijałem tych, którzy próbowali uciekać. Pilnowałem drzwi, żeby nikt nie wyszedł...
+  jest: PL: Spaliłem ludzi żywcem w spichlerzu. Dobijałem tych, którzy próbowali uciekać. Pilnowałem drzwi, żeby nikt nie wyszedł…
+  było: EN: I burned people alive in their home. I finished off those who tried to flee. I guarded the door so no one could get out...
+  jest: EN: I burned people alive in the granary. Finished off the ones who tried to run. Stood at the door so nobody got out…
+
+[10_stan_gry.js:32#3]
+  było: PL: To nie była moja decyzja. Ale rozkaz to rozkaz... Tak sobie wtedy mówiłem. Błagam, zabij mnie. Nie chcę już z tym żyć.
+  jest: PL: To nie była moja decyzja. Ale rozkaz to rozkaz… Tak sobie wtedy mówiłem. Błagam, zabij mnie. Nie chcę już z tym żyć.
+  było: EN: It was not my decision. But an order is an order... That is what I told myself back then. I beg you, kill me. I cannot live with this any longer.
+  jest: EN: It wasn't my decision. But orders are orders… That's what I told myself. I'm begging you, kill me. I don't want to live with it any more.
+
+[10_stan_gry.js:33#1]
+  było: PL: Nie podchodź do okna! Ach... ty żyjesz. I nie gnijesz. Rzadki widok w Złotogrodzie.
+  jest: PL: Nie podchodź do okna. Ach… ty żyjesz. I nie gnijesz. Rzadki widok w Złotogrodzie.
+  było: EN: Stay away from the window! Ah... you are alive. And not rotting. A rare sight in Goldheim.
+  jest: EN: Keep away from the window. Ah… you're alive. And not rotting. A rare sight in Goldheim.
+
+[10_stan_gry.js:33#2]
+  było: EN: Choirs once sang beneath the domes. Now all you hear is the poor scratching at our doors.
+  jest: EN: There were choirs under the domes once. Now all one hears is the poor scratching at our doors.
+
+[10_stan_gry.js:33#3]
+  było: EN: The rot came from the lower districts. We said it was punishment for the wretched. Then it bloomed on our children.
+  jest: EN: The rot came up from the lower quarters. We called it a judgement on the destitute. Then it flowered on our children.
+
+[10_stan_gry.js:33#4]
+  było: EN: Take this flask. It was meant for my husband. He no longer needs it.
+  jest: EN: Take this flask. It was for my husband. He has no need of it now.
+
+[10_stan_gry.js:34#1]
+  było: PL: Precz od mojego progu! Ach, najemnik. Ile chcesz za to, żebyś stał tu do rana?
+  jest: PL: Precz z mojego progu! Ach, najemnik. Ile chcesz za stanie tu do rana?
+  było: EN: Away from my doorstep! Ah, a sellsword. How much do you want to stand guard here until morning?
+  jest: EN: Off my doorstep! Ah, a sellsword. What's your price to stand here till morning?
+
+[10_stan_gry.js:34#2]
+  było: EN: Rot? It is a disease of the gutter. If the wretched washed their hands instead of begging, there would be no plague.
+  jest: EN: The rot? A disease of the street. If paupers washed their hands instead of holding them out, there'd be no plague.
+
+[10_stan_gry.js:34#4]
+  było: EN: Here, forty pieces of gold. Gold has always saved my house. It will save it this time too.
+  jest: EN: Here. Forty pieces of gold. Gold has always saved my house. It will save it now.
+
+[10_stan_gry.js:35#1]
+  było: EN: Are you a knight? Mother said knights would come when the bells rang.
+  jest: EN: Are you a knight? Mama said the knights would come when the bells rang.
+
+[10_stan_gry.js:35#2]
+  było: PL: Dzwony biły trzy noce temu. Same. Wtedy z wieży katedry zeszło coś ze skrzydłami.
+  jest: PL: Dzwony biły trzy noce temu. Same. Wtedy z wieży bazyliki zeszło coś ze skrzydłami.
+  było: EN: The bells rang three nights ago. By themselves. Then something with wings came down from the cathedral tower.
+  jest: EN: The bells rang three nights ago. On their own. That's when the thing with wings came down from the basilica tower.
+
+[10_stan_gry.js:35#3]
+  było: EN: It does not eat people. It collects them. I heard it counting, and then laughing.
+  jest: EN: It doesn't eat people. It collects them. I heard it counting, and then it laughed.
+
+[10_stan_gry.js:35#4]
+  było: EN: Take my medallion. Mother said it protects against evil. It did not protect me, but maybe you are luckier.
+  jest: EN: Take my medallion. Mama said it keeps evil away. It didn't keep it from me, but maybe you'll have better luck.
+
+[10_stan_gry.js:36#1]
+  było: PL: Nie bój się, synku. Ja tu tylko ziele warzę, a ty wyglądasz, jakbyś miał z niego skorzystać.
+  jest: PL: Nie bój się, synku. Ja tu tylko ziele warzę, a tobie, widzę, by się przydało.
+  było: EN: Don't be afraid, son. I only brew herbs here, and you look like you could use some.
+  jest: EN: Don't be afraid, son. I'm only boiling herbs here, and you look like you could do with some.
+
+[10_stan_gry.js:36#2]
+  było: EN: We fled Goldheim from the rot, and the forest greeted us with wolves. But the old herbs still grow where you know to look.
+  jest: EN: We ran from Goldheim and its rot, and the forest met us with wolves. But the old herbs still grow where they always did, if you know to look.
+
+[10_stan_gry.js:36#3]
+  było: EN: Drink. Bitter, but it will seal your wounds. Just don't ask what it's made of.
+  jest: EN: Drink. It's bitter, but it'll close your wounds. Just don't ask what's in it.
+
+[10_stan_gry.js:37#2]
+  było: EN: I have been tracking them for three days. This is no ordinary pack. Something leads them, something that walks on two legs and bears antlers.
+  jest: EN: Three days I've tracked them. That's no ordinary pack. Something leads it. Walks on two legs. Wears antlers.
+
+[10_stan_gry.js:37#3]
+  było: PL: Daj, narysuję ci w błocie, którędy chodzą. I gdzie stoją Sycące Kociołki, póki zakon ich nie spalił.
+  jest: PL: Daj, narysuję ci w błocie, którędy chodzą. I gdzie stoją Sycące Kociołki, póki Zakon ich nie spalił.
+  było: EN: Here, I will draw in the mud where they roam. And where the Nourishing Cauldrons stand, before the Holy Order burns them.
+  jest: EN: Here, I'll draw you their runs in the mud. And where the Nourishing Cauldrons stand, while the Holy Order hasn't burned them yet.
+
+[10_stan_gry.js:38#1]
+  było: PL: Naznaczony. Czuję twoje piętno, jak dym czuć przed burzą.
+  jest: PL: Naznaczony. Czuję twoje Piętno, jak dym czuć przed burzą.
+  było: EN: Marked one. I can sense your Brand, the way you smell smoke before a storm.
+  jest: EN: Branded one. I smell your Brand the way you smell smoke before a storm.
+
+[10_stan_gry.js:38#2]
+  było: EN: The Holy Order beheaded my brothers beneath this oak, and the gods were silent. But the old power still flows through the roots.
+  jest: EN: The Holy Order beheaded my brothers under this oak, and the gods said nothing. But the old power still runs in the roots.
+
+[10_stan_gry.js:38#3]
+  było: EN: I can give you a share of it: your weapon will remember twice as much. You will pay in blood. One fifth of your life, until dawn.
+  jest: EN: I can give you a share of it: your weapon will remember twice as much. You pay in blood. One fifth of your life, until dawn.
+
+[11_dwoch_graczy_gracz.js:174#33]
+  było: EN: Nightmare
+  jest: EN: Night Hag
+
+[11_dwoch_graczy_gracz.js:177#3]
+  było: EN: The Outgrowth
+  jest: EN: The Conjoined
+
+[11_dwoch_graczy_gracz.js:177#6]
+  było: EN: OBDYP, The Shaggy Core of the Abyss
+  jest: EN: OBDYP, the Shaggy Core of the Abyss
+
+[11_dwoch_graczy_gracz.js:178#3]
+  było: EN: Arch-Judge Auditor
+  jest: EN: Arch-Judge Reckoner
+
+[11_dwoch_graczy_gracz.js:243#1]
+  było: PL: Sycący Kociołek zapamiętuje twoje piętno. Tej nocy powrócisz raz. Odrodzenie kosztuje połowę doświadczenia postaci otrzymanego za noc. Monety zostaną w miejscu śmierci.
+  jest: PL: Sycący Kociołek zapamiętuje twoje Piętno. Tej nocy powrócisz raz. Odrodzenie kosztuje połowę doświadczenia postaci otrzymanego za noc. Monety zostaną w miejscu śmierci.
+
+[11_dwoch_graczy_gracz.js:254#1]
+  było: PL: „To nie była moja decyzja. Ale rozkaz to rozkaz... Tak sobie wtedy mówiłem. Błagam, zabij mnie. Nie chcę już z tym żyć”. Co postanawiasz?
+  jest: PL: „To nie była moja decyzja. Ale rozkaz to rozkaz… Tak sobie wtedy mówiłem. Błagam, zabij mnie. Nie chcę już z tym żyć”. Co postanawiasz?
+  było: EN: "It was not my decision. But an order is an order... That is what I told myself back then. I beg you, kill me. I cannot live with this any longer." What do you decide?
+  jest: EN: "It wasn't my decision. But orders are orders… That's what I told myself. I'm begging you, kill me. I don't want to live with it any more." What do you decide?
+
+[12_walka.js:30#2]
+  było: PL: Lekki cios: −8% staminy i −6% czasu powrotu za poziom.
+  jest: PL: Szybki atak: −8% staminy i −6% czasu powrotu za poziom.
+
+[12_walka.js:36#2]
+  było: PL: Co 6., 4. lub 3. trafienie lekkim ciosem (poz. 1–3) wypuszcza falę (60% obrażeń).
+  jest: PL: Co 6., 4. lub 3. trafienie szybkim atakiem (poz. 1–3) wypuszcza falę (60% obrażeń).
+
+[12_walka.js:138#3]
+  było: PL: 30 staminy, odnowienie ${LEAP.cooldown[L-1]} s. Skok o 3 pola w stronę celowania, ponad wrogami; nietykalność w locie. Przy lądowaniu najbliższy wróg dostaje ${Math.round(LEAP.mul[L-1]*100)}% ciężkiego ciosu, pozostali w pobliżu są odepchnięci o 1 pole i ogłuszeni na 0,5 s (bossów nie odpycha). Zatrzymuje się na ścianach.
+  jest: PL: 30 staminy, odnowienie ${LEAP.cooldown[L-1]} s. Skok o 3 pola w stronę celowania, ponad wrogami; nietykalność w locie. Przy lądowaniu najbliższy wróg dostaje ${Math.round(LEAP.mul[L-1]*100)}% silnego ataku, pozostali w pobliżu są odepchnięci o 1 pole i ogłuszeni na 0,5 s (bossów nie odpycha). Zatrzymuje się na ścianach.
+  było: EN: 30 stamina, cooldown ${LEAP.cooldown[L-1]} s. Leap 3 tiles toward your aim, flying over enemies; invulnerable while airborne. On landing the nearest enemy takes ${Math.round(LEAP.mul[L-1]*100)}% of a heavy blow, other nearby enemies are pushed 1 tile and stunned for 0.5 s (bosses are not pushed). Stops at walls.
+  jest: EN: 30 stamina, cooldown ${LEAP.cooldown[L-1]} s. Leap 3 tiles toward your aim, flying over enemies; invulnerable while airborne. On landing the nearest enemy takes ${Math.round(LEAP.mul[L-1]*100)}% of a heavy attack, other nearby enemies are pushed 1 tile and stunned for 0.5 s (bosses are not pushed). Stops at walls.
+
+[12_walka.js:143#3]
+  było: PL: Naładowany ciężki cios (przytrzymaj lekki atak): +${20+10*L} przełamania postawy bossa. Zwykły wróg: odrzut i ogłuszenie ${(.6+.15*L).toFixed(2).replace('.',',')} s.
+  jest: PL: Naładowany silny atak (przytrzymaj szybki atak): +${20+10*L} przełamania postawy bossa. Zwykły wróg: odrzut i ogłuszenie ${(.6+.15*L).toFixed(2).replace('.',',')} s.
+
+[12_walka.js:144#3]
+  było: PL: Po udanym parowaniu następny ciężki cios (do 2 s): +${10*L}% obrażeń. Przepada przy pudle.
+  jest: PL: Po udanym parowaniu następny silny atak (do 2 s): +${10*L}% obrażeń. Przepada przy pudle.
+
+[12_walka.js:146#3]
+  było: PL: 30 many, bez odnowienia. Cienista kopia bohatera na ${[6,7,8][L-1]} s. Biegnie do najbliższego wroga i powtarza twoje lekkie i ciężkie ciosy. Obrażenia kopii: ${[50,55,60][L-1]}% twoich. Riposta odbija się jako ×1,5. Bez efektów ostrza i bez leczenia.
+  jest: PL: 30 many, bez odnowienia. Cienista kopia bohatera na ${[6,7,8][L-1]} s. Biegnie do najbliższego wroga i powtarza twoje szybkie i silne ataki. Obrażenia kopii: ${[50,55,60][L-1]}% twoich. Riposta odbija się jako ×1,5. Bez efektów ostrza i bez leczenia.
+  było: EN: 30 mana, no cooldown. Shadow copy of the hero for ${[6,7,8][L-1]} s. Runs to the nearest enemy and repeats your light and heavy blows. Copy damage: ${[50,55,60][L-1]}% of yours. Riposte echoes at ×1.5. No blade effects or healing.
+  jest: EN: 30 mana, no cooldown. Shadow copy of the hero for ${[6,7,8][L-1]} s. Runs to the nearest enemy and repeats your light and heavy attacks. Copy damage: ${[50,55,60][L-1]}% of yours. Riposte echoes at ×1.5. No blade effects or healing.
+
+[12_walka.js:170#3]
+  było: PL: ${FAN.cost} staminy, odnowienie ${FAN.cooldown[L-1]} s. Rzut 3 wirujących sierpów w stożku 45°; każdy przebija do 3 wrogów i zadaje ${Math.round(FAN.dmgPct[L-1]*100)}% lekkiego ciosu.
+  jest: PL: ${FAN.cost} staminy, odnowienie ${FAN.cooldown[L-1]} s. Rzut 3 wirujących sierpów w stożku 45°; każdy przebija do 3 wrogów i zadaje ${Math.round(FAN.dmgPct[L-1]*100)}% szybkiego ataku.
+  było: EN: ${FAN.cost} stamina, cooldown ${FAN.cooldown[L-1]} s. Throw 3 spinning crescents in a 45° cone; each pierces up to 3 enemies and deals ${Math.round(FAN.dmgPct[L-1]*100)}% of a light blow.
+  jest: EN: ${FAN.cost} stamina, cooldown ${FAN.cooldown[L-1]} s. Throw 3 spinning crescents in a 45° cone; each pierces up to 3 enemies and deals ${Math.round(FAN.dmgPct[L-1]*100)}% of a light attack.
+
+[12_walka.js:171#3]
+  było: PL: ${LDANCE.cost} staminy, odnowienie ${LDANCE.cooldown[L-1]} s. Przez ${LDANCE.dur} s: +20% szybkości ataków${L>1?` i +${7*(L-1)}% obrażeń lekkich ciosów`:''}, ale otrzymujesz +20% obrażeń.
+  jest: PL: ${LDANCE.cost} staminy, odnowienie ${LDANCE.cooldown[L-1]} s. Przez ${LDANCE.dur} s: +20% szybkości ataków${L>1?` i +${7*(L-1)}% obrażeń szybkich ataków`:''}, ale otrzymujesz +20% obrażeń.
+  było: EN: ${LDANCE.cost} stamina, cooldown ${LDANCE.cooldown[L-1]} s. For ${LDANCE.dur} s: +20% attack speed${L>1?` and +${7*(L-1)}% light blow damage`:''}, but you take +20% damage.
+  jest: EN: ${LDANCE.cost} stamina, cooldown ${LDANCE.cooldown[L-1]} s. For ${LDANCE.dur} s: +20% attack speed${L>1?` and +${7*(L-1)}% light attack damage`:''}, but you take +20% damage.
+
+[13_wrogowie.js:65#1]
+  było: PL: Pierwsze serce Strzygi pęka. Ale ona ma dwie dusze...
+  jest: PL: Pierwsze serce Strzygi pęka. Ale ona ma dwie dusze…
+  było: EN: The Striga's first heart bursts. But she has two souls...
+  jest: EN: The Striga's first heart bursts. But she has two souls…
+
+[13_wrogowie.js:99#1]
+  było: PL: Pani Lasu rozsypuje się w liście i strzępy. Zostaje po niej garść monet topielców.
+  jest: PL: Pani Lasu rozsypuje się w liście. Zostaje garść monet po tych, co tylko tędy przechodzili.
+  było: EN: The Lady of the Forest crumbles into leaves and rags. All that remains is a handful of drowned men's coins.
+  jest: EN: The Lady of the Forest crumbles into leaves. What is left is a handful of coins from those who were only passing through.
+
+[13_wrogowie.js:100#1]
+  było: EN: ${CH===5?'The Arch-Judge Auditor falls':'The Collector falls'}. Your gold returns to you: ${total} coins.
+  jest: EN: ${CH===5?'The Arch-Judge Reckoner falls':'The Collector falls'}. Your gold returns to you: ${total} coins.
+
+[13_wrogowie.js:110#2]
+  było: EN: Morhad falls onto the golden flagstones. The blood of his victims will flow from him for a long time.
+  jest: EN: Morhad falls onto the golden flagstones. His victims' blood will be a long time draining out of him.
+
+[13_wrogowie.js:110#5]
+  było: EN: The Outgrowth falls. Its faces are still whispering.
+  jest: EN: The Conjoined falls. Its faces are still whispering.
+
+[13_wrogowie.js:456#1]
+  było: EN: OBDYP, The Shaggy Core of the Abyss, rolls out of the darkness!
+  jest: EN: OBDYP, the Shaggy Core of the Abyss, rolls out of the darkness!
+
+[13_wrogowie.js:471#1]
+  było: EN: The Creditors' Citadel. Seat of the Holy Order, where every debt is written in the ledgers.
+  jest: EN: The Creditors' Citadel. Seat of the Holy Order, where every debt has been entered in the ledgers.
+
+[13_wrogowie.js:473#1]
+  było: EN: In the chancery, the scribes whisper your name and the size of your debt.
+  jest: EN: In the Chancery, the scribes whisper your name and the sum you owe.
+
+[13_wrogowie.js:474#1]
+  było: EN: The clank of shackles rises from the dungeons. The debtors sense they will be next.
+  jest: EN: Shackles clank in the dungeons. The debtors can tell their turn is coming.
+
+[13_wrogowie.js:501#1]
+  było: PL: Wychodzisz na powierzchnię. Upadły Złotogród: złote kopuły nad miastem, które gnije.
+  jest: PL: Winda wynosi cię na powierzchnię. Upadły Złotogród: złote kopuły nad miastem, które gnije.
+  było: EN: You emerge on the surface. Fallen Goldheim: golden domes above a city that is rotting.
+  jest: EN: The lift carries you to the surface. Fallen Goldheim: golden domes above a city that is rotting.
+
+[13_wrogowie.js:510#1]
+  było: PL: Nad kopułami coś ogromnego łopocze skrzydłami. Dzwony katedry zaczynają bić same.
+  jest: PL: Nad kopułami coś ogromnego łopocze skrzydłami. Dzwony bazyliki zaczynają bić same.
+  było: EN: Something enormous beats its wings above the domes. The cathedral bells begin to ring by themselves.
+  jest: EN: Something enormous beats its wings above the domes. The basilica bells begin to ring by themselves.
+
+[13_wrogowie.js:512#1]
+  było: EN: You descend into the Lower City. There has never been sun here.
+  jest: EN: You descend into the Lower City. The sun has never reached here.
+
+[14_umiejetnosci.js:38#1]
+  było: PL: Koszt lekkiego ciosu
+  jest: PL: Koszt szybkiego ataku
+
+[14_umiejetnosci.js:50#3]
+  było: PL:  Od poz. 3: ciężki cios rozbija mróz i spowalnia sąsiadów.
+  jest: PL:  Od poz. 3: silny atak rozbija mróz i spowalnia sąsiadów.
+
+[14_umiejetnosci.js:120#1]
+  było: EN: The priest is waiting. Speak to him again if you accept the pact.
+  jest: EN: The priest is waiting. Speak to him again if you accept the bargain.
+
+[14_umiejetnosci.js:123#1]
+  było: EN: The scribe tears a page from the register. +3 free card rerolls.
+  jest: EN: The scribe tears a page from the ledger. +3 free card rerolls.
+
+[14_umiejetnosci.js:209#4]
+  było: PL: Wrota kuźni rozwierają się z jękiem.
+  jest: PL: Wrota windy rozwierają się z jękiem.
+  było: EN: The forge gates groan open.
+  jest: EN: The lift gates groan open.
+
+[15_etapy.js:24#1]
+  było: EN: The bell falls silent. The Arch-Judge Auditor takes the judge's bench. He has come for your gold.
+  jest: EN: The bell falls silent. The Arch-Judge Reckoner takes the judge's bench. He has come for your gold.
+
+[15_etapy.js:29#3]
+  było: PL: Na Łysej Górze ziemia pęka. Z kurhanu wypełza Zrost, zszyty z ciał pogrzebanych.
+  jest: PL: Na Łysej Górze ziemia pęka. Z kurhanu wypełza Zrost, zrośnięty z ciał pogrzebanych.
+  było: EN: The ground splits on Bleak Peak. The Outgrowth crawls out of the barrow, stitched together from buried bodies.
+  jest: EN: The ground splits on Bleak Peak. The Conjoined crawls out of the barrow, fused from buried bodies.
+
+[15_etapy.js:29#4]
+  było: PL: Z popiołów stodoły wstaje Zrost, zszyty z ciał spalonych.
+  jest: PL: Z popiołów spichlerza wstaje Zrost, zrośnięty z ciał spalonych.
+  było: EN: The Outgrowth rises from the ashes of the barn, stitched together from burned bodies.
+  jest: EN: The Conjoined rises from the ashes of the granary, fused from the bodies of the burned.
+
+[15_etapy.js:29#5]
+  było: PL: Z przepaści wstaje Cumlin, Opętany Król Krasnoludów. Ocieka krwią i sypie złotem.
+  jest: PL: Zza Wielkiej Wagi wychodzi Cumlin, Opętany Król Krasnoludów. Żarzą się w nim pieczęcie.
+  było: EN: Cumlin, the Possessed Dwarf King, rises from the abyss, dripping blood and shedding gold.
+  jest: EN: Cumlin, the Possessed Dwarf King, steps out from behind the Great Scales, the seals in him glowing.
+
+[15_etapy.js:29#6]
+  było: PL: Z przepaści wypełza Zrost, zszyty z wielu ciał.
+  jest: PL: Z przepaści wypełza Zrost, zrośnięty z wielu ciał.
+  było: EN: The Outgrowth crawls out of the abyss, stitched together from many bodies.
+  jest: EN: The Conjoined crawls out of the abyss, fused from many bodies.
+
+[15_etapy.js:29#7]
+  było: PL: Z dachu katedry spada Morhad, Bestia Tysiąca Rzezi, ociekając krwią zabitych.
+  jest: PL: Z wieży bazyliki spada Morhad, Bestia Tysiąca Rzezi. Przyszedł wpisać cię w fundamenty.
+  było: EN: Morhad, Beast of a Thousand Slaughters, drops from the cathedral roof, dripping with the blood of the slain.
+  jest: EN: Morhad, Beast of a Thousand Slaughters, drops from the basilica tower. He has come to enter you in the foundations.
+
+[15_etapy.js:44#1]
+  było: PL: Marga: „Schody prowadzą na górę. Noc na ciebie poczeka.”
+  jest: PL: Marga: „Schody prowadzą na górę. Noc na ciebie poczeka”.
+
+[15_etapy.js:44#2]
+  było: PL: Marga: „Uważaj. Poborca zakonu zwęszył twoje złoto.”
+  jest: PL: Marga: „Uważaj. Poborca Zakonu zwęszył twoje złoto”.
+  było: EN: Marga: "Careful. The Order's collector has sniffed out your gold."
+  jest: EN: Marga: "Careful. The Order Collector has caught the scent of your gold."
+
+[15_etapy.js:101#2]
+  było: EN: You found a note: „${n.t}”. Read it in the Chronicle.
+  jest: EN: You found a note: “${n.t}”. Read it in the Chronicle.
+
+[16_krypta.js:3#1]
+  było: PL: Ze stosu kości w głębi sali wstaje Zrost, zszyty z ciał pogrzebanych w krypcie.
+  jest: PL: Ze stosu kości w głębi sali wstaje Zrost, zrośnięty z ciał pogrzebanych w krypcie.
+  było: EN: The Outgrowth rises from a pile of bones deep in the hall, stitched together from the bodies buried in the crypt.
+  jest: EN: The Conjoined rises from a pile of bones deep in the hall, fused from the bodies buried in the crypt.
+
+[16_krypta.js:43#1]
+  było: PL: Krypta milknie. Na twoje konto wpada 150 monet. Schody w głębi sali prowadzą na górę.
+  jest: PL: Krypta milknie. Do twojej sakwy wpada 150 monet. Schody w głębi sali prowadzą na górę.
+
+[19_hud.js:11#7]
+  było: EN: Arch-Judge Auditor!
+  jest: EN: Arch-Judge Reckoner!
+
+[19_hud.js:11#13]
+  było: EN: Defeat the Outgrowth
+  jest: EN: Defeat the Conjoined
+
+[19_hud.js:12#1]
+  było: EN: OBDYP, The Shaggy Core of the Abyss
+  jest: EN: OBDYP, the Shaggy Core of the Abyss
+
+[19_hud.js:12#2]
+  było: EN: ${CH===5?'Arch-Judge Auditor':'Order Collector'} · stole ${boss.stolen} coins
+  jest: EN: ${CH===5?'Arch-Judge Reckoner':'Order Collector'} · stole ${boss.stolen} coins
+
+[19_hud.js:12#10]
+  było: EN: The Outgrowth
+  jest: EN: The Conjoined
+
+[19_hud.js:26#1]
+  było: EN: Witch's brew, healing · ${mm(S.herb)}
+  jest: EN: Whisperer's brew, healing · ${mm(S.herb)}
+
+[21_muzyka.js:133#1]
+  było: PL: Zakon oddał Nocy sumienie. Cytadela Wierzycieli nie stoi na skale, tylko na księgach: każdy dług Krainy, każde spalone dziecko i każda wyrwana moneta zostały tu zapisane, zanim ktokolwiek zdążył krzyknąć.
+  jest: PL: Zakon nie dał zastawu. Oddał Nocy sumienie. Cytadelę Wierzycieli podmurowano księgami: każdy dług Krainy, każde spalone dziecko i każdą wydartą monetę zapisano tu, zanim ktokolwiek zdążył krzyknąć.
+  było: EN: The Holy Order gave its conscience to the Night. The Creditors' Citadel does not stand on rock, but on ledgers: every debt of the Land, every burned child and every coin torn away was written down here before anyone could scream.
+  jest: EN: The Holy Order pledged nothing. It gave the Night its conscience. The Creditors' Citadel is footed on ledgers: every debt of the Land, every burned child, every coin torn from a hand was entered here before anyone had time to scream.
+
+[21_muzyka.js:133#2]
+  było: PL: Mury są z czarnego kamienia, a w witrażach płoną sceny egzekucji. Na dziedzińcu skrzypi szubienica, z której nikt nie zdejmuje ciał. Wiatr przewraca strony rozrzucone po bruku, a na każdej widnieje twoje imię.
+  jest: PL: Mury są z czarnego kamienia, a w witrażach płoną sceny egzekucji. Na dziedzińcu skrzypi szubienica, z której nikt nie zdejmuje ciał. Wiatr przewraca kartki rozrzucone po bruku. Na każdej jest twoje imię.
+  było: EN: The walls are black stone, and scenes of executions burn in the stained glass. In the courtyard a gallows creaks, and no one takes the bodies down. The wind turns pages scattered on the cobbles, and every one bears your name.
+  jest: EN: The walls are black stone, and executions burn in the stained glass. A gallows creaks in the Courtyard; no one cuts the bodies down. The wind turns loose pages on the cobbles. Your name is on every one.
+
+[21_muzyka.js:133#3]
+  było: EN: In the chancery the scribes are still writing, though the ink turned to blood long ago. The Courtroom awaits the next trial, in the treasury the gold counts itself, and in the dungeons rattle the chains of those who did not pay in time.
+  jest: EN: In the Chancery the scribes write on, though the ink turned to blood long ago. The Courtroom awaits its next hearing, in the Treasury the gold counts itself, and in the dungeons rattle the chains of those who ran out of time to pay.
+
+[21_muzyka.js:133#4]
+  było: PL: Arcysędzia Rachmistrz nie podnosi głosu. Czyta wyrok jak rachunek i zawsze ściąga należność do ostatniej monety. Dalej, na końcu tej drogi, stoi tron, a na nim ten, który wpisał twoje piętno jako pierwsze.
+  jest: PL: Arcysędzia Rachmistrz nie podnosi głosu. Czyta wyrok jak rachunek i zawsze ściąga należność do ostatniej monety. Dalej, na końcu tej drogi, stoi tron, a na nim ten, który jako pierwszy wpisał twoje Piętno.
+  było: EN: The Arch-Judge Auditor never raises his voice. He reads a sentence like a bill and always collects to the last coin. Further on, at the end of this road, stands a throne, and on it the one who was first to record your Brand.
+  jest: EN: The Arch-Judge Reckoner never raises his voice. He reads a sentence like an invoice and collects to the last coin. Beyond him, where this road ends, stands a throne, and on it the one who first entered your Brand.
+
+[21_muzyka.js:133#5]
+  było: PL: Cztery zastawy spłacone, został ostatni. Piętno bije w rytmie dzwonu, a księgi się otwierają. Wierzyciel przyszedł po resztę.
+  jest: PL: Cztery zastawy spłacone. Został Pierwszy Wpis. Piętno bije w rytmie dzwonu, a księgi się otwierają. Wierzyciel przyszedł po resztę.
+  było: EN: Four pledges repaid, one remains. The Brand beats to the rhythm of the bell, and the ledgers open. The Creditor has come for the rest.
+  jest: EN: Four pledges repaid. The First Entry remains. The Brand beats to the rhythm of the bell, and the ledgers open. The Creditor has come for the balance.
+
+[22_postac_zapis_ustawienia.js:26#1]
+  było: PL: Zatute Klingi
+  jest: PL: Zatrute Klingi
+
+[22_postac_zapis_ustawienia.js:55#2]
+  było: PL: Zabij 25 wrogów pierwszym lekkim ciosem wyprowadzonym w 0,8 s po uniku.
+  jest: PL: Zabij 25 wrogów pierwszym szybkim atakiem wyprowadzonym w 0,8 s po uniku.
+  było: EN: Kill 25 enemies with the first light blow struck within 0.8 s after a dodge.
+  jest: EN: Kill 25 enemies with the first light attack made within 0.8 s after a dodge.
+
+[22_postac_zapis_ustawienia.js:66#2]
+  było: PL: Zabij 15 wrogów jednym silnym ciosem, gdy mieli pełne zdrowie.
+  jest: PL: Zabij 15 wrogów jednym silnym atakiem, gdy mieli pełne zdrowie.
+  było: EN: Kill 15 enemies with a single heavy blow while they were at full health.
+  jest: EN: Kill 15 enemies with a single heavy attack while they were at full health.
+
+[22_postac_zapis_ustawienia.js:210#1]
+  było: EN: Unlocks after clearing Chapter I
+  jest: EN: Unlocks after clearing Act I
+
+[22_postac_zapis_ustawienia.js:251#1]
+  było: PL: Słońce wstaje nad zgliszczami Spalonej Osady. Pod spaloną kaplicą widzisz schody prowadzące w dół, do Dolnego Miasta.
+  jest: PL: Słońce wstaje nad zgliszczami Spalonej Osady. Pod zawalonym spichlerzem zieje stary szyb. Prowadzi w dół, do Dolnego Miasta.
+  było: EN: The sun rises over the ashes of the Scorched Settlement. Beneath the burned chapel you see stairs leading down, into the Lower City.
+  jest: EN: The sun comes up over the wreck of the Scorched Settlement. Under the fallen granary gapes an old shaft. It leads down, into the Lower City.
+
+[22_postac_zapis_ustawienia.js:251#2]
+  było: PL: Wrota na powierzchnię rozwierają się z jękiem. Za tobą, w głębi pod lawą, coś ogromnego otwiera oczy.
+  jest: PL: Wrota windy rozwierają się z jękiem. Łańcuchy ruszają. Za tobą, w głębi pod lawą, coś ogromnego otwiera oczy.
+  było: EN: The gates to the surface groan open. Behind you, deep beneath the lava, something enormous opens its eyes.
+  jest: EN: The lift gates groan open. The chains begin to move. Behind you, deep beneath the lava, something enormous opens its eyes.
+
+[22_postac_zapis_ustawienia.js:251#3]
+  było: PL: Rejestr Wierzyciela płonie. Pieczęcie pękają jedna po drugiej, a w Cytadeli po raz pierwszy robi się cicho.
+  jest: PL: Pierwszy Wpis płonie. Pieczęcie pękają jedna po drugiej, a w Cytadeli po raz pierwszy robi się cicho.
+  było: EN: The Creditor's ledger burns. The seals crack one after another, and for the first time the Citadel falls silent.
+  jest: EN: The First Entry burns. The seals crack one after another, and for the first time the Citadel falls silent.
+
+[22_postac_zapis_ustawienia.js:251#4]
+  było: PL: Mgła opada w dolinach. Na Łysej Górze dogasają ogniska, a w kurhanach znów jest cicho. Na razie.
+  jest: PL: Mgła opada. Na Łysej Górze dogasają ogniska, kurhany milkną. Ścieżka na północ pierwszy raz nie zawraca.
+  było: EN: The mist settles in the valleys. The fires on Bleak Peak die down, and the barrows are quiet again. For now.
+  jest: EN: The mist settles. The fires on Bleak Peak die down, the barrows go quiet. For once, the path north does not turn back.
+
+[22_postac_zapis_ustawienia.js:251#5]
+  było: PL: Bestia leży martwa u stóp katedry. Dzwony biją dalej, choć nikt ich nie porusza. Złoto kopuł nie grzeje.
+  jest: PL: Morhad leży martwy pod bazyliką. Dzwony milkną, a gdzieś w dole pęka pierwszy filar. Złoto kopuł nie grzeje.
+  było: EN: The beast lies dead at the foot of the cathedral. The bells keep ringing, though no one moves them. The gold of the domes gives no warmth.
+  jest: EN: Morhad lies dead beneath the basilica. The bells fall silent, and somewhere below the first pillar cracks. The gold of the domes gives no warmth.
+
+[22_postac_zapis_ustawienia.js:268#1]
+  było: PL: Lekkie ciosy
+  jest: PL: Szybkie ataki
+  było: EN: Light blows
+  jest: EN: Light attacks
+
+[22_postac_zapis_ustawienia.js:268#2]
+  było: PL: Ciężkie ciosy
+  jest: PL: Silne ataki
+  było: EN: Heavy blows
+  jest: EN: Heavy attacks
+
+[22_postac_zapis_ustawienia.js:384#2]
+  było: EN: Heavy attack +50% damage, quick attack −30%.
+  jest: EN: Heavy attack +50% damage, light attack −30%.
+
+[BEAST_D:knight]
+  było: EN: Sworn to the Order and loyal even in death. A tough foe that punishes careless swings.
+  jest: EN: Sworn to the Holy Order, loyal even in death. A tough foe that punishes careless swings.
+
+[BEAST_D:shieldman]
+  było: PL: Zasłania się tarczą przed lekkimi ciosami, które tracą połowę siły. Rozbij go silnym atakiem.
+  jest: PL: Zasłania się tarczą przed szybkimi atakami, które tracą połowę siły. Rozbij go silnym atakiem.
+  było: EN: Hides behind a shield that halves light blows. Break him with a heavy attack.
+  jest: EN: Hides behind a shield that halves light attacks. Break him with a heavy attack.
+
+[BEAST_D:strzygon]
+  było: PL: Pół-człowiek, pół-upiór z Łysej Góry. Skacze na ofiarę z daleka, szybko i nisko.
+  jest: PL: Pół człowiek, pół upiór z Łysej Góry. Skacze na ofiarę z daleka, szybko i nisko.
+  było: EN: Half man, half revenant from Bleak Peak. Leaps at its prey from afar, fast and low.
+  jest: EN: Half man, half wraith from Bleak Peak. Leaps at its prey from afar, fast and low.
+
+[BEAST_D:guard]
+  było: PL: Strażnik Cytadeli, który pilnuje długów nawet po śmierci. Solidny, typowy przeciwnik piechoty.
+  jest: PL: Strażnik Cytadeli, który pilnuje długów nawet po śmierci. Solidny piechur, nic więcej.
+
+[BEAST_D:scribe]
+  było: EN: A scribe of the Order who hurls payment summonses at you. Attacks from range.
+  jest: EN: A scribe of the Holy Order who hurls demands for payment at you. Attacks from range.
+
+[BEAST_D:arbiter]
+  było: EN: Keeper of the Order's seals. Almost impossible to knock back, so don't rely on pushing him away.
+  jest: EN: Keeper of the Holy Order's seals. Almost impossible to knock back, so don't count on pushing him away.
+
+[23_instrukcja_sterowanie.js:10#2]
+  było: PL: Jesteś piętnowanym najemnikiem w świecie, w którym noc wypuściła martwych. Każdy rozdział to jedna <b>noc</b>: przetrwaj do świtu, zbieraj siłę i pokonaj bossa, który wstaje na końcu. Walczysz sam przeciwko coraz większej fali wrogów, a wygrywasz mądrym wyborem ulepszeń i ruchem, nie samym klikaniem.
+  jest: PL: Jesteś najemnikiem z Piętnem w świecie, w którym Noc wypuściła martwych. Każdy rozdział to jedna <b>noc</b>: przetrwaj do świtu, zbieraj siłę i pokonaj bossa, który wstaje na końcu. Walczysz sam przeciwko rosnącej fali wrogów, a wygrywasz mądrym wyborem ulepszeń i ruchem, nie samym klikaniem.
+  było: EN: You are a branded sellsword in a world where the night has unleashed the dead. Each act is one <b>night</b>: survive until dawn, gather strength and defeat the boss who rises at the end. You fight alone against an ever-growing wave of enemies, and you win through smart upgrade choices and movement, not just clicking.
+  jest: EN: You are a branded sellsword in a world where the Night has loosed the dead. Each act is one <b>night</b>: survive until dawn, gather strength and kill the boss that rises at the end. You fight alone against an ever-growing tide of enemies, and you win by choosing upgrades well and moving well, not by clicking alone.
+
+[23_instrukcja_sterowanie.js:11#5]
+  było: EN: In acts I–III, the <b>Order Collector</b> appears after midnight. He steals gold, so it pays to kill him. In act IV, Leshy waits in his place, and in act V the Arch-Judge Auditor.
+  jest: EN: In acts I–III, the <b>Order Collector</b> appears after midnight. He steals gold, so it pays to kill him. In act IV, Leshy waits in his place, and in act V the Arch-Judge Reckoner.
+
+[23_instrukcja_sterowanie.js:12#2]
+  było: EN: <b>I · The Scorched Settlement</b>: a village, a cemetery and the crypt beneath it. Boss: The Outgrowth.
+  jest: EN: <b>I · The Scorched Settlement</b>: a village, a cemetery and the crypt beneath it. Boss: The Conjoined.
+
+[23_instrukcja_sterowanie.js:12#6]
+  było: EN: <b>V · The Creditors' Citadel</b>: seat of the Holy Order. Bosses: the Arch-Judge Auditor and the Creditor.
+  jest: EN: <b>V · The Creditors' Citadel</b>: seat of the Holy Order. Bosses: the Arch-Judge Reckoner and the Creditor.
+
+[23_instrukcja_sterowanie.js:15#1]
+  było: PL: <b>Lekki cios</b> (J lub lewy przycisk myszy): szybki, łączy się w <b>serię trzech ciosów</b>. Trzeci cios jest najmocniejszy i najmocniej ogłusza.
+  jest: PL: <b>Szybki atak</b> (J lub lewy przycisk myszy): łączy się w <b>serię trzech ciosów</b>. Trzeci cios jest najmocniejszy i najmocniej ogłusza.
+
+[23_instrukcja_sterowanie.js:15#2]
+  było: PL: <b>Ciężki cios</b> (K lub przytrzymaj atak): wolniejszy, ale mocny i bardzo ogłusza.
+  jest: PL: <b>Silny atak</b> (K lub przytrzymaj atak): wolniejszy, ale mocny i bardzo ogłusza.
+
+[23_instrukcja_sterowanie.js:15#3]
+  było: PL: <b>Blok</b> (L lub prawy przycisk myszy): zmniejsza obrażenia, ale kosztuje staminę. Jeśli stamina się skończy, gard pęka.
+  jest: PL: <b>Blok</b> (L lub prawy przycisk myszy): zmniejsza obrażenia, ale kosztuje staminę. Jeśli stamina się skończy, garda pęka.
+
+[23_instrukcja_sterowanie.js:27#2]
+  było: PL: Cztery sloty aktywne: Q / E / F / R, na padzie LT + X / Y / B / A, na dotyku cztery ikony. Rozmowa: Enter lub Y. Wyposażenie zmieniasz w pauzie poza walką. Magiczne skille ze slotów płacą <b>maną</b> (niebieski pasek pod staminą). <b>Wir Ostrza</b> płaci 35 staminy: obrót 1,2 s, ruch 60%, bez bloku, parowania i uniku podczas obrotu; nietykalność tylko przez pierwsze 0,25 s i powrót 0,25 s bez ataku. Odłamek szronu: 18 many, 8 s. Kula ognia: 24 many, 9 s, wybucha (100% w cel, 50% obok). Kaskada cięć: 25 many, seria 3 cięć. Kolce i Odrzut Mocy: 24 many. Obrońca: 34 many, 30 s; golem ściąga na siebie wrogów. Siła i Inteligencja wzmacniają wszystkie umiejętności aktywne. Mana odnawia się powoli sama, a każde trafienie mieczem oddaje 1 punkt. Techniki na staminie zachowują odnowienie przy przekładaniu skilli; skille na manie go nie mają. Pozostałe techniki miecza nie zajmują slotów. Ciężki cios naładujesz przytrzymując J, lewy przycisk myszy, X lub RT; na ekranie dotykowym przytrzymaj Szybki atak.
+  jest: PL: Cztery sloty aktywne: Q / E / F / R, na padzie LT + X / Y / B / A, na dotyku cztery ikony. Rozmowa: Enter lub Y. Wyposażenie zmieniasz w pauzie poza walką. Magiczne skille ze slotów płacą <b>maną</b> (niebieski pasek pod staminą). <b>Wir Ostrza</b> płaci 35 staminy: obrót 1,2 s, ruch 60%, bez bloku, parowania i uniku podczas obrotu; nietykalność tylko przez pierwsze 0,25 s i powrót 0,25 s bez ataku. Odłamek szronu: 18 many, 8 s. Kula ognia: 24 many, 9 s, wybucha (100% w cel, 50% obok). Kaskada cięć: 25 many, seria 3 cięć. Kolce i Odrzut Mocy: 24 many. Obrońca: 34 many, 30 s; golem ściąga na siebie wrogów. Siła i Inteligencja wzmacniają wszystkie umiejętności aktywne. Mana odnawia się powoli sama, a każde trafienie mieczem oddaje 1 punkt. Techniki na staminie zachowują odnowienie przy przekładaniu skilli; skille na manie go nie mają. Pozostałe techniki miecza nie zajmują slotów. Silny atak naładujesz przytrzymując J, lewy przycisk myszy, X lub RT; na ekranie dotykowym przytrzymaj Szybki atak.
+  było: EN: Four active slots: Q / E / F / R, on a gamepad LT + X / Y / B / A, on touch four icons. Talk: Enter or Y. You change your loadout in the pause menu outside combat. Magic slot skills cost <b>mana</b> (the blue bar below stamina). <b>Blade Whirlwind</b> costs 35 stamina: a 1.2 s spin, 60% movement, no block, parry or dodge while spinning; invulnerability only for the first 0.25 s and a 0.25 s recovery without attacking. Frost Shard: 18 mana, 8 s. Fireball: 24 mana, 9 s, explodes (100% on the target, 50% nearby). Slash Cascade: 25 mana, a series of 3 slashes. Earth Split and Force Knockback: 24 mana. Stone Defender: 34 mana, 30 s; the golem draws enemies to itself. Strength and Intelligence boost all active skills. Mana slowly regenerates on its own, and every sword hit restores 1 point. Stamina techniques keep their cooldowns when you swap skills; mana skills have none. Other sword techniques do not take up slots. You charge a heavy attack by holding J, the left mouse button, X or RT; on a touch screen hold Quick attack.
+  jest: EN: Four active slots: Q / E / F / R, on a gamepad LT + X / Y / B / A, on touch four icons. Talk: Enter or Y. You change your loadout in the pause menu outside combat. Magic slot skills cost <b>mana</b> (the blue bar below stamina). <b>Blade Whirlwind</b> costs 35 stamina: a 1.2 s spin, 60% movement, no block, parry or dodge while spinning; invulnerability only for the first 0.25 s and a 0.25 s recovery without attacking. Frost Shard: 18 mana, 8 s. Fireball: 24 mana, 9 s, explodes (100% on the target, 50% nearby). Slash Cascade: 25 mana, a series of 3 slashes. Earth Split and Force Knockback: 24 mana. Stone Defender: 34 mana, 30 s; the golem draws enemies to itself. Strength and Intelligence boost all active skills. Mana slowly regenerates on its own, and every sword hit restores 1 point. Stamina techniques keep their cooldowns when you swap skills; mana skills have none. Other sword techniques do not take up slots. You charge a heavy attack by holding J, the left mouse button, X or RT; on a touch screen hold Light attack.
+
+[23_instrukcja_sterowanie.js:38#1]
+  było: PL: <b>Krypta prestiżu</b>: drogie nagrody: <b>Zbroja cienia</b>, <b>Zgniły całun płomienia</b> i <b>Klinga ognistego mroku</b> zmieniają wygląd rycerza (każdą możesz założyć albo zdjąć), <b>Dar pieczęci</b> dodaje piąte miejsce na aktywną umiejętność (klawisz <b>G</b>, pad <b>LT+RB</b>).
+  jest: PL: <b>Krypta prestiżu</b>: drogie nagrody: komplety zbroi <b>Kość demonów</b>, <b>Otchłań piekła</b>, <b>Niebiańskie złoto</b> i <b>Platyna</b> zmieniają wygląd postaci (każdy możesz założyć albo zdjąć), <b>Dar pieczęci</b> dodaje piąte miejsce na aktywną umiejętność (klawisz <b>G</b>, pad <b>LT+RB</b>).
+  było: EN: <b>Crypt of Prestige</b>: expensive rewards: <b>Shadow Armour</b>, <b>Rotten Shroud of Flame</b> and <b>Blade of Fiery Dark</b> change how the knight looks (you can put each on or take it off), <b>Gift of the Seal</b> adds a fifth active skill slot (key <b>G</b>, gamepad <b>LT+RB</b>).
+  jest: EN: <b>Crypt of Prestige</b>: expensive rewards: the <b>Demon Bone</b>, <b>Abyss of Hell</b>, <b>Celestial Gold</b> and <b>Platinum</b> armour sets change how your character looks (you can put each on or take it off), <b>Gift of the Seal</b> adds a fifth active skill slot (key <b>G</b>, gamepad <b>LT+RB</b>).
+
+[23_instrukcja_sterowanie.js:43#2]
+  było: PL: Napotkasz postaci, z którymi możesz porozmawiać (<b>Enter</b>, na padzie <b>Y</b>, na dotyku dotknięcie). Dają <b>błogosławieństwa na kilka minut</b> (np. nietykalność, dodatkowy pocisk broni), złoto, poziom albo wyzwania. Niektórzy żądają ceny, np. część życia za mocniejszą broń. Warto z nimi gadać, ale czytaj, co oferują.
+  jest: PL: Napotkasz postaci, z którymi możesz porozmawiać (<b>Enter</b>, na padzie <b>Y</b>, na dotyku dotknięcie). Dają <b>błogosławieństwa na kilka minut</b> (np. nietykalność, szybsza stamina), złoto, poziom albo wyzwania. Niektórzy żądają ceny, np. część życia za mocniejszą broń. Warto z nimi gadać, ale czytaj, co oferują.
+  było: EN: You will meet characters you can talk to (<b>Enter</b>, <b>Y</b> on a gamepad, a tap on touch). They give <b>blessings lasting a few minutes</b>, gold, a level or challenges. Some demand a price, e.g. part of your health for a stronger weapon. It is worth talking to them, but read what they offer.
+  jest: EN: You will meet characters you can talk to (<b>Enter</b>, <b>Y</b> on a gamepad, a tap on touch). They give <b>blessings lasting a few minutes</b> (e.g. invulnerability, faster stamina), gold, a level or challenges. Some demand a price, e.g. part of your health for a stronger weapon. It is worth talking to them, but read what they offer.
+
+[23_instrukcja_sterowanie.js:54#2]
+  było: EN: Practise on chapter I: no death, nothing saved
+  jest: EN: Practise on act I: no death, nothing saved
+
+[ftInfo/etykiety:atk]
+  było: PL: Cios (przytrzymaj: ciężki)
+  jest: PL: Cios (przytrzymaj: silny)
+  było: EN: Strike (hold: heavy)
+  jest: EN: Attack (hold: heavy)
+
+[ftInfo/etykiety:heavy]
+  było: PL: Ciężki cios
+  jest: PL: Silny atak
+  było: EN: Heavy strike
+  jest: EN: Heavy attack
+
+[24_pad_samouczek_bledy.js:81#1]
+  było: EN: Quick attack: tap the button 
+  jest: EN: Light attack: tap the button 
+
+[24_pad_samouczek_bledy.js:81#4]
+  było: PL: X: lekki cios · B: ciężki cios
+  jest: PL: X: szybki atak · B: silny atak
+
+[24_pad_samouczek_bledy.js:81#5]
+  było: PL: J: lekki cios · K: ciężki cios · L: blok
+  jest: PL: J: szybki atak · K: silny atak · L: blok
+
+[24_pad_samouczek_bledy.js:85#1]
+  było: PL: Magia wspiera miecz: pierwszy żywioł ostrza jest główny, drugi wspierający. Łącznie najwyżej dwa żywioły. Ogień wyklucza lód — także w pociskach.
+  jest: PL: Magia wspiera miecz: pierwszy żywioł ostrza jest główny, drugi wspierający. Łącznie najwyżej dwa żywioły. Ogień wyklucza lód, ale tylko w zaklęciach ostrza.
+  było: EN: Magic supports the sword: the first blade element is the main one, the second is support. At most two elements in total. Fire excludes ice — in projectiles too.
+  jest: EN: Magic supports the sword: the first blade element is the main one, the second is support. At most two elements in total. Fire excludes ice, but only in blade spells.
+
+[24_pad_samouczek_bledy.js:85#2]
+  było: PL: Trzy ikony to wyposażone skille. Dotknij wybraną. W pauzie poza walką możesz zmienić wyposażenie. Magia płaci maną (niebieski pasek), Wir Ostrza — staminą. Koszt i odnowienie sprawdzisz w opisie skilla.
+  jest: PL: Cztery ikony to wyposażone skille. Dotknij wybraną. W pauzie poza walką możesz zmienić wyposażenie. Magia płaci maną (niebieski pasek), Wir Ostrza — staminą. Koszt i odnowienie sprawdzisz w opisie skilla.
+
+[24_pad_samouczek_bledy.js:85#3]
+  było: PL: Przytrzymaj LT i naciśnij X, Y lub B, aby użyć skilla ze slotu. A nadal wykonuje unik, LB blok, RT lekki atak, RB ciężki. Wyposażenie zmienisz w pauzie poza walką.
+  jest: PL: Przytrzymaj LT i naciśnij X, Y, B lub A, aby użyć skilla ze slotu. Bez LT: A to unik, LB blok, RT szybki atak, RB silny. Wyposażenie zmienisz w pauzie poza walką.
+  było: EN: Hold LT and press X, Y or B to use a slot skill. A still dodges, LB blocks, RT is a light attack, RB a heavy one. You can change your loadout in the pause menu outside combat.
+  jest: EN: Hold LT and press X, Y, B or A to use a slot skill. Without LT: A dodges, LB blocks, RT is a light attack, RB a heavy one. You can change your loadout in the pause menu outside combat.
+
+[24_pad_samouczek_bledy.js:85#5]
+  było: PL: Techniki wspierają szermierkę: Przełamanie wymaga naładowanego ciężkiego ciosu, Odwet — parowania; kolce i obrońcę aktywujesz ze slotów. Szczegóły każdej techniki znajdziesz w Instrukcji → Style.
+  jest: PL: Techniki wspierają szermierkę: Przełamanie wymaga naładowanego silnego ataku, Odwet — parowania; kolce i obrońcę aktywujesz ze slotów. Szczegóły każdej techniki znajdziesz w Instrukcji → Style.
+  było: EN: Techniques support swordplay: Breaker needs a charged heavy attack, Retaliation — a parry; spikes and the defender are triggered from slots. You will find the details of every technique in Instructions → Styles.
+  jest: EN: Techniques support swordplay: Breaker needs a charged heavy attack, Retaliation — a parry; spikes and the defender are triggered from slots. You will find the details of every technique in Guide → Styles.
+
+[25_grafika_wydajnosc.js:46#6]
+  było: EN: Scales the text in menus, the Chronicle, the manual and the night summary.
+  jest: EN: Scales the text in menus, the Chronicle, the Guide and the night summary.
+
+[I18N_DOM#12]
+  było: EN: The Outgrowth
+  jest: EN: The Conjoined
+
+[I18N_DOM#33]
+  było: EN: Instructions
+  jest: EN: Guide
+
+[I18N_DOM#58]
+  było: PL: Cios: przytrzymaj, a będzie ciężki · Parowanie: blok tuż przed trafieniem · Czerwony błysk wroga: unik (nie da się sparować)
+  jest: PL: Cios: przytrzymaj, a będzie silny · Parowanie: blok tuż przed trafieniem · Czerwony błysk wroga: unik (nie da się sparować)
+
+[I18N_DOM#59]
+  było: PL: Cios (przytrzymaj: ciężki)
+  jest: PL: Cios (przytrzymaj: silny)
+
+[I18N_DOM#80]
+  było: PL: Cios: przytrzymaj, a będzie ciężki · Parowanie: blok tuż przed trafieniem
+  jest: PL: Cios: przytrzymaj, a będzie silny · Parowanie: blok tuż przed trafieniem
+
+[I18N_DOM#85]
+  było: EN: Quick attack
+  jest: EN: Light attack
+
+[I18N_DOM#86]
+  było: PL: Ciężki cios
+  jest: PL: Silny atak
+
+[I18N_DOM#88]
+  było: EN: Strong attack
+  jest: EN: Heavy attack
+
+[I18N_DOM#91]
+  było: EN: RT: hold for a strong attack · LT + X / Y / B / A: skills · Start: pause · in menus: A select, B back
+  jest: EN: RT: hold for a heavy attack · LT + X / Y / B / A: skills · Start: pause · in menus: A select, B back
+
+[I18N_DOM#92]
+  było: EN: Strong attack (RT: hold)
+  jest: EN: Heavy attack (RT: hold)
+
+[I18N_DOM#143]
+  było: PL: Jedna ręka: automatyczne lekkie ciosy
+  jest: PL: Jedna ręka: samoczynne szybkie ataki
+
+[I18N_DOM#144]
+  było: PL: Opcja jednej ręki atakuje pobliskich wrogów. Nadal możesz używać bloku, uniku i ciężkiego ciosu.
+  jest: PL: Opcja jednej ręki atakuje pobliskich wrogów. Nadal możesz używać bloku, uniku i silnego ataku.
+
+[I18N_DOM#176]
+  było: EN: Strong
+  jest: EN: Heavy
+
+[I18N_DOM#178]
+  było: EN: Quick
+  jest: EN: Light
+

@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="pl" class="fenix-loading"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#070608"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Nightbrand"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-180.png"></head><body><style id="fenix-critical">.fenix-loading body>:not(#fenix-load):not(script){visibility:hidden}#fenix-load{position:fixed;inset:0;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#100e12;color:#e2cc9b;font:18px Georgia,serif;text-align:center;padding:24px;box-sizing:border-box}#fenix-load progress{width:min(80vw,340px);height:12px;accent-color:#bca36c}#fenix-retry{margin:24px;padding:12px 24px;color:#e2cc9b;background:#29212a;border:1px solid #bca36c;font:inherit}</style><section id="fenix-load" aria-live="polite"><h1>Nightbrand</h1><p id="fenix-status">Wczytywanie gry: 0%</p><progress id="fenix-progress" max="100" value="0"></progress><button id="fenix-retry" hidden>Spróbuj ponownie</button></section>
+<title>Nightbrand</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+
+
+
+
+
+<div id="rot"><div class="rotc"><div class="rotph"></div><p>Obróć telefon poziomo</p><small>Rotate your phone to landscape</small></div></div>
+<div id="orient">
+<div id="app">
+  <div id="stage">
+    <div id="screen">
+      <div id="activeSkillHud" hidden aria-label="Aktywne umiejętności"></div>
+      <canvas id="gl" aria-label="Ekran gry Nightbrand w trójwymiarze"></canvas>
+      <div id="hud" hidden>
+        <div id="xpbar" class="fb xp"><span class="trk"><i id="xp"></i></span><b class="l"></b><b class="m"></b><b class="r"></b></div>
+        <div class="hud-row">
+          <div class="left"><span class="lvl-tag" id="lvlTag">Poziom 1</span><div class="fb hp" id="hpbar"><span class="trk"><b class="g" id="hpg"></b><i id="hp"></i></span><b class="l"></b><b class="m"></b><b class="r"></b></div><div class="stam" id="stam" aria-label="Stamina uników"></div><div class="stam mana" id="mana" aria-label="Mana"></div><div id="chal" hidden></div><div class="buffs" id="buffs"></div></div>
+          <div class="right"><div class="time" id="time">Do otwarcia wrót 3:00</div><div class="small" id="kills">Zabici: 0</div><div class="small coin" id="coins">0</div></div>
+        </div>
+        <canvas id="mini" width="128" height="112" aria-label="Minimapa"></canvas><div id="miniF"><b></b><b></b><b></b><b></b></div>
+        <div id="chips"></div>
+      </div>
+      <div id="boss" hidden><div class="name" id="bossName">Zrost</div><div class="fb boss"><span class="trk"><i id="bossHp"></i></span><b class="l"></b><b class="m"></b><b class="r"></b></div><div class="xpbar big poise" id="bossPoiseB"><i id="bossPoise"></i></div></div>
+      <div id="prompt" hidden>E · Rozmawiaj</div>
+      <div id="msg" role="status" aria-live="polite"></div><div id="notice" hidden role="dialog" aria-modal="true" aria-labelledby="noticeKicker" aria-describedby="noticeText"><div class="noticebox chainbox"><i class="chain-edge top" aria-hidden="true"></i><i class="chain-edge bottom" aria-hidden="true"></i><i class="chain-side left" aria-hidden="true"></i><i class="chain-side right" aria-hidden="true"></i><div id="noticeKicker" class="kicker">Wydarzenie</div><p id="noticeText"></p><button id="noticeNext" class="go alt" type="button">Dalej · Enter / Spacja</button></div></div>
+      <div id="tut" class="chainbox" aria-live="polite"><i class="chain-edge top" aria-hidden="true"></i><i class="chain-edge bottom" aria-hidden="true"></i><i class="chain-side left" aria-hidden="true"></i><i class="chain-side right" aria-hidden="true"></i><span id="tutText"></span></div>
+      <div id="ft"></div>
+      <div id="hbs"></div>
+      <div id="dialog" class="chainbox" hidden><i class="chain-edge top" aria-hidden="true"></i><i class="chain-edge bottom" aria-hidden="true"></i><i class="chain-side left" aria-hidden="true"></i><i class="chain-side right" aria-hidden="true"></i>
+        <div class="who" id="dlgWho"></div>
+        <div class="txt" id="dlgTxt"></div>
+        <div class="next">E / Spacja · dalej</div><div id="dlgBtns" class="btnrow" hidden><button id="dlgNext" type="button" class="go alt">Dalej</button><button id="dlgSkip" type="button" class="go alt">Zakończ rozmowę</button><button id="dlgClose" type="button" class="go alt">Zamknij</button><button id="dlgReplay" type="button" class="go alt">Przypomnij rozmowę</button></div><div id="witChoices" class="btnrow" hidden><button id="witLeave" type="button" class="go alt">Pozostaw w dybach</button><button id="witKill" type="button" class="go alt">Dobij więźnia</button></div>
+      </div>
+      <div class="overlay" id="shop" hidden>
+        <div class="lvlhead"><div><div class="kicker">Północ · przerwa</div><h2>Kram Margi</h2></div><div class="slots coin" id="shopCoins">0</div></div>
+        <div class="cards shopc" id="shopCards"></div>
+        <div class="btnrow"><button class="go alt" id="shopClose" type="button">Zwiń kram · E</button></div>
+      </div>
+      <div class="overlay" id="lvl" hidden>
+        <div class="level-panel"><div class="level-heading"><div class="kicker">Nowy poziom</div>
+        <h2 id="lvlTitle">Poziom 2</h2><span class="level-ornament" aria-hidden="true"></span></div>
+        <div class="slots" id="slots">Aktywne 1 z 4 · Pasywne 0 z 2</div>
+        <div id="levelWait" class="level-wait-note" role="status" aria-live="polite"></div><div class="cards" id="cards"></div>
+        <details class="level-build"><summary>Twój rozwój · style i zdobyte umiejętności</summary><div id="lvBuild"></div></details>
+        <div class="lvbtns"><button class="go alt" id="rerollBtn" type="button"></button><span class="hint">R · przerzut · 1–4 · wybór</span></div></div>
+      </div>
+      <div id="intro" hidden><div class="iimg" id="iimg"></div><div class="ivig"></div><button type="button" class="iskip" id="iskip"></button><div class="itxt"><div class="ikick" id="ikick"></div><div class="iscroll" id="iscroll"><div class="iroll" id="iroll"></div></div><div class="ihint" id="ihint"></div></div></div>
+      <section id="lang" hidden aria-label="Language / Język"><div class="lglogo" role="img" aria-label="NightBrand"></div><div class="lgpick"><button type="button" data-lang="en"><span class="lgfr"><svg viewBox="0 0 60 40" preserveAspectRatio="none" aria-hidden="true"><clipPath id="lgc"><rect width="60" height="40"/></clipPath><clipPath id="lgt"><path d="M30,20 h30 v20 z v20 h-30 z h-30 v-20 z v-20 h30 z"/></clipPath><g clip-path="url(#lgc)"><rect width="60" height="40" fill="#012169"/><path d="M0,0 60,40 M60,0 0,40" stroke="#fff" stroke-width="8"/><path d="M0,0 60,40 M60,0 0,40" clip-path="url(#lgt)" stroke="#C8102E" stroke-width="5.3"/><path d="M30,0 v40 M0,20 h60" stroke="#fff" stroke-width="13.3"/><path d="M30,0 v40 M0,20 h60" stroke="#C8102E" stroke-width="8"/></g></svg></span><span class="lglb">English</span></button><button type="button" data-lang="pl"><span class="lgfr"><svg viewBox="0 0 60 40" preserveAspectRatio="none" aria-hidden="true"><rect width="60" height="20" fill="#fff"/><rect y="20" width="60" height="20" fill="#DC143C"/></svg></span><span class="lglb">Polski</span></button></div><div class="lghint">You can change the language later in Options · Język zmienisz później w Opcjach</div></section>
+      <div class="overlay m2" id="title">
+        <div class="warn" id="warn"></div>
+        <div class="m2-body">
+          <div class="m2-left">
+            <div class="m2-logo" role="img" aria-label="Nightbrand"></div>
+            <div class="m2-char" id="charCard"><div class="m2-chrow"><span class="chlab">Poziom postaci</span><span class="chn" id="chN">1</span></div><div class="m2-xp"><i id="chBar"></i></div><div class="chxp" id="chXp"></div></div>
+            <button class="m2-kap" id="kapBtn" type="button"><span class="m2-ico m2-ico-kap" aria-hidden="true"></span><span class="m2-kt"><b id="kapT"></b><small id="kapS"></small></span><span class="m2-kgo" id="kapGo"></span></button>
+          </div>
+          <div class="m2-right">
+            <button class="m2-ch" id="start1" disabled>Wczytywanie…</button><button class="m2-ch" id="start2" disabled>Wczytywanie…</button><button class="m2-ch" id="start3" disabled>Wczytywanie…</button><button class="m2-ch" id="start4" disabled>Wczytywanie…</button><button class="m2-ch" id="start5" disabled>Wczytywanie…</button>
+          </div>
+        </div>
+        <div class="m2-bot"><div class="m2-bl"><div class="m2-assist"><label class="tgl touchcorner" for="touchTgl"><input type="checkbox" id="touchTgl"><span class="sl" aria-hidden="true"></span><span>Sterowanie dotykowe</span></label><label class="tgl" for="mpTgl" id="mpTglL"><input type="checkbox" id="mpTgl"><span class="sl" aria-hidden="true"></span><span>2 graczy</span><span id="mpTglT"></span></label></div><span class="credit">Created by Y3ebau</span></div><div class="m2-br"><button class="m2-b" id="optsBtn" type="button">Opcje</button><div class="m2-mode"><span class="m2-lab">Przebieg gry</span><input type="checkbox" id="storyTgl" hidden><div class="nb-mode-select" role="radiogroup" aria-label="Tryb gry" title="Fabularny: rozdziały po kolei. Arcade: wszystkie rozdziały."><button type="button" class="nb-mode" role="radio" aria-checked="true" id="sFab"><img class="nb-mode__icon" src="assets/b7a93afcf6add7edbf85febcdeda7b9d99cf68bd433a00e4f36c1b7003766886.png" alt="" width="256" height="256" draggable="false"><span class="nb-mode__title">Fabularny</span><span class="nb-mode__marker" aria-hidden="true"></span></button><button type="button" class="nb-mode" role="radio" aria-checked="false" id="sArc"><img class="nb-mode__icon" src="assets/00f26693ee9d1044924fcb94b89e9e3915cb2ed363bcf1d47928a59cba233759.png" alt="" width="256" height="256" draggable="false"><span class="nb-mode__title">Arcade</span><span class="nb-mode__marker" aria-hidden="true"></span></button></div><p id="storyModeHint" class="m2-hint"></p></div><button class="m2-b" id="manBtn" type="button">Instrukcja Gry</button></div></div>
+      </div>
+      <div class="overlay m2k" id="kap" hidden>
+        <div class="m2-top"><button class="m2-b" id="kapBack" type="button">Wróć</button><h2 id="kapH"></h2><div class="m2-emb"><span class="m2-ico m2-ico-emb" aria-hidden="true"></span><b id="kapE">0</b></div></div>
+        <div class="m2k-body"><div class="m2k-list" id="kapList"></div><div class="m2k-det" id="kapDet"></div></div>
+      </div>
+      <div class="overlay" id="manual" hidden>
+        <button class="backar" id="manBack" type="button">Wróć</button>
+        <h1 class="manh" aria-label="Instrukcja Gry"></h1>
+        <div class="tabs" role="tablist" id="manTabs"></div>
+        <div class="opsep" aria-hidden="true"></div>
+        <div class="man" id="manBody"></div>
+        
+      </div>
+      <div class="overlay" id="opts" hidden>
+        <button class="backar" id="optsBack" type="button">Wróć</button>
+        <div class="kicker">Nightbrand</div>
+        <h1 class="opth" aria-label="Opcje"></h1>
+        <div class="tabs" role="tablist"><button class="tab on" type="button" data-tab="ctl">Sterowanie</button><button class="tab" type="button" data-tab="aud">Audio</button><button class="tab" type="button" data-tab="gfx">Grafika</button><button class="tab" type="button" data-tab="set">Ustawienia</button><button class="tab" type="button" data-tab="dat">Dane zapisu</button></div>
+        <div class="opsep" aria-hidden="true"></div>
+        <div class="pane" id="pane-ctl">
+        <div class="subtabs"><button class="stab on" type="button" data-sub="kb">Klawiatura i mysz</button><button class="stab" type="button" data-sub="pad">Kontroler Xbox</button><button class="stab" type="button" data-sub="touch">Ekran dotykowy</button><button class="stab" type="button" data-sub="ui">Interfejs</button></div>
+        <div class="opsep sm" aria-hidden="true"></div>
+        <div id="sub-kb"><div id="figKb"><div class="fig kb" style="aspect-ratio:2272/840"><i class="img"></i><span class="lb l" style="left:16.33%;top:13.1%"><b>Esc · P</b> Pauza</span><span class="lb ul" style="left:33.85%;top:13.1%"><b>1 2 3</b> Wybór karty</span><span class="lb ur" style="left:43.62%;top:13.1%"><b>Q E F</b> Skille · <b>Enter</b> Rozmowa · <b>R</b> Przerzut</span><span class="lb l" style="left:16.2%;top:49.17%"><b>W A S D</b> Ruch</span><span class="lb d" style="left:35.56%;top:85.12%"><b>Spacja · Shift</b> Unik</span><span class="lb d" data-m="s" style="left:51.28%;top:85.12%"><b>J</b> Cios</span><span class="lb d d2" data-m="s" style="left:55.33%;top:85.12%"><b>L</b> Blok</span><span class="lb d" style="left:71.88%;top:85.12%"><b>Strzałki</b> Ruch</span></div><p class="figcap" data-m="s">Cios: przytrzymaj, a będzie silny · Parowanie: blok tuż przed trafieniem · Czerwony błysk wroga: unik (nie da się sparować)</p></div><div id="figMouse"><div class="fig mouse" style="aspect-ratio:1700/660"><i class="img"></i><span class="lb l" style="left:22.71%;top:10.0%"><b>Lewy przycisk</b> Cios</span><span class="lb r" style="left:77.24%;top:10.0%"><b>Prawy przycisk</b> Blok i parowanie</span></div></div>
+<div class="keys" id="keysSlash"><span>Ruch</span><b><kbd>WASD</kbd><kbd>Strzałki</kbd></b><span>Cios (przytrzymaj: silny)</span><b><kbd>J</kbd><kbd>Lewy przycisk myszy</kbd></b><span>Blok</span><b><kbd>L</kbd><kbd>Prawy przycisk myszy</kbd></b><span>Parowanie</span><b class="j-dot"><kbd>Blok tuż przed trafieniem</kbd></b><span>Unik (stamina)</span><b><kbd>Spacja</kbd><kbd>Shift</kbd></b><span>Czerwony błysk wroga</span><b class="j-dot"><kbd>Unik (nie do sparowania)</kbd></b><span>Umiejętności aktywne: sloty 1 / 2 / 3 / 4</span><b><kbd>Q</kbd><kbd>E</kbd><kbd>F</kbd><kbd>R</kbd></b><span>Rozmowa i handel</span><b><kbd>Enter</kbd></b><span>Wybór karty · przerzut</span><b class="j-dot"><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>R</kbd></b><span>Pauza</span><b><kbd>Esc</kbd><kbd>P</kbd></b></div>
+
+        </div>
+        <div id="sub-touch" hidden><div class="keys" id="keysTouch"><span>Ruch</span><b class="j-dot"><kbd>Przeciągnij lewą stroną ekranu</kbd></b><span>Unik, ataki, blok</span><b class="j-dot"><kbd>Przyciski po prawej</kbd></b><span>Rozmowa i handel</span><b class="j-dot"><kbd>Dotknij postaci</kbd></b></div></div>
+        <div id="sub-ui" hidden>
+          
+          <label class="musrow"><span>Wielkość napisów</span><input type="range" class="ftsSl" min="70" max="140" step="10" aria-label="Wielkość napisów"></label>
+          <label class="tgl"><input type="checkbox" class="dmgTgl" checked><span class="sl" aria-hidden="true"></span><span>Liczby obrażeń nad wrogami</span></label>
+        </div>
+        <div id="sub-pad" hidden>
+<div class="fig pad" style="aspect-ratio:1672/800"><i class="img"></i><span class="lb l" style="left:7.36%;top:8.5%"><b>LT</b> Umiejętności + X / Y / B</span><span class="lb l" style="left:7.36%;top:23.0%"><b>LB</b> Blok i parowanie</span><span class="lb l" style="left:7.36%;top:39.75%"><b>Lewa gałka</b> Ruch</span><span class="lb l" style="left:7.36%;top:61.38%"><b>Krzyżak</b> Ruch, menu</span><span class="lb r" style="left:92.58%;top:3.38%"><b>RT</b> Szybki atak</span><span class="lb r" style="left:92.58%;top:16.5%"><b>RB</b> Silny atak</span><span class="lb r" style="left:92.58%;top:24.88%"><b>Y</b> Rozmowa, handel</span><span class="lb r" style="left:92.58%;top:37.38%"><b>B</b> Silny atak</span><span class="lb r" style="left:92.58%;top:46.88%"><b>A</b> Unik</span><span class="lb r" style="left:92.58%;top:56.25%"><b>X</b> Szybki atak</span><span class="lb r" style="left:92.58%;top:67.62%"><b>Prawa gałka</b> Celowanie</span></div><p class="figcap">RT: przytrzymaj, aby wyprowadzić silny atak · LT + X / Y / B / A: umiejętności · Start: pauza · w menu: A wybierz, B wróć</p>
+<div class="keys" id="keysPad"><span>Ruch</span><b><kbd>Lewa gałka</kbd><kbd>Krzyżak</kbd></b><span>Celowanie</span><b class="j-dot"><kbd>Prawa gałka</kbd></b><span>Szybki atak</span><b><kbd>X</kbd><kbd>RT</kbd></b><span>Silny atak (RT: przytrzymaj)</span><b><kbd>B</kbd></b><span>Blok i parowanie</span><b><kbd>LB</kbd></b><span>Unik</span><b><kbd>A</kbd></b><span>Silny atak</span><b><kbd>RB</kbd></b><span>Umiejętności: sloty 1 / 2 / 3 / 4</span><b><kbd>LT+X</kbd><kbd>LT+Y</kbd><kbd>LT+B</kbd><kbd>LT+A</kbd></b><span>Rozmowa i handel</span><b><kbd>Y</kbd></b><span>Pauza</span><b><kbd>Start</kbd></b><span>Menu: wybór · powrót · przerzut</span><b class="j-dot"><kbd>A</kbd><kbd>B</kbd><kbd>Y</kbd></b></div>
+        </div>
+        </div>
+        <div class="pane" id="pane-aud" hidden>
+          <label class="musrow"><span>Muzyka</span><input type="range" class="musSl" min="0" max="100" aria-label="Głośność muzyki"></label>
+          <label class="musrow"><span>Efekty</span><input type="range" class="sfxSl" min="0" max="100" aria-label="Głośność efektów"></label>
+        </div>
+        <div class="pane" id="pane-gfx" hidden>
+<div class="opsep sm" aria-hidden="true"></div>
+<h3 class="sth">Jakość grafiki</h3>
+<p class="figcap">Jakość grafiki</p>
+<div class="qrow" id="qualityRow" role="group" aria-label="Jakość grafiki"><button type="button" class="go alt" data-q="auto" aria-pressed="false">Auto</button><button type="button" class="go alt" data-q="ultra" aria-pressed="false">Ultra</button><button type="button" class="go alt" data-q="high" aria-pressed="false">Wysoka</button><button type="button" class="go alt" data-q="mid" aria-pressed="false">Średnia</button><button type="button" class="go alt" data-q="min" aria-pressed="false">Niska</button></div>
+<p class="figcap">Auto: telefon i tablet dostają Średnią, komputer Wysoką. Ultra: najlepszy obraz dla mocnych komputerów i tabletów, jeśli gra klatkuje, wybierz niższy poziom.</p>
+<h3 class="sth">Płynność</h3>
+<p class="figcap">Limit klatek na sekundę</p>
+<div class="qrow" id="fpsRow" role="group" aria-label="Limit klatek na sekundę"><button type="button" class="go alt" data-fps="30" aria-pressed="false">30</button><button type="button" class="go alt" data-fps="45" aria-pressed="false">45</button><button type="button" class="go alt" data-fps="60" aria-pressed="false">60</button><button type="button" class="go alt" data-fps="120" aria-pressed="false">120</button><button type="button" class="go alt" data-fps="0" aria-pressed="false">Bez limitu</button></div>
+<p class="figcap">Niższy limit oszczędza baterię i może pomóc, gdy gra klatkuje. Działa najlepiej, gdy dzieli odświeżanie ekranu (np. 30 i 60 przy ekranie 60 lub 120 Hz). 120 ma sens tylko na ekranie 120 Hz lub szybszym.</p>
+<label class="tgl"><input type="checkbox" id="fpsTgl"><span class="sl" aria-hidden="true"></span><span>Pokaż licznik FPS (diagnostyka)</span></label>
+<h3 class="sth">Zaawansowane</h3>
+<p class="figcap">Cienie</p>
+<div class="qrow" id="gShadowRow" role="group" aria-label="Cienie"><button type="button" class="go alt" data-v="auto" aria-pressed="false">Auto</button><button type="button" class="go alt" data-v="0" aria-pressed="false">Wył.</button><button type="button" class="go alt" data-v="1" aria-pressed="false">Normalne</button><button type="button" class="go alt" data-v="2" aria-pressed="false">Wysokie</button></div>
+<p class="figcap">Światła dynamiczne</p>
+<div class="qrow" id="gLightsRow" role="group" aria-label="Światła dynamiczne"><button type="button" class="go alt" data-v="auto" aria-pressed="false">Auto</button><button type="button" class="go alt" data-v="2" aria-pressed="false">Mało</button><button type="button" class="go alt" data-v="4" aria-pressed="false">Średnio</button><button type="button" class="go alt" data-v="10" aria-pressed="false">Dużo</button></div>
+<p class="figcap">Efekty obrazu (poświata, rozmycie)</p>
+<div class="qrow" id="gFxRow" role="group" aria-label="Efekty obrazu (poświata, rozmycie)"><button type="button" class="go alt" data-v="auto" aria-pressed="false">Auto</button><button type="button" class="go alt" data-v="0" aria-pressed="false">Wył.</button><button type="button" class="go alt" data-v="1" aria-pressed="false">Standard</button><button type="button" class="go alt" data-v="2" aria-pressed="false">Wysokie</button></div>
+<p class="figcap">Cząsteczki (iskry, pył)</p>
+<div class="qrow" id="gPartsRow" role="group" aria-label="Cząsteczki (iskry, pył)"><button type="button" class="go alt" data-v="auto" aria-pressed="false">Auto</button><button type="button" class="go alt" data-v="0.5" aria-pressed="false">Mało</button><button type="button" class="go alt" data-v="1" aria-pressed="false">Normalnie</button><button type="button" class="go alt" data-v="1.5" aria-pressed="false">Dużo</button></div>
+<p class="figcap">Rozdzielczość obrazu</p>
+<div class="qrow" id="gResRow" role="group" aria-label="Rozdzielczość obrazu"><button type="button" class="go alt" data-v="auto" aria-pressed="false">Auto</button><button type="button" class="go alt" data-v="540" aria-pressed="false">540p</button><button type="button" class="go alt" data-v="720" aria-pressed="false">720p</button><button type="button" class="go alt" data-v="1080" aria-pressed="false">1080p</button><button type="button" class="go alt" data-v="1440" aria-pressed="false">1440p</button></div>
+<p class="figcap">Dynamiczna rozdzielczość (utrzymuje limit FPS)</p>
+<div class="qrow" id="gDynRow" role="group" aria-label="Dynamiczna rozdzielczość (utrzymuje limit FPS)"><button type="button" class="go alt" data-v="auto" aria-pressed="false">Auto</button><button type="button" class="go alt" data-v="off" aria-pressed="false">Wył.</button><button type="button" class="go alt" data-v="on" aria-pressed="false">Wł.</button></div>
+<p class="figcap">Gęstość pikseli ekranu</p>
+<div class="qrow" id="gDprRow" role="group" aria-label="Gęstość pikseli ekranu"><button type="button" class="go alt" data-v="auto" aria-pressed="false">Auto</button><button type="button" class="go alt" data-v="1" aria-pressed="false">1×</button><button type="button" class="go alt" data-v="1.5" aria-pressed="false">1.5×</button><button type="button" class="go alt" data-v="2" aria-pressed="false">2×</button></div>
+<p class="figcap">Tekstury ziemi HD (2048 px)</p>
+<div class="qrow" id="gTexRow" role="group" aria-label="Tekstury ziemi HD (2048 px)"><button type="button" class="go alt" data-v="auto" aria-pressed="false">Auto</button><button type="button" class="go alt" data-v="0" aria-pressed="false">Wył.</button><button type="button" class="go alt" data-v="1" aria-pressed="false">Wł.</button></div>
+<p class="figcap">Tekstury HD: ostrzejsza ziemia, pobierana przy pierwszym włączeniu (ok. 12 MB). Auto: włączone na Ultra.</p>
+<p class="figcap">Dynamiczna rozdzielczość sama obniża ostrość sceny, gdy gra nie wyrabia, i podnosi ją, gdy jest zapas. Auto: włączona na poziomach Auto, Ultra i Wysoka. Niższa gęstość pikseli ekranu jest lżejsza dla karty graficznej, ale mniej ostra.</p>
+<p class="figcap">Każdy przełącznik z Auto idzie za poziomem jakości. Wybór ręczny ma pierwszeństwo.</p>
+</div>
+        <div class="pane" id="pane-set" hidden>
+          <div class="opsep sm" aria-hidden="true"></div>
+          <h3 class="sth">Język</h3>
+          <div class="langrow"><button type="button" class="go" data-setlang="pl">Polski</button><button type="button" class="go" data-setlang="en">English</button></div>
+          <h3 class="sth">Jasność obrazu</h3>
+          <label class="musrow"><span>Jasność</span><input type="range" id="briSl" min="70" max="160" step="5" aria-label="Jasność obrazu"></label>
+          <p class="figcap">Jeśli gra jest dla Ciebie zbyt ciemna, zwiększ jasność. Domyślnie 100%.</p>
+          <div class="opsep sm" aria-hidden="true"></div>
+          <h3 class="sth">Wygoda i płynność</h3>
+<label class="tgl"><input type="checkbox" id="shakeTgl"><span class="sl" aria-hidden="true"></span><span>Wstrząsy kamery</span></label>
+<label class="tgl"><input type="checkbox" id="flashTgl"><span class="sl" aria-hidden="true"></span><span>Intensywne błyski</span></label>
+<label class="tgl"><input type="checkbox" id="contrastTgl"><span class="sl" aria-hidden="true"></span><span>Kontrastowe ostrzeżenia (żółty / biały)</span></label>
+<label class="tgl"><input type="checkbox" id="oneHandTgl"><span class="sl" aria-hidden="true"></span><span>Jedna ręka: samoczynne szybkie ataki</span></label>
+<p class="figcap">Opcja jednej ręki atakuje pobliskich wrogów. Nadal możesz używać bloku, uniku i silnego ataku.</p>
+<label class="tgl"><input type="checkbox" id="touchLeftTgl"><span class="sl" aria-hidden="true"></span><span>Przyciski dotykowe po lewej</span></label>
+<label class="musrow"><span>Przyciski dotykowe</span><input type="range" id="touchSizeSl" min="80" max="130" step="10" aria-label="Wielkość przycisków dotykowych"></label>
+<button class="go alt" id="repeatTut" type="button">Powtórz samouczek tego trybu</button>
+
+        </div>
+        <div class="pane" id="pane-dat" hidden>
+<button class="go alt" id="copyErrors" type="button">Kopiuj raport błędów</button>
+          <div class="stats" id="datInfo"></div>
+          <div class="btnrow"><button class="go alt" id="expSave" type="button">Zapisz postęp do pliku</button><button class="go alt" id="impSave" type="button">Wczytaj postęp z pliku</button></div>
+          <input type="file" id="impFile" accept=".json,application/json" hidden>
+          <p class="figcap" id="saveMsg">Postęp jest zapamiętany w przeglądarce. Zapisz go do pliku, żeby nie przepadł po wyczyszczeniu danych przeglądarki albo przy zmianie urządzenia.</p>
+          <button class="go alt" id="clearSave" type="button">Wyczyść zapis postępu</button>
+        </div>
+        
+      </div>
+      <div class="overlay" id="conf" hidden>
+        <div class="kicker">Uwaga</div>
+        <h1>Na pewno<em>?</em></h1>
+        <p class="lede big">Wyczyszczenie zapisu usunie rekordy rozdziałów, poziomy postaci i odblokowane perki, w obu trybach. Tego nie da się cofnąć.</p>
+        <div class="btnrow"><button class="go alt" id="confNo" type="button">Anuluj</button><button class="go" id="confYes" type="button">Tak, wyczyść</button></div>
+      </div>
+      <div class="overlay" id="pause" hidden>
+        <h1 class="pauseh" aria-label="Pauza"></h1>
+        <div class="pbox"><label class="musrow"><span>Muzyka</span><input type="range" class="musSl" min="0" max="100" aria-label="Głośność muzyki"></label>
+        <div class="setrow"><label class="musrow"><span>Efekty</span><input type="range" class="sfxSl" min="0" max="100" aria-label="Głośność efektów"></label>
+        <label class="musrow"><span>Wielkość napisów</span><input type="range" class="ftsSl" min="70" max="140" step="10" aria-label="Wielkość napisów"></label></div>
+        <label class="tgl"><input type="checkbox" class="dmgTgl" checked><span class="sl" aria-hidden="true"></span><span>Liczby obrażeń nad wrogami</span></label></div>
+        <div id="skillLoadout" class="pbox" hidden></div><div id="pauseKeys"></div>
+        <div class="btnrow"><button class="go" id="resumeBtn">Wróć do gry</button><button class="go alt" id="pauseMenuBtn">Wybór rozdziału</button></div>
+      </div>
+      <div class="overlay" id="prep" hidden>
+        <button class="backar" id="prepBack" type="button">Wróć</button>
+        <h1 class="prepth" aria-label="Przygotowanie">Przygotowanie</h1><h2 class="nimh ch1" id="prepNim" aria-label="Spalona Osada"></h2>
+        <div class="kicker" id="prepK">Przygotowanie</div>
+        <div class="chcard prepcard"><div class="chtop"><span class="chlab">Poziom postaci</span><span class="chn" id="prepN">1</span></div><div class="xpbar big"><i id="prepBar"></i></div><div class="chxp" id="prepLv"></div></div>
+        <h3 class="sth prepsth" aria-label="Poziom trudności"></h3><div class="modesw diffsw" id="diffSw"><button type="button" class="mlab" data-d="e">Łatwy</button><button type="button" class="mlab" data-d="n">Normalny</button><button type="button" class="mlab" data-d="h">Trudny</button></div><p class="figcap" id="diffCap"></p>
+        <div class="btnrow"><button class="go" id="prepGo" type="button">Gotowy</button></div>
+        <div class="prepassist"><label class="tgl" for="hintsTgl"><input type="checkbox" id="hintsTgl" checked><span class="sl" aria-hidden="true"></span><span>Samouczek</span></label></div>
+        <div class="prepgrid"><div class="prepbox"><h3 id="prepPH">Perki</h3><div id="prepPerks" class="prepbox"></div></div><div class="prepbox"><h3>Wyzwanie nocy</h3><div id="prepCh" class="prepbox"></div></div></div>
+      </div>
+      <div class="overlay" id="finale" hidden><div id="finImg" aria-hidden="true"></div><div id="finBox"><h1 id="finTitle"></h1><div id="finText"></div><div class="btnrow"><button class="go" id="finNext" type="button">Dalej</button></div></div></div>
+      <div class="overlay" id="end" hidden>
+        <div class="kicker" id="endKicker">Koniec</div>
+        <h1 id="endTitle">Poległeś</h1>
+        <div class="endbox"><p class="lede" id="endText"></p>
+        <div class="stats" id="endStats"></div><div class="stats" id="endStats2"></div><div class="stats" id="endXp"></div></div>
+        <div class="btnrow"><button class="go" id="nextBtn" hidden><small>Rozdział II</small>Zejdź do Dolnego Miasta</button><button class="go" id="againBtn">Jeszcze raz</button><button class="go alt" id="menuBtn">Wybór rozdziału</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="touch" hidden><div id="stick" hidden><div id="knob"></div></div><button id="bPause" type="button" aria-label="Pauza">II</button><div id="btns"><button id="bHeavy" type="button" hidden>Silny<br>Atak</button><button id="bBlock" type="button" hidden>Blok</button><button id="bAtk" type="button" hidden>Szybki<br>Atak</button><button id="bRoll" type="button">Unik</button></div></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="assets/01dade4f3eff320cea13485f7e9ce754002f62bd5b01671bcaf4e00568772b0f.js" onerror="document.getElementById('fenix-status').textContent='Nie udało się wczytać modułu ładowania.';document.getElementById('fenix-retry').hidden=false;document.getElementById('fenix-retry').onclick=function(){location.reload()}"></script></body></html>
