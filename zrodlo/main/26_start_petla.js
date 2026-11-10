@@ -2080,9 +2080,35 @@ ${menus} :is(.tab,.stab,.nbp-tab,.pc-prep-tab):is(:focus-visible,.pf):not(#pc-ta
  const text=(e,v)=>{v=String(v);if(e.textContent!==v)e.textContent=v};
  const meter=(e,v,m)=>{v=Math.max(0,Math.min(m,v));const n=String(Math.ceil(v)),mx=String(m),fill=(100*v/(m||1)).toFixed(2)+'%';if(e.getAttribute('aria-valuenow')!==n)e.setAttribute('aria-valuenow',n);if(e.getAttribute('aria-valuemax')!==mx)e.setAttribute('aria-valuemax',mx);if(e.style.getPropertyValue('--fill')!==fill)e.style.setProperty('--fill',fill);return n+' / '+Math.round(m)};
  const gain=old.querySelector('.nbh-gain'),night=old.querySelector('.nbh-night'),wallet=q('.pch-wallet');
+ // Kooperacja: osobne zasoby postaci, wspolne dane Nocy. Bez zmian mechaniki.
+ const co=make('div','pch pcmp');co.hidden=true;
+ const coPanels=[0,1].map(i=>{const el=make('section','pcmp-player pcmp-p'+(i+1));el.setAttribute('aria-label',T('Gracz ','Player ')+(i+1));
+  const hp=health.cloneNode(true),mp=mana.cloneNode(true),arc=mp.querySelector('.pch-stamina');arc.innerHTML=arc.innerHTML.replaceAll('pch-st-gold','pcmp-st-gold-'+i);arc.querySelector('.pch-st-fill').style.stroke="url('#pcmp-st-gold-"+i+"')";
+  const tag=make('div','pcmp-tag'),state=make('div','pcmp-state'),skills=make('div','pcmp-skills'),heading=make('small','pcmp-skills-title');tag.textContent=T('Gracz ','Player ')+(i+1);heading.textContent=T('Zdobyte','Acquired');
+  el.append(tag,state,hp,mp,heading,skills);co.append(el);return{el,hp,mp,arc,state,skills,signature:''}});
+ const centre=make('div','pcmp-centre'),coLevel=q('.pch-level').cloneNode(true),coXp=xp.cloneNode(true),coWallet=wallet.cloneNode(true),coRevive=make('div','pcmp-revive');
+ coWallet.setAttribute('aria-label',T('Wspólne zasoby','Shared resources'));centre.append(coLevel,coXp,coWallet,coRevive);co.append(centre);old.append(co);
+ co.addEventListener('click',e=>{const b=e.target.closest('[data-coop-slot]');if(!b||b.disabled)return;const use=()=>activateSlot(+b.dataset.coopSlot);if(b.dataset.player==='2')asP2(use);else use()});
+ co.addEventListener('keydown',e=>{if(e.target.closest('[data-coop-slot]')&&['Enter',' '].includes(e.key)){e.stopPropagation();if(e.repeat)e.preventDefault()}});
+ function coopHud(){
+  for(const [i,v] of coPanels.entries()){const p=i?pl2:pl1;if(!p)continue;
+   text(v.hp.querySelector('strong'),meter(v.hp,p.dead?0:p.hp,p.max||1));text(v.mp.querySelector('strong'),meter(v.mp,p.mana||0,p.manaMax||SL.mana.max));
+   const st=meter(v.arc,p.sta||0,p.staMax||1);v.arc.title='Stamina · '+st;text(v.arc.querySelector('small'),'STA · '+Math.round(p.sta||0));v.arc.querySelector('.pch-st-fill').style.strokeDasharray=parseFloat(v.arc.style.getPropertyValue('--fill'))+' 100';
+   v.hp.setAttribute('aria-label',T('Zdrowie gracza ','Player health ')+(i+1));v.mp.setAttribute('aria-label',T('Mana gracza ','Player mana ')+(i+1));v.arc.setAttribute('aria-label',T('Stamina gracza ','Player stamina ')+(i+1));
+   v.el.classList.toggle('pcmp-dead',!!p.dead);v.hp.classList.toggle('pch-low',!!SETT.flash&&!p.dead&&p.hp/p.max<=.25);
+   const rb=i?p.rbF:S.rebirth,used=i?p.rbU:S.rebirthUsed;
+   text(v.state,p.dead?T('Poległ · czeka na wskrzeszenie','Fallen · awaiting revival'):rb?(used?T('Odrodzenie zużyte','Revival used'):T('Odrodzenie gotowe','Revival ready')):'');
+   const state=i?p.actives:S,labels=i||PAD.on?['LT+X','LT+Y','LT+B','LT+A']:[KB.map.s1,KB.map.s2,KB.map.s3,KB.map.s4].map(kbName);
+   const markup=state.activeSlots.map((k,j)=>{const c=ACTIVE_CFG[k],cd=c?Math.ceil(state[c.cd]||0):0,low=c&&(c.resource==='stamina'?p.sta:p.mana)<c.cost,nm=k?SK[k].name:T('Wolny slot','Empty slot');return `<button type="button" data-player="${i+1}" data-coop-slot="${j}" class="pch-cell pcmp-slot${low?' no-mana':''}${cd?' cooling':''}" title="${nm}" aria-label="${T('Gracz ','Player ')}${i+1}: ${labels[j]} · ${nm}" ${!k||p.dead?'disabled':''}>${k?`<img alt="" src="${PREMIUM_ICONS['skille-'+k]}">`:''}<kbd>${labels[j]}</kbd>${cd?`<b>${cd}</b>`:''}</button>`}).join('');
+   if(markup!==v.signature){v.signature=markup;v.skills.innerHTML=markup}v.skills.previousElementSibling.hidden=true;
+  }
+  meter(coXp,S.xp,S.need||1);coXp.title=T('Wspólne doświadczenie: ','Shared experience: ')+S.xp+' / '+S.need;text(coLevel.querySelector('strong'),S.lvl);text(coWallet.querySelector('.pch-coins b'),S.coins);text(coWallet.querySelector('.pch-ashes b'),EMB.e);
+  text(coRevive,mpTotTxt());
+ }
  const oldHud=hud;let key='',buffKey='',scaleKey='';
- hud=function(){oldHud();const on=enabled&&!coarse&&!$('hud').classList.contains('mp2')&&innerWidth>=innerHeight*1.3;scr.classList.toggle('pc-hud',on);if(gain&&gain.parentElement!==(on?wallet:night))(on?wallet:night).append(gain);const show=on&&!active.hidden;root.hidden=!show;scr.classList.toggle('pc-hud-visible',show);if(!show)return;
+ hud=function(){oldHud();const on=enabled&&!coarse&&innerWidth>=innerHeight*1.3,coop=!!(S&&pl2&&S.phase==='play');scr.classList.toggle('pc-hud',on);scr.classList.toggle('pc-coop',on&&coop);const gainHome=on?(coop?coWallet:wallet):night;if(gain&&gain.parentElement!==gainHome)gainHome.append(gain);const show=on&&!!S&&S.phase==='play'&&!S.paused&&!S.choosing&&!S.shop&&!S.dialog&&!S.intro&&!S.notice&&(coop||!pl.dead);root.hidden=!show||coop;co.hidden=!show||!coop;scr.classList.toggle('pc-hud-visible',show);if(!show)return;
   const sk=innerWidth+'x'+innerHeight;if(sk!==scaleKey){scaleKey=sk;const r=scr.getBoundingClientRect();scr.style.setProperty('--hu',Math.min(r.width/1040,r.height/577)+'px')}
+  if(coop){coopHud();return}
   text(health.querySelector('strong'),meter(health,pl.hp,pl.max||1));text(mana.querySelector('strong'),meter(mana,pl.mana||0,pl.manaMax||SL.mana.max));
   const st=meter(stamina,pl.sta||0,pl.staMax||1);stamina.title='Stamina · '+st;text(stamina.querySelector('small'),'STA · '+st);const dash=parseFloat(stamina.style.getPropertyValue('--fill'))+' 100';if(stamina._dash!==dash){stamina._dash=dash;stamina.querySelector('.pch-st-fill').style.strokeDasharray=dash}
   meter(xp,S.xp,S.need||1);xp.title=T('Doświadczenie','Experience')+' · '+S.xp+' / '+S.need;
@@ -2183,6 +2209,55 @@ ${H} .pch-flash{animation:pchFlash .35s steps(2) infinite}@keyframes pchFlash{50
  // Rozmiar tekstu zmienia litery, bez powiekszania i przesuwania calej listwy.
  style.textContent=style.textContent.replace(/(font(?:-size)?\s*:[^;{}]*?)calc\(var\(--hu,1px\)\*([\d.]+)\)/g,'$1calc(var(--hu,1px)*$2*var(--nbts,1))');
  document.head.append(style);
+ const C='#orient'.repeat(17)+' #screen.pc-hud.pc-coop',CP=C+' .pcmp',CS=make('style','pc-coop-hud-style');
+ CS.textContent=`
+${C} #hud .left{display:none!important}
+${CP} .pcmp-player{position:absolute;bottom:${u(5)};width:${u(318)};height:${u(200)};pointer-events:none}
+${CP} .pcmp-p1{left:${u(9)}}${CP} .pcmp-p2{right:${u(9)}}
+${CP} .pcmp-tag{position:absolute;top:0;left:0;right:0;padding-bottom:${u(7)};border-bottom:1px solid #9f81544d;text-align:center;font:450 ${u(12)}/1.2 Cinzel,Georgia,serif;color:#e5c9ae;letter-spacing:.08em}
+${CP} .pcmp-p1 .pcmp-tag{border-image:linear-gradient(90deg,#a7535d,transparent) 1}
+${CP} .pcmp-p2 .pcmp-tag{color:#b6d0eb;border-image:linear-gradient(90deg,transparent,#668db6) 1}
+${CP} .pcmp-state{position:absolute;top:${u(24)};left:0;right:0;text-align:center;font:400 ${u(9)}/1.3 Georgia,serif;color:#baa989}
+${CP} .pch-orb{bottom:${u(-7)}!important;width:${u(116)}!important;height:${u(116)}!important}
+${CP} .pch-health{left:${u(27)}!important;right:auto!important}
+${CP} .pch-mana{left:${u(166)}!important;right:auto!important;bottom:${u(1)}!important;width:${u(102)}!important;height:${u(102)}!important}
+${CP} .pcmp-p2 .pch-health{left:auto!important;right:${u(27)}!important}
+${CP} .pcmp-p2 .pch-mana{left:auto!important;right:${u(166)}!important}
+${CP} .pch-orb strong{font:400 ${u(12)}/1 Georgia,serif!important}
+${CP} .pch-stamina small{font:400 ${u(8)}/1 Georgia,serif!important}
+${CP} .pcmp-p2 .pch-stamina svg{transform:scaleX(-1)}
+${CP} .pcmp-skills{position:absolute;bottom:${u(126)};left:50%;right:auto;transform:translateX(-50%);display:flex;gap:${u(7)}}
+${CP} .pcmp-p2 .pcmp-skills{right:auto;left:50%}
+${CP} .pcmp-skills .pch-cell{width:${u(37)};height:${u(37)};padding:0;border:0;pointer-events:auto;cursor:pointer}
+${CP} .pcmp-slot kbd{position:absolute;bottom:${u(-9)};font:400 ${u(8)}/1 Georgia,serif;color:#d7c9ad;white-space:nowrap;background:#090a0dc9;padding:1px 3px}
+${CP} .pcmp-slot.no-mana img{filter:grayscale(.8) brightness(.5)}
+${CP} .pcmp-slot.cooling img{opacity:.45}
+${CP} .pcmp-slot b{inset:0;display:grid;place-items:center;font:400 ${u(17)}/1 Georgia,serif;background:#080a0c66}
+${CP} .pcmp-slot:disabled{cursor:default;opacity:.6}
+${CP} .pcmp-slot:not(:disabled):is(:hover,:focus-visible){outline:1px solid #b45b6c;outline-offset:-2px}
+${CP} .pcmp-skills-title{position:absolute;bottom:${u(102)};right:0;width:${u(84)};text-align:center;font:400 ${u(8)}/1.2 Georgia,serif;color:#a99c83}
+${CP} .pcmp-p2 .pcmp-skills-title{left:0;right:auto}
+${CP} .pcmp-more{font:400 ${u(11)}/1 Georgia,serif;color:#dbc39b}
+${CP} .pcmp-dead .pch-glass{filter:saturate(.35);opacity:.6}
+${CP} .pcmp-dead .pcmp-state{color:#dec17b}
+${CP} .pcmp-centre{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:${u(300)};height:${u(169)}}
+${CP} .pch-level{bottom:${u(15)};width:${u(50)};height:${u(50)};border:1px solid #9c805366;border-radius:50%;background:radial-gradient(ellipse,#262426,#101115 72%);box-shadow:0 0 0 ${u(3)} #111217,0 0 0 ${u(4)} #7c69434d}
+${CP} .pch-level strong{font:450 ${u(23)}/1 Cinzel,Georgia,serif!important}
+${CP} .pch-level small{bottom:${u(56)};font:450 ${u(7.5)}/1.2 Cinzel,Georgia,serif!important}
+${CP} .pch-experience{bottom:${u(3)}}
+${CP} .pch-wallet{left:0;right:0;bottom:${u(21)};justify-content:space-between}
+${CP} .pch-wallet .pch-cell{width:${u(39)};height:${u(38)}}
+${CP} .pch-wallet .nbh-gain{bottom:100%!important}
+${CP} .pcmp-revive{position:absolute;left:0;right:0;bottom:${u(95)};text-align:center;font:400 ${u(9)}/1.3 Georgia,serif;color:#b8aa8b}
+${CP} .pcmp-active-label{position:absolute;left:0;right:0;bottom:${u(128)};text-align:center;font:450 ${u(8)}/1.2 Cinzel,Georgia,serif;color:#b8aa8b}
+${C} #activeSkillHud{display:none!important}
+${C} #activeSkillHud[hidden]{display:none!important}
+${C} #activeSkillHud .active-slot{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;flex:0 0 ${u(35)}!important;width:${u(35)}!important;height:${u(35)}!important}
+${C} #activeSkillHud kbd{font-size:${u(8)}!important}
+${C} #nbHud .nbh-boss{bottom:${u(181)}!important}
+${'#orient'.repeat(44)}.pc-menu #pause #skillLoadout .pcmp-loadout-tabs{grid-column:1/-1!important;display:flex!important;justify-content:center!important;align-items:center!important;width:100%!important;gap:16px!important;margin:0 0 18px!important}
+`;
+ CS.textContent=CS.textContent.replace(/(font(?:-size)?\s*:[^;{}]*?)calc\(var\(--hu,1px\)\*([\d.]+)\)/g,'$1calc(var(--hu,1px)*$2*var(--nbts,1))');document.head.append(CS);
 })();
 
 // PC: spokojne komunikaty i dolny panel rozmowy. Tylko prezentacja i nawigacja UI.
