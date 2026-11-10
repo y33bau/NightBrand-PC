@@ -2041,6 +2041,18 @@ ${ui} #lang .lglb{position:absolute!important;clip-path:inset(50%)!important;wid
 ${ui} #lang button[data-lang]:is(:hover,:focus-visible,.pf) .lgfr{filter:brightness(1.2) drop-shadow(0 0 5px #f5d38d)!important}
 ${ui} #screen.pc-hud .pch-health .pch-liquid{filter:brightness(1.27) saturate(1.55)}
 ${ui} #screen.pc-hud .pch-mana .pch-liquid{filter:brightness(1.85) saturate(2.7)}
+${ui}.pc-type #prep :is(#prepK,.opt b,.opt strong,.pc-run-identity,.pc-detail-copy h3,.pc-popover summary,#prepBack),
+${ui}.pc-type #kap :is(#kapHd,.m2k-head,.m2k-row b,.m2k-row strong,.m2k-buy){font-family:var(--pc-display)!important;font-weight:450!important;letter-spacing:0!important}
+${ui}.pc-type #prep :is(.opt small,.opt .pl,.opt .mi,.pc-detail-copy p,.pc-run-status small),
+${ui}.pc-type #kap #kapDet :is(p,small,td,b){font-family:var(--pc-reading)!important}
+${ui} #prep .premium-prep-head #prepBack{position:absolute!important;left:0!important;top:50%!important;transform:translateY(-50%)!important;width:calc(112 * var(--pc-u))!important;padding:0!important;margin:0!important}
+${ui} #prep .premium-prep-head .pc-popover:first-child{left:calc(134 * var(--pc-u))!important}
+${ui} #prep .premium-prep-head .pc-popover:last-child{right:calc(134 * var(--pc-u))!important}
+${ui} #title.pc-home .nb-mode-select{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;width:min(80vw,calc(530 * var(--pc-u) * var(--nbts,1)))!important}
+${ui} #title.pc-home .nb-mode{width:100%!important;padding:calc(10 * var(--pc-u)) calc(16 * var(--pc-u))!important;align-items:center!important;justify-content:center!important;text-align:center!important;box-shadow:none!important}
+${ui} #title.pc-home .nb-mode :is(img,.nb-mode__icon,.premium-nav-icon,.nb-mode__marker){display:none!important}
+${ui} #title.pc-home .nb-mode::before,${ui} #title.pc-home .nb-mode::after{content:none!important}
+${ui} #title.pc-home .nb-mode .pc-mode-note{margin-inline:0!important;text-align:center!important}
 `;document.head.append(polish);
 
 
