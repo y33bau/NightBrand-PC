@@ -5875,7 +5875,7 @@ let pcMenuBack=null;
 const PAD={x:0,y:0,ax:0,ay:0,aimT:-99,prev:[],cur:[],atk:false,blk:false,on:false,g:null,menu:'',lock:0,nav:0,navD:0};
 function padRumble(s,w,ms,g0){if(SETT.rumble===false)return;try{const g=g0||PAD.g;if(g&&g.vibrationActuator)g.vibrationActuator.playEffect('dual-rumble',{duration:ms,strongMagnitude:s,weakMagnitude:w})}catch(e){}}
 function padDz(x,y,dz){const m=Math.hypot(x,y);if(m<dz)return [0,0];const k=Math.min(1,(m-dz)/(1-dz))/m;return [x*k,y*k]}
-function padMenuId(){if(recoveryActive)return 'recovery';if(S&&S.notice&&!$('notice').hidden)return 'notice';if(S&&S.witChoice&&!$('witChoices').hidden)return 'witChoices';if(S&&S.phase==='end'&&!$('end').hidden)return 'end';for(const id of ['lang','pause','shop','lvl','prep','conf','manual','opts','kap','end','title']){const el=$(id);if(el&&!el.hidden)return id}return ''}
+function padMenuId(){if(recoveryActive)return 'recovery';if(S&&S.notice&&!$('notice').hidden)return 'notice';if(S&&S.witChoice&&!$('witChoices').hidden)return 'witChoices';if(S&&S.dialog&&!$('dialog').hidden&&$('orient').classList.contains('pc-conversations'))return 'dialog';if(S&&S.phase==='end'&&!$('end').hidden)return 'end';for(const id of ['lang','pause','shop','lvl','prep','conf','manual','opts','kap','end','title']){const el=$(id);if(el&&!el.hidden)return id}return ''}
 // Menus: up/down/left/right pick the nearest control in that direction on screen (not the next one in the list).
 function navMove(id,d){const root=$(id);if(!root)return false;const items=[...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null);if(!items.length)return false;
   const ae=document.activeElement,cur=items.includes(ae)?ae:null;if(!cur){const s1=id==='title'?$('start1'):null;(s1&&items.includes(s1)?s1:items[0]).focus();return true}
@@ -8231,6 +8231,72 @@ ${H} .pch-flash{animation:pchFlash .35s steps(2) infinite}@keyframes pchFlash{50
  // Rozmiar tekstu zmienia litery, bez powiekszania i przesuwania calej listwy.
  style.textContent=style.textContent.replace(/(font(?:-size)?\s*:[^;{}]*?)calc\(var\(--hu,1px\)\*([\d.]+)\)/g,'$1calc(var(--hu,1px)*$2*var(--nbts,1))');
  document.head.append(style);
+})();
+
+// PC: spokojne komunikaty i dolny panel rozmowy. Tylko prezentacja i nawigacja UI.
+// Miniatura pochodzi z tej samej klatki atlasu co NPC w swiecie, bez nowych plikow.
+// ?pcdialogue=0 przywraca dotychczasowa oprawe; sterowanie dotykowe pozostaje bez zmian.
+(()=>{
+ const root=$('orient'),dlg=$('dialog');
+ if(coarse||!root.classList.contains('pc-menu')||new URLSearchParams(location.search).get('pcdialogue')==='0')return;
+ root.classList.add('pc-conversations');
+ const T=(p,e)=>EN?e:p,make=(tag,c)=>{const el=document.createElement(tag);el.className=c;return el};
+ const picture=make('div','pc-talk-portrait'),portrait=make('canvas','');portrait.width=portrait.height=192;picture.append(portrait);picture.setAttribute('aria-hidden','true');
+ const page=make('span','pc-talk-page');page.setAttribute('aria-hidden','true');dlg.prepend(picture);dlg.append(page);
+ dlg.setAttribute('role','dialog');dlg.setAttribute('aria-modal','true');dlg.setAttribute('aria-labelledby','dlgWho');dlg.setAttribute('aria-describedby','dlgTxt');
+ const next=make('button','next'),key=make('kbd','pc-talk-key'),label=make('span','');next.type='button';next.append(key,label);dlg.querySelector('.next').replaceWith(next);
+ // Natywne zatwierdzenie przycisku nie moze rownoczesnie ustawic talkPress / rollPress.
+ dlg.addEventListener('keydown',e=>{if(e.target.closest('button')&&(e.key==='Enter'||e.key===' ')){e.stopPropagation();if(e.repeat)e.preventDefault()}});
+ next.addEventListener('click',()=>resetInput());
+ let image=null,wasOpen=false;
+ const put=(el,t)=>{if(el.textContent!==t)el.textContent=t};
+ const hide=(el,on)=>{if(el.hidden!==on)el.hidden=on};
+ const sync=()=>{
+  const open=!dlg.hidden&&!!S?.dialog;if(!open){wasOpen=false;return}
+  const n=S.dialog,lines=NL(n),count=lines.length,frame=A?.[n.art]?.[0]?.n?.map?.image;
+  hide(picture,!frame);dlg.classList.toggle('pc-talk-has-portrait',!!frame);
+  if(frame&&frame!==image){image=frame;const g=portrait.getContext('2d');g.clearRect(0,0,192,192);
+   // Zachowaj oryginalne proporcje: gorna czesc sylwetki w kwadratowej miniaturze.
+   const probe=canvas(frame.width,frame.height),pg=probe.getContext('2d');pg.drawImage(frame,0,0);const pixels=pg.getImageData(0,0,probe.width,probe.height).data;
+   let x0=probe.width,y0=probe.height,x1=0,y1=0;for(let y=0;y<probe.height;y++)for(let x=0;x<probe.width;x++)if(pixels[(y*probe.width+x)*4+3]>24){x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)}
+   if(x1>x0&&y1>y0){const side=Math.max(x1-x0,(y1-y0)*.74)*1.1;g.imageSmoothingEnabled=false;g.drawImage(frame,(x0+x1-side)/2,y0-side*.035,side,side,0,0,192,192)}
+  }
+  put(page,count>1&&!S.witChoice?`${Math.min(count,S.dlg+1)} / ${count}`:'');hide(page,!page.textContent);
+  put(label,S.dlg>=count-1&&n.id!=='wit'?T('Zamknij','Close'):T('Dalej','Continue'));
+  put(key,document.body.classList.contains('padlast')?'A':kbName(KB.map.talk));
+  hide(next,S.witChoice||n.id==='chojrak');
+  if(!wasOpen){wasOpen=true;if(!dlg.contains(document.activeElement))dlg.querySelector('button:not([hidden])')?.focus({preventScroll:true})}
+ };
+ new MutationObserver(sync).observe(dlg,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['hidden']});
+ new MutationObserver(sync).observe(document.body,{attributes:true,attributeFilter:['class']});
+ const P='#orient'.repeat(44)+'.pc-conversations #screen:not(.port)',D=P+' #dialog',M=P+' #msg',st=make('style','pc-conversation-style');
+ st.textContent=`
+${P}{--talk-unit:clamp(.8px,.092vh,1.25px);--talk-gold:#c9b38b;--talk-copy:#e8dfcf}
+${M}{top:calc(100 * var(--hu,1px))!important;left:50%!important;right:auto!important;width:min(58%,calc(650 * var(--talk-unit)))!important;max-width:68%!important;padding:calc(12 * var(--talk-unit)) calc(30 * var(--talk-unit))!important;border:0!important;border-image:none!important;background:linear-gradient(90deg,transparent,#0c0d12c9 16%,#0c0d12c9 84%,transparent)!important;box-shadow:none!important;color:var(--talk-copy)!important;font:400 max(16px,calc(19 * var(--talk-unit) * var(--nbts,1)))/1.45 Georgia,serif!important;text-align:center!important;text-wrap:pretty!important;text-shadow:0 2px 3px #000!important;transform:translate(-50%,-4px)!important;transition:opacity .25s ease,transform .25s ease!important;pointer-events:none!important}
+${M}.on{opacity:1!important;transform:translate(-50%,0)!important}
+${M}:before{content:''!important;inset:0 14% auto!important;height:1px!important;background:linear-gradient(90deg,transparent,#ad93604d,transparent)!important;opacity:1!important}
+${M}[data-k]:not([data-k='']):after{font:450 max(10px,calc(10 * var(--talk-unit) * var(--nbts,1)))/1.3 Cinzel,Georgia,serif!important;letter-spacing:.14em!important;color:var(--talk-gold)!important;margin:0 0 calc(5 * var(--talk-unit))!important}
+${M}.boss{background:linear-gradient(90deg,transparent,#28131bdf 16%,#28131bdf 84%,transparent)!important;color:#f5dfce!important}
+${M}.boss:before{background:linear-gradient(90deg,transparent,#ab5868,transparent)!important}
+${M}.boss:after{color:#e2a6a9!important}
+${D}{box-sizing:border-box!important;display:grid!important;grid-template-columns:minmax(0,1fr)!important;column-gap:calc(26 * var(--talk-unit))!important;row-gap:calc(10 * var(--talk-unit))!important;position:absolute!important;left:50%!important;right:auto!important;bottom:calc(26 * var(--talk-unit))!important;transform:translateX(-50%)!important;width:min(88%,calc(1080 * var(--talk-unit)))!important;max-width:88%!important;max-height:52%!important;overflow:auto!important;padding:calc(24 * var(--talk-unit)) calc(30 * var(--talk-unit))!important;border:1px solid #a68b5e66!important;border-image:none!important;outline:0!important;border-radius:0!important;background:linear-gradient(140deg,#1c191ded,#0c0d11f5)!important;box-shadow:0 12px 38px #0007,inset 0 1px #cfb37d16!important;cursor:default!important;z-index:15!important;font:400 max(16px,calc(20 * var(--talk-unit) * var(--nbts,1)))/1.5 Georgia,serif!important;color:var(--talk-copy)!important}
+${D}.pc-talk-has-portrait{grid-template-columns:calc(112 * var(--talk-unit)) minmax(0,1fr)!important}
+${D}[hidden],${D} [hidden]{display:none!important}
+${D} :is(.chain-edge,.chain-side){display:none!important}
+${D} .pc-talk-portrait{grid-column:1!important;grid-row:1/4!important;align-self:start!important;aspect-ratio:1;width:100%;border:1px solid #a68b5e55;background:radial-gradient(ellipse at 50% 65%,#76604433,transparent 75%),#0a0b0d88;box-shadow:inset 0 0 20px #0005;overflow:hidden}
+${D} .pc-talk-portrait canvas{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated}
+${D} .who{grid-column:-2!important;grid-row:1!important;margin:0!important;padding:0 calc(44 * var(--talk-unit)) calc(10 * var(--talk-unit)) 0!important;border-bottom:1px solid #aa8b5b33!important;font:450 max(18px,calc(23 * var(--talk-unit) * var(--nbts,1)))/1.3 Cinzel,Georgia,serif!important;letter-spacing:0!important;color:#e0c89f!important;text-shadow:none!important}
+${D} .txt{grid-column:-2!important;grid-row:2!important;margin:0!important;max-width:none!important;max-height:30vh!important;overflow:auto!important;padding:0 calc(8 * var(--talk-unit)) 0 0!important;font:inherit!important;line-height:1.55!important;color:var(--talk-copy)!important;text-align:left!important;text-wrap:pretty;scrollbar-width:thin;scrollbar-color:#87714f #0b0b0d}
+${D} :is(.next,#dlgBtns,#witChoices){grid-column:-2!important;grid-row:3!important;justify-self:end!important;display:flex!important;flex-wrap:wrap!important;justify-content:flex-end!important;align-items:center!important;gap:calc(12 * var(--talk-unit))!important;margin:calc(4 * var(--talk-unit)) 0 0!important;width:auto!important}
+${D} :is(button,.next){box-sizing:border-box!important;min-height:40px!important;padding:calc(8 * var(--talk-unit)) calc(18 * var(--talk-unit))!important;border:1px solid #aa8b5b66!important;border-image:none!important;outline:0!important;border-radius:0!important;background:#18161a!important;box-shadow:none!important;font:450 max(14px,calc(16 * var(--talk-unit) * var(--nbts,1)))/1.25 Cinzel,Georgia,serif!important;letter-spacing:0!important;color:#e4d3b3!important;text-shadow:none!important;cursor:pointer!important}
+${D} button:hover,${D}:not(:has(button:hover)) button:is(:focus-visible,.pf){background:#49242f!important;border-color:#b45b6c!important;outline:1px solid #b45b6c!important;outline-offset:1px!important;color:#fff0d5!important}
+${D} .pc-talk-key{display:inline-flex;align-items:center;justify-content:center;min-width:1.5em;padding:.1em .3em;border:1px solid #ad936066;background:#08090c77;color:#dbcaad;font:400 .8em/1.2 Georgia,serif;white-space:nowrap}
+${D} .pc-talk-page{position:absolute;top:calc(27 * var(--talk-unit));right:calc(30 * var(--talk-unit));font:400 max(11px,calc(12 * var(--talk-unit) * var(--nbts,1)))/1.3 Georgia,serif;color:#ad9c83}
+${D} :is(.next,#dlgBtns,#witChoices)[hidden]{display:none!important}
+@media(max-height:600px){${D}{padding:16px 22px!important;bottom:16px!important;max-height:64%!important}${D}.pc-talk-has-portrait{grid-template-columns:76px minmax(0,1fr)!important}${D} .pc-talk-page{top:19px!important;right:22px!important}${D} .txt{max-height:32vh!important}}
+@media(prefers-reduced-motion:reduce){${M}{transition:none!important}}
+`;
+ document.head.append(st);
 })();
 
 requestAnimationFrame(frame);
