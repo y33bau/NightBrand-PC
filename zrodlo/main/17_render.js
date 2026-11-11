@@ -77,10 +77,10 @@ function syncThreatRings(){
   }
   COMBAT_WARN.marks.count=mark;COMBAT_WARN.marks.instanceMatrix.needsUpdate=true;if(COMBAT_WARN.marks.instanceColor)COMBAT_WARN.marks.instanceColor.needsUpdate=true;
 }
-function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{ambTick(dt);shockTick(dt)}catch(e){quietErr('amb',e)}if(!S)syncThreatRings();
+function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMarks[0].visible=false;heroMarks[1].visible=false}try{ambTick(dt);shockTick(dt)}catch(e){quietErr('amb',e)}if(!S)syncThreatRings();
   let tx,tz;
   if(S){const cp=pl.dead&&pl2&&!pl2.dead?pl2:pl;tx=cp.x/16;tz=cp.y/16}else{idleA+=dt*.08;const I=W.idle;tx=I[0]+Math.sin(idleA)*I[2];tz=I[1]+Math.cos(idleA*.7)*I[3]}
-  if(S&&depthOn()){const hw=11.5*Math.min(1.35,Math.max(.75,cam.aspect/(16/9)));const hx=tx,hz=tz;if(MW>hw*2+2)tx=Math.min(MW-hw,Math.max(hw,tx));tz=Math.min(MH-7.5,Math.max(8.5,tz));tx=Math.min(hx+hw*.6,Math.max(hx-hw*.6,tx));tz=Math.min(hz+4,Math.max(hz-3,tz))}
+  if(S&&depthOn()){const hw=11.5*Math.min(1.35,Math.max(.75,cam.aspect/(16/9)));const hx=tx,hz=tz;if(MW>hw*2+2)tx=Math.min(MW-hw,Math.max(hw,tx));tz=Math.min(MH-7.5,Math.max(8.5,tz));tx=Math.min(hx+hw*.6,Math.max(hx-hw*.6,tx));tz=Math.min(hz+4,Math.max(hz-2.2,tz))}
   camTarget.x+=(tx-camTarget.x)*Math.min(1,dt*8);camTarget.z+=(tz-camTarget.z)*Math.min(1,dt*8);if(!S||S.t<.1){camTarget.x=tx;camTarget.z=tz}
   let sx=0,sz=0;if(SETT.shake&&S&&S.shakeT>0){const pxw=2*DIST*Math.tan(12*Math.PI/180)/RT_H;S.shkT=(S.shkT||0)-dt;if(S.shkT<=0||!S.shk){S.shkT=.04;S.shk=[Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw,Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw/Math.sin(PITCH)]}sx=S.shk[0];sz=S.shk[1]}
   const EZ=S&&S.exec>0&&SETT.shake?1-.16*Math.min(1,S.exec/.3):1;cam.position.set(camTarget.x+sx,Math.sin(PITCH)*DIST*EZ,camTarget.z+Math.cos(PITCH)*DIST*EZ+sz);cam.lookAt(camTarget.x+sx,.8,camTarget.z+sz);syncSwordGlow();syncCombatEffects(dt);syncWhirlVisual(dt);syncBloodHD(dt);
@@ -136,7 +136,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{ambTick(dt)
     S.qBreak=Math.max(0,(S.qBreak||0)-dt);S.qPop=Math.max(0,(S.qPop||0)-dt);
     // charges orbit the hero as sparks; runes of time and reach leave their own orbiting motes
     const orbit=(n,r,sp,col,z)=>{if(dt<=0)return;for(let i=0;i<n;i++){const a=clock*sp+i*Math.PI*2/n;S.parts.push({k:'e',x:pl.x+Math.cos(a)*r,y:pl.y+Math.sin(a)*r*.6,z,vx:0,vy:0,vz:0,c:col,life:.05})}};
-    if(!pl.dead)blob(pl.x/16,pl.y/16,1);if(pl2&&!pl2.dead)blob(pl2.x/16,pl2.y/16,1);
+    if(!pl.dead)blob(pl.x/16,pl.y/16,1);if(pl2&&!pl2.dead)blob(pl2.x/16,pl2.y/16,1);heroMark(0,pl);heroMark(1,pl2);
     for(const e of S.enemies){
       const an=A[e.type];let fr;
       if(e.type==='bat')fr=at(an.walk,clock+e.ph,12);

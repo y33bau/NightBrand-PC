@@ -262,6 +262,11 @@ function setFrame(mesh,fr,mode){if(!fr)return;
 const at=(anim,t,fps,loop=true)=>anim[loop?Math.floor(t*fps)%anim.length:Math.min(anim.length-1,Math.floor(t*fps))];
 
 let heroMesh,margaMesh;
+// Znacznik pod stopami gracza: miekki jasny pierscien, zeby bohater nie ginal w tlumie. ?heromark=0 wylacza.
+const HERO_MARK_ON=new URLSearchParams(location.search).get('heromark')!=='0';
+const heroMarks=(()=>{const c=canvas(96,96),g=c.getContext('2d'),gr=g.createRadialGradient(48,48,0,48,48,48);gr.addColorStop(0,'rgba(255,255,255,.10)');gr.addColorStop(.62,'rgba(255,255,255,.16)');gr.addColorStop(.82,'rgba(255,255,255,.95)');gr.addColorStop(.9,'rgba(255,255,255,.5)');gr.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=gr;g.fillRect(0,0,96,96);const t=texFrom(c);t.magFilter=t.minFilter=THREE.LinearFilter;
+ return [0xbfe6ff,0xd9b8ff].map(col=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:t,color:col,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.5,fog:false}));m.visible=false;m.renderOrder=-2;m.frustumCulled=false;scene.add(m);return m})})();
+function heroMark(i,p){const m=heroMarks[i];if(!HERO_MARK_ON||!p||p.dead||!S||S.phase!=='play'){m.visible=false;return}m.visible=true;m.position.set(p.x/16,.045,p.y/16);const s=1.55+(p.roll>0?.25:0);m.scale.set(s,1,s);m.material.opacity=(SETT.flash?.5:.36)*(p.inv>0&&p.roll<=0?.7:1)}
 const MAXB=420;const blobs=new THREE.InstancedMesh(new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:contactTex,transparent:true,depthWrite:false}),MAXB);scene.add(blobs);
 const wispGlow={1:'#7fd0ff',2:'#9ef0a0',5:'#ff6b6b',c:'#e0b84a'};for(const k in wispGlow)wispGlow[k]=new THREE.MeshBasicMaterial({map:glowC(wispGlow[k]),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,fog:false,opacity:.55});
 const glowGeo=new THREE.PlaneGeometry(.7,.7);

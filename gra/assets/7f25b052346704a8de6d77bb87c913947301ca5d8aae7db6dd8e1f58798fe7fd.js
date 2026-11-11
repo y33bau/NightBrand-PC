@@ -1246,7 +1246,9 @@ function groundMaterial(m){const info=m.map&&m.map.userData&&m.map.userData.grou
   for(let i=0;i<cc0Count;i++){const t=new THREE.Texture(IMGS['cc0_'+cc0.names[i]]);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.magFilter=THREE.LinearFilter;t.minFilter=THREE.LinearMipmapLinearFilter;t.generateMipmaps=true;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());t.needsUpdate=true;m['cc0Texture'+i]=t;hdTexReg(t,'cc0_'+cc0.names[i]);}
   const cc0Cells=cc0?cc0FloorCells(info,groundChapter):info.cells;if(cc0)cc0FloorOverlay(m.map,info,cc0Cells);
   const cc0Uniforms=cc0?cc0.names.slice(0,cc0Count).map((_,i)=>'uniform sampler2D nbCC'+i+';').join('\n'):'';
-  const cc0Sample=cc0?cc0.names.slice(0,cc0Count).map((_,i)=>'if(id<'+(i+.5).toFixed(1)+'){\n#ifdef NB_STABLE_GRAD\nreturn texture2DGradEXT(nbCC'+i+',world/12.,nbDx/12.,nbDy/12.).rgb;\n#else\nreturn texture2D(nbCC'+i+',world/12.).rgb;\n#endif\n}').join('\n'):'';
+  // glebia: w Dolnym Miescie wzor posadzki 2x gestszy, zeby plyty pasowaly do skali postaci (?depth=0 = stara skala)
+  const ccS=groundChapter===2&&DEPTH_ON?'6.':'12.';
+  const cc0Sample=cc0?cc0.names.slice(0,cc0Count).map((_,i)=>'if(id<'+(i+.5).toFixed(1)+'){\n#ifdef NB_STABLE_GRAD\nreturn texture2DGradEXT(nbCC'+i+',world/'+ccS+',nbDx/'+ccS+',nbDy/'+ccS+').rgb;\n#else\nreturn texture2D(nbCC'+i+',world/'+ccS+').rgb;\n#endif\n}').join('\n'):'';
   m.bumpMap=null;m.bumpScale=0;delete m.userData.surfaceDetail;
   m.groundAtlas=surfaceTex(groundPadded(info.image));m.groundCoarse=surfaceTex(groundCoarse(info.image));
   // Stable derivatives across tile-index jumps; retain minification without neighbouring-cell bleed.
@@ -1294,7 +1296,7 @@ vec3 base=nbCCRead(0.,nbWorld)*nbCCTint*ratio;float band=1.-smoothstep(.19,.23,d
 if(nbLite<.5){float gn=fract(sin(dot(floor(nbWorld*24.),vec2(12.9898,78.233)))*43758.5453);float gp=max(length(nbDx),length(nbDy))*24.;result*=1.+(gn-.5)*.12*clamp(1.3-gp,0.,1.);}
 sampledDiffuseColor.rgb=result;}
 sampledDiffuseColor=mapTexelToLinear(sampledDiffuseColor);diffuseColor*=sampledDiffuseColor;
-#endif`)};m.customProgramCacheKey=()=> 'nightbrand-ground-cc0-v3-'+groundChapter+'-'+compactSamplers;return m}
+#endif`)};m.customProgramCacheKey=()=> 'nightbrand-ground-cc0-v3-'+groundChapter+'-'+compactSamplers+'-'+ccS;return m}
 function groundDetails(g){const plan=W.groundPlan;if(!plan)return;for(const p of W.PROPS){const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;if(plan.road[i])continue;const fire=p.fire||/furnace|brazier/.test(p.k),blood=/gallows|covered_corpses|beggar_bodies/.test(p.k),bones=/bones|sarcophagus/.test(p.k);if(!fire&&!blood&&!bones)continue;const key=fire?'scorch':blood?'pool':'bones',stamp=canvas(40,40),q=stamp.getContext('2d');q.drawImage((blood&&bloodHD.ready?bloodHD.stamps:DEC[key])[groundHash(x,y)%4],0,0,40,40);q.globalCompositeOperation='destination-in';const mask=q.createRadialGradient(20,20,4,20,20,20);mask.addColorStop(0,'#fff');mask.addColorStop(1,'transparent');q.fillStyle=mask;q.fillRect(0,0,40,40);g.save();g.globalAlpha=blood?.28:.18;g.drawImage(stamp,p.x*16-20,p.y*16-20);g.restore()}
   for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++){const i=y*MW+x;if(plan.road[i]||plan.rows[i]===255||groundHash(x,y)%67)continue;const wall=[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>SOLID.has(map[(y+dy)*MW+x+dx]));if(!wall)continue;g.save();g.globalAlpha=.12;g.drawImage(DEC.crack[groundHash(y,x)%4],x*16-4,y*16-4,24,24);g.restore()}}
 
@@ -2524,6 +2526,11 @@ function setFrame(mesh,fr,mode){if(!fr)return;
 const at=(anim,t,fps,loop=true)=>anim[loop?Math.floor(t*fps)%anim.length:Math.min(anim.length-1,Math.floor(t*fps))];
 
 let heroMesh,margaMesh;
+// Znacznik pod stopami gracza: miekki jasny pierscien, zeby bohater nie ginal w tlumie. ?heromark=0 wylacza.
+const HERO_MARK_ON=new URLSearchParams(location.search).get('heromark')!=='0';
+const heroMarks=(()=>{const c=canvas(96,96),g=c.getContext('2d'),gr=g.createRadialGradient(48,48,0,48,48,48);gr.addColorStop(0,'rgba(255,255,255,.10)');gr.addColorStop(.62,'rgba(255,255,255,.16)');gr.addColorStop(.82,'rgba(255,255,255,.95)');gr.addColorStop(.9,'rgba(255,255,255,.5)');gr.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=gr;g.fillRect(0,0,96,96);const t=texFrom(c);t.magFilter=t.minFilter=THREE.LinearFilter;
+ return [0xbfe6ff,0xd9b8ff].map(col=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:t,color:col,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.5,fog:false}));m.visible=false;m.renderOrder=-2;m.frustumCulled=false;scene.add(m);return m})})();
+function heroMark(i,p){const m=heroMarks[i];if(!HERO_MARK_ON||!p||p.dead||!S||S.phase!=='play'){m.visible=false;return}m.visible=true;m.position.set(p.x/16,.045,p.y/16);const s=1.55+(p.roll>0?.25:0);m.scale.set(s,1,s);m.material.opacity=(SETT.flash?.5:.36)*(p.inv>0&&p.roll<=0?.7:1)}
 const MAXB=420;const blobs=new THREE.InstancedMesh(new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:contactTex,transparent:true,depthWrite:false}),MAXB);scene.add(blobs);
 const wispGlow={1:'#7fd0ff',2:'#9ef0a0',5:'#ff6b6b',c:'#e0b84a'};for(const k in wispGlow)wispGlow[k]=new THREE.MeshBasicMaterial({map:glowC(wispGlow[k]),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,fog:false,opacity:.55});
 const glowGeo=new THREE.PlaneGeometry(.7,.7);
@@ -4649,10 +4656,10 @@ function syncThreatRings(){
   }
   COMBAT_WARN.marks.count=mark;COMBAT_WARN.marks.instanceMatrix.needsUpdate=true;if(COMBAT_WARN.marks.instanceColor)COMBAT_WARN.marks.instanceColor.needsUpdate=true;
 }
-function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{ambTick(dt);shockTick(dt)}catch(e){quietErr('amb',e)}if(!S)syncThreatRings();
+function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMarks[0].visible=false;heroMarks[1].visible=false}try{ambTick(dt);shockTick(dt)}catch(e){quietErr('amb',e)}if(!S)syncThreatRings();
   let tx,tz;
   if(S){const cp=pl.dead&&pl2&&!pl2.dead?pl2:pl;tx=cp.x/16;tz=cp.y/16}else{idleA+=dt*.08;const I=W.idle;tx=I[0]+Math.sin(idleA)*I[2];tz=I[1]+Math.cos(idleA*.7)*I[3]}
-  if(S&&depthOn()){const hw=11.5*Math.min(1.35,Math.max(.75,cam.aspect/(16/9)));const hx=tx,hz=tz;if(MW>hw*2+2)tx=Math.min(MW-hw,Math.max(hw,tx));tz=Math.min(MH-7.5,Math.max(8.5,tz));tx=Math.min(hx+hw*.6,Math.max(hx-hw*.6,tx));tz=Math.min(hz+4,Math.max(hz-3,tz))}
+  if(S&&depthOn()){const hw=11.5*Math.min(1.35,Math.max(.75,cam.aspect/(16/9)));const hx=tx,hz=tz;if(MW>hw*2+2)tx=Math.min(MW-hw,Math.max(hw,tx));tz=Math.min(MH-7.5,Math.max(8.5,tz));tx=Math.min(hx+hw*.6,Math.max(hx-hw*.6,tx));tz=Math.min(hz+4,Math.max(hz-2.2,tz))}
   camTarget.x+=(tx-camTarget.x)*Math.min(1,dt*8);camTarget.z+=(tz-camTarget.z)*Math.min(1,dt*8);if(!S||S.t<.1){camTarget.x=tx;camTarget.z=tz}
   let sx=0,sz=0;if(SETT.shake&&S&&S.shakeT>0){const pxw=2*DIST*Math.tan(12*Math.PI/180)/RT_H;S.shkT=(S.shkT||0)-dt;if(S.shkT<=0||!S.shk){S.shkT=.04;S.shk=[Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw,Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw/Math.sin(PITCH)]}sx=S.shk[0];sz=S.shk[1]}
   const EZ=S&&S.exec>0&&SETT.shake?1-.16*Math.min(1,S.exec/.3):1;cam.position.set(camTarget.x+sx,Math.sin(PITCH)*DIST*EZ,camTarget.z+Math.cos(PITCH)*DIST*EZ+sz);cam.lookAt(camTarget.x+sx,.8,camTarget.z+sz);syncSwordGlow();syncCombatEffects(dt);syncWhirlVisual(dt);syncBloodHD(dt);
@@ -4708,7 +4715,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{ambTick(dt)
     S.qBreak=Math.max(0,(S.qBreak||0)-dt);S.qPop=Math.max(0,(S.qPop||0)-dt);
     // charges orbit the hero as sparks; runes of time and reach leave their own orbiting motes
     const orbit=(n,r,sp,col,z)=>{if(dt<=0)return;for(let i=0;i<n;i++){const a=clock*sp+i*Math.PI*2/n;S.parts.push({k:'e',x:pl.x+Math.cos(a)*r,y:pl.y+Math.sin(a)*r*.6,z,vx:0,vy:0,vz:0,c:col,life:.05})}};
-    if(!pl.dead)blob(pl.x/16,pl.y/16,1);if(pl2&&!pl2.dead)blob(pl2.x/16,pl2.y/16,1);
+    if(!pl.dead)blob(pl.x/16,pl.y/16,1);if(pl2&&!pl2.dead)blob(pl2.x/16,pl2.y/16,1);heroMark(0,pl);heroMark(1,pl2);
     for(const e of S.enemies){
       const an=A[e.type];let fr;
       if(e.type==='bat')fr=at(an.walk,clock+e.ph,12);
@@ -8448,6 +8455,7 @@ ${AS} .active-slot{position:relative!important;flex:none!important;width:${u(36)
 ${AS} .active-slot:before,${AS} .active-slot:after{content:none!important}
 ${AS} .active-slot .ic{width:${u(27)}!important;height:${u(27)}!important;border-radius:0!important;opacity:1}
 ${AS} .active-slot.empty>span{display:none!important}
+${AS} .active-slot.empty{opacity:.3!important}${AS} .active-slot.empty kbd{display:none!important}${H} .pch-enchants .pch-cell:not(:has(img)){opacity:.3}
 ${AS} .active-slot kbd{top:auto!important;bottom:${u(-3)}!important;left:50%!important;padding:0 ${u(2)}!important;min-width:0!important;font:500 ${u(8)}/1 Grenze,Georgia,serif!important;color:#c8bda7!important;background:#0a0c0ddd!important;border:0!important;border-radius:0!important;transform:translateX(-50%)!important}
 ${AS} .active-slot small{left:auto!important;right:${u(3)}!important;bottom:auto!important;top:${u(2)}!important;transform:none!important;min-width:0!important;padding:0 ${u(1)}!important;border:0!important;border-radius:0!important;background:#08090bdb!important;font:${u(7)}/1 Grenze,Georgia,serif!important;z-index:3}
 ${AS} .active-slot .slot-cd{inset:${u(3)}!important;border-radius:0!important;font:500 ${u(16)}/1 Grenze,Georgia,serif!important;background:#070a11b8!important;box-shadow:inset 0 0 0 1px #a18b5e55!important}
@@ -8629,5 +8637,15 @@ ${P} #intro .ihint{font:400 max(13px,calc(14 * var(--hint-u) * var(--nbts,1)))/1
 
 // Pauza: dluzszy napis przycisku (np. Wybor rozdzialu) nie zawija sie i nie wychodzi poza ramke.
 {const st=document.createElement('style');st.textContent='html body #pause#pause .btnrow button.go{white-space:nowrap!important;width:auto!important;max-width:none!important;min-width:max-content!important;height:auto!important;flex:0 0 auto!important}';document.head.append(st)}
+// Zywe menu: iskry unoszace sie znad pogorzeliska i migotanie luny pozarow na ilustracji tytulowej. Tylko rozjasnia obraz (screen), nie lapie klikniec. ?menufx=0 wylacza.
+{const ti=$('title');if(ti&&new URLSearchParams(location.search).get('menufx')!=='0'){const cv=document.createElement('canvas');cv.id='titleFx';cv.setAttribute('aria-hidden','true');cv.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;mix-blend-mode:screen';ti.prepend(cv);
+ const g=cv.getContext('2d'),P=[],reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;let last=0,CW=0,CH_=0;
+ const spawn=first=>({x:Math.random(),y:first?Math.random():1+Math.random()*.08,vx:(Math.random()-.5)*.02,vy:-(.025+Math.random()*.055),r:.9+Math.random()*1.9,l:first?Math.random()*4:0,life:6+Math.random()*8,ph:Math.random()*6.283});
+ const tick=t=>{requestAnimationFrame(tick);if(ti.hidden||document.hidden||t-last<33)return;const dt=Math.min(.1,(t-last)/1000);last=t;const w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return;if(w!==CW||h!==CH_){CW=cv.width=w;CH_=cv.height=h}
+  g.clearRect(0,0,CW,CH_);const fl=reduce?.5:.5+.5*Math.sin(t*.0031)*Math.sin(t*.0017+1.3);
+  for(const [fx,fy,fr] of [[.03,.42,.42],[.985,.4,.46]]){const gr=g.createRadialGradient(fx*CW,fy*CH_,0,fx*CW,fy*CH_,fr*CH_);gr.addColorStop(0,'rgba(255,112,42,'+(.11+.08*fl).toFixed(3)+')');gr.addColorStop(1,'rgba(255,90,30,0)');g.fillStyle=gr;g.fillRect(0,0,CW,CH_)}
+  if(reduce)return;while(P.length<48)P.push(spawn(true));
+  for(let i=0;i<P.length;i++){const p=P[i];p.l+=dt;p.x+=(p.vx+Math.sin(t*.0008+p.ph)*.012)*dt;p.y+=p.vy*dt;if(p.l>p.life||p.y<-.05){P[i]=spawn(false);continue}const a=Math.min(1,p.l/1.2)*Math.min(1,(p.life-p.l)/2)*(.5+.35*Math.sin(t*.006+p.ph));g.fillStyle='rgba(255,'+(150+((p.ph*20)|0)%70)+',70,'+Math.max(0,a).toFixed(3)+')';g.beginPath();g.arc(p.x*CW,p.y*CH_,p.r*CH_/900,0,6.283);g.fill()}};
+ requestAnimationFrame(tick)}}
 requestAnimationFrame(frame);
 })();

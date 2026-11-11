@@ -2181,6 +2181,7 @@ ${AS} .active-slot{position:relative!important;flex:none!important;width:${u(36)
 ${AS} .active-slot:before,${AS} .active-slot:after{content:none!important}
 ${AS} .active-slot .ic{width:${u(27)}!important;height:${u(27)}!important;border-radius:0!important;opacity:1}
 ${AS} .active-slot.empty>span{display:none!important}
+${AS} .active-slot.empty{opacity:.3!important}${AS} .active-slot.empty kbd{display:none!important}${H} .pch-enchants .pch-cell:not(:has(img)){opacity:.3}
 ${AS} .active-slot kbd{top:auto!important;bottom:${u(-3)}!important;left:50%!important;padding:0 ${u(2)}!important;min-width:0!important;font:500 ${u(8)}/1 Grenze,Georgia,serif!important;color:#c8bda7!important;background:#0a0c0ddd!important;border:0!important;border-radius:0!important;transform:translateX(-50%)!important}
 ${AS} .active-slot small{left:auto!important;right:${u(3)}!important;bottom:auto!important;top:${u(2)}!important;transform:none!important;min-width:0!important;padding:0 ${u(1)}!important;border:0!important;border-radius:0!important;background:#08090bdb!important;font:${u(7)}/1 Grenze,Georgia,serif!important;z-index:3}
 ${AS} .active-slot .slot-cd{inset:${u(3)}!important;border-radius:0!important;font:500 ${u(16)}/1 Grenze,Georgia,serif!important;background:#070a11b8!important;box-shadow:inset 0 0 0 1px #a18b5e55!important}
@@ -2362,5 +2363,15 @@ ${P} #intro .ihint{font:400 max(13px,calc(14 * var(--hint-u) * var(--nbts,1)))/1
 
 // Pauza: dluzszy napis przycisku (np. Wybor rozdzialu) nie zawija sie i nie wychodzi poza ramke.
 {const st=document.createElement('style');st.textContent='html body #pause#pause .btnrow button.go{white-space:nowrap!important;width:auto!important;max-width:none!important;min-width:max-content!important;height:auto!important;flex:0 0 auto!important}';document.head.append(st)}
+// Zywe menu: iskry unoszace sie znad pogorzeliska i migotanie luny pozarow na ilustracji tytulowej. Tylko rozjasnia obraz (screen), nie lapie klikniec. ?menufx=0 wylacza.
+{const ti=$('title');if(ti&&new URLSearchParams(location.search).get('menufx')!=='0'){const cv=document.createElement('canvas');cv.id='titleFx';cv.setAttribute('aria-hidden','true');cv.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;mix-blend-mode:screen';ti.prepend(cv);
+ const g=cv.getContext('2d'),P=[],reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;let last=0,CW=0,CH_=0;
+ const spawn=first=>({x:Math.random(),y:first?Math.random():1+Math.random()*.08,vx:(Math.random()-.5)*.02,vy:-(.025+Math.random()*.055),r:.9+Math.random()*1.9,l:first?Math.random()*4:0,life:6+Math.random()*8,ph:Math.random()*6.283});
+ const tick=t=>{requestAnimationFrame(tick);if(ti.hidden||document.hidden||t-last<33)return;const dt=Math.min(.1,(t-last)/1000);last=t;const w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return;if(w!==CW||h!==CH_){CW=cv.width=w;CH_=cv.height=h}
+  g.clearRect(0,0,CW,CH_);const fl=reduce?.5:.5+.5*Math.sin(t*.0031)*Math.sin(t*.0017+1.3);
+  for(const [fx,fy,fr] of [[.03,.42,.42],[.985,.4,.46]]){const gr=g.createRadialGradient(fx*CW,fy*CH_,0,fx*CW,fy*CH_,fr*CH_);gr.addColorStop(0,'rgba(255,112,42,'+(.11+.08*fl).toFixed(3)+')');gr.addColorStop(1,'rgba(255,90,30,0)');g.fillStyle=gr;g.fillRect(0,0,CW,CH_)}
+  if(reduce)return;while(P.length<48)P.push(spawn(true));
+  for(let i=0;i<P.length;i++){const p=P[i];p.l+=dt;p.x+=(p.vx+Math.sin(t*.0008+p.ph)*.012)*dt;p.y+=p.vy*dt;if(p.l>p.life||p.y<-.05){P[i]=spawn(false);continue}const a=Math.min(1,p.l/1.2)*Math.min(1,(p.life-p.l)/2)*(.5+.35*Math.sin(t*.006+p.ph));g.fillStyle='rgba(255,'+(150+((p.ph*20)|0)%70)+',70,'+Math.max(0,a).toFixed(3)+')';g.beginPath();g.arc(p.x*CW,p.y*CH_,p.r*CH_/900,0,6.283);g.fill()}};
+ requestAnimationFrame(tick)}}
 requestAnimationFrame(frame);
 })();
