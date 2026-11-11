@@ -15,6 +15,9 @@ let filmUniforms=null;
 const ART_ON=new URLSearchParams(location.search).get('art')!=='0';
 const CH1_ART_ON=ART_ON&&new URLSearchParams(location.search).get('art1')!=='0';
 const chapterArt=(ch=CH)=>ch===1?CH1_ART_ON:ART_ON;
+// Swiatlo i glebia (runda swiatlo-pc-1): na razie tylko rozdzial I. ?depth=0 = porownanie przed.
+const DEPTH_ON=new URLSearchParams(location.search).get('depth')!=='0';
+const depthOn=(ch=CH)=>DEPTH_ON&&ch===1;
 const ART_LIGHT={1:[0xffdfba,1.55,10.5],2:[0xffe1b9,1.4,9.5],3:[0xffe4c1,1.45,10],4:[0xcfe4db,1.5,10],5:[0xdde1f0,1.55,10.5],9:[0xd0dded,1.4,9.5]};
 const ATM={1:CH1_ART_ON?{amb:0x707784,ai:.98,hs:0x8999ae,hg:0x302622,hi:.46,fog:0x111722,fd:.0085,clear:0x080b11,mi:.22,mc:0xafbdd7,cold:0xe5ecf2,warm:0xf3dfc4}:{amb:0x65738c,ai:1,hs:0x8a9ebf,hg:0x2b1b17,hi:.42,fog:0x0b101b,fd:.010,clear:0x05070d,mi:.16,mc:0x9ebbea,cold:0xdceaff,warm:0xffeedc},
   2:{amb:0x5c5269,ai:.98,hs:0x5c6380,hg:0x25120c,hi:.5,fog:0x0c0910,fd:.013,clear:0x040307,mi:.18,mc:0xb6bbd5,cold:0xdce1ff,warm:0xffe5c9},
@@ -42,7 +45,7 @@ if(ART_ON){
   9:[[.96,1,1.04],[1.04,1.02,.98],.96,1.06]
  });
 }
-function applyAtmos(){const a=ATM[CH];amb.color.setHex(a.amb);amb.intensity=a.ai;hemi.color.setHex(a.hs);hemi.groundColor.setHex(a.hg);hemi.intensity=a.hi;scene.fog.color.setHex(a.fog);scene.fog.density=a.fd;renderer.setClearColor(a.clear);moon.intensity=a.mi||0;if(a.mc)moon.color.setHex(a.mc);RIMU.k.value=RIM_K*(.5+(a.mi||0)*3);RIMU.col.value.setHex(a.mc||0x9ebbea);if(filmUniforms){filmUniforms.cold.value.setHex(a.cold);filmUniforms.warm.value.setHex(a.warm);const g=GRADE[CH]||GRADE[9];filmUniforms.gSh.value.set(...g[0]);filmUniforms.gHi.value.set(...g[1]);filmUniforms.gSat.value=g[2];filmUniforms.gCon.value=g[3]}if(typeof setAmbience==='function')setAmbience()}
+function applyAtmos(){const a=ATM[CH],dp=depthOn();amb.color.setHex(a.amb);amb.intensity=a.ai*(dp?.6:1);hemi.color.setHex(a.hs);hemi.groundColor.setHex(a.hg);hemi.intensity=a.hi*(dp?.72:1);scene.fog.color.setHex(a.fog);scene.fog.density=a.fd;renderer.setClearColor(a.clear);moon.intensity=a.mi||0;if(a.mc)moon.color.setHex(a.mc);RIMU.k.value=RIM_K*(.5+(a.mi||0)*3);RIMU.col.value.setHex(a.mc||0x9ebbea);if(filmUniforms){filmUniforms.cold.value.setHex(a.cold);filmUniforms.warm.value.setHex(a.warm);const g=GRADE[CH]||GRADE[9];filmUniforms.gSh.value.set(...g[0]);filmUniforms.gHi.value.set(...g[1]);filmUniforms.gSat.value=g[2];filmUniforms.gCon.value=g[3]}if(typeof setAmbience==='function')setAmbience()}
 // moon rim light on sprites: figure pixels whose screen-left neighbour is empty get a cold edge glow (flips with the sprite mirroring)
 const RIM_K=.55;
 const RIMU={col:{value:new THREE.Color(0x9ebbea)},k:{value:0}};
