@@ -8638,6 +8638,48 @@ ${P} #intro .ihint{font:400 max(13px,calc(14 * var(--hint-u) * var(--nbts,1)))/1
  document.head.append(style);
 })();
 
+// ===== HUD PC, szlif czytelnosci (runda hud-pc-1): pasek staminy pod bohaterem, grubszy luk staminy i pasek doswiadczenia,
+// wieksze liczniki monet, czerwona winieta przy niskim zyciu. Tylko odczyt stanu gry. ?hudfix=0 wylacza.
+(()=>{if(new URLSearchParams(location.search).get('hudfix')==='0')return;
+ const scr=$('screen'),nb=$('nbHud');if(!scr||!nb)return;const V3=new THREE.Vector3();
+ const bars=[0,1].map(i=>{const e=document.createElement('div');e.className='nbx-sta nbx-sta'+(i+1);e.setAttribute('aria-hidden','true');e.innerHTML='<i></i>';scr.insertBefore(e,nb);return{e,f:e.firstChild,t:0,w:''}});
+ const prevHud=hud;let lastXp=-1,xpT=0,lastCoins=-1,coinT=0;
+ hud=function(){prevHud();const show=scr.classList.contains('pc-hud-visible')&&!!S,now=performance.now();scr.classList.toggle('nbx-hud',scr.classList.contains('pc-hud'));
+  const w=scr.clientWidth,h=scr.clientHeight,hu=parseFloat(scr.style.getPropertyValue('--hu'))||1;
+  for(const [i,p] of [pl,pl2].entries()){const b=bars[i];if(!show||!p||p.dead){if(b.on!==false){b.on=false;b.e.classList.remove('on')}continue}
+   const r=Math.max(0,Math.min(1,(p.sta||0)/(p.staMax||1)));if(r<.995)b.t=now+650;const on=now<b.t;
+   if(on){V3.set(p.x/16,0,p.y/16).project(cam);const x=Math.round((V3.x*.5+.5)*w),y=Math.round((-V3.y*.5+.5)*h+13*hu);b.e.style.transform='translate('+x+'px,'+y+'px) translate(-50%,0)';const fw=(r*100).toFixed(1)+'%';if(fw!==b.w){b.w=fw;b.f.style.width=fw}
+    b.e.classList.toggle('low',r<.25);b.e.classList.toggle('no',!i&&!!SETT.flash&&$('stam').classList.contains('flash'))}
+   if(on!==b.on){b.on=on;b.e.classList.toggle('on',on)}}
+  if(!show)return;
+  const xp=nb.querySelector('.pch:not(.pcmp) .pch-experience'),wal=nb.querySelector('.pch:not(.pcmp) .pch-coins');
+  if(lastXp>=0&&S.xp!==lastXp&&xp){xp.classList.add('nbx-gain');xpT=now+450}if(xpT&&now>xpT&&xp){xp.classList.remove('nbx-gain');xpT=0}lastXp=S.xp;
+  if(lastCoins>=0&&S.coins>lastCoins&&wal){wal.classList.add('nbx-gain');coinT=now+450}if(coinT&&now>coinT&&wal){wal.classList.remove('nbx-gain');coinT=0}lastCoins=S.coins;
+ };
+ const O='#orient'.repeat(40)+' #screen.pc-hud',H=O+' .pch',u=n=>'calc(var(--hu,1px)*'+n+')',st=document.createElement('style');st.id='nbHudFix';st.textContent=`
+${O} .nbx-sta{position:absolute;left:0;top:0;width:${u(46)};height:${u(5)};box-sizing:border-box;pointer-events:none;background:#0a0c0fde;border:1px solid #7c6840;box-shadow:0 1px 3px #000,0 0 0 1px #05060899;opacity:0;transition:opacity .22s;will-change:transform,opacity}
+${O} .nbx-sta.on{opacity:.96}
+${O} .nbx-sta i{display:block;height:100%;width:100%;background:linear-gradient(#f6dc86,#c29a3f);transition:width .08s linear}
+${O} .nbx-sta.low i{background:linear-gradient(#f0a352,#b4532a)}
+${O} .nbx-sta.no{border-color:#e0584a;box-shadow:0 0 ${u(6)} #e0584acc,0 1px 3px #000}
+${O} .nbx-sta2 i{background:linear-gradient(#e6c6f6,#9a6fc2)}
+#screen:not(.pc-hud-visible) .nbx-sta{opacity:0!important}
+${H} .pch-st-track{stroke-width:7!important;stroke:#101216e6!important}
+${H} .pch-st-fill{stroke-width:4.6!important;filter:drop-shadow(0 0 ${u(2)} #f0c85a88)!important}
+${H} .pch-stamina.pch-low .pch-st-fill{stroke:#e8893c!important}
+${H} .pch-stamina small{font-size:${u(9.5)}!important;color:#f0d98c!important}
+${H} .pch-experience{height:${u(7)}!important;bottom:${u(3)}!important;border-color:#a08653!important}
+${H} .pch-experience i{background:linear-gradient(#f3d892,#a8823f)!important;box-shadow:0 0 ${u(4)} #e6c98755}
+${H} .pch-experience.nbx-gain{filter:brightness(1.7);box-shadow:0 0 ${u(8)} #f3d892aa,0 1px 2px #000,inset 0 0 0 1px #080a0c!important}
+${H} .pch-wallet{gap:${u(6)}!important;bottom:${u(16)}!important}
+${H} .pch-wallet .pch-cell{width:${u(42)}!important;height:${u(44)}!important}
+${H} .pch-wallet b{font-size:${u(13.5)}!important;font-weight:600!important;color:#f3e6c4!important;padding:${u(1)} 0!important}
+${H} .pch-wallet .nbx-gain{filter:brightness(1.6)}
+${H} .pch-wallet .pch-cell{transition:filter .25s}
+${H}:has(.pch-health.pch-low)::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,transparent 56%,rgba(128,14,26,.42) 100%);animation:nbxVig 1.5s ease-in-out infinite}
+@keyframes nbxVig{50%{opacity:.5}}
+@media(prefers-reduced-motion:reduce){${H}:has(.pch-health.pch-low)::after{animation:none}${O} .nbx-sta,${O} .nbx-sta i{transition:none}}
+`;document.head.append(st)})();
 // Pauza: dluzszy napis przycisku (np. Wybor rozdzialu) nie zawija sie i nie wychodzi poza ramke.
 {const st=document.createElement('style');st.textContent='html body #pause#pause .btnrow button.go{white-space:nowrap!important;width:auto!important;max-width:none!important;min-width:max-content!important;height:auto!important;flex:0 0 auto!important}';document.head.append(st)}
 // Zywe menu: iskry unoszace sie znad pogorzeliska i migotanie luny pozarow na ilustracji tytulowej. Tylko rozjasnia obraz (screen), nie lapie klikniec. ?menufx=0 wylacza.
