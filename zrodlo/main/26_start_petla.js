@@ -2507,5 +2507,8 @@ html[lang=en] @Q@ #prep .nb-prep-class:not(.on)::after{content:'Select  ›'!imp
 @Q@ #prep .nb-prep-class:not(.on):hover{border-color:var(--nbs-hover)!important;background:var(--nbs-cellh)!important;box-shadow:var(--nbs-glow)!important;filter:none!important}
 @Q@ #prep .nb-prep-class:not(.on):hover::after{color:#fff0d5!important}
 `.replace(/@P@/g,'#orient'.repeat(30)).replace(/@Q@/g,'#orient'.repeat(110));document.head.append(st)}
+// 12.11.2026: sygnal przewijania w panelach pauzy (gradient u dolu, gdy jest wiecej tresci)
+if(new URLSearchParams(location.search).get('menufix')!=='0'){const st=document.createElement('style');st.id='nbScrollHint';st.textContent=`#pause .nbp-panel.nb-more::after{content:'\\25BE';display:block;position:sticky;bottom:0;height:30px;margin-top:-30px;text-align:center;line-height:34px;font-size:17px;color:#e8c878;pointer-events:none;background:linear-gradient(to bottom,rgba(10,8,8,0),rgba(10,8,8,.92))}`;document.head.append(st);
+setInterval(()=>{const p=document.getElementById('pause');if(!p||p.hidden||p.offsetParent===null)return;p.querySelectorAll('.nbp-panel').forEach(e=>e.classList.toggle('nb-more',e.scrollHeight>e.clientHeight+12&&e.scrollTop+e.clientHeight<e.scrollHeight-8))},300)}
 requestAnimationFrame(frame);
 })();
