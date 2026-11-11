@@ -666,3 +666,4 @@ cache588 · PC: Zlotogrod - mur miejski i klasztor z wlasciwa tekstura kamienia 
 cache589 · PC: cieniowanie scian w rozdzialach I-V, jasniejsza Cytadela, przycisk Wybor rozdzialu w pauzie miesci sie w ramce. Nie sprawdzono: karta graficzna autora, FPS, pad, dzwiek, kamienice z bliska, pauza po angielsku
 cache590 · PC: Zlotogrod - kamienice, katedra, palac i kaplica: wieksze okna, kamienny gzyms i cokol; ?depth=0 = przed. Nie sprawdzono: karta graficzna autora, FPS, pad, dzwiek
 cache591 · PC: znacznik pod bohaterem (?heromark=0), gestsza posadzka Dolnego Miasta, przygaszone puste sloty HUD, iskry i luna pozaru w menu (?menufx=0), kamera blizej srodka przy krawedzi. Nie sprawdzono: karta graficzna autora, FPS, pad, dzwiek, gra we dwoje
+cache592 · PC: most w Dolnym Miescie z kamienia HD zamiast pikselowego kafla. Nie sprawdzono: karta graficzna autora, pad, dzwiek
