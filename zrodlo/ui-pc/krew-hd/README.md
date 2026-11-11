@@ -21,3 +21,11 @@ Implementacja w `zrodlo/main/11_dwoch_graczy_gracz.js`:
   Przy braku załadowanej grafiki działa poprzedni efekt.
 
 Nie zmieniano obrażeń, leczenia, kosztów, łupów, ostrzeżeń ani reguł kooperacji.
+
+## Krople w locie — uzupełnienie
+
+Drobne krople korzystają z dotychczasowej fizyki cząsteczek krwi. Zaokrąglona
+tekstura jest przygotowywana raz w canvas; nie dodaje pliku ani nowego shadera.
+InstancedMesh rysuje do 160 kropli wspólnie. Do 18 kropli z pojedynczego trafienia
+zachowuje kierunek, prędkość i grawitację istniejącego efektu. Mocniejsze trafienia
+dają więcej kropli. Pauza zatrzymuje ich ruch, a nowa gra czyści ich widoczność.

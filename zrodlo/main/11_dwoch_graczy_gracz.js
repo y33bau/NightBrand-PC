@@ -265,7 +265,7 @@ function chooseWit(mercy){if(!S||!S.witChoice||S.dialog?.id!=='wit')return;const
 function shake(m,t){if(!SETT.shake)return;S.shakeM=Math.max(S.shakeM,m);S.shakeT=Math.max(S.shakeT,t)}
 // Blood HD: shared artwork, bounded reusable meshes, no gameplay randomness or shaders.
 const BLOOD_HD_ON=new URLSearchParams(location.search).get('blood')!=='0';
-const bloodHD={ready:false,stamps:[],textures:[],ground:[],sprays:[],serial:0,groundNext:0,sprayNext:0};
+const bloodHD={ready:false,stamps:[],textures:[],ground:[],sprays:[],drops:null,dropDummy:new THREE.Object3D(),serial:0,groundNext:0,sprayNext:0};
 function initBloodHD(){
   if(!BLOOD_HD_ON)return;
   const im=new Image();im.onload=()=>{
@@ -284,11 +284,19 @@ function initBloodHD(){
         if(ground)mesh.rotation.x=-Math.PI/2;scene.add(mesh);list.push({mesh,active:false,age:0});
       }
     }
+    // Small rounded droplets use the existing ballistic particles, in one draw call.
+    const cv=canvas(64,96),g=cv.getContext('2d');
+    g.beginPath();g.moveTo(32,5);g.bezierCurveTo(27,25,12,44,13,63);g.bezierCurveTo(13,89,51,89,51,63);g.bezierCurveTo(52,44,37,25,32,5);g.closePath();
+    const fill=g.createLinearGradient(12,15,51,83);fill.addColorStop(0,'#ca3440');fill.addColorStop(.38,'#961322');fill.addColorStop(1,'#3e0813');g.fillStyle=fill;g.fill();
+    g.beginPath();g.ellipse(24,58,4,10,.28,0,Math.PI*2);g.fillStyle='rgba(229,103,103,.35)';g.fill();
+    const tex=new THREE.CanvasTexture(cv);tex.minFilter=THREE.LinearMipMapLinearFilter;tex.magFilter=THREE.LinearFilter;
+    bloodHD.drops=new THREE.InstancedMesh(geo,new THREE.MeshBasicMaterial({map:tex,transparent:true,depthWrite:false,alphaTest:.03,opacity:.94,fog:true}),160);
+    bloodHD.drops.instanceMatrix.setUsage(THREE.DynamicDrawUsage);bloodHD.drops.count=0;bloodHD.drops.frustumCulled=false;bloodHD.drops.renderOrder=5;scene.add(bloodHD.drops);
     bloodHD.ready=true;
   };
   im.src='assets/ec46e83d933a2db80e3e82c795ba3a9ec7e50910bbdd085df486bc0be2b26d3e.png';
 }
-function resetBloodHD(){for(const f of [...bloodHD.ground,...bloodHD.sprays]){f.active=false;f.mesh.visible=false}bloodHD.serial=0;bloodHD.groundNext=0;bloodHD.sprayNext=0}
+function resetBloodHD(){for(const f of [...bloodHD.ground,...bloodHD.sprays]){f.active=false;f.mesh.visible=false}if(bloodHD.drops)bloodHD.drops.count=0;bloodHD.serial=0;bloodHD.groundNext=0;bloodHD.sprayNext=0}
 function stampBloodHD(x,y,w,h,old=false){
   if(!bloodHD.ready)return false;
   if(VOID.has(tileAt(Math.floor(x/TS),Math.floor(y/TS))))return true;
@@ -310,6 +318,16 @@ function sprayBloodHD(x,y,n,nx,ny,spread){
 }
 function syncBloodHD(dt){
   if(!bloodHD.ready)return;
+  let count=0;const d=bloodHD.dropDummy;
+  if(S)for(let i=S.parts.length-1;i>=0&&count<160;i--){
+    const p=S.parts[i];if(p.k!=='b'||!p.bloodHD||p.bloodVisible===false||p.z<=0)continue;
+    const speed=Math.hypot(p.vx,p.vy),v=Math.abs(p.vx*.31+p.vy*.17)%1;
+    const size=(.075+v*.035)*Math.min(1,.45+p.z/6);
+    d.position.set(p.x/16,p.z/16+.02,p.y/16);d.quaternion.copy(cam.quaternion);
+    d.rotateZ(Math.atan2(p.vz*Math.cos(PITCH)-p.vy*Math.sin(PITCH),p.vx)-Math.PI/2);
+    d.scale.set(size,size*(1.25+Math.min(1.1,speed/100)),1);d.updateMatrix();bloodHD.drops.setMatrixAt(count++,d.matrix);
+  }
+  bloodHD.drops.count=count;bloodHD.drops.instanceMatrix.needsUpdate=true;
   for(const f of bloodHD.ground){
     if(!f.active)continue;f.age+=dt;
     if(f.age>=f.dur){f.active=false;f.mesh.visible=false;continue}
@@ -330,7 +348,7 @@ function syncBloodHD(dt){
   }
 }
 initBloodHD();
-function blood(x,y,n,nx,ny,spread=1){const hd=sprayBloodHD(x,y,n,nx,ny,spread);const art=chapterArt(),c0=art?'#74202a':P.blood,c1=art?'#39141c':P.blood2;const b=Math.atan2(ny,nx),m=n>=100?n:n<=3?n*3:n*2;for(let i=0;i<m;i++){const a=b+(Math.random()-.5)*2.2*spread,s=(25+Math.random()*100)*(art?.72:1);S.parts.push({k:'b',bloodHD:hd,x,y,z:8+Math.random()*8,vx:Math.cos(a)*s,vy:Math.sin(a)*s,vz:15+Math.random()*70,c:Math.random()<.65?c0:c1});if(i%2===0&&m<100){const a2=b+(Math.random()-.5)*1.6*spread,s2=10+Math.random()*45;S.parts.push({k:'d',bloodHD:hd,x,y,z:10+Math.random()*10,vx:Math.cos(a2)*s2,vy:Math.sin(a2)*s2,vz:6+Math.random()*26,c:Math.random()<.5?c1:art?'#5e1722':'#6e0f12',life:.25+Math.random()*.3})}}}
+function blood(x,y,n,nx,ny,spread=1){const hd=sprayBloodHD(x,y,n,nx,ny,spread);const art=chapterArt(),c0=art?'#74202a':P.blood,c1=art?'#39141c':P.blood2;const b=Math.atan2(ny,nx),m=n>=100?n:n<=3?n*3:n*2;for(let i=0;i<m;i++){const a=b+(Math.random()-.5)*2.2*spread,s=(25+Math.random()*100)*(art?.72:1);S.parts.push({k:'b',bloodHD:hd,bloodVisible:i%Math.max(1,Math.ceil(m/18))===0,x,y,z:8+Math.random()*8,vx:Math.cos(a)*s,vy:Math.sin(a)*s,vz:15+Math.random()*70,c:Math.random()<.65?c0:c1});if(i%2===0&&m<100){const a2=b+(Math.random()-.5)*1.6*spread,s2=10+Math.random()*45;S.parts.push({k:'d',bloodHD:hd,x,y,z:10+Math.random()*10,vx:Math.cos(a2)*s2,vy:Math.sin(a2)*s2,vz:6+Math.random()*26,c:Math.random()<.5?c1:art?'#5e1722':'#6e0f12',life:.25+Math.random()*.3})}}}
 function decalAt(cv,x,y,a=1){if(bloodHD.ready&&DEC.spray?.includes(cv)){stampBloodHD(x,y,18,11);return}dg.globalAlpha=a;dg.drawImage(cv,Math.round(x-16),Math.round(y-16));dg.globalAlpha=1;decalDirty=true}
 function pool(x,y,w,h){if(stampBloodHD(x,y,w,h))return;if(DEC.pool){decalAt(DEC.pool[w<14?0:w<19?1:w<30?2:3],x,y);return}x=Math.round(x);y=Math.round(y);dg.fillStyle=P.blood2;dg.fillRect(x-w/2,y-h/2+1,w,h-2);dg.fillStyle=P.blood;dg.fillRect(x-w/4,y-1,w/2,2);decalDirty=true}
 function heal(n){if(pl.dead||pl.hp>=pl.max)return 0;const h=Math.min(n,pl.max-pl.hp);pl.hp+=h;return h}

@@ -656,3 +656,4 @@ cache578 · PC menu: hover bez starych bitmapowych nakladek i filtrow ramek; 53 
 cache579 · Spalona Osada: szlif palety, istniejacego oswietlenia, deszczu i efektow trafien; przelacznik art1=0 do A/B (bez fizycznego pada, odsluchu i pomiaru FPS na karcie autora)
 cache580 · Wspolny szlif oprawy wszystkich rozdzialow I-V i krypty: indywidualne palety, swiatlo postaci i spokojniejsze efekty; A/B 6 map, trafienia/RNG, niska jakosc i HUD 4+4 OK (bez pomiaru FPS na karcie autora, fizycznego pada i odsluchu)
 cache581 · Krew HD na wszystkich mapach: organiczne plamy, kierunkowe rozpryski, ciemnienie sladow, stale pule efektow; testy I-V, krypta i coop OK; nie sprawdzono fizycznego pada, dzwieku ani wydajnosci na GPU autora
+cache582 · Drobne zaokraglone krople krwi w locie, do 18 na trafienie i 160 lacznie; test trafien, pauzy, coop i czyszczenia OK; nie sprawdzono fizycznego pada, dzwieku ani GPU autora
