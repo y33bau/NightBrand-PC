@@ -142,7 +142,7 @@ const SPRITE_GROUPS={
   "wl_win": ["r3"],
   "rf_gold": ["r3"],
   "rf_goldm": ["r3"],
-  "wl_fort": ["r5"],
+  "wl_fort": ["r3","r5"],
   "wl_cap": ["r3", "r5"],
   "wl_plank": ["r3"],
   "wl_hala": ["core","r2"],"wl_kuznia": ["r2"],"wl_kopalnia": ["r2"],"wl_urwisko": ["r2"],"wl_kolumna": ["core","r2"],"wl_halacap": ["core","r2"],

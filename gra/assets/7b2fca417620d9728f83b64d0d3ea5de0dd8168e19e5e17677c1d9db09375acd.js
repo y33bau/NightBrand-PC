@@ -142,7 +142,7 @@ const SPRITE_GROUPS={
   "wl_win": ["r3"],
   "rf_gold": ["r3"],
   "rf_goldm": ["r3"],
-  "wl_fort": ["r5"],
+  "wl_fort": ["r3","r5"],
   "wl_cap": ["r3", "r5"],
   "wl_plank": ["r3"],
   "wl_hala": ["core","r2"],"wl_kuznia": ["r2"],"wl_kopalnia": ["r2"],"wl_urwisko": ["r2"],"wl_kolumna": ["core","r2"],"wl_halacap": ["core","r2"],
@@ -1762,7 +1762,10 @@ function buildStolica(I){planGround(3);
   const rc=()=>(r()*8)|0;
   const box=h=>{const g=new THREE.BoxGeometry(1,h,1);g.translate(0,h/2,0);return g};
   const capT=texFrom(tcut(ZW,3,4),true),capT2=texFrom(tcut(ZW,4,7),true);
-  const addWalls=(list,h,side,cap,tint=0xffffff)=>{if(!list.length)return;const sm=side.w?worldSurf(cutCircle(phong({color:tint})),side.w[0],side.w[1],'c'):cutCircle(phong(Object.assign({color:tint},side))),cm=cap&&cap.w?worldSurf(cutCircle(phong({color:tint})),cap.w[0],cap.w[1],'c'):cutCircle(phong({map:cap,color:tint}));instanced(box(h),[sm,sm,cm,cm,sm,sm],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))};
+  const addWalls=(list,h,side,cap,tint=0xffffff)=>{if(!list.length)return;const sm=side.w?worldSurf(cutCircle(phong({color:tint})),side.w[0],side.w[1],'c'):cutCircle(phong(Object.assign({color:tint},side))),cm=cap&&cap.w?worldSurf(cutCircle(phong({color:tint})),cap.w[0],cap.w[1],'c'):cutCircle(phong({map:cap,color:tint}));const bg=box(h);
+    // glebia: sciana ciemniejsza u podstawy, jasniejsza pod gzymsem (kolory wierzcholkow, bez nowego shadera)
+    if(depthOn(3)){const ps=bg.attributes.position,cl=new Float32Array(ps.count*3);for(let i=0;i<ps.count;i++){const v=ps.getY(i)>h*.5?1:.5;cl[i*3]=cl[i*3+1]=cl[i*3+2]=v}bg.setAttribute('color',new THREE.BufferAttribute(cl,3));sm.vertexColors=true}
+    instanced(bg,[sm,sm,cm,cm,sm,sm],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))};
   const inB=(B,x,y)=>x>=B.x&&x<B.x+B.w&&y>=B.y&&y<B.y+B.h;
   const G={outer:[[],[]],house:[[],[],[],[]],cath:[[],[]],palace:[],chapel:[],mon:[[],[]],shack:[[],[]]};
   for(const [x,y,t] of walls){
