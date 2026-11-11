@@ -8709,6 +8709,13 @@ html[lang=en] @P@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips::after{content:'
 /* Minimalny rozmiar drobnych napisow */
 @P@ :is(#title .pc-mode-note,#title .pc-profile-stat small,#title .pc-chapter-label small,#opts .nbo-ah small,#prep .pc-detail-kicker,#lvl .level-heading .kicker,#lvl .card .ck,#lvl .card .fx em,#lvl .lvbtns .hint,#pause .nbp-sub){font-size:max(13px,1.5vh)!important}
 @P@ #opts .nbo-ah small{display:block!important;text-align:left!important}
-`.replace(/@P@/g,'#orient'.repeat(30));document.head.append(st)}
+/* Dopelnienie: fokus pozycji nie jest ucinany przez liste, tytul Kramu w jednej linii, Gotowy jako akcja glowna, reakcja rozwijanych przyciskow */
+@P@ #kap .m2k-row:focus-visible,@P@ #kap .m2k-row.pf{outline-offset:-3px!important}
+@P@ #shop .pcg-heading{white-space:nowrap!important;width:auto!important;max-width:none!important;padding-left:3vh!important;padding-right:3vh!important}
+@Q@ #prep #prepGo.go{background:var(--pcg-selected,var(--nbs-on)) center/100% 180% no-repeat!important}
+@Q@ #prep #prepGo.go:hover{filter:brightness(1.2)!important}
+@P@ #prep summary:hover{filter:brightness(1.28)!important}
+@P@ #pause .nbp-tab:not(.on):hover,@P@ #pause .slot-tab:not(.chosen):hover{filter:brightness(1.28)!important}
+`.replace(/@P@/g,'#orient'.repeat(30)).replace(/@Q@/g,'#orient'.repeat(110));document.head.append(st)}
 requestAnimationFrame(frame);
 })();
