@@ -464,7 +464,7 @@ function applyEnchants(e,a,crit){if(e.dead)return;const [k,L]=encLevel();if(!k)r
   // the status itself
   if(!(e.pois>0||e.burn>0||e.chill>0||e.bleed>0))ftx(c.name,e.x,e.y,ftEntH(e)+.5,'i');
   if(k==='venom'){e.pois=4;e.poisD=2+L}else if(k==='fireblade'){e.burn=3;e.burnD=3+1.5*L}else if(k==='iceblade'){e.chill=2.5;e.chillMul=Math.max(.3,.6-.03*L)}else{e.bleed=3;e.bleedDmg=2+L}
-  skAdd(k==='venom'?'poison':k==='fireblade'?'burn':k==='iceblade'?'freeze':'bleed',.5,e.x,e.y,.3,.85,'bill');
+  {const v=skAdd(k==='venom'?'poison':k==='fireblade'?'burn':k==='iceblade'?'freeze':'bleed',.5,e.x,e.y,.3,.85,'bill');if(COMBAT_POLISH_ON)bindWeaponFx(v,e)}
   for(let i=0;i<8;i++)S.parts.push({k:'e',x:e.x+rnd(-5,5),y:e.y+rnd(-3,3),z:rnd(6,18),vx:rnd(-14,14),vy:0,vz:rnd(8,22),c:Math.random()<.6?c.col:c.col2,life:rnd(.3,.6)});
   if(a.statusOnly)return; // Whirl applies the status only: no elemental execution, healing or boss stun.
   e.marks=(e.marks||0)+1;if(e.marks<encMarks(e))return;e.marks=0;

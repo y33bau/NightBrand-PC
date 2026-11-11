@@ -354,12 +354,40 @@ function pool(x,y,w,h){if(stampBloodHD(x,y,w,h))return;if(DEC.pool){decalAt(DEC.
 function heal(n){if(pl.dead||pl.hp>=pl.max)return 0;const h=Math.min(n,pl.max-pl.hp);pl.hp+=h;return h}
 const might=()=>(1+.1*(S.whet||0))*(S.fury>0?1.2:1)*(S.pk?S.pk.dmg:1);
 function spriteMesh(geo){const m=new THREE.Mesh(geo,A.fx.slash[0].n);scene.add(m);return m}
-function addVfx(anim,dur,x,y,h,size,mode,rot=0,flip=1){const m=spriteMesh(geoC);m.renderOrder=6;setFrame(m,anim[0]);S.vfx.push({mesh:m,anim,t:0,dur,x,y,h,size,mode,rot,flip});return m}
+function addVfx(anim,dur,x,y,h,size,mode,rot=0,flip=1){const m=spriteMesh(geoC);m.renderOrder=6;setFrame(m,anim[0]);const f={mesh:m,anim,t:0,dur,x,y,h,size,mode,rot,flip};polishMagic(f,anim._magicKind);S.vfx.push(f);return m}
+// Combat presentation only: never changes AI, hitboxes, rewards or gameplay RNG.
+const COMBAT_POLISH_ON=new URLSearchParams(location.search).get('combatfx')!=='0';
+let combatVisualSeed=0x63b09a17;
+function combatVisualBuild(fn){const original=Math.random;Math.random=()=>{combatVisualSeed=(Math.imul(combatVisualSeed,1664525)+1013904223)>>>0;return combatVisualSeed/4294967296};try{return fn()}finally{Math.random=original}}
+const MAGIC_KINDS=new Set(['frostf','firef','frosti','firei','freeze','burn','poison','bleed','knock','stone','bolt','boss','boltHit','earth']);
+function polishMagic(f,kind){
+  if(!COMBAT_POLISH_ON||!kind)return f;f.magicKind=kind;
+  if(f.mode==='ground')return f;
+  f.weaponAspect=.8;
+  if(['frostf','firef','bolt','boss'].includes(kind)){
+    f.magicFlying=true;f.size=Math.min(f.size,kind==='frostf'?.9:kind==='firef'?.86:.65);f.h=1.5;
+    const a=-(f.rot||0),x=Math.cos(a),y=Math.sin(a)/Math.sin(PITCH),n=Math.hypot(x,y)||1;f.magicDx=x/n;f.magicDy=y/n;
+  }else if(['freeze','burn','poison','bleed'].includes(kind)){f.size*=.72;f.h=1.3}
+  else if(kind==='firei'||kind==='frosti'){f.size*=.82;f.h=1.45}
+  else if(kind==='boltHit'){f.size*=.8;f.h=1.35}
+  else if(kind==='knock'){f.mode='ground';f.h=.09;f.sy=1/Math.sin(PITCH);f.weaponAspect=null}
+  else{f.size*=.85;f.h=Math.max(1.4,f.h)}
+  return f;
+}
+function magicMaterialMode(fr,soft=false){
+  const key=soft?'cmSoft':'cm';if(!fr[key]){const m=combatVisualBuild(()=>fr.n.clone());m.transparent=true;m.depthWrite=false;m.depthTest=true;m.opacity=soft?.28:.84;fr[key]=m}return key;
+}
+function combatThreatNear(x,y,r=0){return !!(S&&S.enemies.some(e=>!e.dead&&attackCue(e)&&Math.hypot((e.mode==='up'||e.mode==='root'?e.tx:e.x)-x,(e.mode==='up'||e.mode==='root'?e.ty:e.y)-y)<r+e.r+38))}
+function enemyImpactShape(e){
+  const v=e.visualHit;if(!COMBAT_POLISH_ON||!SETT.shake||!v||v.t<=0)return null;if(attackCue(e))return {push:0,lean:0,stretch:0};
+  const t=1-v.t/v.life,p=Math.min(1,t/.22),q=t<.22?1-(1-p)*(1-p):Math.pow((1-t)/.78,2);
+  return {push:v.amplitude*q,lean:(v.heavy?.065:.038)*q,stretch:(v.heavy?.045:.025)*q};
+}
 // Visual-only blade placement: owner-relative anchor and floor-safe billboard bounds.
 const WEAPON_FX_ON=new URLSearchParams(location.search).get('weaponfx')!=='0',WEAPON_BOX=new WeakMap();
 function bindWeaponFx(f,owner=pl){if(!f)return f;f.weaponOwner=owner;f.weaponX=owner.x;f.weaponY=owner.y;f.weaponAspect=.74;return f}
 function weaponFloorLift(f,fr){
-  if(f.weaponFloor!==undefined)return f.weaponFloor;
+  const key=f.size+':'+f.rot+':'+f.weaponAspect;if(f.weaponFloor!==undefined&&f.weaponFloorKey===key)return f.weaponFloor;f.weaponFloorKey=key;
   let bottom=0;
   for(const frame of f.anim){const im=frame?.n?.map?.image;if(!im)continue;
   let b=WEAPON_BOX.get(im);
@@ -389,8 +417,8 @@ const SKM={"knock": [0, 6], "earth": [1, 6], "stone": [2, 6], "frostf": [3, 4], 
 // runda 245: statusy ostrza (ogień, lód, trucizna, krew) = te same animacje co stal, tylko przebarwione (mapa gradientu po jasności)
 const SK_TINTS={fire:[[110,14,0],[255,104,18],[255,236,150]],ice:[[16,52,130],[84,184,255],[236,251,255]],poison:[[14,62,16],[108,220,58],[232,255,172]],blood:[[84,0,8],[188,18,30],[255,128,116]]};
 function skTint(c,tint){const T=SK_TINTS[tint];if(!T)return;const g=c.getContext('2d'),d=g.getImageData(0,0,c.width,c.height),p=d.data;for(let i=0;i<p.length;i+=4){if(!p[i+3])continue;let l=Math.pow((p[i]*.299+p[i+1]*.587+p[i+2]*.114)/255,.8);l=Math.min(1,l*1.15);const a=l<.5?T[0]:T[1],b=l<.5?T[1]:T[2],q=l<.5?l*2:(l-.5)*2;p[i]=a[0]+(b[0]-a[0])*q;p[i+1]=a[1]+(b[1]-a[1])*q;p[i+2]=a[2]+(b[2]-a[2])*q}g.putImageData(d,0,0)}
-function skFrames(k,tint){if(tint&&SKM[k+'_'+tint]){k+='_'+tint;tint=null}const key=tint?k+':'+tint:k;if(SKFX[key])return SKFX[key];const im=typeof IMGS!=='undefined'&&IMGS&&IMGS.skill_fx,m=SKM[k];if(!im||!m)return null;const out=[];for(let i=0;i<m[1];i++){const c=document.createElement('canvas');c.width=c.height=192;c.getContext('2d').drawImage(im,i*192,m[0]*192,192,192,0,0,192,192);if(tint)skTint(c,tint);const t=new THREE.CanvasTexture(c);t.magFilter=t.minFilter=THREE.LinearFilter;t.generateMipmaps=false;out.push({n:new THREE.MeshBasicMaterial({map:t,transparent:true,alphaTest:.04,depthWrite:false,depthTest:false,side:THREE.DoubleSide,fog:false})})}return SKFX[key]=out}
-function skLoop(fr,dur,fps){const n=Math.max(fr.length,Math.round(dur*fps/fr.length)*fr.length),o=[];for(let i=0;i<n;i++)o.push(fr[i%fr.length]);return o}
+function skFrames(k,tint){if(tint&&SKM[k+'_'+tint]){k+='_'+tint;tint=null}const key=tint?k+':'+tint:k;if(SKFX[key])return SKFX[key];const im=typeof IMGS!=='undefined'&&IMGS&&IMGS.skill_fx,m=SKM[k];if(!im||!m)return null;const out=[];for(let i=0;i<m[1];i++){const c=document.createElement('canvas');c.width=c.height=192;c.getContext('2d').drawImage(im,i*192,m[0]*192,192,192,0,0,192,192);if(tint)skTint(c,tint);const t=new THREE.CanvasTexture(c);t.magFilter=t.minFilter=THREE.LinearFilter;t.generateMipmaps=false;out.push({n:new THREE.MeshBasicMaterial({map:t,transparent:true,alphaTest:.04,depthWrite:false,depthTest:false,side:THREE.DoubleSide,fog:false})})}if(MAGIC_KINDS.has(k))out._magicKind=k;return SKFX[key]=out}
+function skLoop(fr,dur,fps){const n=Math.max(fr.length,Math.round(dur*fps/fr.length)*fr.length),o=[];for(let i=0;i<n;i++)o.push(fr[i%fr.length]);o._magicKind=fr._magicKind;return o}
 function skAdd(k,dur,x,y,h,size,mode,rot=0,tint){const fr=skFrames(k,tint);if(!fr)return null;addVfx(fr,dur,x,y,h,size,mode||'bill',rot);return S.vfx[S.vfx.length-1]}
 
 
