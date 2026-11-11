@@ -673,3 +673,4 @@ cache595 · PC: mocne podswietlenie najechania (wybor rozdzialu, przygotowanie i
 cache596 · PC: HUD - pasek staminy pod bohaterem (gdy niepelna), grubszy luk staminy i pasek doswiadczenia z blyskiem, wieksze liczniki monet i Popiolow, czerwona winieta przy niskim zyciu; ?hudfix=0 = przed. Nie sprawdzono: gra we dwoje, pad, karta graficzna autora
 cache597 · PC: naprawa lawy w Dolnym Miescie - ciemne tlo za mapa lezalo nad lawa (od 587). Nie sprawdzono: lawa/woda w pozostalych rozdzialach, pad, karta autora
 cache598 · PC: Akt I - usuniety wielki cien NPC (studnia), sygnal przewijania w zakladkach pauzy. Nie sprawdzono: cienie NPC w II-V, pad, karta autora
+cache599 · PC: Akt I - rekwizyty bez twardego cienia z swiatla bohatera i zgaszone do koloru ziemi (?softprops=0 = przed). Nie sprawdzono: rekwizyty w II-V, pad, slabsze karty
