@@ -664,3 +664,4 @@ cache586 · PC: swiatlo i glebia w Spalonej Osadzie (ciemniejsze otoczenie, mocn
 cache587 · PC: swiatlo i glebia w rozdzialach I-V (bez krypty), kamera trzyma bohatera blisko srodka przy krawedzi mapy; ?depth=0 = przed. Nie sprawdzono: karta graficzna autora, FPS, pad, dzwiek, krypta, gra we dwoje
 cache588 · PC: Zlotogrod - mur miejski i klasztor z wlasciwa tekstura kamienia (brakowalo jej w paczce rozdzialu III, stad powtarzany wzor okien), sciany ciemniejsze u podstawy. Nie sprawdzono: kamienice z bliska, karta graficzna autora, FPS, pad, dzwiek
 cache589 · PC: cieniowanie scian w rozdzialach I-V, jasniejsza Cytadela, przycisk Wybor rozdzialu w pauzie miesci sie w ramce. Nie sprawdzono: karta graficzna autora, FPS, pad, dzwiek, kamienice z bliska, pauza po angielsku
+cache590 · PC: Zlotogrod - kamienice, katedra, palac i kaplica: wieksze okna, kamienny gzyms i cokol; ?depth=0 = przed. Nie sprawdzono: karta graficzna autora, FPS, pad, dzwiek
