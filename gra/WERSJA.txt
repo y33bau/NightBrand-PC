@@ -669,3 +669,4 @@ cache591 · PC: znacznik pod bohaterem (?heromark=0), gestsza posadzka Dolnego M
 cache592 · PC: most w Dolnym Miescie z kamienia HD zamiast pikselowego kafla. Nie sprawdzono: karta graficzna autora, pad, dzwiek
 cache593 · PC: krag obszaru ataku rysuje sie na ziemi za sylwetkami (nie na bossie). Nie sprawdzono: karta graficzna autora, pozostali bossowie, pad, dzwiek
 cache594 · PC: porzadek menu - jedna zasada zaznaczenia/najechania/fokusu, Kaplica i Kronika z wyraznym wyborem, Kram bez nachodzenia, Gotowy jako akcja glowna, jednolity Wroc, min. 13 px; ?menufix=0 = przed. Nie sprawdzono: pad, 1280x720 i 1920x1080, ekran konca nocy, karta graficzna autora
+cache595 · PC: mocne podswietlenie najechania (wybor rozdzialu, przygotowanie i pozostale ekrany), naprawiona rozwijana trudnosc, wybor postaci z przyciskami Wybierz. Nie sprawdzono: start rozdzialu (sama zmiana stylow), pad, inne rozdzielczosci

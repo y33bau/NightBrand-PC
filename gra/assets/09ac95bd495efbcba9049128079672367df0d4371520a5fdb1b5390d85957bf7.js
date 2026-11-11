@@ -8716,6 +8716,31 @@ html[lang=en] @P@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips::after{content:'
 @Q@ #prep #prepGo.go:hover{filter:brightness(1.2)!important}
 @P@ #prep summary:hover{filter:brightness(1.28)!important}
 @P@ #pause .nbp-tab:not(.on):hover,@P@ #pause .slot-tab:not(.chosen):hover{filter:brightness(1.28)!important}
+/* --- Runda 2: mocne najechanie (wybor rozdzialu, przygotowanie i reszta), trudnosc, wybor postaci --- */
+:root{--nbs-hover:rgba(240,206,128,.98);--nbs-cellh:rgba(86,56,66,.72);--nbs-glow:0 0 0 1px rgba(240,206,128,.9),0 0 20px rgba(240,190,110,.34)}
+@Q@ :is(#title,#prep,#kap,#opts,#manual,#pause,#shop,#end,#conf,#lvl) :is(.m2-ch,.pcg-menu,.pcg-action,.pc-home-button,.premium-go,.m2-b,.m2-kap,.tab,.stab,.nbp-tab,.pc-prep-tab,.slot-tab,.go,summary,#kapBack,#optsBack,#manBack,#prepBack,.premium-back,#optsBtn):not([disabled]):not(:disabled):hover{filter:brightness(1.5) saturate(1.12)!important;box-shadow:var(--nbs-glow)!important;outline:1px solid var(--nbs-hover)!important;outline-offset:-1px!important}
+@Q@ #title .m2-ch:not([disabled]):hover{filter:brightness(1.6) saturate(1.15)!important;outline:2px solid var(--nbs-hover)!important;outline-offset:-2px!important}
+@Q@ #title #optsBtn:hover{outline:0!important;box-shadow:none!important;filter:brightness(1.7) drop-shadow(0 0 8px rgba(240,190,110,.75))!important}
+@Q@ #prep .prepbox .opt:not([disabled]):not(:disabled):hover{background:var(--nbs-cellh)!important;border-color:var(--nbs-hover)!important;box-shadow:var(--nbs-glow)!important;filter:brightness(1.25)!important}
+@Q@ #kap .m2k-row:hover,@Q@ #shop .card:not([disabled]):hover{border-color:var(--nbs-hover)!important;background:var(--nbs-cellh)!important;box-shadow:var(--nbs-glow)!important}
+@Q@ #lvl .card:not(.locked):hover{box-shadow:var(--nbs-glow)!important;filter:brightness(1.18)!important}
+/* Trudnosc: trzy czytelne przyciski obok siebie zamiast nachodzacych napisow */
+@Q@ #prep details.pc-popover>div{width:max-content!important;max-width:92vw!important;overflow:visible!important;padding:1.4vh!important}
+@Q@ #prep #diffSw{display:flex!important;flex-wrap:nowrap!important;gap:1vh!important;align-items:stretch!important;width:auto!important}
+@Q@ #prep #diffSw .premium-difficulty{flex:0 0 auto!important;width:auto!important;min-width:max-content!important;height:auto!important;min-height:0!important;padding:1.3vh 2.4vh!important;font-size:2.15vh!important;line-height:1.2!important;white-space:nowrap!important;overflow:visible!important;border:1px solid var(--nbs-idle)!important;background:var(--nbs-cell)!important;border-radius:2px!important}
+@Q@ #prep #diffSw .premium-difficulty.on{background:var(--nbs-on)!important;border-color:var(--nbs-line)!important;color:#fff0d5!important}
+@Q@ #prep #diffSw .premium-difficulty:not(.on):hover{border-color:var(--nbs-hover)!important;background:var(--nbs-cellh)!important;box-shadow:var(--nbs-glow)!important}
+/* Wybor postaci: pozostale klasy wygladaja jak przyciski do wyboru */
+@Q@ #prep .nb-prep-class:not(.on){border:1px solid rgba(230,214,184,.42)!important;background:var(--nbs-cell)!important;min-height:5.6vh!important;height:auto!important;margin-top:.9vh!important;padding:.9vh 1.4vh!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:1vh!important;overflow:visible!important;cursor:pointer!important;opacity:1!important}
+@Q@ #prep .nb-prep-class:not(.on) b{text-align:left!important;flex:1 1 auto!important}
+@Q@ #prep .nb-prep-class:not(.on){flex-direction:row!important;flex-wrap:nowrap!important;margin-top:.7vh!important;min-height:5vh!important;padding:.6vh 1.4vh!important}
+@Q@ #prep .nb-prep-class:not(.on) b{font-size:2.05vh!important;white-space:nowrap!important}
+@Q@ #prep .nb-prep-class.on .premium-class-art{max-height:25vh!important;width:auto!important;max-width:100%!important;object-fit:contain!important;align-self:center!important}
+@Q@ #prep .nb-prep-class.on{height:auto!important;min-height:0!important}
+@Q@ #prep .nb-prep-class:not(.on)::after{content:'Wybierz  ›'!important;display:block!important;position:static!important;flex:0 0 auto!important;font:600 max(13px,1.55vh) Cinzel,Georgia,serif!important;letter-spacing:.08em!important;text-transform:uppercase!important;color:#d9b876!important;background:none!important;width:auto!important;height:auto!important;opacity:1!important}
+html[lang=en] @Q@ #prep .nb-prep-class:not(.on)::after{content:'Select  ›'!important}
+@Q@ #prep .nb-prep-class:not(.on):hover{border-color:var(--nbs-hover)!important;background:var(--nbs-cellh)!important;box-shadow:var(--nbs-glow)!important;filter:none!important}
+@Q@ #prep .nb-prep-class:not(.on):hover::after{color:#fff0d5!important}
 `.replace(/@P@/g,'#orient'.repeat(30)).replace(/@Q@/g,'#orient'.repeat(110));document.head.append(st)}
 requestAnimationFrame(frame);
 })();
