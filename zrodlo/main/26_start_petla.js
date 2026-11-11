@@ -2373,5 +2373,65 @@ ${P} #intro .ihint{font:400 max(13px,calc(14 * var(--hint-u) * var(--nbts,1)))/1
   if(reduce)return;while(P.length<48)P.push(spawn(true));
   for(let i=0;i<P.length;i++){const p=P[i];p.l+=dt;p.x+=(p.vx+Math.sin(t*.0008+p.ph)*.012)*dt;p.y+=p.vy*dt;if(p.l>p.life||p.y<-.05){P[i]=spawn(false);continue}const a=Math.min(1,p.l/1.2)*Math.min(1,(p.life-p.l)/2)*(.5+.35*Math.sin(t*.006+p.ph));g.fillStyle='rgba(255,'+(150+((p.ph*20)|0)%70)+',70,'+Math.max(0,a).toFixed(3)+')';g.beginPath();g.arc(p.x*CW,p.y*CH_,p.r*CH_/900,0,6.283);g.fill()}};
  requestAnimationFrame(tick)}}
+// Porzadek menu (runda menu-porzadek-pc-1): jedna zasada zaznaczenia/najechania/fokusu, napisy w ramkach, Kaplica, Kronika, Kram. ?menufix=0 wylacza.
+if(new URLSearchParams(location.search).get('menufix')!=='0'){const st=document.createElement('style');st.id='nbMenuFix';st.textContent=`/* NightBrand PC: porzadek menu (jedna zasada zaznaczenia, napisy w ramkach). ?menufix=0 wylacza. */
+:root{--nbs-on:linear-gradient(145deg,rgba(97,48,59,.92),rgba(53,28,37,.96));--nbs-line:rgba(196,110,130,.9);--nbs-idle:rgba(230,214,184,.17);--nbs-hover:rgba(230,214,184,.55);--nbs-focus:#ecc977;--nbs-cell:rgba(12,9,14,.46);--nbs-cellh:rgba(46,33,42,.62)}
+/* --- Kaplica i Kronika: pozycje listy --- */
+@P@ #kap .m2k-row{border:1px solid var(--nbs-idle)!important;background:var(--nbs-cell)!important;border-radius:2px!important;height:auto!important;min-height:min-content!important;flex:0 0 auto!important;opacity:1!important;transition:background .12s,border-color .12s,box-shadow .12s;cursor:pointer;outline:0}
+@P@ #kap .m2k-row::before{content:none!important}
+@P@ #kap .m2k-row:hover{border-color:var(--nbs-hover)!important;background:var(--nbs-cellh)!important}
+@P@ #kap .m2k-row.on{background:var(--nbs-on)!important;border-color:var(--nbs-line)!important;box-shadow:inset 0 0 0 1px rgba(110,48,62,.95),inset 0 0 22px rgba(127,52,69,.22)!important}
+@P@ #kap .m2k-row.on b{color:#fff0d5!important}
+@P@ #kap .m2k-row:focus-visible,@P@ #kap .m2k-row.pf{outline:2px solid var(--nbs-focus)!important;outline-offset:2px!important}
+/* Kaplica: ikona z lewej, tekst z prawej, pelne opisy */
+@P@ #kap:not(.pc-chronicle) #kapList{gap:1.25vh!important;align-content:start!important;grid-auto-rows:1fr!important}
+@P@ #kap:not(.pc-chronicle) .m2k-row{display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;grid-auto-rows:auto!important;column-gap:1.5vh!important;row-gap:.35vh!important;align-items:center!important;justify-items:start!important;text-align:left!important;padding:1.5vh 1.6vh!important}
+@P@ #kap:not(.pc-chronicle) .m2k-row img{grid-row:1/span 3!important;width:6.6vh!important;height:6.6vh!important;margin:0!important}
+@P@ #kap:not(.pc-chronicle) .m2k-row b{font-size:1.95vh!important;line-height:1.2!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important;text-align:left!important;align-self:end!important}
+@P@ #kap:not(.pc-chronicle) .m2k-row small,@P@ #kap:not(.pc-chronicle) .m2k-row .m2k-pips{text-align:left!important;white-space:normal!important;line-height:1.3!important;font-size:max(13px,1.6vh)!important;margin:0!important}
+@P@ #kap:not(.pc-chronicle) .m2k-row.lk>*{opacity:.58}
+@P@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips::after{content:' · zablokowane'}
+html[lang=en] @P@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips::after{content:' · locked'}
+@P@ #kap #kapBuy{white-space:nowrap!important;font-size:2.15vh!important;letter-spacing:.02em}
+@P@ #kap #kapBuy[disabled]{opacity:.62!important;filter:saturate(.45)!important;cursor:default}
+@P@ #kap #kapBuy:not([disabled]):hover{filter:brightness(1.18)!important}
+@P@ #kap #kapBuy:focus-visible,@P@ #kap #kronDay:focus-visible,@P@ #kap #kapBack:focus-visible{outline:2px solid var(--nbs-focus)!important;outline-offset:2px!important}
+/* Kronika: rowne wyrownanie i przycisk akcji w ramce */
+@P@ #kap.pc-chronicle .m2k-row b,@P@ #kap.pc-chronicle .m2k-row small{align-self:flex-start!important;width:auto!important;max-width:100%!important;text-align:left!important}
+@P@ #kap.pc-chronicle .m2k-row{display:flex!important;flex-direction:column!important;align-items:flex-start!important;justify-content:center!important;gap:.45vh!important;padding-top:1.3vh!important;padding-bottom:1.3vh!important}
+@P@ #kap.pc-chronicle #kapList{grid-template-rows:none!important;grid-auto-rows:max-content!important;align-content:start!important;gap:.9vh!important;overflow-y:auto!important}
+@P@ #kap.pc-chronicle .m2k-row>*{position:static!important;margin:0!important;transform:none!important;inset:auto!important}
+@P@ #kap.pc-chronicle #kronDay{background:var(--nbs-on)!important;border:1px solid var(--nbs-line)!important;box-shadow:inset 0 0 0 1px rgba(110,48,62,.95)!important;white-space:nowrap!important;transition:filter .12s;box-sizing:border-box!important;width:auto!important;max-width:calc(100% - 3.2vh)!important;justify-self:stretch}
+@P@ #kap.pc-chronicle #kronDay:hover{filter:brightness(1.2)!important}
+/* --- Kram --- */
+@P@ #shop #shopCards{grid-template-rows:none!important;grid-auto-rows:auto!important;gap:1.3vh!important;align-content:start!important;align-items:stretch!important}
+@P@ #shop .card{height:auto!important;min-height:0!important;padding:1.2vh 1.6vh 1.5vh!important;gap:.55vh!important;border:1px solid var(--nbs-idle)!important;background:var(--nbs-cell)!important;opacity:1!important;filter:none!important;transition:background .12s,border-color .12s;outline:0;align-self:stretch!important;transform:none!important;margin:0!important;justify-content:flex-start!important}
+@P@ #shop .card .ic{width:6.8vh!important;height:6.8vh!important}
+@P@ #shop .card .cn{font-size:2.7vh!important;line-height:1.15!important}
+@P@ #shop .card .cd{font-size:1.9vh!important;line-height:1.35!important}
+@P@ #shop .card .cl{margin-top:.2vh!important}
+@P@ #shop .card[disabled]{cursor:default}
+@P@ #shop .card[disabled] .cn,@P@ #shop .card[disabled] .cd,@P@ #shop .card[disabled] .ic{opacity:.6}
+@P@ #shop .card[disabled] .cl{color:#d59a8c!important}
+@P@ #shop .card:not([disabled]):hover{border-color:var(--nbs-hover)!important;background:var(--nbs-cellh)!important}
+@P@ #shop .card:focus-visible,@P@ #shop .card.pf{outline:2px solid var(--nbs-focus)!important;outline-offset:2px!important}
+/* --- Wspolna zasada: fokus (klawiatura, pad) i najechanie --- */
+@P@ :is(#title,#kap,#opts,#manual,#prep,#lvl,#pause,#shop,#end,#conf) :is(button,[role=tab],[role=radio],summary):focus-visible{outline:2px solid var(--nbs-focus)!important;outline-offset:2px!important}
+@P@ :is(#kap,#opts,#manual,#prep,#pause,#shop,#end,#conf) :is(button.go,.tab,.stab,.nbp-tab,.pc-prep-tab,.slot-tab,.backar,.premium-back,#kapBack):not([disabled]):not(.on):not(.chosen):hover{filter:brightness(1.28)!important}
+/* Przygotowanie: perki, wyzwania, klatwy */
+@P@ #prep .prepbox .opt{border:1px solid transparent!important;border-radius:2px!important;transition:background .12s,border-color .12s}
+@P@ #prep .prepbox .opt:not([disabled]):hover{background:var(--nbs-cellh)!important;border-color:var(--nbs-hover)!important}
+@P@ #prep .prepbox .opt.on{background:var(--nbs-on)!important;border-color:var(--nbs-line)!important;box-shadow:inset 0 0 0 1px rgba(110,48,62,.95)!important}
+@P@ #prep .prepbox .opt.on b{color:#fff0d5!important}
+@P@ #prep .nb-prep-class:not(.on):hover{color:#fff0d5!important;filter:brightness(1.25)!important}
+@P@ #prep #prepGo{background:radial-gradient(at 50% 0,rgba(130,54,69,.27),rgba(0,0,0,0) 80%),linear-gradient(140deg,rgba(84,36,48,.96),rgba(46,21,30,.97))!important;box-shadow:inset 0 0 0 1px rgba(160,86,99,.4),0 0 17px rgba(99,36,49,.14)!important}
+/* Jednolity przycisk powrotu */
+@P@ :is(#kapBack,#optsBack,#manBack,#prepBack){border:1px solid var(--nbs-idle)!important;background:var(--nbs-cell)!important;padding:.95vh 1.9vh!important;border-radius:2px!important;opacity:1!important;transition:border-color .12s,filter .12s}
+@P@ :is(#kapBack,#optsBack,#manBack,#prepBack):hover{border-color:var(--nbs-hover)!important}
+@P@ :is(#kapBack,#optsBack,#manBack,#prepBack)::before{content:'←  '!important;position:static!important;display:inline!important;background:none!important;width:auto!important;height:auto!important}
+/* Minimalny rozmiar drobnych napisow */
+@P@ :is(#title .pc-mode-note,#title .pc-profile-stat small,#title .pc-chapter-label small,#opts .nbo-ah small,#prep .pc-detail-kicker,#lvl .level-heading .kicker,#lvl .card .ck,#lvl .card .fx em,#lvl .lvbtns .hint,#pause .nbp-sub){font-size:max(13px,1.5vh)!important}
+@P@ #opts .nbo-ah small{display:block!important;text-align:left!important}
+`.replace(/@P@/g,'#orient'.repeat(30));document.head.append(st)}
 requestAnimationFrame(frame);
 })();
