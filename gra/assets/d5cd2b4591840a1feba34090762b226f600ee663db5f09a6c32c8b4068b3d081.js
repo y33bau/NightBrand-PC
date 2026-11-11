@@ -1022,7 +1022,9 @@ const amb=new THREE.AmbientLight(0x5a4f78,.85);scene.add(amb);
 const hemi=new THREE.HemisphereLight(0x302848,0x1a0a06,.55);scene.add(hemi);
 const moon=new THREE.DirectionalLight(0xd0c0ff,0);moon.position.set(-6,14,-10);scene.add(moon);scene.add(moon.target);
 let filmUniforms=null;
-const ATM={1:{amb:0x65738c,ai:1,hs:0x8a9ebf,hg:0x2b1b17,hi:.42,fog:0x0b101b,fd:.010,clear:0x05070d,mi:.16,mc:0x9ebbea,cold:0xdceaff,warm:0xffeedc},
+// Szlif rozdzialu I: tylko istniejace swiatla, grading i kosmetyka. ?art1=0 = porownanie przed.
+const CH1_ART_ON=new URLSearchParams(location.search).get('art1')!=='0';
+const ATM={1:CH1_ART_ON?{amb:0x707784,ai:.98,hs:0x8999ae,hg:0x302622,hi:.46,fog:0x111722,fd:.0085,clear:0x080b11,mi:.22,mc:0xafbdd7,cold:0xe5ecf2,warm:0xf3dfc4}:{amb:0x65738c,ai:1,hs:0x8a9ebf,hg:0x2b1b17,hi:.42,fog:0x0b101b,fd:.010,clear:0x05070d,mi:.16,mc:0x9ebbea,cold:0xdceaff,warm:0xffeedc},
   2:{amb:0x5c5269,ai:.98,hs:0x5c6380,hg:0x25120c,hi:.5,fog:0x0c0910,fd:.013,clear:0x040307,mi:.18,mc:0xb6bbd5,cold:0xdce1ff,warm:0xffe5c9},
   3:{amb:0x6b6076,ai:.7,hs:0xb59a6a,hg:0x2b1921,hi:.32,fog:0x19121a,fd:.009,clear:0x0c080d,mi:.26,mc:0xc7cbe9,cold:0xe2defb,warm:0xffedcf},
   9:{amb:0x55546e,ai:.94,hs:0x566181,hg:0x1d1217,hi:.48,fog:0x090912,fd:.015,clear:0x030309,mi:.12,mc:0xaab9df,cold:0xd9e3ff,warm:0xffead7},
@@ -1031,6 +1033,7 @@ const ATM={1:{amb:0x65738c,ai:1,hs:0x8a9ebf,hg:0x2b1b17,hi:.42,fog:0x0b101b,fd:.
 // 10.11.2026: paleta rozdziału w obrazie końcowym: [barwa cieni], [barwa świateł], nasycenie, kontrast
 const GRADE={1:[[.90,.98,1.12],[1.14,1.02,.86],1.16,1.05],2:[[.98,.95,1.04],[1.15,.99,.82],1.10,1.06],3:[[.93,1.02,.93],[1.12,1.05,.84],1.06,1.05],4:[[.88,1.03,1.0],[.98,1.05,1.03],1.04,1.06],5:[[.93,.96,1.10],[1.07,1.02,.95],.94,1.09],9:[[.92,1.0,1.07],[1.05,1.02,.95],.96,1.05]};
 const DAWN=new THREE.Color(0xc0a898),TMPC=new THREE.Color(),WHITE_C=new THREE.Color(1,1,1);
+if(CH1_ART_ON)GRADE[1]=[[.94,.99,1.05],[1.07,1.01,.93],1.06,1.06];
 function applyAtmos(){const a=ATM[CH];amb.color.setHex(a.amb);amb.intensity=a.ai;hemi.color.setHex(a.hs);hemi.groundColor.setHex(a.hg);hemi.intensity=a.hi;scene.fog.color.setHex(a.fog);scene.fog.density=a.fd;renderer.setClearColor(a.clear);moon.intensity=a.mi||0;if(a.mc)moon.color.setHex(a.mc);RIMU.k.value=RIM_K*(.5+(a.mi||0)*3);RIMU.col.value.setHex(a.mc||0x9ebbea);if(filmUniforms){filmUniforms.cold.value.setHex(a.cold);filmUniforms.warm.value.setHex(a.warm);const g=GRADE[CH]||GRADE[9];filmUniforms.gSh.value.set(...g[0]);filmUniforms.gHi.value.set(...g[1]);filmUniforms.gSat.value=g[2];filmUniforms.gCon.value=g[3]}if(typeof setAmbience==='function')setAmbience()}
 // moon rim light on sprites: figure pixels whose screen-left neighbour is empty get a cold edge glow (flips with the sprite mirroring)
 const RIM_K=.55;
@@ -2986,7 +2989,7 @@ function chooseWit(mercy){if(!S||!S.witChoice||S.dialog?.id!=='wit')return;const
   else{st.state='dead';pool(n.x,n.y,18,7);const e=spawnEnemy('wraith',n.x+20,n.y+8,{rise:1,stolen:0,witSpecter:true});e.stolen=S.coins;S.coins=0;play('bossGrowl',0);say((EN?'You finish Wit off. With his last breath, a Ledger Wraith arrives from the Citadel and takes your coins. Defeat it to get them back.':'Dobijasz Wita. Z jego ostatnim tchnieniem przybywa Upiór rachunków z Cytadeli i zabiera twoje monety. Pokonaj go, by je odzyskać.'));}}
 
 function shake(m,t){if(!SETT.shake)return;S.shakeM=Math.max(S.shakeM,m);S.shakeT=Math.max(S.shakeT,t)}
-function blood(x,y,n,nx,ny,spread=1){const b=Math.atan2(ny,nx),m=n>=100?n:n<=3?n*3:n*2;for(let i=0;i<m;i++){const a=b+(Math.random()-.5)*2.2*spread,s=25+Math.random()*100;S.parts.push({k:'b',x,y,z:8+Math.random()*8,vx:Math.cos(a)*s,vy:Math.sin(a)*s,vz:15+Math.random()*70,c:Math.random()<.65?P.blood:P.blood2});if(i%2===0&&m<100){const a2=b+(Math.random()-.5)*1.6*spread,s2=10+Math.random()*45;S.parts.push({k:'d',x,y,z:10+Math.random()*10,vx:Math.cos(a2)*s2,vy:Math.sin(a2)*s2,vz:6+Math.random()*26,c:Math.random()<.5?P.blood2:'#6e0f12',life:.25+Math.random()*.3})}}}
+function blood(x,y,n,nx,ny,spread=1){const art=CH===1&&CH1_ART_ON,c0=art?'#74202a':P.blood,c1=art?'#39141c':P.blood2;const b=Math.atan2(ny,nx),m=n>=100?n:n<=3?n*3:n*2;for(let i=0;i<m;i++){const a=b+(Math.random()-.5)*2.2*spread,s=(25+Math.random()*100)*(art?.72:1);S.parts.push({k:'b',x,y,z:8+Math.random()*8,vx:Math.cos(a)*s,vy:Math.sin(a)*s,vz:15+Math.random()*70,c:Math.random()<.65?c0:c1});if(i%2===0&&m<100){const a2=b+(Math.random()-.5)*1.6*spread,s2=10+Math.random()*45;S.parts.push({k:'d',x,y,z:10+Math.random()*10,vx:Math.cos(a2)*s2,vy:Math.sin(a2)*s2,vz:6+Math.random()*26,c:Math.random()<.5?c1:art?'#5e1722':'#6e0f12',life:.25+Math.random()*.3})}}}
 function decalAt(cv,x,y,a=1){dg.globalAlpha=a;dg.drawImage(cv,Math.round(x-16),Math.round(y-16));dg.globalAlpha=1;decalDirty=true}
 function pool(x,y,w,h){if(DEC.pool){decalAt(DEC.pool[w<14?0:w<19?1:w<30?2:3],x,y);return}x=Math.round(x);y=Math.round(y);dg.fillStyle=P.blood2;dg.fillRect(x-w/2,y-h/2+1,w,h-2);dg.fillStyle=P.blood;dg.fillRect(x-w/4,y-1,w/2,2);decalDirty=true}
 function heal(n){if(pl.dead||pl.hp>=pl.max)return 0;const h=Math.min(n,pl.max-pl.hp);pl.hp+=h;return h}
@@ -3558,7 +3561,7 @@ function syncCombatEffects(dt){for(const f of combatEffects){if(!f.active)contin
  uv.setXY(0,u0,v1);uv.setXY(1,u1,v1);uv.setXY(2,u0,v0);uv.setXY(3,u1,v0);uv.needsUpdate=true;
  const pos=m.geometry.attributes.position,px=cfg.pivot[0],py=cfg.pivot[1];pos.setXYZ(0,-px,py,0);pos.setXYZ(1,1-px,py,0);pos.setXYZ(2,-px,py-1,0);pos.setXYZ(3,1-px,py-1,0);pos.needsUpdate=true;}
  m.position.set(f.x/16,trail?.25:.45,f.y/16);m.quaternion.copy(cam.quaternion);m.rotateZ(f.rot);m.scale.set(size,size,1);
- m.material.opacity=(trail?.72:f.kind==='parry'?.48:.64)*(SETT.flash?1:.38)*Math.min(1,(1-phase)*3);
+ m.material.opacity=(trail?.72:f.kind==='parry'?.48:.64)*(CH===1&&CH1_ART_ON&&f.kind!=='parry'&&f.kind!=='block'?.82:1)*(SETT.flash?1:.38)*Math.min(1,(1-phase)*3);
 }}
 
 function contactSparks(x,y,nx,ny,kind,count){const angle=Math.atan2(ny,nx),soft=!SETT.flash,n=Math.max(1,Math.round(count*GFX.parts));
@@ -4476,8 +4479,8 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{ambTick(dt)
   // weather and dawn (chapter I)
   const fl=SETT.flash&&S?S.flash:0,dawn=CH!==2&&S&&S.opening?Math.min(1,(3.4-S.opening)/2.4):0,AT=ATM[CH];
   amb.intensity=AT.ai+fl*1.4+dawn*.9;hemi.intensity=AT.hi+fl*.8+dawn*.5;if(dawn>0){TMPC.setHex(AT.amb);amb.color.copy(TMPC.lerp(DAWN,dawn))}else amb.color.setHex(AT.amb);
-  postMat.uniforms.flash.value=fl*.3;postMat.uniforms.haze.value=CH===2&&S&&S.phase==='play'&&!S.dg&&SETT.quality!=='low'?1:0;postMat.uniforms.tm.value=clock%600;postMat.uniforms.grain.value=SETT.quality==='low'?0:.03;postMat.uniforms.gtm.value=SETT.flash?clock%600:0;postMat.uniforms.sharp.value=S&&S.shakeT>0?1:Math.max(0,postMat.uniforms.sharp.value-dt*4);
-  rain.visible=CH===1;if(rain.visible){rain.material.opacity=.32*(1-dawn*.7);for(let i=0;i<RAIN_N;i++){const d=DROPS[i];d.y-=d.s*dt;d.x-=d.s*.12*dt;if(d.y<0){d.y+=12;d.x=rnd(-15,15);d.z=rnd(-10,10);if(S&&dt>0&&i%9===0)S.parts.push({k:'d',x:(camTarget.x+d.x)*16,y:(camTarget.z+d.z)*16,z:1,vx:rnd(-6,6),vy:rnd(-3,3),vz:rnd(8,14),c:'#6a7a96',life:.25})}
+  postMat.uniforms.flash.value=fl*.3;postMat.uniforms.haze.value=CH===2&&S&&S.phase==='play'&&!S.dg&&SETT.quality!=='low'?1:0;postMat.uniforms.tm.value=clock%600;postMat.uniforms.grain.value=SETT.quality==='low'?0:CH===1&&CH1_ART_ON?.015:.03;postMat.uniforms.gtm.value=SETT.flash?clock%600:0;postMat.uniforms.sharp.value=S&&S.shakeT>0?1:Math.max(0,postMat.uniforms.sharp.value-dt*4);
+  rain.visible=CH===1;if(rain.visible){rain.material.opacity=(CH1_ART_ON?.20:.32)*(1-dawn*.7);for(let i=0;i<RAIN_N;i++){const d=DROPS[i];d.y-=d.s*dt;d.x-=d.s*.12*dt;if(d.y<0){d.y+=12;d.x=rnd(-15,15);d.z=rnd(-10,10);if(S&&dt>0&&i%9===0)S.parts.push({k:'d',x:(camTarget.x+d.x)*16,y:(camTarget.z+d.z)*16,z:1,vx:rnd(-6,6),vy:rnd(-3,3),vz:rnd(8,14),c:'#6a7a96',life:.25})}
     const x=camTarget.x+d.x,z=camTarget.z+d.z,o=i*6;rainPos[o]=x;rainPos[o+1]=d.y;rainPos[o+2]=z;rainPos[o+3]=x+.07;rainPos[o+4]=d.y-.55;rainPos[o+5]=z}rainGeo.attributes.position.needsUpdate=true}
   for(const o of propObjs){let f;
     if(o.kind==='gate')f=o.frames[!S||!S.opening?0:S.opening>2.4?1:2];
@@ -4487,7 +4490,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{ambTick(dt)
     if(f&&o.mesh.material!==f.n)setFrame(o.mesh,f)}
   CUT.value.set(S&&!pl.dead?pl.x/16:-99,0,S&&!pl.dead?pl.y/16:-99);
   if(S&&!pl.dead&&(CH===3||CH===4)){V.set(pl.x/16,.9,pl.y/16).project(cam);CUTS.value.set((V.x+1)/2*rt.width,(V.y+1)/2*rt.height,rt.height*.16)}else CUTS.value.set(-999,-999,0);
-  if(S){plLight.position.set(pl.x/16,2.4,pl.y/16);plLight.intensity=pl.dead?.6:2.05+Math.sin(clock*9)*.06}else plLight.position.set(tx,2.4,tz);
+  if(S){const art=CH===1&&CH1_ART_ON;plLight.color.setHex(art?0xffdfba:0xffd2a0);plLight.distance=art?10.5:13;plLight.position.set(pl.x/16,2.4,pl.y/16);plLight.intensity=pl.dead?.6:(art?1.55:2.05)+Math.sin(clock*9)*(art?.025:.06)}else plLight.position.set(tx,2.4,tz);
   let bi=0;const blob=(x,z,s)=>{if(bi>=MAXB)return;V.set(x,.03,z);SC.set(s,1,s*.6);M4.compose(V,Q.set(0,0,0,1),SC);blobs.setMatrixAt(bi++,M4)};
   // NPCs of the active chapter
   for(const n of W.npcs){const m=W.npcMeshes[n.id];if(!m)continue;const st=S?S.npc[n.id]:{state:'alive',t:0};
@@ -4569,7 +4572,7 @@ function swayMat(m){if(!m||m.userData.sway)return;m.userData.sway=1;const prev=m
  m.onBeforeCompile=(sh,r)=>{if(prev)prev(sh,r);sh.uniforms.uSway=SWAY;sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nuniform float uSway;').replace('#include <begin_vertex>','#include <begin_vertex>\n#ifdef USE_INSTANCING\n{float ph=instanceMatrix[3].x*.73+instanceMatrix[3].z*.51;float hgt=clamp((position.y+.125)/4.,0.,1.);transformed.x+=(sin(uSway*1.7+ph)*.6+sin(uSway*.63+ph*1.9)*.4)*.11*hgt*hgt;}\n#endif')};
  m.customProgramCacheKey=()=>pk+'|sway';m.needsUpdate=true}
 const AMB={sys:[],ch:-1,fog:[],t:0};
-const AMB_K={ember:{c:[1,.55,.15],s:0.26,a:.95,add:1,y:[0,1.6],v:[.5,1.1],life:[2.5,5.5],fl:1},ash:{c:[.6,.6,.63],s:0.16,a:.55,add:0,y:[2,7],v:[-.35,-.18],life:[6,10]},
+const AMB_K={ember:{c:[1,.55,.15],s:CH1_ART_ON?.19:.26,a:CH1_ART_ON?.65:.95,add:1,y:[0,1.6],v:[.5,1.1],life:[2.5,5.5],fl:1},ash:{c:[.6,.6,.63],s:.16,a:CH1_ART_ON?.4:.55,add:0,y:[2,7],v:[-.35,-.18],life:[6,10]},
  spark:{c:[1,.72,.28],s:0.18,a:1,add:1,y:[0,1.2],v:[1.1,2.1],life:[1.2,2.6],fl:1},dustw:{c:[.7,.5,.38],s:0.22,a:.28,add:1,y:[.2,3],v:[-.05,.05],life:[6,10]},
  mote:{c:[1,.84,.42],s:0.2,a:.75,add:1,y:[.4,3.5],v:[-.06,.08],life:[5,9],tw:1},fly:{c:[.05,.05,.04],s:0.1,a:.9,add:0,y:[.3,1.4],v:[0,0],life:[3,6],jit:1},
  firefly:{c:[.78,1,.38],s:0.28,a:1,add:1,y:[.3,2.2],v:[-.08,.12],life:[6,11],pulse:1},mote2:{c:[.86,.84,.78],s:0.16,a:.32,add:1,y:[.4,4],v:[-.04,.05],life:[6,10],tw:1},
