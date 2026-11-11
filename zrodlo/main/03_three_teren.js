@@ -18,8 +18,10 @@ const chapterArt=(ch=CH)=>ch===1?CH1_ART_ON:ART_ON;
 // Swiatlo i glebia (runda swiatlo-pc-1): rozdzialy I-V, bez krypty. ?depth=0 = porownanie przed.
 // Wiersz: mnoznik swiatla otoczenia, nieba, ognisk, zasiegu ognisk, swiatla bohatera, jego zasiegu, kolor ziemi za mapa.
 const DEPTH_ON=new URLSearchParams(location.search).get('depth')!=='0';
-const DEPTH_CH={1:[.6,.72,1.75,1.35,1.22,1.15,0x262729],2:[.62,.72,1.8,1.35,1.2,1.15,0x15131a],3:[.74,.8,1.6,1.3,1.2,1.15,0x1d1a18],4:[.72,.8,1.7,1.35,1.2,1.15,0x121a16],5:[.6,.72,1.75,1.35,1.2,1.15,0x16151c]};
+const DEPTH_CH={1:[.6,.72,1.75,1.35,1.22,1.15,0x262729],2:[.62,.72,1.8,1.35,1.2,1.15,0x15131a],3:[.74,.8,1.6,1.3,1.2,1.15,0x1d1a18],4:[.72,.8,1.7,1.35,1.2,1.15,0x121a16],5:[.72,.8,1.75,1.35,1.3,1.15,0x16151c]};
 const depthOn=(ch=CH)=>DEPTH_ON?DEPTH_CH[ch]||null:null;
+// Sciana ciemniejsza u podstawy i jasniejsza u gory (kolory wierzcholkow, bez nowego shadera).
+function depthWall(geo,side,ch){if(!depthOn(ch))return geo;if(!geo.attributes.color){geo.computeBoundingBox();const ps=geo.attributes.position,b=geo.boundingBox,mid=(b.min.y+b.max.y)/2,cl=new Float32Array(ps.count*3);for(let i=0;i<ps.count;i++){const v=ps.getY(i)>mid?1:.5;cl[i*3]=cl[i*3+1]=cl[i*3+2]=v}geo.setAttribute('color',new THREE.BufferAttribute(cl,3))}side.vertexColors=true;return geo}
 const ART_LIGHT={1:[0xffdfba,1.55,10.5],2:[0xffe1b9,1.4,9.5],3:[0xffe4c1,1.45,10],4:[0xcfe4db,1.5,10],5:[0xdde1f0,1.55,10.5],9:[0xd0dded,1.4,9.5]};
 const ATM={1:CH1_ART_ON?{amb:0x707784,ai:.98,hs:0x8999ae,hg:0x302622,hi:.46,fog:0x111722,fd:.0085,clear:0x080b11,mi:.22,mc:0xafbdd7,cold:0xe5ecf2,warm:0xf3dfc4}:{amb:0x65738c,ai:1,hs:0x8a9ebf,hg:0x2b1b17,hi:.42,fog:0x0b101b,fd:.010,clear:0x05070d,mi:.16,mc:0x9ebbea,cold:0xdceaff,warm:0xffeedc},
   2:{amb:0x5c5269,ai:.98,hs:0x5c6380,hg:0x25120c,hi:.5,fog:0x0c0910,fd:.013,clear:0x040307,mi:.18,mc:0xb6bbd5,cold:0xdce1ff,warm:0xffe5c9},
