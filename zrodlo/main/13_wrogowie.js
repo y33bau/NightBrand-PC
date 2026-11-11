@@ -48,7 +48,7 @@ function syncCombatEffects(dt){for(const f of combatEffects){if(!f.active)contin
  uv.setXY(0,u0,v1);uv.setXY(1,u1,v1);uv.setXY(2,u0,v0);uv.setXY(3,u1,v0);uv.needsUpdate=true;
  const pos=m.geometry.attributes.position,px=cfg.pivot[0],py=cfg.pivot[1];pos.setXYZ(0,-px,py,0);pos.setXYZ(1,1-px,py,0);pos.setXYZ(2,-px,py-1,0);pos.setXYZ(3,1-px,py-1,0);pos.needsUpdate=true;}
  m.position.set(f.x/16,trail?.25:.45,f.y/16);m.quaternion.copy(cam.quaternion);m.rotateZ(f.rot);m.scale.set(size,size,1);
- m.material.opacity=(trail?.72:f.kind==='parry'?.48:.64)*(CH===1&&CH1_ART_ON&&f.kind!=='parry'&&f.kind!=='block'?.82:1)*(SETT.flash?1:.38)*Math.min(1,(1-phase)*3);
+ m.material.opacity=(trail?.72:f.kind==='parry'?.48:.64)*(chapterArt()&&f.kind!=='parry'&&f.kind!=='block'?.82:1)*(SETT.flash?1:.38)*Math.min(1,(1-phase)*3);
 }}
 
 function contactSparks(x,y,nx,ny,kind,count){const angle=Math.atan2(ny,nx),soft=!SETT.flash,n=Math.max(1,Math.round(count*GFX.parts));
