@@ -140,7 +140,7 @@ function storyIntro(ch){if(!STORY||!STORYMODE||!STORY_INTRO[ch]||!S||!SPRITE_DAT
   // 8.11.2026: the whole text scrolls up by itself; hold (tap/Space/pad) = faster, "Skip" ends the intro at once
   const roll=$('iroll');roll.textContent='';for(const l of STORY_INTRO[ch]){const p=document.createElement('p');p.textContent=l;roll.appendChild(p)}
   roll.style.transform='translateY(100%)';
-  const sk=$('iskip');sk.textContent=EN?'Skip ▸':'Pomiń ▸';sk.setAttribute('aria-label',EN?'Skip the introduction':'Pomiń wprowadzenie');
+  const sk=$('iskip');sk.textContent=EN?'Skip':'Pomiń';sk.setAttribute('aria-label',EN?'Skip the introduction':'Pomiń wprowadzenie');
   $('ihint').textContent=EN?'Hold to speed up':'Przytrzymaj, aby przyspieszyć';
   el.classList.remove('out');el.hidden=false;$('touch').hidden=true;
   INTRO={ch,lines:STORY_INTRO[ch],y:0,t:0,wait:.8,hold:false,pad:false,linger:0,chars:STORY_INTRO[ch].join('').length};S.intro=true;}
