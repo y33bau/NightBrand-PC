@@ -57,8 +57,9 @@ const COMBAT_WARN={areas:[],marks:null,dummy:combatVisualBuild(()=>new THREE.Obj
 function initCombatWarnings(){if(COMBAT_WARN.marks)return;
   const ring=new THREE.RingGeometry(.974,1,64).rotateX(-Math.PI/2),back=new THREE.RingGeometry(.95,1.02,64).rotateX(-Math.PI/2);
   for(let i=0;i<8;i++){
-    const m=new THREE.Mesh(ring,new THREE.MeshBasicMaterial({transparent:true,depthWrite:false,depthTest:false,fog:false,side:THREE.DoubleSide}));
-    const b=new THREE.Mesh(back,new THREE.MeshBasicMaterial({color:0x150e12,transparent:true,opacity:.72,depthWrite:false,depthTest:false,fog:false,side:THREE.DoubleSide}));m.renderOrder=46;b.renderOrder=45;m.visible=b.visible=false;scene.add(m,b);COMBAT_WARN.areas.push({mesh:m,back:b});
+    // krag obszaru ataku lezy na ziemi i chowa sie za sylwetkami (test glebi), zamiast rysowac sie na bossie
+    const m=new THREE.Mesh(ring,new THREE.MeshBasicMaterial({transparent:true,depthWrite:false,depthTest:true,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2,fog:false,side:THREE.DoubleSide}));
+    const b=new THREE.Mesh(back,new THREE.MeshBasicMaterial({color:0x150e12,transparent:true,opacity:.72,depthWrite:false,depthTest:true,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2,fog:false,side:THREE.DoubleSide}));m.renderOrder=46;b.renderOrder=45;m.visible=b.visible=false;scene.add(m,b);COMBAT_WARN.areas.push({mesh:m,back:b});
   }
   const c=canvas(64,96),g=c.getContext('2d');g.beginPath();g.moveTo(32,5);g.lineTo(55,47);g.lineTo(32,89);g.lineTo(9,47);g.closePath();g.fillStyle='#170e12';g.fill();g.strokeStyle='#ffebcb';g.lineWidth=3;g.stroke();g.fillStyle='#fff1d8';g.fillRect(29,26,6,30);g.beginPath();g.arc(32,66,3.6,0,Math.PI*2);g.fill();
   COMBAT_WARN.marks=new THREE.InstancedMesh(new THREE.PlaneGeometry(.34,.52),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false,depthTest:false,fog:false,opacity:.92}),16);COMBAT_WARN.marks.count=0;COMBAT_WARN.marks.frustumCulled=false;COMBAT_WARN.marks.renderOrder=48;scene.add(COMBAT_WARN.marks);
@@ -71,7 +72,7 @@ function syncThreatRings(){
   for(const e of list){const cue=attackCue(e);let radius=0,x=e.x,y=e.y;
     if(e.type==='collector')radius=56;else if(cue){if(e.atkT>0)radius=54;else if(e.mode==='root'){radius=32;x=e.tx;y=e.ty}else if(e.mode==='up'){radius=e.type==='beast'?70:62;x=e.tx;y=e.ty}}
     const idle=e.type==='collector'&&!cue;
-    if(radius&&area<8){const f=COMBAT_WARN.areas[area++];f.mesh.visible=f.back.visible=true;for(const m of [f.mesh,f.back]){m.position.set(x/16,.055,y/16);m.scale.setScalar(radius/16)}f.mesh.material.color.set(SETT.contrast?'#ffe270':e.type==='collector'?'#e0b84a':'#ff6655');f.mesh.material.opacity=idle?.28:.88;f.back.material.opacity=idle?.32:.72}
+    if(radius&&area<8){const f=COMBAT_WARN.areas[area++];f.mesh.visible=f.back.visible=true;for(const m of [f.mesh,f.back]){m.position.set(x/16,.07,y/16);m.scale.setScalar(radius/16)}f.mesh.material.color.set(SETT.contrast?'#ffe270':e.type==='collector'?'#e0b84a':'#ff6655');f.mesh.material.opacity=idle?.28:.88;f.back.material.opacity=idle?.32:.72}
     const important=e.mini||BIG.has(e.type)||e.type==='collector'||e.red||e.castWind>0||e.fanWind>0||e.aim>0||e.ghoulWind>0||e.mode==='root'||e.mode==='up';
     if(cue&&important&&mark<16){const geo=e.mesh.geometry;if(!geo.boundingBox)geo.computeBoundingBox();const top=geo.boundingBox.max.y*Math.abs(e.mesh.scale.y)+.38;d.position.set(e.x/16,top+(e.lh||0),e.y/16);d.quaternion.copy(cam.quaternion);d.scale.setScalar(BIG.has(e.type)?1.2:1);d.updateMatrix();COMBAT_WARN.marks.setMatrixAt(mark,d.matrix);COMBAT_WARN.color.set(SETT.contrast?'#ffe270':cue==='r'?'#ff7767':'#ffe3b0');COMBAT_WARN.marks.setColorAt(mark++,COMBAT_WARN.color)}
   }
