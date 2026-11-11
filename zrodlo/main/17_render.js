@@ -83,7 +83,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{ambTick(dt)
   // weather and dawn (chapter I)
   const fl=SETT.flash&&S?S.flash:0,dawn=CH!==2&&S&&S.opening?Math.min(1,(3.4-S.opening)/2.4):0,AT=ATM[CH];
   amb.intensity=AT.ai+fl*1.4+dawn*.9;hemi.intensity=AT.hi+fl*.8+dawn*.5;if(dawn>0){TMPC.setHex(AT.amb);amb.color.copy(TMPC.lerp(DAWN,dawn))}else amb.color.setHex(AT.amb);
-  postMat.uniforms.flash.value=fl*.3;postMat.uniforms.haze.value=CH===2&&S&&S.phase==='play'&&!S.dg&&SETT.quality!=='low'?1:0;postMat.uniforms.tm.value=clock%600;postMat.uniforms.grain.value=SETT.quality==='low'?0:CH===1&&CH1_ART_ON?.015:.03;postMat.uniforms.gtm.value=SETT.flash?clock%600:0;postMat.uniforms.sharp.value=S&&S.shakeT>0?1:Math.max(0,postMat.uniforms.sharp.value-dt*4);
+  postMat.uniforms.flash.value=fl*.3;postMat.uniforms.haze.value=CH===2&&S&&S.phase==='play'&&!S.dg&&SETT.quality!=='low'?1:0;postMat.uniforms.tm.value=clock%600;postMat.uniforms.grain.value=SETT.quality==='low'?0:chapterArt()?.015:.03;postMat.uniforms.gtm.value=SETT.flash?clock%600:0;postMat.uniforms.sharp.value=S&&S.shakeT>0?1:Math.max(0,postMat.uniforms.sharp.value-dt*4);
   rain.visible=CH===1;if(rain.visible){rain.material.opacity=(CH1_ART_ON?.20:.32)*(1-dawn*.7);for(let i=0;i<RAIN_N;i++){const d=DROPS[i];d.y-=d.s*dt;d.x-=d.s*.12*dt;if(d.y<0){d.y+=12;d.x=rnd(-15,15);d.z=rnd(-10,10);if(S&&dt>0&&i%9===0)S.parts.push({k:'d',x:(camTarget.x+d.x)*16,y:(camTarget.z+d.z)*16,z:1,vx:rnd(-6,6),vy:rnd(-3,3),vz:rnd(8,14),c:'#6a7a96',life:.25})}
     const x=camTarget.x+d.x,z=camTarget.z+d.z,o=i*6;rainPos[o]=x;rainPos[o+1]=d.y;rainPos[o+2]=z;rainPos[o+3]=x+.07;rainPos[o+4]=d.y-.55;rainPos[o+5]=z}rainGeo.attributes.position.needsUpdate=true}
   for(const o of propObjs){let f;
@@ -94,7 +94,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{ambTick(dt)
     if(f&&o.mesh.material!==f.n)setFrame(o.mesh,f)}
   CUT.value.set(S&&!pl.dead?pl.x/16:-99,0,S&&!pl.dead?pl.y/16:-99);
   if(S&&!pl.dead&&(CH===3||CH===4)){V.set(pl.x/16,.9,pl.y/16).project(cam);CUTS.value.set((V.x+1)/2*rt.width,(V.y+1)/2*rt.height,rt.height*.16)}else CUTS.value.set(-999,-999,0);
-  if(S){const art=CH===1&&CH1_ART_ON;plLight.color.setHex(art?0xffdfba:0xffd2a0);plLight.distance=art?10.5:13;plLight.position.set(pl.x/16,2.4,pl.y/16);plLight.intensity=pl.dead?.6:(art?1.55:2.05)+Math.sin(clock*9)*(art?.025:.06)}else plLight.position.set(tx,2.4,tz);
+  if(S){const art=chapterArt()?ART_LIGHT[CH]:null;plLight.color.setHex(art?art[0]:0xffd2a0);plLight.distance=art?art[2]:13;plLight.position.set(pl.x/16,2.4,pl.y/16);plLight.intensity=pl.dead?.6:(art?art[1]:2.05)+Math.sin(clock*9)*(art?.025:.06)}else plLight.position.set(tx,2.4,tz);
   let bi=0;const blob=(x,z,s)=>{if(bi>=MAXB)return;V.set(x,.03,z);SC.set(s,1,s*.6);M4.compose(V,Q.set(0,0,0,1),SC);blobs.setMatrixAt(bi++,M4)};
   // NPCs of the active chapter
   for(const n of W.npcs){const m=W.npcMeshes[n.id];if(!m)continue;const st=S?S.npc[n.id]:{state:'alive',t:0};
@@ -177,10 +177,10 @@ function swayMat(m){if(!m||m.userData.sway)return;m.userData.sway=1;const prev=m
  m.customProgramCacheKey=()=>pk+'|sway';m.needsUpdate=true}
 const AMB={sys:[],ch:-1,fog:[],t:0};
 const AMB_K={ember:{c:[1,.55,.15],s:CH1_ART_ON?.19:.26,a:CH1_ART_ON?.65:.95,add:1,y:[0,1.6],v:[.5,1.1],life:[2.5,5.5],fl:1},ash:{c:[.6,.6,.63],s:.16,a:CH1_ART_ON?.4:.55,add:0,y:[2,7],v:[-.35,-.18],life:[6,10]},
- spark:{c:[1,.72,.28],s:0.18,a:1,add:1,y:[0,1.2],v:[1.1,2.1],life:[1.2,2.6],fl:1},dustw:{c:[.7,.5,.38],s:0.22,a:.28,add:1,y:[.2,3],v:[-.05,.05],life:[6,10]},
- mote:{c:[1,.84,.42],s:0.2,a:.75,add:1,y:[.4,3.5],v:[-.06,.08],life:[5,9],tw:1},fly:{c:[.05,.05,.04],s:0.1,a:.9,add:0,y:[.3,1.4],v:[0,0],life:[3,6],jit:1},
- firefly:{c:[.78,1,.38],s:0.28,a:1,add:1,y:[.3,2.2],v:[-.08,.12],life:[6,11],pulse:1},mote2:{c:[.86,.84,.78],s:0.16,a:.32,add:1,y:[.4,4],v:[-.04,.05],life:[6,10],tw:1},
- paper:{c:[.86,.82,.7],s:0.26,a:.9,add:0,y:[3,7],v:[-.28,-.16],life:[8,12],sw:1}};
+ spark:{c:[1,.72,.28],s:ART_ON?.16:.18,a:ART_ON?.8:1,add:1,y:[0,1.2],v:[1.1,2.1],life:[1.2,2.6],fl:1},dustw:{c:[.7,.5,.38],s:ART_ON?.20:.22,a:ART_ON?.23:.28,add:1,y:[.2,3],v:[-.05,.05],life:[6,10]},
+ mote:{c:[1,.84,.42],s:ART_ON?.17:.2,a:ART_ON?.58:.75,add:1,y:[.4,3.5],v:[-.06,.08],life:[5,9],tw:1},fly:{c:[.05,.05,.04],s:0.1,a:.9,add:0,y:[.3,1.4],v:[0,0],life:[3,6],jit:1},
+ firefly:{c:[.78,1,.38],s:ART_ON?.22:.28,a:ART_ON?.8:1,add:1,y:[.3,2.2],v:[-.08,.12],life:[6,11],pulse:1},mote2:{c:[.86,.84,.78],s:.16,a:ART_ON?.28:.32,add:1,y:[.4,4],v:[-.04,.05],life:[6,10],tw:1},
+ paper:{c:[.86,.82,.7],s:ART_ON?.22:.26,a:ART_ON?.75:.9,add:0,y:[3,7],v:[-.28,-.16],life:[8,12],sw:1}};
 const AMB_CFG={1:[['ember',55],['ash',45]],2:[['spark',55],['dustw',35]],3:[['mote',60],['fly',16]],4:[['firefly',45]],5:[['mote2',50],['paper',20]],9:[['mote2',35]]};
 function ambTex(){const c=canvas(32,32),g=c.getContext('2d'),gr=g.createRadialGradient(16,16,0,16,16,16);gr.addColorStop(0,'rgba(255,255,255,1)');gr.addColorStop(.35,'rgba(255,255,255,.65)');gr.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=gr;g.fillRect(0,0,32,32);const t=new THREE.CanvasTexture(c);return t}
 let AMB_TEX=null;

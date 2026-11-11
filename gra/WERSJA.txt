@@ -654,3 +654,4 @@ cache576 · PC: dyskretne komunikaty i rozmowy z miniaturami NPC, stronami i naw
 cache577 · PC coop: symetryczny HUD, cztery aktywne sloty na gracza, osobne odnowienia i wybor wyposazenia w pauzie; Dar pieczeci tylko solo. PL/EN i symulacje padow/nocy OK (bez fizycznych padow i odsluchu)
 cache578 · PC menu: hover bez starych bitmapowych nakladek i filtrow ramek; 53 kontrolki PL/EN, wybor i fokus OK (artefakt z komputera autora nie zostal bezposrednio odtworzony; bez fizycznego pada i odsluchu)
 cache579 · Spalona Osada: szlif palety, istniejacego oswietlenia, deszczu i efektow trafien; przelacznik art1=0 do A/B (bez fizycznego pada, odsluchu i pomiaru FPS na karcie autora)
+cache580 · Wspolny szlif oprawy wszystkich rozdzialow I-V i krypty: indywidualne palety, swiatlo postaci i spokojniejsze efekty; A/B 6 map, trafienia/RNG, niska jakosc i HUD 4+4 OK (bez pomiaru FPS na karcie autora, fizycznego pada i odsluchu)
