@@ -355,6 +355,35 @@ function heal(n){if(pl.dead||pl.hp>=pl.max)return 0;const h=Math.min(n,pl.max-pl
 const might=()=>(1+.1*(S.whet||0))*(S.fury>0?1.2:1)*(S.pk?S.pk.dmg:1);
 function spriteMesh(geo){const m=new THREE.Mesh(geo,A.fx.slash[0].n);scene.add(m);return m}
 function addVfx(anim,dur,x,y,h,size,mode,rot=0,flip=1){const m=spriteMesh(geoC);m.renderOrder=6;setFrame(m,anim[0]);S.vfx.push({mesh:m,anim,t:0,dur,x,y,h,size,mode,rot,flip});return m}
+// Visual-only blade placement: owner-relative anchor and floor-safe billboard bounds.
+const WEAPON_FX_ON=new URLSearchParams(location.search).get('weaponfx')!=='0',WEAPON_BOX=new WeakMap();
+function bindWeaponFx(f,owner=pl){if(!f)return f;f.weaponOwner=owner;f.weaponX=owner.x;f.weaponY=owner.y;f.weaponAspect=.74;return f}
+function weaponFloorLift(f,fr){
+  if(f.weaponFloor!==undefined)return f.weaponFloor;
+  let bottom=0;
+  for(const frame of f.anim){const im=frame?.n?.map?.image;if(!im)continue;
+  let b=WEAPON_BOX.get(im);
+  if(!b){let l=.08,r=.92,t=.08,d=.92;
+    if(im.getContext){const g=im.getContext('2d'),w=im.width,h=im.height,a=g.getImageData(0,0,w,h).data;let x0=w,x1=0,y0=h,y1=0;
+      for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(a[(y*w+x)*4+3]>32){x0=Math.min(x0,x);x1=Math.max(x1,x);y0=Math.min(y0,y);y1=Math.max(y1,y)}
+      if(x0<=x1){l=x0/w;r=(x1+1)/w;t=y0/h;d=(y1+1)/h}}
+    b=[l*2-1,r*2-1,1-t*2,1-d*2];WEAPON_BOX.set(im,b);
+  }
+  const a=f.rot||0,cs=Math.cos(a),sn=Math.sin(a),sy=f.weaponAspect||1;
+  bottom=Math.min(bottom,...[b[0],b[1]].flatMap(x=>[b[2],b[3]].map(y=>(x*sn+y*sy*cs)*f.size)));
+  }
+  return f.weaponFloor=Math.max(f.h,(.035-bottom)/Math.cos(PITCH));
+}
+function emitWeaponSlash(a,c,s,R,owner=pl,trail=COMBAT_TRAIL[encLevel()[0]]||embTrail()){
+  const heavy=a.kind==='h',size=Math.min(heavy?1.25:1.05,R/16*(heavy?.48:.44)),x=owner.x+c*R*.50,y=owner.y+s*R*.50,h=heavy?1.7:1.55,rot=-screenAng(c,s);
+  let f;
+  if(S.zab){
+    if(heavy)f=zfx('fx_zab',2,.34,owner.x,owner.y,.72,R/16*.94,'ground',0);
+    else f=zfx('fx_zab',a.combo===4?1:0,a.combo===4?.24:.22,x,y,h,size,'bill',rot);
+  }else f=skAdd('slash',.26,x,y,h,size,'bill',rot,trail);
+  if(!f){addVfx(A.fx.slash,.26,x,y,h,size,'bill',rot);f=S.vfx[S.vfx.length-1]}
+  return bindWeaponFx(f,owner);
+}
 // ---- nowe animacje skilli i pocisków (Gemini, 30.10.2026): arkusz skill_fx, 192 px na klatkę ----
 const SKM={"knock": [0, 6], "earth": [1, 6], "stone": [2, 6], "frostf": [3, 4], "frosti": [4, 6], "firef": [5, 4], "firei": [6, 6], "casc": [7, 6], "whirl": [8, 4], "wave1": [9, 6], "wave2": [10, 6], "rush": [11, 6], "slash": [12, 6], "bolt": [13, 3], "boltHit": [14, 6], "boss": [15, 4], "freeze": [16, 4], "burn": [17, 4], "poison": [18, 4], "bleed": [19, 4], "slash_fire": [20, 4], "slash_ice": [21, 4], "slash_poison": [22, 4], "slash_blood": [23, 4]},SKFX={};
 // runda 245: statusy ostrza (ogień, lód, trucizna, krew) = te same animacje co stal, tylko przebarwione (mapa gradientu po jasności)

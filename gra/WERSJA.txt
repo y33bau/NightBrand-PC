@@ -657,3 +657,4 @@ cache579 · Spalona Osada: szlif palety, istniejacego oswietlenia, deszczu i efe
 cache580 · Wspolny szlif oprawy wszystkich rozdzialow I-V i krypty: indywidualne palety, swiatlo postaci i spokojniejsze efekty; A/B 6 map, trafienia/RNG, niska jakosc i HUD 4+4 OK (bez pomiaru FPS na karcie autora, fizycznego pada i odsluchu)
 cache581 · Krew HD na wszystkich mapach: organiczne plamy, kierunkowe rozpryski, ciemnienie sladow, stale pule efektow; testy I-V, krypta i coop OK; nie sprawdzono fizycznego pada, dzwieku ani wydajnosci na GPU autora
 cache582 · Drobne zaokraglone krople krwi w locie, do 18 na trafienie i 160 lacznie; test trafien, pauzy, coop i czyszczenia OK; nie sprawdzono fizycznego pada, dzwieku ani GPU autora
+cache583 · Oprawa broni: proporcjonalne smugi na wysokosci ostrza, przypiecie do ruchu, poprawa wiru, Kaskady ciecia, fali i haka; 48 kombinacji i testy specjalne OK; bez zmian mechaniki; nie sprawdzono fizycznego pada, dzwieku ani GPU autora

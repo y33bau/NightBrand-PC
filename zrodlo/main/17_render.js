@@ -148,9 +148,9 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{ambTick(dt)
     for(const z of S.zones){setFrame(z.mesh,at(A.fx.inferno,clock+z.x,9));z.mesh.position.set(z.x/16,0,z.y/16);const k=z.r/16*1.25;z.mesh.scale.set(k,k*SQ*.8,1)}
     for(const p of S.picks){const y=.1+Math.sin(clock*4+p.ph)*.07;p.mesh.position.set(p.x/16,y+(p.k==='h'?.15:p.k==='c'?.15:-.55),p.y/16);p.mesh.quaternion.copy(cam.quaternion);{const ps=p.k==='h'?.275:p.k==='c'?.3:.9;p.mesh.scale.set(ps,ps,1)}
       p.glow.position.set(p.x/16,y+.02,p.y/16+.01);p.glow.quaternion.copy(cam.quaternion);{const gs=p.k==='h'||p.k==='c'?.5:1;p.glow.scale.set(gs,gs,1)}} // runda 302: serca i monety o polowe mniejsze (rysunek, wysokosc, poswiata)
-    for(const f of S.vfx){setFrame(f.mesh,at(f.anim,f.t,f.anim.length/f.dur,false));
-      if(f.mode==='ground'){f.mesh.position.set(f.x/16,f.h,f.y/16);f.mesh.rotation.set(-Math.PI/2,0,f.rot||0);f.mesh.scale.set(f.size*(f.sx||1),f.size*(f.sy||1),1)}
-      else{f.mesh.position.set(f.x/16,f.h+(f.mode==='bill'&&f.h===0?f.size*.42:0),f.y/16);f.mesh.quaternion.copy(cam.quaternion);if(f.rot)f.mesh.rotateZ(f.rot);f.mesh.scale.set(f.size,f.size,1)}}
+    for(const f of S.vfx){const fr=at(f.anim,f.t,f.anim.length/f.dur,false);setFrame(f.mesh,fr);const wx=f.weaponOwner?f.weaponOwner.x-f.weaponX:0,wy=f.weaponOwner?f.weaponOwner.y-f.weaponY:0;
+      if(f.mode==='ground'){f.mesh.position.set((f.x+wx)/16,f.h,(f.y+wy)/16);f.mesh.rotation.set(-Math.PI/2,0,f.rot||0);f.mesh.scale.set(f.size*(f.sx||1),f.size*(f.sy||1),1)}
+      else{f.mesh.position.set((f.x+wx)/16,f.weaponAspect?weaponFloorLift(f,fr):f.h+(f.mode==='bill'&&f.h===0?f.size*.42:0),(f.y+wy)/16);f.mesh.quaternion.copy(cam.quaternion);if(f.rot)f.mesh.rotateZ(f.rot);f.mesh.scale.set(f.size,f.size*(f.weaponAspect||1),1)}}
     let n=0;for(const p of S.parts){if(p.bloodHD)continue;if(n>=MAXP)break;pPos[n*3]=p.x/16;pPos[n*3+1]=p.z/16+.02;pPos[n*3+2]=p.y/16;const c=col(p.c);let a=p.life!==undefined?Math.max(0,Math.min(1,p.life)):1;pCol[n*3]=c.r*a;pCol[n*3+1]=c.g*a;pCol[n*3+2]=c.b*a;n++}
     pGeo.setDrawRange(0,n);pGeo.attributes.position.needsUpdate=true;pGeo.attributes.color.needsUpdate=true;
     postMat.uniforms.hurt.value=SETT.flash?Math.max(S.hurt*1.2,pl.dead?.25:0,(!pl.dead&&pl.hp<pl.max*.3)?(.12+.08*Math.sin(clock*5)):0):pl.dead?.18:pl.hp<pl.max*.3?.1:0;

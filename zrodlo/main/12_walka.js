@@ -70,7 +70,7 @@ function attackHit(a){const P=a.kind==='h'?SL.heavy:SL.light,R=P.range*(S.zab&&a
   if(S.zab){S.zTag=null;if(a.kind==='h')S.zWhirlBest=Math.max(S.zWhirlBest||0,S.zWhirlN||0);if(hits>0){S.zHits++;S.zCombo=Math.min(S.pk.zCap,(S.zCombo||0)+.03);S.zT=S.pk.zDecay}}
   if(hits>0&&!(S.manaHitCd>0)&&SL.mana.onHit>0){gainMana(SL.mana.onHit);S.manaHitCd=SL.mana.hitGap}
   const c=Math.cos(ang),s=Math.sin(ang),trail=COMBAT_TRAIL[encLevel()[0]]||embTrail(),visualSize=swordVisualSize(a.kind);
-  if(S.zab&&zabSlashFx(a,c,s,R,visualSize)){}else if(!skAdd('slash',.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize*1.1,'bill',-screenAng(c,s),trail)){if(!trail||!emitCombatEffect(trail,pl.x+c*R*.12,pl.y+s*R*.12,visualSize,-screenAng(c,s)))addVfx(A.fx.slash,.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize,'bill',-screenAng(c,s))}
+  if(WEAPON_FX_ON)emitWeaponSlash(a,c,s,R);else if(S.zab&&zabSlashFx(a,c,s,R,visualSize)){}else if(!skAdd('slash',.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize*1.1,'bill',-screenAng(c,s),trail)){if(!trail||!emitCombatEffect(trail,pl.x+c*R*.12,pl.y+s*R*.12,visualSize,-screenAng(c,s)))addVfx(A.fx.slash,.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize,'bill',-screenAng(c,s))}
   {const en=ENCH.filter(k=>S.sk[k]);if(en.length)for(let i=0;i<16;i++){const t=ang+rnd(-arc,arc),rr=rnd(10,R),k=en[i%en.length];S.parts.push({k:'e',x:pl.x+Math.cos(t)*rr,y:pl.y+Math.sin(t)*rr,z:rnd(8,18),vx:0,vy:0,vz:rnd(4,12),c:Math.random()<.6?ENC[k].col:ENC[k].col2,life:rnd(.2,.45)})}}
   if(crit){pl.riposte=0;const wdp=waveDmg*.8;launchWave(a,ang,wdp);const ec=sk('echo');if(ec>=1){launchWave(a,ang-.28,wdp*(ec>=3?1.2:1),1);if(ec>=2)launchWave(a,ang+.28,wdp*(ec>=3?1.2:1),1)}if(hits)ftInfo((EN?'Critical hit!':'Cios krytyczny!'))}
   else if(hits&&a.kind==='l'&&sk('zryw')){S.hitN=(S.hitN||0)+1;if(S.hitN>=ZRYW_N[sk('zryw')]){S.hitN=0;launchWave(a,ang,waveDmg)}}
@@ -78,6 +78,7 @@ function attackHit(a){const P=a.kind==='h'?SL.heavy:SL.light,R=P.range*(S.zab&&a
   if(S.twin)twinPush(a,crit,twinBase)}
 // fala cięcia: nagroda za parowanie, leci przed siebie i przebija wszystkich wrogów na swojej drodze (raz każdego)
 function launchWave(a,ang,base,quiet){const W0=a.kind==='h'?SL.wave.h:SL.wave.l,zs=sk('zasieg'),W=Object.assign({},W0,{life:W0.life*(1+.18*zs),r:W0.r*(1+.18*zs),size:W0.size*(1+.1*zs),dmg:W0.dmg*(1+FALA_B[sk('fala')])*(brOn('wav')?1.3:1)}),c=Math.cos(ang),s=Math.sin(ang);{const wk=brOn('wav')?'rush':sk('zasieg')>=1?'wave2':'wave1',wf=skFrames(wk);if(wf)addVfx(wf,W.life,pl.x+c*14,pl.y+s*14,.6,W.size*1.05,'bill',-screenAng(c,s));else addVfx(A.fx.slash,W.life,pl.x+c*14,pl.y+s*14,.6,W.size,'bill',-screenAng(c,s))}
+  if(WEAPON_FX_ON){const f=S.vfx[S.vfx.length-1];f.h=1.55;f.size=Math.min(1.2,f.size*.72);f.weaponAspect=.74}
   (S.waves=S.waves||[]).push({f:S.vfx[S.vfx.length-1],x:pl.x+c*14,y:pl.y+s*14,vx:c*W.speed,vy:s*W.speed,t:W.life,r:W.r,dmg:base*W.dmg,hit:new Set()});play('katana',0);shake(.12,.1);padRumble(.4,.7,160);
   if(!quiet)ftInfo((EN?'Slash wave':'Fala cięcia'))}
 function waveTick(dt){if(!S.waves||!S.waves.length)return;for(let i=S.waves.length-1;i>=0;i--){const w=S.waves[i];w.t-=dt;w.x+=w.vx*dt;w.y+=w.vy*dt;if(w.f){w.f.x=w.x;w.f.y=w.y}
@@ -206,7 +207,7 @@ function cascadeCut(c){const C=SL.cascade,ang=Math.atan2(c.dy,c.dx),dmg=C.dmg[c.
  const side=c.n%2?-1:1,a2=ang+side*.12;moveBox(pl,c.dx*C.lunge,c.dy*C.lunge,4,3);
  ftMelee=true;ftHeavy=false;ftCrit=false;let hits=0;try{for(const e of [...S.enemies]){if(e.dead||e.rise>0)continue;const dx=e.x-pl.x,dy=e.y-pl.y,d=Math.hypot(dx,dy);if(d>C.range+e.r||!sightSword(pl.x,pl.y,e.x,e.y))continue;let df=Math.atan2(dy,dx)-ang;while(df>Math.PI)df-=2*Math.PI;while(df<-Math.PI)df+=2*Math.PI;if(d>10&&Math.abs(df)>C.arc)continue;
   if(damageEnemy(e,dmg,dx/(d||1),dy/(d||1),.4,'sk:cascade'))hits++}}finally{ftMelee=oldM;ftHeavy=oldH;ftCrit=oldC}
- const cs=Math.cos(a2),sn=Math.sin(a2);if(skFrames('casc')){if(c.n===0)skAdd('casc',.62,pl.x+cs*C.range*.5,pl.y+sn*C.range*.5,.6,2.0,'bill',-screenAng(cs,sn))}else addVfx(A.fx.slash,.18,pl.x+cs*C.range*.45,pl.y+sn*C.range*.45,.6,swordVisualSize('l')*1.1,'bill',-screenAng(cs,sn));
+ const cs=Math.cos(a2),sn=Math.sin(a2);if(WEAPON_FX_ON){const sz=Math.min(1.25,C.range/16*.47);let v;if(skFrames('casc')){if(c.n===0)v=skAdd('casc',.62,pl.x+cs*C.range*.5,pl.y+sn*C.range*.5,1.65,sz,'bill',-screenAng(cs,sn))}else{addVfx(A.fx.slash,.18,pl.x+cs*C.range*.5,pl.y+sn*C.range*.5,1.65,sz,'bill',-screenAng(cs,sn));v=S.vfx[S.vfx.length-1]}bindWeaponFx(v)}else if(skFrames('casc')){if(c.n===0)skAdd('casc',.62,pl.x+cs*C.range*.5,pl.y+sn*C.range*.5,.6,2.0,'bill',-screenAng(cs,sn))}else addVfx(A.fx.slash,.18,pl.x+cs*C.range*.45,pl.y+sn*C.range*.45,.6,swordVisualSize('l')*1.1,'bill',-screenAng(cs,sn));
  pl.swingT=pl.swingDur=.2;if(Math.abs(c.dx)>Math.abs(c.dy)){pl.swingDir=2;pl.swingS=c.dx>0?1:-1}else{pl.swingDir=c.dy>0?0:1;pl.swingS=side}
  play('swing',0);shake(.06,.06);if(hits){S.hitstop=Math.max(S.hitstop||0,.025);if(!(S.manaHitCd>0)&&SL.mana.onHit>0){gainMana(SL.mana.onHit);S.manaHitCd=SL.mana.hitGap}}}
 function cascadeTick(dt){const c=S.cascade;if(!c)return;if(pl.dead||pl.roll>0||pl.broken>0){S.cascade=null;if(pl.atk?.kind==='skill')pl.atk=null;return}
@@ -285,7 +286,7 @@ function rendCut(a){const cx=pl.x+a.dx*12,cy=pl.y+a.dy*12,dmg=skDmg(REND.dmg[a.L
  for(const e of S.enemies){if(e.dead||e.rise>0)continue;const d=Math.hypot(e.x-cx,e.y-cy);if(d<=REND.hitR+e.r)list.push([d,e])}
  list.sort((p,q)=>p[0]-q[0]);ftMelee=true;ftHeavy=false;ftCrit=false;
  try{for(const [d,e] of list.slice(0,REND.maxT)){const big=BIG.has(e.type)||e.type==='collector';if(!damageEnemy(e,dmg*finMul(e),a.dx,a.dy,.25,'sk:rend'))continue;if(!a.st.has(e)){a.st.add(e);supportEnchant(e,a,false);applyEnchants(e,a,false)}if(!e.dead){if(big)breakPoise(e,4);else slashStagger(e,.25)}}}finally{ftMelee=oldM;ftHeavy=oldH;ftCrit=oldC}
- zfx('fx_zab',a.n%2?1:0,.18,cx+a.dx*8,cy+a.dy*8,.6,1.5,'bill',a.n%2?0:Math.random()*6.28);if(a.n%2===0)play('bladeLight',.03);shake(.05,.05)}
+ {const vr=a.n%2?0:Math.random()*6.28;if(WEAPON_FX_ON)bindWeaponFx(zfx('fx_zab',a.n%2?1:0,.18,cx+a.dx*8,cy+a.dy*8,1.6,1.0,'bill',-screenAng(a.dx,a.dy)));else zfx('fx_zab',a.n%2?1:0,.18,cx+a.dx*8,cy+a.dy*8,.6,1.5,'bill',vr);}if(a.n%2===0)play('bladeLight',.03);shake(.05,.05)}
 function rendTick(dt){const a=pl.atk;if(pl.dead||pl.broken>0){endSk('rend');return}skTickCommon(dt);
  if(a.stage==='wind'){a.t-=dt;if(a.t<=0){a.stage='cut';a.at=0;a.n=0}return}
  if(a.stage==='cut'){a.at+=dt;moveBox(pl,a.dx*REND.dist/REND.dur*dt,a.dy*REND.dist/REND.dur*dt,4,3,true);const done=a.at>=REND.dur;
@@ -308,8 +309,8 @@ function beginLDance(L){const level=Math.min(3,Math.max(1,L));payActive('ldance'
 // --- Hak Kata: hak leci na 5 pól, przyciąga pierwszego wroga pod nogi ---
 function hookVis(a,init){
  if(init){const hf=fxFrames('fx_kat',0),cf=fxFrames('fx_kat',1);if(hf){addVfx([hf[1]],99,pl.x,pl.y,.6,.8,'bill',-screenAng(a.dx,a.dy));a.vh=S.vfx[S.vfx.length-1]}if(cf){addVfx([cf[1]],99,pl.x,pl.y,.15,1,'ground',0);a.vc=S.vfx[S.vfx.length-1]}}
- if(a.vh){a.vh.x=a.hx;a.vh.y=a.hy;a.vh.t=0}
- if(a.vc){const L=Math.hypot(a.hx-pl.x,a.hy-pl.y);a.vc.x=(pl.x+a.hx)/2;a.vc.y=(pl.y+a.hy)/2;a.vc.rot=-Math.atan2(a.hy-pl.y,a.hx-pl.x);a.vc.sx=Math.max(.05,L/32);a.vc.sy=.3;a.vc.t=0}}
+ if(a.vh){a.vh.x=a.hx;a.vh.y=a.hy;a.vh.t=0;if(WEAPON_FX_ON){a.vh.h=1.4;a.vh.weaponAspect=.74}}
+ if(a.vc){if(WEAPON_FX_ON)a.vc.h=.7;const L=Math.hypot(a.hx-pl.x,a.hy-pl.y);a.vc.x=(pl.x+a.hx)/2;a.vc.y=(pl.y+a.hy)/2;a.vc.rot=-Math.atan2(a.hy-pl.y,a.hx-pl.x);a.vc.sx=Math.max(.05,L/32);a.vc.sy=.3;a.vc.t=0}}
 function hookClear(a){for(const v of [a.vh,a.vc])if(v)v.t=v.dur;a.vh=a.vc=null}
 function beginHook(L){const level=Math.min(3,Math.max(1,L)),[dx,dy]=skDir();pl.fx=dx;pl.fy=dy;payActive('hook');S.hookCd=ACTIVE_CFG.hook.wait(level);S.actions.skill=(S.actions.skill||0)+1;skPrep();
  pl.atk={kind:'hook',stage:'wind',L:level,t:HOOK.wind,dx,dy,len:0,hx:pl.x,hy:pl.y,tgt:null};play('swing',0)}
@@ -345,8 +346,8 @@ function syncWhirlVisual(dt=0){const a=pl?.atk;for(let i=0;i<whirlVisualPool.len
  const ring=i===0;if(ring){if(a?.kind!=='whirl'||a.stage!=='act'){f.active=false;f.mesh.visible=false;if(skWhirlMesh)skWhirlMesh.visible=false;continue}f.elapsed=a.elapsed;f.x=pl.x;f.y=pl.y;f.kind=COMBAT_TRAIL[encLevel()[0]]||embTrail()||'steel'}else{f.elapsed+=dt;if(f.elapsed>=.22){f.active=false;f.mesh.visible=false;continue}}
  const low=SETT.quality==='low',raw=ring?Math.floor(f.elapsed/(WHIRL.duration/8))%4:Math.min(3,Math.floor(f.elapsed/.055)),frame=low?raw<2?0:2:raw;
  setWhirlVisualFrame(f,frame);let warning=false;for(const e of S.enemies)if(!e.dead&&attackCue(e)&&Math.hypot(e.x-f.x,e.y-f.y)<f.radius+e.r+12){warning=true;break}
- const m=f.mesh;m.visible=!warning;m.position.set(f.x/16,.13,f.y/16);m.rotation.set(-Math.PI/2,0,0);const size=f.radius*2/16*(low?.94:1);m.scale.set(size,size/Math.sin(PITCH),1);m.material.opacity=(ring?.66:.45)*(SETT.flash?1:.38)*(ring?1:1-f.elapsed/.22);
- if(ring){const wf=skFrames('whirl',f.kind==='steel'?null:f.kind),sm=skWhirl();if(wf){m.visible=false;sm.visible=!warning;sm.material=wf[frame%wf.length].n;sm.position.copy(m.position);sm.rotation.set(-Math.PI/2,0,0);const q=f.radius*2/16*1.25;sm.scale.set(q,q/Math.sin(PITCH),1)}else sm.visible=false}
+ const m=f.mesh;m.visible=!warning;m.position.set(f.x/16,WEAPON_FX_ON?(ring?.72:.07):.13,f.y/16);m.rotation.set(-Math.PI/2,0,0);const size=f.radius*2/16*(low?.94:1);m.scale.set(size,size/Math.sin(PITCH),1);m.material.opacity=(ring?.66:.45)*(SETT.flash?1:.38)*(ring?1:1-f.elapsed/.22);
+ if(ring){const wf=skFrames('whirl',f.kind==='steel'?null:f.kind),sm=skWhirl();if(wf){m.visible=false;sm.visible=!warning;sm.material=wf[frame%wf.length].n;sm.position.copy(m.position);sm.rotation.set(-Math.PI/2,0,0);const q=f.radius*2/16*(WEAPON_FX_ON?1:1.25);sm.scale.set(q,q/Math.sin(PITCH),1)}else sm.visible=false}
 }}
 
 function activeSlotsTick(dt){S.combatLock=Math.max(0,(S.combatLock||0)-dt);S.aardCd=Math.max(0,(S.aardCd||0)-dt);if(!S.activeWind)return;
@@ -396,7 +397,7 @@ function twinStrike(E,a){const q=a.q,P=a.P,R=P.range,arc=P.arc,ang=Math.atan2(E.
   try{for(const e of [...S.enemies]){if(e.dead||e.rise>0)continue;const dx=e.x-E.x,dy=e.y-E.y,d=Math.hypot(dx,dy);if(d>R+e.r||!sightSword(E.x,E.y,e.x,e.y))continue;let df=Math.atan2(dy,dx)-ang;while(df>Math.PI)df-=2*Math.PI;while(df<-Math.PI)df+=2*Math.PI;if(d>10&&Math.abs(df)>arc)continue;
     if(damageEnemy(e,dmg,dx/(d||1),dy/(d||1),q.kind==='h'?1.2:.5,'sk:drugieja'))hits++}}finally{ftMelee=oldM;ftHeavy=oldH;ftCrit=oldC}
   const c=Math.cos(ang),s=Math.sin(ang),trail=embTrail(),vs=swordVisualSize(q.kind);
-  if(S.zab&&zabSlashFx({kind:q.kind,combo:q.combo},c,s,R,vs,E.x,E.y)){}else if(!skAdd('slash',.26,E.x+c*R*.55,E.y+s*R*.55,.6,vs*1.1,'bill',-screenAng(c,s),trail)){if(!trail||!emitCombatEffect(trail,E.x+c*R*.12,E.y+s*R*.12,vs,-screenAng(c,s)))addVfx(A.fx.slash,.26,E.x+c*R*.55,E.y+s*R*.55,.6,vs,'bill',-screenAng(c,s))}
+  if(WEAPON_FX_ON)emitWeaponSlash({kind:q.kind,combo:q.combo},c,s,R,E,trail);else if(S.zab&&zabSlashFx({kind:q.kind,combo:q.combo},c,s,R,vs,E.x,E.y)){}else if(!skAdd('slash',.26,E.x+c*R*.55,E.y+s*R*.55,.6,vs*1.1,'bill',-screenAng(c,s),trail)){if(!trail||!emitCombatEffect(trail,E.x+c*R*.12,E.y+s*R*.12,vs,-screenAng(c,s)))addVfx(A.fx.slash,.26,E.x+c*R*.55,E.y+s*R*.55,.6,vs,'bill',-screenAng(c,s))}
   play(q.kind==='h'?'bladeHeavy':'bladeLight',.05);if(hits)swordSparks(E.x+c*R*.5,E.y+s*R*.5,'#9a86ff',4)}
 function twinTick(dt){const E=S.twin;if(!E)return;if(pl.dead){removeTwin();return}E.age+=dt;E.t-=dt;E.q=E.q.filter(q=>q.due>E.age);
   if(E.atk){const a=E.atk;a.t-=dt;if(a.stage==='wind'&&a.t<=0){a.stage='act';a.t=a.P.act;twinStrike(E,a)}else if(a.stage==='act'&&a.t<=0){a.stage='rec';a.t=a.P.rec}else if(a.stage==='rec'&&a.t<=0)E.atk=null;E.moving=false}
