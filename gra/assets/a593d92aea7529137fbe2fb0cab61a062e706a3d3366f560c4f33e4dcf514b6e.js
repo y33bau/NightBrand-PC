@@ -1288,7 +1288,7 @@ if(nbLite<.5){float gn=fract(sin(dot(floor(nbWorld*24.),vec2(12.9898,78.233)))*4
 sampledDiffuseColor.rgb=result;}
 sampledDiffuseColor=mapTexelToLinear(sampledDiffuseColor);diffuseColor*=sampledDiffuseColor;
 #endif`)};m.customProgramCacheKey=()=> 'nightbrand-ground-cc0-v3-'+groundChapter+'-'+compactSamplers;return m}
-function groundDetails(g){const plan=W.groundPlan;if(!plan)return;for(const p of W.PROPS){const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;if(plan.road[i])continue;const fire=p.fire||/furnace|brazier/.test(p.k),blood=/gallows|covered_corpses|beggar_bodies/.test(p.k),bones=/bones|sarcophagus/.test(p.k);if(!fire&&!blood&&!bones)continue;const key=fire?'scorch':blood?'pool':'bones',stamp=canvas(40,40),q=stamp.getContext('2d');q.drawImage(DEC[key][groundHash(x,y)%4],0,0,40,40);q.globalCompositeOperation='destination-in';const mask=q.createRadialGradient(20,20,4,20,20,20);mask.addColorStop(0,'#fff');mask.addColorStop(1,'transparent');q.fillStyle=mask;q.fillRect(0,0,40,40);g.save();g.globalAlpha=blood?.28:.18;g.drawImage(stamp,p.x*16-20,p.y*16-20);g.restore()}
+function groundDetails(g){const plan=W.groundPlan;if(!plan)return;for(const p of W.PROPS){const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;if(plan.road[i])continue;const fire=p.fire||/furnace|brazier/.test(p.k),blood=/gallows|covered_corpses|beggar_bodies/.test(p.k),bones=/bones|sarcophagus/.test(p.k);if(!fire&&!blood&&!bones)continue;const key=fire?'scorch':blood?'pool':'bones',stamp=canvas(40,40),q=stamp.getContext('2d');q.drawImage((blood&&bloodHD.ready?bloodHD.stamps:DEC[key])[groundHash(x,y)%4],0,0,40,40);q.globalCompositeOperation='destination-in';const mask=q.createRadialGradient(20,20,4,20,20,20);mask.addColorStop(0,'#fff');mask.addColorStop(1,'transparent');q.fillStyle=mask;q.fillRect(0,0,40,40);g.save();g.globalAlpha=blood?.28:.18;g.drawImage(stamp,p.x*16-20,p.y*16-20);g.restore()}
   for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++){const i=y*MW+x;if(plan.road[i]||plan.rows[i]===255||groundHash(x,y)%67)continue;const wall=[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>SOLID.has(map[(y+dy)*MW+x+dx]));if(!wall)continue;g.save();g.globalAlpha=.12;g.drawImage(DEC.crack[groundHash(y,x)%4],x*16-4,y*16-4,24,24);g.restore()}}
 
 function finishGround(c){const noise=canvas(64,64),g=noise.getContext('2d'),d=g.createImageData(64,64);for(let y=0;y<64;y++)for(let x=0;x<64;x++){const i=(y*64+x)*4,n=.5+.24*Math.sin(x*.17+CH)*Math.cos(y*.19)+.24*Math.sin((x+y)*.11+CH*2);d.data[i]=10;d.data[i+1]=12;d.data[i+2]=17;d.data[i+3]=12+n*30}g.putImageData(d,0,0);const fg=c.getContext('2d');fg.save();fg.globalCompositeOperation='source-atop';fg.imageSmoothingEnabled=true;fg.drawImage(noise,0,0,c.width,c.height);fg.restore();const info=c.nbGround;if(info&&!W.groundPlan){const random=rng((W.seed||CH*991)^0x54d2);for(let k=0;k<96;k++){const x=(random()*MW)|0,y=(random()*MH)|0;if(!(info.cells[(y*MW+x)*4+3]&1))continue;const images=random()<.65?DEC.crack:DEC.scorch;if(!images)continue;fg.save();fg.globalAlpha=.10+random()*.08;fg.translate(x*16+8,y*16+8);fg.rotate(random()*Math.PI*2);const size=9+random()*11;fg.drawImage(images[(random()*4)|0],-size/2,-size/2,size,size);fg.restore()}}}
@@ -2875,7 +2875,7 @@ function mpHudTick(){{const h=$('hud');if(h)h.classList.toggle('mp2',!!(S&&pl2&&
   for(const [p,el,ar] of [[pl1,mpEls.b1,mpEls.a1],[pl2,mpEls.b2,mpEls.a2]]){MPV.set(p.x/16,2.1,p.y/16).project(cam);const inView=MPV.z<1&&Math.abs(MPV.x)<1.05&&Math.abs(MPV.y)<1.05;
     el.style.display=inView?'block':'none';ar.style.display=inView?'none':'block';if(!inView){let vx=MPV.x,vy=-MPV.y;if(MPV.z>1){vx=-vx;vy=-vy}const px=vx*r.width/2,py=vy*r.height/2,t=Math.min((r.width/2-26)/Math.max(1e-3,Math.abs(px)),(r.height/2-26)/Math.max(1e-3,Math.abs(py)));ar.style.left=(r.left+r.width/2+px*t-9)+'px';ar.style.top=(r.top+r.height/2+py*t-11)+'px';ar.style.transform='rotate('+Math.atan2(py,px)+'rad)'}if(!inView)continue;el.style.left=(r.left+(MPV.x*.5+.5)*r.width)+'px';el.style.top=(r.top+(-MPV.y*.5+.5)*r.height)+'px';
     const f=p.dead?Math.min(1,(S.mpProg||0)/5):Math.max(0,p.hp)/p.max;el.firstChild.style.width=f*100+'%';el.firstChild.style.background=p.dead?'#e8c85a':(p===pl1?'#d84a4a':'#4f8fd8')}}
-function clearScene(){if(!S)return;for(const f of S.vfx)if(f.ownMat)for(const a of f.anim)a.n.dispose();if(pl2){asP2(clearSwordTransient);const a=pl2.actives;if(a){for(const f of a.whirlPool){scene.remove(f.mesh);f.mesh.geometry.dispose();f.mesh.material.dispose()}a.whirlPool[0]?.mesh.material.map?.dispose();if(a.whirlMesh){scene.remove(a.whirlMesh);a.whirlMesh.geometry.dispose()}a.whirlPool=[];a.whirlMesh=null}}clearSwordTransient();if(swordGlow)swordGlow.visible=false;const all=[...S.enemies.map(e=>e.mesh),...S.picks.flatMap(p=>[p.mesh,p.glow]),...S.vfx.map(f=>f.mesh),...S.corpses.map(c=>c.mesh),...S.golems.map(g=>g.mesh),...S.zones.map(z=>z.mesh),...(S.eproj||[]).map(f=>f.mesh),...(S.deathPurses||[]).map(p=>p.mesh)];for(const m of all)if(m)scene.remove(m);for(const c of S.corpses)if(c.own)c.mesh.material.dispose()}
+function clearScene(){resetBloodHD();if(!S)return;for(const f of S.vfx)if(f.ownMat)for(const a of f.anim)a.n.dispose();if(pl2){asP2(clearSwordTransient);const a=pl2.actives;if(a){for(const f of a.whirlPool){scene.remove(f.mesh);f.mesh.geometry.dispose();f.mesh.material.dispose()}a.whirlPool[0]?.mesh.material.map?.dispose();if(a.whirlMesh){scene.remove(a.whirlMesh);a.whirlMesh.geometry.dispose()}a.whirlPool=[];a.whirlMesh=null}}clearSwordTransient();if(swordGlow)swordGlow.visible=false;const all=[...S.enemies.map(e=>e.mesh),...S.picks.flatMap(p=>[p.mesh,p.glow]),...S.vfx.map(f=>f.mesh),...S.corpses.map(c=>c.mesh),...S.golems.map(g=>g.mesh),...S.zones.map(z=>z.mesh),...(S.eproj||[]).map(f=>f.mesh),...(S.deathPurses||[]).map(p=>p.mesh)];for(const m of all)if(m)scene.remove(m);for(const c of S.corpses)if(c.own)c.mesh.material.dispose()}
 function newGame(){
   clearScene();dg.clearRect(0,0,WW,WH);decalDirty=true;resetFog();MINI.t=0;
   S={t:0,kills:0,coins:0,lvl:1,xp:0,need:xpNeed(1),pendLv:0,choosing:false,phase:'play',enemies:[],parts:[],picks:[],vfx:[],corpses:[],quakes:[],golems:[],zones:[],delayed:[],
@@ -3009,9 +3009,76 @@ function chooseWit(mercy){if(!S||!S.witChoice||S.dialog?.id!=='wit')return;const
   else{st.state='dead';pool(n.x,n.y,18,7);const e=spawnEnemy('wraith',n.x+20,n.y+8,{rise:1,stolen:0,witSpecter:true});e.stolen=S.coins;S.coins=0;play('bossGrowl',0);say((EN?'You finish Wit off. With his last breath, a Ledger Wraith arrives from the Citadel and takes your coins. Defeat it to get them back.':'Dobijasz Wita. Z jego ostatnim tchnieniem przybywa Upiór rachunków z Cytadeli i zabiera twoje monety. Pokonaj go, by je odzyskać.'));}}
 
 function shake(m,t){if(!SETT.shake)return;S.shakeM=Math.max(S.shakeM,m);S.shakeT=Math.max(S.shakeT,t)}
-function blood(x,y,n,nx,ny,spread=1){const art=chapterArt(),c0=art?'#74202a':P.blood,c1=art?'#39141c':P.blood2;const b=Math.atan2(ny,nx),m=n>=100?n:n<=3?n*3:n*2;for(let i=0;i<m;i++){const a=b+(Math.random()-.5)*2.2*spread,s=(25+Math.random()*100)*(art?.72:1);S.parts.push({k:'b',x,y,z:8+Math.random()*8,vx:Math.cos(a)*s,vy:Math.sin(a)*s,vz:15+Math.random()*70,c:Math.random()<.65?c0:c1});if(i%2===0&&m<100){const a2=b+(Math.random()-.5)*1.6*spread,s2=10+Math.random()*45;S.parts.push({k:'d',x,y,z:10+Math.random()*10,vx:Math.cos(a2)*s2,vy:Math.sin(a2)*s2,vz:6+Math.random()*26,c:Math.random()<.5?c1:art?'#5e1722':'#6e0f12',life:.25+Math.random()*.3})}}}
-function decalAt(cv,x,y,a=1){dg.globalAlpha=a;dg.drawImage(cv,Math.round(x-16),Math.round(y-16));dg.globalAlpha=1;decalDirty=true}
-function pool(x,y,w,h){if(DEC.pool){decalAt(DEC.pool[w<14?0:w<19?1:w<30?2:3],x,y);return}x=Math.round(x);y=Math.round(y);dg.fillStyle=P.blood2;dg.fillRect(x-w/2,y-h/2+1,w,h-2);dg.fillStyle=P.blood;dg.fillRect(x-w/4,y-1,w/2,2);decalDirty=true}
+// Blood HD: shared artwork, bounded reusable meshes, no gameplay randomness or shaders.
+const BLOOD_HD_ON=new URLSearchParams(location.search).get('blood')!=='0';
+const bloodHD={ready:false,stamps:[],textures:[],ground:[],sprays:[],serial:0,groundNext:0,sprayNext:0};
+function initBloodHD(){
+  if(!BLOOD_HD_ON)return;
+  const im=new Image();im.onload=()=>{
+    for(let i=0;i<8;i++){
+      const w=im.width/4,h=im.height/2,cv=canvas(w,h);
+      cv.getContext('2d').drawImage(im,(i%4)*w,Math.floor(i/4)*h,w,h,0,0,w,h);
+      if(i<4)bloodHD.stamps.push(cv);
+      const t=new THREE.CanvasTexture(cv);t.minFilter=THREE.LinearMipMapLinearFilter;t.magFilter=THREE.LinearFilter;
+      t.generateMipmaps=true;bloodHD.textures.push(t);
+    }
+    const geo=new THREE.PlaneGeometry(1,1);
+    for(const [list,count,ground] of [[bloodHD.ground,64,true],[bloodHD.sprays,16,false]]){
+      for(let i=0;i<count;i++){
+        const mat=new THREE.MeshBasicMaterial({map:bloodHD.textures[(ground?0:4)+i%4],transparent:true,depthWrite:false,alphaTest:.018,fog:true});
+        const mesh=new THREE.Mesh(geo,mat);mesh.visible=false;mesh.renderOrder=ground?1:5;
+        if(ground)mesh.rotation.x=-Math.PI/2;scene.add(mesh);list.push({mesh,active:false,age:0});
+      }
+    }
+    bloodHD.ready=true;
+  };
+  im.src='assets/ec46e83d933a2db80e3e82c795ba3a9ec7e50910bbdd085df486bc0be2b26d3e.png';
+}
+function resetBloodHD(){for(const f of [...bloodHD.ground,...bloodHD.sprays]){f.active=false;f.mesh.visible=false}bloodHD.serial=0;bloodHD.groundNext=0;bloodHD.sprayNext=0}
+function stampBloodHD(x,y,w,h,old=false){
+  if(!bloodHD.ready)return false;
+  if(VOID.has(tileAt(Math.floor(x/TS),Math.floor(y/TS))))return true;
+  const f=bloodHD.ground[bloodHD.groundNext++%bloodHD.ground.length],id=++bloodHD.serial;
+  Object.assign(f,{active:true,age:old?75:0,ch:CH,dur:210,x,y});
+  f.mesh.position.set(x/16,.027+(id%7)*.0004,y/16);
+  f.mesh.rotation.z=(id*2.399963)%6.283185;
+  f.mesh.scale.set(Math.max(.22,w/16)*1.3,Math.max(.2,h/16)*1.5,1);
+  f.mesh.material.color.setHex(old?0x65565c:0xb39595);f.mesh.material.opacity=old?.46:.76;
+  f.mesh.visible=true;return true;
+}
+function sprayBloodHD(x,y,n,nx,ny,spread){
+  if(!bloodHD.ready)return false;
+  const f=bloodHD.sprays[bloodHD.sprayNext++%bloodHD.sprays.length],len=Math.hypot(nx,ny)||1;
+  const dx=nx/len,dy=ny/len,size=Math.min(2.3,.72+Math.sqrt(Math.max(1,n))*.17);
+  Object.assign(f,{active:true,age:0,dur:.27,ch:CH,x,y,dx,dy,size,stamped:false});
+  f.mesh.material.color.setHex(0xbb7c7c);f.mesh.material.opacity=.82;
+  f.mesh.position.set(x/16+dx*.25,.55,y/16+dy*.25);f.mesh.visible=true;return true;
+}
+function syncBloodHD(dt){
+  if(!bloodHD.ready)return;
+  for(const f of bloodHD.ground){
+    if(!f.active)continue;f.age+=dt;
+    if(f.age>=f.dur){f.active=false;f.mesh.visible=false;continue}
+    const t=Math.min(1,f.age/65);f.mesh.material.color.setRGB(.70-.31*t,.58-.25*t,.58-.23*t);
+    f.mesh.material.opacity=(.76-.28*t)*Math.min(1,(f.dur-f.age)/25);
+    f.mesh.visible=!!S&&f.ch===CH&&Math.hypot(f.x-pl.x,f.y-pl.y)<380;
+  }
+  for(const f of bloodHD.sprays){
+    if(!f.active)continue;f.age+=dt;
+    if(f.ch!==CH){f.active=false;f.mesh.visible=false;continue}
+    if(!f.stamped&&f.age>=.16){stampBloodHD(f.x+f.dx*8,f.y+f.dy*8,6+f.size*4,4+f.size*3);f.stamped=true}
+    if(f.age>=f.dur){f.active=false;f.mesh.visible=false;continue}
+    const t=f.age/f.dur;f.mesh.visible=!!S&&f.ch===CH&&!S.enemies.some(e=>!e.dead&&attackCue(e)&&Math.hypot(e.x-f.x,e.y-f.y)<e.r+f.size*18);
+    f.mesh.quaternion.copy(cam.quaternion);f.mesh.rotateZ(Math.atan2(-f.dy*.7,f.dx));
+    f.mesh.position.set(f.x/16+f.dx*(.25+t*.4),.55+t*.15,f.y/16+f.dy*(.25+t*.4));
+    f.mesh.scale.set(f.size*(.72+t*.4),f.size*(.68-t*.18),1);
+    f.mesh.material.opacity=.85*Math.min(1,(1-t)*2.5);
+  }
+}
+initBloodHD();
+function blood(x,y,n,nx,ny,spread=1){const hd=sprayBloodHD(x,y,n,nx,ny,spread);const art=chapterArt(),c0=art?'#74202a':P.blood,c1=art?'#39141c':P.blood2;const b=Math.atan2(ny,nx),m=n>=100?n:n<=3?n*3:n*2;for(let i=0;i<m;i++){const a=b+(Math.random()-.5)*2.2*spread,s=(25+Math.random()*100)*(art?.72:1);S.parts.push({k:'b',bloodHD:hd,x,y,z:8+Math.random()*8,vx:Math.cos(a)*s,vy:Math.sin(a)*s,vz:15+Math.random()*70,c:Math.random()<.65?c0:c1});if(i%2===0&&m<100){const a2=b+(Math.random()-.5)*1.6*spread,s2=10+Math.random()*45;S.parts.push({k:'d',bloodHD:hd,x,y,z:10+Math.random()*10,vx:Math.cos(a2)*s2,vy:Math.sin(a2)*s2,vz:6+Math.random()*26,c:Math.random()<.5?c1:art?'#5e1722':'#6e0f12',life:.25+Math.random()*.3})}}}
+function decalAt(cv,x,y,a=1){if(bloodHD.ready&&DEC.spray?.includes(cv)){stampBloodHD(x,y,18,11);return}dg.globalAlpha=a;dg.drawImage(cv,Math.round(x-16),Math.round(y-16));dg.globalAlpha=1;decalDirty=true}
+function pool(x,y,w,h){if(stampBloodHD(x,y,w,h))return;if(DEC.pool){decalAt(DEC.pool[w<14?0:w<19?1:w<30?2:3],x,y);return}x=Math.round(x);y=Math.round(y);dg.fillStyle=P.blood2;dg.fillRect(x-w/2,y-h/2+1,w,h-2);dg.fillStyle=P.blood;dg.fillRect(x-w/4,y-1,w/2,2);decalDirty=true}
 function heal(n){if(pl.dead||pl.hp>=pl.max)return 0;const h=Math.min(n,pl.max-pl.hp);pl.hp+=h;return h}
 const might=()=>(1+.1*(S.whet||0))*(S.fury>0?1.2:1)*(S.pk?S.pk.dmg:1);
 function spriteMesh(geo){const m=new THREE.Mesh(geo,A.fx.slash[0].n);scene.add(m);return m}
@@ -4204,8 +4271,8 @@ function ashMatMake(src,fire){const m=src.clone();m.transparent=true;const U={va
 function updParts(dt){
   const ps=S.parts;
   for(let i=ps.length-1;i>=0;i--){const p=ps[i];
-    if(p.k==='b'){p.vz-=230*dt;p.z+=p.vz*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;
-      if(p.z<=0){if(!VOID.has(tileAt(Math.floor(p.x/TS),Math.floor(p.y/TS)))){const X=Math.round(p.x),Y=Math.round(p.y),vm=Math.hypot(p.vx,p.vy)||1,ux=p.vx/vm,uy=p.vy/vm,L=vm>85?3:vm>45?2:1;dg.fillStyle=p.c;dg.fillRect(X,Y,1,1);for(let j=1;j<=L;j++)dg.fillRect(Math.round(X+ux*j),Math.round(Y+uy*j),1,1);if(Math.random()<.3){dg.fillRect(X,Y,2,1);dg.fillStyle=P.blood2;dg.fillRect(X+1,Y+1,1,1)}decalDirty=true}ps.splice(i,1)}}
+    if(p.k==='b'){if(bloodHD.ready&&p.bloodHD===undefined){p.bloodHD=true;p.bloodDrop=(++bloodHD.serial%4===0)}p.vz-=230*dt;p.z+=p.vz*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;
+      if(p.z<=0){if(p.bloodHD){if(!VOID.has(tileAt(Math.floor(p.x/TS),Math.floor(p.y/TS)))){Math.random();if(p.bloodDrop)stampBloodHD(p.x,p.y,4,3)}}else if(!VOID.has(tileAt(Math.floor(p.x/TS),Math.floor(p.y/TS)))){const X=Math.round(p.x),Y=Math.round(p.y),vm=Math.hypot(p.vx,p.vy)||1,ux=p.vx/vm,uy=p.vy/vm,L=vm>85?3:vm>45?2:1;dg.fillStyle=p.c;dg.fillRect(X,Y,1,1);for(let j=1;j<=L;j++)dg.fillRect(Math.round(X+ux*j),Math.round(Y+uy*j),1,1);if(Math.random()<.3){dg.fillRect(X,Y,2,1);dg.fillStyle=P.blood2;dg.fillRect(X+1,Y+1,1,1)}decalDirty=true}ps.splice(i,1)}}
     else if(p.k==='g2'){p.life-=dt;const tx=p.tx;if(tx&&!tx.dead){p.x+=(tx.x-p.x)*Math.min(1,dt*6);p.y+=(tx.y-p.y)*Math.min(1,dt*6);p.z+=(18-p.z)*dt*4}if(p.life<=0)ps.splice(i,1)}
     else{p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;p.vx*=.97;if(p.k==='d')p.vz-=60*dt;if(p.z<0&&p.k!=='e')p.z=0;if(p.life<=0)ps.splice(i,1)}}
   if(ps.length>MAXP-50)ps.splice(0,ps.length-(MAXP-50));
@@ -4474,7 +4541,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{ambTick(dt)
   if(S){const cp=pl.dead&&pl2&&!pl2.dead?pl2:pl;tx=cp.x/16;tz=cp.y/16}else{idleA+=dt*.08;const I=W.idle;tx=I[0]+Math.sin(idleA)*I[2];tz=I[1]+Math.cos(idleA*.7)*I[3]}
   camTarget.x+=(tx-camTarget.x)*Math.min(1,dt*8);camTarget.z+=(tz-camTarget.z)*Math.min(1,dt*8);if(!S||S.t<.1){camTarget.x=tx;camTarget.z=tz}
   let sx=0,sz=0;if(SETT.shake&&S&&S.shakeT>0){const pxw=2*DIST*Math.tan(12*Math.PI/180)/RT_H;S.shkT=(S.shkT||0)-dt;if(S.shkT<=0||!S.shk){S.shkT=.04;S.shk=[Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw,Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw/Math.sin(PITCH)]}sx=S.shk[0];sz=S.shk[1]}
-  const EZ=S&&S.exec>0&&SETT.shake?1-.16*Math.min(1,S.exec/.3):1;cam.position.set(camTarget.x+sx,Math.sin(PITCH)*DIST*EZ,camTarget.z+Math.cos(PITCH)*DIST*EZ+sz);cam.lookAt(camTarget.x+sx,.8,camTarget.z+sz);syncSwordGlow();syncCombatEffects(dt);syncWhirlVisual(dt);
+  const EZ=S&&S.exec>0&&SETT.shake?1-.16*Math.min(1,S.exec/.3):1;cam.position.set(camTarget.x+sx,Math.sin(PITCH)*DIST*EZ,camTarget.z+Math.cos(PITCH)*DIST*EZ+sz);cam.lookAt(camTarget.x+sx,.8,camTarget.z+sz);syncSwordGlow();syncCombatEffects(dt);syncWhirlVisual(dt);syncBloodHD(dt);
   const z0=S&&S.zones[0];if(z0){W.zoneLight.x=z0.x/16;W.zoneLight.z=z0.y/16}
   for(const L of LSRC){let k=L.base;
     if(L.kind==='fire')k*=.85+Math.sin(clock*13+L.ph)*.08+Math.random()*.12;else if(L.kind==='lava'||L.kind==='rot')k*=.9+Math.sin(clock*1.7+L.ph)*.1;else if(L.kind==='rune')k*=.75+.25*Math.sin(clock*2+L.ph);
@@ -4567,7 +4634,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{ambTick(dt)
     for(const f of S.vfx){setFrame(f.mesh,at(f.anim,f.t,f.anim.length/f.dur,false));
       if(f.mode==='ground'){f.mesh.position.set(f.x/16,f.h,f.y/16);f.mesh.rotation.set(-Math.PI/2,0,f.rot||0);f.mesh.scale.set(f.size*(f.sx||1),f.size*(f.sy||1),1)}
       else{f.mesh.position.set(f.x/16,f.h+(f.mode==='bill'&&f.h===0?f.size*.42:0),f.y/16);f.mesh.quaternion.copy(cam.quaternion);if(f.rot)f.mesh.rotateZ(f.rot);f.mesh.scale.set(f.size,f.size,1)}}
-    let n=0;for(const p of S.parts){if(n>=MAXP)break;pPos[n*3]=p.x/16;pPos[n*3+1]=p.z/16+.02;pPos[n*3+2]=p.y/16;const c=col(p.c);let a=p.life!==undefined?Math.max(0,Math.min(1,p.life)):1;pCol[n*3]=c.r*a;pCol[n*3+1]=c.g*a;pCol[n*3+2]=c.b*a;n++}
+    let n=0;for(const p of S.parts){if(p.bloodHD)continue;if(n>=MAXP)break;pPos[n*3]=p.x/16;pPos[n*3+1]=p.z/16+.02;pPos[n*3+2]=p.y/16;const c=col(p.c);let a=p.life!==undefined?Math.max(0,Math.min(1,p.life)):1;pCol[n*3]=c.r*a;pCol[n*3+1]=c.g*a;pCol[n*3+2]=c.b*a;n++}
     pGeo.setDrawRange(0,n);pGeo.attributes.position.needsUpdate=true;pGeo.attributes.color.needsUpdate=true;
     postMat.uniforms.hurt.value=SETT.flash?Math.max(S.hurt*1.2,pl.dead?.25:0,(!pl.dead&&pl.hp<pl.max*.3)?(.12+.08*Math.sin(clock*5)):0):pl.dead?.18:pl.hp<pl.max*.3?.1:0;
   }else{heroMesh.visible=false;if(mesh2)mesh2.visible=false;if(mpTotLast)mpTotLast.visible=false;mpHudTick();pGeo.setDrawRange(0,0);postMat.uniforms.hurt.value=0}

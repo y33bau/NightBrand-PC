@@ -129,7 +129,7 @@ function mpHudTick(){{const h=$('hud');if(h)h.classList.toggle('mp2',!!(S&&pl2&&
   for(const [p,el,ar] of [[pl1,mpEls.b1,mpEls.a1],[pl2,mpEls.b2,mpEls.a2]]){MPV.set(p.x/16,2.1,p.y/16).project(cam);const inView=MPV.z<1&&Math.abs(MPV.x)<1.05&&Math.abs(MPV.y)<1.05;
     el.style.display=inView?'block':'none';ar.style.display=inView?'none':'block';if(!inView){let vx=MPV.x,vy=-MPV.y;if(MPV.z>1){vx=-vx;vy=-vy}const px=vx*r.width/2,py=vy*r.height/2,t=Math.min((r.width/2-26)/Math.max(1e-3,Math.abs(px)),(r.height/2-26)/Math.max(1e-3,Math.abs(py)));ar.style.left=(r.left+r.width/2+px*t-9)+'px';ar.style.top=(r.top+r.height/2+py*t-11)+'px';ar.style.transform='rotate('+Math.atan2(py,px)+'rad)'}if(!inView)continue;el.style.left=(r.left+(MPV.x*.5+.5)*r.width)+'px';el.style.top=(r.top+(-MPV.y*.5+.5)*r.height)+'px';
     const f=p.dead?Math.min(1,(S.mpProg||0)/5):Math.max(0,p.hp)/p.max;el.firstChild.style.width=f*100+'%';el.firstChild.style.background=p.dead?'#e8c85a':(p===pl1?'#d84a4a':'#4f8fd8')}}
-function clearScene(){if(!S)return;for(const f of S.vfx)if(f.ownMat)for(const a of f.anim)a.n.dispose();if(pl2){asP2(clearSwordTransient);const a=pl2.actives;if(a){for(const f of a.whirlPool){scene.remove(f.mesh);f.mesh.geometry.dispose();f.mesh.material.dispose()}a.whirlPool[0]?.mesh.material.map?.dispose();if(a.whirlMesh){scene.remove(a.whirlMesh);a.whirlMesh.geometry.dispose()}a.whirlPool=[];a.whirlMesh=null}}clearSwordTransient();if(swordGlow)swordGlow.visible=false;const all=[...S.enemies.map(e=>e.mesh),...S.picks.flatMap(p=>[p.mesh,p.glow]),...S.vfx.map(f=>f.mesh),...S.corpses.map(c=>c.mesh),...S.golems.map(g=>g.mesh),...S.zones.map(z=>z.mesh),...(S.eproj||[]).map(f=>f.mesh),...(S.deathPurses||[]).map(p=>p.mesh)];for(const m of all)if(m)scene.remove(m);for(const c of S.corpses)if(c.own)c.mesh.material.dispose()}
+function clearScene(){resetBloodHD();if(!S)return;for(const f of S.vfx)if(f.ownMat)for(const a of f.anim)a.n.dispose();if(pl2){asP2(clearSwordTransient);const a=pl2.actives;if(a){for(const f of a.whirlPool){scene.remove(f.mesh);f.mesh.geometry.dispose();f.mesh.material.dispose()}a.whirlPool[0]?.mesh.material.map?.dispose();if(a.whirlMesh){scene.remove(a.whirlMesh);a.whirlMesh.geometry.dispose()}a.whirlPool=[];a.whirlMesh=null}}clearSwordTransient();if(swordGlow)swordGlow.visible=false;const all=[...S.enemies.map(e=>e.mesh),...S.picks.flatMap(p=>[p.mesh,p.glow]),...S.vfx.map(f=>f.mesh),...S.corpses.map(c=>c.mesh),...S.golems.map(g=>g.mesh),...S.zones.map(z=>z.mesh),...(S.eproj||[]).map(f=>f.mesh),...(S.deathPurses||[]).map(p=>p.mesh)];for(const m of all)if(m)scene.remove(m);for(const c of S.corpses)if(c.own)c.mesh.material.dispose()}
 function newGame(){
   clearScene();dg.clearRect(0,0,WW,WH);decalDirty=true;resetFog();MINI.t=0;
   S={t:0,kills:0,coins:0,lvl:1,xp:0,need:xpNeed(1),pendLv:0,choosing:false,phase:'play',enemies:[],parts:[],picks:[],vfx:[],corpses:[],quakes:[],golems:[],zones:[],delayed:[],
@@ -263,9 +263,76 @@ function chooseWit(mercy){if(!S||!S.witChoice||S.dialog?.id!=='wit')return;const
   else{st.state='dead';pool(n.x,n.y,18,7);const e=spawnEnemy('wraith',n.x+20,n.y+8,{rise:1,stolen:0,witSpecter:true});e.stolen=S.coins;S.coins=0;play('bossGrowl',0);say((EN?'You finish Wit off. With his last breath, a Ledger Wraith arrives from the Citadel and takes your coins. Defeat it to get them back.':'Dobijasz Wita. Z jego ostatnim tchnieniem przybywa Upiór rachunków z Cytadeli i zabiera twoje monety. Pokonaj go, by je odzyskać.'));}}
 
 function shake(m,t){if(!SETT.shake)return;S.shakeM=Math.max(S.shakeM,m);S.shakeT=Math.max(S.shakeT,t)}
-function blood(x,y,n,nx,ny,spread=1){const art=chapterArt(),c0=art?'#74202a':P.blood,c1=art?'#39141c':P.blood2;const b=Math.atan2(ny,nx),m=n>=100?n:n<=3?n*3:n*2;for(let i=0;i<m;i++){const a=b+(Math.random()-.5)*2.2*spread,s=(25+Math.random()*100)*(art?.72:1);S.parts.push({k:'b',x,y,z:8+Math.random()*8,vx:Math.cos(a)*s,vy:Math.sin(a)*s,vz:15+Math.random()*70,c:Math.random()<.65?c0:c1});if(i%2===0&&m<100){const a2=b+(Math.random()-.5)*1.6*spread,s2=10+Math.random()*45;S.parts.push({k:'d',x,y,z:10+Math.random()*10,vx:Math.cos(a2)*s2,vy:Math.sin(a2)*s2,vz:6+Math.random()*26,c:Math.random()<.5?c1:art?'#5e1722':'#6e0f12',life:.25+Math.random()*.3})}}}
-function decalAt(cv,x,y,a=1){dg.globalAlpha=a;dg.drawImage(cv,Math.round(x-16),Math.round(y-16));dg.globalAlpha=1;decalDirty=true}
-function pool(x,y,w,h){if(DEC.pool){decalAt(DEC.pool[w<14?0:w<19?1:w<30?2:3],x,y);return}x=Math.round(x);y=Math.round(y);dg.fillStyle=P.blood2;dg.fillRect(x-w/2,y-h/2+1,w,h-2);dg.fillStyle=P.blood;dg.fillRect(x-w/4,y-1,w/2,2);decalDirty=true}
+// Blood HD: shared artwork, bounded reusable meshes, no gameplay randomness or shaders.
+const BLOOD_HD_ON=new URLSearchParams(location.search).get('blood')!=='0';
+const bloodHD={ready:false,stamps:[],textures:[],ground:[],sprays:[],serial:0,groundNext:0,sprayNext:0};
+function initBloodHD(){
+  if(!BLOOD_HD_ON)return;
+  const im=new Image();im.onload=()=>{
+    for(let i=0;i<8;i++){
+      const w=im.width/4,h=im.height/2,cv=canvas(w,h);
+      cv.getContext('2d').drawImage(im,(i%4)*w,Math.floor(i/4)*h,w,h,0,0,w,h);
+      if(i<4)bloodHD.stamps.push(cv);
+      const t=new THREE.CanvasTexture(cv);t.minFilter=THREE.LinearMipMapLinearFilter;t.magFilter=THREE.LinearFilter;
+      t.generateMipmaps=true;bloodHD.textures.push(t);
+    }
+    const geo=new THREE.PlaneGeometry(1,1);
+    for(const [list,count,ground] of [[bloodHD.ground,64,true],[bloodHD.sprays,16,false]]){
+      for(let i=0;i<count;i++){
+        const mat=new THREE.MeshBasicMaterial({map:bloodHD.textures[(ground?0:4)+i%4],transparent:true,depthWrite:false,alphaTest:.018,fog:true});
+        const mesh=new THREE.Mesh(geo,mat);mesh.visible=false;mesh.renderOrder=ground?1:5;
+        if(ground)mesh.rotation.x=-Math.PI/2;scene.add(mesh);list.push({mesh,active:false,age:0});
+      }
+    }
+    bloodHD.ready=true;
+  };
+  im.src='assets/ec46e83d933a2db80e3e82c795ba3a9ec7e50910bbdd085df486bc0be2b26d3e.png';
+}
+function resetBloodHD(){for(const f of [...bloodHD.ground,...bloodHD.sprays]){f.active=false;f.mesh.visible=false}bloodHD.serial=0;bloodHD.groundNext=0;bloodHD.sprayNext=0}
+function stampBloodHD(x,y,w,h,old=false){
+  if(!bloodHD.ready)return false;
+  if(VOID.has(tileAt(Math.floor(x/TS),Math.floor(y/TS))))return true;
+  const f=bloodHD.ground[bloodHD.groundNext++%bloodHD.ground.length],id=++bloodHD.serial;
+  Object.assign(f,{active:true,age:old?75:0,ch:CH,dur:210,x,y});
+  f.mesh.position.set(x/16,.027+(id%7)*.0004,y/16);
+  f.mesh.rotation.z=(id*2.399963)%6.283185;
+  f.mesh.scale.set(Math.max(.22,w/16)*1.3,Math.max(.2,h/16)*1.5,1);
+  f.mesh.material.color.setHex(old?0x65565c:0xb39595);f.mesh.material.opacity=old?.46:.76;
+  f.mesh.visible=true;return true;
+}
+function sprayBloodHD(x,y,n,nx,ny,spread){
+  if(!bloodHD.ready)return false;
+  const f=bloodHD.sprays[bloodHD.sprayNext++%bloodHD.sprays.length],len=Math.hypot(nx,ny)||1;
+  const dx=nx/len,dy=ny/len,size=Math.min(2.3,.72+Math.sqrt(Math.max(1,n))*.17);
+  Object.assign(f,{active:true,age:0,dur:.27,ch:CH,x,y,dx,dy,size,stamped:false});
+  f.mesh.material.color.setHex(0xbb7c7c);f.mesh.material.opacity=.82;
+  f.mesh.position.set(x/16+dx*.25,.55,y/16+dy*.25);f.mesh.visible=true;return true;
+}
+function syncBloodHD(dt){
+  if(!bloodHD.ready)return;
+  for(const f of bloodHD.ground){
+    if(!f.active)continue;f.age+=dt;
+    if(f.age>=f.dur){f.active=false;f.mesh.visible=false;continue}
+    const t=Math.min(1,f.age/65);f.mesh.material.color.setRGB(.70-.31*t,.58-.25*t,.58-.23*t);
+    f.mesh.material.opacity=(.76-.28*t)*Math.min(1,(f.dur-f.age)/25);
+    f.mesh.visible=!!S&&f.ch===CH&&Math.hypot(f.x-pl.x,f.y-pl.y)<380;
+  }
+  for(const f of bloodHD.sprays){
+    if(!f.active)continue;f.age+=dt;
+    if(f.ch!==CH){f.active=false;f.mesh.visible=false;continue}
+    if(!f.stamped&&f.age>=.16){stampBloodHD(f.x+f.dx*8,f.y+f.dy*8,6+f.size*4,4+f.size*3);f.stamped=true}
+    if(f.age>=f.dur){f.active=false;f.mesh.visible=false;continue}
+    const t=f.age/f.dur;f.mesh.visible=!!S&&f.ch===CH&&!S.enemies.some(e=>!e.dead&&attackCue(e)&&Math.hypot(e.x-f.x,e.y-f.y)<e.r+f.size*18);
+    f.mesh.quaternion.copy(cam.quaternion);f.mesh.rotateZ(Math.atan2(-f.dy*.7,f.dx));
+    f.mesh.position.set(f.x/16+f.dx*(.25+t*.4),.55+t*.15,f.y/16+f.dy*(.25+t*.4));
+    f.mesh.scale.set(f.size*(.72+t*.4),f.size*(.68-t*.18),1);
+    f.mesh.material.opacity=.85*Math.min(1,(1-t)*2.5);
+  }
+}
+initBloodHD();
+function blood(x,y,n,nx,ny,spread=1){const hd=sprayBloodHD(x,y,n,nx,ny,spread);const art=chapterArt(),c0=art?'#74202a':P.blood,c1=art?'#39141c':P.blood2;const b=Math.atan2(ny,nx),m=n>=100?n:n<=3?n*3:n*2;for(let i=0;i<m;i++){const a=b+(Math.random()-.5)*2.2*spread,s=(25+Math.random()*100)*(art?.72:1);S.parts.push({k:'b',bloodHD:hd,x,y,z:8+Math.random()*8,vx:Math.cos(a)*s,vy:Math.sin(a)*s,vz:15+Math.random()*70,c:Math.random()<.65?c0:c1});if(i%2===0&&m<100){const a2=b+(Math.random()-.5)*1.6*spread,s2=10+Math.random()*45;S.parts.push({k:'d',bloodHD:hd,x,y,z:10+Math.random()*10,vx:Math.cos(a2)*s2,vy:Math.sin(a2)*s2,vz:6+Math.random()*26,c:Math.random()<.5?c1:art?'#5e1722':'#6e0f12',life:.25+Math.random()*.3})}}}
+function decalAt(cv,x,y,a=1){if(bloodHD.ready&&DEC.spray?.includes(cv)){stampBloodHD(x,y,18,11);return}dg.globalAlpha=a;dg.drawImage(cv,Math.round(x-16),Math.round(y-16));dg.globalAlpha=1;decalDirty=true}
+function pool(x,y,w,h){if(stampBloodHD(x,y,w,h))return;if(DEC.pool){decalAt(DEC.pool[w<14?0:w<19?1:w<30?2:3],x,y);return}x=Math.round(x);y=Math.round(y);dg.fillStyle=P.blood2;dg.fillRect(x-w/2,y-h/2+1,w,h-2);dg.fillStyle=P.blood;dg.fillRect(x-w/4,y-1,w/2,2);decalDirty=true}
 function heal(n){if(pl.dead||pl.hp>=pl.max)return 0;const h=Math.min(n,pl.max-pl.hp);pl.hp+=h;return h}
 const might=()=>(1+.1*(S.whet||0))*(S.fury>0?1.2:1)*(S.pk?S.pk.dmg:1);
 function spriteMesh(geo){const m=new THREE.Mesh(geo,A.fx.slash[0].n);scene.add(m);return m}

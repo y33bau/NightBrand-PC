@@ -152,8 +152,8 @@ function ashMatMake(src,fire){const m=src.clone();m.transparent=true;const U={va
 function updParts(dt){
   const ps=S.parts;
   for(let i=ps.length-1;i>=0;i--){const p=ps[i];
-    if(p.k==='b'){p.vz-=230*dt;p.z+=p.vz*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;
-      if(p.z<=0){if(!VOID.has(tileAt(Math.floor(p.x/TS),Math.floor(p.y/TS)))){const X=Math.round(p.x),Y=Math.round(p.y),vm=Math.hypot(p.vx,p.vy)||1,ux=p.vx/vm,uy=p.vy/vm,L=vm>85?3:vm>45?2:1;dg.fillStyle=p.c;dg.fillRect(X,Y,1,1);for(let j=1;j<=L;j++)dg.fillRect(Math.round(X+ux*j),Math.round(Y+uy*j),1,1);if(Math.random()<.3){dg.fillRect(X,Y,2,1);dg.fillStyle=P.blood2;dg.fillRect(X+1,Y+1,1,1)}decalDirty=true}ps.splice(i,1)}}
+    if(p.k==='b'){if(bloodHD.ready&&p.bloodHD===undefined){p.bloodHD=true;p.bloodDrop=(++bloodHD.serial%4===0)}p.vz-=230*dt;p.z+=p.vz*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;
+      if(p.z<=0){if(p.bloodHD){if(!VOID.has(tileAt(Math.floor(p.x/TS),Math.floor(p.y/TS)))){Math.random();if(p.bloodDrop)stampBloodHD(p.x,p.y,4,3)}}else if(!VOID.has(tileAt(Math.floor(p.x/TS),Math.floor(p.y/TS)))){const X=Math.round(p.x),Y=Math.round(p.y),vm=Math.hypot(p.vx,p.vy)||1,ux=p.vx/vm,uy=p.vy/vm,L=vm>85?3:vm>45?2:1;dg.fillStyle=p.c;dg.fillRect(X,Y,1,1);for(let j=1;j<=L;j++)dg.fillRect(Math.round(X+ux*j),Math.round(Y+uy*j),1,1);if(Math.random()<.3){dg.fillRect(X,Y,2,1);dg.fillStyle=P.blood2;dg.fillRect(X+1,Y+1,1,1)}decalDirty=true}ps.splice(i,1)}}
     else if(p.k==='g2'){p.life-=dt;const tx=p.tx;if(tx&&!tx.dead){p.x+=(tx.x-p.x)*Math.min(1,dt*6);p.y+=(tx.y-p.y)*Math.min(1,dt*6);p.z+=(18-p.z)*dt*4}if(p.life<=0)ps.splice(i,1)}
     else{p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;p.vx*=.97;if(p.k==='d')p.vz-=60*dt;if(p.z<0&&p.k!=='e')p.z=0;if(p.life<=0)ps.splice(i,1)}}
   if(ps.length>MAXP-50)ps.splice(0,ps.length-(MAXP-50));
