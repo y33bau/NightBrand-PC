@@ -8115,6 +8115,10 @@ ${ui} #title.pc-home .nb-mode .pc-mode-note{margin-inline:0!important;text-align
 /* Aktywna zakladka: staly bordowy kontur, niezalezny od wskazania kursorem. */
 ${menus} :is(.tab.on,.stab.on,.nbp-tab[aria-pressed=true],.pc-prep-tab[aria-pressed=true]):not(#pc-tab-unused){background:linear-gradient(145deg,#61303bea,#351c25f5)!important;outline:2px solid #b45b6c!important;outline-offset:-2px!important;box-shadow:inset 0 0 0 4px #6e303e,inset 0 0 22px #7f344533!important;color:#fff0d5!important}
 ${menus} :is(.tab,.stab,.nbp-tab,.pc-prep-tab):is(:focus-visible,.pf):not(#pc-tab-unused){outline:2px solid #efd09b!important;outline-offset:2px!important}
+/* Hover PC: bez ponownego rastrowania ramek i starych nakladek bitmapowych. */
+${menus} :is(button,summary):is(:hover,:focus-visible,.pf){--pc-cloth:linear-gradient(145deg,#42232e,#21171e);--pcg-idle:linear-gradient(145deg,#201a20ed,#100f12ed);--pcg-selected:linear-gradient(145deg,#42232e,#21171e);filter:none!important}
+${menus} :is(button,summary):is(:hover,:focus-visible,.pf)>:is(.pcg-edge,.pc-journey-gear){filter:none!important}
+${menus} :is(.tab,.stab,.nbp-tab,.pc-prep-tab):hover:not(.on):not([aria-pressed=true]):not(#pc-tab-unused){background:linear-gradient(145deg,#38212be8,#20171def)!important}
 `;document.head.append(polish);
 
 
