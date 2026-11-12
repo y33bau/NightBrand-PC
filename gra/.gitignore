@@ -27,6 +27,17 @@
 !/assets/*.ogg
 !/assets/*.woff2
 !/assets/three-LICENSE.txt
+# Podfoldery kategorii (assets/<kategoria>/<hash>.<ext>): te same typy plikow co wyzej, bez js/css/json.
+!/assets/*/
+/assets/*/*
+!/assets/*/*.png
+!/assets/*/*.webp
+!/assets/*/*.avif
+!/assets/*/*.svg
+!/assets/*/*.mp3
+!/assets/*/*.ogg
+!/assets/*/*.woff2
+!/assets/*/*.ttf
 # Never publish working files, originals, screenshots, archives, or installers.
 backup/
 test-results/

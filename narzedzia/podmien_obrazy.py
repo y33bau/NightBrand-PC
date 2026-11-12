@@ -1,6 +1,7 @@
 """NightBrand: podmiana obrazow (te same obrazy, inny zapis pliku).
 Uzycie: python3 podmien_obrazy.py KATALOG_GRY LISTA.json
-LISTA.json: [{"f":"<stara_nazwa>.webp","src":"<sciezka_nowego_pliku>","ext":"webp (opcjonalnie, gdy zmienia sie format)"}, ...]
+LISTA.json: [{"f":"<stara_sciezka_w_assets>","src":"<sciezka_nowego_pliku>","ext":"webp (opcjonalnie, gdy zmienia sie format)","kategoria":"ui (opcjonalnie)"}, ...]
+<stara_sciezka_w_assets> = np. ui/<hash>.webp (z docs/INDEKS_ASSETOW.json). Nowy plik trafia do tego samego podfolderu (lub do "kategoria").
 Dla kazdego obrazu: nowy plik pod nazwa SHA-256, stary usuniety, poprawione wpisy w manifest.json, sw.js
 i w plikach tekstowych (SPRITE_DATA, CSS), ktore go wskazuja. Zmienione pliki tekstowe dostaja nowe nazwy
 (SHA-256) i te tez sa poprawiane w manifest.json, sw.js i index.html. Na koncu uruchom wydaj.py wersja.
@@ -13,11 +14,12 @@ texts=[f for f in os.listdir(A) if f.endswith(('.js','.css'))]
 main=[f for f in texts if '============ WORLDS' in open(A+f,encoding='utf8',errors='ignore').read()]
 ren={}  # old name -> new name (bez katalogu)
 for it in L:
-    old=it['f'];b=open(it['src'],'rb').read();ext=it.get('ext') or old.rsplit('.',1)[1];new=sha(b)+'.'+ext
-    if any(old[:64] in open(A+m,encoding='utf8').read() for m in main):sys.exit('BLAD: glowny plik gry wskazuje '+old)
-    open(A+new,'wb').write(b);os.remove(A+old);ren[old]=new
+    old=it['f'][7:] if it['f'].startswith('assets/') else it['f'];b=open(it['src'],'rb').read();ext=it.get('ext') or old.rsplit('.',1)[1]
+    folder=(it['kategoria']+'/') if it.get('kategoria') else (old.rsplit('/',1)[0]+'/' if '/' in old else '');new=folder+sha(b)+'.'+ext;oldh=old.rsplit('/',1)[-1][:64]
+    if any(oldh in open(A+m,encoding='utf8').read() for m in main):sys.exit('BLAD: glowny plik gry wskazuje '+old)
+    os.makedirs(A+folder,exist_ok=True);open(A+new,'wb').write(b);os.remove(A+old);ren[old]=new
     for f in man['files']:
-        if f['url']=='assets/'+old:f.update(url='assets/'+new,bytes=len(b),sha256=new[:64])
+        if f['url']=='assets/'+old:f.update(url='assets/'+new,bytes=len(b),sha256=sha(b))
 # pliki tekstowe wskazujace podmienione obrazy
 tren={}
 for t in texts:

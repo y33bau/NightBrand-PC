@@ -708,3 +708,4 @@ cache630 · Rekwizyty stoja na ziemi (bez tonięcia i lewitacji) na wszystkich m
 cache631 · Rozdz. III: ciemniejsza maz; rozdz. V: kamienne plyty w salach, jasniejsze posadzki
 cache632 · Runda map 633: wody z miekkim brzegiem, swieczniki w krypcie V, warsztaty w kuzni II, kociolek na ziemi w I
 cache633 · Nowe tekstury: woda plytka i brod (I, IV), dachy dwuspadowe i olowiane (III), spalone dachy (I), korona murow
+cache634 · Porzadek assets/: pliki w podfolderach wg kategorii (845 przeniesionych, nazwy-hashe bez zmian), nowe hashe 4 plikow js/css, spis docs/INDEKS_ASSETOW.json; jednorazowe ponowne pobranie gry; nie sprawdzono: telefon, pad, dzwiek, pelny start offline (test-offline-start nie mieści sie w czasie w sandboxie, tak samo przed zmiana)

@@ -2,6 +2,7 @@
 
 Kopia gry po KAŻDEJ publikacji (decyzja autora, 2.11.2026).
 - `gra/`: pełny snapshot opublikowanej wersji (to samo, co y33bau/nightbrand, main).
-- `narzedzia/`: sprawdz.py, wydaj.py, dymny.js (opis w projekcie Claude: claude/PRZEKAZANIE_NOWY_CZAT.md).
+- `narzedzia/`: sprawdz.py, wydaj.py, dymny.js (opis w projekcie Claude: claude/PRZEKAZANIE_NOWY_CZAT.md) oraz indeks_assetow.py, przenies_assety.py, assety_wspolne.py (układ assets/).
+- `docs/`: ASSETY_UKLAD.md (podfoldery assets/ i jak z nich korzystać), INDEKS_ASSETOW.json (spis: plik, nazwa z kodu, kategoria).
 - Gałęzie `kopia/RRRR-MM-DD`: stan z danego dnia (znaczniki git nie przechodzą przez proxy sesji).
 - Źródło `demo-hd2d/zrodlo` jest nieaktualne od rundy 181; nie nadpisywać nim gry.

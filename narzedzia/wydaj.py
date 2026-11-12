@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """NightBrand: wydawanie wersji. Uzycie:
   python3 wydaj.py rehash KATALOG ROZSZERZENIE STARY_HASH PLIK_EDYCJI   # podmiana tresci pliku js/css z hashem (PLIK_EDYCJI definiuje EDITS=[(stare,nowe),...], kazde 'stare' musi wystapic dokladnie raz)
-  python3 wydaj.py dodaj KATALOG PLIK [leniwy]                          # nowy zasob (hash w nazwie) do manifestu i sw.js; leniwy = pobierany przy pierwszym uzyciu
+  python3 wydaj.py dodaj KATALOG PLIK KATEGORIA [leniwy]                # nowy zasob (hash w nazwie) do assets/KATEGORIA/, manifestu i sw.js; leniwy = pobierany przy pierwszym uzyciu
+                                                                        # KATEGORIA: bohaterowie wrogowie npc rekwizyty tekstury efekty ikony ui tla muzyka dzwieki czcionki (js/css: bez kategorii)
   python3 wydaj.py wersja KATALOG "opis rundy"                          # nowy numer cache w sw.js + linijka w WERSJA.txt + kontrola sprawdz.py
 rehash: podmienia plik pod nowa nazwa (SHA-256 tresci), usuwa stary, poprawia manifest.json i sw.js."""
 import sys,os,re,json,hashlib,datetime,subprocess
@@ -36,9 +37,13 @@ elif cmd=='wersja':
 elif cmd=='dodaj':
     # dodaj KATALOG PLIK [leniwy]: nowy zasob pod nazwa = SHA-256 tresci, wpis w manifest.json i w sw.js
     # (F = pobierane od razu przy instalacji; L = "leniwe": pobierane dopiero przy pierwszym uzyciu, ale trzymane w cache)
-    src=sys.argv[3];lazy=len(sys.argv)>4 and sys.argv[4]=='leniwy';b=open(src,'rb').read();nh=hashlib.sha256(b).hexdigest()
-    ext=src.rsplit('.',1)[-1].lower();url='assets/%s.%s'%(nh,ext);A=R+'/assets/'
-    if not os.path.exists(R+'/'+url):open(R+'/'+url,'wb').write(b)
+    sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)));from assety_wspolne import KATEGORIE
+    src=sys.argv[3];ex=sys.argv[4:];lazy='leniwy' in ex;kat=next((x for x in ex if x in KATEGORIE),'');b=open(src,'rb').read();nh=hashlib.sha256(b).hexdigest()
+    ext=src.rsplit('.',1)[-1].lower()
+    if ext not in('js','css','txt') and not kat:die('podaj KATEGORIE zasobu: '+' '.join(KATEGORIE))
+    if ext in('js','css','txt'):kat=''
+    url='assets/%s%s.%s'%(kat+'/' if kat else '',nh,ext);A=R+'/assets/'
+    if not os.path.exists(R+'/'+url):os.makedirs(os.path.dirname(R+'/'+url),exist_ok=True);open(R+'/'+url,'wb').write(b)
     m=json.load(open(A+'manifest.json',encoding='utf8'))
     if not any(f['url']==url for f in m['files']):m['files'].append(dict({'url':url,'bytes':len(b),'sha256':nh},**({'lazy':True} if lazy else {})))  # lazy: modul startowy (FENIX) nie pobiera przy starcie
     open(A+'manifest.json','w',encoding='utf8',newline='').write(json.dumps(m,ensure_ascii=False,separators=(',',':')))

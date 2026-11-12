@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 """NightBrand: kontrola spojnosci buildu. Uzycie: python3 sprawdz.py [katalog_gry]
-Sprawdza: hash w nazwach plikow, manifest vs dysk, sw.js vs manifest, sieroty, limit rozmiaru, skladnie JS, pokrycie tlumaczen EN.
+Sprawdza: hash w nazwach plikow, manifest vs dysk, sw.js vs manifest, odwolania w kodzie, uklad podfolderow assets/, sieroty, limit rozmiaru, skladnie JS, pokrycie tlumaczen EN.
 Kod wyjscia 1 = jest BLAD (nie publikowac)."""
 import sys,os,re,json,hashlib,glob,subprocess
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from assety_wspolne import lista_plikow,KATEGORIE,KORZEN_EXT,RE_ASSETS,RE_CSS
 R=sys.argv[1] if len(sys.argv)>1 else '.'
 A=R+'/assets/';err=[];warn=[];info=[]
 def rd(p,m='r'):return open(p,m,**({'encoding':'utf8'} if m=='r' else {})).read()
-man=json.load(open(A+'manifest.json',encoding='utf8'));files={os.path.basename(f['url']):f for f in man['files']}
-disk={n for n in os.listdir(A) if n!='manifest.json'}
+man=json.load(open(A+'manifest.json',encoding='utf8'));files={f['url'][len('assets/'):]:f for f in man['files']}   # klucz = sciezka wzgledna do assets/ (np. ui/<hash>.webp)
+disk=set(lista_plikow(A))
 # 1) hash w nazwie = hash tresci (wyjatki: pliki o nazwie nie-hashowej)
 for n in sorted(disk):
-    stem=n.split('.')[0]
+    stem=n.rsplit('/',1)[-1].split('.')[0]
     if re.fullmatch(r'[0-9a-f]{64}',stem):
         h=hashlib.sha256(open(A+n,'rb').read()).hexdigest()
         if h!=stem:err.append('nazwa pliku != hash tresci: '+n)
@@ -24,12 +26,12 @@ for n,f in files.items():
 for n in sorted(disk-set(files)):info.append('na dysku, poza manifestem: '+n)
 for k in('styles','scripts'):
     for u in man[k]:
-        if os.path.basename(u) not in disk:err.append('manifest.%s wskazuje brakujacy plik %s'%(k,u))
+        if u[len('assets/'):] not in disk:err.append('manifest.%s wskazuje brakujacy plik %s'%(k,u))
 # 3) sw.js
 sw=rd(R+'/sw.js');m=re.search(r"const C='(nightbrand-codex-\d{8}-\d+)'",sw)
 if not m:err.append('sw.js: brak stalej cache C w formacie nightbrand-codex-RRRRMMDD-NNN')
 else:info.append('cache: '+m.group(1))
-swa=set(os.path.basename(x) for x in re.findall(r'assets/[^"\']+',sw))
+swa=set(x[len('assets/'):] for x in re.findall(r'assets/[^"\']+',sw))
 for n in sorted(swa-disk-{'manifest.json'}):err.append('sw.js wymienia brakujacy plik: '+n)
 for n in sorted(set(files)-swa):warn.append('plik w manifescie, ale nie w sw.js (nie bedzie offline): '+n)
 for n in sorted(swa-set(files)):info.append('sw.js ma plik spoza manifestu: '+n)
@@ -41,7 +43,18 @@ for n in disk:
     if n.endswith(('.js','.css')):code+=rd(A+n)
 for n in sorted(files):
     if n.endswith(('.js','.css')):continue
-    if n not in code and n.split('.')[0] not in code:warn.append('sierota (nikt nie wspomina): '+n)
+    if n not in code and n.rsplit('/',1)[-1].split('.')[0] not in code:warn.append('sierota (nikt nie wspomina): '+n)
+# 4b) kazde odwolanie w kodzie wskazuje istniejacy plik; uklad podfolderow
+kodrz=rd(R+'/index.html')+''.join(rd(A+n) for n in disk if n.endswith(KORZEN_EXT))
+for rx in (RE_ASSETS,RE_CSS):
+    for mm in rx.finditer(kodrz):
+        q=mm.group(1)+mm.group(2)+'.'+mm.group(3)
+        if q not in disk:err.append('kod wskazuje brakujacy plik: assets/'+q)
+for n in sorted(disk):
+    d=n.rsplit('/',1)[0] if '/' in n else ''
+    stem=n.rsplit('/',1)[-1].split('.')[0]
+    if d and d not in KATEGORIE:err.append('nieznany podfolder w assets/: '+d+' ('+n+')')
+    if not d and re.fullmatch(r'[0-9a-f]{64}',stem) and not n.endswith(KORZEN_EXT+('.txt',)):warn.append('plik zasobu luzem w assets/ (ma byc w podfolderze): '+n)
 # 5) rozmiar
 tot=sum(f['bytes'] for f in files.values())/1e6
 (err if tot>150 else warn if tot>120 else info).append('rozmiar zasobow: %.1f MB (limit 150, cel 100-120)'%tot)
