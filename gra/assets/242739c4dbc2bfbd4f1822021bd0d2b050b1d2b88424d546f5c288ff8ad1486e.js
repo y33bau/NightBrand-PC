@@ -1495,7 +1495,7 @@ const HUMAN_PROP_SCALE={chapel_stairs:1.5,dead_tree:1.02,impaled_head:.65,grave_
   queen_fountain:1.3,street_lantern:1.3,noble_door:1.2,saint_king:.8,cathedral_gate:1.3,beggar_bodies:.65,plague_cart:1.25,noble_carriage:1.4,gibbet:1.3,pyre:.8,rot_bloom:.45,royal_banner:1.3,offering_bowl:.5,broken_bell:.55,doorway_bones:.9,
   cz_fire:.65,cz_idol:1.2,cz_skullpole:.7,cz_shrine:.8,cz_wagon:1.1,cz_cauldron:.45,cz_firewood:.4,cz_gallows:1.6,cz_sacpole:1.3,cz_beehive:.5,cz_wheel:.55,cz_wisp:.45,cz_crow:.35,cz_walk:1.6,cz_tent:1.4,cz_pelts:.45,cz_bones:.3};
 // Runda 259: rozdz. I - skala wg wzrostu bohatera (180 cm = ok. 1,44 j.; 1 j. = ok. 125 cm). Wartosci dla nowych rekwizytow HD (p1_*).
-const HUMAN_PROP_SCALE_1={house_fire:.5,shop_sign:.9,crypt_stairs:.75,dead_tree:1.6,impaled_head:1.1,grave_cross:.73,tombstone:.55,well:.8,stocks:.81,shrine:.8,gallows:1.67,wheel:.6,barrel:.5,marga_cart:1.15,crow_post:1.04,covered_corpses:.8,order_banner:1.4,burnt_hay:.8,dead_horse:1};
+const HUMAN_PROP_SCALE_1={house_fire:.5,shop_sign:.9,crypt_stairs:.75,dead_tree:1.6,impaled_head:1.1,grave_cross:.6,tombstone:.55,well:.8,stocks:.81,shrine:.8,gallows:1.67,wheel:.6,barrel:.5,marga_cart:1.15,crow_post:1.04,covered_corpses:.8,order_banner:1.4,burnt_hay:.8,dead_horse:1};
 function fitWorldProps(w,ch){if(ch===5)return;const assigned=new Set();
   for(const p of w.PROPS){const s=(ch===1&&HUMAN_PROP_SCALE_1[p.k]!==undefined)?HUMAN_PROP_SCALE_1[p.k]:HUMAN_PROP_SCALE[p.k];if(s===undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);if(!o)continue;
     o.mesh.scale.set(s,s*SQ,s);p.obj=o;assigned.add(o);if(['wheel','burnt_hay','covered_corpses','dwarf_bones','beggar_bodies','doorway_bones','cz_pelts','cz_bones'].includes(p.k))o.mesh.castShadow=false}
@@ -1638,13 +1638,15 @@ function dressSettlementsHD(w){
   }
  }
 }
-function roofGeo(W,D,rise){const ax=W>=D,L=ax?W:D,T=ax?D:W,hT=T/2,sl=Math.hypot(rise,hT),P=[],U=[],vx=(a,b,y,u,v)=>{if(ax)P.push(a,y,b);else P.push(b,y,a);U.push(u/4,v/4)};
- for(const sg of[-1,1]){const A=[-L/2,sg*hT,0,0,0],B=[L/2,sg*hT,0,L,0],C=[L/2,0,rise,L,sl],E=[-L/2,0,rise,0,sl];for(const q of[A,B,C,A,C,E])vx(...q)}
- for(const e of[-1,1]){vx(e*L/2,-hT,0,0,0);vx(e*L/2,hT,0,T,0);vx(e*L/2,0,rise,T/2,rise)}
- const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(P),3));g.setAttribute('uv',new THREE.BufferAttribute(new Float32Array(U),2));g.computeVertexNormals();return g}
+function roofGeo(W,D,rise){const ax=W>=D,L=ax?W:D,T=ax?D:W,hT=T/2,sl=Math.hypot(rise,hT),P=[],U=[],C=[],vx=(a,b,y,u,v,c=1)=>{if(ax)P.push(a,y,b);else P.push(b,y,a);U.push(u/2.2,v/2.2);C.push(c,c,c)};
+ // 12.11.2026: steeper gable with baked shading (sunlit south slope, dark north slope, darker eaves) and a ridge beam, so a roof reads as a roof, not as a floor
+ for(const sg of[-1,1]){const lo=ax?(sg>0?.98:.46):(sg>0?1:.55),hi=ax?(sg>0?1.28:.68):(sg>0?1.2:.74),A=[-L/2,sg*hT,0,0,0,lo],B=[L/2,sg*hT,0,L,0,lo],Cc=[L/2,0,rise,L,sl,hi],E=[-L/2,0,rise,0,sl,hi];for(const q of[A,B,Cc,A,Cc,E])vx(...q)}
+ for(const e of[-1,1]){vx(e*L/2,-hT,0,0,0,.5);vx(e*L/2,hT,0,T,0,.62);vx(e*L/2,0,rise,T/2,rise,.72)}
+ {const rw=.11,ry=rise-rw*rise/hT+.03,rt=rise+.05;for(const sg of[-1,1]){const A=[-L/2,sg*rw,ry,0,0,.2],B=[L/2,sg*rw,ry,L,0,.2],Cc=[L/2,0,rt,L,.2,.3],E=[-L/2,0,rt,0,.2,.3];for(const q of[A,B,Cc,A,Cc,E])vx(...q)}}
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(P),3));g.setAttribute('uv',new THREE.BufferAttribute(new Float32Array(U),2));g.setAttribute('color',new THREE.BufferAttribute(new Float32Array(C),3));g.computeVertexNormals();return g}
 function buildRoofs(w){if(!w.roofs||!w.group)return;const rm=[];
- for(const r of w.roofs){const W=r.w+.7,D=r.h+.7,rise=Math.min(.9,Math.min(r.w,r.h)*.14);
-  const m=new THREE.Mesh(roofGeo(W,D,rise),new THREE.MeshLambertMaterial({color:0x4a382c,transparent:true,opacity:1,side:THREE.DoubleSide}));
+ for(const r of w.roofs){const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
+  const m=new THREE.Mesh(roofGeo(W,D,rise),new THREE.MeshLambertMaterial({color:0x4a382c,transparent:true,opacity:1,side:THREE.DoubleSide,vertexColors:true}));
   m.position.set(r.x+r.w/2,1.9,r.y+r.h/2);m.castShadow=false;m.receiveShadow=false;m.renderOrder=3;w.group.add(m);r.mesh=m;r.a=1;rm.push(r)}
  roofImg(im=>{if(CH===1&&IMGS.rf_lupek)im=IMGS.rf_lupek;const hd=im===IMGS.rf_lupek;const t=new THREE.Texture(im);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=hd?8:4;t.needsUpdate=true;for(const r of rm){r.mesh.material.map=t;r.mesh.material.color.setHex(hd?0xe4d4c8:0xd8c8bc);r.mesh.material.needsUpdate=true}})}
 const ROOF_PNG='./assets/517905a0e4feadfa5ba42b536be2720a1d736e68e81eba922eedcc53d16acee0.png';let _roofIm=null,_roofCbs=[];function roofImg(cb){if(_roofIm&&_roofIm.complete&&_roofIm.naturalWidth){cb(_roofIm);return}_roofCbs.push(cb);if(_roofIm)return;_roofIm=new Image();_roofIm.onload=()=>{const l=_roofCbs;_roofCbs=[];for(const f of l)f(_roofIm)};_roofIm.src=ROOF_PNG}
@@ -2174,6 +2176,8 @@ function layoutPatch1b(w){const P=w.PROPS,M=w.map,U=w.under,T=(x,y)=>M[y*MW+x];
  // rozebrany dom (obrys scian) -> podloga, w jego miejscu studnia
  for(const [x,y] of MAP1_HOUSE){const i=y*MW+x;if(M[i]!==31&&SOLID.has(M[i]))M[i]=floorAt(x,y)}
  drop('burnt_hay',57,59,3);add('well',59,61,[[59,61]]);
+ // 12.11.2026: plac przy studni nie jest juz pusty - beczki, slup z krukiem, siano i calun; przejscia (clearways) wolne
+ add('barrel',62,60,[[62,60]]);add('barrel',63,61,[[63,61]]);add('crow_post',56,59,[[56,59]]);add('burnt_hay',55,62,[]);add('covered_corpses',62,64,[]);
  // cmentarz: stare krzyze i nagrobek z tej kwatery zastapione ukladem autora (20 krzyzy, nagrobek (73,33)), obwodka paproci bez kolizji
  for(let j=P.length-1;j>=0;j--){const q=P[j];if((q.k==='grave_cross'||q.k==='tombstone')&&q.x>=68&&q.x<79&&q.y>=27&&q.y<35){P.splice(j,1);free(Math.floor(q.x),Math.floor(q.y))}}
  for(const [x,y] of MAP1_CROSS)add('grave_cross',x,y,[[x,y]]);for(const [x,y] of MAP1_TOMB)add('tombstone',x,y,[[x,y]]);w.extraFerns=MAP1_FERNS;
@@ -2396,7 +2400,7 @@ function procFrame(img,x,y,size,h,kind,lift=0){
   const density=img.nbDensity||1,logicalW=size,w=size*density;x*=density;y*=density;h=(h||size)*density;lift*=density;
   const c=canvas(w,h),g=c.getContext('2d');g.drawImage(img,x,y,w,h-lift,0,0,w,h-lift);
   if(density>=2&&(kind===undefined||kind==='boss'||kind==='npc')){const id0=g.getImageData(0,0,w,h),p=id0.data,w0=density,w1=Math.round(density*2.5),A=new Uint8Array(w*h);
-    if(!/^(hero_|kat_|zab_|knight_)/.test(img.nbKey||'')){const nm=sheetNorm(img);if(Math.abs(nm.gl-1)>.01||Math.abs(nm.gs-1)>.01)for(let i=0;i<p.length;i+=4){if(!p[i+3])continue;const l=.299*p[i]+.587*p[i+1]+.114*p[i+2];p[i]=Math.max(0,Math.min(255,(l+(p[i]-l)*nm.gs)*nm.gl));p[i+1]=Math.max(0,Math.min(255,(l+(p[i+1]-l)*nm.gs)*nm.gl));p[i+2]=Math.max(0,Math.min(255,(l+(p[i+2]-l)*nm.gs)*nm.gl))}}for(let i=0;i<w*h;i++)A[i]=p[i*4+3]>127?1:0;
+    if(!/^(hero_|kat_|zab_|knight_|dzw_|mil_)/.test(img.nbKey||'')){const nm=sheetNorm(img);if(Math.abs(nm.gl-1)>.01||Math.abs(nm.gs-1)>.01)for(let i=0;i<p.length;i+=4){if(!p[i+3])continue;const l=.299*p[i]+.587*p[i+1]+.114*p[i+2];p[i]=Math.max(0,Math.min(255,(l+(p[i]-l)*nm.gs)*nm.gl));p[i+1]=Math.max(0,Math.min(255,(l+(p[i+1]-l)*nm.gs)*nm.gl));p[i+2]=Math.max(0,Math.min(255,(l+(p[i+2]-l)*nm.gs)*nm.gl))}}for(let i=0;i<w*h;i++)A[i]=p[i*4+3]>127?1:0;
     for(let yy=w1;yy<h;yy++)for(let xx=w1;xx<w;xx++){const i=yy*w+xx;if(!A[i]||!A[i-w0*w-w0]||A[i-w1*w-w1])continue;const j=i*4;p[j]=Math.min(255,p[j]*1.3+19);p[j+1]=Math.min(255,p[j+1]*1.3+24);p[j+2]=Math.min(255,p[j+2]*1.3+38)}
     g.putImageData(id0,0,0)}
   const tex=texFrom(c);
@@ -2430,7 +2434,7 @@ function procFrame(img,x,y,size,h,kind,lift=0){
   if(kind==='ghost')return{n:new THREE.MeshBasicMaterial({map:tex,alphaTest:.5,side:THREE.DoubleSide,transparent:true,opacity:.85,fog:false})};
   let padB=0,vis=1;if(kind==='prop'){let r=h-1;for(;r>=0;r--){let o=false;for(let q=0;q<w;q++)if(d[(r*w+q)*4+3]>=128){o=true;break}if(o)break}padB=Math.min(.15,Math.max(0,(h-1-r)/h));if(padB<.01)padB=0;let u=0;for(;u<=r;u++){let o=false;for(let q=0;q<w;q++)if(d[(u*w+q)*4+3]>=128){o=true;break}if(o)break}vis=(r-u+1)/h}
   return{padB,vis,
-    n:(m=>{if(ol)moonRim(m,density/w);return m})(phong({map:tex,emissiveMap:em,emissive:0xffffff,alphaTest:.5,side:THREE.DoubleSide,color:/^(hero_|kat_|zab_|knight_)/.test(key||'')?0xb4b4b4:0xffffff})),
+    n:(m=>{if(ol)moonRim(m,density/w);return m})(phong({map:tex,emissiveMap:em,emissive:0xffffff,alphaTest:.5,side:THREE.DoubleSide,color:/^(hero_|kat_|zab_|knight_|dzw_|mil_)/.test(key||'')?0xb4b4b4:0xffffff})),
     // rarely used variants are made on first use (setFrame reads fr[mode]); 5.11.2026
     get f(){return lazyMat(this,'f',()=>flashMat(tex))},
     get i(){return lazyMat(this,'i',()=>phong({map:tex,emissiveMap:em,emissive:0xffffff,color:0x8fd0ff,alphaTest:.5,side:THREE.DoubleSide}))},
@@ -3294,7 +3298,7 @@ function emitWeaponSlash(a,c,s,R,owner=pl,trail=COMBAT_TRAIL[encLevel()[0]]||emb
     if(heavy){f=skAdd('ham_v',.3,x,y,.9,size*1.15,'bill',0);skAdd('ham_r',.3,owner.x+c*R*.62,owner.y+s*R*.62,.15,size*1.1,'ground',0)}
     else f=skAdd(a.combo%2?'ham_d':'ham_h',.26,x,y,h,size*1.05,'bill',rot)
   }else if(S.mil){
-    f=skAdd('sp_h',heavy?.3:.24,x+c*R*.1,y+s*R*.1,h,size*(heavy?2.3:1.9),'bill',rot);if(heavy)skAdd('sp_s',.26,owner.x+c*R*.9,owner.y+s*R*.9,.9,size*1.2,'bill',0)
+    f=skAdd('sp_h',heavy?.3:.24,x+c*R*.1,y+s*R*.1,h,size*(heavy?1.6:1.3),'bill',rot);if(heavy)skAdd('sp_s',.26,owner.x+c*R*.9,owner.y+s*R*.9,.9,size*.9,'bill',0)
   }else f=skAdd('slash',.26,x,y,h,size,'bill',rot,trail);
   if(!f){addVfx(A.fx.slash,.26,x,y,h,size,'bill',rot);f=S.vfx[S.vfx.length-1]}
   return bindWeaponFx(f,owner);
@@ -3803,7 +3807,7 @@ function milParry(){const e=S.attacker;if(e){if(e.milPar!==undefined&&S.t-e.milP
   if((S.wick||0)>=MIL.wick.max){ftInfo(EN?'Living Wick: full':'Żywy Knot: pełny');return}
   S.wick=Math.min(MIL.wick.max,(S.wick||0)+(S.pk.mKnot||1));ftInfo((EN?'Living Wick ':'Żywy Knot ')+S.wick+'/'+MIL.wick.max);for(let i=0;i<8;i++)S.parts.push({k:'e',x:pl.x+rnd(-6,6),y:pl.y+rnd(-3,3),z:rnd(14,28),vx:0,vy:0,vz:rnd(8,16),c:i%2?'#ffb347':'#ffe9a0',life:.4})}
 function milStrip(n,ang){if(n>=MIL.wick.max)S.mFull=(S.mFull||0)+1;const M=MIL.strip,c=Math.cos(ang),s=Math.sin(ang),len=M.len+M.lenN*n,dur=M.dur+M.durN*n,z={x:pl.x,y:pl.y,c,s,len,w:M.w+M.wN*n,t:dur,tk:0,n,ch:CH};
-  const fr=fxFrames('mil_fx',3);if(fr){addVfx(skLoop(fr,dur,10),dur,pl.x+c*len*.5,pl.y+s*len*.5,.12,len/16*1.2,'bill',-screenAng(c,s));z.f=S.vfx[S.vfx.length-1]}
+  const fr=fxFrames('mil_fx',3);if(fr){addVfx(skLoop(fr,dur,10),dur,pl.x+c*len*.5,pl.y+s*len*.5,.06,len/29,'ground',-Math.atan2(s,c));z.f=S.vfx[S.vfx.length-1];z.f.sy=1.25}
   (S.milStrips=S.milStrips||[]).push(z);ftInfo(EN?`Wax strip ×${n}`:`Pas wosku ×${n}`);swordSparks(pl.x+c*len*.5,pl.y+s*len*.5,'#ffb347',10)}
 function milStripTick(dt){const L=S.milStrips;if(!L)return;for(let i=L.length-1;i>=0;i--){const z=L[i];z.t-=dt;z.tk-=dt;if(z.t<=0||pl.dead||z.ch!==CH){if(z.f)z.f.t=z.f.dur;L.splice(i,1);continue}
   if(z.tk<=0){z.tk=MIL.strip.tick;const dm=skDmg((MIL.strip.dmg+MIL.strip.dmgN*z.n)*(z.n>=MIL.wick.max?(S.pk.mFive||1):1));for(const e of [...S.enemies]){if(e.dead||e.rise>0)continue;const dx=e.x-z.x,dy=e.y-z.y,t=dx*z.c+dy*z.s,p=-dx*z.s+dy*z.c;if(t<-e.r||t>z.len+e.r||Math.abs(p)>z.w+e.r)continue;damageEnemy(e,dm,z.c,z.s,0,'sk:knot');if(e.dead)S.mWaxK=(S.mWaxK||0)+1;else milWaxSlow(e,MIL.strip.slowT,MIL.strip.slow,MIL.strip.bossSlow,.6)}}}}

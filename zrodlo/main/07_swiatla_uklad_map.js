@@ -54,6 +54,8 @@ function layoutPatch1b(w){const P=w.PROPS,M=w.map,U=w.under,T=(x,y)=>M[y*MW+x];
  // rozebrany dom (obrys scian) -> podloga, w jego miejscu studnia
  for(const [x,y] of MAP1_HOUSE){const i=y*MW+x;if(M[i]!==31&&SOLID.has(M[i]))M[i]=floorAt(x,y)}
  drop('burnt_hay',57,59,3);add('well',59,61,[[59,61]]);
+ // 12.11.2026: plac przy studni nie jest juz pusty - beczki, slup z krukiem, siano i calun; przejscia (clearways) wolne
+ add('barrel',62,60,[[62,60]]);add('barrel',63,61,[[63,61]]);add('crow_post',56,59,[[56,59]]);add('burnt_hay',55,62,[]);add('covered_corpses',62,64,[]);
  // cmentarz: stare krzyze i nagrobek z tej kwatery zastapione ukladem autora (20 krzyzy, nagrobek (73,33)), obwodka paproci bez kolizji
  for(let j=P.length-1;j>=0;j--){const q=P[j];if((q.k==='grave_cross'||q.k==='tombstone')&&q.x>=68&&q.x<79&&q.y>=27&&q.y<35){P.splice(j,1);free(Math.floor(q.x),Math.floor(q.y))}}
  for(const [x,y] of MAP1_CROSS)add('grave_cross',x,y,[[x,y]]);for(const [x,y] of MAP1_TOMB)add('tombstone',x,y,[[x,y]]);w.extraFerns=MAP1_FERNS;

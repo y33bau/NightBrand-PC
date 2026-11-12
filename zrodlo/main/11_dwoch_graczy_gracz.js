@@ -412,7 +412,7 @@ function emitWeaponSlash(a,c,s,R,owner=pl,trail=COMBAT_TRAIL[encLevel()[0]]||emb
     if(heavy){f=skAdd('ham_v',.3,x,y,.9,size*1.15,'bill',0);skAdd('ham_r',.3,owner.x+c*R*.62,owner.y+s*R*.62,.15,size*1.1,'ground',0)}
     else f=skAdd(a.combo%2?'ham_d':'ham_h',.26,x,y,h,size*1.05,'bill',rot)
   }else if(S.mil){
-    f=skAdd('sp_h',heavy?.3:.24,x+c*R*.1,y+s*R*.1,h,size*(heavy?2.3:1.9),'bill',rot);if(heavy)skAdd('sp_s',.26,owner.x+c*R*.9,owner.y+s*R*.9,.9,size*1.2,'bill',0)
+    f=skAdd('sp_h',heavy?.3:.24,x+c*R*.1,y+s*R*.1,h,size*(heavy?1.6:1.3),'bill',rot);if(heavy)skAdd('sp_s',.26,owner.x+c*R*.9,owner.y+s*R*.9,.9,size*.9,'bill',0)
   }else f=skAdd('slash',.26,x,y,h,size,'bill',rot,trail);
   if(!f){addVfx(A.fx.slash,.26,x,y,h,size,'bill',rot);f=S.vfx[S.vfx.length-1]}
   return bindWeaponFx(f,owner);
