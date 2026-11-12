@@ -695,3 +695,4 @@ cache617 · Zbroje Kaplicy dla Iwa i Mileny (wosk zostaje), Otchlan piekla -> Ne
 cache618 · Nowe animacje: ciecia, wir, fale mocy, mlot Dzwonnika, wlocznia Mileny, parry Dzwonnika
 cache619 · Nowe animacje: ciecia, wir, fale mocy, mlot Dzwonnika, wlocznia Mileny, parry Dzwonnika
 cache620 · Wlocznia wieksza
+cache621 · Standard efektow: nowe ciecia i parowanie dla wszystkich bohaterow

@@ -405,7 +405,7 @@ function weaponFloorLift(f,fr){
 function emitWeaponSlash(a,c,s,R,owner=pl,trail=COMBAT_TRAIL[encLevel()[0]]||embTrail()){
   const heavy=a.kind==='h',size=Math.min(heavy?1.25:1.05,R/16*(heavy?.48:.44)),x=owner.x+c*R*.50,y=owner.y+s*R*.50,h=heavy?1.7:1.55,rot=-screenAng(c,s);
   let f;
-  if(S.zab){
+  if(false&&S.zab){
     if(heavy)f=zfx('fx_zab',2,.34,owner.x,owner.y,.72,R/16*.94,'ground',0);
     else f=zfx('fx_zab',a.combo===4?1:0,a.combo===4?.24:.22,x,y,h,size,'bill',rot);
   }else if(S.dzw){
