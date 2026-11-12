@@ -17,14 +17,6 @@
 "pewnosc": "korzen"
 },
 {
-"plik": "assets/315a950dd6c82c79aeb3054fdd457dcfc01c5dc33788d5b4f0c350bdfb038d7b.css",
-"hash": "315a950dd6c82c79aeb3054fdd457dcfc01c5dc33788d5b4f0c350bdfb038d7b",
-"typ": "css",
-"bajty": 207038,
-"kategoria": "korzen",
-"pewnosc": "korzen"
-},
-{
 "plik": "assets/35655dfb05e1b32aa0b6d72a3df4a240d0b89ab5357cf6e0736c25fbd7ce682e.css",
 "hash": "35655dfb05e1b32aa0b6d72a3df4a240d0b89ab5357cf6e0736c25fbd7ce682e",
 "typ": "css",
@@ -33,18 +25,10 @@
 "pewnosc": "korzen"
 },
 {
-"plik": "assets/61e521d74fa7aaf8180a18b1c3ae1032e1e61717820c8b1c5bcf4e0450f88974.js",
-"hash": "61e521d74fa7aaf8180a18b1c3ae1032e1e61717820c8b1c5bcf4e0450f88974",
-"typ": "js",
-"bajty": 1407721,
-"kategoria": "korzen",
-"pewnosc": "korzen"
-},
-{
-"plik": "assets/7a9053f6e5c8b82dae6209e0356554f3c5189682dd15a33176a75cc4fc09556b.js",
-"hash": "7a9053f6e5c8b82dae6209e0356554f3c5189682dd15a33176a75cc4fc09556b",
-"typ": "js",
-"bajty": 56792,
+"plik": "assets/4fdc59cbfa09eb6686d24650957e70bf1f5e4bb6fb8ae2db68e7fcebedf269ff.css",
+"hash": "4fdc59cbfa09eb6686d24650957e70bf1f5e4bb6fb8ae2db68e7fcebedf269ff",
+"typ": "css",
+"bajty": 207038,
 "kategoria": "korzen",
 "pewnosc": "korzen"
 },
@@ -65,6 +49,22 @@
 "pewnosc": "korzen"
 },
 {
+"plik": "assets/a658973025d862a1820288aef28158333c3e17a74d9f45eadda01540a2169ce6.js",
+"hash": "a658973025d862a1820288aef28158333c3e17a74d9f45eadda01540a2169ce6",
+"typ": "js",
+"bajty": 1408058,
+"kategoria": "korzen",
+"pewnosc": "korzen"
+},
+{
+"plik": "assets/ac3271143cc35f549b8bb00701f653fde7a65fed9c8dd865e22942b7af921fa6.js",
+"hash": "ac3271143cc35f549b8bb00701f653fde7a65fed9c8dd865e22942b7af921fa6",
+"typ": "js",
+"bajty": 57833,
+"kategoria": "korzen",
+"pewnosc": "korzen"
+},
+{
 "plik": "assets/bohaterowie/01ce6b6b3de874e306044ee9063e08cc23b6a8272f48aa2aa0e600f0f9388773.webp",
 "hash": "01ce6b6b3de874e306044ee9063e08cc23b6a8272f48aa2aa0e600f0f9388773",
 "typ": "webp",
@@ -77,7 +77,7 @@
 "zab_db"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -95,7 +95,7 @@
 "dzw_dd"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -113,7 +113,7 @@
 "zab_dc"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -131,7 +131,7 @@
 "knight_dc"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -149,7 +149,7 @@
 "kat_death"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -167,7 +167,7 @@
 "hero_d"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -185,7 +185,7 @@
 "mil_d"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -203,7 +203,7 @@
 "mil_sk"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -221,7 +221,7 @@
 "zab_dd"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -239,7 +239,7 @@
 "kat_dd"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -257,7 +257,7 @@
 "kat_d"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -275,7 +275,7 @@
 "knight_death"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -293,7 +293,7 @@
 "zab_whirl"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -311,7 +311,7 @@
 "kat_hook"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -329,7 +329,7 @@
 "dzw_ex"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -347,7 +347,7 @@
 "hero_dc"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -365,7 +365,7 @@
 "zab_atk45"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -383,7 +383,7 @@
 "knight_dd"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -401,7 +401,7 @@
 "kat_leap"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -419,7 +419,7 @@
 "knight_d"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -437,7 +437,7 @@
 "kat_def"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -455,7 +455,7 @@
 "hero_db"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -473,7 +473,7 @@
 "zab_rend"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -491,7 +491,7 @@
 "protagonist_a"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -509,7 +509,7 @@
 "dzw_sk"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -527,7 +527,7 @@
 "kat_dc"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -545,7 +545,7 @@
 "dzw_d"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -563,7 +563,7 @@
 "zab_death"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -581,7 +581,7 @@
 "dzw_def"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -599,7 +599,7 @@
 "mil_ex"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -617,7 +617,7 @@
 "zab_d"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -635,7 +635,7 @@
 "mil_db"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -653,7 +653,7 @@
 "protagonist_b"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -671,7 +671,7 @@
 "zab_fan"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -689,7 +689,7 @@
 "knight_db"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -707,7 +707,7 @@
 "dzw_zas"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -725,7 +725,7 @@
 "knight_whirl"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -743,7 +743,7 @@
 "mil_dd"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -761,7 +761,7 @@
 "hero_dd"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -779,7 +779,7 @@
 "kat_whirl"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -797,7 +797,7 @@
 "mil_def"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -815,7 +815,7 @@
 "dzw_dc"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -833,7 +833,7 @@
 "knight_def"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -851,7 +851,7 @@
 "dzw_db"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -869,7 +869,7 @@
 "zab_def"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -887,7 +887,7 @@
 "hero_def"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -905,7 +905,7 @@
 "kat_db"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -923,7 +923,7 @@
 "mil_fx"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -941,7 +941,7 @@
 "mil_dc"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "bohaterowie",
 "pewnosc": "klucz"
@@ -1095,7 +1095,7 @@
 "typ": "ttf",
 "bajty": 125468,
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "czcionki",
 "pewnosc": "rozszerzenie"
@@ -1109,7 +1109,7 @@
 "Rock Meteor Throw 1"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1123,7 +1123,7 @@
 "Fireball 2"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1137,7 +1137,7 @@
 "Sword Parry 1"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1151,7 +1151,7 @@
 "Sword Attack 1"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1165,7 +1165,7 @@
 "Owlish/80-CC0-RPG-SFX/spell_01.ogg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1179,7 +1179,7 @@
 "Owlish/Ambience/earthquake.wav"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1193,7 +1193,7 @@
 "Owlish/UI/UI_001.wav"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1207,7 +1207,7 @@
 "Owlish/80-CC0-RPG-SFX/item_gem_03.ogg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1221,7 +1221,7 @@
 "Owlish/80-CC0-RPG-SFX/creature_monster_04.ogg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1235,7 +1235,7 @@
 "Zar"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1249,7 +1249,7 @@
 "Rock Wall 2"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1263,7 +1263,7 @@
 "Sword Parry 2"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1277,7 +1277,7 @@
 "Rock Wall 1"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1291,7 +1291,7 @@
 "Owlish/Impacts/flip.wav"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1305,7 +1305,7 @@
 "Owlish/80-CC0-RPG-SFX/item_coins_03.ogg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1319,7 +1319,7 @@
 "Kociolek"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1333,7 +1333,7 @@
 "Owlish/80-CC0-RPG-SFX/item_coins_01.ogg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1347,7 +1347,7 @@
 "Fireball 1"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1361,7 +1361,7 @@
 "Sword Impact Hit 1"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1375,7 +1375,7 @@
 "Owlish/80-CC0-RPG-SFX/creature_roar_02.ogg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1389,7 +1389,7 @@
 "Postawa"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1403,7 +1403,7 @@
 "Sword Impact Hit 2"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1417,7 +1417,7 @@
 "Owlish/80-CC0-RPG-SFX/creature_die_01.ogg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1431,7 +1431,7 @@
 "Owlish/80-CC0-RPG-SFX/creature_roar_01.ogg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1445,7 +1445,7 @@
 "Owlish/80-CC0-RPG-SFX/item_gem_02.ogg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1459,7 +1459,7 @@
 "Sword Attack 3"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1473,7 +1473,7 @@
 "Owlish/UI/UI_024.wav"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1487,7 +1487,7 @@
 "Sword Impact Hit 3"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1501,7 +1501,7 @@
 "Owlish/Impacts/hit.wav"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1515,7 +1515,7 @@
 "Owlish/80-CC0-RPG-SFX/item_coins_02.ogg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1529,7 +1529,7 @@
 "Owlish/80-CC0-RPG-SFX/creature_monster_03.ogg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1543,7 +1543,7 @@
 "Sword Blocked 2"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1557,7 +1557,7 @@
 "Sword Attack 2"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1571,7 +1571,7 @@
 "Owlish/UI/UI_017.wav"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1585,7 +1585,7 @@
 "Ice Throw 1"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1599,7 +1599,7 @@
 "Sword Blocked 1"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1613,7 +1613,7 @@
 "Owlish/UI/UI_040.wav"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1627,7 +1627,7 @@
 "Ice Throw 2"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1641,7 +1641,7 @@
 "Owlish/80-CC0-RPG-SFX/creature_roar_03.ogg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1655,7 +1655,7 @@
 "Rock Meteor Throw 2"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1669,7 +1669,7 @@
 "Owlish/80-CC0-RPG-SFX/creature_hurt_01.ogg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "dzwieki",
 "pewnosc": "klucz"
@@ -1688,8 +1688,8 @@
 "src"
 ],
 "uzywa": [
-"css:315a950d",
-"js:61e521d7"
+"css:4fdc59cb",
+"js:a6589730"
 ],
 "kategoria": "efekty",
 "pewnosc": "klucz"
@@ -1707,7 +1707,7 @@
 "whirl_fx"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "efekty",
 "pewnosc": "klucz"
@@ -1725,7 +1725,7 @@
 "combat_fx"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "efekty",
 "pewnosc": "klucz"
@@ -1743,7 +1743,7 @@
 "skill_fx"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "efekty",
 "pewnosc": "klucz"
@@ -1761,7 +1761,7 @@
 "fx_kat"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "efekty",
 "pewnosc": "klucz"
@@ -1779,7 +1779,7 @@
 "fx_zab"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "efekty",
 "pewnosc": "klucz"
@@ -1797,7 +1797,7 @@
 "effects_pickups"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "efekty",
 "pewnosc": "klucz"
@@ -1815,7 +1815,7 @@
 "decals"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "efekty",
 "pewnosc": "klucz"
@@ -1833,7 +1833,7 @@
 "trans"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "efekty",
 "pewnosc": "klucz"
@@ -1851,7 +1851,7 @@
 "src"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "efekty",
 "pewnosc": "recznie"
@@ -1877,7 +1877,7 @@
 "skille-riposta"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -1895,7 +1895,7 @@
 "wyzwania-d_garda"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -1913,7 +1913,7 @@
 "perki-d_braz"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -1931,7 +1931,7 @@
 "perki-cien"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -1949,7 +1949,7 @@
 "skille-retaliation"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -1967,7 +1967,7 @@
 "perki-z_widmo"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -1985,7 +1985,7 @@
 "skille-fireblade"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2003,7 +2003,7 @@
 "perki-m_grot"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2021,7 +2021,7 @@
 "perki-d_poglos"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2039,7 +2039,7 @@
 "wyzwania-d_zniwo"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2057,7 +2057,7 @@
 "skille-venom"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2075,7 +2075,7 @@
 "wyzwania-m_oddech"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2093,7 +2093,7 @@
 "kaplica-breath"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2111,7 +2111,7 @@
 "kaplica-cos_tr_rot"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2129,7 +2129,7 @@
 "skille-odlew"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2147,7 +2147,7 @@
 "skille-ldance"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2165,7 +2165,7 @@
 "perki-d_oddech"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2183,7 +2183,7 @@
 "wyzwania-m_warta"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2201,7 +2201,7 @@
 "perki-riposta"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2219,7 +2219,7 @@
 "skille-zryw"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2237,7 +2237,7 @@
 "perki-k_ostrze"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2255,7 +2255,7 @@
 "perki-fanatyk"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2273,7 +2273,7 @@
 "kaplica-nimble"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2291,7 +2291,7 @@
 "wyzwania-d_echo"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2309,7 +2309,7 @@
 "wyzwania-d_spiz"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2327,7 +2327,7 @@
 "wyzwania-d_ton"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2345,7 +2345,7 @@
 "kaplica-smelt"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2363,7 +2363,7 @@
 "skille-_dex"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2381,7 +2381,7 @@
 "kaplica-venge"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2399,7 +2399,7 @@
 "perki-berserk"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2417,7 +2417,7 @@
 "perki-d_msza"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2435,7 +2435,7 @@
 "perki-z_dobicie"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2453,7 +2453,7 @@
 "wyzwania-m_slady"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2471,7 +2471,7 @@
 "wyzwania-m_egzekucja"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2489,7 +2489,7 @@
 "perki-d_krag"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2507,7 +2507,7 @@
 "skille-leap"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2525,7 +2525,7 @@
 "wyzwania-m_noc"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2543,7 +2543,7 @@
 "skille-stoneguard"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2561,7 +2561,7 @@
 "kaplica-cos_tr_fire"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2579,7 +2579,7 @@
 "wyzwania-m_parowania"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2597,7 +2597,7 @@
 "skille-zastaw"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2615,7 +2615,7 @@
 "wyzwania-d_zastaw"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2633,7 +2633,7 @@
 "skille-earthcut"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2651,7 +2651,7 @@
 "skille-rytm"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2669,7 +2669,7 @@
 "kaplica-lastch"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2687,7 +2687,7 @@
 "perki-k_wyrok"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2705,7 +2705,7 @@
 "skille-szklo"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2723,7 +2723,7 @@
 "kaplica-vigor"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2741,7 +2741,7 @@
 "skille-fala"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2759,7 +2759,7 @@
 "skille-dogasanie"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2777,7 +2777,7 @@
 "kaplica-elite"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2795,7 +2795,7 @@
 "wyzwania-m_fala"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2813,7 +2813,7 @@
 "perki-k_rytm"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2831,7 +2831,7 @@
 "perki-k_gilotyna"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2849,7 +2849,7 @@
 "wyzwania-d_parafia"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2867,7 +2867,7 @@
 "perki-k_pien"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2885,7 +2885,7 @@
 "skille-hook"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2903,7 +2903,7 @@
 "skille-rend"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2921,7 +2921,7 @@
 "skille-_int"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2939,7 +2939,7 @@
 "perki-d_spiz"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2957,7 +2957,7 @@
 "skille-buty"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2975,7 +2975,7 @@
 "skille-garda"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -2993,7 +2993,7 @@
 "skille-cascade"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3011,7 +3011,7 @@
 "perki-pancerz"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3029,7 +3029,7 @@
 "perki-z_taniec"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3047,7 +3047,7 @@
 "kaplica-purse"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3065,7 +3065,7 @@
 "skille-frostshot"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3083,7 +3083,7 @@
 "perki-m_kregi"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3101,7 +3101,7 @@
 "skille-zasieg"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3119,7 +3119,7 @@
 "perki-z_gilotyna"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3137,7 +3137,7 @@
 "kaplica-raven"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3155,7 +3155,7 @@
 "skille-taniec"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3173,7 +3173,7 @@
 "skille-drugieja"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3191,7 +3191,7 @@
 "wyzwania-d_krok"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3209,7 +3209,7 @@
 "kaplica-cos_seal"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3227,7 +3227,7 @@
 "skille-zelazo"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3245,7 +3245,7 @@
 "skille-_str"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3263,7 +3263,7 @@
 "perki-z_ped"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3281,7 +3281,7 @@
 "kaplica-gaze"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3299,7 +3299,7 @@
 "perki-m_wosk"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3317,7 +3317,7 @@
 "perki-szklana"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3335,7 +3335,7 @@
 "wyzwania-m_zalobnicy"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3353,7 +3353,7 @@
 "skille-odzysk"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3371,7 +3371,7 @@
 "skille-cisza"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3389,7 +3389,7 @@
 "wyzwania-m_ofiara"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3407,7 +3407,7 @@
 "kaplica-bastion"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3425,7 +3425,7 @@
 "kaplica-magnet"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3443,7 +3443,7 @@
 "kaplica-cos_tr_blood"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3461,7 +3461,7 @@
 "perki-klucznik"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3479,7 +3479,7 @@
 "perki-z_przetrwanie"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3497,7 +3497,7 @@
 "perki-k_kaptur"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3515,7 +3515,7 @@
 "perki-k_slowo"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3533,7 +3533,7 @@
 "wyzwania-d_serce"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3551,7 +3551,7 @@
 "skille-fan"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3569,7 +3569,7 @@
 "perki-d_dzwon"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3587,7 +3587,7 @@
 "skille-breach"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3605,7 +3605,7 @@
 "skille-whirl"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3623,7 +3623,7 @@
 "skille-zalecho"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3641,7 +3641,7 @@
 "skille-iceblade"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3659,7 +3659,7 @@
 "wyzwania-m_oblicza"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3677,7 +3677,7 @@
 "skille-embershot"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3695,7 +3695,7 @@
 "skille-aard"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3713,7 +3713,7 @@
 "perki-m_odlew"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3731,7 +3731,7 @@
 "kaplica-cos_tr_ice"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3749,7 +3749,7 @@
 "kaplica-exec"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3767,7 +3767,7 @@
 "perki-z_trucizna"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3785,7 +3785,7 @@
 "perki-z_riposta"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3803,7 +3803,7 @@
 "skille-_vit"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3821,7 +3821,7 @@
 "wyzwania-d_pancerz"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3839,7 +3839,7 @@
 "skille-echo"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3857,7 +3857,7 @@
 "skille-ostrze"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3875,7 +3875,7 @@
 "skille-krew"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3893,7 +3893,7 @@
 "perki-d_lichwa"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3911,7 +3911,7 @@
 "skille-bloodblade"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3929,7 +3929,7 @@
 "perki-m_przewrot"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3947,7 +3947,7 @@
 "perki-m_knot"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3965,7 +3965,7 @@
 "perki-sztych"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -3983,7 +3983,7 @@
 "perki-m_piec"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -4001,7 +4001,7 @@
 "perki-k_kamien"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -4019,7 +4019,7 @@
 "perki-m_plomien"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ikony",
 "pewnosc": "klucz"
@@ -4033,7 +4033,7 @@
 "intro"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "muzyka",
 "pewnosc": "klucz"
@@ -4047,7 +4047,7 @@
 "c2"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "muzyka",
 "pewnosc": "klucz"
@@ -4061,7 +4061,7 @@
 "c5"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "muzyka",
 "pewnosc": "klucz"
@@ -4075,7 +4075,7 @@
 "c3"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "muzyka",
 "pewnosc": "klucz"
@@ -4089,7 +4089,7 @@
 "crypt"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "muzyka",
 "pewnosc": "klucz"
@@ -4103,7 +4103,7 @@
 "c1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "muzyka",
 "pewnosc": "klucz"
@@ -4117,7 +4117,7 @@
 "c4"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "muzyka",
 "pewnosc": "klucz"
@@ -4135,7 +4135,7 @@
 "npc_seweryna"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4153,7 +4153,7 @@
 "npcp_lucjan"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4171,7 +4171,7 @@
 "npcp_wolch"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4189,7 +4189,7 @@
 "npcp_mila"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4207,7 +4207,7 @@
 "npc_chojrak"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4225,7 +4225,7 @@
 "npc_ottokar"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4243,7 +4243,7 @@
 "npcp_pieczetnik"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4261,7 +4261,7 @@
 "npcp_dobromir"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4279,7 +4279,7 @@
 "npc_wolch"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4297,7 +4297,7 @@
 "npc_heri"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4315,7 +4315,7 @@
 "npcp_izolda"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4333,7 +4333,7 @@
 "npcp_wierz"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4351,7 +4351,7 @@
 "npc_aurel"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4369,7 +4369,7 @@
 "npc_tharm"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4387,7 +4387,7 @@
 "npc_wit"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4405,7 +4405,7 @@
 "npcp_skryba"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4423,7 +4423,7 @@
 "npc_lucjan"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4441,7 +4441,7 @@
 "npcp_tharm"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4459,7 +4459,7 @@
 "npc_izolda"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4477,7 +4477,7 @@
 "npcp_elder"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4495,7 +4495,7 @@
 "npcp_ottokar"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4513,7 +4513,7 @@
 "npc_straznik"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4531,7 +4531,7 @@
 "npcp_seweryna"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4549,7 +4549,7 @@
 "npcp_chojrak"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4567,7 +4567,7 @@
 "npcp_marga"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4585,7 +4585,7 @@
 "npcp_bartosz"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4603,7 +4603,7 @@
 "npc_dobromir"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4621,7 +4621,7 @@
 "npc_rudna"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4639,7 +4639,7 @@
 "npc_elder"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4657,7 +4657,7 @@
 "npcp_aurel"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4675,7 +4675,7 @@
 "npc_bartosz"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4693,7 +4693,7 @@
 "npc_new"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4711,7 +4711,7 @@
 "npc_pieczetnik"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4729,7 +4729,7 @@
 "npc_wierz"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4747,7 +4747,7 @@
 "npc_marga"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4765,7 +4765,7 @@
 "npc_nawoj"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4783,7 +4783,7 @@
 "npcp_heri"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4801,7 +4801,7 @@
 "npcp_wit"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4819,7 +4819,7 @@
 "npcp_nawoj"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4837,7 +4837,7 @@
 "npc_skryba"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4855,7 +4855,7 @@
 "npcp_straznik"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4873,7 +4873,7 @@
 "ally_npcs"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4891,7 +4891,7 @@
 "npcp_rudna"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4909,7 +4909,7 @@
 "npc_mila"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "npc",
 "pewnosc": "klucz"
@@ -4927,7 +4927,7 @@
 "POT_PNG"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -4945,7 +4945,7 @@
 "p3_rot_bloom_1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -4963,7 +4963,7 @@
 "p4_dead_oak"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -4981,7 +4981,7 @@
 "p1_gallows"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -4999,7 +4999,7 @@
 "p4_spruce"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5017,7 +5017,7 @@
 "p3_pyre_3"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5035,7 +5035,7 @@
 "p4_wd10"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5053,7 +5053,7 @@
 "p1_dead_tree"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5071,7 +5071,7 @@
 "p2_dwarf_bones"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5089,7 +5089,7 @@
 "p1_dead_horse"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5107,7 +5107,7 @@
 "p3_queen_fountain"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5125,7 +5125,7 @@
 "p2_clan_banner"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5143,7 +5143,7 @@
 "p2_pickaxe_rack"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5161,7 +5161,7 @@
 "p5_goblet"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5179,7 +5179,7 @@
 "p2_king_statue"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5197,7 +5197,7 @@
 "p4_cz_wagon"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5215,7 +5215,7 @@
 "p1_marga_cart"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5233,7 +5233,7 @@
 "p4_cz_walk"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5251,7 +5251,7 @@
 "p2_chapel_stairs"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5269,7 +5269,7 @@
 "p5_chest"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5287,7 +5287,7 @@
 "p4_mossy_boulder"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5305,7 +5305,7 @@
 "p3_chains"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5323,7 +5323,7 @@
 "p5_desk"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5341,7 +5341,7 @@
 "p5_swordbooks"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5359,7 +5359,7 @@
 "p4_cz_pelts"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5377,7 +5377,7 @@
 "p4_hanging_tree"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5395,7 +5395,7 @@
 "p3_pyre_1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5413,7 +5413,7 @@
 "p4_tall_pine"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5431,7 +5431,7 @@
 "p5_statue_a"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5449,7 +5449,7 @@
 "p1_order_banner"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5467,7 +5467,7 @@
 "p4_sp5"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5485,7 +5485,7 @@
 "p2_chains"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5503,7 +5503,7 @@
 "p5_inkwell"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5521,7 +5521,7 @@
 "p4_standing_stone_dark"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5539,7 +5539,7 @@
 "p1_tombstone"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5557,7 +5557,7 @@
 "p1_roof_burnt"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5575,7 +5575,7 @@
 "p4_cz_beehive"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5593,7 +5593,7 @@
 "p1_shrine"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5611,7 +5611,7 @@
 "p3_doorway_bones"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5629,7 +5629,7 @@
 "p4_cz_shrine_burnt"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5647,7 +5647,7 @@
 "p4_sp8"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5665,7 +5665,7 @@
 "p4_mushrooms"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5683,7 +5683,7 @@
 "p4_wd5"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5701,7 +5701,7 @@
 "p4_burial_mound"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5719,7 +5719,7 @@
 "p2_brazier_1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5737,7 +5737,7 @@
 "p3_wall_top"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5755,7 +5755,7 @@
 "p2_fallen_pillar"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5773,7 +5773,7 @@
 "p3_broken_bell"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5791,7 +5791,7 @@
 "TOTEM_PNG"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5809,7 +5809,7 @@
 "p4_drowned_cart"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5828,7 +5828,7 @@
 "p5_chains_1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5846,7 +5846,7 @@
 "p5_armour"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5864,7 +5864,7 @@
 "p5_chair"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5882,7 +5882,7 @@
 "p3_roof_lead"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5900,7 +5900,7 @@
 "p4_cz_bones"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5918,7 +5918,7 @@
 "p1_impaled_head"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5936,7 +5936,7 @@
 "p5_vault"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5954,7 +5954,7 @@
 "p3_noble_carriage"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5972,7 +5972,7 @@
 "p4_cz_fire_2"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -5990,7 +5990,7 @@
 "p4_cz_skullpole"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6008,7 +6008,7 @@
 "p2_depleted_shrine"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6026,7 +6026,7 @@
 "p5_pillar_b"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6044,7 +6044,7 @@
 "p1_order_bonfire"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6062,7 +6062,7 @@
 "p5_purse"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6080,7 +6080,7 @@
 "p4_dead_spruce"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6098,7 +6098,7 @@
 "p4_cz_fire_3"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6116,7 +6116,7 @@
 "p4_wd0"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6134,7 +6134,7 @@
 "p4_cz_sacpole"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6152,7 +6152,7 @@
 "p5_inkbarrel"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6170,7 +6170,7 @@
 "p4_sacred_oak"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6188,7 +6188,7 @@
 "p3_sarcophagus"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6206,7 +6206,7 @@
 "p0_np_thistle"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6224,7 +6224,7 @@
 "p1_shop_sign"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6242,7 +6242,7 @@
 "p4_wd1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6260,7 +6260,7 @@
 "p4_brambles"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6278,7 +6278,7 @@
 "p3_plague_cart"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6296,7 +6296,7 @@
 "p5_goldheap"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6314,7 +6314,7 @@
 "p5_gallows"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6332,7 +6332,7 @@
 "p1_house_fire_0"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6350,7 +6350,7 @@
 "p2_healing_shrine"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6368,7 +6368,7 @@
 "p3_healing_shrine"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6386,7 +6386,7 @@
 "p3_gallows"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6404,7 +6404,7 @@
 "p5_scroll"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6422,7 +6422,7 @@
 "p2_brazier_2"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6440,7 +6440,7 @@
 "p2_bellows"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6458,7 +6458,7 @@
 "p2_brazier_0"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6476,7 +6476,7 @@
 "p5_shackles"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6495,7 +6495,7 @@
 "p5_raven_1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6513,7 +6513,7 @@
 "p3_offering_bowl"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6531,7 +6531,7 @@
 "p0_np_grass"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6549,7 +6549,7 @@
 "p3_depleted_shrine"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6567,7 +6567,7 @@
 "p1_house_fire_1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6585,7 +6585,7 @@
 "p4_wd4"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6603,7 +6603,7 @@
 "p4_wd11"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6621,7 +6621,7 @@
 "p4_cz_gallows"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6639,7 +6639,7 @@
 "p4_fallen_log"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6657,7 +6657,7 @@
 "p4_sp7"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6675,7 +6675,7 @@
 "p3_pyre_2"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6693,7 +6693,7 @@
 "p3_wheel"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6711,7 +6711,7 @@
 "p2_furnace_1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6729,7 +6729,7 @@
 "p3_royal_banner"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6747,7 +6747,7 @@
 "p4_wd9"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6765,7 +6765,7 @@
 "p3_street_lantern"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6783,7 +6783,7 @@
 "p4_cz_firewood"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6801,7 +6801,7 @@
 "p5_scale"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6819,7 +6819,7 @@
 "p4_wolf_skull_bush"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6837,7 +6837,7 @@
 "p5_bookcase_a"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6855,7 +6855,7 @@
 "p4_ferns"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6873,7 +6873,7 @@
 "p4_sp6"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6891,7 +6891,7 @@
 "p5_seal"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6909,7 +6909,7 @@
 "p1_grave_cross"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6927,7 +6927,7 @@
 "p1_covered_corpses"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6945,7 +6945,7 @@
 "p3_saint_king"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6963,7 +6963,7 @@
 "p4_cz_tent"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6981,7 +6981,7 @@
 "p4_cz_wheel"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -6999,7 +6999,7 @@
 "p2_mine_cart"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7017,7 +7017,7 @@
 "p1_well"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7035,7 +7035,7 @@
 "p3_noble_door"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7053,7 +7053,7 @@
 "p3_cathedral_gate"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7071,7 +7071,7 @@
 "p5_lectern"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7089,7 +7089,7 @@
 "p1_debris_fire_3"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7107,7 +7107,7 @@
 "p5_bookcase_b"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7125,7 +7125,7 @@
 "p2_furnace_0"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7143,7 +7143,7 @@
 "p4_cz_fire_0"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7161,7 +7161,7 @@
 "p3_beggar_bodies"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7179,7 +7179,7 @@
 "p3_pyre_0"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7197,7 +7197,7 @@
 "p4_birch"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7215,7 +7215,7 @@
 "p0_np_fern"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7233,7 +7233,7 @@
 "p2_brazier_3"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7251,7 +7251,7 @@
 "p4_sp2"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7269,7 +7269,7 @@
 "p1_barrel"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7287,7 +7287,7 @@
 "p5_cage"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7305,7 +7305,7 @@
 "p1_wheel"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7323,7 +7323,7 @@
 "p2_rune_lantern"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7341,7 +7341,7 @@
 "p4_sp4"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7360,7 +7360,7 @@
 "p5_pages_1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7378,7 +7378,7 @@
 "p1_debris_fire_1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7396,7 +7396,7 @@
 "p4_wd7"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7414,7 +7414,7 @@
 "p4_wd6"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7432,7 +7432,7 @@
 "p3_roof_ridge"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7450,7 +7450,7 @@
 "p5_chest_open"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7468,7 +7468,7 @@
 "p4_sp1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7486,7 +7486,7 @@
 "p2_black_powder"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7504,7 +7504,7 @@
 "p5_pillar_a"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7522,7 +7522,7 @@
 "p4_wd3"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7540,7 +7540,7 @@
 "p3_roof_tile_gold"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7558,7 +7558,7 @@
 "p1_house_fire_3"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7576,7 +7576,7 @@
 "p1_debris_fire_0"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7594,7 +7594,7 @@
 "p5_ledgers"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7612,7 +7612,7 @@
 "p4_sp11"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7630,7 +7630,7 @@
 "p4_cz_fire_1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7648,7 +7648,7 @@
 "p3_roof_shack"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7666,7 +7666,7 @@
 "p4_axe_stump"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7684,7 +7684,7 @@
 "p3_rot_bloom_0"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7702,7 +7702,7 @@
 "p5_statue_b"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7720,7 +7720,7 @@
 "p2_sarcophagus"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7738,7 +7738,7 @@
 "p3_barrel"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7757,7 +7757,7 @@
 "p5_bench_b"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7775,7 +7775,7 @@
 "p5_rack"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7793,7 +7793,7 @@
 "p2_anvil"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7811,7 +7811,7 @@
 "p3_dead_horse"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7829,7 +7829,7 @@
 "p0_np_tall"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7847,7 +7847,7 @@
 "p5_book"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7865,7 +7865,7 @@
 "p1_debris_fire_2"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7883,7 +7883,7 @@
 "p4_wd8"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7901,7 +7901,7 @@
 "p4_cz_shrine"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7919,7 +7919,7 @@
 "p5_candelabra"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7937,7 +7937,7 @@
 "p4_standing_stone_lit"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7955,7 +7955,7 @@
 "p4_sp9"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7973,7 +7973,7 @@
 "p5_throne"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -7991,7 +7991,7 @@
 "p1_crow_post"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8009,7 +8009,7 @@
 "p4_cz_idol"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8027,7 +8027,7 @@
 "p5_keys"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8045,7 +8045,7 @@
 "p4_sp3"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8063,7 +8063,7 @@
 "p1_crypt_stairs"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8081,7 +8081,7 @@
 "p5_skull"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8099,7 +8099,7 @@
 "p3_gibbet"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8117,7 +8117,7 @@
 "p5_well"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8135,7 +8135,7 @@
 "p3_dead_tree"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8153,7 +8153,7 @@
 "p4_sp0"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8171,7 +8171,7 @@
 "p4_sp10"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8189,7 +8189,7 @@
 "p1_house_fire_2"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8207,7 +8207,7 @@
 "p5_cart"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8225,7 +8225,7 @@
 "p4_reeds"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8243,7 +8243,7 @@
 "p1_stocks"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8261,7 +8261,7 @@
 "p1_burnt_hay"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8279,7 +8279,7 @@
 "p3_roof_tile"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8297,7 +8297,7 @@
 "p4_wd2"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "rekwizyty",
 "pewnosc": "klucz"
@@ -8315,7 +8315,7 @@
 "wl_kuznia"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8333,7 +8333,25 @@
 "zl_walls"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
+],
+"kategoria": "tekstury",
+"pewnosc": "klucz"
+},
+{
+"plik": "assets/tekstury/0a4c828a9a8a4335b61c393e9b39be99b707b0e521bb8aa35829c5c24852ca8a.webp",
+"hash": "0a4c828a9a8a4335b61c393e9b39be99b707b0e521bb8aa35829c5c24852ca8a",
+"typ": "webp",
+"bajty": 92806,
+"wymiary": [
+1024,
+1024
+],
+"klucze": [
+"cc0_c5_archiwum"
+],
+"uzywa": [
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8351,7 +8369,7 @@
 "water_shallow"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8369,7 +8387,7 @@
 "cc0_mud"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8387,7 +8405,7 @@
 "rf_lupek"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8405,7 +8423,25 @@
 "cy_props"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
+],
+"kategoria": "tekstury",
+"pewnosc": "klucz"
+},
+{
+"plik": "assets/tekstury/1137e7e11a4e2b76131b04f222666de9766a8d39ddf5f48e36b2711d3872251d.webp",
+"hash": "1137e7e11a4e2b76131b04f222666de9766a8d39ddf5f48e36b2711d3872251d",
+"typ": "webp",
+"bajty": 122738,
+"wymiary": [
+1024,
+1024
+],
+"klucze": [
+"cc0_c5_skarbiec"
+],
+"uzywa": [
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8423,7 +8459,7 @@
 "zl_ground"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8441,7 +8477,7 @@
 "cc0_deski"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8459,7 +8495,7 @@
 "rf_goldm"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8477,7 +8513,25 @@
 "cc0_lava"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
+],
+"kategoria": "tekstury",
+"pewnosc": "klucz"
+},
+{
+"plik": "assets/tekstury/170cd05584d5545261a4b25f99caed3947eab61b200bb13f2d9a7a83dc6e4bea.webp",
+"hash": "170cd05584d5545261a4b25f99caed3947eab61b200bb13f2d9a7a83dc6e4bea",
+"typ": "webp",
+"bajty": 177760,
+"wymiary": [
+1024,
+1024
+],
+"klucze": [
+"cc0_c5_pieczec"
+],
+"uzywa": [
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8495,7 +8549,7 @@
 "cc0_mud"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8513,7 +8567,7 @@
 "cc0_ash"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8531,7 +8585,7 @@
 "wl_cap"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8549,7 +8603,7 @@
 "cz_ground"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8567,7 +8621,7 @@
 "zl_props"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8585,7 +8639,25 @@
 "wl_wieza"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
+],
+"kategoria": "tekstury",
+"pewnosc": "klucz"
+},
+{
+"plik": "assets/tekstury/2e878fe802ddc919b06239febbf25696f2d6b225d8d345b8fb4b1c70ae8a1e64.webp",
+"hash": "2e878fe802ddc919b06239febbf25696f2d6b225d8d345b8fb4b1c70ae8a1e64",
+"typ": "webp",
+"bajty": 252288,
+"wymiary": [
+1024,
+1024
+],
+"klucze": [
+"wl_c5_wew"
+],
+"uzywa": [
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8603,7 +8675,7 @@
 "cc0_dirt2"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8621,7 +8693,7 @@
 "cc0_leaves"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8639,7 +8711,25 @@
 "cc0_zl_street"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
+],
+"kategoria": "tekstury",
+"pewnosc": "klucz"
+},
+{
+"plik": "assets/tekstury/36dcaafdaeb0aee2d6c32586cb2aa975c3edeb01b0dd0e43437782005abb7982.webp",
+"hash": "36dcaafdaeb0aee2d6c32586cb2aa975c3edeb01b0dd0e43437782005abb7982",
+"typ": "webp",
+"bajty": 210170,
+"wymiary": [
+1024,
+1024
+],
+"klucze": [
+"cc0_c5_dziedziniec"
+],
+"uzywa": [
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8657,7 +8747,7 @@
 "cz_walls"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8675,7 +8765,25 @@
 "cc0_abyss"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
+],
+"kategoria": "tekstury",
+"pewnosc": "klucz"
+},
+{
+"plik": "assets/tekstury/413708ebc75f99bc1c8f9d983a2ff305b85d8daa7c3823383e0179e6c36e1cc7.webp",
+"hash": "413708ebc75f99bc1c8f9d983a2ff305b85d8daa7c3823383e0179e6c36e1cc7",
+"typ": "webp",
+"bajty": 272872,
+"wymiary": [
+1024,
+1024
+],
+"klucze": [
+"cc0_c5_loch"
+],
+"uzywa": [
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8693,7 +8801,25 @@
 "cc0_dirt3"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
+],
+"kategoria": "tekstury",
+"pewnosc": "klucz"
+},
+{
+"plik": "assets/tekstury/47faeec3cdf56d3396f2d2a65d12cd5dcda713e5579c9f000cb5626f8cfedcef.webp",
+"hash": "47faeec3cdf56d3396f2d2a65d12cd5dcda713e5579c9f000cb5626f8cfedcef",
+"typ": "webp",
+"bajty": 201902,
+"wymiary": [
+1024,
+1024
+],
+"klucze": [
+"cc0_c5_dywan"
+],
+"uzywa": [
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8711,7 +8837,7 @@
 "cy_npc"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8729,7 +8855,7 @@
 "cc0_ash"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8747,7 +8873,7 @@
 "ROOF_PNG"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8765,7 +8891,7 @@
 "wl_plank"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8783,7 +8909,7 @@
 "cc0_zl_place"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8801,7 +8927,7 @@
 "cc0_water"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8819,7 +8945,7 @@
 "cy_ground"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8837,7 +8963,7 @@
 "wl_fort"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8855,7 +8981,7 @@
 "cc0_cracks"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8873,7 +8999,7 @@
 "wl_chata"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8891,7 +9017,25 @@
 "wl_palecap"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
+],
+"kategoria": "tekstury",
+"pewnosc": "klucz"
+},
+{
+"plik": "assets/tekstury/6a8473e2df4b378604a87f965c084be32db0cb6990788ad4309e78f9ed30672e.webp",
+"hash": "6a8473e2df4b378604a87f965c084be32db0cb6990788ad4309e78f9ed30672e",
+"typ": "webp",
+"bajty": 95270,
+"wymiary": [
+1024,
+1024
+],
+"klucze": [
+"cc0_c5_atrament"
+],
+"uzywa": [
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8909,7 +9053,7 @@
 "cc0_moss1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8927,7 +9071,7 @@
 "br_ground"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8945,7 +9089,7 @@
 "wl_win"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8963,7 +9107,7 @@
 "cc0_dirt3"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8981,7 +9125,7 @@
 "cc0_zl_place"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -8999,7 +9143,7 @@
 "cc0_cracks"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9017,7 +9161,7 @@
 "cc0_zl_moss"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9035,7 +9179,7 @@
 "cc0_darkrock"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9053,7 +9197,7 @@
 "dm_floor"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9071,7 +9215,7 @@
 "cc0_ground1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9089,7 +9233,7 @@
 "wl_urwisko"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9107,7 +9251,7 @@
 "wl_obozpal"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9125,7 +9269,7 @@
 "wl_dolina"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9143,7 +9287,7 @@
 "wl_halacap"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9161,7 +9305,7 @@
 "ford_stones"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9179,7 +9323,25 @@
 "zl_en_b"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
+],
+"kategoria": "tekstury",
+"pewnosc": "klucz"
+},
+{
+"plik": "assets/tekstury/99ba7118244ae7415672ab2a6c04387a985502be55bf1c6212949b0e7c79d5e3.webp",
+"hash": "99ba7118244ae7415672ab2a6c04387a985502be55bf1c6212949b0e7c79d5e3",
+"typ": "webp",
+"bajty": 303226,
+"wymiary": [
+1024,
+1024
+],
+"klucze": [
+"wl_c5_mur"
+],
+"uzywa": [
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9197,7 +9359,7 @@
 "cc0_charcoal"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9215,7 +9377,25 @@
 "cz_npc"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
+],
+"kategoria": "tekstury",
+"pewnosc": "klucz"
+},
+{
+"plik": "assets/tekstury/9e564b479c14414889bdba1c16f2761b3ff40c958c057b779a0e69362142db1f.webp",
+"hash": "9e564b479c14414889bdba1c16f2761b3ff40c958c057b779a0e69362142db1f",
+"typ": "webp",
+"bajty": 108476,
+"wymiary": [
+1024,
+1024
+],
+"klucze": [
+"cc0_c5_marmur"
+],
+"uzywa": [
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9233,7 +9413,7 @@
 "dm_walls"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9251,7 +9431,7 @@
 "cc0_ground1"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9269,7 +9449,7 @@
 "cy_big"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9287,7 +9467,7 @@
 "wl_town"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9305,7 +9485,7 @@
 "cc0_forestmoss"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9323,7 +9503,7 @@
 "wl_kolumna"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9341,7 +9521,7 @@
 "cc0_charcoal"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9359,7 +9539,7 @@
 "cy_walls"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9377,7 +9557,7 @@
 "cz_props"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9395,7 +9575,7 @@
 "br_walls"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9413,7 +9593,7 @@
 "cc0_ground2"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9431,7 +9611,7 @@
 "wl_palisada"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9449,7 +9629,7 @@
 "rf_gold"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9467,7 +9647,7 @@
 "wl_hala"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9485,7 +9665,7 @@
 "cc0_leaves"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9503,7 +9683,7 @@
 "cc0_zl_street"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9521,7 +9701,7 @@
 "cc0_dirt2"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9539,7 +9719,7 @@
 "cc0_darkrock"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9557,7 +9737,7 @@
 "dm_props"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9575,7 +9755,7 @@
 "cc0_forestmoss"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9593,7 +9773,7 @@
 "cc0_deski"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9611,7 +9791,7 @@
 "cc0_moss1"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9629,7 +9809,7 @@
 "cz_trees"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9647,7 +9827,7 @@
 "cc0_ground2"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9665,7 +9845,7 @@
 "wl_lasu"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9683,7 +9863,7 @@
 "cc0_blackrock"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9701,7 +9881,7 @@
 "br_props"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9719,7 +9899,7 @@
 "cc0_blackrock"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9737,7 +9917,7 @@
 "wl_kopalnia"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9755,7 +9935,7 @@
 "cc0_zl_moss"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tekstury",
 "pewnosc": "klucz"
@@ -9781,7 +9961,7 @@
 "intro2_fallback"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -9799,7 +9979,7 @@
 "rozdzial-5-mini"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -9817,7 +9997,7 @@
 "ENDING_IMG_FB"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -9835,7 +10015,7 @@
 "intro1_fallback"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -9853,7 +10033,7 @@
 "rozdzial-5"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -9871,7 +10051,7 @@
 "intro2"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -9889,7 +10069,7 @@
 "rozdzial-2-mini"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -9907,7 +10087,7 @@
 "intro5_fallback"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -9925,7 +10105,7 @@
 "rozdzial-1"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -9943,7 +10123,7 @@
 "intro5"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -9957,7 +10137,7 @@
 "ENDING_IMG"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -9972,7 +10152,7 @@
 853
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "recznie"
@@ -9990,7 +10170,7 @@
 "rozdzial-2"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -10008,7 +10188,7 @@
 "chmury"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -10026,7 +10206,7 @@
 "intro1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -10041,7 +10221,7 @@
 941
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "recznie"
@@ -10059,7 +10239,7 @@
 "rozdzial-1-mini"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -10077,7 +10257,7 @@
 "rozdzial-4-mini"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -10095,7 +10275,7 @@
 "intro4_fallback"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -10113,7 +10293,7 @@
 "rozdzial-3"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -10131,7 +10311,7 @@
 "intro3"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -10149,7 +10329,7 @@
 "intro4"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -10167,7 +10347,7 @@
 "intro3_fallback"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -10185,7 +10365,7 @@
 "rozdzial-4"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -10203,7 +10383,7 @@
 "rozdzial-3-mini"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "tla",
 "pewnosc": "klucz"
@@ -10218,7 +10398,7 @@
 36
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10251,7 +10431,7 @@
 1100
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10266,7 +10446,7 @@
 58
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10281,7 +10461,7 @@
 478
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10299,7 +10479,7 @@
 "ramka-karta"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -10314,7 +10494,7 @@
 512
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10329,7 +10509,7 @@
 181
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10344,7 +10524,7 @@
 117
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10359,7 +10539,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10374,7 +10554,7 @@
 611
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10389,7 +10569,7 @@
 59
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10404,7 +10584,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10419,7 +10599,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10434,7 +10614,7 @@
 17
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10449,7 +10629,7 @@
 290
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10464,7 +10644,7 @@
 732
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10479,7 +10659,7 @@
 660
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10497,7 +10677,7 @@
 "heads"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -10512,7 +10692,7 @@
 72
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10527,7 +10707,7 @@
 54
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10545,7 +10725,7 @@
 "glass"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -10560,7 +10740,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10575,7 +10755,7 @@
 113
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10590,7 +10770,7 @@
 72
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10605,7 +10785,7 @@
 98
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10620,7 +10800,7 @@
 941
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "recznie"
@@ -10635,7 +10815,7 @@
 156
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10650,7 +10830,7 @@
 471
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10665,7 +10845,7 @@
 502
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10680,7 +10860,7 @@
 275
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10695,7 +10875,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10710,7 +10890,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10725,7 +10905,7 @@
 512
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10740,7 +10920,7 @@
 424
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10755,7 +10935,7 @@
 57
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10773,7 +10953,7 @@
 "idle"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -10788,7 +10968,7 @@
 325
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10803,7 +10983,7 @@
 424
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10821,7 +11001,7 @@
 "portret-kat"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -10839,7 +11019,7 @@
 "panel"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -10854,23 +11034,7 @@
 614
 ],
 "uzywa": [
-"css:315a950d"
-],
-"kategoria": "ui",
-"pewnosc": "css"
-},
-{
-"plik": "assets/ui/30ad16f5e6d855a7f89bfb3d4cd4585c5a811bacca366f2347db73519efa3f0a.webp",
-"hash": "30ad16f5e6d855a7f89bfb3d4cd4585c5a811bacca366f2347db73519efa3f0a",
-"typ": "webp",
-"bajty": 331346,
-"wymiary": [
-1200,
-378
-],
-"uzywa": [
-"css:315a950d",
-"js:61e521d7"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10888,7 +11052,7 @@
 "ramka-okno"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -10906,7 +11070,7 @@
 "menu"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -10921,7 +11085,7 @@
 62
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10936,7 +11100,7 @@
 252
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10951,7 +11115,7 @@
 592
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10966,7 +11130,7 @@
 319
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -10984,7 +11148,7 @@
 "slot"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11002,7 +11166,7 @@
 "portret-zabojczyni"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11017,7 +11181,7 @@
 235
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11032,7 +11196,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11050,7 +11214,7 @@
 "tryby-arcade"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11065,7 +11229,7 @@
 72
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11083,7 +11247,7 @@
 "portret-zabojczyni"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11098,7 +11262,7 @@
 424
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11116,7 +11280,7 @@
 "przycisk-zwykly"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11131,7 +11295,7 @@
 30
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11146,7 +11310,7 @@
 238
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "recznie"
@@ -11161,7 +11325,7 @@
 512
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11176,7 +11340,7 @@
 1135
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11191,7 +11355,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11206,7 +11370,7 @@
 737
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11221,7 +11385,7 @@
 30
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11236,7 +11400,7 @@
 153
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11251,7 +11415,7 @@
 44
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11266,7 +11430,7 @@
 110
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11281,7 +11445,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11296,7 +11460,7 @@
 41
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11311,7 +11475,7 @@
 256
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11326,7 +11490,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11341,7 +11505,7 @@
 68
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11356,7 +11520,7 @@
 107
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11374,7 +11538,7 @@
 "portret-kat"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11389,7 +11553,7 @@
 20
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11407,7 +11571,7 @@
 "portret-dzwonnik"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11422,7 +11586,7 @@
 261
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11440,7 +11604,7 @@
 "portret-rycerz"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11458,7 +11622,7 @@
 "obrecz"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11473,7 +11637,7 @@
 194
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11488,7 +11652,7 @@
 192
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11503,7 +11667,7 @@
 90
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11518,7 +11682,7 @@
 166
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11536,7 +11700,7 @@
 "map"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11550,7 +11714,7 @@
 "ziarno"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11565,7 +11729,7 @@
 577
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11583,7 +11747,7 @@
 "flow"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11598,7 +11762,7 @@
 107
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11616,10 +11780,26 @@
 "tryby-fabula"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
+},
+{
+"plik": "assets/ui/702ff214967aa716ea2d0daa9f67099929b12d3a46f35dad3e3ca018d13feb1a.webp",
+"hash": "702ff214967aa716ea2d0daa9f67099929b12d3a46f35dad3e3ca018d13feb1a",
+"typ": "webp",
+"bajty": 160328,
+"wymiary": [
+1600,
+533
+],
+"uzywa": [
+"css:4fdc59cb",
+"js:a6589730"
+],
+"kategoria": "ui",
+"pewnosc": "css"
 },
 {
 "plik": "assets/ui/71e68ab77bf8dcf5fdc22fa605b702b7201f65a4cd84d2ac0b584fb0500dfdf5.webp",
@@ -11631,7 +11811,7 @@
 424
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11646,7 +11826,7 @@
 574
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11661,7 +11841,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11676,7 +11856,7 @@
 19
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11691,7 +11871,7 @@
 54
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11706,7 +11886,7 @@
 576
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11721,7 +11901,7 @@
 172
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11736,7 +11916,7 @@
 94
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11754,7 +11934,7 @@
 "ramka-komunikat"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11769,7 +11949,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11787,7 +11967,7 @@
 "rail"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -11802,7 +11982,7 @@
 540
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11817,7 +11997,7 @@
 68
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11832,7 +12012,7 @@
 556
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11847,7 +12027,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11862,7 +12042,7 @@
 88
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11877,7 +12057,7 @@
 120
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11892,7 +12072,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11907,7 +12087,7 @@
 139
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11922,7 +12102,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11937,7 +12117,7 @@
 147
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11952,7 +12132,7 @@
 256
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11967,7 +12147,7 @@
 112
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11982,7 +12162,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -11997,7 +12177,7 @@
 941
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "recznie"
@@ -12012,7 +12192,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12027,7 +12207,7 @@
 471
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12042,7 +12222,7 @@
 94
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12057,7 +12237,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12075,7 +12255,7 @@
 "portret-rycerz"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -12090,7 +12270,7 @@
 800
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12108,7 +12288,7 @@
 "rama"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -12123,7 +12303,7 @@
 470
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12138,7 +12318,7 @@
 235
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12153,7 +12333,7 @@
 72
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12168,7 +12348,7 @@
 48
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12183,7 +12363,7 @@
 555
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12198,7 +12378,7 @@
 26
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12213,7 +12393,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12228,7 +12408,7 @@
 80
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12243,7 +12423,7 @@
 26
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12258,7 +12438,7 @@
 248
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12273,7 +12453,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12291,7 +12471,7 @@
 "clock"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -12309,7 +12489,7 @@
 "divider"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -12324,7 +12504,7 @@
 54
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12339,7 +12519,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12354,7 +12534,7 @@
 614
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12369,7 +12549,7 @@
 192
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12384,7 +12564,7 @@
 501
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12399,7 +12579,7 @@
 57
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12414,7 +12594,7 @@
 192
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12432,7 +12612,7 @@
 "orb"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -12447,7 +12627,7 @@
 512
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12462,7 +12642,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12477,7 +12657,7 @@
 561
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12492,7 +12672,7 @@
 121
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12507,7 +12687,7 @@
 85
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12522,7 +12702,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12537,7 +12717,7 @@
 192
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12552,7 +12732,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12585,7 +12765,7 @@
 72
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12600,7 +12780,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12615,7 +12795,7 @@
 415
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12630,7 +12810,7 @@
 724
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "recznie"
@@ -12648,7 +12828,7 @@
 "selected"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -12666,7 +12846,7 @@
 "nawigacja-podroz"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -12681,7 +12861,7 @@
 628
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12696,7 +12876,7 @@
 591
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12711,7 +12891,7 @@
 488
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12726,7 +12906,7 @@
 88
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12741,7 +12921,7 @@
 941
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "recznie"
@@ -12756,7 +12936,7 @@
 166
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12771,7 +12951,7 @@
 114
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12786,7 +12966,7 @@
 473
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12801,7 +12981,7 @@
 26
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12819,7 +12999,7 @@
 "nawigacja-kronika"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -12834,7 +13014,7 @@
 72
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12849,7 +13029,7 @@
 136
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12864,7 +13044,7 @@
 112
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12879,7 +13059,7 @@
 192
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12894,7 +13074,7 @@
 212
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12909,7 +13089,7 @@
 471
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12924,7 +13104,7 @@
 162
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12939,7 +13119,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12954,7 +13134,7 @@
 120
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12969,7 +13149,7 @@
 102
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -12987,7 +13167,7 @@
 "nawigacja-opcje"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -13002,7 +13182,7 @@
 190
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13017,7 +13197,7 @@
 68
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13032,7 +13212,7 @@
 941
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "recznie"
@@ -13047,7 +13227,7 @@
 20
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13062,7 +13242,7 @@
 424
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13077,7 +13257,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13092,7 +13272,7 @@
 256
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13107,7 +13287,7 @@
 192
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13122,7 +13302,7 @@
 114
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13137,7 +13317,7 @@
 113
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13152,7 +13332,7 @@
 72
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13167,7 +13347,7 @@
 192
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13182,7 +13362,7 @@
 113
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13197,7 +13377,7 @@
 365
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13212,7 +13392,7 @@
 32
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13227,7 +13407,7 @@
 192
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13245,7 +13425,7 @@
 "src"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "recznie"
@@ -13260,7 +13440,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13275,7 +13455,7 @@
 470
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13290,7 +13470,7 @@
 62
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13308,7 +13488,7 @@
 "portret-woskownica"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -13323,7 +13503,7 @@
 111
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13338,7 +13518,7 @@
 113
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13353,7 +13533,7 @@
 357
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13368,7 +13548,7 @@
 94
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13383,7 +13563,7 @@
 128
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13401,7 +13581,7 @@
 "play"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "ui",
 "pewnosc": "klucz"
@@ -13416,7 +13596,7 @@
 44
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13431,7 +13611,7 @@
 44
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13446,7 +13626,7 @@
 209
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13461,7 +13641,7 @@
 174
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13476,7 +13656,7 @@
 478
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13491,7 +13671,7 @@
 789
 ],
 "uzywa": [
-"css:315a950d"
+"css:4fdc59cb"
 ],
 "kategoria": "ui",
 "pewnosc": "css"
@@ -13509,7 +13689,7 @@
 "village_undead"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13527,7 +13707,7 @@
 "mob_hound"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13545,7 +13725,7 @@
 "golem_a"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13563,7 +13743,7 @@
 "boss_zrost"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13581,7 +13761,7 @@
 "mob_possessed"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13599,7 +13779,7 @@
 "morhad"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13617,7 +13797,7 @@
 "mob_executioner"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13635,7 +13815,7 @@
 "mob_zmora"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13653,7 +13833,7 @@
 "mob_guard"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13671,7 +13851,7 @@
 "pani_lasu"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13689,7 +13869,7 @@
 "mob_wolf"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13707,7 +13887,7 @@
 "mob_drowner"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13725,7 +13905,7 @@
 "mob_bies"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13743,7 +13923,7 @@
 "mob_gravedigger"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13761,7 +13941,7 @@
 "mob_rotknight"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13779,7 +13959,7 @@
 "mob_strzygon"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13797,7 +13977,7 @@
 "mob_goat"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13815,7 +13995,7 @@
 "wierz2"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13833,7 +14013,7 @@
 "mob_shieldman"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13851,7 +14031,7 @@
 "strzyga_b"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13869,7 +14049,7 @@
 "mob_warden"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13887,7 +14067,7 @@
 "mob_condemned"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13905,7 +14085,7 @@
 "mob_marauder"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13923,7 +14103,7 @@
 "src"
 ],
 "uzywa": [
-"js:61e521d7"
+"js:a6589730"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "recznie"
@@ -13941,7 +14121,7 @@
 "mob_scribe"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13959,7 +14139,7 @@
 "mob_bookgolem"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13977,7 +14157,7 @@
 "mob_dwarf"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -13995,7 +14175,7 @@
 "mob_judge"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14013,7 +14193,7 @@
 "mob_courtraven"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14031,7 +14211,7 @@
 "mob_madman"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14049,7 +14229,7 @@
 "mob_wraith"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14067,7 +14247,7 @@
 "mob_wisp"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14085,7 +14265,7 @@
 "mob_ghoul"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14103,7 +14283,7 @@
 "mob_knight"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14121,7 +14301,7 @@
 "golem_b"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14139,7 +14319,7 @@
 "mob_paperrat"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14157,7 +14337,7 @@
 "collector"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14175,7 +14355,7 @@
 "mob_wight"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14193,7 +14373,7 @@
 "mob_militia"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14211,7 +14391,7 @@
 "rachm"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14229,7 +14409,7 @@
 "strzyga"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14247,7 +14427,7 @@
 "cumlin_fx"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14265,7 +14445,7 @@
 "mob_glizzard"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14283,7 +14463,7 @@
 "order_deep_dead"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14301,7 +14481,7 @@
 "leszy"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14319,7 +14499,7 @@
 "mob_cursed"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14337,7 +14517,7 @@
 "cumlin"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14355,7 +14535,7 @@
 "wierz1"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14373,7 +14553,7 @@
 "mob_debtor"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14391,7 +14571,7 @@
 "mob_bandit"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14409,7 +14589,7 @@
 "mob_bat"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14427,7 +14607,7 @@
 "mob_arbiter"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14445,7 +14625,7 @@
 "mob_xbow"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"
@@ -14463,7 +14643,7 @@
 "mob_glz_fx"
 ],
 "uzywa": [
-"js:7a9053f6"
+"js:ac327114"
 ],
 "kategoria": "wrogowie",
 "pewnosc": "klucz"

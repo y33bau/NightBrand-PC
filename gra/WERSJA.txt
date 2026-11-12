@@ -713,3 +713,4 @@ cache635 · Usuniety JAK_ZAINSTALOWAC.txt (instrukcja iPhone/iPad, nie dotyczy w
 cache636 · Rozdz. III: zniknely pomaranczowe prostokaty na ziemi po smierci szalenca i zgnilego rycerza (13_wrogowie.js); sprawdzono start rozdz. III, nie sprawdzono wygladu po zabiciu w grze
 cache637 · Nowe logo NightBrand (menu i ekran jezyka); sprawdzono start, nie sprawdzono wygladu w grze
 cache638 · Akt I: dachy chat ze zwęglonych gontów (p1_roof_burnt) zamiast niebieskiego łupka rf_lupek; nie sprawdzono wyglądu w grze
+cache639 · Rozdz. V: siedziba zakonu - nowe podlogi dla kazdej sali (dziedziniec, marmur, archiwum, dywan, skarbiec, loch, pieczec, atrament) i nowe sciany (mur zewnetrzny, sciany sal) od autora; bez zmian ukladu i kolizji

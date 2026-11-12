@@ -4,6 +4,16 @@ addEventListener('error',ev=>{try{const p=document.getElementById('fenix-load'),
 
 // Shared atlas dependencies: CC0_FLOORS, buildDungeon/build* and buildAnims. Intro remains on demand.
 const SPRITE_GROUPS={
+  "cc0_c5_archiwum": ["r5"],
+  "cc0_c5_atrament": ["r5"],
+  "cc0_c5_dywan": ["r5"],
+  "cc0_c5_dziedziniec": ["r5"],
+  "cc0_c5_loch": ["r5"],
+  "cc0_c5_marmur": ["r5"],
+  "cc0_c5_pieczec": ["r5"],
+  "cc0_c5_skarbiec": ["r5"],
+  "wl_c5_mur": ["r5"],
+  "wl_c5_wew": ["r5"],
   "p1_shop_sign": ["core"],
   "p4_drowned_cart": ["r4"],
   "p4_cz_walk": ["r4"],

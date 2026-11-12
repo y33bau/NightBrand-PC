@@ -335,16 +335,16 @@ function buildCytadela(I){planGround(5);
     if(t===21||t===78||t===80){fg.fillStyle='rgba(3,3,6,.55)';fg.fillRect(tx*16,ty*16,16,16)}}
   floorAO(fg,new Set([31,22,27]));
   groundDetails(fg);
-  const floor=new THREE.Mesh(floorGeo,groundMaterial(phong({map:surfaceTex(fc),alphaTest:.5,color:0x9a949c})));floor.position.set(MW/2,0,MH/2);floor.receiveShadow=true;ROOT.add(floor);
+  const floor=new THREE.Mesh(floorGeo,groundMaterial(phong({map:surfaceTex(fc),alphaTest:.5,color:0x9e9c9a})));floor.position.set(MW/2,0,MH/2);floor.receiveShadow=true;ROOT.add(floor);
   // walls: every hall has its own face (r0 fortress stone, r1 bookcases, r2 black marble, r4 vault plates, r3 bars), roof caps from r6
   const box=h=>{const g=new THREE.BoxGeometry(1,h,1);g.translate(0,h/2,0);return g};
   const rc=()=>(r()*8)|0;
-  const addWalls=(list,h,row,tint=0xffffff,plain)=>{if(!list.length)return;const side=I.wl_fort&&!plain?worldSurf(cutaway(phong({color:tint})),I.wl_fort,4,'a'):cutaway(phong({map:stackTex(WL,[[rc(),row],[rc(),row],[rc(),row]]),color:tint})),cap=I.wl_cap&&!plain?worldSurf(cutaway(phong({color:tint})),I.wl_cap,3,'a'):cutaway(phong({map:texFrom(tcut(WL,rc(),6),true),color:tint}));instanced(depthWall(box(h),side,5),[side,side,cap,cap,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5)).frustumCulled=false};
+  const addWalls=(list,h,row,tint=0xffffff,plain,img)=>{if(!list.length)return;const wim=img||I.wl_fort;const side=wim&&!plain?worldSurf(cutaway(phong({color:tint})),wim,4,'a'):cutaway(phong({map:stackTex(WL,[[rc(),row],[rc(),row],[rc(),row]]),color:tint})),cap=I.wl_cap&&!plain?worldSurf(cutaway(phong({color:tint})),I.wl_cap,3,'a'):cutaway(phong({map:texFrom(tcut(WL,rc(),6),true),color:tint}));instanced(depthWall(box(h),side,5),[side,side,cap,cap,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5)).frustumCulled=false};
   const WROW={dziedziniec:0,kancelaria:1,sala:2,skarbiec:4,krypta:0,tron:2};
   const rim=[[],[]],bars=[],inner={};
   for(const [x,y,t] of walls){if(t===80)bars.push([x,y]);else if(t===21)rim[(x+y)&1].push([x,y]);else{const k=W.region(x,y);(inner[k]=inner[k]||[[],[]])[(x+y)&1].push([x,y])}}
-  rim.forEach(l=>addWalls(l,4.4,0,0x8a8890));
-  for(const k in inner)inner[k].forEach(l=>addWalls(l,3.4,WROW[k]));
+  rim.forEach(l=>addWalls(l,4.4,0,I.wl_c5_mur?0xd8d6d4:0x8a8890,false,I.wl_c5_mur)); // 13.11.2026: granitowy mur zakonu
+  for(const k in inner)inner[k].forEach(l=>addWalls(l,3.4,WROW[k],0xffffff,false,I.wl_c5_wew));
   addWalls(bars,2.2,3,0xffffff,true); // 12.11.2026: kraty z wlasna tekstura krat (wczesniej kamienny slup)
   const R={brazier_0:[0,0,32,32],brazier_1:[32,0,32,32],brazier_2:[64,0,32,32],brazier_3:[96,0,32,32],king_statue:[0,32,32,64],healing_shrine:[32,64,32,32],depleted_shrine:[64,64,32,32],chains:[96,64,32,32],
     fallen_pillar:[0,96,64,32],dwarf_bones:[64,96,32,32],sarcophagus:[0,160,32,32],rune_lantern:[32,160,32,32],clan_banner:[96,160,32,32]};

@@ -4,6 +4,16 @@ addEventListener('error',ev=>{try{const p=document.getElementById('fenix-load'),
 
 // Shared atlas dependencies: CC0_FLOORS, buildDungeon/build* and buildAnims. Intro remains on demand.
 const SPRITE_GROUPS={
+  "cc0_c5_archiwum": ["r5"],
+  "cc0_c5_atrament": ["r5"],
+  "cc0_c5_dywan": ["r5"],
+  "cc0_c5_dziedziniec": ["r5"],
+  "cc0_c5_loch": ["r5"],
+  "cc0_c5_marmur": ["r5"],
+  "cc0_c5_pieczec": ["r5"],
+  "cc0_c5_skarbiec": ["r5"],
+  "wl_c5_mur": ["r5"],
+  "wl_c5_wew": ["r5"],
   "p1_shop_sign": ["core"],
   "p4_drowned_cart": ["r4"],
   "p4_cz_walk": ["r4"],
@@ -1329,7 +1339,7 @@ const MAP1_FLOOR=["0000000000000000000000000000000000000000000000000000000000000
 const MAP1_SHALLOW=[[27,4],[27,5],[27,6],[27,7],[27,8],[27,9],[27,10],[27,11],[27,12],[27,13],[27,14],[27,15],[27,16],[27,17],[27,18],[27,19],[27,20],[27,21],[27,22],[27,23],[27,24],[27,25],[28,25],[27,26],[28,26],[29,26],[30,26],[31,26],[32,26],[28,27],[29,27],[30,27],[31,27],[32,27],[41,27],[42,27],[29,28],[30,28],[31,31],[32,31]];
 const MAP1_HOUSE=[[56,58],[57,58],[58,58],[59,58],[60,58],[61,58],[62,58],[56,59],[62,59],[56,60],[62,60],[56,61],[62,61],[56,62],[62,62],[56,63],[57,63],[61,63],[62,63]];
 const MAP1_CROSS=[[70,31],[70,32],[70,33],[71,31],[71,32],[71,33],[72,31],[72,32],[72,33],[73,31],[73,32],[74,31],[74,32],[74,33],[75,31],[75,32],[75,33],[76,31],[76,32],[76,33]],MAP1_TOMB=[[73,33]],MAP1_FERNS=[[69,30],[69,31],[69,32],[69,33],[70,30],[71,30],[72,30],[73,30],[74,30],[75,30],[76,30],[77,30],[77,31],[77,32],[77,33]];
-const CC0_FLOORS={1:{names:['dirt2','cracks','charcoal','ground1','ash','moss1','lava','deski'],tint:[1,.97,.92]},2:{names:['ground1','blackrock','charcoal'],tint:[.84,.88,.96]},3:{names:['zl_place','zl_street','zl_moss'],tint:[1,.96,.88]},4:{names:['mud','dirt3','leaves','darkrock','forestmoss'],tint:[.9,.96,.88]},5:{names:['ground2','blackrock','ground1'],tint:[.8,.8,.86]},9:{names:['ground2','ground1'],tint:[.73,.75,.81]}};
+const CC0_FLOORS={1:{names:['dirt2','cracks','charcoal','ground1','ash','moss1','lava','deski'],tint:[1,.97,.92]},2:{names:['ground1','blackrock','charcoal'],tint:[.84,.88,.96]},3:{names:['zl_place','zl_street','zl_moss'],tint:[1,.96,.88]},4:{names:['mud','dirt3','leaves','darkrock','forestmoss'],tint:[.9,.96,.88]},5:{names:['c5_dziedziniec','c5_marmur','c5_archiwum','c5_skarbiec','c5_loch','c5_pieczec','c5_atrament','c5_dywan'],tint:[.86,.84,.83]},9:{names:['ground2','ground1'],tint:[.73,.75,.81]}};
 function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan;if(!plan)return cells;
  const burns=W.PROPS.filter(p=>p.fire||/debris_fire|burnt_hay|furnace|brazier/.test(p.k||''));
  // extra CC0 floors (folder 'skille claude'): ash around the burned houses, moss patches, mossy cobbles in the slums, moss in the forest
@@ -1344,8 +1354,7 @@ function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan
   if(ch===3&&![1,4].includes(row))id=plan.road[i]||row===3?1:0;
   if(ch===3&&id>=0&&W.region(x,y)==='slums'&&(nz(x,y)>.4&&tileAt(x,y)!==54))id=2; // 12.11.2026: bez ciemnych kwadratow wokol mazi
   if(ch===4&&![4,5,7].includes(row)){const r=W.region(x,y);id=r==='camp'?0:row===1?1:(r==='hill'||r==='stones')?3:r==='forest'?2:0;if(id===2&&nz(x,y)>.6)id=4;}
-  if(ch===5&&![3,4,6,7].includes(row))id=row===2||row===1?2:row===5?1:0;
-  if(ch===5&&id===0){const rg=W.region(x,y);if(rg==='dziedziniec'&&(plan.road[i]||Math.hypot((x-MP(40))*.8,y-MP(62))<5.2+.8*nz(x,y)))id=2;else if(rg==='krypta'&&nz(x*1.4,y*1.4)>.9)id=1;} // 12.11.2026: kamienne drogi i plac na dziedzincu, czarna skala w krypcie // 12.11.2026: sale (sadowa, skarbiec, tron) maja kamienne plyty zamiast klepiska; posadzki jasniejsze
+  if(ch===5)id=IMGS.cc0_c5_dziedziniec?(()=>{let t=tileAt(x,y);if(t===31||t===27||t===22)t=W.under[i];return t===73?7:t===76?5:t===77?6:({dziedziniec:0,kancelaria:2,sala:1,skarbiec:3,krypta:4,tron:1})[W.region(x,y)]??0})():(![3,4,6,7].includes(row)?(row===2||row===1?2:row===5?1:0):-1); // 13.11.2026: siedziba zakonu, osobna podloga dla kazdej sali (70 dziedziniec,71 marmur,72 archiwum,73 dywan,74 skarbiec,75 loch,76 pieczec,77 atrament)
   if(ch===9&&![1,5,7].includes(row))id=row===2?1:0;
   if(ch===1){let X=x,Y=y;if(map[i]===45||map[i]===90){let b=99;for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const u=x+dx,v=y+dy,k=v*MW+u;if(u<0||v<0||u>=MW||v>=MH||map[k]===45||map[k]===90)continue;const d=dx*dx+dy*dy;if(d<b){b=d;X=u;Y=v}}}const v=MAP1_FLOOR[Y].charCodeAt(X)-48;if(v!==0||id>=0)id=v} // 12.11.2026: pod woda ta sama posadzka co na najblizszym brzegu
   if(id>capId)id=ch===4?2:0;
@@ -2063,16 +2072,16 @@ function buildCytadela(I){planGround(5);
     if(t===21||t===78||t===80){fg.fillStyle='rgba(3,3,6,.55)';fg.fillRect(tx*16,ty*16,16,16)}}
   floorAO(fg,new Set([31,22,27]));
   groundDetails(fg);
-  const floor=new THREE.Mesh(floorGeo,groundMaterial(phong({map:surfaceTex(fc),alphaTest:.5,color:0x9a949c})));floor.position.set(MW/2,0,MH/2);floor.receiveShadow=true;ROOT.add(floor);
+  const floor=new THREE.Mesh(floorGeo,groundMaterial(phong({map:surfaceTex(fc),alphaTest:.5,color:0x9e9c9a})));floor.position.set(MW/2,0,MH/2);floor.receiveShadow=true;ROOT.add(floor);
   // walls: every hall has its own face (r0 fortress stone, r1 bookcases, r2 black marble, r4 vault plates, r3 bars), roof caps from r6
   const box=h=>{const g=new THREE.BoxGeometry(1,h,1);g.translate(0,h/2,0);return g};
   const rc=()=>(r()*8)|0;
-  const addWalls=(list,h,row,tint=0xffffff,plain)=>{if(!list.length)return;const side=I.wl_fort&&!plain?worldSurf(cutaway(phong({color:tint})),I.wl_fort,4,'a'):cutaway(phong({map:stackTex(WL,[[rc(),row],[rc(),row],[rc(),row]]),color:tint})),cap=I.wl_cap&&!plain?worldSurf(cutaway(phong({color:tint})),I.wl_cap,3,'a'):cutaway(phong({map:texFrom(tcut(WL,rc(),6),true),color:tint}));instanced(depthWall(box(h),side,5),[side,side,cap,cap,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5)).frustumCulled=false};
+  const addWalls=(list,h,row,tint=0xffffff,plain,img)=>{if(!list.length)return;const wim=img||I.wl_fort;const side=wim&&!plain?worldSurf(cutaway(phong({color:tint})),wim,4,'a'):cutaway(phong({map:stackTex(WL,[[rc(),row],[rc(),row],[rc(),row]]),color:tint})),cap=I.wl_cap&&!plain?worldSurf(cutaway(phong({color:tint})),I.wl_cap,3,'a'):cutaway(phong({map:texFrom(tcut(WL,rc(),6),true),color:tint}));instanced(depthWall(box(h),side,5),[side,side,cap,cap,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5)).frustumCulled=false};
   const WROW={dziedziniec:0,kancelaria:1,sala:2,skarbiec:4,krypta:0,tron:2};
   const rim=[[],[]],bars=[],inner={};
   for(const [x,y,t] of walls){if(t===80)bars.push([x,y]);else if(t===21)rim[(x+y)&1].push([x,y]);else{const k=W.region(x,y);(inner[k]=inner[k]||[[],[]])[(x+y)&1].push([x,y])}}
-  rim.forEach(l=>addWalls(l,4.4,0,0x8a8890));
-  for(const k in inner)inner[k].forEach(l=>addWalls(l,3.4,WROW[k]));
+  rim.forEach(l=>addWalls(l,4.4,0,I.wl_c5_mur?0xd8d6d4:0x8a8890,false,I.wl_c5_mur)); // 13.11.2026: granitowy mur zakonu
+  for(const k in inner)inner[k].forEach(l=>addWalls(l,3.4,WROW[k],0xffffff,false,I.wl_c5_wew));
   addWalls(bars,2.2,3,0xffffff,true); // 12.11.2026: kraty z wlasna tekstura krat (wczesniej kamienny slup)
   const R={brazier_0:[0,0,32,32],brazier_1:[32,0,32,32],brazier_2:[64,0,32,32],brazier_3:[96,0,32,32],king_statue:[0,32,32,64],healing_shrine:[32,64,32,32],depleted_shrine:[64,64,32,32],chains:[96,64,32,32],
     fallen_pillar:[0,96,64,32],dwarf_bones:[64,96,32,32],sarcophagus:[0,160,32,32],rune_lantern:[32,160,32,32],clan_banner:[96,160,32,32]};
