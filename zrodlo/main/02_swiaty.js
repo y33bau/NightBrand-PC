@@ -152,7 +152,7 @@ function genBrzeznica(){
           {id:'marga',art:'marga',name:(EN?'Marga, the Bone Trader':'Marga, handlarka kości'),x:54.9*TS,y:21.1*TS,lines:MARGA_LINES},
           {id:'wit',art:'wit',name:(EN?'Brother Wit, Prisoner in the Stocks':'Brat Wit, więzień w dybach'),x:14.5*TS,y:30.92*TS,lines:WIT_LINES,solid:[14,30]},
           (()=>{const [x,y]=freeNear(map,PROPS,[40,41,42,47],27,15);return{id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:(x+.5)*TS,y:(y+.4)*TS,lines:CHOJRAK_LINES}})(),
-          (()=>{const [x,y]=freeNear(map,PROPS,[46,40,41,42,47],47,19);return{id:'nawoj',art:'nawoj',name:(EN?'Nawoj, Keeper of Names':'Nawoj, Strażnik Imion'),x:(x+.5)*TS,y:(y+.4)*TS,lines:NAWOJ_LINES}})()],idle:[31,28,13,9]};
+          (()=>{const [x,y]=freeNear(map,PROPS,[41,40,42,44,47],10,20);return{id:'nawoj',art:'nawoj',name:(EN?'Nawoj, Keeper of Names':'Nawoj, Strażnik Imion'),x:(x+.5)*TS,y:(y+.4)*TS,lines:NAWOJ_LINES}})()],idle:[31,28,13,9]};
 }
 
 // Chapter III: Złotogród, the golden capital rotting under its domes
