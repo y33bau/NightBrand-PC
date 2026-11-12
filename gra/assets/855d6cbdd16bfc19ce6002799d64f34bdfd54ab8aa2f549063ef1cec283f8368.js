@@ -1373,7 +1373,7 @@ function groundMaterial(m){const info=m.map&&m.map.userData&&m.map.userData.grou
   const cc0Cells=cc0?cc0FloorCells(info,groundChapter):info.cells;if(cc0)cc0FloorOverlay(m.map,info,cc0Cells);
   const cc0Uniforms=cc0?cc0.names.slice(0,cc0Count).map((_,i)=>'uniform sampler2D nbCC'+i+';').join('\n'):'';
   // glebia: w Dolnym Miescie wzor posadzki 2x gestszy, zeby plyty pasowaly do skali postaci (?depth=0 = stara skala)
-  const ccS=groundChapter===2&&DEPTH_ON?'6.':'12.';
+  const ccS=groundChapter===2&&DEPTH_ON?'6.':groundChapter===5?'8.':'12.'; // 13.11.2026: mniejsze plyty w siedzibie zakonu
   const cc0Sample=cc0?cc0.names.slice(0,cc0Count).map((_,i)=>'if(id<'+(i+.5).toFixed(1)+'){\n#ifdef NB_STABLE_GRAD\nreturn texture2DGradEXT(nbCC'+i+',world/'+ccS+',nbDx/'+ccS+',nbDy/'+ccS+').rgb;\n#else\nreturn texture2D(nbCC'+i+',world/'+ccS+').rgb;\n#endif\n}').join('\n'):'';
   m.bumpMap=null;m.bumpScale=0;delete m.userData.surfaceDetail;
   m.groundAtlas=surfaceTex(groundPadded(info.image));m.groundCoarse=surfaceTex(groundCoarse(info.image));
