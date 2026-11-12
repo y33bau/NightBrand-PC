@@ -1,5 +1,5 @@
 /* ============ ENEMIES ============ */
-const ET={madman:{hp:22,spd:26,r:5,dmg:8,xp:1,coin:.08},hound:{hp:16,spd:33,r:5,dmg:7,xp:1,coin:.05},rotknight:{hp:120,spd:17,r:6,dmg:16,xp:5,coin:.35},monk:{hp:45,spd:20,r:5,dmg:6,xp:3,coin:.15},beast:{hp:2200,spd:21,r:14,dmg:24,xp:50,coin:1},collector:{hp:900,spd:31,r:8,dmg:12,xp:25,coin:0},possessed:{hp:20,spd:24,r:5,dmg:8,xp:1,coin:.06},knight:{hp:95,spd:19,r:6,dmg:15,xp:5,coin:.3},jerzak:{hp:500,spd:17,r:9,dmg:0,xp:12,coin:1},dwarf:{hp:26,spd:22,r:5,dmg:9,xp:1,coin:.07},ghoul:{hp:14,spd:30,r:5,dmg:6,xp:1,coin:.06},bat:{hp:6,spd:36,r:4,dmg:2,xp:1,coin:.04},warden:{hp:150,spd:15,r:7,dmg:18,xp:6,coin:.35},shieldman:{hp:48,spd:16,r:6,dmg:11,xp:3,coin:.2},goat:{hp:60,spd:27,r:7,dmg:14,xp:4,coin:.2},boss:{hp:1500,spd:14,r:13,dmg:20,xp:40,coin:1},cumlin:{hp:1900,spd:12,r:15,dmg:28,xp:40,coin:1},
+const ET={madman:{hp:22,spd:26,r:5,dmg:8,xp:1,coin:.08},hound:{hp:16,spd:33,r:5,dmg:7,xp:1,coin:.05},rotknight:{hp:120,spd:17,r:6,dmg:16,xp:5,coin:.35},monk:{hp:45,spd:20,r:5,dmg:6,xp:3,coin:.15},beast:{hp:2200,spd:21,r:14,dmg:24,xp:50,coin:1},collector:{hp:900,spd:31,r:8,dmg:12,xp:25,coin:0},possessed:{hp:20,spd:24,r:5,dmg:8,xp:1,coin:.06},knight:{hp:95,spd:19,r:6,dmg:15,xp:5,coin:.3},glizzard:{hp:560,spd:24,r:6,dmg:12,xp:22,coin:1},dwarf:{hp:26,spd:22,r:5,dmg:9,xp:1,coin:.07},ghoul:{hp:14,spd:30,r:5,dmg:6,xp:1,coin:.06},bat:{hp:6,spd:36,r:4,dmg:2,xp:1,coin:.04},warden:{hp:150,spd:15,r:7,dmg:18,xp:6,coin:.35},shieldman:{hp:48,spd:16,r:6,dmg:11,xp:3,coin:.2},goat:{hp:60,spd:27,r:7,dmg:14,xp:4,coin:.2},boss:{hp:1500,spd:14,r:13,dmg:20,xp:40,coin:1},cumlin:{hp:1900,spd:12,r:15,dmg:28,xp:40,coin:1},
   wolf:{hp:18,spd:35,r:5,dmg:7,xp:1,coin:.05},bandit:{hp:30,spd:25,r:5,dmg:10,xp:2,coin:.3},xbow:{hp:26,spd:22,r:5,dmg:5,xp:2,coin:.25},drowner:{hp:40,spd:18,r:5,dmg:9,xp:2,coin:.1},
   strzygon:{hp:28,spd:33,r:5,dmg:9,xp:2,coin:.08},zmora:{hp:34,spd:23,r:5,dmg:3,xp:2,coin:.1},wisp:{hp:3,spd:0,r:4,dmg:0,xp:0,coin:0},bies:{hp:280,spd:19,r:7,dmg:20,xp:8,coin:.6},
   wight:{hp:110,spd:17,r:6,dmg:15,xp:5,coin:.3},guard:{hp:95,spd:18,r:6,dmg:14,xp:4,coin:.25},scribe:{hp:34,spd:20,r:5,dmg:5,xp:3,coin:.25},executioner:{hp:190,spd:16,r:7,dmg:22,xp:8,coin:.5},
@@ -8,7 +8,7 @@ const ET={madman:{hp:22,spd:26,r:5,dmg:8,xp:1,coin:.08},hound:{hp:16,spd:33,r:5,
   judge:{hp:110,spd:17,r:6,dmg:15,xp:5,coin:.3},arbiter:{hp:150,spd:16,r:7,dmg:18,xp:6,coin:.4},cursed:{hp:170,spd:15,r:7,dmg:20,xp:7,coin:.45},
   militia:{hp:60,spd:19,r:6,dmg:11,xp:3,coin:.2},marauder:{hp:135,spd:18,r:6,dmg:17,xp:6,coin:.35},gravedigger:{hp:75,spd:21,r:5,dmg:12,xp:4,coin:.25}};
 // runda 233: tempo wrogow (zwykli x1,4; szybcy i lekcy x1,18; bossowie x1,15), bohater 72 -> 58 px/s
-for(const k of Object.keys(ET)){const t=ET[k];if(!t.spd)continue;t.spd*=['bat','courtraven','paperrat','wolf','hound','strzygon'].includes(k)?1.18:['beast','collector','jerzak','boss','cumlin','leszy','strzyga','boginka'].includes(k)?1.15:1.4}
+for(const k of Object.keys(ET)){const t=ET[k];if(!t.spd)continue;t.spd*=['bat','courtraven','paperrat','wolf','hound','strzygon'].includes(k)?1.18:['beast','collector','glizzard','boss','cumlin','leszy','strzyga','boginka'].includes(k)?1.15:1.4}
 // 9.11.2026: plansza wejścia bossa (imię + przydomek) i spowolnienie czasu (wejście bossa, ostatni cios)
 const BOSS_TITLES={'1:boss':['Zrost','Plaga Spalonej Osady','The Conjoined','Blight of the Scorched Settlement'],'5:boss':['Wierzyciel','Pan Pierwszego Wpisu','The Creditor','Lord of the First Entry'],'5:collector':['Arcysędzia Rachmistrz','Ostatnia instancja','Arch-Judge Reckoner','The Final Court'],'collector':['Poborca Zakonu','Ten, który przychodzi o północy','Order Collector','He Who Comes at Midnight'],'boginka':['Pani Lasu','Ta, co topi we mgle','The Lady of the Forest','She Who Drowns in Mist']};
 function bossTitle(e){const t=BOSS_TITLES[CH+':'+e.type]||BOSS_TITLES[e.type];if(t)return EN?[t[2],t[3]]:[t[0],t[1]];const n=deathCauseName(e),i=n.indexOf(', ');return i>0?[n.slice(0,i),n.slice(i+2)]:[n,'']}
@@ -23,7 +23,7 @@ function spawnEnemy(type,x,y,extra){if((type==='xbow'||type==='monk')&&S.enemies
     frozen:0,bleed:0,bleedT:0,rise:type==='bat'?0:.5,atkA:0,slamT:4,atkT:0,dead:false},extra||{});
   e.spd*=S.pk.espd||1;
   if(extra&&Number.isFinite(extra.hp)){e.hp=extra.hp*S.pk.ehp*DF[DIFFK].hp*chapterHp(type);e.max=(extra.max??extra.hp)*S.pk.ehp*DF[DIFFK].hp*chapterHp(type)}
-  if((BIG.has(type)||type==='collector'||type==='boginka'||type==='jerzak')){e.hp*=SL.bossHp;e.max*=SL.bossHp}
+  if((BIG.has(type)||type==='collector'||type==='boginka'||type==='glizzard')){e.hp*=SL.bossHp;e.max*=SL.bossHp}
   if(type==='ghoul'&&CH===1)e.lcd=4;if(type==='beast'){e.hw=7;e.cT=2.5;e.lT=3}if(type==='leszy'||type==='strzyga')e.hw=7;if(type==='cumlin')e.hw=11;
   e.mesh=new THREE.Mesh(BIG.has(type)||type==='collector'&&CH===5&&A.collectorC5?geo64:type==='bat'?geoC:geo32,A[type].walk[0].n);e.mesh.castShadow=BIG.has(type);scene.add(e.mesh);S.enemies.push(e);if(S.endless&&S.t>240&&e.hp){const g=1+(S.t-240)/360;e.hp*=g;e.max*=g;if(e.dmg)e.dmg*=1+(S.t-240)/600}if(bossBar(e)&&!(extra&&extra.noIntro))try{bossIntro(e)}catch(er){quietErr('bossIntro',er)}return e}
 function ringSpot(rmin=260,rmax=320){for(let i=0;i<40;i++){const a=Math.random()*Math.PI*2,d=rnd(rmin,rmax),x=pl.x+Math.cos(a)*d,y=pl.y+Math.sin(a)*d*.75;if(x<20||y<20||x>WW-20||y>WH-20||boxSolid(x,y,6,3)||!navReach(x,y)||CH===1&&tileAt(Math.floor(x/TS),Math.floor(y/TS))===43)continue;return[x,y]}return null}
@@ -59,7 +59,7 @@ function hitSpark(e,nx,ny){const length=Math.hypot(nx,ny)||1,dx=nx/length,dy=ny/
   if(!emitCombatEffect(ftHeavy?'heavy':'light',e.x-dx*Math.min(e.r*.55,5),e.y-dy*Math.min(e.r*.55,5),ftHeavy?1.35:.9,0,armour?'steel':'flesh'))contactSparks(e.x-dx*Math.min(e.r*.55,5),e.y-dy*Math.min(e.r*.55,5),dx,dy,armour?'steel':'flesh',ftCrit?8:ftHeavy?6:4);
   const life=COMBAT_POLISH_ON?(ftHeavy?.23:.18):.15,power=COMBAT_POLISH_ON?amplitude*(armour?2.1:2.8):amplitude;e.visualHit={t:life,life,dx,dy,amplitude:power,heavy:ftHeavy};}
 function damageEnemy(e,dmg,nx,ny,kb=1,src){if(e.dead||e.trans>0||e.inv>0)return false;if(TRN.ohk)dmg=Math.max(dmg,e.hp+1);if(e.hookMark>0)dmg*=1.25;if(e.type==='shieldman'&&ftMelee&&!ftHeavy&&!ftCrit&&!(e.stun>0))dmg*=.5;// tarcza: lekkie ciecia zadaja polowe; ciezki atak, krytyk i ogluszenie po paradzie przebijaja
-  if(S.zab&&e.mini&&e.fhT==null)e.fhT=S.t;if(dmg>=.5&&e.type!=='jerzak'&&Math.hypot(e.x-pl.x,e.y-pl.y)<190)ftx(dmg,e.x,e.y,ftEntH(e),ftCrit?'c':'d',e);if(e.type==='jerzak'){if(!e.selfKill){e.selfKill=1.1;e.flash=.15;say((EN?'OBDYP panicked and struck itself with all its might.':'OBDYP spanikował i z całej siły uderzył sam siebie.'));play('boing',0)}return true}// Kat: Guillotine perk finishes regular enemies; hit counter for 'One Verdict'
+  if(S.zab&&e.mini&&e.fhT==null)e.fhT=S.t;if(dmg>=.5&&Math.hypot(e.x-pl.x,e.y-pl.y)<190)ftx(dmg,e.x,e.y,ftEntH(e),ftCrit?'c':'d',e);// Kat: Guillotine perk finishes regular enemies; hit counter for 'One Verdict'
   if(S.pk.kExec&&ftHeavy&&ftMelee&&!e.mini&&!BIG.has(e.type)&&e.type!=='collector'&&e.hp-dmg>0&&e.hp-dmg<e.max*.35)dmg=e.hp;
   e.hN=(e.hN||0)+1;S.dealt=(S.dealt||0)+dmg;if(src!=='trn'){const sk=typeof src==='string'&&src.slice(0,3)==='sk:'?src.slice(3):'',D=S.dsrc||(S.dsrc={}),k=src==='parry'?'p':src==='dot'?'d':sk?'s':DSRC||'s';D[k]=(D[k]||0)+dmg;if(sk){const Q=S.dsk||(S.dsk={});Q[sk]=(Q[sk]||0)+dmg}}if(dmg>(S.bigHit||0))S.bigHit=dmg;e.hp-=dmg;if(!e.ph2&&e.hp>0&&e.hp<=e.max*.5&&!e.mini&&(BIG.has(e.type)||e.type==='collector'||e.type==='boginka'))bossPhase2(e);e.flash=ftCrit?.17:ftHeavy?.12:.08;if(ftMelee&&dmg>=.5)hitSpark(e,nx,ny);else if(COMBAT_POLISH_ON&&dmg>=.5&&src!=='dot'&&src!=='trn'){const len=Math.hypot(nx,ny)||1;e.visualHit={t:.17,life:.17,dx:nx/len,dy:ny/len,amplitude:BIG.has(e.type)?.3:1.2,heavy:false}}if(e.type==='collector'&&!(e.hurtCd>0)&&dmg>=20){e.hurtA=.3;e.hurtCd=2.5}const k=(BIG.has(e.type)?.05:e.type==='collector'?.15:(e.type==='warden'||e.type==='knight'||e.type==='rotknight'||e.type==='wight'||e.type==='bies'||e.type==='boginka'||e.type==='marauder'||e.type==='cursed'||e.type==='arbiter')?.35:1)*110*kb;if(e.frozen<=0){e.vx+=nx*k;e.vy+=ny*k}
   if(Math.random()<.6)blood(e.x,e.y,2,nx||rnd(-1,1),ny||rnd(-1,1));play(ftCrit?'hitC':ftHeavy?'hitH':ftMelee&&steelEnemy(e)?'hitSteel':'hit',.05);if(e.hp<=0){if(e.type==='strzyga'&&!e.phase){e.phase=1;e.hp=e.max*.6;e.trans=1.8;e.mode=null;e.lh=0;shake(.6,.8);S.flash=.7;blood(e.x,e.y,80,0,1,3);play('bossGrowl',0);for(let i=0;i<40;i++){const a=Math.random()*Math.PI*2;S.parts.push({k:'d',x:e.x,y:e.y,z:rnd(10,40),vx:Math.cos(a)*rnd(40,120),vy:Math.sin(a)*rnd(20,60),vz:rnd(10,40),c:Math.random()<.6?'#141014':P.blood,life:rnd(.8,1.6)})}say((EN?'The Striga\'s first heart bursts. But she has two souls…':'Pierwsze serce Strzygi pęka. Ale ona ma dwie dusze…'))}else killEnemy(e,nx,ny)}return true}
@@ -77,11 +77,11 @@ function dropPick(k,x,y,v=1){if(k==='w'){awardXp(v);return}const fr=k==='c'?{n:C
 // 8.11.2026 boss second phase: at half health the boss enrages (faster, harder hits) and calls two of the night's creatures
 function bossPhase2(e){e.ph2=1;if(e.spd)e.spd*=1.2;if(e.dmg)e.dmg*=1.15;e.flash=.5;S.flash=Math.max(S.flash||0,.35);shake(.5,.45);play('hitH',0);padRumble(1,.6,320);
   ftInfo(EN?'Second phase!':'Druga faza!');say((ENAME[e.type]||(EN?'The boss':'Boss'))+(EN?' flies into a rage.':' wpada w szał.'),'event');
-  const pool=S.enemies.filter(x=>!x.dead&&!x.mini&&!BIG.has(x.type)&&x.type!=='collector'&&x.type!=='boginka'&&x.type!=='jerzak'),t=pool.length?pool[0].type:null;
+  const pool=S.enemies.filter(x=>!x.dead&&!x.mini&&!BIG.has(x.type)&&x.type!=='collector'&&x.type!=='boginka'&&x.type!=='glizzard'),t=pool.length?pool[0].type:null;
   if(t)for(const s of [-1,1]){try{const a=spawnEnemy(t,e.x+s*34,e.y+8);if(a)a.rise=Math.max(a.rise||0,.6)}catch(err){quietErr('bossAdd',err)}}}
 function killEnemy(e,nx,ny){if(e.mini||BIG.has(e.type)){S.hitstop=Math.max(S.hitstop||0,.1);shake(.3,.22)}if(bossBar(e)){slowMo(1.4,.22);shockAt(e.x,e.y,1)}else if(e.mini){slowMo(.5,.45);shockAt(e.x,e.y,.55)}swordOnKill(e);e.dead=true;S.kills++;S.streak=(S.streak||0)+1;if(S.streak>(S.bestStreak||0))S.bestStreak=S.streak;metaKill(e);
   // 8.11.2026 execution: slow motion + camera push-in + extra blood on the killing blow of an elite or a boss
-  if(ftMelee&&!pl.dead&&e.type!=='jerzak'&&(e.mini||BIG.has(e.type)||e.type==='collector'||e.type==='boginka')){S.exec=BIG.has(e.type)||e.type==='collector'||e.type==='boginka'?1.1:.75;S.execX=e.x;S.execY=e.y;blood(e.x,e.y,BIG.has(e.type)?42:26,e.x-pl.x,e.y-pl.y,1.6);play('hitH',0);padRumble(1,.8,260)}if(S.zab){if(S.zTag==='x')S.zCrossK++;else if(S.zTag==='s')S.zSlideK++;else if(S.zTag==='w')S.zWhirlN++;if(e.mini&&e.fhT!=null&&S.t-e.fhT<=15)S.zEliteFast=1}if(e.mini&&S.eliteLoot){dropPick('c',e.x+rnd(-6,6),e.y+rnd(-4,4),25);dropPick('h',e.x+rnd(-8,8),e.y+rnd(-4,4))}if(e.mini){S.eliteK=1;S.eliteN=(S.eliteN||0)+1;if(S.t-(e.bornT??-99)<=20)S.eliteFast=1}if(ftHeavy&&ftMelee)S.hvK=(S.hvK||0)+1;
+  if(ftMelee&&!pl.dead&&(e.mini||BIG.has(e.type)||e.type==='collector'||e.type==='boginka'||e.type==='glizzard')){S.exec=BIG.has(e.type)||e.type==='collector'||e.type==='boginka'||e.type==='glizzard'?1.1:.75;S.execX=e.x;S.execY=e.y;blood(e.x,e.y,BIG.has(e.type)?42:26,e.x-pl.x,e.y-pl.y,1.6);play('hitH',0);padRumble(1,.8,260)}if(S.zab){if(S.zTag==='x')S.zCrossK++;else if(S.zTag==='s')S.zSlideK++;else if(S.zTag==='w')S.zWhirlN++;if(e.mini&&e.fhT!=null&&S.t-e.fhT<=15)S.zEliteFast=1}if(e.mini&&S.eliteLoot){dropPick('c',e.x+rnd(-6,6),e.y+rnd(-4,4),25);dropPick('h',e.x+rnd(-8,8),e.y+rnd(-4,4))}if(e.mini){S.eliteK=1;S.eliteN=(S.eliteN||0)+1;if(S.t-(e.bornT??-99)<=20)S.eliteFast=1}if(ftHeavy&&ftMelee)S.hvK=(S.hvK||0)+1;
   if(S.kat){if(ftHeavy&&ftMelee&&e.hN===1)S.kOne=(S.kOne||0)+1;if(S.kTag==='w'){S.kKrN=(S.kKrN||0)+1;S.kKrBest=Math.max(S.kKrBest||0,S.kKrN)}if(S.kTag==='l')S.kLeapK=(S.kLeapK||0)+1;if(e.mini&&ftHeavy&&ftMelee)S.kEliteHv=(S.kEliteHv||0)+1}
   if(S.pk.kHood&&ftHeavy&&ftMelee&&!pl.dead)pl.sta=Math.min(pl.staMax,pl.sta+pl.staMax*.15);if(!pl.dead&&pl.hp<pl.max*.3)S.lowK=(S.lowK||0)+1;storyBoss(e);if(S.trial)S.trial.k++;
   // altars (standing stones, graves, rune lanterns, offering bowls) wake up after STONE_N kills next to each; all of them: full heal and 30 coins
@@ -92,20 +92,20 @@ function killEnemy(e,nx,ny){if(e.mini||BIG.has(e.type)){S.hitstop=Math.max(S.hit
     else{pl.hp=pl.max;S.coins+=30;play('coin',0);shake(.12,.5);say(W.altar.all)}});
   // barrels of black powder in the Lower City blow up when someone dies next to them
   if(CH===2)for(const p of PROPS){if(p.k!=='black_powder'||S.boom.has(p)||Math.hypot(e.x-p.x*16,e.y-p.y*16)>30)continue;S.boom.add(p);S.delayed.push({t:.15,fn:()=>powderBlast(p)})}
-  const big=BIG.has(e.type),jz=e.type==='jerzak',ghost=e.type==='wisp'||e.type==='zmora'||e.type==='wraith';
+  const big=BIG.has(e.type),jz=e.type==='glizzard',ghost=e.type==='wisp'||e.type==='zmora'||e.type==='wraith';
   if(e.type==='wisp'){scene.remove(e.mesh);return}
   if(e.type==='wraith'&&e.stolen>0){dropPick('c',e.x,e.y,e.stolen);S.picks[S.picks.length-1].returned=true}
   if(e.type==='leszy'&&!e.dgBoss){startBreak();S.leszy=null;say((EN?'Leshy crumbles into rotten wood. The forest releases you from its grip.':'Leszy rozpada się w próchno. Las wypuszcza cię z objęć.'));for(let i=0;i<30;i++)dropPick('c',e.x+rnd(-26,26),e.y+rnd(-16,16));for(let i=0;i<10;i++)dropPick('w',e.x+rnd(-20,20),e.y+rnd(-12,12),3)}
   if(e.type==='boginka'){say((EN?'The Lady of the Forest crumbles into leaves. What is left is a handful of coins from those who were only passing through.':'Pani Lasu rozsypuje się w liście. Zostaje garść monet po tych, co tylko tędy przechodzili.'));bossSay('ladyOfTheForest','defeat');for(let i=0;i<25;i++)dropPick('c',e.x+rnd(-22,22),e.y+rnd(-14,14));for(let i=0;i<5;i++)dropPick('w',e.x+rnd(-16,16),e.y+rnd(-10,10),3)}
   if(e.type==='collector'){S.collector=null;startBreak();const total=Math.floor(e.stolen||0)+20,n=Math.min(40,total);say((EN?`${CH===5?'The Arch-Judge Reckoner falls':'The Collector falls'}. Your gold returns to you: ${total} coins.`:`${CH===5?'Arcysędzia Rachmistrz pada':'Poborca pada'}. Złoto wraca do ciebie: ${total} monet.`));bossSay(CH===5?'auditor':CH===2?'collector':null,'defeat');shake(.4,.5);
     for(let i=0;i<n;i++){dropPick('c',e.x+rnd(-26,26),e.y+rnd(-16,16));Object.assign(S.picks[S.picks.length-1],{v:Math.floor(total/n)+(i<total%n?1:0),returned:true})}for(let i=0;i<8;i++)dropPick('w',e.x+rnd(-20,20),e.y+rnd(-12,12),3)}
-  if(jz){say((EN?'OBDYP fell by its own hand. Honour its memory.':'OBDYP poległ z własnej ręki. Cześć jego pamięci.'));shake(.3,.4);for(let i=0;i<40;i++){const a=Math.random()*Math.PI*2,sp=rnd(30,110);S.parts.push({k:'d',x:e.x,y:e.y,z:rnd(6,16),vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.6,vz:rnd(20,60),c:Math.random()<.6?'#2a1a14':'#c98a7a',life:rnd(1,2)})}
-    for(let i=0;i<30;i++)dropPick('c',e.x+rnd(-26,26),e.y+rnd(-16,16));for(let i=0;i<6;i++)dropPick('w',e.x+rnd(-18,18),e.y+rnd(-12,12),2)}
+  if(jz){say((EN?'Glizard, The Glizzy G-Lord, falls. The air reeks of mustard.':'Glizzard, Wielki Paruwiak, pada. W powietrzu wisi zapach musztardy.'));shake(.3,.4);for(let i=0;i<40;i++){const a=Math.random()*Math.PI*2,sp=rnd(30,110);S.parts.push({k:'d',x:e.x,y:e.y,z:rnd(6,16),vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.6,vz:rnd(20,60),c:Math.random()<.6?'#d8a820':'#8a2a1a',life:rnd(1,2)})}
+    for(let i=0;i<30;i++)dropPick('c',e.x+rnd(-26,26),e.y+rnd(-16,16));for(let i=0;i<8;i++)dropPick('w',e.x+rnd(-18,18),e.y+rnd(-12,12),2)}
   if(!ghost)blood(e.x,e.y,big?140:e.type==='warden'?4:e.type==='bat'?5:16,nx||0,ny||1,big?3:1.5);play('kill',.06);
   if(e.type==='rotknight'||e.type==='madman'){dg.fillStyle='rgba(194,74,32,.55)';dg.fillRect(Math.round(e.x)-5,Math.round(e.y)-1,10,3);decalDirty=true}
   if(e.type!=='warden'&&e.type!=='bat'&&!ghost){pool(e.x,e.y,big?36:12,big?12:5);if(DEC.spray&&Math.random()<.5)decalAt(DEC.spray[(Math.random()*4)|0],e.x+(nx||0)*10,e.y+(ny||0)*7,.85)}
   // corpse keeps the death animation and stays on the floor
-  e.mesh.castShadow=false;if(e.type==='bat'){e.mesh.geometry=geo32;e.mesh.position.y=0}const ck=jz?1.5:e.type==='beast'?(A.beast.sheet?1.2:1.35):e.type==='collector'?(CH===5&&A.collectorC5?.95:1.25):e.type==='leszy'?1.25:e.type==='strzyga'?1.2:e.type==='bies'?1.15:e.type==='cumlin'?1.2:1;const fire=e.burn>0;S.corpses.push({mesh:e.mesh,anim:A[e.type].death,t:0,s:e.s*ck,k:ck,big,gone:ghost?1:0,ash:!ghost&&!big,x:e.x,y:e.y,fire,fall:COMBAT_POLISH_ON&&!ghost&&e.type!=='bat'&&e.type!=='courtraven'?{dx:(nx||0)/(Math.hypot(nx||0,ny||0)||1),dy:(ny||0)/(Math.hypot(nx||0,ny||0)||1),power:big?.7:2.8,y:e.mesh.position.y,sx:Math.abs(e.mesh.position.x*16-e.x)<16?e.mesh.position.x*16-e.x:0,sy:Math.abs(e.mesh.position.z*16-e.y)<16?e.mesh.position.z*16-e.y:0,rz:e.mesh.rotation.z}:null});if(!ghost&&!big)ashFx(e.x,e.y,big,fire,SETT.quality==='low'?3:6,20);
+  e.mesh.castShadow=false;if(e.type==='bat'){e.mesh.geometry=geo32;e.mesh.position.y=0}const ck=jz?1.3:e.type==='beast'?(A.beast.sheet?1.2:1.35):e.type==='collector'?(CH===5&&A.collectorC5?.95:1.25):e.type==='leszy'?1.25:e.type==='strzyga'?1.2:e.type==='bies'?1.15:e.type==='cumlin'?1.2:1;const fire=e.burn>0;S.corpses.push({mesh:e.mesh,anim:A[e.type].death,t:0,s:e.s*ck,k:ck,big,gone:ghost?1:0,ash:!ghost&&!big,x:e.x,y:e.y,fire,fall:COMBAT_POLISH_ON&&!ghost&&e.type!=='bat'&&e.type!=='courtraven'?{dx:(nx||0)/(Math.hypot(nx||0,ny||0)||1),dy:(ny||0)/(Math.hypot(nx||0,ny||0)||1),power:big?.7:2.8,y:e.mesh.position.y,sx:Math.abs(e.mesh.position.x*16-e.x)<16?e.mesh.position.x*16-e.x:0,sy:Math.abs(e.mesh.position.z*16-e.y)<16?e.mesh.position.z*16-e.y:0,rz:e.mesh.rotation.z}:null});if(!ghost&&!big)ashFx(e.x,e.y,big,fire,SETT.quality==='low'?3:6,20);
   {let n=0;for(const c of S.corpses)if(!c.big)n++;if(n>36){const i=S.corpses.findIndex(c=>!c.big);if(i>=0){const c=S.corpses.splice(i,1)[0];scene.remove(c.mesh);if(c.own)c.mesh.material.dispose()}}}
   if(big&&e.type!=='leszy'){if(S.stage==='final')S.won=true;{const bk=e.type==='beast'?'morhad':e.type==='cumlin'?'cumlin':e.type==='boss'?(CH===5?'creditor':CH===1?'outgrowth':null):null;if(bk)setTimeout(()=>{if(S&&S.phase==='play')bossSay(bk,bk==='creditor'?'beforeLedgerDestroyed':'defeat')},0)}say(e.type==='strzyga'?(EN?'Mother Striga bursts into a flock of ravens and ash. Her second heart stops beating.':'Strzyga Matka rozpada się w stado kruków i popiół. Drugie serce przestaje bić.'):e.type==='beast'?(EN?'Morhad falls onto the golden flagstones. His victims\' blood will be a long time draining out of him.':'Morhad pada na złote płyty. Krew jego ofiar jeszcze długo z niego wypływa.'):e.type==='cumlin'?(EN?'Cumlin falls to his knees. The crown rolls across the stone, and the last gold pours from his armour.':'Cumlin pada na kolana. Korona toczy się po kamieniu, a z jego zbroi sypie się ostatnie złoto.'):CH===5?(EN?'The Creditor falls. The ledger burns, and the seals crack one after another.':'Wierzyciel pada. Rejestr płonie, a pieczęcie pękają jedna po drugiej.'):(EN?'The Conjoined falls. Its faces are still whispering.':'Zrost pada. Jego twarze wciąż szepczą.'));if(e.type==='beast'){for(let i=0;i<6;i++)pool(e.x+rnd(-30,30),e.y+rnd(-14,14),36,12)}shake(.6,.7);for(let i=0;i<14;i++)dropPick('w',e.x+rnd(-24,24),e.y+rnd(-14,14),3);for(let i=0;i<20;i++)dropPick('c',e.x+rnd(-26,26),e.y+rnd(-16,16))}
   else if(!big){if(e.xp>0)dropPick('w',e.x,e.y,e.xp);if(Math.random()<.03)dropPick('h',e.x+rnd(-5,5),e.y+rnd(-3,3));
@@ -159,7 +159,6 @@ function stepEnemyAI(e,dt){
   if(Math.hypot(pl.x-e.x,pl.y-e.y)>480&&!BIG.has(e.type)&&e.type!=='wisp'&&e.type!=='boginka'){const p=ringSpot();if(p){e.x=p[0];e.y=p[1]}return}
   if(Math.abs(dx)>1)e.s=dx>0?1:-1;
   if(pl.dead)return;if(e.ghoulWind>0){e.ghoulWind-=dt;if(e.ghoulWind<=0){e.leap=.3;e.lhit=0;e.atkA=.3;e.lx=e.ghoulDX*82;e.ly=e.ghoulDY*82}return}
-  if(e.type==='jerzak'){e.walk+=dt;e.hop=(e.hop||0)+dt;if(e.selfKill>0){e.selfKill-=dt;if(Math.random()<dt*12)shake(.08,.05);if(e.selfKill<=0){e.hp=0;killEnemy(e,0,1)}return}}
   if(e.type==='collector'){e.stealCd=(e.stealCd||0)-dt;e.drain=(e.drain||0)-dt;e.hurtA=(e.hurtA||0)-dt;e.hurtCd=(e.hurtCd||0)-dt;e.tauntA=(e.tauntA||0)-dt;e.tauntCd=(e.tauntCd===undefined?4:e.tauntCd)-dt;
     if(e.tauntCd<=0&&e.stolen>0&&d>90){e.tauntCd=rnd(6,9);e.tauntA=1}
     if(e.stealWind>0){e.stealWind-=dt;if(e.stealWind<=0&&d<e.r+15){S.attacker=e;const hit=hitT(e,enemyDamage(12,0),dx/d,dy/d);S.attacker=null;if(hit){const n=Math.min(S.coins,Math.max(3,Math.floor(S.coins*.15)));S.coins-=n;e.stolen+=n;if(n)ftInfo('−'+n+(EN?' coins':' monet'))}}}
@@ -182,7 +181,7 @@ function stepEnemyAI(e,dt){
     if(e.aim>0){e.aim-=dt;if(e.aim<=0&&d>1&&sight(e.x,e.y,T.x,T.y))mFire()}
     else if(d<140&&e.cast<=0&&sight(e.x,e.y,T.x,T.y)&&(S.enemyShotCd||0)<=0){e.aim=SL.aim;e.cast=rnd(4,5);S.enemyShotCd=SL.shotGap+SL.aim;telegraph(e)}
     if(d<64){moveBox(e,-dx/d*e.spd*dt,-dy/d*e.spd*dt,hw,3);e.walk+=dt;return}if(d<110){e.walk+=dt*.3;return}}
-  if(!BIG.has(e.type)&&e.type!=='collector'&&e.type!=='jerzak'&&e.type!=='wisp'&&e.dmg>0&&e.leap<=0){if(slashEnemy(e,dx,dy,d,dt)){e.walk+=dt*.2;return}}
+  if(!BIG.has(e.type)&&e.type!=='collector'&&e.type!=='glizzard'&&e.type!=='wisp'&&e.dmg>0&&e.leap<=0){if(slashEnemy(e,dx,dy,d,dt)){e.walk+=dt*.2;return}}
   else if(d<e.r+6&&e.dmg>0&&e.type!=='collector'&&BIG.has(e.type)){
     if(BIG.has(e.type)){if(!(e.ctw>0)&&!(e.ccd>0)){e.ctw=.4;for(let k=0;k<3;k++)telegraph(e)}}// boss: zapowiedź .4 s, potem przerwa 1,4 s (unik w tym czasie ratuje)
     else{hitT(e,enemyDamage(e.dmg,480),dx/d,dy/d);if(e.atkA<=0)e.atkA=.35}}
@@ -321,7 +320,7 @@ const CZAI={
     if(e.mode==='charge'){e.mt-=dt;const ox=e.x,oy=e.y;moveBox(e,e.cx*175*dt,e.cy*175*dt,hw,3);e.walk+=dt*3;if(d<e.r+8&&golemTgt(e))golemHurt(e.tg,enemyDamage(22));else if(d<e.r+8&&pl.inv<=0){hurtPlayer(enemyDamage(22),e.cx,e.cy,e);moveBox(pl,e.cx*12,e.cy*9,4,3)}
       if(e.mt<=0||Math.hypot(e.x-ox,e.y-oy)<175*dt*.3){e.mode=null;e.cT=rnd(3,4.5)}return true}
     if(e.cT<=0&&d>40&&d<190){e.mode='wind';e.mt=.6;e.cx=dx/d;e.cy=dy/d;play('growl',0);return true}return false},
-  leszy:leszyAI,strzyga:strzygaAI};
+  leszy:leszyAI,strzyga:strzygaAI,glizzard:glizzardAI};
 // Leszy, Lord of the Wild Wood: calls wolves, strikes with roots from below, steps into one tree and out of another
 function leszyAI(e,dx,dy,d,dt){
   if(Math.random()<dt*5)S.parts.push({k:'m',x:e.x+rnd(-10,10),y:e.y+rnd(-3,3),z:rnd(20,50),vx:rnd(-4,4),vy:0,vz:rnd(-6,-2),c:Math.random()<.5?'#4a5e3a':'#3a2a1c',life:rnd(1,2)});
@@ -338,6 +337,26 @@ function leszyAI(e,dx,dy,d,dt){
   if(e.sT<=0){e.mode='summon';e.mt=.9;e.sT=rnd(10,13);play('howl',0);return true}
   if(e.rT<=0&&d<220){e.mode='root';e.mt=.9;e.tx=e.x+dx;e.ty=e.y+dy;e.rT=rnd(4,5.5);play('bossGrowl',0);return true}
   return false}
+// Glizzard, the Glizzy G-Lord (act II mini-boss after the talk with Tharm's ghost): kites the hero, throws fans of sausages (they burst into mustard),
+// lobs a delayed mustard bomb at the hero's position, curls up and pops away when pressed, and in the second half (below 50% health) throws more and faster.
+function mustardSplash(x,y,sz){const f=A.glzFx;if(f&&f.splash)addVfx(f.splash,.5,x,y,.5,1.5*sz,'bill');for(let k=0;k<14;k++){const a=Math.random()*Math.PI*2;S.parts.push({k:'d',x,y,z:8,vx:Math.cos(a)*rnd(10,60)*sz,vy:Math.sin(a)*rnd(5,30)*sz,vz:rnd(10,50),c:k%3?'#e8b830':'#a8321c',life:rnd(.3,.7)})}}
+function glizzSausage(e,ang,spd,dm){const f={source:{type:e.type,chapter:CH},x:e.x,y:e.y,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,life:2.6,ph:Math.random(),sau:1,dm,anim:A.glzFx&&A.glzFx.fly};if(f.anim)f.mesh=(()=>{const m=new THREE.Mesh(geoC,f.anim[0].n);scene.add(m);return m})();S.eproj.push(f)}
+function glizzardAI(e,dx,dy,d,dt,hw){
+  const P=!!e.ph2;e.moving=false;e.gcd=(e.gcd===undefined?1.6:e.gcd)-dt;e.curlCd=(e.curlCd===undefined?4:e.curlCd)-dt;
+  if(!P&&e.hp<e.max*.5){e.ph2=1;e.mode='roar';e.mt=1;e.spd*=1.15;play('bossGrowl',0);shake(.3,.5);say((EN?'Glizard bristles with fury. The sausages fly thicker now.':'Glizzard jeży się z wściekłości. Kiełbasy lecą gęściej.'))}
+  if(e.mode==='roar'){e.mt-=dt;if(e.mt<=0)e.mode=null;return true}
+  if(e.mode==='curl'){e.mt-=dt;e.inv=Math.max(e.inv||0,.1);if(e.mt<=0){const p=ringSpot(95,150);mustardSplash(e.x,e.y,.6);if(p){e.x=p[0];e.y=p[1]}mustardSplash(e.x,e.y,.6);e.mode=null;e.inv=0;e.gcd=Math.min(e.gcd,.6);play('rise',0)}return true}
+  if(e.mode==='tell'){e.mt-=dt;e.moving=false;
+    if(e.atk==='bomb'&&Math.random()<dt*40){const a=Math.random()*Math.PI*2;S.parts.push({k:'d',x:e.bx+Math.cos(a)*24,y:e.by+Math.sin(a)*14,z:1,vx:0,vy:0,vz:3,c:warningColor(),life:.4})}
+    if(e.mt<=0){e.mode=null;e.atkA=.35;e.gcd=P?1.5:2.3;
+      if(e.atk==='bomb'){const bx=e.bx,by=e.by;play('swing',.2);S.delayed.push({t:.25,fn:()=>{if(e.dead)return;mustardSplash(bx,by,1.6);shake(.2,.25);play('quake',0);aoeP(e,30,enemyDamage(16),bx,by);for(let k=0;k<2;k++){const a=Math.random()*Math.PI*2;if(P)S.delayed.push({t:.3+k*.25,fn:()=>{if(e.dead)return;const x=bx+Math.cos(a)*34,y=by+Math.sin(a)*20;if(!solidAt(x,y)){mustardSplash(x,y,1.1);aoeP(e,20,enemyDamage(10),x,y)}}})}}})}
+      else{const n=P?5:3,sp=P?.26:.3;for(let i=0;i<n;i++)glizzSausage(e,e.aimA+(i-(n-1)/2)*sp,98,7);play('swing',.2)}}
+    return true}
+  if(d<62){moveBox(e,-dx/d*e.spd*1.1*dt,-dy/d*e.spd*1.1*dt,hw,3);e.walk+=dt;e.moving=true}
+  else if(d>140){moveBox(e,dx/d*e.spd*dt,dy/d*e.spd*dt,hw,3);e.walk+=dt;e.moving=true}
+  if(d<36&&e.curlCd<=0){e.mode='curl';e.mt=.55;e.curlCd=rnd(6,8);return true}
+  if(e.gcd<=0&&d<240&&sight(e.x,e.y,e.x+dx,e.y+dy)){e.cnt=(e.cnt||0)+1;e.atk=e.cnt%3===0?'bomb':'fan';e.mode='tell';e.mt=e.atk==='bomb'?.85:.6;e.aimA=Math.atan2(dy,dx);e.bx=pl.x;e.by=pl.y;telegraph(e);play('swing',.2)}
+  return true}
 // the Strzyga Mother: first soul flies, screams (slows you) and dives with her talons; second soul crawls, leaps and raises barrow wights
 function strzygaAI(e,dx,dy,d,dt){
   if(Math.random()<dt*8)S.parts.push({k:'d',x:e.x+rnd(-18,18),y:e.y+rnd(-6,6),z:rnd(20,50),vx:rnd(-20,20),vy:0,vz:rnd(-2,8),c:'#141014',life:rnd(.6,1.2)});
@@ -363,23 +382,25 @@ function strzygaAI(e,dx,dy,d,dt){
 const warningColor=()=>SETT.contrast?'#ffe270':'#ff5a4e';
 function telegraph(e){S.parts.push({k:'e',x:e.x,y:e.y,z:26,vx:0,vy:0,vz:4,c:warningColor(),life:.45});e.atkA=.2}
 // Runda 212: sparowany pocisk wroga wraca i zawsze trafia najbliższego wroga (naprowadzany, przelatuje nad ścianami).
-function nearestFoe(x,y){let b=null,bd=1e9;for(const e of S.enemies){if(e.dead||e.rise>0||e.trans>0||e.type==='jerzak')continue;const d=Math.hypot(e.x-x,e.y-y);if(d<bd){bd=d;b=e}}return b}
+function nearestFoe(x,y){let b=null,bd=1e9;for(const e of S.enemies){if(e.dead||e.rise>0||e.trans>0)continue;const d=Math.hypot(e.x-x,e.y-y);if(d<bd){bd=d;b=e}}return b}
 function updEproj(dt){const _pl=pl;try{updEprojX(dt)}finally{pl=_pl}}
 function updEprojX(dt){S.enemyShotCd=Math.max(0,(S.enemyShotCd||0)-dt);for(let i=S.eproj.length-1;i>=0;i--){const f=S.eproj[i];if(pl2)pl=pickTarget(f);f.life-=dt;f.x+=f.vx*dt;f.y+=f.vy*dt;
   if(f.bolt){const ar=!!(f.source&&(f.source.type==='xbow'||f.source.type==='scribe'));if(!f.vfe&&skFrames(ar?'bolt':'boss')){addVfx(skLoop(skFrames(ar?'bolt':'boss'),f.life,10),f.life,f.x,f.y,.5,ar?.95:.8,'bill',-screenAng(f.vx,f.vy));f.vfe=S.vfx[S.vfx.length-1]}if(f.vfe){f.vfe.x=f.x;f.vfe.y=f.y}}
   if(f.bolt)S.parts.push({k:'d',x:f.x,y:f.y,z:9,vx:0,vy:0,vz:0,c:'#d8cfb8',life:.12});
+  else if(f.sau){if(Math.random()<.6)S.parts.push({k:'d',x:f.x+rnd(-2,2),y:f.y+rnd(-1,1),z:9+rnd(-2,2),vx:rnd(-4,4),vy:0,vz:rnd(-2,4),c:Math.random()<.5?'#e8b830':'#a8321c',life:rnd(.2,.4)})}
   else for(let k=0;k<(f.mesh?1:3);k++)S.parts.push({k:'e',x:f.x+rnd(-2,2),y:f.y+rnd(-1,1),z:9+rnd(-2,2),vx:rnd(-4,4),vy:0,vz:rnd(2,8),c:k?'#ff6a1a':'#ffb347',life:rnd(.15,.35)});
   let gone=f.life<=0||solidAt(f.x,f.y);
   if(f.ref){let e=f.tgt;if(!e||e.dead||!S.enemies.includes(e))e=f.tgt=nearestFoe(f.x,f.y);gone=!e;
     if(e){const dx=e.x-f.x,dy=e.y-f.y,d=Math.hypot(dx,dy)||1;f.vx=dx/d*f.spd;f.vy=dy/d*f.spd;f.life=Math.max(f.life,.2);if(f.vfe)f.vfe.rot=-screenAng(f.vx,f.vy);
       if(d<(e.r||6)+5){const oM=ftMelee,oC=ftCrit;ftMelee=false;ftCrit=true;try{damageEnemy(e,f.dmg,dx/d,dy/d,.6,'parry')}finally{ftMelee=oM;ftCrit=oC}gone=true}}
     if(!gone)continue}
-  {const G=S.swordGuardian;if(!gone&&G&&!G.gone&&Math.hypot(G.x-f.x,G.y-f.y)<SL.guard.r+3){golemHurt(G,enemyDamage(f.bolt?6:7,SL.projDiv));gone=true}}
+  {const G=S.swordGuardian;if(!gone&&G&&!G.gone&&Math.hypot(G.x-f.x,G.y-f.y)<SL.guard.r+3){golemHurt(G,enemyDamage(f.dm||(f.bolt?6:7),SL.projDiv));gone=true}}
   if(!gone&&!pl.dead&&Math.hypot(pl.x-f.x,pl.y-f.y)<8){const sp=Math.hypot(f.vx,f.vy)||1,nx=f.vx/sp,ny=f.vy/sp;
     if(pl.block&&pl.inv<=0&&-(pl.fx*nx+pl.fy*ny)>.3&&pl.blockT<parryWin()){onParry();pl.parryT=.45;S.hitstop=.12;padRumble(.6,.3,140);guardFeedback('parry',nx,ny,f);shake(.15,.15);ftInfo((EN?'Deflected!':'Odbicie!'));
       const tg=nearestFoe(f.x,f.y);if(tg){f.ref=1;f.tgt=tg;f.spd=Math.max(240,sp*1.4);f.dmg=SL.light.dmg[0]*(1+.07*(S.lvl-1))*(S.str||1)*might()*riMul();f.life=5;f.x=pl.x;f.y=pl.y;if(f.vfe){f.vfe.t=f.vfe.dur;f.vfe=null}}}
-    else hurtPlayer(enemyDamage(f.bolt?6:7,SL.projDiv),nx,ny,f.source||(f.bolt?'night':'fire'));gone=!f.ref}
+    else hurtPlayer(enemyDamage(f.dm||(f.bolt?6:7),SL.projDiv),nx,ny,f.source||(f.bolt?'night':'fire'));gone=!f.ref}
   if(gone&&f.bolt){if(f.vfe)f.vfe.t=f.vfe.dur;if(f.source&&(f.source.type==='xbow'||f.source.type==='scribe'))skAdd('boltHit',.3,f.x,f.y,.5,.7,'bill');for(let k=0;k<5;k++)S.parts.push({k:'d',x:f.x,y:f.y,z:8,vx:rnd(-30,30),vy:rnd(-15,15),vz:rnd(5,20),c:'#9d9584',life:.3});S.eproj.splice(i,1);continue}
+  if(gone&&f.sau){mustardSplash(f.x,f.y,1);if(f.mesh)scene.remove(f.mesh);S.eproj.splice(i,1);continue}
   if(gone){for(let k=0;k<12;k++)S.parts.push({k:'e',x:f.x,y:f.y,z:8,vx:rnd(-40,40),vy:rnd(-25,25),vz:rnd(5,30),c:Math.random()<.5?'#ff6a1a':'#ffb347',life:rnd(.2,.5)});if(f.mesh)scene.remove(f.mesh);if(f.vfe)f.vfe.t=f.vfe.dur;S.eproj.splice(i,1)}}}
 // player sword strikes (light/heavy, cascade, whirl) are stopped only by walls/cliffs, not by prop tiles (31) whose collision box is bigger than the sprite (cache 200)
 function sightSword(x0,y0,x1,y1){const n=Math.ceil(Math.hypot(x1-x0,y1-y0)/8);for(let i=1;i<n;i++){const px=x0+(x1-x0)*i/n,py=y0+(y1-y0)*i/n,t=tileAt(Math.floor(px/TS),Math.floor(py/TS));if(t!==31&&SOLID.has(t))return false}return true}
@@ -454,7 +475,7 @@ function events(){
         for(let i=0;i<24;i++){const a=Math.random()*Math.PI*2;S.parts.push({k:'m',x:p.x*16,y:p.y*16,z:rnd(2,10),vx:Math.cos(a)*rnd(20,60),vy:Math.sin(a)*rnd(10,30),vz:rnd(4,16),c:Math.random()<.5?'#e07a30':'#c24a20',life:rnd(.6,1.2)})}
         ftInfo((EN?'Spores':'Zarodniki'))}}}
   // OBDYP shows up only in the Lower City (chapter II)
-  ev('jz',CH===2&&S.t>10,()=>{const p=ringSpot(110,150)||ringSpot(80,200)||[pl.x+100,pl.y];spawnEnemy('jerzak',p[0],p[1],{rise:1});play('boing',0);say((EN?'OBDYP, the Shaggy Core of the Abyss, rolls out of the darkness!':'Z ciemności wytacza się OBDYP, Kosmate Jądro Otchłani!'))});
+  ev('gl',CH===2&&S.glizT>0&&S.t>S.glizT,()=>{const p=ringSpot(110,150)||ringSpot(80,200)||[pl.x+100,pl.y];spawnEnemy('glizzard',p[0],p[1],{rise:1});play('boing',0);say((EN?'Glizard, The Glizzy G-Lord, shuffles out of the dark!':'Z mroku wytacza się Glizzard, Wielki Paruwiak!'))});
   if(CH===1){const N=S.npc;
     ev('a',S.t>.5,()=>say((EN?'Night falls over the Scorched Settlement.':'Noc zapada nad Spaloną Osadą.')));
     ev('b',S.t>5,()=>say((EN?'Every kill gives experience at once. Survive until dawn.':'Każde zabójstwo od razu daje doświadczenie. Przetrwaj do świtu.')));

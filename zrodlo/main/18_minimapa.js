@@ -32,9 +32,9 @@ function drawMini(dt){
   g.strokeStyle='rgba(216,207,184,'+(.32*(1-ph)).toFixed(3)+')';g.lineWidth=1.5*u;g.beginPath();g.arc(cx,cx,ph*R,0,TAU);g.stroke();
   // enemies: glowing dots, elites and bosses pulse
   for(const e of S.enemies){if(e.dead)continue;
-    const dx=(e.x/16-px)*s,dy=(e.y/16-py)*s,big=BIG.has(e.type),spec=e.type==='jerzak'||e.type==='collector',el=!!e.mini&&!big&&!spec;
+    const dx=(e.x/16-px)*s,dy=(e.y/16-py)*s,big=BIG.has(e.type),spec=e.type==='glizzard'||e.type==='collector',el=!!e.mini&&!big&&!spec;
     if(Math.hypot(dx,dy)>R){if(big||e.hunt)far.push([e.x,e.y,big?'#ff2a2a':'#ffd04a']);continue}
-    const col=e.hunt?'#ffd04a':big?'#ff2a2a':e.type==='jerzak'?'#ffb0a0':e.type==='collector'?'#ffd04a':el?'#ff8a2a':'#ff4a3c',r=(big?5.2:spec?4.2:el?3.6:2.6)*u,x=cx+dx,y=cx+dy;
+    const col=e.hunt?'#ffd04a':big?'#ff2a2a':e.type==='glizzard'?'#ffb0a0':e.type==='collector'?'#ffd04a':el?'#ff8a2a':'#ff4a3c',r=(big?5.2:spec?4.2:el?3.6:2.6)*u,x=cx+dx,y=cx+dy;
     dot(x,y,r+2.6*u,col,.26);dot(x,y,r,col,1);
     if(big||el||spec||e.hunt){g.strokeStyle=col;g.lineWidth=1.2*u;g.globalAlpha=.4+.6*pulse;g.beginPath();g.arc(x,y,r+(3+2*pulse)*u,0,TAU);g.stroke();g.globalAlpha=1}}
   for(const n of W.npcs)if(S.npc[n.id].state==='alive'){const dx=(n.x/16-px)*s,dy=(n.y/16-py)*s;if(Math.hypot(dx,dy)>R)continue;dot(cx+dx,cx+dy,3.2*u,n.art==='tharm'?'#7fd0ff':'#d8cfb8',1)}

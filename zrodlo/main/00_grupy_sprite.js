@@ -298,9 +298,6 @@ const SPRITE_GROUPS={
   "effects_pickups": [
     "core"
   ],
-  "jerzak": [
-    "core"
-  ],
   "collector": [
     "core"
   ],
@@ -343,9 +340,6 @@ const SPRITE_GROUPS={
   "zl_props": [
     "r3"
   ],
-  "zl_en_a": [
-    "r3"
-  ],
   "zl_en_b": [
     "r3"
   ],
@@ -354,12 +348,6 @@ const SPRITE_GROUPS={
   ],
   "pani_lasu": [
     "r4"
-  ],
-  "cy_en_d": [
-    "r5"
-  ],
-  "zl_en_c": [
-    "r3"
   ],
   "cy_ground": [
     "r5"
@@ -371,15 +359,6 @@ const SPRITE_GROUPS={
     "r5"
   ],
   "cy_walls": [
-    "r5"
-  ],
-  "cy_en_a": [
-    "r5"
-  ],
-  "cy_en_b": [
-    "r5"
-  ],
-  "cy_en_c": [
     "r5"
   ],
   "cy_npc": [
@@ -405,21 +384,6 @@ const SPRITE_GROUPS={
     "r4"
   ],
   "cz_props": [
-    "r4"
-  ],
-  "cz_en_a": [
-    "r4"
-  ],
-  "goat_beast": [
-    "r4"
-  ],
-  "shield_dead": [
-    "core"
-  ],
-  "cz_en_b": [
-    "r4"
-  ],
-  "cz_en_c": [
     "r4"
   ],
   "cz_npc": [
@@ -533,6 +497,44 @@ const SPRITE_GROUPS={
   "zab_atk45": [
     "core"
   ],
+  "mob_possessed": ["core"],
+  "mob_ghoul": ["core"],
+  "mob_bat": ["core"],
+  "mob_dwarf": ["core"],
+  "mob_knight": ["core"],
+  "mob_warden": ["core"],
+  "mob_shieldman": ["core"],
+  "mob_madman": ["r3"],
+  "mob_hound": ["r3"],
+  "mob_rotknight": ["r3"],
+  "mob_militia": ["r3"],
+  "mob_marauder": ["r3"],
+  "mob_gravedigger": ["r3"],
+  "mob_goat": ["r4"],
+  "mob_wolf": ["r4"],
+  "mob_bandit": ["r4"],
+  "mob_xbow": ["r4"],
+  "mob_drowner": ["r4"],
+  "mob_strzygon": ["r4"],
+  "mob_zmora": ["r4"],
+  "mob_wisp": ["r4"],
+  "mob_bies": ["r4"],
+  "mob_wight": ["r4"],
+  "mob_guard": ["r5"],
+  "mob_scribe": ["r5"],
+  "mob_executioner": ["r5"],
+  "mob_debtor": ["r5"],
+  "mob_wraith": ["r5"],
+  "mob_courtraven": ["r5"],
+  "mob_paperrat": ["r5"],
+  "mob_bookgolem": ["r5"],
+  "mob_condemned": ["r5"],
+  "mob_judge": ["r5"],
+  "mob_arbiter": ["r5"],
+  "mob_cursed": ["r5"],
+  "mob_tharm": ["r2"],
+  "mob_glizzard": ["r2"],
+  "mob_glz_fx": ["r2"],
   "golem_a": [
     "core"
   ],

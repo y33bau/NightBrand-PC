@@ -123,12 +123,13 @@ function armorRecolor(img,cls,v){const P=ARM_PAL[v],C=ARM_CFG[cls];if(!P||!C)ret
   for(let i=0;i<N;i++){if(!M[i])continue;const j=i*4;let t=((.3*p[j]+.59*p[j+1]+.11*p[j+2])/255-.04)/.72;t=t<0?0:t>1?1:Math.pow(t,.9);
     const A=t<.5?P[0]:P[1],B=t<.5?P[1]:P[2],u=t<.5?t/.5:(t-.5)/.5;p[j]=A[0]+(B[0]-A[0])*u;p[j+1]=A[1]+(B[1]-A[1])*u;p[j+2]=A[2]+(B[2]-A[2])*u}
   g.putImageData(id,0,0);c.nbDensity=img.nbDensity;c.nbKey=img.nbKey;return c}
+const MOB_GROUPS={'core':['possessed','ghoul','bat','dwarf','knight','warden','shieldman'],'r3':['madman','hound','rotknight','militia','marauder','gravedigger'],'r4':['goat','wolf','bandit','xbow','drowner','strzygon','zmora','wisp','bies','wight'],'r5':['guard','scribe','executioner','debtor','wraith','courtraven','paperrat','bookgolem','condemned','judge','arbiter','cursed'],'r2':['tharm','glizzard','glz_fx']};
 function buildAnims(imgs,group="all"){
   const has=g=>group==="all"||group===g;
   const bz=has("r3")&&!imgs.morhad?beastSheet():null,bs=(c,r)=>procFrame(bz,c*64,r*64,64,64);
   // sheets redrawn at 64x64 (same layout, cells twice as big) are detected by their width and drawn at the same size in the world
-  const HI=new Set(['protagonist_a','protagonist_b','village_undead','order_deep_dead','ally_npcs','effects_pickups','jerzak','collector','zl_en_a','zl_en_b','npc_new','cz_en_a','cz_en_b','cz_en_c','cz_npc','shield_dead','goat_beast','cy_en_a','cy_en_b','cy_en_c','cy_en_d','zl_en_c','cy_npc','hero_d','hero_db','hero_dc','hero_dd','hero_def','knight_d','knight_db','knight_dc','knight_dd','knight_def','knight_death','knight_whirl','kat_death','kat_leap','kat_whirl','kat_hook','zab_d','zab_db','zab_dc','zab_dd','zab_def','zab_death','zab_rend','zab_fan','zab_whirl','zab_atk45','dzw_d','dzw_db','dzw_dc','dzw_dd','dzw_def','dzw_ex','dzw_sk','dzw_zas','golem_a','golem_b']);
-  const row=(sheet,r,from=0,to=4,kind,size=32)=>{const k=HI.has(sheet)&&imgs[sheet].width/(imgs[sheet].nbDensity||1)>=256?2:1,cs=size*k;const out=[];for(let c=from;c<to;c++)out.push(procFrame(imgs[sheet],c*cs,r*cs,cs,cs,kind,k>1?2:0));return out};
+  const HI=new Set(['protagonist_a','protagonist_b','village_undead','order_deep_dead','ally_npcs','effects_pickups','collector','zl_en_a','zl_en_b','npc_new','cz_en_a','cz_en_b','cz_en_c','cz_npc','shield_dead','goat_beast','cy_en_a','cy_en_b','cy_en_c','cy_en_d','zl_en_c','cy_npc','hero_d','hero_db','hero_dc','hero_dd','hero_def','knight_d','knight_db','knight_dc','knight_dd','knight_def','knight_death','knight_whirl','kat_death','kat_leap','kat_whirl','kat_hook','zab_d','zab_db','zab_dc','zab_dd','zab_def','zab_death','zab_rend','zab_fan','zab_whirl','zab_atk45','dzw_d','dzw_db','dzw_dc','dzw_dd','dzw_def','dzw_ex','dzw_sk','dzw_zas','golem_a','golem_b']);
+  const row=(sheet,r,from=0,to=4,kind,size=32)=>{const k=(HI.has(sheet)||sheet.startsWith('mob_'))&&imgs[sheet].width/(imgs[sheet].nbDensity||1)>=256?2:1,cs=size*k;const out=[];for(let c=from;c<to;c++)out.push(procFrame(imgs[sheet],c*cs,r*cs,cs,cs,kind,k>1?2:0));return out};
   const ha='protagonist_a',hb='protagonist_b',vu='village_undead',od='order_deep_dead',an='ally_npcs',fx='effects_pickups';
   const pick=has('core')?row(fx,5,0,4,'fx'):[];
   const mkHeroD=()=>({idle_down:row('hero_d',0),idle_side:row('hero_d',1),idle_up:row('hero_d',2),walk_down:row('hero_d',3),walk_side:row('hero_d',4),walk_up:row('hero_d',5),
@@ -149,7 +150,6 @@ function buildAnims(imgs,group="all"){
     shieldman:imgs.shield_dead?{walk:row('shield_dead',0),attack:row('shield_dead',1,0,2),death:row('shield_dead',1,2,4),sheet:1}:{walk:row(od,0),attack:row(od,1,0,2),death:row(od,1,2,4)},
     ghoul:{walk:row(vu,2),attack:row(vu,3,0,2),death:row(vu,3,2,4)},
     bat:{walk:row(vu,4),attack:row(vu,4),death:row(vu,5,0,2)},
-    jerzak:{idle:row('jerzak',0),walk:row('jerzak',1),panic:row('jerzak',2),attack:row('jerzak',3),death:row('jerzak',4),roll:row('jerzak',5,0,2)},
     }:{}),
     ...(has("r3")?{
     ...(imgs.zl_en_a?{
@@ -241,6 +241,13 @@ function buildAnims(imgs,group="all"){
     pick:{1:pick[0],2:pick[1],5:pick[2],c:pick[3]}
     }:{})
   };
+  // New mob models (12.11.2026): one sheet per enemy, 4 columns x 2 rows of 256 px (row 0 walk, row 1: two attack frames + two death frames); on-screen size matches the old sheets
+  for(const g in MOB_GROUPS)if(has(g))for(const k of MOB_GROUPS[g]){const S_='mob_'+k;if(!imgs[S_])continue;const kd=k==='wraith'||k==='wisp'?'propc':undefined;
+    if(k==='tharm')anims.tharm=row(S_,0,0,4,'ghost');
+    else if(k==='glz_fx')anims.glzFx={fly:row(S_,0,0,4,'fx'),splash:[...row(S_,2,0,4,'fx'),...row(S_,3,0,4,'fx')]};
+    else if(k==='glizzard')anims.glizzard={walk:row(S_,0),idle:row(S_,1),tell:row(S_,2),attack:[row(S_,3,1,2)[0],row(S_,3,2,3)[0]],hurt:row(S_,4,0,2),death:row(S_,4,2,4),curl:row(S_,5,0,2),sheet:1};
+    else if(k==='drowner')anims.drowner={rise:row(S_,0,0,2),walk:row(S_,0,2,4),attack:row(S_,1,0,2),death:row(S_,1,2,4),sheet:1};
+    else anims[k]={walk:row(S_,0,0,4,kd),attack:row(S_,1,0,2,kd),death:row(S_,1,2,4,kd),sheet:1}}
   // old one-piece hero (protagonist_a/b): only a fallback behind heroD, so its frames are built on first use, not at start (5.11.2026: ~35 MB of canvases)
   if(has("core"))Object.defineProperty(anims,'hero',{configurable:true,enumerable:false,get(){const v={idle_down:row(ha,0),walk_down:row(ha,1),walk_up:row(ha,2),walk_side:row(ha,3),roll:row(ha,4),hurt:row(ha,5,0,2),
       swing_side:row(hb,0),swing_down:row(hb,1),swing_up:row(hb,2),death:row(hb,3).concat(row(hb,4,0,2)),idle_up:row(hb,5,0,2),idle_side:row(hb,5,2,4)};Object.defineProperty(anims,'hero',{value:v,writable:true,configurable:true,enumerable:false});return v}});

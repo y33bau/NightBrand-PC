@@ -108,7 +108,7 @@ function advanceDialog(){if(S.witChoice)return;const n=S.dialog;S.dlg++;if(S.dlg
   if(n.story){$('dialog').hidden=true;S.dialog=null;return}
   $('dialog').hidden=true;$('dlgBtns').hidden=true;S.dialog=null;const st=S.npc[n.id];
   const motes=c=>{for(let i=0;i<30;i++)S.parts.push({k:'i',x:n.x+rnd(-6,6),y:n.y,z:rnd(0,20),vx:rnd(-10,10),vy:0,vz:rnd(10,26),c,life:rnd(1,2)})};
-  if(n.id==='tharm'){st.state='fading';st.t=1.5;pl.max+=25;pl.hp=pl.max;play('bless',0);say((EN?'The warmth of the forge fills your veins. +25 max health.':'Ciepło kuźni wypełnia ci żyły. +25 do maks. życia.'));motes('#7fd0ff')}
+  if(n.id==='tharm'){st.state='fading';st.t=1.5;if(!S.glizT)S.glizT=S.t+3;pl.max+=25;pl.hp=pl.max;play('bless',0);say((EN?'The warmth of the forge fills your veins. +25 max health.':'Ciepło kuźni wypełnia ci żyły. +25 do maks. życia.'));motes('#7fd0ff')}
   else if(n.id==='elder'){st.state='dead';st.deadAt=S.t;pool(n.x,n.y,14,6);S.ev.add('el');say((EN?'The old man breathes his last.':'Starzec wydaje ostatnie tchnienie.'))}
   else if(n.id==='marga'){st.state='gone';motes('#3d4a3a');0}
   else if(n.id==='wit'){return}
