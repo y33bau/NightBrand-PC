@@ -690,3 +690,4 @@ cache612 · Runda 613: porzadek UI po dodaniu bohaterow (siatka wyboru postaci, 
 cache613 · Perki i wyzwania Mileny, ikony perkow/wyzwan Mileny i Dzwonnika
 cache614 · Perki i wyzwania Mileny, ikony perkow/wyzwan Mileny i Dzwonnika
 cache615 · Wyzwanie dnia i Noc tygodnia losuja tez Iwa i Milene
+cache616 · Kronika: Piec losow, Dlug dzwonu i knota
