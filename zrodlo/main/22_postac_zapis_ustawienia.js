@@ -40,13 +40,18 @@ const charId=()=>{try{return prog().char||'r'}catch(e){return 'r'}};
 const katOn=()=>charId()==='k';
 const zabOn=()=>charId()==='z';
 const dzwOn=()=>charId()==='d';
+const milOn=()=>charId()==='m';
+// Wspólne dane bohaterów (12.11.2026): jedno źródło imienia, przydomka i klasy dla całego interfejsu. ID techniczne (r,k,z,d,m) bez zmian.
+const HEROES={r:{n:'Radan',ep:EN?'the Crestless':'Bez Herbu',cls:EN?'Knight':'Rycerz',art:'rycerz'},k:{n:'Goran',ep:EN?'the Neckbreaker':'Łamacz Karków',cls:EN?'Executioner':'Kat',art:'kat'},z:{n:'Mira',ep:EN?'the Ash Dancer':'Tancerka Popiołów',cls:EN?'Assassin':'Zabójczyni',art:'zabojczyni'},d:{n:'Iwo',ep:EN?'the Herald of Silence':'Zwiastun Ciszy',cls:EN?'Bellringer':'Dzwonnik',art:'dzwonnik'},m:{n:'Milena',ep:EN?'the Unquenched':'Niedogasła',cls:EN?'Candlebound':'Woskownica',art:'woskownica'}};
+const heroName=(c,full)=>{const h=HEROES[c]||HEROES.r;return full?h.n+', '+h.ep:h.n};
 // Dzwonnik (12.11.2026): do czasu wlasnych perkow i wyzwan korzysta z zestawu Rycerza
-const perkCls=()=>charId();
+const perkCls=()=>charId()==='m'?'r':charId();
 const perkOk=(d,q)=>d.lv<=q.lv&&(d.who||'r')===perkCls();
 const SL0={light:JSON.parse(JSON.stringify(SL.light)),heavy:JSON.parse(JSON.stringify(SL.heavy)),roll:SL.roll};
-function applyChar(k){const kat=katOn();S.kat=kat;S.zab=zabOn();S.dzw=dzwOn();S.kn=charId()==='r';if(typeof dzwClear==='function')dzwClear();Object.assign(SL.light,JSON.parse(JSON.stringify(SL0.light)));Object.assign(SL.heavy,JSON.parse(JSON.stringify(SL0.heavy)));SL.roll=SL0.roll;
+function applyChar(k){const kat=katOn();S.kat=kat;S.zab=zabOn();S.dzw=dzwOn();S.mil=milOn();S.kn=charId()==='r';if(typeof dzwClear==='function')dzwClear();if(typeof milClear==='function')milClear();Object.assign(SL.light,JSON.parse(JSON.stringify(SL0.light)));Object.assign(SL.heavy,JSON.parse(JSON.stringify(SL0.heavy)));SL.roll=SL0.roll;
   if(S.zab){Object.assign(SL.light,{dmg:[13,14,13,14,24],stun:[.15,.15,.15,.15,.3],lunge:[24,24,24,24,45],arc:.78});Object.assign(SL.heavy,{cost:44,dmg:42,charge:.5,wind:.75,act:.6,rec:.3,range:38,arc:Math.PI,stun:.9,lunge:0});
     pl.max=Math.round(pl.max*.75);pl.staMax=Math.round((pl.staMax||100)*1.35);pl.sta=pl.staMax;k.hurt*=1.1;k.staRegen*=1.18;k.spd*=1.18;k.rollCost*=.9;k.zAspd=1.3;return}
+  if(S.mil){Object.assign(SL.light,{cost:15,dmg:[16,17,26],wind:.14,rec:.3,range:40,arc:.8,lunge:[28,22,56]});Object.assign(SL.heavy,{cost:38,dmg:52,charge:.5,wind:.62,act:.14,rec:.5,range:46,arc:1.9,stun:.8,lunge:50});SL.roll=26;S.wick=0;S.milStrips=[];return}
   if(S.dzw){Object.assign(SL.light,{cost:18,dmg:[21,24,35],wind:.2,rec:.36,range:36,arc:1.3});Object.assign(SL.heavy,{cost:44,dmg:72,charge:.8,range:44,arc:1.7,stun:1.1});SL.roll=32;
     pl.max=Math.round(pl.max*1.15);k.spd*=.9;k.blockSta*=.8;k.roll*=.88;k.poise*=1.4;k.heavyKb=1.4;return}
   if(!kat)return;Object.assign(SL.light,{cost:18,dmg:[22,25,36],wind:.2,rec:.36,range:34,arc:1.35});Object.assign(SL.heavy,{cost:42,dmg:66,charge:.75,range:42,arc:1.8,stun:1});SL.roll=34;
@@ -160,7 +165,7 @@ function applyEmbers(k){pl.max=Math.round(pl.max*(1+.02*embU('vigor')));k.staReg
 const embCos=id=>!!(embU(id)&&EMB.eq&&EMB.eq[id]);
 const embTrail=()=>{for(const p of [['cos_tr_fire','fire'],['cos_tr_blood','blood'],['cos_tr_rot','poison'],['cos_tr_ice','ice']])if(embCos(p[0]))return p[1];return null};
 let HERO_SKIN='000',HERO_ORIG=null;
-function applyHeroSkin(){if(!IMGS||!A||!A.heroD)return;const pre=katOn()&&IMGS.kat_d?'kat_':zabOn()&&IMGS.zab_d?'zab_':dzwOn()&&IMGS.dzw_d?'dzw_':charId()==='r'&&IMGS.knight_d&&IMGS.knight_dd&&IMGS.knight_def?'knight_':null,kat=!!pre,cls=charId(),arm=kat?armorOn(cls):null,key=kat?pre.slice(0,3)+(arm?':'+arm:''):['cos_armor','cos_cape','cos_blade'].map(k=>embCos(k)?1:0).join('');if(key===HERO_SKIN)return;
+function applyHeroSkin(){if(!IMGS||!A||!A.heroD)return;const pre=katOn()&&IMGS.kat_d?'kat_':zabOn()&&IMGS.zab_d?'zab_':dzwOn()&&IMGS.dzw_d?'dzw_':milOn()&&IMGS.mil_d?'mil_':charId()==='r'&&IMGS.knight_d&&IMGS.knight_dd&&IMGS.knight_def?'knight_':null,kat=!!pre,cls=charId(),arm=kat?armorOn(cls):null,key=kat?pre.slice(0,3)+(arm?':'+arm:''):['cos_armor','cos_cape','cos_blade'].map(k=>embCos(k)?1:0).join('');if(key===HERO_SKIN)return;
   try{const ks=['hero_d','hero_db','hero_dc','hero_dd','hero_def'];if(!HERO_ORIG){HERO_ORIG={};for(const k of ks)if(IMGS[k])HERO_ORIG[k]=IMGS[k]}
     const o={armor:key[0]==='1',cape:key[1]==='1',blade:key[2]==='1'};for(const k in HERO_ORIG){const src=kat?(IMGS[pre+k.slice(5)]||HERO_ORIG[k]):null;IMGS[k]=kat?(arm&&src!==HERO_ORIG[k]?armorRecolor(src,cls,arm):src):key==='000'?HERO_ORIG[k]:recolorHero(HERO_ORIG[k],o)}
     // class-only sheets (death, whirl, leap, hook, rend...): originals kept in CLS_ORIG, current class recoloured when an armour is worn
@@ -229,19 +234,21 @@ function ravenTick(){let r=$('ravenEye');const el=S&&S.raven&&!pl.dead?S.enemies
 $('kapBtn').addEventListener('click',openKap);$('kapBack').addEventListener('click',closeKap);addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('kap').hidden)closeKap()});
 function openPrep(ch){if(!groupReady(ch))return waitChapter(ch,()=>openPrep(ch),$('start'+ch));PREP.ch=ch;const q=prog();PREP.perks=q.sel.filter(id=>PERKS.find(p=>p.id===id&&perkOk(p,q))).slice(0,1);PREP.chal=chalList().some(c=>c.id===q.ch)?q.ch:null;
   $('title').hidden=true;$('end').hidden=true;$('prep').hidden=false;renderPrep();setTimeout(()=>{const f=$('prepGo');f.focus();$('prep').scrollTop=0},30)}
-function charIcon(id){const im=document.createElement('img');im.className='premium-class-art';im.alt='';im.src=PREMIUM_ASSETS['portret-'+({r:'rycerz',k:'kat',z:'zabojczyni',d:'dzwonnik'}[id])];return im}
+function charIcon(id){const im=document.createElement('img');im.className='premium-class-art';im.alt='';im.src=PREMIUM_ASSETS['portret-'+HEROES[id].art];return im}
 function renderCharPick(q){const g=$('prepPerks').closest('.prepgrid');let pc=$('prepChar');if(!pc){pc=document.createElement('div');pc.id='prepChar';pc.className='prepbox';pc.style.gridColumn='1/-1';g.prepend(pc)}
   const won=true;pc.innerHTML='';const h=document.createElement('h3');h.textContent=EN?'Character':'Postać';pc.appendChild(h);const row=document.createElement('div');row.style.cssText='display:flex;gap:.6em;flex-wrap:wrap';pc.appendChild(row);
-  const mk=(id,n,d,lock)=>{const on=id===charId(),b=document.createElement('button');b.type='button';b.className='opt'+(on?' on':'');b.style.cssText='flex:1 1 14em;width:auto';b.disabled=!!lock;
-    b.innerHTML=lock?`<b>${n}</b><small>${EN?'Unlocks after clearing Act I':'Odblokowanie: ukończ rozdział I'}</small>`:`<b>${on?'✓ ':''}${n}</b><span>${d}</span>`;if(!lock){const ic=charIcon(id),i=d.indexOf(': '),wp=i>0?d.slice(0,i):'',ds=i>0?d.slice(i+2):d;b.innerHTML='';
-      const t1=document.createElement('b'),t2=document.createElement('span');t1.textContent=(on?'✓ ':'')+n+(wp?', '+wp:'');t1.style.cssText='display:block;color:#e2b44a;font-family:inherit;font-weight:700;font-size:1.08em;letter-spacing:.03em;text-align:center;text-shadow:0 1px 3px #000';
+  const mk=(id,d,lock)=>{const H=HEROES[id],on=id===charId(),b=document.createElement('button');b.type='button';b.className='opt'+(on?' on':'');b.style.cssText='flex:1 1 14em;width:auto';b.disabled=!!lock;b.dataset.hero=id;
+    if(lock)b.innerHTML=`<b>${H.n}</b><small>${EN?'Unlocks after clearing Act I':'Odblokowanie: ukończ rozdział I'}</small>`;else{b.innerHTML='';const ic=charIcon(id),i=d.indexOf(': '),ds=i>0?d.slice(i+2):d;
+      const t1=document.createElement('b'),t1b=document.createElement('small'),t1c=document.createElement('small'),t2=document.createElement('span');t1.textContent=(on?'✓ ':'')+H.n;t1.style.cssText='display:block;color:#e2b44a;font-family:inherit;font-weight:700;font-size:1.18em;letter-spacing:.03em;text-align:center;text-shadow:0 1px 3px #000';
+      t1b.className='hero-ep';t1b.textContent=H.ep;t1c.textContent=H.cls;t1c.style.cssText='display:block;color:#b8ad98;text-align:center;font-size:.82em;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.25em';
       t2.textContent=ds.charAt(0).toLocaleUpperCase(EN?'en':'pl')+ds.slice(1);t2.style.cssText='display:block;color:#f4f0e6;font-family:inherit;font-weight:400;text-align:center;hyphens:none;margin-top:.15em';
-      if(ic)b.appendChild(ic);b.appendChild(t1);b.appendChild(t2);b.classList.add('nb-prep-class')}
-    b.addEventListener('click',()=>{if(q.char===id)return;q.char=id;q.sel=[];PREP.perks=[];saveProg();renderPrep();const nb=[...$('prepChar').querySelectorAll('button')].find(x=>x.textContent.includes(n));nb&&nb.focus()});row.appendChild(b)};
-  mk('r',EN?'Knight':'Rycerz',EN?'Sword: quick and agile, the balanced way to fight.':'Miecz: szybki i zwrotny, wyważony styl walki.');
-  mk('k',EN?'Executioner':'Kat',EN?'Axe: slow and heavy, +25% health, harder hits, longer parry stun, slower movement and attacks, more expensive dodges.':'Topór: wolny i ciężki, +25% życia, mocniejsze ciosy, dłuższe ogłuszenie po parowaniu, wolniejszy ruch i ataki, droższy unik.',!won);
-  mk('z',EN?'Ash Dancer':'Zabójczyni',EN?'Twin sabres: lightning-fast combos, quick movement and dodges, −25% health, +10% damage taken, spinning heavy attack.':'Dwie szable: błyskawiczne serie, szybki ruch i uniki, −25% życia, +10% otrzymywanych obrażeń, silny atak obrotowy.');
-  mk('d',EN?'Bellbearer':'Dzwonnik',EN?'Hammer: heavy, deliberate blows, +15% health, cheaper blocking, every third parry releases a stunning toll; slower movement and attacks.':'Młot: ciężkie, świadome ciosy, +15% życia, tańszy blok, co trzecie parowanie uwalnia ogłuszający ton; wolniejszy ruch i ataki.')}
+      if(ic)b.appendChild(ic);b.appendChild(t1);b.appendChild(t1b);b.appendChild(t1c);b.appendChild(t2);b.classList.add('nb-prep-class')}
+    b.addEventListener('click',()=>{if(q.char===id)return;q.char=id;q.sel=[];PREP.perks=[];saveProg();renderPrep();const nb=$('prepChar').querySelector('button[data-hero="'+id+'"]');nb&&nb.focus()});row.appendChild(b)};
+  mk('r',EN?'Sword: quick and agile, the balanced way to fight.':'Miecz: szybki i zwrotny, wyważony styl walki.');
+  mk('k',EN?'Axe: slow and heavy, +25% health, harder hits, longer parry stun, slower movement and attacks, more expensive dodges.':'Topór: wolny i ciężki, +25% życia, mocniejsze ciosy, dłuższe ogłuszenie po parowaniu, wolniejszy ruch i ataki, droższy unik.',!won);
+  mk('z',EN?'Twin sabres: lightning-fast combos, quick movement and dodges, −25% health, +10% damage taken, spinning heavy attack.':'Dwie szable: błyskawiczne serie, szybki ruch i uniki, −25% życia, +10% otrzymywanych obrażeń, silny atak obrotowy.');
+  mk('d',EN?'Hammer: heavy, deliberate blows, +15% health, cheaper blocking, every third parry releases a stunning toll; slower movement and attacks.':'Młot: ciężkie, świadome ciosy, +15% życia, tańszy blok, co trzecie parowanie uwalnia ogłuszający ton; wolniejszy ruch i ataki.');
+  mk('m',EN?'Candlestick spear: long reach and area control; Living Wick — each parry adds a charge (max 5), the next heavy blow spends them all and leaves a strip of hot wax; somersault dodge. A missed heavy blow leaves you open to a counter.':'Lichtarz-włócznia: duży zasięg i kontrola pola; Żywy Knot — każde parowanie dodaje ładunek (maks. 5), następny silny atak zużywa wszystkie i zostawia pas gorącego wosku; unik przewrotem. Chybiony silny atak naraża na kontrę.')}
 function renderPrep(){const q=prog();$('prepK').textContent=CHN[PREP.ch-1];{const nm=$('prepNim');nm.className='nimh ch'+PREP.ch;nm.setAttribute('aria-label',CHN[PREP.ch-1])}{const pn=$('prepN');pn.classList.remove('nbt');delete pn.dataset.nbt;pn.textContent=q.lv}$('prepLv').textContent=q.lv>=PMAX?(EN?'Max level':'Poziom maksymalny'):q.xp+' / '+PNEED(q.lv)+(EN?' XP to level ':' XP do poziomu ')+(q.lv+1);$('prepBar').style.setProperty('--p',q.lv>=PMAX?1:q.xp/PNEED(q.lv));
   $('prepPH').textContent=(EN?`Perk (${PREP.perks.length}/1)`:`Perk (${PREP.perks.length}/1)`);
   renderCharPick(q);const LST=PERKS.filter(d=>(d.who||'r')===perkCls());const P=$('prepPerks');P.innerHTML='';for(const d of LST){const lock=d.lv>q.lv,on=PREP.perks.includes(d.id),b=document.createElement('button');b.type='button';b.className='opt'+(on?' on':'');b.disabled=lock;
@@ -445,7 +452,7 @@ const KRON=[
  ...[1,2,3,4,5].map(c=>['akt'+c,(EN?'Act ':'Rozdział ')+['I','II','III','IV','V'][c-1],(EN?'Complete act ':'Ukończ rozdział ')+['I','II','III','IV','V'][c-1]+'.',c===5?50:20,()=>chWon(c)]),
  ['dlug_r',EN?'Debt of the Sword':'Dług miecza',EN?'Complete act V as the Knight.':'Ukończ rozdział V Rycerzem.',40,()=>medalOf('r',5)>0],
  ['dlug_k',EN?'Debt of the Axe':'Dług topora',EN?'Complete act V as the Executioner.':'Ukończ rozdział V Katem.',40,()=>medalOf('k',5)>0],
- ['dlug_z',EN?'Debt of the Sabres':'Dług szabel',EN?'Complete act V as the Ash Dancer.':'Ukończ rozdział V Zabójczynią.',40,()=>medalOf('z',5)>0],
+ ['dlug_z',EN?'Debt of the Sabres':'Dług szabel',EN?'Complete act V as Mira.':'Ukończ rozdział V Zabójczynią.',40,()=>medalOf('z',5)>0],
  ['nietknieta',EN?'Untouched':'Nietknięta skóra',EN?'Win a night taking at most 3 hits.':'Wygraj noc, otrzymując najwyżej 3 trafienia.',50,x=>x&&x.won&&(S.hitsT||0)<=3],
  ['trudny',EN?'Hard Way':'Trudna droga',EN?'Win any night on Hard.':'Wygraj dowolną noc na poziomie Trudnym.',30,x=>x&&x.won&&DIFFK==='h'],
  ['trudny5',EN?'Iron Debt':'Żelazny dług',EN?'Complete act V on Hard.':'Ukończ rozdział V na poziomie Trudnym.',60,x=>x&&x.won&&DIFFK==='h'&&x.C===5],
@@ -524,7 +531,7 @@ function beastImg(t,size){const k=t+':'+size;if(KRON_IMG[k])return KRON_IMG[k];t
 function openKron(){kronCheck(null);KAPMODE='kron';KRONSEL=0;$('title').hidden=true;$('kap').hidden=false;renderKron();setTimeout(()=>{const f=$('kapList').children[0];f&&f.focus()},30)}
 function closeKron(){closeKap()}
 function hms(t){t=Math.round(t||0);const h=Math.floor(t/3600),m=Math.floor(t%3600/60);return h?h+' h '+m+' min':m+' min'}
-function kronRows(){const W=weekNight(),cn={r:EN?'Knight':'Rycerz',k:EN?'Executioner':'Kat',z:EN?'Ash Dancer':'Zabójczyni'};
+function kronRows(){const W=weekNight(),cn={r:HEROES.r.n,k:HEROES.k.n,z:HEROES.z.n,d:HEROES.d.n,m:HEROES.m.n};
   if(KRONTAB===0){const done=META.wk.done===W.key,Dn=dayNight(),dd=META.dy.done===Dn.key;return[{n:EN?'Daily challenge':'Wyzwanie dnia',s:(dd?'✓ ':'')+Dn.ruleN+' · '+cn[Dn.cls],ok:dd,day:Dn},{icon:kronIcon(),n:(EN?'Night of the Week ':'Noc tygodnia ')+W.key,s:(done?'✓ ':'')+(EN?'Act ':'Rozdz. ')+['I','II','III','IV','V'][W.ch-1]+' · '+cn[W.cls]+' · '+W.curseN,ok:done,week:W}]}
   if(KRONTAB===1)return KRON.map(([id,n,d,ash])=>({icon:kronIcon(),id,n,s:(META.kr[id]?'✓ ':'')+ash+(EN?' Ashes':' Popiołów'),ok:!!META.kr[id],d,ash}));
   if(KRONTAB===2)return [...'rkz'].map(c=>({img:PREMIUM_ASSETS['portret-'+({r:'rycerz',k:'kat',z:'zabojczyni',d:'dzwonnik'}[c])]||'',n:cn[c],s:(EN?'Medals ':'Medale ')+[1,2,3,4,5].filter(ch=>medalOf(c,ch)).length+'/5 · '+(EN?'gold ':'złote ')+[1,2,3,4,5].filter(ch=>medalOf(c,ch)>=3).length+'/5',ok:true,cls:c}));
@@ -547,7 +554,7 @@ function renderKron(){$('kapH').textContent=EN?'Chronicle':'Kronika';$('kapE').t
     b.classList.add('nbui-kron-row');b.classList.toggle('nbui-has-art',!!r.img);
     {const pp=b.querySelector('.m2k-pips');if(pp)pp.remove()}
     b.addEventListener('click',()=>{KRONSEL=i;renderKron();const nb=$('kapList').children[i];nb&&nb.focus()});L.appendChild(b)});
-  const r=R[KRONSEL],D=$('kapDet'),cn0={r:EN?'Knight':'Rycerz',k:EN?'Executioner':'Kat',z:EN?'Ash Dancer':'Zabójczyni'};let body='',btn='';
+  const r=R[KRONSEL],D=$('kapDet'),cn0={r:HEROES.r.n,k:HEROES.k.n,z:HEROES.z.n,d:HEROES.d.n,m:HEROES.m.n};let body='',btn='';
   if(KRONTAB===0&&r.day){const Dn=r.day,y=META.dy,best=y.key===Dn.key?y.best:0,yd=new Date();yd.setDate(yd.getDate()-1);const streak=y.done===Dn.key||y.done===dayKey(yd)?y.streak:0;
     body=`<p>${EN?'Rule of the day':'Zasada dnia'}: <b>${Dn.ruleN}</b><br><small>${Dn.ruleD}</small></p>
       <p>${EN?'Act':'Rozdział'}: <b>${['I','II','III','IV','V'][Dn.ch-1]} · ${CHN[Dn.ch-1]}</b> · ${EN?'Character':'Postać'}: <b>${cn0[Dn.cls]}</b></p>

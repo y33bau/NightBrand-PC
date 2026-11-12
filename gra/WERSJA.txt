@@ -685,3 +685,4 @@ cache607 · Umiejetnosci: usuniete Kaskada ciec, Rozciecie ziemi, Przelamanie, Z
 cache608 · Dzwonnik: fale po ciezkiej ripoście licza sie z polowy obrazen uderzenia (Echo Parowania, Fala Mocy) (nie sprawdzono: czucie walki, pad)
 cache609 · Nowe modele wszystkich mobów i bossa Zrost; Glizzard, Wielki Paruwiak zamiast OBDYP: mini boss aktu II po rozmowie z Tharmem (nie sprawdzono: telefon, pad, dźwięk, balans Glizzarda)
 cache610 · NPC: nowe modele 16 postaci, portrety w rozmowach, 5 nowych NPC (po jednym na akt)
+cache611 · Milena, Niedogasła: nowa grywalna postać (włócznia-lichtarz), Żywy Knot, Odlew Skazańca, Dogasanie; zatwierdzone imiona wszystkich bohaterów

@@ -1,8 +1,9 @@
 /* ============ RENDER ============ */
 const camTarget=new THREE.Vector3();let idleA=0;
 // slasher hero v2 (S1-S4 sheets): every state has its own drawn-sword animation
-function heroFrameV2(D){const fd=()=>Math.abs(pl.fx)>Math.abs(pl.fy)?'side':pl.fy>0?'down':'up',ix=(a,i)=>a[Math.max(0,Math.min(a.length-1,i|0))];
-  if(pl.roll>0)return ix(D.roll,pl.rollT/.3*4);
+function heroFrameV2(D){const MI=S&&S.mil&&D.mil?D.mil:null,fd=()=>Math.abs(pl.fx)>Math.abs(pl.fy)?'side':pl.fy>0?'down':'up',ix=(a,i)=>a[Math.max(0,Math.min(a.length-1,i|0))];
+  if(MI&&pl.atk&&pl.atk.kind==='gut')return ix(MI.gut[fd()],pl.atk.stage==='hold'?(1-pl.atk.t/MIL.gut.hold)*3.99:3);
+  if(pl.roll>0)return MI&&pl.milEffT>0?ix(MI.eff[fd()],pl.rollT/.3*4):ix(D.roll,pl.rollT/.3*4);
   const K=S&&S.kat&&D.kat?D.kat:S&&S.kn&&D.kn?D.kn:S&&S.dzw&&D.dzw?D.dzw:null,Z=S&&S.zab&&D.zab?D.zab:null,DZ=S&&S.dzw&&D.dzw?D.dzw:null;
   if(DZ&&pl.tonT>0&&!pl.atk)return ix(DZ.ton,(.5-pl.tonT)/.5*4);if(DZ&&DZ.cast&&pl.castT>0&&!pl.atk)return ix(DZ.cast[fd()],(.45-pl.castT)/.45*4);
   if(K&&pl.atk&&pl.atk.kind==='whirl'){const a=pl.atk;if(a.stage==='rec')return ix(K.whirlRec,(1-a.t/WHIRL.recovery)*4);if(a.elapsed<.12)return ix(K.whirlWind,a.elapsed/.12*4);return at(K.whirlLoop,a.elapsed,13.3,true)}
@@ -40,7 +41,7 @@ function heroBladeMat(fr,k){const key='E'+k;if(fr[key]!==undefined)return fr[key
 function heroFrame(){
   const V2=A.heroD&&A.heroD.v2?A.heroD:null;
   if(V2&&!pl.dead){const r=heroFrameV2(V2);if(r)return r}
-  if(pl.dead)return S&&S.dzw&&A.heroD&&A.heroD.dzw?at(A.heroD.dzw.death,pl.deadT,6,false):S&&S.kn&&A.heroD&&A.heroD.kn?at(A.heroD.kn.death,pl.deadT,5,false):S&&S.zab&&A.heroD&&A.heroD.zab?at(A.heroD.zab.death,pl.deadT,5,false):S&&S.kat&&A.heroD&&A.heroD.kat?at(A.heroD.kat.death,pl.deadT,5,false):at(A.hero.death,pl.deadT,5,false);
+  if(pl.dead)return S&&S.mil&&A.heroD&&A.heroD.mil?at(A.heroD.mil.death,pl.deadT,6,false):S&&S.dzw&&A.heroD&&A.heroD.dzw?at(A.heroD.dzw.death,pl.deadT,6,false):S&&S.kn&&A.heroD&&A.heroD.kn?at(A.heroD.kn.death,pl.deadT,5,false):S&&S.zab&&A.heroD&&A.heroD.zab?at(A.heroD.zab.death,pl.deadT,5,false):S&&S.kat&&A.heroD&&A.heroD.kat?at(A.heroD.kat.death,pl.deadT,5,false):at(A.hero.death,pl.deadT,5,false);
   if(pl.roll>0)return at(A.hero.roll,pl.rollT,13,false);
   if(pl.swingT>0){const a=pl.swingDir===2?A.hero.swing_side:pl.swingDir===0?A.hero.swing_down:A.hero.swing_up,dur=pl.swingDur||.32;{const f=(dur-pl.swingT)/dur;return a[Math.min(a.length-1,f<.12?0:f<.24?1:f<.62?2:3)]}}
   const D=A.heroD;
