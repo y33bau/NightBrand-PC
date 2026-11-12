@@ -702,3 +702,4 @@ cache624 · Mapy: usuniete cienkie zlote linie na posadzkach (II, III, V)
 cache625 · Woskownica: mniejsze efekty, czystszy sprite; rozdz. I: dachy dwuspadowe, plac przy studni, mniejsze krzyze
 cache626 · Rozdz. I: faliste brzegi podloza, ogien spod szubienicy usuniety
 cache627 · Rozdz. I: zasada wolnej drogi (oboz zakonu i kociolek poza droga)
+cache628 · Rozdz. I: sztandary zakonu jako brama po obu stronach drogi
