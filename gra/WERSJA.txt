@@ -692,3 +692,6 @@ cache614 · Perki i wyzwania Mileny, ikony perkow/wyzwan Mileny i Dzwonnika
 cache615 · Wyzwanie dnia i Noc tygodnia losuja tez Iwa i Milene
 cache616 · Kronika: Piec losow, Dlug dzwonu i knota
 cache617 · Zbroje Kaplicy dla Iwa i Mileny (wosk zostaje), Otchlan piekla -> Nether
+cache618 · Nowe animacje: ciecia, wir, fale mocy, mlot Dzwonnika, wlocznia Mileny, parry Dzwonnika
+cache619 · Nowe animacje: ciecia, wir, fale mocy, mlot Dzwonnika, wlocznia Mileny, parry Dzwonnika
+cache620 · Wlocznia wieksza

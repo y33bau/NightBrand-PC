@@ -3287,12 +3287,17 @@ function emitWeaponSlash(a,c,s,R,owner=pl,trail=COMBAT_TRAIL[encLevel()[0]]||emb
   if(S.zab){
     if(heavy)f=zfx('fx_zab',2,.34,owner.x,owner.y,.72,R/16*.94,'ground',0);
     else f=zfx('fx_zab',a.combo===4?1:0,a.combo===4?.24:.22,x,y,h,size,'bill',rot);
+  }else if(S.dzw){
+    if(heavy){f=skAdd('ham_v',.3,x,y,.9,size*1.15,'bill',0);skAdd('ham_r',.3,owner.x+c*R*.62,owner.y+s*R*.62,.15,size*1.1,'ground',0)}
+    else f=skAdd(a.combo%2?'ham_d':'ham_h',.26,x,y,h,size*1.05,'bill',rot)
+  }else if(S.mil){
+    f=skAdd('sp_h',heavy?.3:.24,x+c*R*.1,y+s*R*.1,h,size*(heavy?2.3:1.9),'bill',rot);if(heavy)skAdd('sp_s',.26,owner.x+c*R*.9,owner.y+s*R*.9,.9,size*1.2,'bill',0)
   }else f=skAdd('slash',.26,x,y,h,size,'bill',rot,trail);
   if(!f){addVfx(A.fx.slash,.26,x,y,h,size,'bill',rot);f=S.vfx[S.vfx.length-1]}
   return bindWeaponFx(f,owner);
 }
 // ---- nowe animacje skilli i pocisków (Gemini, 30.10.2026): arkusz skill_fx, 192 px na klatkę ----
-const SKM={"knock": [0, 6], "earth": [1, 6], "stone": [2, 6], "frostf": [3, 4], "frosti": [4, 6], "firef": [5, 4], "firei": [6, 6], "casc": [7, 6], "whirl": [8, 4], "wave1": [9, 6], "wave2": [10, 6], "rush": [11, 6], "slash": [12, 6], "bolt": [13, 3], "boltHit": [14, 6], "boss": [15, 4], "freeze": [16, 4], "burn": [17, 4], "poison": [18, 4], "bleed": [19, 4], "slash_fire": [20, 4], "slash_ice": [21, 4], "slash_poison": [22, 4], "slash_blood": [23, 4]},SKFX={};
+const SKM={"knock": [0, 6], "earth": [1, 6], "stone": [2, 6], "frostf": [3, 4], "frosti": [4, 6], "firef": [5, 4], "firei": [6, 6], "casc": [7, 6], "whirl": [8, 4], "wave1": [9, 4], "wave2": [10, 4], "rush": [11, 4], "slash": [12, 4], "bolt": [13, 3], "boltHit": [14, 6], "boss": [15, 4], "freeze": [16, 4], "burn": [17, 4], "poison": [18, 4], "bleed": [19, 4], "slash_fire": [20, 4], "slash_ice": [21, 4], "slash_poison": [22, 4], "slash_blood": [23, 4], "whirl_blood": [24, 4], "whirl_ice": [25, 4], "whirl_poison": [26, 4], "whirl_fire": [27, 4], "ham_h": [28, 4], "ham_v": [29, 4], "ham_d": [30, 4], "ham_r": [31, 4], "sp_h": [32, 4], "sp_d1": [33, 4], "sp_d2": [34, 4], "sp_s": [35, 4], "parry_d": [36, 4]},SKFX={};
 // runda 245: statusy ostrza (ogień, lód, trucizna, krew) = te same animacje co stal, tylko przebarwione (mapa gradientu po jasności)
 const SK_TINTS={fire:[[110,14,0],[255,104,18],[255,236,150]],ice:[[16,52,130],[84,184,255],[236,251,255]],poison:[[14,62,16],[108,220,58],[232,255,172]],blood:[[84,0,8],[188,18,30],[255,128,116]]};
 function skTint(c,tint){const T=SK_TINTS[tint];if(!T)return;const g=c.getContext('2d'),d=g.getImageData(0,0,c.width,c.height),p=d.data;for(let i=0;i<p.length;i+=4){if(!p[i+3])continue;let l=Math.pow((p[i]*.299+p[i+1]*.587+p[i+2]*.114)/255,.8);l=Math.min(1,l*1.15);const a=l<.5?T[0]:T[1],b=l<.5?T[1]:T[2],q=l<.5?l*2:(l-.5)*2;p[i]=a[0]+(b[0]-a[0])*q;p[i+1]=a[1]+(b[1]-a[1])*q;p[i+2]=a[2]+(b[2]-a[2])*q}g.putImageData(d,0,0)}
@@ -3874,7 +3879,7 @@ function syncCombatEffects(dt){for(const f of combatEffects){if(!f.active)contin
 function contactSparks(x,y,nx,ny,kind,count){const angle=Math.atan2(ny,nx),soft=!SETT.flash,n=Math.max(1,Math.round(count*GFX.parts));
   for(let i=0;i<n;i++){const q=(Math.sin((i+1)*78.233+clock*12.9898)*43758.5453)%1,f=q-Math.floor(q),a=angle+(f-.5)*2.1,sp=26+f*(kind==='parry'?66:42);S.parts.push({k:'e',x,y,z:10+f*4,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.6,vz:12+f*25,c:kind==='flesh'?(i%2?'#ba7354':'#96513f'):soft?(i%2?'#b9b1a0':'#8c969c'):kind==='parry'?(i%2?'#ffe9bb':'#d3e0eb'):(i%2?'#c9c3aa':'#b8c6d0'),life:.09+f*.09})}}
 function guardFeedback(kind,nx,ny,projectile){let dx=-nx,dy=-ny,d=Math.hypot(dx,dy);if(d<.001){dx=pl.fx;dy=pl.fy;d=1}dx/=d;dy/=d;const attacker=S.attacker,reach=attacker?Math.min(10,Math.hypot(attacker.x-pl.x,attacker.y-pl.y)*.5):9,x=projectile?projectile.x:pl.x+dx*reach,y=projectile?projectile.y:pl.y+dy*reach;
-  if(!emitCombatEffect(kind==='parry'?'parry':'block',x,y,kind==='parry'?1.3:.9))contactSparks(x,y,dx,dy,kind,kind==='parry'?12:7);if(kind==='parry')shockAt(x,y,.35);pl.visualGuard={t:.16,life:.16,dx:nx,dy:ny};play(kind,kind==='parry'?.03:.05)}
+  if(!(kind==='parry'&&S.dzw&&skAdd('parry_d',.28,x,y,.9,1.5,'bill',0))&&!emitCombatEffect(kind==='parry'?'parry':'block',x,y,kind==='parry'?1.3:.9))contactSparks(x,y,dx,dy,kind,kind==='parry'?12:7);if(kind==='parry')shockAt(x,y,.35);pl.visualGuard={t:.16,life:.16,dx:nx,dy:ny};play(kind,kind==='parry'?.03:.05)}
 function hitSpark(e,nx,ny){const length=Math.hypot(nx,ny)||1,dx=nx/length,dy=ny/length,armour=steelEnemy(e),amplitude=BIG.has(e.type)?.35:e.type==='collector'?.55:ftHeavy?1.3:ftCrit?1.1:.75;
   if(!emitCombatEffect(ftHeavy?'heavy':'light',e.x-dx*Math.min(e.r*.55,5),e.y-dy*Math.min(e.r*.55,5),ftHeavy?1.35:.9,0,armour?'steel':'flesh'))contactSparks(e.x-dx*Math.min(e.r*.55,5),e.y-dy*Math.min(e.r*.55,5),dx,dy,armour?'steel':'flesh',ftCrit?8:ftHeavy?6:4);
   const life=COMBAT_POLISH_ON?(ftHeavy?.23:.18):.15,power=COMBAT_POLISH_ON?amplitude*(armour?2.1:2.8):amplitude;e.visualHit={t:life,life,dx,dy,amplitude:power,heavy:ftHeavy};}
