@@ -1377,6 +1377,8 @@ vec3 nbNeighbor(vec3 color,vec2 pos,vec2 local,vec2 dir,float distanceToEdge,vec
 vec4 sampledDiffuseColor=texture2D(map,vUv);vec2 nbPos=vec2(vUv.x,1.-vUv.y)*nbGrid,nbTile=floor(nbPos),nbLocal=fract(nbPos);vec4 cell=nbCell(nbTile);nbDx=dFdx(nbPos);nbDy=dFdy(nbPos);nbWorld=nbPos;
 if(cell.r>.5){
 if(cell.b<128.&&nbLite<.5&&nbFlag(cell.a,64.)>.5&&cell.g!=3.&&cell.g!=1.){vec2 warp=nbPos+.64*vec2(sin(nbPos.y*1.7+sin(nbPos.x*.8)),sin(nbPos.x*1.5+sin(nbPos.y*.9)));vec4 next=nbCell(floor(warp));if(next.r>.5&&nbFlag(next.a,64.)>.5&&next.g!=cell.g&&next.g!=3.&&next.g!=1.){cell=next;nbTile=floor(warp);nbLocal=fract(warp);}}
+// 12.11.2026: the same wavy boundary for CC0 floors outdoors (I, IV): painted patches no longer end on straight tile edges; plank floors (id 7) stay straight
+if(cell.b>=128.&&nbLite<.5&&nbArchitecture<.5&&nbFlag(cell.a,64.)>.5&&floor((cell.b-128.)/8.)!=7.){vec2 warp=nbPos+.42*vec2(sin(nbPos.y*1.7+sin(nbPos.x*.8))+.45*sin(nbPos.y*4.1+nbPos.x*1.3),sin(nbPos.x*1.5+sin(nbPos.y*.9))+.45*sin(nbPos.x*3.7-nbPos.y*1.1));vec4 next=nbCell(floor(warp));if(next.r>.5&&next.b>=128.&&nbFlag(next.a,64.)>.5&&floor((next.b-128.)/8.)!=7.&&floor((next.b-128.)/8.)!=floor((cell.b-128.)/8.)){cell=next;nbTile=floor(warp);nbLocal=fract(warp);}}
 vec2 uv=nbUV(cell,nbLocal);vec3 detail=nbRead(nbAtlas,cell,nbLocal),coarse=${compactSamplers?'nbTone(cell.g)':'texture2D(nbCoarse,nbReference(cell,nbLocal)).rgb'};
 if(nbLite<.5){
 detail=nbNeighbor(detail,nbTile,nbLocal,vec2(-1.,0.),nbLocal.x,cell);detail=nbNeighbor(detail,nbTile,nbLocal,vec2(1.,0.),1.-nbLocal.x,cell);detail=nbNeighbor(detail,nbTile,nbLocal,vec2(0.,-1.),nbLocal.y,cell);detail=nbNeighbor(detail,nbTile,nbLocal,vec2(0.,1.),1.-nbLocal.y,cell);

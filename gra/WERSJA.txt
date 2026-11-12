@@ -700,3 +700,4 @@ cache622 · Scalenie rundy 611: dialogi nowych NPC od autora, Nawoj przy ruinach
 cache623 · Mapy: skala rekwizytow (kola, kociolki, drzewa), filary klasztoru w Zlotogrodzie
 cache624 · Mapy: usuniete cienkie zlote linie na posadzkach (II, III, V)
 cache625 · Woskownica: mniejsze efekty, czystszy sprite; rozdz. I: dachy dwuspadowe, plac przy studni, mniejsze krzyze
+cache626 · Rozdz. I: faliste brzegi podloza, ogien spod szubienicy usuniety
