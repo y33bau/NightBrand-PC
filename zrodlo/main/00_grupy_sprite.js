@@ -223,6 +223,7 @@ const SPRITE_GROUPS={
   "p3_roof_ridge": ["r3"],
   "p3_wall_top": ["r3"],
   "p3_roof_shack": ["r3"],
+  "p3_roof_lead": ["r3"],
   "p1_roof_burnt": ["core"],
   "water_shallow": ["core","r4"],
   "ford_stones": ["r4"],
