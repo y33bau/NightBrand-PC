@@ -87,7 +87,8 @@ function genDolne(){
   return{map,under,PROPS,clearways,start:{x:6*TS+8,y:23*TS+14},shrines:[{x:4*TS+8,y:38*TS+12},{x:60*TS+8,y:40*TS+12}],
     region:(x,y)=>x>=40&&y>=42?'mine':x>=40?'forge':'hall',
     npcs:[{id:'tharm',art:'tharm',name:(EN?'Tharm\'s Ghost':'Duch kowala Tharma'),x:52*TS+8,y:24*TS+12,lines:THARM_LINES},
-          (()=>{const [x,y]=freeNear(map,PROPS,[20,26,30],22,34);return{id:'mila',art:'mila',name:(EN?'Mila, the Amazon':'Mila, amazonka'),x:(x+.5)*TS,y:(y+.4)*TS,lines:MILA_LINES}})()],idle:[18,23,12,8]};
+          (()=>{const [x,y]=freeNear(map,PROPS,[20,26,30],22,34);return{id:'mila',art:'mila',name:(EN?'Mila, the Amazon':'Mila, amazonka'),x:(x+.5)*TS,y:(y+.4)*TS,lines:MILA_LINES}})(),
+          (()=>{const [x,y]=freeNear(map,PROPS,[20,26,30],46,46);return{id:'rudna',art:'rudna',name:(EN?'Rudna, Listener of the Veins':'Rudna, Słuchaczka Żył'),x:(x+.5)*TS,y:(y+.4)*TS,lines:RUDNA_LINES}})()],idle:[18,23,12,8]};
 }
 
 // Chapter I: the burned village of Brzeźnica
@@ -150,7 +151,8 @@ function genBrzeznica(){
     npcs:[{id:'elder',art:'elder',name:(EN?'Dying Old Man':'Umierający przy studni'),x:29.6*TS,y:26.4*TS,lines:ELDER_LINES},
           {id:'marga',art:'marga',name:(EN?'Marga, the Bone Trader':'Marga, handlarka kości'),x:54.9*TS,y:21.1*TS,lines:MARGA_LINES},
           {id:'wit',art:'wit',name:(EN?'Brother Wit, Prisoner in the Stocks':'Brat Wit, więzień w dybach'),x:14.5*TS,y:30.92*TS,lines:WIT_LINES,solid:[14,30]},
-          (()=>{const [x,y]=freeNear(map,PROPS,[40,41,42,47],27,15);return{id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:(x+.5)*TS,y:(y+.4)*TS,lines:CHOJRAK_LINES}})()],idle:[31,28,13,9]};
+          (()=>{const [x,y]=freeNear(map,PROPS,[40,41,42,47],27,15);return{id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:(x+.5)*TS,y:(y+.4)*TS,lines:CHOJRAK_LINES}})(),
+          (()=>{const [x,y]=freeNear(map,PROPS,[46,40,41,42,47],47,19);return{id:'nawoj',art:'nawoj',name:(EN?'Nawoj, Keeper of Names':'Nawoj, Strażnik Imion'),x:(x+.5)*TS,y:(y+.4)*TS,lines:NAWOJ_LINES}})()],idle:[31,28,13,9]};
 }
 
 // Chapter III: Złotogród, the golden capital rotting under its domes
@@ -223,7 +225,8 @@ function genStolica(){
     npcs:[{id:'izolda',art:'izolda',name:(EN?'Countess Isolda of Vermar':'Hrabina Izolda z Vermarów'),x:6.5*TS,y:18.4*TS,lines:IZOLDA_LINES},
           {id:'ottokar',art:'ottokar',name:(EN?'Count Ottokar, King\'s Treasurer':'Hrabia Ottokar, skarbnik korony'),x:50*TS,y:9.4*TS,lines:OTTOKAR_LINES},
           {id:'aurel',art:'aurel',name:(EN?'Young Aurel of House Halder':'Młody Aurel z rodu Halderów'),x:16.5*TS,y:27.4*TS,lines:AUREL_LINES},
-          (()=>{const [x,y]=freeNear(map,PROPS,[50,52,53,55],24,42);return{id:'heri',art:'heri',name:(EN?'Heri of the Royal Guard':'Heri, wojak z gwardii królewskiej'),x:(x+.5)*TS,y:(y+.4)*TS,lines:HERI_LINES}})()],idle:[32,30,11,8]};
+          (()=>{const [x,y]=freeNear(map,PROPS,[50,52,53,55],24,42);return{id:'heri',art:'heri',name:(EN?'Heri of the Royal Guard':'Heri, wojak z gwardii królewskiej'),x:(x+.5)*TS,y:(y+.4)*TS,lines:HERI_LINES}})(),
+          (()=>{const [x,y]=freeNear(map,PROPS,[50,52,53,55],10,46);return{id:'seweryna',art:'seweryna',name:(EN?'Seweryna, the Mourning Seamstress':'Seweryna, Krawcowa Żałobna'),x:(x+.5)*TS,y:(y+.4)*TS,lines:SEWERYNA_LINES}})()],idle:[32,30,11,8]};
 }
 
 // Chapter IV: Czarnobór, the wild valleys of the old faith (plan: docs/prompty-rozdzial4.md)
@@ -330,7 +333,7 @@ function genCzarnobor(seed){
     region:(x,y)=>y>=CZY.campTop?'camp':y>=CZY.stones?'meadows':y>=CZY.north?'stones':y<15&&x>23&&x<58?'hill':x<CZX.marsh?'marsh':'forest',
     npcs:(()=>{const OK=[60,61,62,63,66,67],nn=(id,art,name,lines,x,y,extra)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);return Object.assign({id,art,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines},extra||{})};
       return[nn('wierz','wierz',(EN?'Wierzchoslava, the Whisperer':'Wierzchosława, szeptucha'),WIERZ_LINES,36,62),nn('bartosz','bartosz',(EN?'Bart the Scout':'Bartosz Tropiciel'),BARTOSZ_LINES,roadX(44)-3,43),
-        nn('wolch','wolch',(EN?'Volch, Pagan Priest':'Żerca Wołch'),WOLCH_LINES,CZ.oak[0],CZ.oak[1]+4),nn('boginka','boginka_lure','',[],62+((r()*10)|0),10+((r()*10)|0),{lure:true})]})(),idle:[40,48,14,10]};
+        nn('wolch','wolch',(EN?'Volch, Pagan Priest':'Żerca Wołch'),WOLCH_LINES,CZ.oak[0],CZ.oak[1]+4),nn('dobromir','dobromir',(EN?'Dobromir, Keeper of Empty Hives':'Dobromir, Pszczelarz Pustych Uli'),DOBROMIR_LINES,47,62),nn('boginka','boginka_lure','',[],62+((r()*10)|0),10+((r()*10)|0),{lure:true})]})(),idle:[40,48,14,10]};
 }
 
 // Chapter V: Cytadela Wierzycieli, seat of the Order (plan: docs/prompty-rozdzial5.md)
@@ -368,7 +371,7 @@ function genCytadela(seed){
   const SH=[[69,60],[10,42],[40,19]];SH.forEach(([x,y],i)=>P('healing_shrine',x,y,true,{shrine:i}));
   return{map,under,PROPS,seed,start:{x:40*TS+8,y:63*TS+8},shrines:SH.map(([x,y])=>({x:x*TS+8,y:y*TS+12})),region:cyRegion,idle:[40,58,14,6],
     npcs:(()=>{const OK=[70,71,72,73,74,75],nn=(id,name,lines,x,y)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);return{id,art:id,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines}};
-      return[nn('skryba',(EN?'Condemned Scribe':'Skazany Skryba'),SKRYBA_LINES,28,16),nn('straznik',(EN?'The Guard Who Fled':'Strażnik, który uciekł'),STRAZNIK_LINES,24,64),nn('pieczetnik',(EN?'The Senior Bookkeeper':'Starszy Księgowy'),PIECZETNIK_LINES,40,54)]})()};
+      return[nn('skryba',(EN?'Condemned Scribe':'Skazany Skryba'),SKRYBA_LINES,28,16),nn('straznik',(EN?'The Guard Who Fled':'Strażnik, który uciekł'),STRAZNIK_LINES,24,64),nn('pieczetnik',(EN?'The Senior Bookkeeper':'Starszy Księgowy'),PIECZETNIK_LINES,40,54),nn('lucjan',(EN?'Lucjan, the Eraser':'Lucjan, Wymazywacz'),LUCJAN_LINES,56,50)]})()};
 }
 
 // Crypt under the Brzeźnica graveyard (side quest of chapter I), built from the Lower City tiles and props.

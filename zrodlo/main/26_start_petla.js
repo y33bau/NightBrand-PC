@@ -2286,9 +2286,10 @@ ${'#orient'.repeat(44)}.pc-menu #pause #skillLoadout .pcmp-loadout-tabs{grid-col
  const hide=(el,on)=>{if(el.hidden!==on)el.hidden=on};
  const sync=()=>{
   const open=!dlg.hidden&&!!S?.dialog;if(!open){wasOpen=false;return}
-  const n=S.dialog,lines=NL(n),count=lines.length,frame=A?.[n.art]?.[0]?.n?.map?.image;
+  const n=S.dialog,lines=NL(n),count=lines.length,frame=IMGS?.['npcp_'+n.art]||A?.[n.art]?.[0]?.n?.map?.image;
   hide(picture,!frame);dlg.classList.toggle('pc-talk-has-portrait',!!frame);
-  if(frame&&frame!==image){image=frame;const g=portrait.getContext('2d');g.clearRect(0,0,192,192);
+  if(frame&&frame!==image&&IMGS?.['npcp_'+n.art]===frame){image=frame;const g=portrait.getContext('2d');g.clearRect(0,0,192,192);g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';const q=Math.min(192/frame.width,192/frame.height);g.drawImage(frame,(192-frame.width*q)/2,(192-frame.height*q)/2,frame.width*q,frame.height*q)}
+  else if(frame&&frame!==image){image=frame;const g=portrait.getContext('2d');g.clearRect(0,0,192,192);
    // Zachowaj oryginalne proporcje: gorna czesc sylwetki w kwadratowej miniaturze.
    const probe=canvas(frame.width,frame.height),pg=probe.getContext('2d');pg.drawImage(frame,0,0);const pixels=pg.getImageData(0,0,probe.width,probe.height).data;
    let x0=probe.width,y0=probe.height,x1=0,y1=0;for(let y=0;y<probe.height;y++)for(let x=0;x<probe.width;x++)if(pixels[(y*probe.width+x)*4+3]>24){x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)}

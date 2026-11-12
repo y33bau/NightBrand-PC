@@ -684,3 +684,4 @@ cache606 · Dzwonnik: 8 perkow i 10 wyzwan; poprawki z przegladu perkow i wyzwan
 cache607 · Umiejetnosci: usuniete Kaskada ciec, Rozciecie ziemi, Przelamanie, Zelazny odwet, Drugie Ja, Pakt Krwi, Pakt Zelaza; Daleka Fala scalona z Fala Mocy (+10% obrazen i +15% zasiegu za poziom); Kamienny obronca ma 5 poziomow (uderza 2-3-4-5 wrogow, na 5. poziomie +30% obrazen) (nie sprawdzono: czucie walki, pad, 2 graczy; test-coop-active odwoluje sie do usunietego Rozciecia ziemi)
 cache608 · Dzwonnik: fale po ciezkiej ripoście licza sie z polowy obrazen uderzenia (Echo Parowania, Fala Mocy) (nie sprawdzono: czucie walki, pad)
 cache609 · Nowe modele wszystkich mobów i bossa Zrost; Glizzard, Wielki Paruwiak zamiast OBDYP: mini boss aktu II po rozmowie z Tharmem (nie sprawdzono: telefon, pad, dźwięk, balans Glizzarda)
+cache610 · NPC: nowe modele 16 postaci, portrety w rozmowach, 5 nowych NPC (po jednym na akt)

@@ -532,7 +532,48 @@ const SPRITE_GROUPS={
   "mob_judge": ["r5"],
   "mob_arbiter": ["r5"],
   "mob_cursed": ["r5"],
-  "mob_tharm": ["r2"],
+  "npc_chojrak": ["core"],
+  "npcp_chojrak": ["core"],
+  "npc_marga": ["core"],
+  "npcp_marga": ["core"],
+  "npc_elder": ["core"],
+  "npcp_elder": ["core"],
+  "npc_wit": ["core"],
+  "npcp_wit": ["core"],
+  "npc_nawoj": ["core"],
+  "npcp_nawoj": ["core"],
+  "npc_mila": ["r2"],
+  "npcp_mila": ["r2"],
+  "npc_tharm": ["r2"],
+  "npcp_tharm": ["r2"],
+  "npc_rudna": ["r2"],
+  "npcp_rudna": ["r2"],
+  "npc_heri": ["r3"],
+  "npcp_heri": ["r3"],
+  "npc_izolda": ["r3"],
+  "npcp_izolda": ["r3"],
+  "npc_ottokar": ["r3"],
+  "npcp_ottokar": ["r3"],
+  "npc_aurel": ["r3"],
+  "npcp_aurel": ["r3"],
+  "npc_seweryna": ["r3"],
+  "npcp_seweryna": ["r3"],
+  "npc_wierz": ["r4"],
+  "npcp_wierz": ["r4"],
+  "npc_bartosz": ["r4"],
+  "npcp_bartosz": ["r4"],
+  "npc_wolch": ["r4"],
+  "npcp_wolch": ["r4"],
+  "npc_dobromir": ["r4"],
+  "npcp_dobromir": ["r4"],
+  "npc_skryba": ["r5"],
+  "npcp_skryba": ["r5"],
+  "npc_straznik": ["r5"],
+  "npcp_straznik": ["r5"],
+  "npc_pieczetnik": ["r5"],
+  "npcp_pieczetnik": ["r5"],
+  "npc_lucjan": ["r5"],
+  "npcp_lucjan": ["r5"],
   "mob_glizzard": ["r2"],
   "mob_glz_fx": ["r2"],
   "golem_a": [
@@ -711,7 +752,8 @@ function genDolne(){
   return{map,under,PROPS,clearways,start:{x:6*TS+8,y:23*TS+14},shrines:[{x:4*TS+8,y:38*TS+12},{x:60*TS+8,y:40*TS+12}],
     region:(x,y)=>x>=40&&y>=42?'mine':x>=40?'forge':'hall',
     npcs:[{id:'tharm',art:'tharm',name:(EN?'Tharm\'s Ghost':'Duch kowala Tharma'),x:52*TS+8,y:24*TS+12,lines:THARM_LINES},
-          (()=>{const [x,y]=freeNear(map,PROPS,[20,26,30],22,34);return{id:'mila',art:'mila',name:(EN?'Mila, the Amazon':'Mila, amazonka'),x:(x+.5)*TS,y:(y+.4)*TS,lines:MILA_LINES}})()],idle:[18,23,12,8]};
+          (()=>{const [x,y]=freeNear(map,PROPS,[20,26,30],22,34);return{id:'mila',art:'mila',name:(EN?'Mila, the Amazon':'Mila, amazonka'),x:(x+.5)*TS,y:(y+.4)*TS,lines:MILA_LINES}})(),
+          (()=>{const [x,y]=freeNear(map,PROPS,[20,26,30],46,46);return{id:'rudna',art:'rudna',name:(EN?'Rudna, Listener of the Veins':'Rudna, Słuchaczka Żył'),x:(x+.5)*TS,y:(y+.4)*TS,lines:RUDNA_LINES}})()],idle:[18,23,12,8]};
 }
 
 // Chapter I: the burned village of Brzeźnica
@@ -774,7 +816,8 @@ function genBrzeznica(){
     npcs:[{id:'elder',art:'elder',name:(EN?'Dying Old Man':'Umierający przy studni'),x:29.6*TS,y:26.4*TS,lines:ELDER_LINES},
           {id:'marga',art:'marga',name:(EN?'Marga, the Bone Trader':'Marga, handlarka kości'),x:54.9*TS,y:21.1*TS,lines:MARGA_LINES},
           {id:'wit',art:'wit',name:(EN?'Brother Wit, Prisoner in the Stocks':'Brat Wit, więzień w dybach'),x:14.5*TS,y:30.92*TS,lines:WIT_LINES,solid:[14,30]},
-          (()=>{const [x,y]=freeNear(map,PROPS,[40,41,42,47],27,15);return{id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:(x+.5)*TS,y:(y+.4)*TS,lines:CHOJRAK_LINES}})()],idle:[31,28,13,9]};
+          (()=>{const [x,y]=freeNear(map,PROPS,[40,41,42,47],27,15);return{id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:(x+.5)*TS,y:(y+.4)*TS,lines:CHOJRAK_LINES}})(),
+          (()=>{const [x,y]=freeNear(map,PROPS,[46,40,41,42,47],47,19);return{id:'nawoj',art:'nawoj',name:(EN?'Nawoj, Keeper of Names':'Nawoj, Strażnik Imion'),x:(x+.5)*TS,y:(y+.4)*TS,lines:NAWOJ_LINES}})()],idle:[31,28,13,9]};
 }
 
 // Chapter III: Złotogród, the golden capital rotting under its domes
@@ -847,7 +890,8 @@ function genStolica(){
     npcs:[{id:'izolda',art:'izolda',name:(EN?'Countess Isolda of Vermar':'Hrabina Izolda z Vermarów'),x:6.5*TS,y:18.4*TS,lines:IZOLDA_LINES},
           {id:'ottokar',art:'ottokar',name:(EN?'Count Ottokar, King\'s Treasurer':'Hrabia Ottokar, skarbnik korony'),x:50*TS,y:9.4*TS,lines:OTTOKAR_LINES},
           {id:'aurel',art:'aurel',name:(EN?'Young Aurel of House Halder':'Młody Aurel z rodu Halderów'),x:16.5*TS,y:27.4*TS,lines:AUREL_LINES},
-          (()=>{const [x,y]=freeNear(map,PROPS,[50,52,53,55],24,42);return{id:'heri',art:'heri',name:(EN?'Heri of the Royal Guard':'Heri, wojak z gwardii królewskiej'),x:(x+.5)*TS,y:(y+.4)*TS,lines:HERI_LINES}})()],idle:[32,30,11,8]};
+          (()=>{const [x,y]=freeNear(map,PROPS,[50,52,53,55],24,42);return{id:'heri',art:'heri',name:(EN?'Heri of the Royal Guard':'Heri, wojak z gwardii królewskiej'),x:(x+.5)*TS,y:(y+.4)*TS,lines:HERI_LINES}})(),
+          (()=>{const [x,y]=freeNear(map,PROPS,[50,52,53,55],10,46);return{id:'seweryna',art:'seweryna',name:(EN?'Seweryna, the Mourning Seamstress':'Seweryna, Krawcowa Żałobna'),x:(x+.5)*TS,y:(y+.4)*TS,lines:SEWERYNA_LINES}})()],idle:[32,30,11,8]};
 }
 
 // Chapter IV: Czarnobór, the wild valleys of the old faith (plan: docs/prompty-rozdzial4.md)
@@ -954,7 +998,7 @@ function genCzarnobor(seed){
     region:(x,y)=>y>=CZY.campTop?'camp':y>=CZY.stones?'meadows':y>=CZY.north?'stones':y<15&&x>23&&x<58?'hill':x<CZX.marsh?'marsh':'forest',
     npcs:(()=>{const OK=[60,61,62,63,66,67],nn=(id,art,name,lines,x,y,extra)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);return Object.assign({id,art,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines},extra||{})};
       return[nn('wierz','wierz',(EN?'Wierzchoslava, the Whisperer':'Wierzchosława, szeptucha'),WIERZ_LINES,36,62),nn('bartosz','bartosz',(EN?'Bart the Scout':'Bartosz Tropiciel'),BARTOSZ_LINES,roadX(44)-3,43),
-        nn('wolch','wolch',(EN?'Volch, Pagan Priest':'Żerca Wołch'),WOLCH_LINES,CZ.oak[0],CZ.oak[1]+4),nn('boginka','boginka_lure','',[],62+((r()*10)|0),10+((r()*10)|0),{lure:true})]})(),idle:[40,48,14,10]};
+        nn('wolch','wolch',(EN?'Volch, Pagan Priest':'Żerca Wołch'),WOLCH_LINES,CZ.oak[0],CZ.oak[1]+4),nn('dobromir','dobromir',(EN?'Dobromir, Keeper of Empty Hives':'Dobromir, Pszczelarz Pustych Uli'),DOBROMIR_LINES,47,62),nn('boginka','boginka_lure','',[],62+((r()*10)|0),10+((r()*10)|0),{lure:true})]})(),idle:[40,48,14,10]};
 }
 
 // Chapter V: Cytadela Wierzycieli, seat of the Order (plan: docs/prompty-rozdzial5.md)
@@ -992,7 +1036,7 @@ function genCytadela(seed){
   const SH=[[69,60],[10,42],[40,19]];SH.forEach(([x,y],i)=>P('healing_shrine',x,y,true,{shrine:i}));
   return{map,under,PROPS,seed,start:{x:40*TS+8,y:63*TS+8},shrines:SH.map(([x,y])=>({x:x*TS+8,y:y*TS+12})),region:cyRegion,idle:[40,58,14,6],
     npcs:(()=>{const OK=[70,71,72,73,74,75],nn=(id,name,lines,x,y)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);return{id,art:id,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines}};
-      return[nn('skryba',(EN?'Condemned Scribe':'Skazany Skryba'),SKRYBA_LINES,28,16),nn('straznik',(EN?'The Guard Who Fled':'Strażnik, który uciekł'),STRAZNIK_LINES,24,64),nn('pieczetnik',(EN?'The Senior Bookkeeper':'Starszy Księgowy'),PIECZETNIK_LINES,40,54)]})()};
+      return[nn('skryba',(EN?'Condemned Scribe':'Skazany Skryba'),SKRYBA_LINES,28,16),nn('straznik',(EN?'The Guard Who Fled':'Strażnik, który uciekł'),STRAZNIK_LINES,24,64),nn('pieczetnik',(EN?'The Senior Bookkeeper':'Starszy Księgowy'),PIECZETNIK_LINES,40,54),nn('lucjan',(EN?'Lucjan, the Eraser':'Lucjan, Wymazywacz'),LUCJAN_LINES,56,50)]})()};
 }
 
 // Crypt under the Brzeźnica graveyard (side quest of chapter I), built from the Lower City tiles and props.
@@ -2433,13 +2477,13 @@ function armorRecolor(img,cls,v){const P=ARM_PAL[v],C=ARM_CFG[cls];if(!P||!C)ret
   for(let i=0;i<N;i++){if(!M[i])continue;const j=i*4;let t=((.3*p[j]+.59*p[j+1]+.11*p[j+2])/255-.04)/.72;t=t<0?0:t>1?1:Math.pow(t,.9);
     const A=t<.5?P[0]:P[1],B=t<.5?P[1]:P[2],u=t<.5?t/.5:(t-.5)/.5;p[j]=A[0]+(B[0]-A[0])*u;p[j+1]=A[1]+(B[1]-A[1])*u;p[j+2]=A[2]+(B[2]-A[2])*u}
   g.putImageData(id,0,0);c.nbDensity=img.nbDensity;c.nbKey=img.nbKey;return c}
-const MOB_GROUPS={'core':['possessed','ghoul','bat','dwarf','knight','warden','shieldman'],'r3':['madman','hound','rotknight','militia','marauder','gravedigger'],'r4':['goat','wolf','bandit','xbow','drowner','strzygon','zmora','wisp','bies','wight'],'r5':['guard','scribe','executioner','debtor','wraith','courtraven','paperrat','bookgolem','condemned','judge','arbiter','cursed'],'r2':['tharm','glizzard','glz_fx']};
+const MOB_GROUPS={'core':['possessed','ghoul','bat','dwarf','knight','warden','shieldman'],'r3':['madman','hound','rotknight','militia','marauder','gravedigger'],'r4':['goat','wolf','bandit','xbow','drowner','strzygon','zmora','wisp','bies','wight'],'r5':['guard','scribe','executioner','debtor','wraith','courtraven','paperrat','bookgolem','condemned','judge','arbiter','cursed'],'r2':['glizzard','glz_fx']};
 function buildAnims(imgs,group="all"){
   const has=g=>group==="all"||group===g;
   const bz=has("r3")&&!imgs.morhad?beastSheet():null,bs=(c,r)=>procFrame(bz,c*64,r*64,64,64);
   // sheets redrawn at 64x64 (same layout, cells twice as big) are detected by their width and drawn at the same size in the world
   const HI=new Set(['protagonist_a','protagonist_b','village_undead','order_deep_dead','ally_npcs','effects_pickups','collector','zl_en_a','zl_en_b','npc_new','cz_en_a','cz_en_b','cz_en_c','cz_npc','shield_dead','goat_beast','cy_en_a','cy_en_b','cy_en_c','cy_en_d','zl_en_c','cy_npc','hero_d','hero_db','hero_dc','hero_dd','hero_def','knight_d','knight_db','knight_dc','knight_dd','knight_def','knight_death','knight_whirl','kat_death','kat_leap','kat_whirl','kat_hook','zab_d','zab_db','zab_dc','zab_dd','zab_def','zab_death','zab_rend','zab_fan','zab_whirl','zab_atk45','dzw_d','dzw_db','dzw_dc','dzw_dd','dzw_def','dzw_ex','dzw_sk','dzw_zas','golem_a','golem_b']);
-  const row=(sheet,r,from=0,to=4,kind,size=32)=>{const k=(HI.has(sheet)||sheet.startsWith('mob_'))&&imgs[sheet].width/(imgs[sheet].nbDensity||1)>=256?2:1,cs=size*k;const out=[];for(let c=from;c<to;c++)out.push(procFrame(imgs[sheet],c*cs,r*cs,cs,cs,kind,k>1?2:0));return out};
+  const row=(sheet,r,from=0,to=4,kind,size=32)=>{const k=(HI.has(sheet)||sheet.startsWith('mob_')||sheet.startsWith('npc_'))&&imgs[sheet].width/(imgs[sheet].nbDensity||1)>=256?2:1,cs=size*k;const out=[];for(let c=from;c<to;c++)out.push(procFrame(imgs[sheet],c*cs,r*cs,cs,cs,kind,k>1?2:0));return out};
   const ha='protagonist_a',hb='protagonist_b',vu='village_undead',od='order_deep_dead',an='ally_npcs',fx='effects_pickups';
   const pick=has('core')?row(fx,5,0,4,'fx'):[];
   const mkHeroD=()=>({idle_down:row('hero_d',0),idle_side:row('hero_d',1),idle_up:row('hero_d',2),walk_down:row('hero_d',3),walk_side:row('hero_d',4),walk_up:row('hero_d',5),
@@ -2553,11 +2597,13 @@ function buildAnims(imgs,group="all"){
   };
   // New mob models (12.11.2026): one sheet per enemy, 4 columns x 2 rows of 256 px (row 0 walk, row 1: two attack frames + two death frames); on-screen size matches the old sheets
   for(const g in MOB_GROUPS)if(has(g))for(const k of MOB_GROUPS[g]){const S_='mob_'+k;if(!imgs[S_])continue;const kd=k==='wraith'||k==='wisp'?'propc':undefined;
-    if(k==='tharm')anims.tharm=row(S_,0,0,4,'ghost');
-    else if(k==='glz_fx')anims.glzFx={fly:row(S_,0,0,4,'fx'),splash:[...row(S_,2,0,4,'fx'),...row(S_,3,0,4,'fx')]};
+    if(k==='glz_fx')anims.glzFx={fly:row(S_,0,0,4,'fx'),splash:[...row(S_,2,0,4,'fx'),...row(S_,3,0,4,'fx')]};
     else if(k==='glizzard')anims.glizzard={walk:row(S_,0),idle:row(S_,1),tell:row(S_,2),attack:[row(S_,3,1,2)[0],row(S_,3,2,3)[0]],hurt:row(S_,4,0,2),death:row(S_,4,2,4),curl:row(S_,5,0,2),sheet:1};
     else if(k==='drowner')anims.drowner={rise:row(S_,0,0,2),walk:row(S_,0,2,4),attack:row(S_,1,0,2),death:row(S_,1,2,4),sheet:1};
     else anims[k]={walk:row(S_,0,0,4,kd),attack:row(S_,1,0,2,kd),death:row(S_,1,2,4,kd),sheet:1}}
+  // NPC models (12.11.2026): one sheet per character, 4 columns x 256 px (frames 0-2 idle, frame 3 = dead/gone), in the group of the act where they live
+  const NPC_GROUPS={'core':['chojrak','marga','elder','wit','nawoj'],'r2':['mila','tharm','rudna'],'r3':['heri','izolda','ottokar','aurel','seweryna'],'r4':['wierz','bartosz','wolch','dobromir'],'r5':['skryba','straznik','pieczetnik','lucjan']};
+  for(const g in NPC_GROUPS)if(has(g))for(const k of NPC_GROUPS[g])if(imgs['npc_'+k])anims[k]=row('npc_'+k,0,0,4,k==='tharm'?'ghost':'npc');
   // old one-piece hero (protagonist_a/b): only a fallback behind heroD, so its frames are built on first use, not at start (5.11.2026: ~35 MB of canvases)
   if(has("core"))Object.defineProperty(anims,'hero',{configurable:true,enumerable:false,get(){const v={idle_down:row(ha,0),walk_down:row(ha,1),walk_up:row(ha,2),walk_side:row(ha,3),roll:row(ha,4),hurt:row(ha,5,0,2),
       swing_side:row(hb,0),swing_down:row(hb,1),swing_up:row(hb,2),death:row(hb,3).concat(row(hb,4,0,2)),idle_up:row(hb,5,0,2),idle_side:row(hb,5,2,4)};Object.defineProperty(anims,'hero',{value:v,writable:true,configurable:true,enumerable:false});return v}});
@@ -2797,6 +2843,12 @@ const AUREL_LINES=[(EN?'Are you a knight? Mama said the knights would come when 
 const WIERZ_LINES=[(EN?'Don\'t be afraid, son. I\'m only boiling herbs here, and you look like you could do with some.':'Nie bój się, synku. Ja tu tylko ziele warzę, a tobie, widzę, by się przydało.'),(EN?'We ran from Goldheim and its rot, and the forest met us with wolves. But the old herbs still grow where they always did, if you know to look.':'Uciekliśmy ze Złotogrodu przed zgnilizną, a las przywitał nas wilkami. Ale stare zioła wciąż rosną tam, gdzie ich szukać.'),(EN?'Drink. It\'s bitter, but it\'ll close your wounds. Just don\'t ask what\'s in it.':'Pij. Gorzkie, ale rany zasklepi. Tylko nie pytaj, z czego to.')];
 const BARTOSZ_LINES=[(EN?'Quieter. Wolves hear better than you do.':'Ciszej. Wilki słyszą lepiej niż ty.'),(EN?'Three days I\'ve tracked them. That\'s no ordinary pack. Something leads it. Walks on two legs. Wears antlers.':'Tropię je od trzech dni. To nie zwykłe stado. Prowadzi je coś, co chodzi na dwóch nogach i ma poroże.'),(EN?'Here, I\'ll draw you their runs in the mud. And where the Nourishing Cauldrons stand, while the Holy Order hasn\'t burned them yet.':'Daj, narysuję ci w błocie, którędy chodzą. I gdzie stoją Sycące Kociołki, póki Zakon ich nie spalił.')];
 const WOLCH_LINES=[(EN?'Branded one. I smell your Brand the way you smell smoke before a storm.':'Naznaczony. Czuję twoje Piętno, jak dym czuć przed burzą.'),(EN?'The Holy Order beheaded my brothers under this oak, and the gods said nothing. But the old power still runs in the roots.':'Zakon ściął moich braci pod tym dębem, a bogowie milczeli. Ale stara moc wciąż płynie w korzeniach.'),(EN?'I can give you a share of it: your weapon will remember twice as much. You pay in blood. One fifth of your life, until dawn.':'Mogę ci dać jej część: twoja broń zapamięta dwa razy więcej. Zapłacisz krwią. Jedną piątą życia, do świtu.'),(EN?'If you agree, speak to me once more. If not, leave and do not return.':'Jeśli się zgadzasz, przemów do mnie jeszcze raz. Jeśli nie, odejdź i nie wracaj.')];
+// Nowe postacie (12.11.2026): po jednej na rozdzial. Teksty robocze do akceptacji autora.
+const NAWOJ_LINES=[(EN?'Stay a moment. I keep the names of the ones this village buried, and of those it never got to bury.':'Zostań chwilę. Spisuję imiona tych, których ta wieś pochowała, i tych, których nie zdążyła.'),(EN?'Fire takes the faces first, then the names. I will not let it take the names.':'Ogień zabiera najpierw twarze, potem imiona. Imion nie oddam.'),(EN?'Say yours, if you still remember it. A name said aloud holds a man on his feet a little longer.':'Powiedz swoje, jeśli jeszcze pamiętasz. Imię wypowiedziane na głos dłużej trzyma człowieka na nogach.')];
+const RUDNA_LINES=[(EN?'Quiet. Put your ear to the stone. The veins here are sobbing.':'Cicho. Przyłóż ucho do kamienia. Żyły tu łkają.'),(EN?'I hear every tunnel, every cave-in, every pick that still strikes somewhere below.':'Słyszę każdy chodnik, każdy zawał, każdy kilof, który jeszcze gdzieś w dole uderza.'),(EN?'Come. I will tell you where the rock is hollow and where the dead are digging.':'Chodź. Powiem ci, gdzie skała jest pusta i gdzie kopią umarli.')];
+const SEWERYNA_LINES=[(EN?'Hold still, your cloak is torn. Mourning cloth does not forgive a loose thread.':'Stój spokojnie, płaszcz masz rozdarty. Żałobne sukno nie wybacza luźnej nitki.'),(EN?'I sewed shrouds for the whole district. Now I sew them for whoever is still standing.':'Szyłam całunów dla całej dzielnicy. Teraz szyję je dla każdego, kto jeszcze stoi.'),(EN?'Take this black thread. Whoever wears it fights as if he had already been buried once.':'Weź tę czarną nić. Kto ją nosi, walczy tak, jakby już raz został pochowany.')];
+const DOBROMIR_LINES=[(EN?'Easy, they are empty. The bees left when the forest started to scream.':'Spokojnie, są puste. Pszczoły odeszły, kiedy las zaczął krzyczeć.'),(EN?'Still I come every morning, knock on each hive and wait. Somebody has to.':'A ja i tak codziennie przychodzę, pukam w każdy ul i czekam. Ktoś musi.'),(EN?'There is a drop of old honey left, dark as resin. Eat it, it knits what is torn.':'Została kropla starego miodu, ciemna jak żywica. Zjedz, zrasta to, co rozdarte.')];
+const LUCJAN_LINES=[(EN?'Do not read that. Please. Every page you read is a page I cannot take back.':'Nie czytaj tego. Proszę. Każda przeczytana strona to strona, której nie cofnę.'),(EN?'I am the Eraser. When a debt is settled, I strike it from the ledger, and from memory as well.':'Jestem Wymazywaczem. Gdy dług zostaje spłacony, skreślam go z rejestru i z pamięci.'),(EN?'Here, a purse from the struck-off accounts. Nobody will ask for it now.':'Masz, sakiewka z wykreślonych kont. Nikt już się o nią nie upomni.')];
 const WOLCH_ACCEPT=[(EN?'Good. Give me your hand.':'Dobrze. Daj rękę.'),(EN?'Blood for memory. It has always been so.':'Krew za pamięć. Tak było zawsze.')];
 const BIG=new Set(['boss','beast','leszy','strzyga','cumlin']);
 // experience curve: 5 wisps per level as before, and on top of that every level costs 5% more (compounding)
@@ -4385,6 +4437,11 @@ function advanceDialog(){if(S.witChoice)return;const n=S.dialog;S.dlg++;if(S.dlg
   else if(n.id==='wolch'){if(st.state==='alive'){st.state='offered';say((EN?'The priest is waiting. Speak to him again if you accept the bargain.':'Żerca czeka. Porozmawiaj z nim jeszcze raz, jeśli przyjmujesz układ.'))}
     else{st.state='talked';const own=SLASH_SK.filter(k=>S.sk[k]&&S.sk[k]<(SK[k].max||9)),k=own[(Math.random()*own.length)|0],cost=Math.round(pl.max*.2);pl.max-=cost;pl.hp=Math.min(pl.hp,pl.max);blood(pl.x,pl.y,20,0,1);play('bless',0);motes('#951518');chipsDirty=true;
       if(k){S.sk[k]=Math.min(SK[k].max||9,S.sk[k]+2);S.hl={k,t:clock};say((EN?`The priest cuts your palm above the oak\'s root. ${SK[k].name}: +2 levels. Max health −${cost}.`:`Żerca nacina ci dłoń nad korzeniem dębu. ${SK[k].name}: +2 poziomy. Maks. życia −${cost}.`))}else{S.lvl++;S.need=xpNeed(S.lvl);S.pendLv++;say((EN?`The blood soaks into the roots. Max health −${cost}.`:`Krew wsiąka w korzenie. Maks. życia −${cost}.`));openLevelUp()}}}
+  else if(n.id==='nawoj'){st.state='talked';pl.max+=10;pl.hp=pl.max;play('bless',0);motes('#d9d2bd');say((EN?'Nawoj writes your name in the book. +10 max health and full heal.':'Nawoj wpisuje twoje imię do księgi. +10 do maks. życia i pełne leczenie.'))}
+  else if(n.id==='rudna'){st.state='talked';MINI.fog.getContext('2d').clearRect(0,0,MW,MH);play('bless',0);motes('#b8a58a');say((EN?'Rudna lays her palm on the rock and tells you every tunnel. The whole map is revealed.':'Rudna kładzie dłoń na skale i opowiada ci każdy chodnik. Cała mapa zostaje odsłonięta.'))}
+  else if(n.id==='seweryna'){st.state='talked';S.fury=90;play('bless',0);motes('#a46a8a');say((EN?'Seweryna ties the black thread around your wrist. +20% damage for 90 seconds.':'Seweryna wiąże ci czarną nić na nadgarstku. +20% obrażeń przez 90 sekund.'))}
+  else if(n.id==='dobromir'){st.state='talked';pl.hp=Math.min(pl.max,pl.hp+Math.round(pl.max*.5));play('heal',0);motes('#e0b040');say((EN?'The old honey is bitter and warm. You recover half of your health.':'Stary miód jest gorzki i ciepły. Odzyskujesz połowę życia.'))}
+  else if(n.id==='lucjan'){st.state='talked';S.coins+=60;play('coin',0);motes('#c9b98a');say((EN?'Lucjan presses a purse into your hand. +60 coins.':'Lucjan wciska ci w dłoń sakiewkę. +60 monet.'))}
   else if(n.id==='skryba'){st.state='talked';S.rr=(S.rr||0)+3;play('bless',0);motes('#c9b98a');say((EN?'The scribe tears a page from the ledger. +3 free card rerolls.':'Skryba wyrywa kartkę z rejestru. +3 darmowe przerzuty kart.'))}
   else if(n.id==='straznik'){st.state='talked';S.disc=.35;play('coin',0);motes('#d8cfb8');say((EN?'The guard whispers something to the trader. Prices at Marga\'s stall: −35%.':'Strażnik szepcze coś handlarce. Ceny w kramie Margi: −35%.'))}
   else if(n.id==='pieczetnik'){st.state='talked';pl.inv=Math.max(pl.inv,10);play('bless',0);motes('#ffd27a');say((EN?'Seal of protection for 10 seconds: nothing can touch you.':'Pieczęć ochronna przez 10 sekund: nic cię nie tknie.'))}
@@ -8640,9 +8697,10 @@ ${'#orient'.repeat(44)}.pc-menu #pause #skillLoadout .pcmp-loadout-tabs{grid-col
  const hide=(el,on)=>{if(el.hidden!==on)el.hidden=on};
  const sync=()=>{
   const open=!dlg.hidden&&!!S?.dialog;if(!open){wasOpen=false;return}
-  const n=S.dialog,lines=NL(n),count=lines.length,frame=A?.[n.art]?.[0]?.n?.map?.image;
+  const n=S.dialog,lines=NL(n),count=lines.length,frame=IMGS?.['npcp_'+n.art]||A?.[n.art]?.[0]?.n?.map?.image;
   hide(picture,!frame);dlg.classList.toggle('pc-talk-has-portrait',!!frame);
-  if(frame&&frame!==image){image=frame;const g=portrait.getContext('2d');g.clearRect(0,0,192,192);
+  if(frame&&frame!==image&&IMGS?.['npcp_'+n.art]===frame){image=frame;const g=portrait.getContext('2d');g.clearRect(0,0,192,192);g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';const q=Math.min(192/frame.width,192/frame.height);g.drawImage(frame,(192-frame.width*q)/2,(192-frame.height*q)/2,frame.width*q,frame.height*q)}
+  else if(frame&&frame!==image){image=frame;const g=portrait.getContext('2d');g.clearRect(0,0,192,192);
    // Zachowaj oryginalne proporcje: gorna czesc sylwetki w kwadratowej miniaturze.
    const probe=canvas(frame.width,frame.height),pg=probe.getContext('2d');pg.drawImage(frame,0,0);const pixels=pg.getImageData(0,0,probe.width,probe.height).data;
    let x0=probe.width,y0=probe.height,x1=0,y1=0;for(let y=0;y<probe.height;y++)for(let x=0;x<probe.width;x++)if(pixels[(y*probe.width+x)*4+3]>24){x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)}
