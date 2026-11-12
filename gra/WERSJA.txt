@@ -705,3 +705,4 @@ cache627 · Rozdz. I: zasada wolnej drogi (oboz zakonu i kociolek poza droga)
 cache628 · Rozdz. I: sztandary zakonu jako brama po obu stronach drogi
 cache629 · Rozdz. II: kolumnada w hali, latarnie w kryptach, wypalona skala przy lawie, wegiel w kopalni
 cache630 · Rekwizyty stoja na ziemi (bez tonięcia i lewitacji) na wszystkich mapach; brama zakonu
+cache631 · Rozdz. III: ciemniejsza maz; rozdz. V: kamienne plyty w salach, jasniejsze posadzki

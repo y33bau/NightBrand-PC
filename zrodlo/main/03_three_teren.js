@@ -203,7 +203,7 @@ const MAP1_FLOOR=["0000000000000000000000000000000000000000000000000000000000000
 const MAP1_SHALLOW=[[27,4],[27,5],[27,6],[27,7],[27,8],[27,9],[27,10],[27,11],[27,12],[27,13],[27,14],[27,15],[27,16],[27,17],[27,18],[27,19],[27,20],[27,21],[27,22],[27,23],[27,24],[27,25],[28,25],[27,26],[28,26],[29,26],[30,26],[31,26],[32,26],[28,27],[29,27],[30,27],[31,27],[32,27],[41,27],[42,27],[29,28],[30,28],[31,31],[32,31]];
 const MAP1_HOUSE=[[56,58],[57,58],[58,58],[59,58],[60,58],[61,58],[62,58],[56,59],[62,59],[56,60],[62,60],[56,61],[62,61],[56,62],[62,62],[56,63],[57,63],[61,63],[62,63]];
 const MAP1_CROSS=[[70,31],[70,32],[70,33],[71,31],[71,32],[71,33],[72,31],[72,32],[72,33],[73,31],[73,32],[74,31],[74,32],[74,33],[75,31],[75,32],[75,33],[76,31],[76,32],[76,33]],MAP1_TOMB=[[73,33]],MAP1_FERNS=[[69,30],[69,31],[69,32],[69,33],[70,30],[71,30],[72,30],[73,30],[74,30],[75,30],[76,30],[77,30],[77,31],[77,32],[77,33]];
-const CC0_FLOORS={1:{names:['dirt2','cracks','charcoal','ground1','ash','moss1','lava','deski'],tint:[1,.97,.92]},2:{names:['ground1','blackrock','charcoal'],tint:[.84,.88,.96]},3:{names:['zl_place','zl_street','zl_moss'],tint:[1,.96,.88]},4:{names:['mud','dirt3','leaves','darkrock','forestmoss'],tint:[.9,.96,.88]},5:{names:['ground2','blackrock','ground1'],tint:[.68,.69,.74]},9:{names:['ground2','ground1'],tint:[.73,.75,.81]}};
+const CC0_FLOORS={1:{names:['dirt2','cracks','charcoal','ground1','ash','moss1','lava','deski'],tint:[1,.97,.92]},2:{names:['ground1','blackrock','charcoal'],tint:[.84,.88,.96]},3:{names:['zl_place','zl_street','zl_moss'],tint:[1,.96,.88]},4:{names:['mud','dirt3','leaves','darkrock','forestmoss'],tint:[.9,.96,.88]},5:{names:['ground2','blackrock','ground1'],tint:[.8,.8,.86]},9:{names:['ground2','ground1'],tint:[.73,.75,.81]}};
 function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan;if(!plan)return cells;
  const burns=W.PROPS.filter(p=>p.fire||/debris_fire|burnt_hay|furnace|brazier/.test(p.k||''));
  // extra CC0 floors (folder 'skille claude'): ash around the burned houses, moss patches, mossy cobbles in the slums, moss in the forest
@@ -218,7 +218,7 @@ function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan
   if(ch===3&&![1,4].includes(row))id=plan.road[i]||row===3?1:0;
   if(ch===3&&id>=0&&W.region(x,y)==='slums'&&(nz(x,y)>.4||[[2,0],[-2,0],[0,2],[0,-2],[1,1],[-1,-1],[1,-1],[-1,1]].some(([dx,dy])=>tileAt(x+dx,y+dy)===54)))id=2;
   if(ch===4&&![4,5,7].includes(row)){const r=W.region(x,y);id=r==='camp'?0:row===1?1:(r==='hill'||r==='stones')?3:r==='forest'?2:0;if(id===2&&nz(x,y)>.6)id=4;}
-  if(ch===5&&![3,4,6,7].includes(row))id=row===2?2:row===5?1:0;
+  if(ch===5&&![3,4,6,7].includes(row))id=row===2||row===1?2:row===5?1:0; // 12.11.2026: sale (sadowa, skarbiec, tron) maja kamienne plyty zamiast klepiska; posadzki jasniejsze
   if(ch===9&&![1,5,7].includes(row))id=row===2?1:0;
   if(ch===1){const v=MAP1_FLOOR[y].charCodeAt(x)-48;if(v!==0||id>=0)id=v}
   if(id>capId)id=ch===4?2:0;
