@@ -1221,9 +1221,11 @@ function planOtherGround(ch){if(W.groundPlan)return W.groundPlan;if(W.seed===und
 function groundPatterns(ch,p){const bits=new Uint8Array(MW*MH),rail=new Uint8Array(MW*MH),point=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH?y*MW+x:-1;
   const free=i=>i>=0&&(!SOLID.has(map[i])||map[i]===31),put=(x,y)=>{const i=point(x,y);if(free(i))bits[i]=1};
   const frame=(a,b,c,d)=>{a=Math.round(MP(a));b=Math.round(MP(b));c=Math.round(MP(c));d=Math.round(MP(d));for(let x=a;x<=c;x++){put(x,b);put(x,d)}for(let y=b;y<=d;y++){put(a,y);put(c,y)}};
-  if(ch===2){frame(5,10,32,37);for(let x=Math.round(MP(5));x<=Math.round(MP(32));x++)put(x,Math.round(MP(24)));}
-  if(ch===3){frame(25,26,38,33);frame(23,7,40,12);for(let y=Math.round(MP(24));y<=Math.round(MP(53));y++)put(Math.round(MP(31.5)),y);for(let y=Math.round(MP(6));y<=Math.round(MP(13));y++)put(Math.round(MP(31.5)),y);}
-  if(ch===5){frame(14,36,31,43);frame(48,36,65,43);frame(15,25,64,31);frame(27,4,52,9);}
+  // 12.11.2026: thin gold inlay lines removed on the author's request (they read as a rendering glitch); rails stay
+  const INLAY=false;
+  if(INLAY&&ch===2){frame(5,10,32,37);for(let x=Math.round(MP(5));x<=Math.round(MP(32));x++)put(x,Math.round(MP(24)));}
+  if(INLAY&&ch===3){frame(25,26,38,33);frame(23,7,40,12);for(let y=Math.round(MP(24));y<=Math.round(MP(53));y++)put(Math.round(MP(31.5)),y);for(let y=Math.round(MP(6));y<=Math.round(MP(13));y++)put(Math.round(MP(31.5)),y);}
+  if(INLAY&&ch===5){frame(14,36,31,43);frame(48,36,65,43);frame(15,25,64,31);frame(27,4,52,9);}
   const mask=(a,x,y)=>(a[point(x,y-1)]?1:0)|(a[point(x+1,y)]?2:0)|(a[point(x,y+1)]?4:0)|(a[point(x-1,y)]?8:0);
   const col=m=>m===5||m===1||m===4?1:m===10||m===2||m===8?0:m===3?3:m===6?4:m===12?5:m===9?6:2;
   if(ch===2){const mark=(x,y)=>{const i=point(x,y);if(free(i)&&W.region(x,y)==='mine')rail[i]=1};for(let x=Math.round(MP(43));x<=Math.round(MP(59));x++)mark(x,Math.round(MP(48)));for(let y=Math.round(MP(44));y<=Math.round(MP(50));y++)mark(Math.round(MP(50)),y);}
