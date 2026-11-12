@@ -26,7 +26,7 @@ function unblockRoads1(w){if(typeof MAP1_FLOOR==='undefined')return;const P=w.PR
  const freeCell=(x,y)=>{const i=y*MW+x;if(M[i]===31){let v=U[i];if(!v||v===31||SOLID.has(v))v=41;M[i]=v}},occ=(x,y)=>{const i=y*MW+x;if(!SOLID.has(M[i])){U[i]=M[i];M[i]=31}};
  // oboz zakonu przy zachodniej drodze: ognisko i sztandary stawaly w poprzek drogi
  {const mvp=(k,ox,oy,nx,ny)=>{const q=P.find(q=>q.k===k&&Math.floor(q.x)===ox&&Math.floor(q.y)===oy);if(!q||!open(nx,ny)||P.some(o=>o!==q&&Math.floor(o.x)===nx&&Math.floor(o.y)===ny))return false;freeCell(ox,oy);q.x+=nx-ox;q.y+=ny-oy;occ(nx,ny);return true};
-  mvp('order_bonfire',26,31,29,32);mvp('order_banner',24,30,23,30);mvp('order_banner',28,30,27,30)} // sztandary = brama po obu stronach drogi (x 24-26), ognisko obok
+  mvp('order_bonfire',26,31,29,32);mvp('order_banner',24,30,23,32);mvp('order_banner',28,30,27,32)} // sztandary = brama po obu stronach drogi (x 24-26), ognisko obok
  for(const p of P){const x=Math.floor(p.x),y=Math.floor(p.y);if(M[y*MW+x]!==31)continue;const two=p.k==='shrine',cells=two?[[x-1,y],[x,y]]:[[x,y]];if(!cells.some(([a,b])=>road(a,b)))continue;
   let best=null,bd=1e9;for(let dy=-6;dy<=6;dy++)for(let dx=-6;dx<=6;dx++){const nx=x+dx,ny=y+dy,d=dx*dx+dy*dy*1.3;if(d>=bd||nx<3||ny<3||nx>=MW-3||ny>=MH-3)continue;
    const cs=two?[[nx-1,ny],[nx,ny]]:[[nx,ny]];if(cs.some(([a,b])=>!open(a,b)||road(a,b)||fl(a,b)===0&&run(a,b,1,0)<=6||w.clearways?.has(b*MW+a)))continue;
