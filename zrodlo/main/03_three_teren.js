@@ -187,7 +187,7 @@ function groundCoarse(img){if(!img.nbCoarse){const c=canvas(128,128);c.getContex
 function groundTile(g,img,col,row,tx,ty){const n=groundHash(tx,ty),plan=W.groundPlan,j=ty*MW+tx;let materialCell=j;
   // A prop's collision tile (31) and a brazier/point tile (27) have the same floor as their surroundings, not a separate old atlas patch.
   // 12.11.2026: pod woda (przykrytą siatką z miękkim brzegiem) leży zwykły grunt z sąsiedztwa, nie kwadratowe kafle wody
-  const WETF=CH===1?[45,90]:CH===4?[64,65,91]:[];const wetCell=k=>WETF.includes(map[k]);
+  const WETF=CH===1?[45,90]:CH===4?[64,65,91]:CH===3?[54]:[];const wetCell=k=>WETF.includes(map[k]);
   if(plan&&(plan.rows[j]===255&&(map[j]===31||map[j]===27)||wetCell(j))){let best=Infinity;for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const x=tx+dx,y=ty+dy,k=y*MW+x;if(x<0||y<0||x>=MW||y>=MH||plan.rows[k]===255||wetCell(k))continue;const score=dx*dx+dy*dy+((map[k]===31?W.under[k]:map[k])===W.under[j]?0:8);if(score<best){best=score;materialCell=k}}}
   const planned=plan&&plan.rows[materialCell]!==255;
   if(planned){row=plan.rows[materialCell];col=n%100<55?0:1+n%5}const natural=naturalGround(img,row)&&!(plan&&(CH===1&&[3,4].includes(row)||CH===4&&[1,7].includes(row)||CH!==1&&CH!==4)),variant=natural?n&7:0;const shore=col>=4&&((img.nbKey==='br_ground'||img.nbKey==='dm_floor')&&row===5||img.nbKey==='zl_ground'&&row===4||img.nbKey==='cz_ground'&&(row===4||row===5));let flags=natural||shore||img.nbKey==='cz_ground'&&row===7?1:0;
@@ -218,7 +218,7 @@ function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan
   if(ch===1&&row!==3&&id>=0&&id!==2&&id!==4&&id!==6){let d=9;for(let oy=-3;oy<=3;oy++)for(let ox=-3;ox<=3;ox++){const t=tileAt(x+ox,y+oy);if(t===45||t===90)d=Math.min(d,Math.hypot(ox,oy))}if(d<9&&d<=Math.max(1,Math.min(3,1.9+.5*nz(x*1.3+3,y*1.3))))id=5} // runda 290: mech nad woda jak na mapie 4, szerokosc pasa falista
   if(ch===2&&![1,5,7].includes(row)){const rg=W.region(x,y);let lv=9;if(rg==='forge')for(let oy=-3;oy<=3;oy++)for(let ox=-3;ox<=3;ox++)if(tileAt(x+ox,y+oy)===24)lv=Math.min(lv,Math.hypot(ox,oy));id=lv<=2.2+.6*nz(x*1.3,y*1.3)?1:rg==='mine'&&nz(x*1.7,y*1.7)>.7?2:row===2&&[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>SOLID.has(tileAt(x+dx,y+dy)))?1:0; /* 12.11.2026: w kuzni czarna, wypalona skala wokol kanalow lawy, w kopalni plamy wegla - strefy roznia sie posadzka */if(burns.some(p=>Math.hypot(p.x-x-.5,p.y-y-.5)<2))id=2;}
   if(ch===3&&![1,4].includes(row))id=plan.road[i]||row===3?1:0;
-  if(ch===3&&id>=0&&W.region(x,y)==='slums'&&(nz(x,y)>.4||[[2,0],[-2,0],[0,2],[0,-2],[1,1],[-1,-1],[1,-1],[-1,1]].some(([dx,dy])=>tileAt(x+dx,y+dy)===54)))id=2;
+  if(ch===3&&id>=0&&W.region(x,y)==='slums'&&(nz(x,y)>.4&&tileAt(x,y)!==54))id=2; // 12.11.2026: bez ciemnych kwadratow wokol mazi
   if(ch===4&&![4,5,7].includes(row)){const r=W.region(x,y);id=r==='camp'?0:row===1?1:(r==='hill'||r==='stones')?3:r==='forest'?2:0;if(id===2&&nz(x,y)>.6)id=4;}
   if(ch===5&&![3,4,6,7].includes(row))id=row===2||row===1?2:row===5?1:0;
   if(ch===5&&id===0){const rg=W.region(x,y);if(rg==='dziedziniec'&&(plan.road[i]||Math.hypot((x-MP(40))*.8,y-MP(62))<5.2+.8*nz(x,y)))id=2;else if(rg==='krypta'&&nz(x*1.4,y*1.4)>.9)id=1;} // 12.11.2026: kamienne drogi i plac na dziedzincu, czarna skala w krypcie // 12.11.2026: sale (sadowa, skarbiec, tron) maja kamienne plyty zamiast klepiska; posadzki jasniejsze
