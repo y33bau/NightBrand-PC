@@ -711,3 +711,4 @@ cache633 · Nowe tekstury: woda plytka i brod (I, IV), dachy dwuspadowe i olowia
 cache634 · Porzadek assets/: pliki w podfolderach wg kategorii (845 przeniesionych, nazwy-hashe bez zmian), nowe hashe 4 plikow js/css, spis docs/INDEKS_ASSETOW.json; jednorazowe ponowne pobranie gry; nie sprawdzono: telefon, pad, dzwiek, pelny start offline (test-offline-start nie mieści sie w czasie w sandboxie, tak samo przed zmiana)
 cache635 · Usuniety JAK_ZAINSTALOWAC.txt (instrukcja iPhone/iPad, nie dotyczy wersji PC); nie sprawdzono: pad, dzwiek
 cache636 · Rozdz. III: zniknely pomaranczowe prostokaty na ziemi po smierci szalenca i zgnilego rycerza (13_wrogowie.js); sprawdzono start rozdz. III, nie sprawdzono wygladu po zabiciu w grze
+cache637 · Nowe logo NightBrand (menu i ekran jezyka); sprawdzono start, nie sprawdzono wygladu w grze
