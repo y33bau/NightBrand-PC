@@ -2141,6 +2141,23 @@ function thinFires(w){const P=w.PROPS,M=w.map,U=w.under,idol=P.find(p=>p.k==='cz
  for(const f of gone){const x=Math.floor(f.x),y=Math.floor(f.y);for(let dx=0;dx<=0;dx++){const i=y*MW+x+dx;if(M[i]!==31)continue;if(P.some(p=>Math.floor(p.y)===y&&Math.abs(p.x-(x+dx+.5))<1.2))continue;
   let v=U&&U[i];if(!v||v===31||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=M[(y+b)*MW+x+dx+a];if(!SOLID.has(t)){v=t;break}}}if(v)M[i]=v}}}
 // runda 298: uklad mapy 1 z edytora map (eksport autora 2.11.2026). Przesuniecia, usuniecia i dodania w polach swiata 104x91, reszta mapy bez zmian.
+// 12.11.2026, zasada autora: NIC z kolizja nie stoi na drodze. Rozdz. I: droga = pomalowane klepisko (MAP1_FLOOR 0) o szerokosci do 5 pol
+// (plac jest szerszy, wiec zostaje). Rekwizyt z drogi trafia na najblizsze wolne pole poza droga, razem z kolizja; kapliczka zabiera swoj punkt odrodzenia.
+function unblockRoads1(w){if(typeof MAP1_FLOOR==='undefined')return;const P=w.PROPS,M=w.map,U=w.under,fl=(x,y)=>x<0||y<0||x>=MW||y>=MH?-1:MAP1_FLOOR[y].charCodeAt(x)-48;
+ const run=(x,y,dx,dy)=>{let n=1;for(const sg of[-1,1])for(let k=1;k<9;k++){if(fl(x+dx*k*sg,y+dy*k*sg)!==0)break;n++}return n};
+ const road=(x,y)=>fl(x,y)===0&&Math.min(run(x,y,1,0),run(x,y,0,1))<=5;
+ const open=(x,y)=>{const t=M[y*MW+x];return !SOLID.has(t)&&t!==45&&t!==90};
+ const freeCell=(x,y)=>{const i=y*MW+x;if(M[i]===31){let v=U[i];if(!v||v===31||SOLID.has(v))v=41;M[i]=v}},occ=(x,y)=>{const i=y*MW+x;if(!SOLID.has(M[i])){U[i]=M[i];M[i]=31}};
+ // oboz zakonu przy zachodniej drodze: ognisko i sztandary stawaly w poprzek drogi -> caly oboz na pogorzelisko obok
+ {const mvp=(k,ox,oy,nx,ny)=>{const q=P.find(q=>q.k===k&&Math.floor(q.x)===ox&&Math.floor(q.y)===oy);if(!q||!open(nx,ny)||P.some(o=>o!==q&&Math.floor(o.x)===nx&&Math.floor(o.y)===ny))return false;freeCell(ox,oy);q.x+=nx-ox;q.y+=ny-oy;occ(nx,ny);return true};
+  mvp('order_bonfire',26,31,30,32);mvp('order_banner',24,30,28,31);mvp('order_banner',28,30,32,31)||mvp('order_banner',28,30,31,30)||mvp('order_banner',28,30,30,30)}
+ for(const p of P){const x=Math.floor(p.x),y=Math.floor(p.y);if(M[y*MW+x]!==31)continue;const two=p.k==='shrine',cells=two?[[x-1,y],[x,y]]:[[x,y]];if(!cells.some(([a,b])=>road(a,b)))continue;
+  let best=null,bd=1e9;for(let dy=-6;dy<=6;dy++)for(let dx=-6;dx<=6;dx++){const nx=x+dx,ny=y+dy,d=dx*dx+dy*dy*1.3;if(d>=bd||nx<3||ny<3||nx>=MW-3||ny>=MH-3)continue;
+   const cs=two?[[nx-1,ny],[nx,ny]]:[[nx,ny]];if(cs.some(([a,b])=>!open(a,b)||road(a,b)||fl(a,b)===0&&run(a,b,1,0)<=6||w.clearways?.has(b*MW+a)))continue;
+   let ok=true;for(let b=-1;b<=1&&ok;b++)for(let a=-2;a<=1&&ok;a++)if(!open(nx+a,ny+b)&&!(M[(ny+b)*MW+nx+a]===31&&cells.some(([cx,cy])=>cx===nx+a&&cy===ny+b)))ok=false;
+   if(!ok||P.some(q=>q!==p&&Math.hypot(q.x-(nx+.5),q.y-(ny+.92))<1.6)||w.npcs.some(n=>Math.hypot(n.x/16-nx,n.y/16-ny)<2.5))continue;best=[nx,ny];bd=d}
+  if(!best)continue;for(const [a,b] of cells)freeCell(a,b);const mx=best[0]-x,my=best[1]-y;p.x+=mx;p.y+=my;for(const [a,b] of cells)occ(a+mx,b+my);
+  if(two&&p.shrine!==undefined&&w.shrines[p.shrine]){w.shrines[p.shrine].x+=mx*TS;w.shrines[p.shrine].y+=my*TS}}}
 function layoutPatch1(w){const P=w.PROPS,M=w.map,U=w.under,T=(x,y)=>M[y*MW+x];
  const floorAt=(x,y)=>{let v=U[y*MW+x];if(!v||v===31||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=T(x+a,y+b);if(!SOLID.has(t)){v=t;break}}}return v||42};
  const free=(x,y)=>{if(T(x,y)===31)M[y*MW+x]=floorAt(x,y)};
@@ -2304,7 +2321,7 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
   {const M3=w.map,U3=w.under,P3=w.PROPS,sh3=w.shrines||[];if(sh3.length)for(let k=P3.length-1;k>=0;k--){const p=P3[k];if(p.shrine!==undefined)continue;if(!(p.fire||/debris_fire|cz_fire|pyre|bonfire/.test(p.k||'')))continue;
    if(!sh3.some(s=>Math.hypot(s.x/16-p.x,s.y/16-p.y)<6))continue;P3.splice(k,1);const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;
    if(M3[i]===31&&!P3.some(q=>Math.floor(q.y)===y&&Math.abs(q.x-(x+.5))<1.2)){let v=U3&&U3[i];if(!v||v===31||v===27||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=M3[(y+b)*MW+x+a];if(!SOLID.has(t)&&t!==27&&t!==24&&t!==54){v=t;break}}}M3[i]=v||20}}}
-  if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w)}
+  if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}
   scene.add(w.group);
   const ta=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?21:w.map[y*MW+x];
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=ta(x,y);
