@@ -677,3 +677,4 @@ cache599 · PC: Akt I - rekwizyty bez twardego cienia z swiatla bohatera i zgasz
 cache600 · PC: podmiana rekwizytow Aktu II (8), III (21) i V (24) na nowe sprite'y Gemini, Akt III dostaje sprite'y takze dla szubienicy, beczki, kola, konia, drzewa, sarkofagu, lancuchow i kwiatu zgnilizny; nie sprawdzono: wyglad na GPU autora, rekwizyty ruchome (ogniska, piec, stos), Akt I i IV
 cache601 · PC: podmiana 15 rekwizytow Aktu I na nowe sprite'y Gemini; nie sprawdzono: GPU autora, rekwizyty ruchome, Akt IV
 cache602 · PC: animowane ognie (chata, zgliszcza, ognisko IV, stos III, piec i palenisko II, ognisko Zakonu) i 27 rekwizytow Aktu IV na nowych sprite'ach; nie sprawdzono: GPU autora, ognie w V i III poza stosem, rosliny i drzewa tla IV (wd/sp)
+cache603 · Akt IV: rosliny i grzyby z atlasu 24 roslin (nie sprawdzono: GPU, pad)
