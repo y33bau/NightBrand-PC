@@ -447,10 +447,10 @@ PREP.curses=PREP.curses||[];
 function weekKey(d=new Date()){const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=t.getUTCDay()||7;t.setUTCDate(t.getUTCDate()+4-day);const y=t.getUTCFullYear(),w=Math.ceil(((t-Date.UTC(y,0,1))/864e5+1)/7);return y+'-W'+String(w).padStart(2,'0')}
 function dayKey(d=new Date()){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function dayNight(){const key=dayKey();let h=2166136261;for(const c of 'D'+key){h^=c.charCodeAt(0);h=Math.imul(h,16777619)>>>0}const R=n=>{h=Math.imul(h^(h>>>15),2246822507)>>>0;h=Math.imul(h^(h>>>13),3266489909)>>>0;return((h^(h>>>16))>>>0)%n};
-  const chs=[1,2,3,4,5].filter(c=>!chLocked(c)),ch=chs[R(chs.length)]||1,cls='rkz'[R(3)],ru=DAILY[R(DAILY.length)];return{key,ch,cls,rule:ru.id,ruleN:ru.n,ruleD:ru.d}}
+  const chs=[1,2,3,4,5].filter(c=>!chLocked(c)),ch=chs[R(chs.length)]||1,cls='rkzdm'[R(5)],ru=DAILY[R(DAILY.length)];return{key,ch,cls,rule:ru.id,ruleN:ru.n,ruleD:ru.d}}
 function startDaily(){const D=dayNight(),q=prog();if(q.char!==D.cls){q.char=D.cls;q.sel=[];saveProg()}openPrep(D.ch);PREP.daily=D.key;PREP.curses=[];renderPrep()}
 function weekNight(){const key=weekKey();let h=2166136261;for(const c of key){h^=c.charCodeAt(0);h=Math.imul(h,16777619)>>>0}const R=n=>{h=Math.imul(h^(h>>>15),2246822507)>>>0;h=Math.imul(h^(h>>>13),3266489909)>>>0;return((h^(h>>>16))>>>0)%n};
-  const chs=[1,2,3,4,5].filter(c=>!chLocked(c)),ch=chs[R(chs.length)]||1,cls='rkz'[R(3)],cl=CHALS.filter(c=>(c.who||'r')===cls),chal=cl[R(cl.length)],curse=CURSES[R(CURSES.length)];return{key,ch,cls,chal:chal&&chal.id,chalN:chal&&chal.n,curse:curse.id,curseN:curse.n}}
+  const chs=[1,2,3,4,5].filter(c=>!chLocked(c)),ch=chs[R(chs.length)]||1,cls='rkzdm'[R(5)],cl=CHALS.filter(c=>(c.who||'r')===cls),chal=cl[R(cl.length)],curse=CURSES[R(CURSES.length)];return{key,ch,cls,chal:chal&&chal.id,chalN:chal&&chal.n,curse:curse.id,curseN:curse.n}}
 function startWeekly(){const W=weekNight(),q=prog();if(q.char!==W.cls){q.char=W.cls;q.sel=[];saveProg()}q.ch=W.chal;saveProg();openPrep(W.ch);PREP.chal=W.chal;PREP.curses=[W.curse];PREP.weekly=W.key;renderPrep()}
 // called from applyPrep (before PREP.chal is cleared)
 // 9.11.2026: szybki restart: ta sama noc z tymi samymi klątwami (i wyzwaniem dnia / nocą tygodnia, jeśli nadal aktualne), bez ekranu przygotowania
