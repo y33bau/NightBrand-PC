@@ -30,7 +30,9 @@ function rollChoices(){{const ne=ENCH.filter(k=>S.sk[k]).length,sk0=SLASH_SK.fil
     for(const k in STY){const t=STY[k];if(t.pact){if(S.lvl>=4&&npa<2&&!S.sk[k])pool.push([k,.7]);continue}if(sk(k)>=t.max)continue;const have=brSum(t.br);pool.push([k,have>0?3.2+(t.br===lead?1.2:0):1.4])}
     const o=[];while(o.length<4&&pool.length){const tot=pool.reduce((a,b)=>a+b[1],0);let r=Math.random()*tot,i=0;for(;i<pool.length-1;i++){r-=pool[i][1];if(r<=0)break}const k=pool.splice(i,1)[0][0];if(!o.includes(k))o.push(k)}
     if(!o.some(k=>STY[k]&&!STY[k].pact)){const st=Object.keys(STY).filter(k=>!STY[k].pact&&sk(k)<STY[k].max);if(st.length)o[o.length-1]=st[(Math.random()*st.length)|0]}
+    {const need=S.chal&&!S.chal.done&&({k_doskok:'leap',k_krag:'whirl',d_echo:'zalecho',d_zastaw:'zastaw'})[S.chal.c.id];if(need&&!sk(need)&&canLearnSlasher(need)&&!o.includes(need))o[0]=need}
     return o}}
+const rollCostNow=()=>SL.roll*(1-.12*sk('taniec'))*S.pk.rollCost*(S.zab&&S.pk.zSurge&&pl.sta<pl.staMax*.35?.8:1);
 function cardSub(k,l,d){if(d.pact)return (EN?'Pact: an edge with a price':'Pakt: przewaga z ceną');const n=brSum(d.br);return (l?(EN?`Level ${l+1} of ${d.max}`:`Poziom ${l+1} z ${d.max}`):(EN?'New style':'Nowy styl'))+` · ${BR[d.br].n} ${Math.min(SET_N,n+1)}/${SET_N}`}
 function cardDesc(k,d){let t=d.d;if(!d.pact&&!brOn(d.br)&&brSum(d.br)+1>=SET_N)t+=(EN?' Set ':' Zestaw ')+BR[d.br].n+': '+BR[d.br].set;return t}
 // przed → po: jedna liczba zamiast opisu
@@ -132,9 +134,9 @@ function updPlayer(dt){
   if(pl.visualGuard)pl.visualGuard.t=Math.max(0,pl.visualGuard.t-dt);pl.inv=Math.max(0,pl.inv-dt);pl.swingT=Math.max(0,pl.swingT-dt);pl.hurtT=Math.max(0,pl.hurtT-dt);pl.parryT=Math.max(0,(pl.parryT||0)-dt);pl.gHitT=Math.max(0,(pl.gHitT||0)-dt);
   if(pl.roll>0){pl.roll-=dt;pl.rollT+=dt;moveBox(pl,pl.rvx*dt,pl.rvy*dt,4,3,true);return}
   pl.rollCd-=dt;
-  if(rollPress){if(pl.sta+1e-8>=SL.roll*(1-.12*sk('taniec'))*S.pk.rollCost&&!(pl.broken>0)&&!(pl.atk&&pl.atk.stage!=='rec')&&pl.rollCd<=0){{pl.sta=Math.max(0,pl.sta-SL.roll*(1-.12*sk('taniec'))*S.pk.rollCost);pl.dance=sk('taniec')?.8:0;if(sk('fireblade')>=3){S.swordTrails.push({x:pl.x,y:pl.y,t:1.2,hit:new Set()});}pl.staDelay=SL.delay;pl.atk=null;pl.block=false;pl.swingT=0}let dx=pl.fx,dy=pl.fy;if(ml>.1){dx=mx/ml;dy=my/ml}S.actions.dodge++;if(S.t>=NIGHT-90)S.lateDodge=1;if(S.t<BREAK_AT)S.kDodge=1;pl.roll=.3;pl.rollT=0;pl.rvx=dx*215*S.pk.roll;pl.rvy=dy*215*S.pk.roll;pl.s=dx>=0?1:-1;pl.inv=Math.max(pl.inv,S.kat?.42:.34);pl.rollCd=.28;pl.swingT=0;play('roll',0);return}
-    if(pl.atk?.kind!=='whirl'&&pl.sta<SL.roll*(1-.12*sk('taniec'))*S.pk.rollCost){S.stamFlash=.45;play('empty',.25)}}
-  const slow=(SLOWT[tileAt(Math.floor(pl.x/TS),Math.floor(pl.y/TS))]||1)*(S.zab&&S.pk.zSurge&&pl.sta<pl.staMax*.2?1.2:1);
+  if(rollPress){if(pl.sta+1e-8>=rollCostNow()&&!(pl.broken>0)&&!(pl.atk&&pl.atk.stage!=='rec')&&pl.rollCd<=0){{pl.sta=Math.max(0,pl.sta-rollCostNow());pl.dance=sk('taniec')?.8:0;if(sk('fireblade')>=3){S.swordTrails.push({x:pl.x,y:pl.y,t:1.2,hit:new Set()});}pl.staDelay=SL.delay;pl.atk=null;pl.block=false;pl.swingT=0}let dx=pl.fx,dy=pl.fy;if(ml>.1){dx=mx/ml;dy=my/ml}S.actions.dodge++;if(S.t>=NIGHT-90)S.lateDodge=1;if(S.t<BREAK_AT)S.kDodge=1;pl.roll=.3;pl.rollT=0;pl.rvx=dx*215*S.pk.roll;pl.rvy=dy*215*S.pk.roll;pl.s=dx>=0?1:-1;pl.inv=Math.max(pl.inv,S.kat?.42:.34);pl.rollCd=.28;pl.swingT=0;play('roll',0);return}
+    if(pl.atk?.kind!=='whirl'&&pl.sta<rollCostNow()){S.stamFlash=.45;play('empty',.25)}}
+  const slow=(SLOWT[tileAt(Math.floor(pl.x/TS),Math.floor(pl.y/TS))]||1)*(S.zab&&S.pk.zSurge&&pl.sta<pl.staMax*.35?1.2:1);
   const hold=(S.snare>0?.3:1)*(S.slowT>0?.6:1)*(pl.atk?.kind==='whirl'&&pl.atk.stage==='act'?WHIRL.speed:pl.atk||pl.broken>0?0:pl.block?.45:pl.charging?.5:1);
   if(ml>.1&&hold>0){if(!(pl.block||pl.charging)){pl.fx=mx/ml;pl.fy=my/ml}const ox=pl.x,oy=pl.y;moveBox(pl,mx*66.7*slow*hold*S.pk.spd*(1+.1*sk('buty'))*dt,my*66.7*slow*hold*S.pk.spd*(1+.1*sk('buty'))*dt,4,3);const distance=Math.hypot(pl.x-ox,pl.y-oy);pl.walk+=distance/72;pl.moving=distance>.001}else pl.moving=false;
   if(Math.abs(pl.fx)>Math.abs(pl.fy)){pl.dir=2;pl.s=pl.fx>0?1:-1}else{pl.dir=pl.fy>0?0:1}
