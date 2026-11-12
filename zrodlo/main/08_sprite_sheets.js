@@ -106,12 +106,12 @@ function recolorHero(img,o,gc=4,gr=6){const W=img.width,H=img.height,c=canvas(W,
 // (red cloth and skin kept); the weapon follows the armour (detecting it apart was unreliable between animations).
 // Per frame cell the top part of the figure is kept (Kat's hood, Ash Dancer's hair).
 const ARM_PAL={kosc:[[58,46,36],[196,180,150],[252,246,230]],otch:[[4,3,7],[34,24,46],[150,104,186]],zloto:[[46,26,6],[196,144,44],[255,238,168]],plat:[[38,42,50],[168,176,190],[246,249,255]]};
-const ARM_CFG={r:{sat:.42,lo:20,top:0},k:{sat:.42,lo:24,top:.15},z:{sat:.32,lo:50,top:.27}};
+const ARM_CFG={r:{sat:.42,lo:20,top:0},k:{sat:.42,lo:24,top:.15},z:{sat:.32,lo:50,top:.27},d:{sat:.42,lo:24,top:.22},m:{sat:.42,lo:24,top:.22,wax:1}};
 function armorRecolor(img,cls,v){const P=ARM_PAL[v],C=ARM_CFG[cls];if(!P||!C)return img;
   const W=img.width,H=img.height,c=canvas(W,H),g=c.getContext('2d');g.drawImage(img,0,0);const id=g.getImageData(0,0,W,H),p=id.data,N=W*H,M=new Uint8Array(N);
   const cell=Math.round(64*(img.nbDensity||4)),sc=cell/256,minA=14*sc*sc;
   for(let i=0;i<N;i++){const j=i*4;if(p[j+3]<128)continue;const r=p[j],gg=p[j+1],b=p[j+2],mx=Math.max(r,gg,b),mn=Math.min(r,gg,b),sat=mx?(mx-mn)/mx:0;
-    if(r>gg*1.5&&r>b*1.5)continue;if(r>gg&&gg>b&&sat>.25&&r>110)continue;if(sat<C.sat&&mx>C.lo&&Math.abs(r-b)<44)M[i]=1}
+    if(r>gg*1.5&&r>b*1.5)continue;if(C.wax&&r>=gg&&gg>=b&&mx>110&&sat>.1)continue;if(r>gg&&gg>b&&sat>.25&&r>110)continue;if(sat<C.sat&&mx>C.lo&&Math.abs(r-b)<44)M[i]=1}
   const q=new Int32Array(cell*cell),seen=new Uint8Array(N);
   for(let y0=0;y0<H;y0+=cell)for(let x0=0;x0<W;x0+=cell){const x1=Math.min(W,x0+cell),y1=Math.min(H,y0+cell);let top=-1,bot=-1;
     for(let y=y0;y<y1&&top<0;y++)for(let x=x0;x<x1;x++)if(p[(y*W+x)*4+3]>=128){top=y;break}
