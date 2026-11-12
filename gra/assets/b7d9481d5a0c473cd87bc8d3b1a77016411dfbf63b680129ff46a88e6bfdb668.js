@@ -3278,7 +3278,7 @@ const brSum=br=>Object.keys(STY).filter(k=>STY[k].br===br).reduce((a,k)=>a+sk(k)
 const parryWin=()=>SL.parry*(S.pk.parryWin||1),riMul=()=>{const l=sk('riposta');return l>=2?3:l>=1?2:SL.riposte},blockMulX=()=>SL.blockMul*(1-.1*sk('garda'));
 // 10.11.2026 (decyzja autora): gdy riposta jest gotowa, ciężki cios Kata (ładowanie) i Zabójczyni (zamach) trafia po 0,66 s,
 // czyli w oknie 0,7 s nietykalności po parowaniu; poza ripostą czasy bez zmian (0,75 s)
-const RIPO_HV=.66;function hvCharge(){return S.kat&&pl.riposte>0?Math.min(SL.heavy.charge,RIPO_HV):SL.heavy.charge}
+const RIPO_HV=.66;function hvCharge(){return (S.kat||S.dzw)&&pl.riposte>0?Math.min(SL.heavy.charge,RIPO_HV):SL.heavy.charge}
 function onParry(){if(S.dzw&&pl===(typeof pl1!=='undefined'&&pl1||pl))dzwParry();S.combatLock=4;if(sk('retaliation'))S.retaliate=2;S.parries++;S.actions.parry++;pl.riposte=1.6+.25*sk('riposta');const o=sk('odzysk');if(o)pl.sta=Math.min(pl.staMax,pl.sta+10*o);
   const ready=!(pl.parryHealCd>0);if(ready){heal(pl.max*(.01+(o>=3?.02:0)+(brOn('def')?.02:0)));pl.parryHealCd=2.5}
   // 9.11.2026 (10.11: 0,7 s, decyzja autora): udane parowanie daje 0,7 s nietykalności (Mur obrońcy 0,9 s) i lekko odpycha najbliższych wrogów, żeby w tłumie nie karać za dobrą obronę
@@ -3401,7 +3401,7 @@ const FAN={cost:20,dmgPct:[.60,.64,.68],cooldown:[8,7,6],wind:.25,rec:.25,cone:.
 const LDANCE={cost:20,dur:5,cooldown:[20,18,16]};
 const HOOK={cost:25,cooldown:[10,9,8],dist:80,speed:420,wind:.2,pull:.25,rec:.25,stun:1.2,mark:3,dmg:[12,12.8,13.7]};
 const cdTxt=a=>a.join('/');
-const DZW={echo:{cost:26,cooldown:[10,9,8],delay:.9,mul:[.6,.75,.9]},pledge:{cost:30,cooldown:[20,18,16],dur:6,sh:[.2,.25,.3],hv:1.5,keep:8},ton:{n:3,r:78,stun:1.6,dmg:18}};
+const DZW={echo:{cost:30,cooldown:[10,9,8],delay:.9,mul:[.5,.6,.7]},pledge:{cost:30,cooldown:[22,20,18],dur:6,sh:[.15,.2,.25],hv:1.5,keep:8},ton:{n:3,r:78,stun:1.6,dmg:18}};
 Object.assign(SK,{
  zalecho:{name:(EN?'Echo of Mourning':'Echo Żałoby'),kind:(EN?'Active technique · Bellbearer':'Technika aktywna · Dzwonnik'),ic:'zalecho',max:3,who:'d',lv:[1,2,3].map(L=>(EN?`${DZW.echo.cost} stamina, cooldown ${DZW.echo.cooldown[L-1]} s. An immediate heavy blow; a motionless phantom stays behind and after ${DZW.echo.delay} s repeats the strike in the same place for ${Math.round(DZW.echo.mul[L-1]*100)}% of its damage.`:`${DZW.echo.cost} staminy, odnowienie ${String(DZW.echo.cooldown[L-1])} s. Natychmiastowy silny atak; w miejscu ciosu zostaje nieruchome widmo, które po ${String(DZW.echo.delay).replace('.',',')} s powtarza uderzenie za ${Math.round(DZW.echo.mul[L-1]*100)}% obrażeń.`))},
  zastaw:{name:(EN?'Life Pledge':'Zastaw Życia'),kind:(EN?'Active technique · Bellbearer':'Technika aktywna · Dzwonnik'),ic:'zastaw',max:3,who:'d',lv:[1,2,3].map(L=>(EN?`${DZW.pledge.cost} stamina, cooldown ${DZW.pledge.cooldown[L-1]} s. For ${DZW.pledge.dur} s a shield absorbs damage equal to ${Math.round(DZW.pledge.sh[L-1]*100)}% of max health. Its unused part strengthens your next heavy blow (×${DZW.pledge.hv} of what is left).`:`${DZW.pledge.cost} staminy, odnowienie ${DZW.pledge.cooldown[L-1]} s. Przez ${DZW.pledge.dur} s osłona pochłania obrażenia równe ${Math.round(DZW.pledge.sh[L-1]*100)}% maks. życia. Niewykorzystana część wzmacnia następny silny atak (×${String(DZW.pledge.hv).replace('.',',')} pozostałej osłony).`))},
@@ -3888,7 +3888,7 @@ function hurtPlayer(dmg,nx,ny,source='night'){if(S.zab&&pl.roll>0&&pl.inv>0&&!S.
   if(S.attacker)[nx,ny]=incomingMelee(S.attacker,nx,ny);
   if(S.redHit&&pl.block)ftInfo((EN?'Heavy blow — dodge!':'Ciężki cios — unik!'));
   if(!S.redHit&&pl.block&&-(pl.fx*nx+pl.fy*ny)>.3){
-    if(pl.blockT<parryWin()&&S.attacker&&!S.attacker.dead&&!S.redHit){const e=S.attacker;e.stun=S.kat?2:1.4;if(S.kat)S.kStun=(S.kStun||0)+1;e.sw=0;e.recov=0;onParry();pl.parryT=.45;S.hitstop=.12;padRumble(.6,.3,140);guardFeedback('parry',nx,ny);shake(.15,.15);ftInfo((EN?'Parry!':'Parowanie!'));return}
+    if(pl.blockT<parryWin()&&S.attacker&&!S.attacker.dead&&!S.redHit){const e=S.attacker;e.stun=S.kat?2:S.dzw?1.7:1.4;if(S.kat)S.kStun=(S.kStun||0)+1;e.sw=0;e.recov=0;onParry();pl.parryT=.45;S.hitstop=.12;padRumble(.6,.3,140);guardFeedback('parry',nx,ny);shake(.15,.15);ftInfo((EN?'Parry!':'Parowanie!'));return}
     if(S.redHit&&pl.blockT<parryWin()+.1)ftInfo((EN?'Unparryable':'Nie do sparowania'));pl.sta-=dmg*blockMulX()*S.pk.blockSta*(S.redHit?2.2:1);pl.staDelay=SL.delay;pl.gHitT=.25;guardFeedback('block',nx,ny);
     if(pl.sta>=0){if(S.pk.leak&&!pl.dead)pl.hp=Math.max(1,pl.hp-dmg*S.pk.leak);pl.inv=.18;moveBox(pl,nx*6,ny*4,4,3);return}
     pl.sta=0;pl.broken=SL.guardBreak;pl.block=false;dmg*=.5;play('empty',0);ftInfo((EN?'Guard broken':'Garda przełamana'))}
@@ -5429,7 +5429,7 @@ const SL0={light:JSON.parse(JSON.stringify(SL.light)),heavy:JSON.parse(JSON.stri
 function applyChar(k){const kat=katOn();S.kat=kat;S.zab=zabOn();S.dzw=dzwOn();S.kn=charId()==='r';if(typeof dzwClear==='function')dzwClear();Object.assign(SL.light,JSON.parse(JSON.stringify(SL0.light)));Object.assign(SL.heavy,JSON.parse(JSON.stringify(SL0.heavy)));SL.roll=SL0.roll;
   if(S.zab){Object.assign(SL.light,{dmg:[13,14,13,14,24],stun:[.15,.15,.15,.15,.3],lunge:[24,24,24,24,45],arc:.78});Object.assign(SL.heavy,{cost:44,dmg:42,charge:.5,wind:.75,act:.6,rec:.3,range:38,arc:Math.PI,stun:.9,lunge:0});
     pl.max=Math.round(pl.max*.75);pl.staMax=Math.round((pl.staMax||100)*1.35);pl.sta=pl.staMax;k.hurt*=1.1;k.staRegen*=1.18;k.spd*=1.18;k.rollCost*=.9;k.aspd=1.3;return}
-  if(S.dzw){Object.assign(SL.light,{cost:19,dmg:[20,23,33],wind:.22,rec:.38,range:36,arc:1.3});Object.assign(SL.heavy,{cost:44,dmg:72,charge:.8,range:44,arc:1.7,stun:1.1});SL.roll=32;
+  if(S.dzw){Object.assign(SL.light,{cost:18,dmg:[21,24,35],wind:.2,rec:.36,range:36,arc:1.3});Object.assign(SL.heavy,{cost:44,dmg:72,charge:.8,range:44,arc:1.7,stun:1.1});SL.roll=32;
     pl.max=Math.round(pl.max*1.15);k.spd*=.9;k.blockSta*=.8;k.roll*=.88;k.poise*=1.4;k.heavyKb=1.4;return}
   if(!kat)return;Object.assign(SL.light,{cost:18,dmg:[22,25,36],wind:.2,rec:.36,range:34,arc:1.35});Object.assign(SL.heavy,{cost:42,dmg:66,charge:.75,range:42,arc:1.8,stun:1});SL.roll=34;
   pl.max=Math.round(pl.max*1.25);k.spd*=.88;k.staRegen*=.9;k.blockSta*=1.15;k.roll*=.85;k.poise*=1.5;k.heavyKb=1.5}

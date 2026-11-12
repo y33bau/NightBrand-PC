@@ -37,7 +37,7 @@ const SL0={light:JSON.parse(JSON.stringify(SL.light)),heavy:JSON.parse(JSON.stri
 function applyChar(k){const kat=katOn();S.kat=kat;S.zab=zabOn();S.dzw=dzwOn();S.kn=charId()==='r';if(typeof dzwClear==='function')dzwClear();Object.assign(SL.light,JSON.parse(JSON.stringify(SL0.light)));Object.assign(SL.heavy,JSON.parse(JSON.stringify(SL0.heavy)));SL.roll=SL0.roll;
   if(S.zab){Object.assign(SL.light,{dmg:[13,14,13,14,24],stun:[.15,.15,.15,.15,.3],lunge:[24,24,24,24,45],arc:.78});Object.assign(SL.heavy,{cost:44,dmg:42,charge:.5,wind:.75,act:.6,rec:.3,range:38,arc:Math.PI,stun:.9,lunge:0});
     pl.max=Math.round(pl.max*.75);pl.staMax=Math.round((pl.staMax||100)*1.35);pl.sta=pl.staMax;k.hurt*=1.1;k.staRegen*=1.18;k.spd*=1.18;k.rollCost*=.9;k.aspd=1.3;return}
-  if(S.dzw){Object.assign(SL.light,{cost:19,dmg:[20,23,33],wind:.22,rec:.38,range:36,arc:1.3});Object.assign(SL.heavy,{cost:44,dmg:72,charge:.8,range:44,arc:1.7,stun:1.1});SL.roll=32;
+  if(S.dzw){Object.assign(SL.light,{cost:18,dmg:[21,24,35],wind:.2,rec:.36,range:36,arc:1.3});Object.assign(SL.heavy,{cost:44,dmg:72,charge:.8,range:44,arc:1.7,stun:1.1});SL.roll=32;
     pl.max=Math.round(pl.max*1.15);k.spd*=.9;k.blockSta*=.8;k.roll*=.88;k.poise*=1.4;k.heavyKb=1.4;return}
   if(!kat)return;Object.assign(SL.light,{cost:18,dmg:[22,25,36],wind:.2,rec:.36,range:34,arc:1.35});Object.assign(SL.heavy,{cost:42,dmg:66,charge:.75,range:42,arc:1.8,stun:1});SL.roll=34;
   pl.max=Math.round(pl.max*1.25);k.spd*=.88;k.staRegen*=.9;k.blockSta*=1.15;k.roll*=.85;k.poise*=1.5;k.heavyKb=1.5}

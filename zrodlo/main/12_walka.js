@@ -44,7 +44,7 @@ const brSum=br=>Object.keys(STY).filter(k=>STY[k].br===br).reduce((a,k)=>a+sk(k)
 const parryWin=()=>SL.parry*(S.pk.parryWin||1),riMul=()=>{const l=sk('riposta');return l>=2?3:l>=1?2:SL.riposte},blockMulX=()=>SL.blockMul*(1-.1*sk('garda'));
 // 10.11.2026 (decyzja autora): gdy riposta jest gotowa, ciężki cios Kata (ładowanie) i Zabójczyni (zamach) trafia po 0,66 s,
 // czyli w oknie 0,7 s nietykalności po parowaniu; poza ripostą czasy bez zmian (0,75 s)
-const RIPO_HV=.66;function hvCharge(){return S.kat&&pl.riposte>0?Math.min(SL.heavy.charge,RIPO_HV):SL.heavy.charge}
+const RIPO_HV=.66;function hvCharge(){return (S.kat||S.dzw)&&pl.riposte>0?Math.min(SL.heavy.charge,RIPO_HV):SL.heavy.charge}
 function onParry(){if(S.dzw&&pl===(typeof pl1!=='undefined'&&pl1||pl))dzwParry();S.combatLock=4;if(sk('retaliation'))S.retaliate=2;S.parries++;S.actions.parry++;pl.riposte=1.6+.25*sk('riposta');const o=sk('odzysk');if(o)pl.sta=Math.min(pl.staMax,pl.sta+10*o);
   const ready=!(pl.parryHealCd>0);if(ready){heal(pl.max*(.01+(o>=3?.02:0)+(brOn('def')?.02:0)));pl.parryHealCd=2.5}
   // 9.11.2026 (10.11: 0,7 s, decyzja autora): udane parowanie daje 0,7 s nietykalności (Mur obrońcy 0,9 s) i lekko odpycha najbliższych wrogów, żeby w tłumie nie karać za dobrą obronę
@@ -167,7 +167,7 @@ const FAN={cost:20,dmgPct:[.60,.64,.68],cooldown:[8,7,6],wind:.25,rec:.25,cone:.
 const LDANCE={cost:20,dur:5,cooldown:[20,18,16]};
 const HOOK={cost:25,cooldown:[10,9,8],dist:80,speed:420,wind:.2,pull:.25,rec:.25,stun:1.2,mark:3,dmg:[12,12.8,13.7]};
 const cdTxt=a=>a.join('/');
-const DZW={echo:{cost:26,cooldown:[10,9,8],delay:.9,mul:[.6,.75,.9]},pledge:{cost:30,cooldown:[20,18,16],dur:6,sh:[.2,.25,.3],hv:1.5,keep:8},ton:{n:3,r:78,stun:1.6,dmg:18}};
+const DZW={echo:{cost:30,cooldown:[10,9,8],delay:.9,mul:[.5,.6,.7]},pledge:{cost:30,cooldown:[22,20,18],dur:6,sh:[.15,.2,.25],hv:1.5,keep:8},ton:{n:3,r:78,stun:1.6,dmg:18}};
 Object.assign(SK,{
  zalecho:{name:(EN?'Echo of Mourning':'Echo Żałoby'),kind:(EN?'Active technique · Bellbearer':'Technika aktywna · Dzwonnik'),ic:'zalecho',max:3,who:'d',lv:[1,2,3].map(L=>(EN?`${DZW.echo.cost} stamina, cooldown ${DZW.echo.cooldown[L-1]} s. An immediate heavy blow; a motionless phantom stays behind and after ${DZW.echo.delay} s repeats the strike in the same place for ${Math.round(DZW.echo.mul[L-1]*100)}% of its damage.`:`${DZW.echo.cost} staminy, odnowienie ${String(DZW.echo.cooldown[L-1])} s. Natychmiastowy silny atak; w miejscu ciosu zostaje nieruchome widmo, które po ${String(DZW.echo.delay).replace('.',',')} s powtarza uderzenie za ${Math.round(DZW.echo.mul[L-1]*100)}% obrażeń.`))},
  zastaw:{name:(EN?'Life Pledge':'Zastaw Życia'),kind:(EN?'Active technique · Bellbearer':'Technika aktywna · Dzwonnik'),ic:'zastaw',max:3,who:'d',lv:[1,2,3].map(L=>(EN?`${DZW.pledge.cost} stamina, cooldown ${DZW.pledge.cooldown[L-1]} s. For ${DZW.pledge.dur} s a shield absorbs damage equal to ${Math.round(DZW.pledge.sh[L-1]*100)}% of max health. Its unused part strengthens your next heavy blow (×${DZW.pledge.hv} of what is left).`:`${DZW.pledge.cost} staminy, odnowienie ${DZW.pledge.cooldown[L-1]} s. Przez ${DZW.pledge.dur} s osłona pochłania obrażenia równe ${Math.round(DZW.pledge.sh[L-1]*100)}% maks. życia. Niewykorzystana część wzmacnia następny silny atak (×${String(DZW.pledge.hv).replace('.',',')} pozostałej osłony).`))},
