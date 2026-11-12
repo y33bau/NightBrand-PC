@@ -697,3 +697,4 @@ cache619 · Nowe animacje: ciecia, wir, fale mocy, mlot Dzwonnika, wlocznia Mile
 cache620 · Wlocznia wieksza
 cache621 · Standard efektow: nowe ciecia i parowanie dla wszystkich bohaterow
 cache622 · Scalenie rundy 611: dialogi nowych NPC od autora, Nawoj przy ruinach spichlerza
+cache623 · Mapy: skala rekwizytow (kola, kociolki, drzewa), filary klasztoru w Zlotogrodzie

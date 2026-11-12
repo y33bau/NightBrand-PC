@@ -145,7 +145,7 @@ const SPRITE_GROUPS={
   "wl_fort": ["r3","r5"],
   "wl_cap": ["r3", "r5"],
   "wl_plank": ["r3"],
-  "wl_hala": ["core","r2"],"wl_kuznia": ["r2"],"wl_kopalnia": ["r2"],"wl_urwisko": ["r2"],"wl_kolumna": ["core","r2"],"wl_halacap": ["core","r2"],
+  "wl_hala": ["core","r2"],"wl_kuznia": ["r2"],"wl_kopalnia": ["r2"],"wl_urwisko": ["r2"],"wl_kolumna": ["core","r2","r3"],"wl_halacap": ["core","r2"],
   "wl_dolina": ["r4"],"wl_lasu": ["r4"],"wl_obozpal": ["r4"],"wl_wieza": ["r4"],
   "wl_palisada": ["core"],"wl_chata": ["core"],"wl_palecap": ["core"],
   "cc0_cracks": [
