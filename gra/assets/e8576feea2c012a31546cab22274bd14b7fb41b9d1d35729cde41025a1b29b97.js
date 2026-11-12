@@ -748,6 +748,9 @@ function genDolne(){
   for(const [x,y] of [[44,15],[57,15],[44,32],[57,32]])W1('anvil',x,y);
   W1('pickaxe_rack',60,11);W1('pickaxe_rack',60,20);W1('mine_cart',60,17);W1('mine_cart',60,24);
   W1('black_powder',59,30);W1('black_powder',41,36);W1('rune_lantern',60,37,{stone:3});W1('chains',41,10);W1('chains',41,38);
+  // 12.11.2026: warsztaty miedzy kanalami lawy (pas x48..52 wolny): kowadla, proch, stojaki; kosci jako drobiazgi
+  for(const [k,x,y] of [['anvil',45,20],['anvil',45,27],['black_powder',42,18],['pickaxe_rack',41,29],['anvil',55,20],['anvil',55,28],['black_powder',58,27],['pickaxe_rack',46,39],['mine_cart',56,39],['anvil',44,11],['black_powder',59,11]])W1(k,x,y);
+  for(const [x,y] of [[46,30],[54,17],[53,37],[43,40]])prop('dwarf_bones',x+.5,y+.92,[],{floorDetail:true});
   // kopalnia: stojaki przy polnocnej scianie, wozki przy poludniowej, skład prochu przy wschodniej
   for(const x of [43,47,51])W1('pickaxe_rack',x,45);
   for(const x of [44,50])W1('mine_cart',x,51);
@@ -1004,7 +1007,7 @@ function genCzarnobor(seed){
   const shr=[s1,s2,s3].filter(Boolean).map(([x,y])=>({x:x*TS+8,y:(y+1)*TS}));
   return{map,under,PROPS,seed,clearways,start:{x:40*TS+8,y:63*TS+8},shrines:shr,
     region:(x,y)=>y>=CZY.campTop?'camp':y>=CZY.stones?'meadows':y>=CZY.north?'stones':y<15&&x>23&&x<58?'hill':x<CZX.marsh?'marsh':'forest',
-    npcs:(()=>{const OK=[60,61,62,63,66,67],nn=(id,art,name,lines,x,y,extra)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);return Object.assign({id,art,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines},extra||{})};
+    npcs:(()=>{const OK=[60,61,62,63,66,67],nn=(id,art,name,lines,x,y,extra)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);for(let i=PROPS.length-1;i>=0;i--){const p=PROPS[i],dy=p.y-(Y+.4);if(p.tree&&Math.abs(p.x-X-.5)<2.2&&dy<.8&&dy>-4.6){const tx=Math.floor(p.x),ty=Math.floor(p.y);if(map[ty*GW+tx]===31)map[ty*GW+tx]=under[ty*GW+tx]||60;PROPS.splice(i,1)}}/*12.11.2026: drzewo tuz za NPC zaslanialo go (NPC na sosnie)*/return Object.assign({id,art,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines},extra||{})};
       return[nn('wierz','wierz',(EN?'Wierzchoslava, the Whisperer':'Wierzchosława, szeptucha'),WIERZ_LINES,36,62),nn('bartosz','bartosz',(EN?'Bart the Scout':'Bartosz Tropiciel'),BARTOSZ_LINES,roadX(44)-3,43),
         nn('wolch','wolch',(EN?'Volch, Pagan Priest':'Żerca Wołch'),WOLCH_LINES,CZ.oak[0],CZ.oak[1]+4),nn('dobromir','dobromir',(EN?'Dobromir, Keeper of Empty Hives':'Dobromir, Pszczelarz Pustych Uli'),DOBROMIR_LINES,47,62),nn('boginka','boginka_lure','',[],62+((r()*10)|0),10+((r()*10)|0),{lure:true})]})(),idle:[40,48,14,10]};
 }
@@ -1041,6 +1044,13 @@ function genCytadela(seed){
   for(const y of [58,47,35,24,13,3])for(const x of [8,71]){if(y===13&&x===71)P('chains',x,y,[],{anim:'chains'});else P('order_bonfire',x,y,[],{fire:true})}
   // Six deliberate, non-blocking details beside furniture, never scattered into passageways.
   for(const [k,x,y] of [['shackles',7,19]])P(k,x,y,[],{floorDetail:true,...(k==='pages'?{anim:'pages'}:{})});
+  // 12.11.2026: dziedziniec ubrany po bokach (wozy, stojaki, sztandary przy bramach, paleniska), krypta z sarkofagami i kośćmi; pasy x16..23 i x56..63 oraz środek wolne
+  for(const [x,y] of [[13,59],[26,59],[53,59],[66,59],[31,61],[49,61],[26,15],[53,15],[5,20],[74,20]])set(x,y,27);
+  for(const x of [14,25,54,65])P('order_banner',x,58);
+  P('cart',12,65,true);P('cart',67,65,true);P('armour',5,62);P('armour',74,62);P('rack',5,65,true);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
+  for(const [x,y] of [[27,19],[32,19],[47,19],[52,19]])P('sarcophagus',x,y,true);
+  for(const [x,y] of [[29,18],[50,18],[35,15],[45,15]])P('candelabra',x,y,true); // 12.11.2026: swiatlo w krypcie
+  for(const [k,x,y] of [['dwarf_bones',5,15],['skull',74,15],['skull',30,17],['dwarf_bones',50,17],['chains',6,13]])P(k,x,y,[],{floorDetail:true});
   const SH=[[69,60],[10,42],[40,19]];SH.forEach(([x,y],i)=>P('healing_shrine',x,y,true,{shrine:i}));
   return{map,under,PROPS,seed,start:{x:40*TS+8,y:63*TS+8},shrines:SH.map(([x,y])=>({x:x*TS+8,y:y*TS+12})),region:cyRegion,idle:[40,58,14,6],
     npcs:(()=>{const OK=[70,71,72,73,74,75],nn=(id,name,lines,x,y)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);return{id,art:id,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines}};
@@ -1291,7 +1301,9 @@ function groundPadded(img){if(!img.nbPadded){const S=img.width/8,P=S/16,I=S-2*P,
 function groundCoarse(img){if(!img.nbCoarse){const c=canvas(128,128);c.getContext('2d').drawImage(img,0,0,128,128);img.nbCoarse=c}return img.nbCoarse}
 function groundTile(g,img,col,row,tx,ty){const n=groundHash(tx,ty),plan=W.groundPlan,j=ty*MW+tx;let materialCell=j;
   // A prop's collision tile (31) and a brazier/point tile (27) have the same floor as their surroundings, not a separate old atlas patch.
-  if(plan&&plan.rows[j]===255&&(map[j]===31||map[j]===27)){let best=Infinity;for(let dy=-3;dy<=3;dy++)for(let dx=-3;dx<=3;dx++){const x=tx+dx,y=ty+dy,k=y*MW+x;if(x<0||y<0||x>=MW||y>=MH||plan.rows[k]===255)continue;const score=dx*dx+dy*dy+((map[k]===31?W.under[k]:map[k])===W.under[j]?0:8);if(score<best){best=score;materialCell=k}}}
+  // 12.11.2026: pod woda (przykrytą siatką z miękkim brzegiem) leży zwykły grunt z sąsiedztwa, nie kwadratowe kafle wody
+  const WETF=CH===1?[45,90]:CH===4?[64,65,91]:[];const wetCell=k=>WETF.includes(map[k]);
+  if(plan&&(plan.rows[j]===255&&(map[j]===31||map[j]===27)||wetCell(j))){let best=Infinity;for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const x=tx+dx,y=ty+dy,k=y*MW+x;if(x<0||y<0||x>=MW||y>=MH||plan.rows[k]===255||wetCell(k))continue;const score=dx*dx+dy*dy+((map[k]===31?W.under[k]:map[k])===W.under[j]?0:8);if(score<best){best=score;materialCell=k}}}
   const planned=plan&&plan.rows[materialCell]!==255;
   if(planned){row=plan.rows[materialCell];col=n%100<55?0:1+n%5}const natural=naturalGround(img,row)&&!(plan&&(CH===1&&[3,4].includes(row)||CH===4&&[1,7].includes(row)||CH!==1&&CH!==4)),variant=natural?n&7:0;const shore=col>=4&&((img.nbKey==='br_ground'||img.nbKey==='dm_floor')&&row===5||img.nbKey==='zl_ground'&&row===4||img.nbKey==='cz_ground'&&(row===4||row===5));let flags=natural||shore||img.nbKey==='cz_ground'&&row===7?1:0;
   if(planned){flags|=65;if(CH===3&&row===1){const code=(x,y)=>{const k=y*MW+x;return k>=0&&k<map.length&&(map[k]===51||map[k]===31&&W.under[k]===51)};col=code(tx,ty-1)||code(tx,ty+1)?1:0}if(CH===4&&row===1)col=W.region(tx,ty)==='camp'?1:n%100<55?1:2+n%4;if(CH===5&&row===2)col=0;if(CH===5&&row===4)col=0;}
@@ -1323,9 +1335,10 @@ function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan
   if(ch===3&&![1,4].includes(row))id=plan.road[i]||row===3?1:0;
   if(ch===3&&id>=0&&W.region(x,y)==='slums'&&(nz(x,y)>.4||[[2,0],[-2,0],[0,2],[0,-2],[1,1],[-1,-1],[1,-1],[-1,1]].some(([dx,dy])=>tileAt(x+dx,y+dy)===54)))id=2;
   if(ch===4&&![4,5,7].includes(row)){const r=W.region(x,y);id=r==='camp'?0:row===1?1:(r==='hill'||r==='stones')?3:r==='forest'?2:0;if(id===2&&nz(x,y)>.6)id=4;}
-  if(ch===5&&![3,4,6,7].includes(row))id=row===2||row===1?2:row===5?1:0; // 12.11.2026: sale (sadowa, skarbiec, tron) maja kamienne plyty zamiast klepiska; posadzki jasniejsze
+  if(ch===5&&![3,4,6,7].includes(row))id=row===2||row===1?2:row===5?1:0;
+  if(ch===5&&id===0){const rg=W.region(x,y);if(rg==='dziedziniec'&&(plan.road[i]||Math.hypot((x-MP(40))*.8,y-MP(62))<5.2+.8*nz(x,y)))id=2;else if(rg==='krypta'&&nz(x*1.4,y*1.4)>.9)id=1;} // 12.11.2026: kamienne drogi i plac na dziedzincu, czarna skala w krypcie // 12.11.2026: sale (sadowa, skarbiec, tron) maja kamienne plyty zamiast klepiska; posadzki jasniejsze
   if(ch===9&&![1,5,7].includes(row))id=row===2?1:0;
-  if(ch===1){const v=MAP1_FLOOR[y].charCodeAt(x)-48;if(v!==0||id>=0)id=v}
+  if(ch===1){let X=x,Y=y;if(map[i]===45||map[i]===90){let b=99;for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const u=x+dx,v=y+dy,k=v*MW+u;if(u<0||v<0||u>=MW||v>=MH||map[k]===45||map[k]===90)continue;const d=dx*dx+dy*dy;if(d<b){b=d;X=u;Y=v}}}const v=MAP1_FLOOR[Y].charCodeAt(X)-48;if(v!==0||id>=0)id=v} // 12.11.2026: pod woda ta sama posadzka co na najblizszym brzegu
   if(id>capId)id=ch===4?2:0;
   if(id>=0)cells[a+2]=(cells[a+2]%8)+128+id*8;
  }return cells;
@@ -1431,9 +1444,16 @@ let WATER_ALL=[];
 function waterHD(li,cells,Y,RU,col,deep){if(!li||!cells||!cells.length)return null;
  const lt=new THREE.Texture(li);lt.wrapS=lt.wrapT=THREE.RepeatWrapping;lt.magFilter=THREE.LinearFilter;lt.minFilter=THREE.LinearMipmapLinearFilter;lt.generateMipmaps=true;lt.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());lt.needsUpdate=true;
  const L=new Set(cells.map(([x,y])=>x+','+y)),shore=(cx,cy)=>{let d=3;for(let oy=-3;oy<=2;oy++)for(let ox=-3;ox<=2;ox++){const x=Math.floor(cx)+ox,y=Math.floor(cy)+oy;if(L.has(x+','+y))continue;const dx=Math.max(x-cx,0,cx-x-1),dy=Math.max(y-cy,0,cy-y-1);d=Math.min(d,Math.hypot(dx,dy))}return d};
- const pos=[],uv=[],cl=[],idx=[];for(const [x,y] of cells){const b=pos.length/3;for(const [vx,vy] of [[x,y],[x+1,y],[x,y+1],[x+1,y+1]]){pos.push(vx,Y,vy);uv.push(vx/RU,-vy/RU);const d=shore(vx,vy),v=deep?1.1-.4*Math.min(d,2.5)/2.5:1-.12*Math.min(d,1.5)/1.5;cl.push(v,v,v)}idx.push(b,b+2,b+1,b+1,b+2,b+3)}
- const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setAttribute('color',new THREE.Float32BufferAttribute(cl,3));g.setIndex(idx);g.computeVertexNormals();
- const mat=liquidMat({map:lt,color:col,vertexColors:true,shininess:deep?36:26,specular:deep?0x1e2a38:0x161c1c},2),mesh=new THREE.Mesh(g,mat);mesh.castShadow=false;mesh.receiveShadow=true;ROOT.add(mesh);
+ // 12.11.2026: brzeg wody bez schodkow z kafli. Siatka 4x4 na kafel obejmuje tez pas ladu wokol wody; przezroczystosc liczona z gladkiej odleglosci od brzegu z lekkim falowaniem, wiec linia brzegu jest zaokraglona i nieregularna
+ const N=4,ring=new Set(L);for(const [x,y] of cells)for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)ring.add((x+dx)+','+(y+dy));
+ const CV=[];for(let j=-3;j<=3;j++)for(let i=-3;i<=3;i++)if(i*i+j*j<=9)CV.push([i*.3,j*.3]);const cover=(vx,vy)=>{let n=0;for(const [ox,oy] of CV)if(L.has(Math.floor(vx+ox)+','+Math.floor(vy+oy)))n++;return n/CV.length};
+ const wob=(x,y)=>.14*(Math.sin(x*2.3+y*1.1)+Math.sin(y*2.9-x*1.7))+.05*Math.sin(x*6.1+y*5.3);
+ const pos=[],uv=[],cl=[],aw=[],idx=[];for(const k of ring){const [x,y]=k.split(',').map(Number);const b=pos.length/3;
+  for(let j=0;j<=N;j++)for(let i=0;i<=N;i++){const vx=x+i/N,vy=y+j/N;pos.push(vx,Y,vy);uv.push(vx/RU,-vy/RU);const d=shore(vx,vy),v=deep?1.1-.4*Math.min(d,2.5)/2.5:1-.12*Math.min(d,1.5)/1.5;cl.push(v,v,v);const t=Math.min(1,Math.max(0,(cover(vx,vy)+wob(vx,vy)-.32)/.36));aw.push(t*t*(3-2*t))}
+  for(let j=0;j<N;j++)for(let i=0;i<N;i++){const a=b+j*(N+1)+i;if(aw[a]+aw[a+1]+aw[a+N+1]+aw[a+N+2]===0)continue;idx.push(a,a+N+1,a+1,a+1,a+N+1,a+N+2)}}
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setAttribute('color',new THREE.Float32BufferAttribute(cl,3));g.setAttribute('aw',new THREE.Float32BufferAttribute(aw,1));g.setIndex(idx);g.computeVertexNormals();
+ const mat=liquidMat({map:lt,color:col,vertexColors:true,shininess:deep?36:26,specular:deep?0x1e2a38:0x161c1c},2),mesh=new THREE.Mesh(g,mat);
+ {const ob=mat.onBeforeCompile;mat.onBeforeCompile=sh=>{ob(sh);sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nattribute float aw;varying float vAw;').replace('#include <begin_vertex>','#include <begin_vertex>\nvAw=aw;');sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying float vAw;').replace('#include <fog_fragment>','#include <fog_fragment>\ngl_FragColor.a*=vAw;')};mat.customProgramCacheKey=()=>'waterAw';mat.transparent=true;mat.depthWrite=false}mesh.castShadow=false;mesh.receiveShadow=true;ROOT.add(mesh);
  WATER_ALL=WATER_ALL.filter(o=>!(o.ch===CH&&o.deep===deep&&o.Y===Y));const o={ch:CH,tex:lt,deep,Y,mesh};WATER_ALL.push(o);return o}
 // Runda 254: fazowanie brzegów cieczy (woda, lawa, szkarłatna maź). Trzy elementy:
 // 1) zbocze niecki (pionowa ścianka od lustra cieczy do gruntu; tylko tam, gdzie ciecz leży poniżej gruntu),
@@ -1449,11 +1469,13 @@ function wallShade(){if(SETT.quality==='low'||!W||!W.map)return;const M=W.map,is
  const m=new THREE.Mesh(g,new THREE.MeshBasicMaterial({vertexColors:true,transparent:true,blending:THREE.MultiplyBlending,premultipliedAlpha:true,depthWrite:false,fog:false,toneMapped:false}));m.renderOrder=1;m.castShadow=m.receiveShadow=false;m.frustumCulled=false;ROOT.add(m)}
 function shoreFX(all,draw,Y,kind,land,step){if(!all||!all.length||!draw||!draw.length)return;
  const A=new Set(all.map(([x,y])=>x+','+y)),D=new Set(draw.map(([x,y])=>x+','+y));
- const P={water:{ld:.62,lw:.85,id:.5,iw:.3},lava:{ld:.55,lw:.8,id:.85,iw:.4},rot:{ld:.5,lw:.75,id:.8,iw:.38}}[kind]||{ld:.5,lw:.8,id:.5,iw:.3};
+ const P={water:{ld:.42,lw:.9,id:.08,iw:.3},lava:{ld:.55,lw:.8,id:.85,iw:.4},rot:{ld:.5,lw:.75,id:.8,iw:.38}}[kind]||{ld:.5,lw:.8,id:.5,iw:.3};
  const dist=(vx,vy,wantLiquid)=>{let d=2;for(let oy=-2;oy<=1;oy++)for(let ox=-2;ox<=1;ox++){const x=Math.floor(vx)+ox,y=Math.floor(vy)+oy;if(A.has(x+','+y)!==wantLiquid)continue;const dx=Math.max(x-vx,0,vx-x-1),dy=Math.max(y-vy,0,vy-y-1);d=Math.min(d,Math.hypot(dx,dy))}return d};
+ const CVW=[];for(let j=-4;j<=4;j++)for(let i=-4;i<=4;i++)if(i*i+j*j<=16)CVW.push([i*.24,j*.24]); // 12.11.2026: mokry pas przy wodzie liczony z wygladzonego zasiegu wody, bez prostych krawedzi z kafli
  const pos=[],col=[],idx=[],N=4,quad=(x,y,yy,fn)=>{const b=pos.length/3;for(let j=0;j<=N;j++)for(let i=0;i<=N;i++){const vx=x+i/N,vy=y+j/N,f=fn(vx,vy);pos.push(vx,yy,vy);col.push(f,f,f)}for(let j=0;j<N;j++)for(let i=0;i<N;i++){const a=b+j*(N+1)+i;idx.push(a,a+N+1,a+1,a+1,a+N+1,a+N+2)}};
- for(const k of D){const [x,y]=k.split(',').map(Number);quad(x,y,Y,(vx,vy)=>1-P.id*Math.exp(-dist(vx,vy,false)/P.iw))}
- if(land){const seen=new Set();for(const k of A){const [cx,cy]=k.split(',').map(Number);for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const x=cx+dx,y=cy+dy,kk=x+','+y;if(A.has(kk)||seen.has(kk)||x<0||y<0||x>=MW||y>=MH)continue;seen.add(kk);quad(x,y,.02,(vx,vy)=>{const d=dist(vx,vy,true);return 1-P.ld*Math.pow(Math.max(0,1-d/P.lw),2)})}}}
+ if(kind!=='water')for(const k of D){const [x,y]=k.split(',').map(Number);quad(x,y,Y,(vx,vy)=>1-P.id*Math.exp(-dist(vx,vy,false)/P.iw))}
+ if(land&&kind==='water'){const seen=new Set(),f=(vx,vy)=>{let n=0;for(const [ox,oy] of CVW)if(A.has(Math.floor(vx+ox)+','+Math.floor(vy+oy)))n++;const c=n/CVW.length;return 1-P.ld*4*c*(1-c)};for(const k of A){const [cx,cy]=k.split(',').map(Number);for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const x=cx+dx,y=cy+dy,kk=x+','+y;if(seen.has(kk)||x<0||y<0||x>=MW||y>=MH)continue;seen.add(kk);if(A.has(kk)&&[[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,-1],[1,-1],[-1,1]].every(([ax,ay])=>A.has((x+ax)+','+(y+ay))))continue;quad(x,y,.02,f)}}}
+ else if(land){const seen=new Set();for(const k of A){const [cx,cy]=k.split(',').map(Number);for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const x=cx+dx,y=cy+dy,kk=x+','+y;if(A.has(kk)||seen.has(kk)||x<0||y<0||x>=MW||y>=MH)continue;seen.add(kk);quad(x,y,.02,kind==='water'?(vx,vy)=>{let n=0;for(const [ox,oy] of CVW)if(A.has(Math.floor(vx+ox)+','+Math.floor(vy+oy)))n++;const c=n/CVW.length;return 1-P.ld*Math.min(1,c*2.2)}:(vx,vy)=>{const d=dist(vx,vy,true);return 1-P.ld*Math.pow(Math.max(0,1-d/P.lw),2)})}}}
  if(pos.length){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));g.setIndex(idx);
   const m=new THREE.Mesh(g,new THREE.MeshBasicMaterial({vertexColors:true,transparent:true,blending:THREE.MultiplyBlending,premultipliedAlpha:true,depthWrite:false,fog:false,toneMapped:false}));m.renderOrder=1;m.castShadow=m.receiveShadow=false;m.frustumCulled=false;ROOT.add(m)}
  if(Y<-.03){const wp=[],wc=[],wi=[],lv=kind==='lava',top=lv?[.085,.055,.05]:[.34,.27,.21],bot=lv?[.46,.13,.035]:[.07,.09,.11],mid=[.2,.075,.045],yb=Y-.012;
@@ -1799,7 +1821,7 @@ function buildBrzeznica(I){
   const fc=canvas(WW,WH),fg=fc.getContext('2d');
   const tile=(c,row,tx,ty)=>groundTile(fg,F,c,row,tx,ty);
   const ROW={40:0,41:1,42:2,43:3,44:4,46:6,47:7,48:3,21:2};
-  for(let ty=0;ty<MH;ty++)for(let tx=0;tx<MW;tx++){let t=tileAt(tx,ty);if(t===31)t=W.under[ty*MW+tx]||42;if(t===45||t===90)continue;
+  for(let ty=0;ty<MH;ty++)for(let tx=0;tx<MW;tx++){let t=tileAt(tx,ty);if(t===31)t=W.under[ty*MW+tx]||42;if(t===45||t===90)t=42;
     tile((r()*8)|0,ROW[t]??2,tx,ty);if(t===21){fg.fillStyle='rgba(3,3,6,.6)';fg.fillRect(tx*16,ty*16,16,16)}}
   // Natural boundaries blend continuously in the atlas material.
   floorAO(fg,new Set([31]));
@@ -1946,7 +1968,7 @@ function buildCzarnobor(I){planGround(4);
   const gcode=(x,y)=>{let t=tileAt(x,y);if(t===31)t=W.under[y*MW+x]||60;return t};
   W.fords=[];W.marsh=[];W.deepw=[];
   for(let ty=0;ty<MH;ty++)for(let tx=0;tx<MW;tx++){const t=gcode(tx,ty);let c=(r()*8)|0,row=ROW[t]??0;
-    if(WET.has(t)){const edge=D4.some(([dx,dy])=>!WET.has(gcode(tx+dx,ty+dy)));if(t===65&&edge)c=4+(c&3);else{c&=3;(t===64?W.fords:t===91?W.deepw:W.marsh).push([tx,ty])}}
+    if(WET.has(t)){c&=3;row=0;(t===64?W.fords:t===91?W.deepw:W.marsh).push([tx,ty])}
     else if(D4.some(([dx,dy])=>gcode(tx+dx,ty+dy)===64)&&r()<.85){row=4;c=4+(c&3)}
     else if(t===67&&W.region(tx,ty)==='camp'){const q=r();if(q<.35){row=1}else c=q<.75?0:q<.92?2:1}
     groundTile(fg,G,c,row,tx,ty);
@@ -2017,13 +2039,13 @@ function buildCytadela(I){planGround(5);
   // walls: every hall has its own face (r0 fortress stone, r1 bookcases, r2 black marble, r4 vault plates, r3 bars), roof caps from r6
   const box=h=>{const g=new THREE.BoxGeometry(1,h,1);g.translate(0,h/2,0);return g};
   const rc=()=>(r()*8)|0;
-  const addWalls=(list,h,row,tint=0xffffff)=>{if(!list.length)return;const side=I.wl_fort?worldSurf(cutaway(phong({color:tint})),I.wl_fort,4,'a'):cutaway(phong({map:stackTex(WL,[[rc(),row],[rc(),row],[rc(),row]]),color:tint})),cap=I.wl_cap?worldSurf(cutaway(phong({color:tint})),I.wl_cap,3,'a'):cutaway(phong({map:texFrom(tcut(WL,rc(),6),true),color:tint}));instanced(depthWall(box(h),side,5),[side,side,cap,cap,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5)).frustumCulled=false};
+  const addWalls=(list,h,row,tint=0xffffff,plain)=>{if(!list.length)return;const side=I.wl_fort&&!plain?worldSurf(cutaway(phong({color:tint})),I.wl_fort,4,'a'):cutaway(phong({map:stackTex(WL,[[rc(),row],[rc(),row],[rc(),row]]),color:tint})),cap=I.wl_cap&&!plain?worldSurf(cutaway(phong({color:tint})),I.wl_cap,3,'a'):cutaway(phong({map:texFrom(tcut(WL,rc(),6),true),color:tint}));instanced(depthWall(box(h),side,5),[side,side,cap,cap,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5)).frustumCulled=false};
   const WROW={dziedziniec:0,kancelaria:1,sala:2,skarbiec:4,krypta:0,tron:2};
   const rim=[[],[]],bars=[],inner={};
   for(const [x,y,t] of walls){if(t===80)bars.push([x,y]);else if(t===21)rim[(x+y)&1].push([x,y]);else{const k=W.region(x,y);(inner[k]=inner[k]||[[],[]])[(x+y)&1].push([x,y])}}
   rim.forEach(l=>addWalls(l,4.4,0,0x8a8890));
   for(const k in inner)inner[k].forEach(l=>addWalls(l,3.4,WROW[k]));
-  addWalls(bars,2.2,3);
+  addWalls(bars,2.2,3,0xffffff,true); // 12.11.2026: kraty z wlasna tekstura krat (wczesniej kamienny slup)
   const R={brazier_0:[0,0,32,32],brazier_1:[32,0,32,32],brazier_2:[64,0,32,32],brazier_3:[96,0,32,32],king_statue:[0,32,32,64],healing_shrine:[32,64,32,32],depleted_shrine:[64,64,32,32],chains:[96,64,32,32],
     fallen_pillar:[0,96,64,32],dwarf_bones:[64,96,32,32],sarcophagus:[0,160,32,32],rune_lantern:[32,160,32,32],clan_banner:[96,160,32,32]};
   const PF={};for(const k in R)PF[k]=procFrame(I.dm_props,...R[k],'prop');
@@ -2049,7 +2071,7 @@ function buildCytadela(I){planGround(5);
   // K4 small props, 32 px cells; the healing shrine still comes from the Lower City sheet
   const RK={torch_0:[0,0],torch_1:[32,0],torch_2:[64,0],torch_3:[96,0],scroll:[0,32],book:[32,32],inkwell:[64,32],seal:[96,32],chains_0:[0,64],chains_1:[32,64],shackles:[64,64],skull:[96,64],
     chair:[0,96],desk:[32,96],inkbarrel:[64,96],cart:[96,96],pages_0:[0,128],pages_1:[32,128],raven_0:[64,128],raven_1:[96,128],purse:[0,160],goblet:[32,160],keys:[64,160],swordbooks:[96,160]};
-  const KF={};if(I.p1_order_bonfire)KF.order_bonfire=procFrame(I.p1_order_bonfire,0,0,32,32,'prop');for(const k in RK){if(I['p5_'+k])KF[k]=procFrame(I['p5_'+k],0,0,32,32,'prop');else if(KP)KF[k]=procFrame(KP,RK[k][0],RK[k][1],32,32,'prop')}
+  const KF={};if(I.p1_order_bonfire)KF.order_bonfire=procFrame(I.p1_order_bonfire,0,0,32,32,'prop');if(I.p1_order_banner)KF.order_banner=procFrame(I.p1_order_banner,0,0,32,32,'prop');for(const k in RK){if(I['p5_'+k])KF[k]=procFrame(I['p5_'+k],0,0,32,32,'prop');else if(KP)KF[k]=procFrame(KP,RK[k][0],RK[k][1],32,32,'prop')}
   const ANIM={torch:['torch',4,6],chains:['chains',2,2],pages:['pages',2,2.5],raven:['raven',2,1.5]};
   for(const p of PROPS){if(p.obj&&BG&&p.shrine===undefined)continue;
     const sh=p.shrine!==undefined;let frames,fps=0;
@@ -2059,7 +2081,7 @@ function buildCytadela(I){planGround(5);
     else frames=[PF[p.k]];
     if(!frames[0])continue;
     const o={mesh:mkProp(frames,p.x,p.y,[0,0,32,32]),frames,fps,ph:Math.random()*3,kind:sh?'shrine':fps?'anim':'static',si:p.shrine,prop:p};
-    {const SCL={scroll:.2,book:.17,inkwell:.16,seal:.14,pages:.18,purse:.2,goblet:.18,keys:.16,shackles:.24,skull:.24,swordbooks:.28,chair:.48,desk:.5,inkbarrel:.42,cart:.5,order_bonfire:.8,torch:.5,chains:.5,healing_shrine:.75},c=SCL[p.k]||SCL[p.anim]||1;if(c!==1)o.mesh.scale.set(c,SQ*c,c)}
+    {const SCL={scroll:.2,book:.17,inkwell:.16,seal:.14,pages:.18,purse:.2,goblet:.18,keys:.16,shackles:.24,skull:.24,swordbooks:.28,chair:.48,desk:.5,inkbarrel:.42,cart:.9,sarcophagus:.85,order_bonfire:.8,torch:.5,chains:.5,healing_shrine:.75},c=SCL[p.k]||SCL[p.anim]||1;if(c!==1)o.mesh.scale.set(c,SQ*c,c)}
     if(!sh&&(p.k==='shackles'||p.k==='skull'||p.k==='scroll'||p.k==='pages'||p.k==='book'||p.k==='torch'||p.k==='chains'))o.mesh.castShadow=false;p.obj=o;propObjs.push(o)}
 }
 
@@ -2133,7 +2155,7 @@ const plLight=new THREE.PointLight(0xffd2a0,2.1,13,2);plLight.castShadow=true;pl
 // with extra buildings, props, four "altars" for the kill-next-to-it event, traps and the 9:00 wave (big-map coordinates)
 // Runda 216: dodatkowe dekoracje bez kolizji na każdej mapie. Stawiane tylko na wolnej posadzce (bez cieczy, z dala od ścian),
 // z dala od innych obiektów, NPC, kapliczek, startu i korytarzy (clearways); nie zmieniają mapy kolizji.
-const UND=['wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11'];const DECOR={1:[['covered_corpses',8],['burnt_hay',9],['wheel',7]],2:[],3:[['beggar_bodies',12],['doorway_bones',10],['rot_bloom',8,{anim:'bloom'}]],4:[['cz_bones',22],['wolf_skull_bush',14]],5:[['ledgers',8],['chair',6],['rack',5],['armour',4],['cage',3]]};
+const UND=['wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11'];const DECOR={1:[['covered_corpses',8],['burnt_hay',9],['wheel',7]],2:[],3:[['beggar_bodies',12],['doorway_bones',10],['rot_bloom',8,{anim:'bloom'}]],4:[['cz_bones',22],['wolf_skull_bush',14]],5:[['ledgers',8,null,['kancelaria','sala']],['chair',6,null,['kancelaria']],['rack',5,null,['skarbiec','krypta']],['armour',4,null,['sala','skarbiec']],['cage',3,null,['krypta']]]};
 // Runda 217: przerzedzenie zwykłych ognisk (ogniska z gruzu, obozowe, stosy): żadne dwa nie stoją bliżej niż 9 pól.
 // Nie dotyczy ognisk mocy (kapliczek odrodzenia), koksowników, pochodni i latarni ani kręgu ognisk wokół bożka w rozdz. IV.
 function thinFires(w){const P=w.PROPS,M=w.map,U=w.under,idol=P.find(p=>p.k==='cz_idol'),sh=w.shrines||[],R=9;
@@ -2146,6 +2168,9 @@ function thinFires(w){const P=w.PROPS,M=w.map,U=w.under,idol=P.find(p=>p.k==='cz
 // runda 298: uklad mapy 1 z edytora map (eksport autora 2.11.2026). Przesuniecia, usuniecia i dodania w polach swiata 104x91, reszta mapy bez zmian.
 // 12.11.2026, zasada autora: NIC z kolizja nie stoi na drodze. Rozdz. I: droga = pomalowane klepisko (MAP1_FLOOR 0) o szerokosci do 5 pol
 // (plac jest szerszy, wiec zostaje). Rekwizyt z drogi trafia na najblizsze wolne pole poza droga, razem z kolizja; kapliczka zabiera swoj punkt odrodzenia.
+// 12.11.2026: drzewo tuz przy NPC (z przodu lub tuz za nim) zaslania go albo wyglada, jakby NPC stal na koronie; takie drzewa usuwamy
+function clearNpcTrees(w){const P=w.PROPS,M=w.map,U=w.under,drop=new Set();for(const n of w.npcs||[]){const nx=n.x/16,ny=n.y/16;for(const p of P)if(p.tree&&Math.abs(p.x-nx)<2.4&&p.y-ny>-1.6&&p.y-ny<4.8)drop.add(p)}
+ if(!drop.size)return;w.PROPS=P.filter(p=>!drop.has(p));for(const p of drop){const bx=Math.floor(p.x),by=Math.floor(p.y);for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const x=bx+dx,y=by+dy,i=y*MW+x;if(x<1||y<1||x>=MW-1||y>=MH-1||M[i]!==31)continue;if(w.PROPS.some(q=>Math.abs(q.x-x-.5)<1.3&&Math.abs(q.y-y-.5)<1.3))continue;M[i]=U[i]||60}}}
 function unblockRoads1(w){if(typeof MAP1_FLOOR==='undefined')return;const P=w.PROPS,M=w.map,U=w.under,fl=(x,y)=>x<0||y<0||x>=MW||y>=MH?-1:MAP1_FLOOR[y].charCodeAt(x)-48;
  const run=(x,y,dx,dy)=>{let n=1;for(const sg of[-1,1])for(let k=1;k<9;k++){if(fl(x+dx*k*sg,y+dy*k*sg)!==0)break;n++}return n};
  const road=(x,y)=>fl(x,y)===0&&Math.min(run(x,y,1,0),run(x,y,0,1))<=5;
@@ -2255,7 +2280,7 @@ function decorFill(w,ch){const L=DECOR[ch];if(!L)return;const r=rng(ch*104729+77
  const ok=(x,y)=>{const t=T(x,y);if(NO.has(t)||SOLID.has(t))return false;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const u=T(x+dx,y+dy);if(SOLID.has(u)||NO.has(u))return false}
   for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)if(keep.has((y+dy)*MW+x+dx))return false;if(Math.hypot(st.x/16-x,st.y/16-y)<7)return false;
   if(others.some(n=>Math.abs(n.x/16-x)<3&&Math.abs(n.y/16-y)<3))return false;return !P.some(p=>Math.abs(p.x-x-.5)<2.2&&Math.abs(p.y-y-.92)<2.2)};
- for(const [k,n,extra] of L)for(let i=0,c=0;i<n*60&&c<n;i++){const x=2+((r()*(MW-4))|0),y=2+((r()*(MH-4))|0);if(!ok(x,y))continue;P.push(Object.assign({k,x:x+.5,y:y+.92,flip:r()<.5,decor:1},extra||{}));c++}}
+ for(const [k,n,extra,regs] of L)for(let i=0,c=0;i<n*60&&c<n;i++){const x=2+((r()*(MW-4))|0),y=2+((r()*(MH-4))|0);if(regs&&!regs.includes(w.region(x,y)))continue;if(!ok(x,y))continue;P.push(Object.assign({k,x:x+.5,y:y+.92,flip:r()<.5,decor:1},extra||{}));c++}}
 function enrich(w,ch){
   const r=rng(ch*7919+13),M=w.map,U=w.under,P=w.PROPS;
   const keep=w.clearways||(w.clearways=new Set()),keepRect=(x,y,ww,hh)=>{for(let Y=y;Y<y+hh;Y++)for(let X=x;X<x+ww;X++)keep.add(Y*MW+X)};
@@ -2316,7 +2341,7 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
   if(ch===9)w.rooms=w.rooms.map(R=>Object.assign(SR(R),{k:R.k}));
   Object.assign(w,{ch,group:new THREE.Group(),propObjs:[],npcMeshes:{},walls:[],cliffs:[],pillars:[],lavas:[],braziers:[],waters:[],rots:[],shallow:[],LSRC:[]});
   if(ch>=2&&ch<=5){const sp=chojrakSpot(w);if(sp)w.npcs.push({id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:sp[0],y:sp[1],lines:[]})}
-  for(const n of w.npcs)if(n.solid)w.map[n.solid[1]*MW+n.solid[0]]=31;if(ch===4)deepMarsh(w);if(ch===1)clearCryptSurrounds(w);if(ch>=1&&ch<=5){thinFires(w);decorFill(w,ch)}
+  for(const n of w.npcs)if(n.solid)w.map[n.solid[1]*MW+n.solid[0]]=31;if(ch===4){deepMarsh(w);clearNpcTrees(w)}if(ch===1)clearCryptSurrounds(w);if(ch>=1&&ch<=5){thinFires(w);decorFill(w,ch)}
   // runda 215: bez ognisk (koksowników) tuż przy lawie w rozdz. II
   if(ch===2)for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const i=y*MW+x;if(w.map[i]!==27)continue;let n=false;for(let dy=-3;dy<=3&&!n;dy++)for(let dx=-3;dx<=3;dx++){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<MW&&Y<MH&&w.map[Y*MW+X]===24){n=true;break}}if(n)w.map[i]=(w.under&&w.under[i]&&w.under[i]!==27)?w.under[i]:20}
   // runda 242: zasada świata: żadnych ognisk na lawie ani w promieniu 4 pól od niej (ogniska z gruzu, obozowe, stosy, koksowniki); ogniska mocy bez zmian
@@ -3000,7 +3025,7 @@ function fireFxTick(){
 
 function mkTotem(x,y){const g=new THREE.Group();
   const fb=new THREE.Group(),st=new THREE.MeshBasicMaterial({color:0x5a5c70}),base=new THREE.Mesh(new THREE.CylinderGeometry(.6,.78,.4,8),st);base.position.y=.2;const pil=new THREE.Mesh(new THREE.CylinderGeometry(.24,.38,2.4,6),st);pil.position.y=1.4;fb.add(base,pil);g.add(fb);
-  totemLoad(fr=>{if(!fr)return;const im=_totImg,hh=4.5,geo=new THREE.PlaneGeometry(hh*im.width/im.height,hh).translate(0,hh/2-.1,0),n=geo.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6);const m=new THREE.Mesh(geo,fr.n);m.scale.set(1,SQ,1);g.add(m);g.remove(fb)});
+  totemLoad(fr=>{if(!fr)return;const im=_totImg,hh=4.5,geo=new THREE.PlaneGeometry(hh*im.width/im.height,hh).translate(0,hh/2-.012,0),n=geo.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6);const m=new THREE.Mesh(geo,fr.n);m.scale.set(1,SQ,1);g.add(m);g.remove(fb)});
   const ring=new THREE.Mesh(new THREE.PlaneGeometry(5.6,5.6).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:TOTGLOW,color:0xff9a3c,transparent:true,opacity:.5,depthWrite:false,blending:THREE.AdditiveBlending,fog:false}));ring.position.y=.05;g.add(ring);
   const low=SETT&&SETT.quality==='low',mk=(n,col,size)=>{const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(n*3),3));const pt=new THREE.Points(geo,new THREE.PointsMaterial({color:col,size,map:TOTDOT,sizeAttenuation:true,transparent:true,opacity:.95,depthWrite:false,blending:THREE.AdditiveBlending,fog:false}));pt.frustumCulled=false;g.add(pt);return pt};
   const em=mk(low?18:36,0xff9a3c,.3),wi=mk(low?5:10,0x8fe8ff,.5);
@@ -3164,7 +3189,7 @@ function activatePowerFire(f){if(!f||!S||S.rebirth||S.rebirthUsed)return false;S
 let _fgt=null;function fireGlowTex(){if(_fgt)return _fgt;const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),gr=x.createRadialGradient(64,64,0,64,64,64);gr.addColorStop(0,'rgba(255,255,255,.6)');gr.addColorStop(.45,'rgba(255,255,255,.28)');gr.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=gr;x.fillRect(0,0,128,128);return _fgt=new THREE.CanvasTexture(c)}
 const POT_PNG='./assets/00a19433f6e4d7a9436e350b567cabcf808435eba909266bde9f749922afbb93.png';let _potImg=null,_potFr=null;function potLoad(cb){if(_potFr){cb(_potFr);return}if(!_potImg){const im=_potImg=new Image();im.nbKey='pot';im.nbDensity=5;im.cbs=[];im.onload=()=>{try{_potFr=procFrame(im,0,0,im.width/5,im.height/5,'prop');cutCircle(_potFr.n)}catch(e){_potFr=null}for(const f of im.cbs)f(_potFr);im.cbs=[]};im.src=POT_PNG}_potImg.cbs.push(cb)}
 function preparePowerFires(w){if(!A.powerFire)A.powerFire=[[64,64],[96,64],[0,96],[32,96]].map(([x,y])=>procFrame(IMGS.br_props,x,y,32,32,'prop'));
-  w.fireMarkers=[];for(const o of w.propObjs)if(o.kind==='shrine'){o.frames=A.powerFire;o.fps=6;o.mesh.geometry=geo32;o.mesh.material=o.frames[0].n;o.mesh.castShadow=false;potLoad(fr=>{if(!fr||!_potImg)return;const hh=1.6,g=new THREE.PlaneGeometry(hh*_potImg.width/_potImg.height,hh).translate(0,hh/2-.1,0),nn=g.attributes.normal;for(let i=0;i<nn.count;i++)nn.setXYZ(i,0,.8,.6);o.frames=[fr];o.fps=0;o.mesh.geometry=g;o.mesh.material=fr.n});const mat=new THREE.MeshBasicMaterial({map:fireGlowTex(),color:0xffad55,transparent:true,opacity:.7,depthWrite:false,blending:THREE.AdditiveBlending,fog:false}),ring=new THREE.Mesh(new THREE.PlaneGeometry(3.4,3.4).rotateX(-Math.PI/2),mat);ring.position.set(o.mesh.position.x,.035,o.mesh.position.z);w.group.add(ring);w.fireMarkers.push({mesh:ring,index:o.si})}for(const l of w.LSRC)if(l.kind==='shrine')l.col=0xffa355}
+  w.fireMarkers=[];for(const o of w.propObjs)if(o.kind==='shrine'){o.frames=A.powerFire;o.fps=6;o.mesh.geometry=geo32;o.mesh.material=o.frames[0].n;o.mesh.castShadow=false;potLoad(fr=>{if(!fr||!_potImg)return;const hh=1.6,g=new THREE.PlaneGeometry(hh*_potImg.width/_potImg.height,hh).translate(0,hh/2-.012,0),nn=g.attributes.normal;for(let i=0;i<nn.count;i++)nn.setXYZ(i,0,.8,.6);o.frames=[fr];o.fps=0;o.mesh.geometry=g;o.mesh.material=fr.n});const mat=new THREE.MeshBasicMaterial({map:fireGlowTex(),color:0xffad55,transparent:true,opacity:.7,depthWrite:false,blending:THREE.AdditiveBlending,fog:false}),ring=new THREE.Mesh(new THREE.PlaneGeometry(3.4,3.4).rotateX(-Math.PI/2),mat);ring.position.set(o.mesh.position.x,.035,o.mesh.position.z);w.group.add(ring);w.fireMarkers.push({mesh:ring,index:o.si})}for(const l of w.LSRC)if(l.kind==='shrine')l.col=0xffa355}
 function makeDeathPurse(x,y,amount){if(!(amount>0))return;const mesh=new THREE.Mesh(geoC,A.pick.c.n);mesh.scale.setScalar(.8);mesh.position.set(x/16,.2,y/16);scene.add(mesh);(S.deathPurses||(S.deathPurses=[])).push({ch:CH,x,y,amount,mesh,ready:false})}
 function updatePowerVisuals(){fireFxTick();roofTick();if(!S)return;loopSnd('pot','Kociolek',clock-(S.potHealT||-9)<.25?.7:0);for(const f of W.fireMarkers||[]){const armed=S.rebirth&&S.rebirth.ch===CH&&S.rebirth.index===f.index;f.mesh.material.color.setHex(S.rebirthUsed||S.rebirth&&!armed?0x766b65:armed?0x8cead4:0xffad55);f.mesh.material.opacity=(S.rebirthUsed||S.rebirth&&!armed)?.18:armed?.85:.48+.18*Math.sin(clock*2);{const pv=S.pot&&S.pot[CH+':'+f.index];if(pv!=null&&pv<=0){f.mesh.material.color.setHex(0x555555);f.mesh.material.opacity=.15}}if(S.fxHeal!=null&&f.index===S.fxHealIdx&&clock-S.fxHeal<.25){f.mesh.material.color.setHex(0x9dffc0);f.mesh.material.opacity=.95;f.mesh.scale.setScalar(1.15+.12*Math.sin(clock*8))}else f.mesh.scale.setScalar(1)}for(const p of S.deathPurses||[]){p.mesh.visible=p.ch===CH;p.mesh.position.set(p.x/16,.2+Math.sin(clock*3)*.035,p.y/16)}}
 function recoverPurses(){for(let i=(S.deathPurses||[]).length-1;i>=0;i--){const p=S.deathPurses[i];if(p.ch!==CH)continue;const distance=Math.hypot(pl.x-p.x,pl.y-p.y);if(!p.ready){if(distance>24)p.ready=true;continue}if(distance>16)continue;S.coins+=p.amount;scene.remove(p.mesh);S.deathPurses.splice(i,1);play('coin',0);say((EN?'You recover the purse from where you died: ':'Odzyskujesz sakwę z miejsca śmierci: ')+p.amount+(EN?' coins.':' monet.'))}}

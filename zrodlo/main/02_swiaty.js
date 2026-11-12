@@ -75,6 +75,9 @@ function genDolne(){
   for(const [x,y] of [[44,15],[57,15],[44,32],[57,32]])W1('anvil',x,y);
   W1('pickaxe_rack',60,11);W1('pickaxe_rack',60,20);W1('mine_cart',60,17);W1('mine_cart',60,24);
   W1('black_powder',59,30);W1('black_powder',41,36);W1('rune_lantern',60,37,{stone:3});W1('chains',41,10);W1('chains',41,38);
+  // 12.11.2026: warsztaty miedzy kanalami lawy (pas x48..52 wolny): kowadla, proch, stojaki; kosci jako drobiazgi
+  for(const [k,x,y] of [['anvil',45,20],['anvil',45,27],['black_powder',42,18],['pickaxe_rack',41,29],['anvil',55,20],['anvil',55,28],['black_powder',58,27],['pickaxe_rack',46,39],['mine_cart',56,39],['anvil',44,11],['black_powder',59,11]])W1(k,x,y);
+  for(const [x,y] of [[46,30],[54,17],[53,37],[43,40]])prop('dwarf_bones',x+.5,y+.92,[],{floorDetail:true});
   // kopalnia: stojaki przy polnocnej scianie, wozki przy poludniowej, skład prochu przy wschodniej
   for(const x of [43,47,51])W1('pickaxe_rack',x,45);
   for(const x of [44,50])W1('mine_cart',x,51);
@@ -331,7 +334,7 @@ function genCzarnobor(seed){
   const shr=[s1,s2,s3].filter(Boolean).map(([x,y])=>({x:x*TS+8,y:(y+1)*TS}));
   return{map,under,PROPS,seed,clearways,start:{x:40*TS+8,y:63*TS+8},shrines:shr,
     region:(x,y)=>y>=CZY.campTop?'camp':y>=CZY.stones?'meadows':y>=CZY.north?'stones':y<15&&x>23&&x<58?'hill':x<CZX.marsh?'marsh':'forest',
-    npcs:(()=>{const OK=[60,61,62,63,66,67],nn=(id,art,name,lines,x,y,extra)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);return Object.assign({id,art,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines},extra||{})};
+    npcs:(()=>{const OK=[60,61,62,63,66,67],nn=(id,art,name,lines,x,y,extra)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);for(let i=PROPS.length-1;i>=0;i--){const p=PROPS[i],dy=p.y-(Y+.4);if(p.tree&&Math.abs(p.x-X-.5)<2.2&&dy<.8&&dy>-4.6){const tx=Math.floor(p.x),ty=Math.floor(p.y);if(map[ty*GW+tx]===31)map[ty*GW+tx]=under[ty*GW+tx]||60;PROPS.splice(i,1)}}/*12.11.2026: drzewo tuz za NPC zaslanialo go (NPC na sosnie)*/return Object.assign({id,art,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines},extra||{})};
       return[nn('wierz','wierz',(EN?'Wierzchoslava, the Whisperer':'Wierzchosława, szeptucha'),WIERZ_LINES,36,62),nn('bartosz','bartosz',(EN?'Bart the Scout':'Bartosz Tropiciel'),BARTOSZ_LINES,roadX(44)-3,43),
         nn('wolch','wolch',(EN?'Volch, Pagan Priest':'Żerca Wołch'),WOLCH_LINES,CZ.oak[0],CZ.oak[1]+4),nn('dobromir','dobromir',(EN?'Dobromir, Keeper of Empty Hives':'Dobromir, Pszczelarz Pustych Uli'),DOBROMIR_LINES,47,62),nn('boginka','boginka_lure','',[],62+((r()*10)|0),10+((r()*10)|0),{lure:true})]})(),idle:[40,48,14,10]};
 }
@@ -368,6 +371,13 @@ function genCytadela(seed){
   for(const y of [58,47,35,24,13,3])for(const x of [8,71]){if(y===13&&x===71)P('chains',x,y,[],{anim:'chains'});else P('order_bonfire',x,y,[],{fire:true})}
   // Six deliberate, non-blocking details beside furniture, never scattered into passageways.
   for(const [k,x,y] of [['shackles',7,19]])P(k,x,y,[],{floorDetail:true,...(k==='pages'?{anim:'pages'}:{})});
+  // 12.11.2026: dziedziniec ubrany po bokach (wozy, stojaki, sztandary przy bramach, paleniska), krypta z sarkofagami i kośćmi; pasy x16..23 i x56..63 oraz środek wolne
+  for(const [x,y] of [[13,59],[26,59],[53,59],[66,59],[31,61],[49,61],[26,15],[53,15],[5,20],[74,20]])set(x,y,27);
+  for(const x of [14,25,54,65])P('order_banner',x,58);
+  P('cart',12,65,true);P('cart',67,65,true);P('armour',5,62);P('armour',74,62);P('rack',5,65,true);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
+  for(const [x,y] of [[27,19],[32,19],[47,19],[52,19]])P('sarcophagus',x,y,true);
+  for(const [x,y] of [[29,18],[50,18],[35,15],[45,15]])P('candelabra',x,y,true); // 12.11.2026: swiatlo w krypcie
+  for(const [k,x,y] of [['dwarf_bones',5,15],['skull',74,15],['skull',30,17],['dwarf_bones',50,17],['chains',6,13]])P(k,x,y,[],{floorDetail:true});
   const SH=[[69,60],[10,42],[40,19]];SH.forEach(([x,y],i)=>P('healing_shrine',x,y,true,{shrine:i}));
   return{map,under,PROPS,seed,start:{x:40*TS+8,y:63*TS+8},shrines:SH.map(([x,y])=>({x:x*TS+8,y:y*TS+12})),region:cyRegion,idle:[40,58,14,6],
     npcs:(()=>{const OK=[70,71,72,73,74,75],nn=(id,name,lines,x,y)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);return{id,art:id,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines}};

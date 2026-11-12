@@ -186,7 +186,9 @@ function groundPadded(img){if(!img.nbPadded){const S=img.width/8,P=S/16,I=S-2*P,
 function groundCoarse(img){if(!img.nbCoarse){const c=canvas(128,128);c.getContext('2d').drawImage(img,0,0,128,128);img.nbCoarse=c}return img.nbCoarse}
 function groundTile(g,img,col,row,tx,ty){const n=groundHash(tx,ty),plan=W.groundPlan,j=ty*MW+tx;let materialCell=j;
   // A prop's collision tile (31) and a brazier/point tile (27) have the same floor as their surroundings, not a separate old atlas patch.
-  if(plan&&plan.rows[j]===255&&(map[j]===31||map[j]===27)){let best=Infinity;for(let dy=-3;dy<=3;dy++)for(let dx=-3;dx<=3;dx++){const x=tx+dx,y=ty+dy,k=y*MW+x;if(x<0||y<0||x>=MW||y>=MH||plan.rows[k]===255)continue;const score=dx*dx+dy*dy+((map[k]===31?W.under[k]:map[k])===W.under[j]?0:8);if(score<best){best=score;materialCell=k}}}
+  // 12.11.2026: pod woda (przykrytą siatką z miękkim brzegiem) leży zwykły grunt z sąsiedztwa, nie kwadratowe kafle wody
+  const WETF=CH===1?[45,90]:CH===4?[64,65,91]:[];const wetCell=k=>WETF.includes(map[k]);
+  if(plan&&(plan.rows[j]===255&&(map[j]===31||map[j]===27)||wetCell(j))){let best=Infinity;for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const x=tx+dx,y=ty+dy,k=y*MW+x;if(x<0||y<0||x>=MW||y>=MH||plan.rows[k]===255||wetCell(k))continue;const score=dx*dx+dy*dy+((map[k]===31?W.under[k]:map[k])===W.under[j]?0:8);if(score<best){best=score;materialCell=k}}}
   const planned=plan&&plan.rows[materialCell]!==255;
   if(planned){row=plan.rows[materialCell];col=n%100<55?0:1+n%5}const natural=naturalGround(img,row)&&!(plan&&(CH===1&&[3,4].includes(row)||CH===4&&[1,7].includes(row)||CH!==1&&CH!==4)),variant=natural?n&7:0;const shore=col>=4&&((img.nbKey==='br_ground'||img.nbKey==='dm_floor')&&row===5||img.nbKey==='zl_ground'&&row===4||img.nbKey==='cz_ground'&&(row===4||row===5));let flags=natural||shore||img.nbKey==='cz_ground'&&row===7?1:0;
   if(planned){flags|=65;if(CH===3&&row===1){const code=(x,y)=>{const k=y*MW+x;return k>=0&&k<map.length&&(map[k]===51||map[k]===31&&W.under[k]===51)};col=code(tx,ty-1)||code(tx,ty+1)?1:0}if(CH===4&&row===1)col=W.region(tx,ty)==='camp'?1:n%100<55?1:2+n%4;if(CH===5&&row===2)col=0;if(CH===5&&row===4)col=0;}
@@ -218,9 +220,10 @@ function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan
   if(ch===3&&![1,4].includes(row))id=plan.road[i]||row===3?1:0;
   if(ch===3&&id>=0&&W.region(x,y)==='slums'&&(nz(x,y)>.4||[[2,0],[-2,0],[0,2],[0,-2],[1,1],[-1,-1],[1,-1],[-1,1]].some(([dx,dy])=>tileAt(x+dx,y+dy)===54)))id=2;
   if(ch===4&&![4,5,7].includes(row)){const r=W.region(x,y);id=r==='camp'?0:row===1?1:(r==='hill'||r==='stones')?3:r==='forest'?2:0;if(id===2&&nz(x,y)>.6)id=4;}
-  if(ch===5&&![3,4,6,7].includes(row))id=row===2||row===1?2:row===5?1:0; // 12.11.2026: sale (sadowa, skarbiec, tron) maja kamienne plyty zamiast klepiska; posadzki jasniejsze
+  if(ch===5&&![3,4,6,7].includes(row))id=row===2||row===1?2:row===5?1:0;
+  if(ch===5&&id===0){const rg=W.region(x,y);if(rg==='dziedziniec'&&(plan.road[i]||Math.hypot((x-MP(40))*.8,y-MP(62))<5.2+.8*nz(x,y)))id=2;else if(rg==='krypta'&&nz(x*1.4,y*1.4)>.9)id=1;} // 12.11.2026: kamienne drogi i plac na dziedzincu, czarna skala w krypcie // 12.11.2026: sale (sadowa, skarbiec, tron) maja kamienne plyty zamiast klepiska; posadzki jasniejsze
   if(ch===9&&![1,5,7].includes(row))id=row===2?1:0;
-  if(ch===1){const v=MAP1_FLOOR[y].charCodeAt(x)-48;if(v!==0||id>=0)id=v}
+  if(ch===1){let X=x,Y=y;if(map[i]===45||map[i]===90){let b=99;for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const u=x+dx,v=y+dy,k=v*MW+u;if(u<0||v<0||u>=MW||v>=MH||map[k]===45||map[k]===90)continue;const d=dx*dx+dy*dy;if(d<b){b=d;X=u;Y=v}}}const v=MAP1_FLOOR[Y].charCodeAt(X)-48;if(v!==0||id>=0)id=v} // 12.11.2026: pod woda ta sama posadzka co na najblizszym brzegu
   if(id>capId)id=ch===4?2:0;
   if(id>=0)cells[a+2]=(cells[a+2]%8)+128+id*8;
  }return cells;
