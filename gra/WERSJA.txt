@@ -687,3 +687,5 @@ cache609 · Nowe modele wszystkich mobów i bossa Zrost; Glizzard, Wielki Paruwi
 cache610 · NPC: nowe modele 16 postaci, portrety w rozmowach, 5 nowych NPC (po jednym na akt)
 cache611 · Milena, Niedogasła: nowa grywalna postać (włócznia-lichtarz), Żywy Knot, Odlew Skazańca, Dogasanie; zatwierdzone imiona wszystkich bohaterów
 cache612 · Runda 613: porzadek UI po dodaniu bohaterow (siatka wyboru postaci, Kronika z 5 bohaterami, Kaplica, Instrukcja), bez ptaszka przy imieniu
+cache613 · Perki i wyzwania Mileny, ikony perkow/wyzwan Mileny i Dzwonnika
+cache614 · Perki i wyzwania Mileny, ikony perkow/wyzwan Mileny i Dzwonnika

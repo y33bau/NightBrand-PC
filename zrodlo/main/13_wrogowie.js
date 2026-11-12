@@ -82,6 +82,7 @@ function bossPhase2(e){e.ph2=1;if(e.spd)e.spd*=1.2;if(e.dmg)e.dmg*=1.15;e.flash=
 function killEnemy(e,nx,ny){if(e.mini||BIG.has(e.type)){S.hitstop=Math.max(S.hitstop||0,.1);shake(.3,.22)}if(bossBar(e)){slowMo(1.4,.22);shockAt(e.x,e.y,1)}else if(e.mini){slowMo(.5,.45);shockAt(e.x,e.y,.55)}swordOnKill(e);e.dead=true;S.kills++;S.streak=(S.streak||0)+1;if(S.streak>(S.bestStreak||0))S.bestStreak=S.streak;metaKill(e);
   // 8.11.2026 execution: slow motion + camera push-in + extra blood on the killing blow of an elite or a boss
   if(ftMelee&&!pl.dead&&(e.mini||BIG.has(e.type)||e.type==='collector'||e.type==='boginka'||e.type==='glizzard')){S.exec=BIG.has(e.type)||e.type==='collector'||e.type==='boginka'||e.type==='glizzard'?1.1:.75;S.execX=e.x;S.execY=e.y;blood(e.x,e.y,BIG.has(e.type)?42:26,e.x-pl.x,e.y-pl.y,1.6);play('hitH',0);padRumble(1,.8,260)}if(S.zab){if(S.zTag==='x')S.zCrossK++;else if(S.zTag==='s')S.zSlideK++;else if(S.zTag==='w')S.zWhirlN++;if(e.mini&&e.fhT!=null&&S.t-e.fhT<=15)S.zEliteFast=1}if(e.mini&&S.eliteLoot){dropPick('c',e.x+rnd(-6,6),e.y+rnd(-4,4),25);dropPick('h',e.x+rnd(-8,8),e.y+rnd(-4,4))}if(e.mini){S.eliteK=1;S.eliteN=(S.eliteN||0)+1;if(S.t-(e.bornT??-99)<=20)S.eliteFast=1}if(ftHeavy&&ftMelee)S.hvK=(S.hvK||0)+1;
+  if(S.mil&&e.mini&&ftHeavy&&ftMelee&&pl.atk&&pl.atk.wick>=MIL.wick.max)S.mEliteK=(S.mEliteK||0)+1;
   if(S.kat){if(ftHeavy&&ftMelee&&e.hN===1)S.kOne=(S.kOne||0)+1;if(S.kTag==='w'){S.kKrN=(S.kKrN||0)+1;S.kKrBest=Math.max(S.kKrBest||0,S.kKrN)}if(S.kTag==='l')S.kLeapK=(S.kLeapK||0)+1;if(e.mini&&ftHeavy&&ftMelee)S.kEliteHv=(S.kEliteHv||0)+1}
   if(S.pk.kHood&&ftHeavy&&ftMelee&&!pl.dead)pl.sta=Math.min(pl.staMax,pl.sta+pl.staMax*.15);if(!pl.dead&&pl.hp<pl.max*.3)S.lowK=(S.lowK||0)+1;storyBoss(e);if(S.trial)S.trial.k++;
   // altars (standing stones, graves, rune lanterns, offering bowls) wake up after STONE_N kills next to each; all of them: full heal and 30 coins
@@ -119,7 +120,7 @@ function powderBlast(p){const x=p.x*16,y=p.y*16;shockAt(x,y,1);if(p.obj)p.obj.me
   for(const e of [...S.enemies])if(!e.dead&&Math.hypot(e.x-x,e.y-y)<48)damageEnemy(e,BIG.has(e.type)?60:90,(e.x-x)/48,(e.y-y)/48,2);
   const d=Math.hypot(pl.x-x,pl.y-y);if(d<34)hurtPlayer(12,(pl.x-x)/(d||1),(pl.y-y)/(d||1),'powder');
   for(const q of PROPS)if(q!==p&&q.k==='black_powder'&&!S.boom.has(q)&&Math.hypot(q.x-p.x,q.y-p.y)<4){S.boom.add(q);S.delayed.push({t:.25,fn:()=>powderBlast(q)})}}
-function hurtPlayer(dmg,nx,ny,source='night'){if(S.zab&&pl.roll>0&&pl.inv>0&&!S.notice&&!pl.dead)S.zDodgeOk=1;if(S.notice||pl.inv>0||pl.dead)return false;if(TRN.god)return false;dmg*=S.pk.hurt*(S.zDance>0?1.2:1);if(S.pk.kBlock&&(pl.charging||pl.atk&&pl.atk.kind==='h'))dmg*=.7;if(S.vuln)dmg*=S.vuln;
+function hurtPlayer(dmg,nx,ny,source='night'){if(S.zab&&pl.roll>0&&pl.inv>0&&!S.notice&&!pl.dead)S.zDodgeOk=1;if(S.notice||pl.inv>0||pl.dead)return false;if(TRN.god)return false;dmg*=S.pk.hurt*(S.zDance>0?1.2:1);if(S.pk.kBlock&&(pl.charging||pl.atk&&pl.atk.kind==='h'))dmg*=.7;if(S.gut)dmg*=S.pk.mFlame||1;if(S.vuln)dmg*=S.vuln;
   if(S.attacker)[nx,ny]=incomingMelee(S.attacker,nx,ny);
   if(S.redHit&&pl.block)ftInfo((EN?'Heavy blow — dodge!':'Ciężki cios — unik!'));
   if(!S.redHit&&pl.block&&-(pl.fx*nx+pl.fy*ny)>.3){
