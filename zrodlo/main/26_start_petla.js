@@ -2508,6 +2508,38 @@ html[lang=en] @P@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips::after{content:'
 html[lang=en] @Q@ #prep .nb-prep-class:not(.on)::after{content:'Select  ›'!important}
 @Q@ #prep .nb-prep-class:not(.on):hover{border-color:var(--nbs-hover)!important;background:var(--nbs-cellh)!important;box-shadow:var(--nbs-glow)!important;filter:none!important}
 @Q@ #prep .nb-prep-class:not(.on):hover::after{color:#fff0d5!important}
+/* Runda 613: porzadek po dodaniu 5. bohatera i imion. Pozostali bohaterowie w siatce 2x2 (wszyscy widoczni bez przewijania) */
+@Q@ #prep #prepChar>div{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:.8vh!important;align-items:stretch!important}
+@Q@ #prep #prepChar .nb-prep-class.on{grid-column:1/-1!important;order:-1!important}
+@Q@ #prep .nb-prep-class:not(.on){flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:.1vh!important;margin-top:0!important;min-height:5.7vh!important;padding:.5vh .6vh!important;width:auto!important;min-width:0!important}
+@Q@ #prep .nb-prep-class:not(.on) b{flex:0 0 auto!important;text-align:center!important;font-size:max(11px,2.15vh)!important;line-height:1.15!important}
+@Q@ #prep .nb-prep-class:not(.on) small{display:block!important;margin:0!important;text-align:center!important;font-size:max(8px,1.45vh)!important;line-height:1.15!important;white-space:nowrap!important}
+@Q@ #prep .nb-prep-class:not(.on) small.hero-ep{display:none!important}
+@Q@ #prep .nb-prep-class:not(.on)::after{content:none!important;display:none!important}
+@Q@ #prep #prepChar .nb-prep-class.on .premium-class-art{max-height:23vh!important}
+@Q@ #prep .nb-prep-class.on .hero-ep{font:600 max(11px,2.35vh) Grenze,Georgia,serif!important;color:#e8d6a8!important;margin:.2vh 0 .3vh!important;text-align:center!important;display:block!important}
+/* Kronika: portret po lewej, tekst obok; wiersze tej samej wysokosci co pozostale; licznik zawsze w osobnej linii, zeby zakladki nie skakaly */
+@Q@ #kap .m2k-row.nbui-kron-row.nbui-has-art{position:relative!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:flex-start!important;text-align:left!important;min-height:9vh!important;padding:1vh 2vh 1vh 10.5vh!important}
+@Q@ #kap .m2k-row.nbui-kron-row.nbui-has-art>.premium-shrine-icon{position:absolute!important;left:2vh!important;top:50%!important;transform:translateY(-50%)!important;width:6.6vh!important;height:6.6vh!important;margin:0!important;object-fit:cover!important;object-position:center 12%!important;border:1px solid rgba(230,214,184,.28)!important;border-radius:2px!important;background:rgba(0,0,0,.35)!important}
+@Q@ #kap .m2k-row.nbui-kron-row.nbui-has-art>b,@Q@ #kap .m2k-row.nbui-kron-row.nbui-has-art>small{text-align:left!important;margin-left:0!important}
+@Q@ #kap:has(.nbui-kron-row) .m2k-tier{flex:0 0 100%!important;text-align:right!important;margin:0!important}
+/* Kaplica: kafle nie sciskaja sie ponizej tresci (dlugie nazwy nie wychodza z ramki), lista przewija sie w razie potrzeby */
+@Q@ #kap #kapList:not(:has(.nbui-kron-row)){grid-auto-rows:minmax(max-content,1fr)!important;align-content:start!important}
+@Q@ #kap #kapList:not(:has(.nbui-kron-row))>.m2k-row{min-height:max-content!important;overflow:hidden!important}
+@media(max-height:550px){
+@Q@ #prep #prepChar .nb-prep-class.on .premium-class-art{max-height:15vh!important}
+@Q@ #prep #prepChar .nb-prep-class.on{padding-bottom:1vh!important}
+@Q@ #kap #kapList:not(:has(.nbui-kron-row))>.m2k-row small,@Q@ #kap #kapList:not(:has(.nbui-kron-row))>.m2k-row .m2k-pips{font-size:max(8px,2vh)!important;line-height:1.2!important}
+@Q@ #kap:has(.nbui-kron-row) #kapDet p,@Q@ #kap:has(.nbui-kron-row) #kapDet td,@Q@ #kap:has(.nbui-kron-row) #kapDet div{font-size:max(10px,2.7vh)!important}
+@Q@ #manual #manBody>ul{margin-bottom:3vh!important}
+}
+/* Instrukcja: jeden kroj i rozmiar tekstu, pelna szerokosc akapitow, oddech przed naglowkami */
+@media(min-height:551px){
+@Q@ #manual #manBody .mbox,@Q@ #manual #manBody .mbox>p,@Q@ #manual #manBody p,@Q@ #manual #manBody li{font:400 max(15px,2.3vh)/1.6 Georgia,serif!important;max-width:none!important}
+@Q@ #manual #manBody .mbox b,@Q@ #manual #manBody p b,@Q@ #manual #manBody li b{font-size:inherit!important;font-family:inherit!important}
+@Q@ #manual #manBody>ul,@Q@ #manual #manBody>p{margin-bottom:3vh!important}
+@Q@ #manual #manBody .mh{margin-top:3.4vh!important}
+}
 `.replace(/@P@/g,'#orient'.repeat(30)).replace(/@Q@/g,'#orient'.repeat(110));document.head.append(st)}
 // 12.11.2026: sygnal przewijania w panelach pauzy (gradient u dolu, gdy jest wiecej tresci)
 if(new URLSearchParams(location.search).get('menufix')!=='0'){const st=document.createElement('style');st.id='nbScrollHint';st.textContent=`#pause .nbp-panel.nb-more::after{content:'\\25BE';display:block;position:sticky;bottom:0;height:30px;margin-top:-30px;text-align:center;line-height:34px;font-size:17px;color:#e8c878;pointer-events:none;background:linear-gradient(to bottom,rgba(10,8,8,0),rgba(10,8,8,.92))}`;document.head.append(st);
