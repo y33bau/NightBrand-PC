@@ -461,6 +461,30 @@ const SPRITE_GROUPS={
   "zab_d": [
     "core"
   ],
+  "dzw_d": [
+    "core"
+  ],
+  "dzw_db": [
+    "core"
+  ],
+  "dzw_dc": [
+    "core"
+  ],
+  "dzw_dd": [
+    "core"
+  ],
+  "dzw_def": [
+    "core"
+  ],
+  "dzw_ex": [
+    "core"
+  ],
+  "dzw_sk": [
+    "core"
+  ],
+  "dzw_zas": [
+    "core"
+  ],
   "zab_db": [
     "core"
   ],

@@ -3,14 +3,15 @@ const camTarget=new THREE.Vector3();let idleA=0;
 // slasher hero v2 (S1-S4 sheets): every state has its own drawn-sword animation
 function heroFrameV2(D){const fd=()=>Math.abs(pl.fx)>Math.abs(pl.fy)?'side':pl.fy>0?'down':'up',ix=(a,i)=>a[Math.max(0,Math.min(a.length-1,i|0))];
   if(pl.roll>0)return ix(D.roll,pl.rollT/.3*4);
-  const K=S&&S.kat&&D.kat?D.kat:S&&S.kn&&D.kn?D.kn:null,Z=S&&S.zab&&D.zab?D.zab:null;
+  const K=S&&S.kat&&D.kat?D.kat:S&&S.kn&&D.kn?D.kn:S&&S.dzw&&D.dzw?D.dzw:null,Z=S&&S.zab&&D.zab?D.zab:null,DZ=S&&S.dzw&&D.dzw?D.dzw:null;
+  if(DZ&&pl.tonT>0&&!pl.atk)return ix(DZ.ton,(.5-pl.tonT)/.5*4);if(DZ&&DZ.cast&&pl.castT>0&&!pl.atk)return ix(DZ.cast[fd()],(.45-pl.castT)/.45*4);
   if(K&&pl.atk&&pl.atk.kind==='whirl'){const a=pl.atk;if(a.stage==='rec')return ix(K.whirlRec,(1-a.t/WHIRL.recovery)*4);if(a.elapsed<.12)return ix(K.whirlWind,a.elapsed/.12*4);return at(K.whirlLoop,a.elapsed,13.3,true)}
   if(K&&pl.atk&&pl.atk.kind==='leap'){const a=pl.atk,arr=K.leap[fd()];return ix(arr,a.stage==='wind'?0:a.stage==='air'?(a.at<LEAP.air*.5?1:2):3)}
   if(Z&&pl.atk&&pl.atk.kind==='h'){const a=pl.atk;if(a.stage==='wind')return ix(Z.whirlWind,(1-a.t/(a.visualWind||SL.heavy.wind))*4);if(a.stage==='act')return ix(Z.whirlLoop,(1-a.t/SL.heavy.act)*Z.whirlLoop.length);return ix(Z.whirlRec,(1-a.t/SL.heavy.rec)*Z.whirlRec.length)}
   if(Z&&pl.atk&&pl.atk.kind==='rend'){const a=pl.atk,arr=Z.rend[fd()];return ix(arr,a.stage==='wind'?(1-a.t/REND.wind)*1.99:a.stage==='cut'?2+a.at/REND.dur*3.99:6+Math.min(1.99,(1-a.t/REND.rec)*2))}
   if(Z&&pl.atk&&pl.atk.kind==='fan'){const a=pl.atk,arr=Z.fan[fd()];return ix(arr,a.stage==='wind'?(1-a.t/FAN.wind)*3.99:4+(1-a.t/FAN.rec)*3.99)}
   if(K&&K.hook&&pl.atk&&pl.atk.kind==='hook'){const a=pl.atk,arr=K.hook[fd()];return ix(arr,a.stage==='wind'?(1-a.t/HOOK.wind)*1.99:a.stage==='fly'?2+Math.min(1.99,a.len/HOOK.dist*2):a.stage==='pull'?4+(1-a.t/HOOK.pull)*1.99:6+Math.min(1.99,(1-a.t/HOOK.rec)*2))}
-  if(pl.atk){const a=pl.atk,P=a.kind==='h'?SL.heavy:SL.light,d=pl.swingDir===2?'side':pl.swingDir===0?'down':'up',zh=Z&&Z.hit&&a.kind!=='h'&&!a.visualRiposte&&a.combo>=3?Z.hit[Math.min(1,a.combo-3)][d]:null,asH=!zh&&(a.kind==='h'||(Z&&a.combo===4&&!a.visualRiposte)),arr=zh||(asH?D.heavy[d]:D.light[d][a.visualRiposte?2:(Z?[0,1,2,1,0][a.combo]:a.combo)||0]);
+  if(pl.atk){const a=pl.atk,P=a.kind==='h'?SL.heavy:SL.light,d=pl.swingDir===2?'side':pl.swingDir===0?'down':'up',zh=Z&&Z.hit&&a.kind!=='h'&&!a.visualRiposte&&a.combo>=3?Z.hit[Math.min(1,a.combo-3)][d]:null,asH=!zh&&(a.kind==='h'||(Z&&a.combo===4&&!a.visualRiposte)),arr=zh||(asH?(a.emp&&DZ&&DZ.emp?DZ.emp[d]:D.heavy[d]):D.light[d][a.visualRiposte?2:(Z?[0,1,2,1,0][a.combo]:a.combo)||0]);
     if(a.stage==='wind')return ix(arr,asH?(a.t>(a.visualWind||P.wind)*.75?0:1):0);if(a.stage==='act')return ix(arr,asH?2:1);
     if(asH)return ix(arr,a.t>P.rec*.72?2:3);return ix(arr,a.t>P.rec*.5?2:3)}
   if(pl.swingT>0&&!pl.block&&!(pl.parryT>0)&&!(pl.broken>0)&&!(pl.hurtT>0)&&!pl.charging){const d=pl.swingDir===2?'side':pl.swingDir===0?'down':'up',dur=pl.swingDur||.25;return ix(D.light[d][0],(dur-pl.swingT)/dur*4)}
@@ -39,7 +40,7 @@ function heroBladeMat(fr,k){const key='E'+k;if(fr[key]!==undefined)return fr[key
 function heroFrame(){
   const V2=A.heroD&&A.heroD.v2?A.heroD:null;
   if(V2&&!pl.dead){const r=heroFrameV2(V2);if(r)return r}
-  if(pl.dead)return S&&S.kn&&A.heroD&&A.heroD.kn?at(A.heroD.kn.death,pl.deadT,5,false):S&&S.zab&&A.heroD&&A.heroD.zab?at(A.heroD.zab.death,pl.deadT,5,false):S&&S.kat&&A.heroD&&A.heroD.kat?at(A.heroD.kat.death,pl.deadT,5,false):at(A.hero.death,pl.deadT,5,false);
+  if(pl.dead)return S&&S.dzw&&A.heroD&&A.heroD.dzw?at(A.heroD.dzw.death,pl.deadT,6,false):S&&S.kn&&A.heroD&&A.heroD.kn?at(A.heroD.kn.death,pl.deadT,5,false):S&&S.zab&&A.heroD&&A.heroD.zab?at(A.heroD.zab.death,pl.deadT,5,false):S&&S.kat&&A.heroD&&A.heroD.kat?at(A.heroD.kat.death,pl.deadT,5,false):at(A.hero.death,pl.deadT,5,false);
   if(pl.roll>0)return at(A.hero.roll,pl.rollT,13,false);
   if(pl.swingT>0){const a=pl.swingDir===2?A.hero.swing_side:pl.swingDir===0?A.hero.swing_down:A.hero.swing_up,dur=pl.swingDur||.32;{const f=(dur-pl.swingT)/dur;return a[Math.min(a.length-1,f<.12?0:f<.24?1:f<.62?2:3)]}}
   const D=A.heroD;
@@ -133,7 +134,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
     heroMesh.visible=!(SETT.flash&&clock<(pl.blinkUntil||0)&&pl.roll<=0&&!pl.dead&&Math.floor(clock*24)%2);
     {const hf=heroFrame(),ek=encLevel()[0];S.heroHF=hf;setFrame(heroMesh,hf);const hv=ek&&hf?heroBladeMat(hf,ek):null;if(hv&&heroMesh.material===hf.n){hv.emissiveIntensity=.8+.35*Math.sin(clock*6);heroMesh.material=hv}}
     const hs=pl.atk&&FACEK.includes(pl.atk.kind)?(pl.fx>=0?1:-1):pl.roll>0||pl.dead?pl.s:A.heroD&&A.heroD.v2&&!pl.atk&&(pl.parryT>0||pl.broken>0||(pl.hurtT>0&&!pl.block))?(pl.fx>=0?1:-1):pl.swingT>0?(pl.swingDir===2?pl.swingS:1):(pl.charging||pl.block)&&Math.abs(pl.fx)>Math.abs(pl.fy)?(pl.fx>0?1:-1):(pl.dir===2?pl.s:1);
-    const guardRecoil=!pl.dead?recoilAmount(pl.visualGuard):0;heroMesh.position.set((pl.x+(pl.visualGuard?pl.visualGuard.dx:0)*guardRecoil*.7)/16,S.zab?.1:0,(pl.y+(pl.visualGuard?pl.visualGuard.dy:0)*guardRecoil*.7)/16);heroMesh.rotation.z=-(pl.visualGuard?pl.visualGuard.dx:0)*guardRecoil*.018;heroMesh.scale.set(hs,SQ,1);twinDraw(hs);drawP2(dt);mpHudTick();
+    const guardRecoil=!pl.dead?recoilAmount(pl.visualGuard):0;heroMesh.position.set((pl.x+(pl.visualGuard?pl.visualGuard.dx:0)*guardRecoil*.7)/16,S.zab?.1:0,(pl.y+(pl.visualGuard?pl.visualGuard.dy:0)*guardRecoil*.7)/16);heroMesh.rotation.z=-(pl.visualGuard?pl.visualGuard.dx:0)*guardRecoil*.018;heroMesh.scale.set(hs,SQ,1);twinDraw(hs);dzwDraw(hs);drawP2(dt);mpHudTick();
     S.qBreak=Math.max(0,(S.qBreak||0)-dt);S.qPop=Math.max(0,(S.qPop||0)-dt);
     // charges orbit the hero as sparks; runes of time and reach leave their own orbiting motes
     const orbit=(n,r,sp,col,z)=>{if(dt<=0)return;for(let i=0;i<n;i++){const a=clock*sp+i*Math.PI*2/n;S.parts.push({k:'e',x:pl.x+Math.cos(a)*r,y:pl.y+Math.sin(a)*r*.6,z,vx:0,vy:0,vz:0,c:col,life:.05})}};

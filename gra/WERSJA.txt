@@ -678,3 +678,4 @@ cache600 · PC: podmiana rekwizytow Aktu II (8), III (21) i V (24) na nowe sprit
 cache601 · PC: podmiana 15 rekwizytow Aktu I na nowe sprite'y Gemini; nie sprawdzono: GPU autora, rekwizyty ruchome, Akt IV
 cache602 · PC: animowane ognie (chata, zgliszcza, ognisko IV, stos III, piec i palenisko II, ognisko Zakonu) i 27 rekwizytow Aktu IV na nowych sprite'ach; nie sprawdzono: GPU autora, ognie w V i III poza stosem, rosliny i drzewa tla IV (wd/sp)
 cache603 · Akt IV: rosliny i grzyby z atlasu 24 roslin (nie sprawdzono: GPU, pad)
+cache604 · Nowa postac: Dzwonnik / Bellbearer (mlot, Echo Zaloby, Zastaw Zycia, Ostatni Ton; liczby wstepne; perki i wyzwania tymczasowo Rycerza) (nie sprawdzono: GPU autora, pad, czucie walki, 2 graczy)

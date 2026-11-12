@@ -275,9 +275,9 @@ body.append(rail,map,hero);title.querySelector('.m2-body').remove();title.queryS
 const url=n=>'url("'+PREMIUM_ASSETS[n]+'")';
 function refresh(){
  if(title.hidden){banner.style.backgroundImage='none';portrait.removeAttribute('src');for(let i=1;i<=5;i++)$('start'+i).style.backgroundImage='none';return}
- const q=prog(),c=q.char||'r',p=PREMIUM_ASSETS['portret-'+({r:'rycerz',k:'kat',z:'zabojczyni'}[c])];
+ const q=prog(),c=q.char||'r',p=PREMIUM_ASSETS['portret-'+({r:'rycerz',k:'kat',z:'zabojczyni',d:'dzwonnik'}[c])];
  if(portrait.getAttribute('src')!==p)portrait.src=p;
- portrait.alt='';name.textContent=({r:EN?'Knight':'Rycerz',k:EN?'Executioner':'Kat',z:EN?'Ash Dancer':'Zabójczyni'})[c];
+ portrait.alt='';name.textContent=({r:EN?'Knight':'Rycerz',k:EN?'Executioner':'Kat',z:EN?'Ash Dancer':'Zabójczyni',d:EN?'Bellbearer':'Dzwonnik'})[c];
  name.textContent+=' · '+(EN?'Level ':'Poziom ')+q.lv;xp.textContent=q.lv>=PMAX?(EN?'Max level':'Poziom maksymalny'):q.xp+' / '+PNEED(q.lv)+' XP';xp.style.setProperty('--xp',String(q.lv>=PMAX?1:q.xp/PNEED(q.lv)));ashes.textContent=EMB.e+' '+(EN?'Ashes':'Popiołów');caption.textContent=CHN[chosen-1];
  banner.style.backgroundImage='linear-gradient(0deg,#080808,transparent 65%),'+url('rozdzial-'+chosen);
  for(let i=1;i<=5;i++){$('start'+i).style.backgroundImage=url('rozdzial-'+i+'-mini');$('start'+i).classList.toggle('premium-selected',chosen===i);$('start'+i).dataset.roman=CHR[i-1];$('start'+i).dataset.status=chLocked(i)?(EN?'Locked':'Zamknięty'):SETT.save['s'+i]?.win?(EN?'Completed':'Ukończony'):(EN?'Available':'Dostępny');$('start'+i).setAttribute('aria-label',CHN[i-1]+' — '+$('start'+i).dataset.status)}
@@ -386,7 +386,7 @@ prepSummary.setAttribute('role','status');prepSummary.setAttribute('aria-live','
 prepControls.insertBefore(controlScroll,prepControls.querySelector('.btnrow'));
 prepControls.insertBefore(prepSummary,prepControls.querySelector('.btnrow'));
 function refreshPrepSummary(){if(prep.hidden)return;const pc=$('prepChar');if(pc){let info=pc.querySelector('.premium-class-description');if(!info){info=el('p','premium-class-description');pc.append(info)}const selected=pc.querySelector('.opt.on>span'),description=selected?.textContent||'';if(info.textContent!==description)info.textContent=description;for(const b of pc.querySelectorAll('.opt')){const text=b.querySelector('span')?.textContent||'';if(b.title!==text)b.title=text}}
-const cls=({r:EN?'Knight':'Rycerz',k:EN?'Executioner':'Kat',z:EN?'Ash Dancer':'Zabójczyni'})[charId()],counts=(EN?'Perks ':'Perki ')+PREP.perks.length+'/1 · '+(EN?'Challenges ':'Wyzwania ')+(PREP.chal?1:0)+' · '+(EN?'Curses ':'Klątwy ')+PREP.curses.length+'/3',text=cls+' · '+DF[DIFFK].n+'\n'+counts;
+const cls=({r:EN?'Knight':'Rycerz',k:EN?'Executioner':'Kat',z:EN?'Ash Dancer':'Zabójczyni',d:EN?'Bellbearer':'Dzwonnik'})[charId()],counts=(EN?'Perks ':'Perki ')+PREP.perks.length+'/1 · '+(EN?'Challenges ':'Wyzwania ')+(PREP.chal?1:0)+' · '+(EN?'Curses ':'Klątwy ')+PREP.curses.length+'/3',text=cls+' · '+DF[DIFFK].n+'\n'+counts;
  if(prepSummary.textContent!==text)prepSummary.textContent=text;
  const detail=[...PERKS.filter(x=>PREP.perks.includes(x.id)).map(x=>x.n),...chalList().filter(x=>x.id===PREP.chal).map(x=>x.n),...CURSES.filter(x=>PREP.curses.includes(x.id)).map(x=>x.n)].join(' · ');if(prepSummary.title!==detail)prepSummary.title=detail;
 }
@@ -508,6 +508,7 @@ const windowStyle=el('style','premium-windows-style');windowStyle.textContent=`
 :is(#dialog,#notice) :is(.chain-edge,.chain-side){display:none!important}
 @media(max-height:550px){:is(#pause,#shop,#conf,#end):not([hidden]){padding:8px 14px!important;gap:7px!important}:is(#pause,#shop,#conf,#end) :is(.pbox,.endbox,#pauseKeys),#lvl .level-panel{border-width:10px!important;border-image-width:10px!important;padding:8px!important}#lvl{padding:7px!important}#lvl #cards{gap:6px!important}:is(#lvl,#shop) .card{border-width:8px!important;border-image-width:8px!important;padding:7px!important}:is(#lvl,#shop) .card .cn{font-size:19px!important;gap:4px}:is(#lvl,#shop) .card .cd{font-size:13px!important}:is(#pause,#shop,#conf,#end,#lvl) button.go{font-size:15px!important;min-height:36px!important;padding:9px 17px!important}#shop #shopCards{gap:7px}#msg.on,#dialog,.noticebox{border-width:12px!important;border-image-width:12px 18px!important;padding:7px 12px!important}}
 `;
+Object.assign(PREMIUM_ICONS,{'skille-zalecho':'assets/c0d65609c3a3e39d85f91394bc538e16b5b389a6f7f2367beecb5b48d9891f9d.webp','skille-zastaw':'assets/4b7d255e50cd79891dea0b5c6869179ffe234f86791eae7365c82d3c315886f1.webp'});for(const k of ['zalecho','zastaw'])windowStyle.textContent+=`.ic-${k}{background-image:url('${PREMIUM_ICONS['skille-'+k]}')!important;background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important}`;
 for(const [key,src] of Object.entries(PREMIUM_ICONS)){if(!key.startsWith('skille-'))continue;const k=key.slice(7);windowStyle.textContent+=`:is(#lvl,#pause,#manual) [data-premium-skill="${k}"]{background:url('${src}') center/contain no-repeat!important;width:64px!important;height:64px!important;display:inline-block!important;image-rendering:auto!important;filter:none!important;mask:none!important}:is(#lvl,#pause,#manual) [data-premium-skill="${k}"]:before,:is(#lvl,#pause,#manual) [data-premium-skill="${k}"]:after{content:none!important}@media(max-height:550px){:is(#lvl,#pause,#manual) [data-premium-skill="${k}"]{width:40px!important;height:40px!important}}`}
 windowStyle.textContent=windowStyle.textContent.replace(/:is\(#[^)]*\)|#(?:pause|shop|conf|end|lvl|msg|dialog)\b/g,m=>'#orient#orient#orient#orient#orient#orient#orient#orient#orient '+m);document.head.append(windowStyle);
 // Final sizing corrections requested after reviewing cache 432.
@@ -1119,7 +1120,7 @@ ${Z} .nbo-note{margin:0!important;text-align:center!important;color:#8c7f6c!impo
  const root=$('orient'),title=$('title'),prep=$('prep');
  const enabled=new URLSearchParams(location.search).get('pcmenu')!=='0';
  root.classList.toggle('pc-menu',enabled);if(!enabled)return;
- Object.assign(PREMIUM_ASSETS,{'portret-rycerz':'assets/5b34b85844e657eca2c40af65c5a8744f7175b81ebe8b37e9614215ef8cda24e.png','portret-kat':'assets/5496889094dbd50b342769c840ab925bcac7c6da2bea4b64307a20dce787cffa.png','portret-zabojczyni':'assets/3a7c4c89940259420bcc50b5647ff9d712a117a9d5f3ea4915a67034db1f5df3.png'});
+ Object.assign(PREMIUM_ASSETS,{'portret-rycerz':'assets/5b34b85844e657eca2c40af65c5a8744f7175b81ebe8b37e9614215ef8cda24e.png','portret-kat':'assets/5496889094dbd50b342769c840ab925bcac7c6da2bea4b64307a20dce787cffa.png','portret-zabojczyni':'assets/3a7c4c89940259420bcc50b5647ff9d712a117a9d5f3ea4915a67034db1f5df3.png','portret-dzwonnik':'assets/5857e9efd70536997aa98e905aec4855bc6b8912b04a498e662ff7370327f36f.webp'});
  const T=(pl,en)=>EN?en:pl,make=(tag,cls,text)=>{const e=document.createElement(tag);e.className=cls;if(text)e.textContent=text;return e};
  const home=make('button','pc-home-button',T('Menu główne','Main menu'));home.type='button';
  const nav=title.querySelector('.premium-nav'),journey=nav.querySelector('.premium-journey');nav.append(home);journey.textContent=T('Graj','Play');journey.classList.add('pc-play');
@@ -1793,7 +1794,7 @@ ${G} #lvl #lvlTitle,${G} #conf h1{font-family:'Grenze Gotisch',Georgia,serif!imp
  const destination=make('section','pc-prep-destination');destination.append($('prepK'));controls.append(destination,runStatus,controls.querySelector(':scope>.btnrow'));info.hidden=true;prep.querySelector('.premium-prep-head').append(settingGroup);
  function refreshTileSummary(){
   if(prep.hidden)return;
-  const cls=({r:T('Rycerz','Knight'),k:T('Kat','Executioner'),z:T('Zabójczyni','Ash Dancer')})[charId()];
+  const cls=({r:T('Rycerz','Knight'),k:T('Kat','Executioner'),z:T('Zabójczyni','Ash Dancer'),d:T('Dzwonnik','Bellbearer')})[charId()];
   put(identity,cls+' · '+DF[DIFFK].n);
   const values=[[T('Perki','Perks'),PREP.perks.length+'/1'],[T('Wyzwania','Challenges'),String(PREP.chal?1:0)],[T('Klątwy','Curses'),PREP.curses.length+'/3']];
   for(let i=0;i<values.length;i++){let cell=counts.children[i];if(!cell){cell=make('span','');cell.append(make('small',''),make('strong',''));counts.append(cell)}put(cell.firstChild,values[i][0]);put(cell.lastChild,values[i][1])}
