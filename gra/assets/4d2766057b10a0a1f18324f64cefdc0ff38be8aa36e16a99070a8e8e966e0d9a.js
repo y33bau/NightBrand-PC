@@ -1319,7 +1319,7 @@ function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan
   if(ch===1&&![3,5].includes(row)){id=row===4?3:row===1?1:0;if(id!==3){if(ashM[i])id=4;else if(nz(x,y)>1.25)id=5}if(row!==4&&burns.some(p=>Math.hypot(p.x-x-.5,p.y-y-.5)<2.1))id=2;}
   if(ch===1&&cells[a]&&x>=4&&x<=16&&y>=15&&y<=24)id=nz(x*2.3+5,y*2.3)>1.0?6:4; // runda 242: pogorzelisko po stodole: popiół + żarzące się pęknięcia
   if(ch===1&&row!==3&&id>=0&&id!==2&&id!==4&&id!==6){let d=9;for(let oy=-3;oy<=3;oy++)for(let ox=-3;ox<=3;ox++){const t=tileAt(x+ox,y+oy);if(t===45||t===90)d=Math.min(d,Math.hypot(ox,oy))}if(d<9&&d<=Math.max(1,Math.min(3,1.9+.5*nz(x*1.3+3,y*1.3))))id=5} // runda 290: mech nad woda jak na mapie 4, szerokosc pasa falista
-  if(ch===2&&![1,5,7].includes(row)){id=row===2&&[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>SOLID.has(tileAt(x+dx,y+dy)))?1:0;if(burns.some(p=>Math.hypot(p.x-x-.5,p.y-y-.5)<2))id=2;}
+  if(ch===2&&![1,5,7].includes(row)){const rg=W.region(x,y);let lv=9;if(rg==='forge')for(let oy=-3;oy<=3;oy++)for(let ox=-3;ox<=3;ox++)if(tileAt(x+ox,y+oy)===24)lv=Math.min(lv,Math.hypot(ox,oy));id=lv<=2.2+.6*nz(x*1.3,y*1.3)?1:rg==='mine'&&nz(x*1.7,y*1.7)>.7?2:row===2&&[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>SOLID.has(tileAt(x+dx,y+dy)))?1:0; /* 12.11.2026: w kuzni czarna, wypalona skala wokol kanalow lawy, w kopalni plamy wegla - strefy roznia sie posadzka */if(burns.some(p=>Math.hypot(p.x-x-.5,p.y-y-.5)<2))id=2;}
   if(ch===3&&![1,4].includes(row))id=plan.road[i]||row===3?1:0;
   if(ch===3&&id>=0&&W.region(x,y)==='slums'&&(nz(x,y)>.4||[[2,0],[-2,0],[0,2],[0,-2],[1,1],[-1,-1],[1,-1],[-1,1]].some(([dx,dy])=>tileAt(x+dx,y+dy)===54)))id=2;
   if(ch===4&&![4,5,7].includes(row)){const r=W.region(x,y);id=r==='camp'?0:row===1?1:(r==='hill'||r==='stones')?3:r==='forest'?2:0;if(id===2&&nz(x,y)>.6)id=4;}
@@ -2158,6 +2158,11 @@ function unblockRoads1(w){if(typeof MAP1_FLOOR==='undefined')return;const P=w.PR
    if(!ok||P.some(q=>q!==p&&Math.hypot(q.x-(nx+.5),q.y-(ny+.92))<1.6)||w.npcs.some(n=>Math.hypot(n.x/16-nx,n.y/16-ny)<2.5))continue;best=[nx,ny];bd=d}
   if(!best)continue;for(const [a,b] of cells)freeCell(a,b);const mx=best[0]-x,my=best[1]-y;p.x+=mx;p.y+=my;for(const [a,b] of cells)occ(a+mx,b+my);
   if(two&&p.shrine!==undefined&&w.shrines[p.shrine]){w.shrines[p.shrine].x+=mx*TS;w.shrines[p.shrine].y+=my*TS}}}
+// 12.11.2026: Dolne Miasto - wielka hala dostaje kolumnade wzdluz glownej nawy (12 nowych filarow przy x=24 i x=36), krypty runiczne latarnie.
+// Zasada autora: nic na drodze - nowe rzeczy tylko na polach bez drogi (groundPlan jeszcze nie istnieje, wiec pomijamy pas y 36-42 i nawe x 25-35).
+function layoutPatch2(w){const P=w.PROPS,M=w.map,U=w.under,ok=(x,y)=>{const t=M[y*MW+x];return !SOLID.has(t)&&!VOID.has(t)&&t!==24&&t!==27&&!(w.clearways&&w.clearways.has(y*MW+x))&&!P.some(p=>Math.abs(p.x-x-.5)<1.6&&Math.abs(p.y-y-.92)<1.6)&&!w.npcs.some(n=>Math.hypot(n.x/16-x,n.y/16-y)<3)};
+ for(const x of [24,36])for(const y of [18,25,31,46,52,59])if(ok(x,y)){U[y*MW+x]=M[y*MW+x];M[y*MW+x]=22}
+ for(const [x,y] of [[14,6],[26,6],[36,6],[48,6],[14,76],[48,76]])if(ok(x,y)){P.push({k:'rune_lantern',x:x+.5,y:y+.92});U[y*MW+x]=M[y*MW+x];M[y*MW+x]=31}}
 function layoutPatch1(w){const P=w.PROPS,M=w.map,U=w.under,T=(x,y)=>M[y*MW+x];
  const floorAt=(x,y)=>{let v=U[y*MW+x];if(!v||v===31||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=T(x+a,y+b);if(!SOLID.has(t)){v=t;break}}}return v||42};
  const free=(x,y)=>{if(T(x,y)===31)M[y*MW+x]=floorAt(x,y)};
@@ -2322,6 +2327,7 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
    if(!sh3.some(s=>Math.hypot(s.x/16-p.x,s.y/16-p.y)<6))continue;P3.splice(k,1);const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;
    if(M3[i]===31&&!P3.some(q=>Math.floor(q.y)===y&&Math.abs(q.x-(x+.5))<1.2)){let v=U3&&U3[i];if(!v||v===31||v===27||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=M3[(y+b)*MW+x+a];if(!SOLID.has(t)&&t!==27&&t!==24&&t!==54){v=t;break}}}M3[i]=v||20}}}
   if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}
+  if(ch===2)layoutPatch2(w);
   scene.add(w.group);
   const ta=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?21:w.map[y*MW+x];
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=ta(x,y);

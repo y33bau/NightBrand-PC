@@ -34,6 +34,11 @@ function unblockRoads1(w){if(typeof MAP1_FLOOR==='undefined')return;const P=w.PR
    if(!ok||P.some(q=>q!==p&&Math.hypot(q.x-(nx+.5),q.y-(ny+.92))<1.6)||w.npcs.some(n=>Math.hypot(n.x/16-nx,n.y/16-ny)<2.5))continue;best=[nx,ny];bd=d}
   if(!best)continue;for(const [a,b] of cells)freeCell(a,b);const mx=best[0]-x,my=best[1]-y;p.x+=mx;p.y+=my;for(const [a,b] of cells)occ(a+mx,b+my);
   if(two&&p.shrine!==undefined&&w.shrines[p.shrine]){w.shrines[p.shrine].x+=mx*TS;w.shrines[p.shrine].y+=my*TS}}}
+// 12.11.2026: Dolne Miasto - wielka hala dostaje kolumnade wzdluz glownej nawy (12 nowych filarow przy x=24 i x=36), krypty runiczne latarnie.
+// Zasada autora: nic na drodze - nowe rzeczy tylko na polach bez drogi (groundPlan jeszcze nie istnieje, wiec pomijamy pas y 36-42 i nawe x 25-35).
+function layoutPatch2(w){const P=w.PROPS,M=w.map,U=w.under,ok=(x,y)=>{const t=M[y*MW+x];return !SOLID.has(t)&&!VOID.has(t)&&t!==24&&t!==27&&!(w.clearways&&w.clearways.has(y*MW+x))&&!P.some(p=>Math.abs(p.x-x-.5)<1.6&&Math.abs(p.y-y-.92)<1.6)&&!w.npcs.some(n=>Math.hypot(n.x/16-x,n.y/16-y)<3)};
+ for(const x of [24,36])for(const y of [18,25,31,46,52,59])if(ok(x,y)){U[y*MW+x]=M[y*MW+x];M[y*MW+x]=22}
+ for(const [x,y] of [[14,6],[26,6],[36,6],[48,6],[14,76],[48,76]])if(ok(x,y)){P.push({k:'rune_lantern',x:x+.5,y:y+.92});U[y*MW+x]=M[y*MW+x];M[y*MW+x]=31}}
 function layoutPatch1(w){const P=w.PROPS,M=w.map,U=w.under,T=(x,y)=>M[y*MW+x];
  const floorAt=(x,y)=>{let v=U[y*MW+x];if(!v||v===31||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=T(x+a,y+b);if(!SOLID.has(t)){v=t;break}}}return v||42};
  const free=(x,y)=>{if(T(x,y)===31)M[y*MW+x]=floorAt(x,y)};
@@ -198,6 +203,7 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
    if(!sh3.some(s=>Math.hypot(s.x/16-p.x,s.y/16-p.y)<6))continue;P3.splice(k,1);const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;
    if(M3[i]===31&&!P3.some(q=>Math.floor(q.y)===y&&Math.abs(q.x-(x+.5))<1.2)){let v=U3&&U3[i];if(!v||v===31||v===27||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=M3[(y+b)*MW+x+a];if(!SOLID.has(t)&&t!==27&&t!==24&&t!==54){v=t;break}}}M3[i]=v||20}}}
   if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}
+  if(ch===2)layoutPatch2(w);
   scene.add(w.group);
   const ta=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?21:w.map[y*MW+x];
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=ta(x,y);

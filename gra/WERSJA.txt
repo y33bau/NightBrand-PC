@@ -703,3 +703,4 @@ cache625 · Woskownica: mniejsze efekty, czystszy sprite; rozdz. I: dachy dwuspa
 cache626 · Rozdz. I: faliste brzegi podloza, ogien spod szubienicy usuniety
 cache627 · Rozdz. I: zasada wolnej drogi (oboz zakonu i kociolek poza droga)
 cache628 · Rozdz. I: sztandary zakonu jako brama po obu stronach drogi
+cache629 · Rozdz. II: kolumnada w hali, latarnie w kryptach, wypalona skala przy lawie, wegiel w kopalni
