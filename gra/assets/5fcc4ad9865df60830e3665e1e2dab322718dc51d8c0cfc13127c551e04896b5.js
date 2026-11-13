@@ -3583,7 +3583,7 @@ function supportEnchant(e,a,crit){const k=ENCH.find(k=>sk(k)&&k!==encLevel()[0])
  swordSparks(e.x,e.y,ENC[k].col,5);
 }
 // Kat: własne efekty cięcia i ciężkiego uderzenia (arkusz kat_fx, runda 13.11.2026)
-function katSlashFx(a,c,s,R,vs){const hv=a.kind==='h',x=pl.x+c*R*(hv?.62:.5),y=pl.y+s*R*(hv?.62:.5),v=hv?skAdd('kat_heavy',.42,x,y,.5,vs*1.55,'bill',0):skAdd('kat_cut',.26,x,y,.95,vs*1.25,'bill',-screenAng(c,s));if(v)v.kat=true;return !!v}
+function katSlashFx(a,c,s,R,vs){const hv=a.kind==='h',x=pl.x+c*R*(hv?.62:.5),y=pl.y+s*R*(hv?.62:.5),v=hv?skAdd('kat_heavy',.42,x,y,.3,vs*.7,'bill',0):skAdd('kat_cut',.26,x,y,.95,vs*.8,'bill',-screenAng(c,s));if(v)v.kat=true;return !!v}
 function swordSparks(x,y,col,n=8){for(let i=0;i<n;i++)S.parts.push({k:'e',x:x+rnd(-3,3),y:y+rnd(-2,2),z:rnd(8,16),vx:rnd(-12,12),vy:rnd(-8,8),vz:rnd(5,20),c:col,life:.2+rnd(0,.15)})}
 const REND={cost:40,cuts:6,dmg:[9,9.6,10.3],cooldown:[12,11,10],wind:.14,dist:44,dur:.28,rec:.2,maxT:3,hitR:26};
 const FAN={cost:20,dmgPct:[.60,.64,.68],cooldown:[8,7,6],wind:.25,rec:.25,cone:.39};
