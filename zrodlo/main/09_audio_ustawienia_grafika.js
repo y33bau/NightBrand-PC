@@ -114,13 +114,13 @@ function loadSfxSamples(){if(sfxLoadPromise||!AC)return sfxLoadPromise;
  const b=await AC.decodeAudioData(await r.arrayBuffer());sfxBuffers.set(name,b);
  }catch(e){console.warn((EN?'SFX: failed to load ':'SFX: nie udało się wczytać ')+name,e)}}));return sfxLoadPromise}
 
-// Głośność, minimalny odstęp (czas audio), limit nakładania, priorytet.
+// Głośność, minimalny odstęp (czas audio), limit nakładania, priorytet. 13.11.2026: dźwięki menu (ui, back, tab, toggle) ciszej o 30% (autor).
 // Muzyka omija ten tor. Ważne sygnały mogą wyprzeć cichy efekt zbierania.
-const SFX_MIX={roll:[.5,.035,2,2],ui:[.45,.06,2,3],navtick:[.14,.03,1,3],empty:[.55,.18,1,3],coin:[.45,.10,2,0],pick:[.25,.08,2,0],
+const SFX_MIX={roll:[.5,.035,2,2],ui:[.315,.06,2,3],navtick:[.14,.03,1,3],empty:[.55,.18,1,3],coin:[.45,.10,2,0],pick:[.25,.08,2,0],
  bell:[.75,.15,3,3], level:[.85,.5,1,3],heal:[.55,.4,2,2],bless:[.65,.3,2,2],growl:[.4,.65,2,0],
  bossGrowl:[.85,.22,2,3],warnR:[.65,.18,2,3],kill:[.4,.12,3,0],hurt:[.85,.12,2,3],
  rumble:[.5,.6,1,1],rise:[.5,.2,2,1],poiseBreak:[.8,.3,1,3],
- back:[.5,.06,1,3],tab:[.45,.06,1,3],toggle:[.45,.05,1,3],pauseIn:[.45,.15,1,3],pauseOut:[.5,.15,1,3],
+ back:[.35,.06,1,3],tab:[.315,.06,1,3],toggle:[.315,.05,1,3],pauseIn:[.45,.15,1,3],pauseOut:[.5,.15,1,3],
  buy:[.6,.08,2,3],shopIn:[.6,.3,1,3],equip:[.55,.08,1,3],runStart:[.7,.5,1,3],card:[.6,.15,1,3],reroll:[.5,.1,1,3],doorIn:[.65,.5,1,3],doorOut:[.6,.5,1,3],
  step:[.11,.15,1,0],note:[.6,.3,1,2],purse:[.6,.15,2,1]};
 const sfxPlayedAt={};

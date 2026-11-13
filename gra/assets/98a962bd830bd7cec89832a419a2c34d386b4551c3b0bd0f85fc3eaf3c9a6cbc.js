@@ -2900,13 +2900,13 @@ function loadSfxSamples(){if(sfxLoadPromise||!AC)return sfxLoadPromise;
  const b=await AC.decodeAudioData(await r.arrayBuffer());sfxBuffers.set(name,b);
  }catch(e){console.warn((EN?'SFX: failed to load ':'SFX: nie udało się wczytać ')+name,e)}}));return sfxLoadPromise}
 
-// Głośność, minimalny odstęp (czas audio), limit nakładania, priorytet.
+// Głośność, minimalny odstęp (czas audio), limit nakładania, priorytet. 13.11.2026: dźwięki menu (ui, back, tab, toggle) ciszej o 30% (autor).
 // Muzyka omija ten tor. Ważne sygnały mogą wyprzeć cichy efekt zbierania.
-const SFX_MIX={roll:[.5,.035,2,2],ui:[.45,.06,2,3],navtick:[.14,.03,1,3],empty:[.55,.18,1,3],coin:[.45,.10,2,0],pick:[.25,.08,2,0],
+const SFX_MIX={roll:[.5,.035,2,2],ui:[.315,.06,2,3],navtick:[.14,.03,1,3],empty:[.55,.18,1,3],coin:[.45,.10,2,0],pick:[.25,.08,2,0],
  bell:[.75,.15,3,3], level:[.85,.5,1,3],heal:[.55,.4,2,2],bless:[.65,.3,2,2],growl:[.4,.65,2,0],
  bossGrowl:[.85,.22,2,3],warnR:[.65,.18,2,3],kill:[.4,.12,3,0],hurt:[.85,.12,2,3],
  rumble:[.5,.6,1,1],rise:[.5,.2,2,1],poiseBreak:[.8,.3,1,3],
- back:[.5,.06,1,3],tab:[.45,.06,1,3],toggle:[.45,.05,1,3],pauseIn:[.45,.15,1,3],pauseOut:[.5,.15,1,3],
+ back:[.35,.06,1,3],tab:[.315,.06,1,3],toggle:[.315,.05,1,3],pauseIn:[.45,.15,1,3],pauseOut:[.5,.15,1,3],
  buy:[.6,.08,2,3],shopIn:[.6,.3,1,3],equip:[.55,.08,1,3],runStart:[.7,.5,1,3],card:[.6,.15,1,3],reroll:[.5,.1,1,3],doorIn:[.65,.5,1,3],doorOut:[.6,.5,1,3],
  step:[.11,.15,1,0],note:[.6,.3,1,2],purse:[.6,.15,2,1]};
 const sfxPlayedAt={};
@@ -6529,13 +6529,13 @@ function padScroll(root,ry,dt){if(Math.abs(ry)<.3)return;const can=e=>e&&e.scrol
 // Element pod kursorem dostaje fokus pada (złote podświetlenie), więc A, legenda i znaczki działają bez zmian. Krzyżak nadal skacze po przyciskach.
 const PCUR={x:innerWidth/2,y:innerHeight/2,el:null,last:0,show:false};
 {const st=document.createElement('style');st.textContent="#padCur{position:fixed;left:0;top:0;z-index:2147483050;width:calc(40 * min(.05981vw,.10627vh));height:auto;pointer-events:none;filter:drop-shadow(0 2px 3px #000c);will-change:transform}#padCur[hidden],body:not(.padlast) #padCur{display:none}"+
- "body,body *{cursor:url(assets/ui/2dfdc2fc66033fbcd3f5390f5bc2a46db7430e13661669505a33f098dadb7e3d.png) 4 4,auto!important}body canvas#gl{cursor:url(assets/ui/984955c43a7756900d2a0f63ae46771f2aa5e6c65e84147f096eaca1761fc5bb.png) 18 19,crosshair!important}";document.head.append(st)}
+ "body,body *{cursor:url(assets/ui/2dfdc2fc66033fbcd3f5390f5bc2a46db7430e13661669505a33f098dadb7e3d.png) 4 4,auto!important}body canvas#gl{cursor:url(assets/ui/2d0002a17b0013321dc41b3a13c1adb471c9bcfed6efbf666273a533187ed031.png) 55 58,crosshair!important}";document.head.append(st)}
 function padCurPark(){const a=document.activeElement;if(a&&a!==document.body){const r=a.getBoundingClientRect();PCUR.x=r.left+r.width/2;PCUR.y=r.top+r.height/2}if(PCUR.el)PCUR.el.hidden=true;PCUR.show=false}
 function padCurTick(root,g){const now=performance.now(),dt=Math.min(.05,(now-(PCUR.last||now))/1000);PCUR.last=now;if(PAD.grab||!g)return;
   const [x,y]=padDz(g.axes[0]||0,g.axes[1]||0,.2);if(!x&&!y)return;
   if(!PCUR.el){PCUR.el=document.createElement('img');PCUR.el.id='padCur';PCUR.el.src='assets/ui/09ec512dc3c0387166c377318f86878d62e4c4b39f2d081fb32b9a8075d99898.png';PCUR.el.alt='';PCUR.el.setAttribute('aria-hidden','true');document.body.append(PCUR.el)}
   if(!PCUR.show){PCUR.show=true;PCUR.el.hidden=false}
-  const m=Math.hypot(x,y),sp=.6*(380+1500*m*m)*Math.max(.6,Math.min(innerWidth,innerHeight*16/9)/1600);
+  const m=Math.hypot(x,y),sp=.36*(380+1500*m*m)*Math.max(.6,Math.min(innerWidth,innerHeight*16/9)/1600);
   PCUR.x=Math.max(2,Math.min(innerWidth-2,PCUR.x+x*sp*dt));PCUR.y=Math.max(2,Math.min(innerHeight-2,PCUR.y+y*sp*dt));
   PCUR.el.style.transform='translate('+PCUR.x.toFixed(1)+'px,'+PCUR.y.toFixed(1)+'px) translate(-50%,-50%)';
   const t=document.elementFromPoint(PCUR.x,PCUR.y),b=t&&t.closest('button,summary,input,label,.rng,[tabindex]:not([tabindex="-1"])');if(!b||!root.contains(b))return;
