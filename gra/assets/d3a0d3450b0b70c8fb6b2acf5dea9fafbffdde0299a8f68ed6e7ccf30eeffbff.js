@@ -6537,6 +6537,8 @@ addEventListener('mousedown',()=>{if(!padPrio())document.body.classList.remove('
 // podpowiedzi przycisków pada w menu (13.11.2026): znaczki LB/RB, LT/RT, B, X, Y, ☰ przy samych kontrolkach,
 // nie osobny pasek. Pozycja liczona z prostokąta kontrolki; strona, na której znaczek nic nie zasłania.
 let PADHINT=null,PADHT=0;
+// 13.11.2026: przycisk „Wróć” widoczny także przy padzie (znaczek B obok); zastępuje ukrywanie z rundy 261 w CSS
+{const st=document.createElement('style');st.textContent="html body.padlast #orient#orient#orient#orient .backar,html body.padlast #orient#orient#orient#orient :is(#prep,#opts,#manual)>.backar{display:block!important}";document.head.append(st)}
 function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.15;
   const show=!!mid&&mid!=='notice'&&mid!=='recovery'&&padPrio()&&document.body.classList.contains('padlast');
   if(!PADHINT){if(!show)return;PADHINT=document.createElement('div');PADHINT.id='padHints';PADHINT.setAttribute('aria-hidden','true');document.body.append(PADHINT);
