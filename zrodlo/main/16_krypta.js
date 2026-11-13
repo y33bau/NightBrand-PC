@@ -9,7 +9,6 @@ function makeDungeon(){releaseDungeon();initWorld(9);useWorld(9);ROOT=W.group;bu
 function stashEntities(){if(pl2)asP2(clearSwordTransient);clearSwordTransient();S.swordTrails=[];for(const p of S.picks)if(p.k==='c'){if(p.returned)S.coins+=p.v||1;else awardCoins(p.v||1)}
   for(const m of [...S.enemies.map(e=>e.mesh),...S.picks.flatMap(p=>[p.mesh,p.glow]),...S.vfx.map(f=>f.mesh),...S.corpses.map(c=>c.mesh),...S.zones.map(z=>z.mesh),...(S.eproj||[]).map(f=>f.mesh)])if(m)scene.remove(m);
   for(const c of S.corpses)if(c.own)c.mesh.material.dispose();S.enemies=[];S.picks=[];S.vfx=[];S.waves=[];S.corpses=[];S.zones=[];S.eproj=[];S.quakes=[];S.delayed=[];S.parts=[];S.leszy=null;S.collector=null;S.merchant=null;
-  for(const g of S.golems){g.x=pl.x+rnd(-10,10);g.y=pl.y+rnd(-6,6)}
   Object.assign(pl,{roll:0,swingT:0,inv:1,atk:null,block:false,charging:false,atkHeld:false});camTarget.set(pl.x/16,0,pl.y/16)}
 function enterDungeon(){const fog=canvas(MW,MH);fog.getContext('2d').drawImage(MINI.fog,0,0);const dec=canvas(WW,WH);dec.getContext('2d').drawImage(decalC,0,0);
   S.dgBack={x:W.crypt.x,y:W.crypt.y+12,shr:S.shr,fog,dec};

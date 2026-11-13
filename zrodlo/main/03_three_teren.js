@@ -53,7 +53,7 @@ function applyAtmos(){const a=ATM[CH],dp=depthOn();amb.color.setHex(a.amb);amb.i
 // moon rim light on sprites: figure pixels whose screen-left neighbour is empty get a cold edge glow (flips with the sprite mirroring)
 const RIM_K=.55;
 const RIMU={col:{value:new THREE.Color(0x9ebbea)},k:{value:0}};
-function moonRim(m,step){const prev=m.onBeforeCompile;m.customProgramCacheKey=()=>'moonrim';
+function moonRim(m,step){const prev=m.onBeforeCompile;{const pk0=m.customProgramCacheKey?m.customProgramCacheKey():'';m.customProgramCacheKey=()=>pk0+'|moonrim'}
   m.onBeforeCompile=sh=>{if(prev)prev.call(m,sh);sh.uniforms.uRimC=RIMU.col;sh.uniforms.uRimK=RIMU.k;sh.uniforms.uRimStep={value:step};
     sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying float vRimS;').replace('#include <begin_vertex>','#include <begin_vertex>\nvRimS=modelMatrix[0][0]>=0.?1.:-1.;');
     sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying float vRimS;uniform vec3 uRimC;uniform float uRimK;uniform float uRimStep;')

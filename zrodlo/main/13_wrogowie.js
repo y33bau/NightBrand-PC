@@ -232,8 +232,8 @@ function cumlinAI(e,dx,dy,d,dt,hw){
           const R=red?58:40;shake(red?.7:.5,.4);play('slam',0);shockAt(e.x,e.y,.75);cumlinFx('wave',.45,cx,cy,.08,R/6.2,'ground');if(DEC.crack)decalAt(DEC.crack[2],cx,cy);
           for(let i=0;i<(red?30:20);i++){const a=i/(red?30:20)*Math.PI*2;S.parts.push({k:'d',x:cx+Math.cos(a)*12,y:cy+Math.sin(a)*6,z:1,vx:Math.cos(a)*100,vy:Math.sin(a)*50,vz:20,c:Math.random()<.4?'#e0b84a':P.st3,life:.6})}
           if(red){cumlinFx('shards',.6,cx,cy,0,4.6,'bill');blood(cx,cy,24,0,1,3)}
-          S.attacker=e;S.redHit=!!red;const hit=aoeP(e,R,enemyDamage(red?e.dmg*1.35:e.dmg),cx,cy);S.attacker=null;S.redHit=false;
-          if(red&&!hit&&e.stun<=0){e.stun=2.4;e.cmA=null;ftx((EN?'Exposed!':'Odsłonięty!'),e.x,e.y,ftEntH(e)+.8,'i');cumlinFx('dust',.5,e.x,e.y,0,4,'bill');return true}
+          const missed=Math.hypot(pl.x-cx,pl.y-cy)>=R||pl.inv>0||pl.roll>0;S.attacker=e;S.redHit=!!red;const hit=aoeP(e,R,enemyDamage(red?e.dmg*1.35:e.dmg),cx,cy);S.attacker=null;S.redHit=false;
+          /* recenzja 1.3: ogłuszenie tylko gdy gracz uniknął ciosu; zablokowanie czerwonego ataku już go nie daje */if(red&&missed&&e.stun<=0){e.stun=2.4;e.cmA=null;ftx((EN?'Exposed!':'Odsłonięty!'),e.x,e.y,ftEntH(e)+.8,'i');cumlinFx('dust',.5,e.x,e.y,0,4,'bill');return true}
         }
         if(e.stun>0){e.cmA=null;e.sw=0;return true}
       }
@@ -408,7 +408,9 @@ function sightSword(x0,y0,x1,y1){const n=Math.ceil(Math.hypot(x1-x0,y1-y0)/8);fo
 // Wróg, który nie widzi bohatera przez ścianę, idzie po niej: wychodzi z domów drzwiami i obchodzi przeszkody.
 const NAV={d:null,q:null,t:0};
 function navUpdate(dt){NAV.t-=dt;if(NAV.t>0||!pl)return;NAV.t=.35;const n=MW*MH;if(!NAV.d||NAV.d.length!==n){NAV.d=new Int16Array(n);NAV.q=new Int32Array(n)}
-  const D=NAV.d,Q=NAV.q,tx=Math.floor(pl.x/TS),ty=Math.floor(pl.y/TS);D.fill(-1);if(tx<0||ty<0||tx>=MW||ty>=MH)return;let h=0,t=0;D[ty*MW+tx]=0;Q[t++]=ty*MW+tx;
+  const D=NAV.d,Q=NAV.q;D.fill(-1);let h=0,t=0;
+  // 13.11.2026 (recenzja Gemini 1.1): źródłem są wszyscy żywi gracze, więc wróg goniący gracza 2 obchodzi ściany w jego stronę
+  let src=[pl1||pl,pl2].filter(p=>p&&!p.dead);if(!src.length)src=[pl];for(const p of src){const tx=Math.floor(p.x/TS),ty=Math.floor(p.y/TS);if(tx<0||ty<0||tx>=MW||ty>=MH)continue;const c=ty*MW+tx;if(D[c]===0)continue;D[c]=0;Q[t++]=c}if(!t)return;
   while(h<t){const c=Q[h++],cx=c%MW,cy=(c/MW)|0,v=D[c]+1;
     if(cx>0&&D[c-1]<0&&!SOLID.has(tileAt(cx-1,cy))){D[c-1]=v;Q[t++]=c-1}
     if(cx<MW-1&&D[c+1]<0&&!SOLID.has(tileAt(cx+1,cy))){D[c+1]=v;Q[t++]=c+1}
