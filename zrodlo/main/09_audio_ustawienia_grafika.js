@@ -84,6 +84,11 @@ const SFX={
  poiseBreak:()=>{noise(.08,3000,2,.2,'bandpass',1500);bell(520,.4,.05,0,.15);tone(180,60,.2,.18,'triangle')},
  howl:()=>{voice(240,470,.8,.05,'sine',1500,.5,5,6);voice(470,300,1.5,.05,'sine',1500,.5,5,8,.7)},
  cry:()=>{for(let i=0;i<3;i++)voice(640,470,.4,.04,'triangle',2000,.5,6,10,i*.5)}};
+// 13.11.2026: zdarzenia menu i rzemiosla (próbki Kenney); synteza tylko na czas wczytywania. Klik i ruch po menu zostają łańcuchowe (ui, navtick).
+for(const n of ['back','tab','toggle','pauseIn','pauseOut','shopIn','equip','card','reroll','note'])SFX[n]=SFX.ui;
+SFX.buy=SFX.purse=SFX.coin;SFX.runStart=SFX.katana;SFX.step=()=>{};SFX.doorIn=SFX.doorOut=()=>noise(.5,300,.8,.15,'lowpass',80,.2);
+// dźwięk menu: konkretne zdarzenie (zakup, zakładka, pauza) wypiera ogólne kliknięcie
+let UISND=0;function uiSnd(n){UISND=1;play(n,0)}
 const lastS={};let clock=0;
 function play(n,gap=.04){if(!AC)return;if(clock-(lastS[n]||-9)<gap)return;lastS[n]=clock;SFX[n]()}
 
@@ -113,7 +118,10 @@ function loadSfxSamples(){if(sfxLoadPromise||!AC)return sfxLoadPromise;
 const SFX_MIX={roll:[.5,.035,2,2],ui:[.6,.06,2,3],empty:[.55,.18,1,3],coin:[.45,.10,2,0],pick:[.25,.08,2,0],
  bell:[.75,.15,3,3], level:[.85,.5,1,3],heal:[.55,.4,2,2],bless:[.65,.3,2,2],growl:[.4,.65,2,0],
  bossGrowl:[.85,.22,2,3],warnR:[.65,.18,2,3],kill:[.4,.12,3,0],hurt:[.85,.12,2,3],
- rumble:[.5,.6,1,1],rise:[.5,.2,2,1],poiseBreak:[.8,.3,1,3]};
+ rumble:[.5,.6,1,1],rise:[.5,.2,2,1],poiseBreak:[.8,.3,1,3],
+ back:[.5,.06,1,3],tab:[.55,.06,1,3],toggle:[.5,.05,1,3],pauseIn:[.55,.15,1,3],pauseOut:[.5,.15,1,3],
+ buy:[.6,.08,2,3],shopIn:[.6,.3,1,3],equip:[.55,.08,1,3],runStart:[.7,.5,1,3],card:[.6,.15,1,3],reroll:[.5,.1,1,3],doorIn:[.65,.5,1,3],doorOut:[.6,.5,1,3],
+ step:[.11,.15,1,0],note:[.6,.3,1,2],purse:[.6,.15,2,1]};
 const sfxPlayedAt={};
 for(const [event,names] of Object.entries(SFX_SAMPLE_MAP)){
  const fallback=SFX[event];SFX[event]=()=>{

@@ -11,14 +11,14 @@ function stashEntities(){if(pl2)asP2(clearSwordTransient);clearSwordTransient();
   for(const c of S.corpses)if(c.own)c.mesh.material.dispose();S.enemies=[];S.picks=[];S.vfx=[];S.waves=[];S.corpses=[];S.zones=[];S.eproj=[];S.quakes=[];S.delayed=[];S.parts=[];S.leszy=null;S.collector=null;S.merchant=null;
   for(const g of S.golems){g.x=pl.x+rnd(-10,10);g.y=pl.y+rnd(-6,6)}
   Object.assign(pl,{roll:0,swingT:0,inv:1,atk:null,block:false,charging:false,atkHeld:false});camTarget.set(pl.x/16,0,pl.y/16)}
-function enterDungeon(){const fog=canvas(MW,MH);fog.getContext('2d').drawImage(MINI.fog,0,0);const dec=canvas(WW,WH);dec.getContext('2d').drawImage(decalC,0,0);
+function enterDungeon(){play('doorIn',0);const fog=canvas(MW,MH);fog.getContext('2d').drawImage(MINI.fog,0,0);const dec=canvas(WW,WH);dec.getContext('2d').drawImage(decalC,0,0);
   S.dgBack={x:W.crypt.x,y:W.crypt.y+12,shr:S.shr,fog,dec};
   makeDungeon();pl.x=START.x;pl.y=START.y;stashEntities();
   S.shr=W.shrines.map(()=>60);S.dg={done:false,boss:null,margaT:0};
   dg.clearRect(0,0,WW,WH);decalDirty=true;resetFog();MINI.t=0;lastHud='';
   populateDungeon();play('rumble',0);shake(.15,.6);padRumble(.5,.7,700);
   say((EN?'You descend into the crypt beneath the cemetery. Above, the night stands still. Something awaits you in the deepest hall.':'Schodzisz do krypty pod cmentarzem. Na górze noc stoi w miejscu. W najgłębszej sali coś na ciebie czeka.'))}
-function exitDungeon(){const b=S.dgBack,done=S.dg&&S.dg.done;useWorld(1);pl.x=b.x;pl.y=b.y;stashEntities();S.shr=b.shr;
+function exitDungeon(){play('doorOut',0);const b=S.dgBack,done=S.dg&&S.dg.done;useWorld(1);pl.x=b.x;pl.y=b.y;stashEntities();S.shr=b.shr;
   const fg=MINI.fog.getContext('2d');fg.globalCompositeOperation='source-over';fg.clearRect(0,0,MW,MH);fg.drawImage(b.fog,0,0);
   dg.clearRect(0,0,WW,WH);dg.drawImage(b.dec,0,0);decalDirty=true;
   S.dg=null;S.dgBack=null;S.dgDone=true;S.spawnT=1.5;lastHud='';play('rumble',0);

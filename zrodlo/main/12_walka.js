@@ -189,7 +189,7 @@ function autoEquipActive(k){const slots=pl2&&S.mpTurn===2?pl2.actives.activeSlot
 // 13.11.2026 (decyzja autora): zmiana wyposażenia umiejętności w pauzie zawsze, także w walce.
 // Trwające użycie (activeWind, przywołania) ma własny klucz umiejętności, więc zmiana slotu go nie przerywa.
 function loadoutSafe(){return !!(S&&S.paused&&!pl.dead)}
-function equipActive(i,k){if(!loadoutSafe()||!Number.isInteger(i)||i<0||i>=S.activeSlots.length||k!==null&&(!ACTIVE_SLASHER.includes(k)||!sk(k)))return false;const other=k?S.activeSlots.indexOf(k):-1,old=S.activeSlots[i];S.activeSlots[i]=k;if(other>=0&&other!==i)S.activeSlots[other]=old;renderLoadout();renderActiveHud();return true}
+function equipActive(i,k){if(!loadoutSafe()||!Number.isInteger(i)||i<0||i>=S.activeSlots.length||k!==null&&(!ACTIVE_SLASHER.includes(k)||!sk(k)))return false;const other=k?S.activeSlots.indexOf(k):-1,old=S.activeSlots[i];S.activeSlots[i]=k;if(other>=0&&other!==i)S.activeSlots[other]=old;if(old!==k)uiSnd('equip');renderLoadout();renderActiveHud();return true}
 function activateSlot(i){if(!swordCanAct())return false;const k=S.activeSlots[i],c=ACTIVE_CFG[k],L=sk(k);if(!c||!L)return false;if((S[c.cd]||0)>0){play('empty',.2);return false}if(!canPayActive(k)){activeResourceFlash(k);return false}S.combatLock=4;
  if(k==='whirl'){beginWhirl(L);return true}
  if(k==='leap'){beginLeap(L);return true}

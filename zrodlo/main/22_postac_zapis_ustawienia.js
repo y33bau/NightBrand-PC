@@ -384,7 +384,7 @@ function showFinale(){const el=$('finale'),img=$('finImg'),pg=FTX('story.ending'
 $('finNext').addEventListener('click',()=>showEndBox());
 addEventListener('keydown',e=>{if($('finale').hidden||e.repeat)return;if(['Enter',' ','e','Escape'].includes(e.key)){e.preventDefault();e.stopImmediatePropagation();showEndBox()}},true);
 // ---- ustawienia: efekty, wielkość napisów, liczby obrażeń; ściąga sterowania w pauzie ----
-document.addEventListener('click',e=>{const x=e.target,b=x.closest&&(x.matches('.tgl input')?x:x.closest('button,summary'));if(b&&!b.disabled&&!b.closest('#btns'))play('ui',0)},true);
+document.addEventListener('click',e=>{const x=e.target,b=x.closest&&(x.matches('.tgl input')?x:x.closest('button,summary'));if(b&&!b.disabled&&!b.closest('#btns')){UISND=0;const id=b.id||'',n=b.matches('.tgl input')?'toggle':b.matches(PADTABS+','+PADSUBS)?'tab':/(Back|No|Close)$/.test(id)||b.matches('.pc-home-button')?'back':id==='prepGo'?'':'ui';setTimeout(()=>{if(!UISND&&n)play(n,0)},0)}},true);
 function applySett(){if(typeof fit==='function')fit();if(sfxG&&AC)sfxG.gain.setTargetAtTime(SETT.sfx,AC.currentTime,.05);
   for(const e of document.querySelectorAll('.sfxSl'))e.value=Math.round(SETT.sfx*100);for(const e of document.querySelectorAll('.ftsSl'))e.value=SETT.fts;for(const e of document.querySelectorAll('.dmgTgl'))e.checked=SETT.dmg}
 for(const e of document.querySelectorAll('.sfxSl'))e.addEventListener('input',()=>{SETT.sfx=e.value/100;try{localStorage.setItem('pn_sfx',String(SETT.sfx))}catch(x){}applySett()});

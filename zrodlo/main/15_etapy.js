@@ -35,13 +35,13 @@ function shopDesc(it){return it.id==='amulet'?(EN?'+20 maximum stamina (up to 18
 function renderShop(){$('shopCoins').textContent=S.coins;const box=$('shopCards');box.innerHTML='';
   SHOP.forEach((it,i)=>{const pr=price(it),maxed=shopMaxed(it),b=document.createElement('button');b.type='button';b.className='card';b.id='shop'+i;b.disabled=maxed||S.coins<pr;
     b.innerHTML=(EN?`<span class="ck">Item ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Sold out':pr+' coins'}</span><span class="cd">${shopDesc(it)}</span>`:`<span class="ck">Towar ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Wyprzedane':pr+' monet'}</span><span class="cd">${shopDesc(it)}</span>`);b.addEventListener('click',()=>buy(i));box.appendChild(b)})}
-function openShop(){resetInput();S.shop=true;pl.swingT=0;renderShop();$('shop').hidden=false;$('touch').hidden=true;setTimeout(()=>{const f=$('shopClose');f&&f.focus()},30)}
+function openShop(){resetInput();S.shop=true;play('shopIn',0);pl.swingT=0;renderShop();$('shop').hidden=false;$('touch').hidden=true;setTimeout(()=>{const f=$('shopClose');f&&f.focus()},30)}
 function buy(i){const it=SHOP[i];if(!it||!S.shop)return;const pr=price(it);if(S.coins<pr||shopMaxed(it)){play('empty',0);return}
-  S.coins-=pr;S.bought[it.id]=(S.bought[it.id]||0)+1;play('coin',0);
+  S.coins-=pr;S.bought[it.id]=(S.bought[it.id]||0)+1;uiSnd('buy');
   if(it.id==='brew')pl.hp=pl.max;else if(it.id==='heart'){pl.max+=25;heal(25)}else if(it.id==='whet')S.whet++;else if(it.id==='amulet'){pl.staMax=Math.min(180,pl.staMax+20);pl.sta=pl.staMax}
   else if(it.id==='scroll'){S.lvl++;S.need=xpNeed(S.lvl);S.pendLv++}else if(it.id==='magnet')S.magnet+=.4;
   renderShop()}
-function closeShop(){if(!S||!S.shop)return;S.shop=false;$('shop').hidden=true;$('touch').hidden=!coarse;const mdg=S.merchant&&S.merchant.dg;leaveMerchant();say(mdg?(EN?'Marga: "The stairs lead up. The night will wait for you."':'Marga: „Schody prowadzą na górę. Noc na ciebie poczeka”.'):(EN?'Marga: "Careful. The Order Collector has caught the scent of your gold."':'Marga: „Uważaj. Poborca Zakonu zwęszył twoje złoto”.'));if(S.pendLv>0)openLevelUp()}
+function closeShop(){if(!S||!S.shop)return;S.shop=false;uiSnd('back');$('shop').hidden=true;$('touch').hidden=!coarse;const mdg=S.merchant&&S.merchant.dg;leaveMerchant();say(mdg?(EN?'Marga: "The stairs lead up. The night will wait for you."':'Marga: „Schody prowadzą na górę. Noc na ciebie poczeka”.'):(EN?'Marga: "Careful. The Order Collector has caught the scent of your gold."':'Marga: „Uważaj. Poborca Zakonu zwęszył twoje złoto”.'));if(S.pendLv>0)openLevelUp()}
 
 // 9.11.2026: jedno losowe zdarzenie w środku nocy (nie w krypcie, nie przy bossach, nie w pierwszej nocy)
 const NEV={krew:{d:45,mob:1.4,coin:2},mgla:{d:40,fog:.022},lowy:{d:30,coins:40}};
@@ -94,4 +94,4 @@ function noteTick(){if(S.noteInit||S.train||S.dg||!W||!(CH>=1&&CH<=5))return;S.n
  for(let k=0;k<30;k++){const a=anchors[(Math.random()*anchors.length)|0],an=Math.random()*6.283,d=rnd(26,44),x=a[0]+Math.cos(an)*d,y=a[1]+Math.sin(an)*d*.8;if(x<20||y<20||x>WW-20||y>WH-20||boxSolid(x,y,5,4))continue;
   const m=new THREE.Mesh(new THREE.PlaneGeometry(.9,.9),new THREE.MeshBasicMaterial({map:noteTex(),transparent:true,depthWrite:false,fog:false}));m.position.set(x/TS,.55,y/TS);m.scale.set(1,SQ,1);m.renderOrder=2;scene.add(m);NOTE_MESH=m;S.note={...n,x,y,m};return}}
 function notePickTick(){const n=S.note;if(!n||n.got)return;n.m.position.y=.55+Math.sin(clock*2.4)*.08;const near=[pl,pl2].some(p=>p&&!p.dead&&Math.hypot(p.x-n.x,p.y-n.y)<20);if(!near)return;
- n.got=1;clearNoteMesh();(META.notes||(META.notes={}))[n.id]=1;try{saveMeta()}catch(e){}play('coin',0);padRumble(.25,.35,140);ftInfo(EN?'Note found':'Znaleziono zapiskę');say(EN?`You found a note: “${n.t}”. Read it in the Chronicle.`:`Znalazłeś zapiskę: „${n.t}”. Przeczytasz ją w Kronice.`)}
+ n.got=1;clearNoteMesh();(META.notes||(META.notes={}))[n.id]=1;try{saveMeta()}catch(e){}play('note',0);padRumble(.25,.35,140);ftInfo(EN?'Note found':'Znaleziono zapiskę');say(EN?`You found a note: “${n.t}”. Read it in the Chronicle.`:`Znalazłeś zapiskę: „${n.t}”. Przeczytasz ją w Kronice.`)}
