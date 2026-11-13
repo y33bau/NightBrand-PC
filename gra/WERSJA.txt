@@ -733,3 +733,4 @@ cache655 · runda: wybor rozdzialu tylko klikiem (usuniety focus-select, pad nie
 cache656 · runda: nowa fabula (PL+EN): wstep, opisy rozdzialow, Chojrak, bossowie, komunikaty, zapiski, postacie, zakonczenie; nie sprawdzono w grze
 cache657 · runda: intro nocy = wstep lokalizacji + opis rozdzialu (I-IV), V sam opis; nie sprawdzono w grze
 cache658 · runda: koksowniki nieruchome (stala klatka), opis opcji w przygotowaniu tylko po kliku; nie sprawdzono w grze
+cache659 · runda: koksowniki z nowych klatek p2_brazier (III, V), animacja przywrocona; nie sprawdzono w grze
