@@ -59,6 +59,8 @@ function padNav(id,dt,pr,g){
   if(pr(1)&&pcMenuBack&&pcMenuBack())return;
   // LB / RB: przełączanie zakładek w Opcjach i Instrukcji
   // LB / RB: górne zakładki; LT / RT: podzakładki (strony); prawa gałka: przewijanie opisów
+  // Back (View): z każdego menu poza grą otwiera Opcje; B wraca tam, skąd przyszliśmy
+  if(pr(8)&&['title','prep','kap','manual'].includes(id)){$('optsBtn').click();PAD.fresh=true;return}
   if(pr(4)||pr(5))padCycle(root,PADTABS,pr(5)?1:-1);
   if(pr(6)||pr(7))padCycle(root,PADSUBS,pr(7)?1:-1);
   padScroll(root,g.axes[3]||0,dt);

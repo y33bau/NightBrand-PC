@@ -236,5 +236,31 @@ ${Z} #prep .pc-prep-quick .pc-quick.is-on{border-color:#c8a05a!important;backgro
 ${Z} #prep .pc-prep-quick .pc-quick:hover{border-color:var(--nbs-hover,#d8b878)!important}`;
  document.head.append(st);
 }catch(e){quietErr('prepQuick',e)}})();
+// 13.11.2026: pauza bez przewijania. Audio: trzy karty w jednym rzędzie. Grafika: lewa kolumna Jasność + Płynność,
+// prawa Jakość + Zaawansowane (te w dwóch kolumnach), zamiast długiej listy pod spodem.
+(()=>{const Z='#orient'.repeat(140),st=document.createElement('style');st.id='pc-pause-fit';st.textContent=
+`${Z} #pause .nbp-audiogrid{max-width:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important}
+${Z} #pause .nbp-audiogrid>.nbp-ah{grid-column:1/-1!important}
+${Z} #pause .nbp-audiogrid>.nbp-audio{margin:0!important;min-width:0!important}
+${Z} #pause .nbp-pane:has(#qualityRow){grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-template-rows:auto auto!important;align-items:stretch!important;gap:calc(14 * min(.05981vw,.10627vh))!important}
+${Z} #pause .nbp-pane:has(#qualityRow)>section{margin:0!important;min-width:0!important}
+${Z} #pause .nbp-pane:has(#qualityRow)>section:nth-of-type(1){grid-column:1!important;grid-row:1!important}
+${Z} #pause .nbp-pane:has(#qualityRow)>section:nth-of-type(2){grid-column:2!important;grid-row:1!important}
+${Z} #pause .nbp-pane:has(#qualityRow)>section:nth-of-type(3){grid-column:3!important;grid-row:1!important}
+${Z} #pause .nbp-pane:has(#qualityRow)>section:nth-of-type(4){grid-column:1/-1!important;grid-row:2!important;columns:4!important;column-gap:calc(26 * min(.05981vw,.10627vh))!important;height:auto!important;max-height:none!important;overflow:visible!important}
+${Z} #pause .nbp-pane:has(#qualityRow)>section:nth-of-type(4)>h3{column-span:all!important;margin:0 0 .2em!important}
+${Z} #pause .nbp-pane:has(#qualityRow)>section:nth-of-type(4)>.qrow~p:not(:has(+.qrow)){font-size:.78em!important;line-height:1.25!important;margin:.1em 0 .25em!important}
+${Z} #pause .nbp-pane:has(#qualityRow)>section:nth-of-type(4)>p{break-after:avoid!important;max-width:none!important}
+${Z} #pause .nbp-pane:has(#qualityRow) .qrow{flex-wrap:wrap!important;width:auto!important;gap:4px!important}
+${Z} #pause .nbp-pane:has(#qualityRow)>section:nth-of-type(4)>.qrow{break-inside:avoid!important;margin-bottom:.8em!important}
+${Z} #pause .nbp-pane:has(#qualityRow) .qrow>button{padding:.26em .42em!important;font-size:.76em!important;min-width:0!important;min-height:0!important;line-height:1.15!important}
+${Z} #pause .nbp-pane:has(#qualityRow)>section{padding:calc(12 * min(.05981vw,.10627vh)) calc(16 * min(.05981vw,.10627vh))!important}
+${Z} #pause .nbp-pane:has(#qualityRow)>section>h3{margin:0 0 .35em!important}
+${Z} #pause .nbp-pane:has(#qualityRow) .figcap{margin:.15em 0 .3em!important;line-height:1.3!important}
+${Z} #pause .nbp-pane:has(#qualityRow)>section:nth-of-type(4)>.qrow{margin-bottom:.45em!important}
+${Z} #pause .nbp-pane:has(#qualityRow) .musrow{min-width:0!important}
+${Z} #pause .nbp-pane:has(#qualityRow) .musrow .rng{flex:1 1 auto!important;width:auto!important;min-width:0!important;max-width:100%!important}
+${Z} #pause .nbp-pane:has(#qualityRow) .musrow .rng input{width:100%!important}`;
+document.head.append(st)})();
 requestAnimationFrame(frame);
 })();
