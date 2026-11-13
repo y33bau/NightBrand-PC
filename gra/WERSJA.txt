@@ -740,3 +740,4 @@ cache662 · Pad w menu: checkboxy, Dane zapisu, LT/RT miedzy sekcjami, ramki zaz
 cache663 · Pad w menu: cichy tyk przy ruchu kursora, bez znaczkow LT/RT (nie sprawdzono: dzwiek, prawdziwy pad)
 cache664 · Przycisk Jeszcze raz: napis z klawiszem R lub Y wg sterowania, Y na padzie uruchamia ponowienie (nie sprawdzono: prawdziwy pad, wyglad u autora)
 cache665 · Dzwieki: tyk glosniejszy i lancuchowy, menu ui jako lancuch (ciszej), dzwon dla silnego ataku Dzwonnika, nowy dzwiek awansu (nie sprawdzono: sluch, pad)
+cache666 · Dzwieki: tyk glosniejszy i lancuchowy, menu jako lancuch, dzwon przy Ostatnim Tonie (co 3. parowanie Dzwonnika), nowy dzwiek awansu (nie sprawdzono: sluch, pad)
