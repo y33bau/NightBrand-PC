@@ -742,3 +742,4 @@ cache664 · Przycisk Jeszcze raz: napis z klawiszem R lub Y wg sterowania, Y na 
 cache665 · Dzwieki: tyk glosniejszy i lancuchowy, menu ui jako lancuch (ciszej), dzwon dla silnego ataku Dzwonnika, nowy dzwiek awansu (nie sprawdzono: sluch, pad)
 cache666 · Dzwieki: tyk glosniejszy i lancuchowy, menu jako lancuch, dzwon przy Ostatnim Tonie (co 3. parowanie Dzwonnika), nowy dzwiek awansu (nie sprawdzono: sluch, pad)
 cache667 · Wstep aktu I bez dublujacych akapitow (usunieto 2 parafrazy); nie sprawdzono: wyglad na ekranie
+cache668 · Wstepy aktow II-IV: tylko opis rozdzialu (bez wstepu lokalizacji); nie sprawdzono: wyglad na ekranie
