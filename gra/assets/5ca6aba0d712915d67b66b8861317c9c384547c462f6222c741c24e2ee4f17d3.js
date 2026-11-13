@@ -6527,19 +6527,26 @@ function padScroll(root,ry,dt){if(Math.abs(ry)<.3)return;const can=e=>e&&e.scrol
   if(t)t.scrollTop+=Math.sign(ry)*(Math.abs(ry)-.3)/.7*dt*1300}
 // 13.11.2026: kursor pada w menu (jak w konsolowych wersjach wielu gier): lewa gałka przesuwa sztylet, A klika to, co pod nim.
 // Element pod kursorem dostaje fokus pada (złote podświetlenie), więc A, legenda i znaczki działają bez zmian. Krzyżak nadal skacze po przyciskach.
-const PCUR={x:innerWidth/2,y:innerHeight/2,el:null,last:0,show:false};
+const PCUR={x:innerWidth/2,y:innerHeight/2,el:null,last:0,show:false,hov:null,src:'assets/ui/09ec512dc3c0387166c377318f86878d62e4c4b39f2d081fb32b9a8075d99898.png'};
 {const st=document.createElement('style');st.textContent="#padCur{position:fixed;left:0;top:0;z-index:2147483050;width:calc(40 * min(.05981vw,.10627vh));height:auto;pointer-events:none;filter:drop-shadow(0 2px 3px #000c);will-change:transform}#padCur[hidden],body:not(.padlast) #padCur{display:none}"+
  "body,body *{cursor:url(assets/ui/2dfdc2fc66033fbcd3f5390f5bc2a46db7430e13661669505a33f098dadb7e3d.png) 4 4,auto!important}body canvas#gl{cursor:url(assets/ui/2d0002a17b0013321dc41b3a13c1adb471c9bcfed6efbf666273a533187ed031.png) 55 58,crosshair!important}";document.head.append(st)}
-function padCurPark(){const a=document.activeElement;if(a&&a!==document.body){const r=a.getBoundingClientRect();PCUR.x=r.left+r.width/2;PCUR.y=r.top+r.height/2}if(PCUR.el)PCUR.el.hidden=true;PCUR.show=false}
-function padCurTick(root,g){const now=performance.now(),dt=Math.min(.05,(now-(PCUR.last||now))/1000);PCUR.last=now;if(PAD.grab||!g)return;
-  const [x,y]=padDz(g.axes[0]||0,g.axes[1]||0,.2);if(!x&&!y)return;
-  if(!PCUR.el){PCUR.el=document.createElement('img');PCUR.el.id='padCur';PCUR.el.src='assets/ui/09ec512dc3c0387166c377318f86878d62e4c4b39f2d081fb32b9a8075d99898.png';PCUR.el.alt='';PCUR.el.setAttribute('aria-hidden','true');document.body.append(PCUR.el)}
+function padCurPark(){const a=document.activeElement;if(a&&a!==document.body){const r=a.getBoundingClientRect();PCUR.x=r.left+r.width/2;PCUR.y=r.top+r.height/2}if(PCUR.el)PCUR.el.hidden=true;PCUR.show=false;padCurHover(null)}
+// 13.11.2026 (poprawka): kursor ma własną pętlę klatek (requestAnimationFrame), niezależną od pętli gry, więc porusza się płynnie.
+// Najechanie NIE przenosi fokusu ani nie wysyła zdarzeń najechania (w menu rozdziałów wybierały mapę); tylko złote podświetlenie.
+// A klika element pod kursorem (padNav). Suwak: A chwyta, gałka zmienia wartość.
+function padCurHover(b){if(b===PCUR.hov)return;PCUR.hov=b;padMark()}/* tylko podświetlenie: zdarzenia najechania wybierały mapę bez A */
+function padCurLoop(now){requestAnimationFrame(padCurLoop);const dt=Math.min(.05,(now-(PCUR.last||now))/1000);PCUR.last=now;
+  const mid=padPrio()&&!PADASK&&!PAD.grab?padMenuId():null;if(!mid||mid==='notice'||mid==='recovery')return;
+  let g=null;try{g=[...navigator.getGamepads()].find(p=>p&&p.connected)||null}catch(e){}if(!g)return;
+  const [x,y]=padDz(g.axes[0]||0,g.axes[1]||0,.2);if(!x&&!y)return;const root=$(mid);if(!root)return;
+  if(!PCUR.el){PCUR.el=document.createElement('img');PCUR.el.id='padCur';PCUR.el.src=PCUR.src;PCUR.el.alt='';PCUR.el.setAttribute('aria-hidden','true');document.body.append(PCUR.el)}
   if(!PCUR.show){PCUR.show=true;PCUR.el.hidden=false}
   const m=Math.hypot(x,y),sp=.36*(380+1500*m*m)*Math.max(.6,Math.min(innerWidth,innerHeight*16/9)/1600);
   PCUR.x=Math.max(2,Math.min(innerWidth-2,PCUR.x+x*sp*dt));PCUR.y=Math.max(2,Math.min(innerHeight-2,PCUR.y+y*sp*dt));
-  PCUR.el.style.transform='translate('+PCUR.x.toFixed(1)+'px,'+PCUR.y.toFixed(1)+'px) translate(-50%,-50%)';
-  const t=document.elementFromPoint(PCUR.x,PCUR.y),b=t&&t.closest('button,summary,input,label,.rng,[tabindex]:not([tabindex="-1"])');if(!b||!root.contains(b))return;
-  const f=b.matches('label,.rng')?(b.querySelector('input')||b):b;if(f!==document.activeElement&&!f.disabled){if(PCUR.hov&&PCUR.hov!==b)for(const n of ['pointerout','pointerleave','mouseout','mouseleave'])PCUR.hov.dispatchEvent(new MouseEvent(n,{bubbles:!n.endsWith('leave'),clientX:PCUR.x,clientY:PCUR.y}));PCUR.hov=b;for(const n of ['pointerover','pointerenter','mouseover','mouseenter'])b.dispatchEvent(new MouseEvent(n,{bubbles:!n.endsWith('enter'),clientX:PCUR.x,clientY:PCUR.y}));f.focus({preventScroll:true})}}/* zdarzenia najechania jak myszą: podglądy i opisy reagują tak samo */
+  PCUR.el.style.transform='translate3d('+PCUR.x.toFixed(1)+'px,'+PCUR.y.toFixed(1)+'px,0) translate(-50%,-50%)';
+  const t=document.elementFromPoint(PCUR.x,PCUR.y),b=t&&t.closest('button,summary,input,label,.rng,[tabindex]:not([tabindex="-1"])');
+  padCurHover(b&&root.contains(b)&&!b.disabled?b:null)}
+requestAnimationFrame(padCurLoop);
 // 13.11.2026: START na ekranie przygotowania pyta, czy rozpocząć noc (A/START — tak, B — nie, lewo/prawo — wybór)
 let PADASK=null;
 function padAskOpen(){if(PADASK)return;const T=(p,e)=>EN?e:p,d=document.createElement('div');d.id='padAsk';d.setAttribute('role','alertdialog');d.setAttribute('aria-modal','true');
@@ -6551,17 +6558,17 @@ function padAskClose(go){if(!PADASK)return;PADASK.el.remove();PADASK=null;if(go)
 function padNav(id,dt,pr,g){
   if(PADASK){if(id!=='prep'){padAskClose(false);return}if(pr(14)||pr(15)||pr(2)){PADASK.sel=PADASK.sel?0:1;PADASK.upd()}if(pr(9))padAskClose(true);else if(pr(0))padAskClose(PADASK.sel===0);else if(pr(1))padAskClose(false);return}
   const root=$(id);if(!root)return;const items=padItems(root);if(!items.length)return;
-  padCurTick(root,g);
   let i=items.indexOf(padKeep(id,items));if(i<0)return;
   const cur=items[i];
   let dir=0,hor=0;const lx=g.axes[0]||0,ly=g.axes[1]||0;
-  const sk=!!PAD.grab,up=PAD.cur[12]||sk&&ly<-.6,dn=PAD.cur[13]||sk&&ly>.6,lf=PAD.cur[14]||sk&&lx<-.6,rt=PAD.cur[15]||sk&&lx>.6;/* 13.11.2026: lewa gałka steruje kursorem (padCurTick); krzyżak skacze po przyciskach; gałka zmienia suwak tylko po chwyceniu A */
+  const sk=!!PAD.grab,up=PAD.cur[12]||sk&&ly<-.6,dn=PAD.cur[13]||sk&&ly>.6,lf=PAD.cur[14]||sk&&lx<-.6,rt=PAD.cur[15]||sk&&lx>.6;/* 13.11.2026: lewa gałka steruje kursorem (padCurLoop); krzyżak skacze po przyciskach; gałka zmienia suwak tylko po chwyceniu A */
   const d=up?-1:dn?1:lf?-2:rt?2:0;
   if(d===0){PAD.navD=0;PAD.nav=0}else{PAD.nav-=dt;if(d!==PAD.navD||PAD.nav<=0){PAD.nav=PAD.navD===d?.16:.4;PAD.navD=d;if(d===1||d===2)dir=1;else dir=-1;hor=Math.abs(d)===2}}
   const grabOff=()=>{PAD.grab=null;for(const e of document.querySelectorAll('.rng.grab'))e.classList.remove('grab')};
   if(PAD.grab&&PAD.grab!==cur)grabOff();
   if(dir){if(PAD.grab===cur||cur.type==='range'&&hor){if(hor){cur.value=String(Math.max(+cur.min,Math.min(+cur.max,+cur.value+dir*Math.max(5,+cur.step||0))));/* 13.11.2026: krok suwaka co najmniej jego step; przy step 10 krok 5 zaokrąglał się w górę i nie dało się zmniejszyć (Wielkość napisów) */cur.dispatchEvent(new Event('input',{bubbles:true}));cur.dispatchEvent(new Event('change',{bubbles:true}))}}
     else{navMove(id,d===1?'d':d===-1?'u':d===2?'r':'l',true);padCurPark()}}
+  if(pr(0)&&!PAD.grab&&PCUR.show&&PCUR.hov&&root.contains(PCUR.hov)){const h=PCUR.hov,ri=h.matches('input[type=range]')?h:h.querySelector?.('input[type=range]');if(ri){ri.focus({preventScroll:true});PAD.grab=ri;ri.parentNode?.classList.add('grab')}else{h.focus({preventScroll:true});h.click()}return}
   if(pr(0)){if(cur.type==='range'){if(PAD.grab===cur)grabOff();else{PAD.grab=cur;if(cur.parentNode)cur.parentNode.classList.add('grab')}}else cur.click()}
   if(pr(1)&&PAD.grab){grabOff();return}
   if(pr(1)&&pcMenuBack&&pcMenuBack())return;
@@ -6575,7 +6582,7 @@ function padNav(id,dt,pr,g){
   if(pr(1)){if(id==='pause')togglePause(false);else if(id==='shop')closeShop();else if(id==='opts')$('optsBack').click();else if(id==='manual')$('manBack').click();else if(id==='conf')$('confNo').click();else if(id==='prep')$('prepBack').click();else if(id==='kap')closeKap();else if(id==='end')$('menuBtn').click();else if(id==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home'))$('title').querySelector('.pc-home-button')?.click()}
   if(pr(9)){if(id==='prep'){const b=$('prepGo');if(b&&!b.disabled)padAskOpen()}else if(id==='shop')closeShop();else if(id==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home')){const b=$('premiumPrepare');if(b&&b.offsetParent!==null&&!b.disabled)b.click()}}
 }
-function padMark(){for(const e of document.querySelectorAll('.pf'))e.classList.remove('pf');if(!PAD.menu||!document.body.classList.contains('padnav'))return;const a=document.activeElement,root=$(PAD.menu);if(!a||!root||!root.contains(a))return;const t=a.type==='range'?a.parentNode:a.type==='checkbox'?(a.closest('label')||a):a;t.classList.add('pf')}
+function padMark(){for(const e of document.querySelectorAll('.pf'))e.classList.remove('pf');if(!PAD.menu||!document.body.classList.contains('padnav'))return;if(PCUR.show){const h=PCUR.hov;if(h){const ri=h.matches('input[type=range]')?h:null;(ri?ri.parentNode:h.matches('input[type=checkbox]')?(h.closest('label')||h):h).classList.add('pf')}return}const a=document.activeElement,root=$(PAD.menu);if(!a||!root||!root.contains(a))return;const t=a.type==='range'?a.parentNode:a.type==='checkbox'?(a.closest('label')||a):a;t.classList.add('pf')}
 let INPUT_LAST='';window.addEventListener('keydown',()=>{INPUT_LAST='k';document.body.classList.remove('padlast')},true);for(const ev of ['pointerdown','mousedown','touchstart'])window.addEventListener(ev,()=>{INPUT_LAST='m';document.body.classList.remove('padlast')},true);
 function padTick(dt){try{padTick0(dt)}finally{MPCLK=false}}
 function padTick0(dt){
