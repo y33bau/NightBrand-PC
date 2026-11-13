@@ -759,3 +759,4 @@ cache681 · Kat: mniejsze efekty ciosow (silny x0.45, lekki x0.64) (nie sprawdzo
 cache682 · Kat: nowe, malowane efekty atakow (kat_fx) (nie sprawdzono: wyglad w grze, pad, itch.io)
 cache683 · Zabojczyni: nowe arkusze lekkich atakow (db), silnych/gora (dc) i ciosow 4-5 (atk45) (nie sprawdzono: wyglad w grze, pad, itch.io)
 cache684 · Zabojczyni: nowe arkusze (zip Remake: d, db, dc, dd, def, death, rend, fan, whirl, atk45); nie sprawdzono w grze, pad, dzwiek, FPS
+cache685 · Zabojczyni: usuniete blekitne refleksy w arkuszach, mocny atak szybszy x1.4 i rowniejszy podzial klatek; nie sprawdzono w grze, pad, dzwiek, FPS

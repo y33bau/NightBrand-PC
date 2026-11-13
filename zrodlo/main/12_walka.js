@@ -252,7 +252,7 @@ const lastCombo=()=>S.zab?4:2;
 const finMul=e=>S.zab&&S.pk.zFin?(e.hp<e.max*.35?1.5:.85):1;
 const skDmg=b=>b*(1+.07*(S.lvl-1))*skillMul()*might();
 // tempo ataków: wściekłość Rycerza, +30% lekkich (Zabójczyni), premia serii, Ostatni Taniec, szybka kontra po parowaniu
-function atkRate(a){let r=(S.pk.fury>1&&pl.hp<pl.max*.35?S.pk.fury:1)*(S.pk.aspd||1);if(S.zab){if(a.kind==='l')r*=S.pk.zAspd||1;r*=1+(S.zCombo||0);if(S.zDance>0)r*=1.2;if(pl.riposte>0&&a.kind==='l')r*=1.35}return r}
+function atkRate(a){let r=(S.pk.fury>1&&pl.hp<pl.max*.35?S.pk.fury:1)*(S.pk.aspd||1);if(S.zab){if(a.kind==='l')r*=S.pk.zAspd||1;else r*=1.4;r*=1+(S.zCombo||0);if(S.zDance>0)r*=1.2;if(pl.riposte>0&&a.kind==='l')r*=1.35}return r}
 function zabTick(dt){
  if(S.zT>0){S.zT-=dt;if(S.zT<=0){S.zCombo=0;S.zHits=0}}
  if((S.zCombo||0)>=S.pk.zCap-1e-6){S.zFull+=dt;if(S.zFull>S.zFullBest)S.zFullBest=S.zFull}else S.zFull=0;
