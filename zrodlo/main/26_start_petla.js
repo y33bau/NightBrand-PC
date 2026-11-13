@@ -283,7 +283,7 @@ function refresh(){
  for(let i=1;i<=5;i++){$('start'+i).style.backgroundImage=url('rozdzial-'+i+'-mini');$('start'+i).classList.toggle('premium-selected',chosen===i);$('start'+i).dataset.roman=CHR[i-1];$('start'+i).dataset.status=chLocked(i)?(EN?'Complete Act ':'Ukończ rozdział ')+CHR[i-2]:SETT.save['s'+i]?.win?(EN?'Completed':'Ukończony'):SETT.save['s'+i]?(EN?'Not completed':'Nieukończony'):'';$('start'+i).setAttribute('aria-label',CHN[i-1]+($('start'+i).dataset.status?' — '+$('start'+i).dataset.status:''))}
  go.disabled=$('start'+chosen).disabled;
 }
-for(let i=1;i<=5;i++){const b=$('start'+i);b.addEventListener('focus',()=>{chosen=i;refresh()});b.addEventListener('pointerenter',e=>{if(e.isTrusted)return;chosen=i;refresh()});b.addEventListener('click',()=>{chosen=i;refresh()})}
+for(let i=1;i<=5;i++){const b=$('start'+i);/* 13.11.2026: samo zaznaczenie (pad, klawiatura) nie wybiera rozdziału; wybiera klik / A */b.addEventListener('nb-select',()=>{chosen=i;refresh()});b.addEventListener('pointerenter',e=>{if(e.isTrusted)return;chosen=i;refresh()});b.addEventListener('click',()=>{chosen=i;refresh()})}
 go.addEventListener('click',()=>openPrep(chosen));journey.addEventListener('click',refresh);
 new MutationObserver(refresh).observe(title,{attributes:true,attributeFilter:['hidden']});
 new MutationObserver(()=>{if(!title.hidden)refresh()}).observe($('chN'),{childList:true,subtree:true,characterData:true});

@@ -730,3 +730,4 @@ cache652 · Pauza: Audio trzy karty w rzedzie, Grafika trzy panele + Zaawansowan
 cache653 · Audio (Opcje i pauza) bez naglowka USTAWIENIA DZWIEKU / AUDIO; znaczek Back (View) przy kole zebatym na wyborze rozdzialu, gdy gra sie padem (nie sprawdzono: fizyczny pad, test dymny I-V)
 cache654 · Wybor rozdzialu: Tryb gry jako przelacznik Fabularny | Arcade z podswietlona aktywna opcja (wczesniej nazwa trybu znikala po przelaczeniu) (nie sprawdzono: fizyczny pad, test dymny I-V)
 cache655 · Poprawki z recenzji Gemini: wrogowie w trybie 2 graczy ida do najblizszego zywego gracza, odnowienia Iwo/Mileny dla gracza 2, Cumlin bez ogluszenia po zablokowaniu czerwonego ciosu, klucze shaderow wody/lawy/ksiezyca, usunieta martwa lista S.golems (nie sprawdzono: gra we dwoje, walka z Cumlinem, wyglad wody/lawy)
+cache656 · Wybor rozdzialu: zaznaczenie padem/klawiatura nie wybiera rozdzialu, wybiera dopiero klik/A (nie sprawdzono: fizyczny pad)

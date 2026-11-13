@@ -49,7 +49,7 @@
  journey2();
  // „Tryb gry" jest przelacznikiem (dotad zmiana tylko w menu glownym).
  {const info=title.querySelector('.pc-journey-mode');if(info){const b=mk('button','pc-journey-mode nb2-mode');b.type='button';while(info.firstChild)b.append(info.firstChild);b.append(mk('span','nb2-mode-hint',T('zmień','change')));info.replaceWith(b);
-   b.addEventListener('click',()=>{(STORYMODE?$('sArc'):$('sFab'))?.click();const sel=title.querySelector('.premium-selected'),ch=Number(sel?.id.slice(5))||1;if(chLocked(ch))$('start1')?.focus();setTimeout(()=>{journey2();b.focus()},0)})}}
+   b.addEventListener('click',()=>{(STORYMODE?$('sArc'):$('sFab'))?.click();const sel=title.querySelector('.premium-selected'),ch=Number(sel?.id.slice(5))||1;if(chLocked(ch)){$('start1')?.focus();$('start1')?.dispatchEvent(new Event('nb-select'))}setTimeout(()=>{journey2();b.focus()},0)})}}
 
  // ---------- Menu glowne ----------
  {const rail=title.querySelector('.premium-rail'),nav=title.querySelector('.premium-nav');

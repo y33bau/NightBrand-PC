@@ -7015,7 +7015,7 @@ function refresh(){
  for(let i=1;i<=5;i++){$('start'+i).style.backgroundImage=url('rozdzial-'+i+'-mini');$('start'+i).classList.toggle('premium-selected',chosen===i);$('start'+i).dataset.roman=CHR[i-1];$('start'+i).dataset.status=chLocked(i)?(EN?'Complete Act ':'Ukończ rozdział ')+CHR[i-2]:SETT.save['s'+i]?.win?(EN?'Completed':'Ukończony'):SETT.save['s'+i]?(EN?'Not completed':'Nieukończony'):'';$('start'+i).setAttribute('aria-label',CHN[i-1]+($('start'+i).dataset.status?' — '+$('start'+i).dataset.status:''))}
  go.disabled=$('start'+chosen).disabled;
 }
-for(let i=1;i<=5;i++){const b=$('start'+i);b.addEventListener('focus',()=>{chosen=i;refresh()});b.addEventListener('pointerenter',e=>{if(e.isTrusted)return;chosen=i;refresh()});b.addEventListener('click',()=>{chosen=i;refresh()})}
+for(let i=1;i<=5;i++){const b=$('start'+i);/* 13.11.2026: samo zaznaczenie (pad, klawiatura) nie wybiera rozdziału; wybiera klik / A */b.addEventListener('nb-select',()=>{chosen=i;refresh()});b.addEventListener('pointerenter',e=>{if(e.isTrusted)return;chosen=i;refresh()});b.addEventListener('click',()=>{chosen=i;refresh()})}
 go.addEventListener('click',()=>openPrep(chosen));journey.addEventListener('click',refresh);
 new MutationObserver(refresh).observe(title,{attributes:true,attributeFilter:['hidden']});
 new MutationObserver(()=>{if(!title.hidden)refresh()}).observe($('chN'),{childList:true,subtree:true,characterData:true});
@@ -9328,7 +9328,7 @@ setInterval(()=>{const p=document.getElementById('pause');if(!p||p.hidden||p.off
  journey2();
  // „Tryb gry" jest przelacznikiem (dotad zmiana tylko w menu glownym).
  {const info=title.querySelector('.pc-journey-mode');if(info){const b=mk('button','pc-journey-mode nb2-mode');b.type='button';while(info.firstChild)b.append(info.firstChild);b.append(mk('span','nb2-mode-hint',T('zmień','change')));info.replaceWith(b);
-   b.addEventListener('click',()=>{(STORYMODE?$('sArc'):$('sFab'))?.click();const sel=title.querySelector('.premium-selected'),ch=Number(sel?.id.slice(5))||1;if(chLocked(ch))$('start1')?.focus();setTimeout(()=>{journey2();b.focus()},0)})}}
+   b.addEventListener('click',()=>{(STORYMODE?$('sArc'):$('sFab'))?.click();const sel=title.querySelector('.premium-selected'),ch=Number(sel?.id.slice(5))||1;if(chLocked(ch)){$('start1')?.focus();$('start1')?.dispatchEvent(new Event('nb-select'))}setTimeout(()=>{journey2();b.focus()},0)})}}
 
  // ---------- Menu glowne ----------
  {const rail=title.querySelector('.premium-rail'),nav=title.querySelector('.premium-nav');
