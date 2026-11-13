@@ -741,3 +741,4 @@ cache663 · Pad w menu: cichy tyk przy ruchu kursora, bez znaczkow LT/RT (nie sp
 cache664 · Przycisk Jeszcze raz: napis z klawiszem R lub Y wg sterowania, Y na padzie uruchamia ponowienie (nie sprawdzono: prawdziwy pad, wyglad u autora)
 cache665 · Dzwieki: tyk glosniejszy i lancuchowy, menu ui jako lancuch (ciszej), dzwon dla silnego ataku Dzwonnika, nowy dzwiek awansu (nie sprawdzono: sluch, pad)
 cache666 · Dzwieki: tyk glosniejszy i lancuchowy, menu jako lancuch, dzwon przy Ostatnim Tonie (co 3. parowanie Dzwonnika), nowy dzwiek awansu (nie sprawdzono: sluch, pad)
+cache667 · Wstep aktu I bez dublujacych akapitow (usunieto 2 parafrazy); nie sprawdzono: wyglad na ekranie
