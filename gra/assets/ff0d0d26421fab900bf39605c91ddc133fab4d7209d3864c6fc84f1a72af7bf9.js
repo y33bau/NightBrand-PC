@@ -6439,9 +6439,31 @@ function navMove(id,d){const root=$(id);if(!root)return false;const items=[...ro
   if(!best){const i=items.indexOf(cur),step=d==='d'||d==='r'?1:-1;best=items[(i+step+items.length)%items.length]}
   best.focus({preventScroll:true});try{best.scrollIntoView({block:'nearest'})}catch(e){}return true}
 addEventListener('keydown',e=>{const m={arrowdown:'d',arrowup:'u',arrowleft:'l',arrowright:'r'}[e.key.toLowerCase()];if(!m||recoveryActive||e.target.closest?.('[role=radiogroup]')&&['l','r'].includes(m))return;const id=padMenuId();if(!id||id==='notice')return;const ae=document.activeElement;if(ae&&ae.type==='range'&&(m==='l'||m==='r'))return;if(ae&&(ae.tagName==='SELECT'||ae.tagName==='TEXTAREA'||ae.type==='text'))return;if(navMove(id,m)){e.preventDefault();e.stopImmediatePropagation()}},true);
+// 13.11.2026 (runda pad-menu-2): nawigacja padem wg Xbox Accessibility Guideline 112.
+// Fokus nie gubi się: gdy menu przerysuje przyciski albo mysz zdejmie fokus, wraca na ten sam
+// element (lub jego odpowiednik po id/zakładce/tekście, albo najbliższy na ekranie), a nie na pierwszy.
+const PADTABS='.nbp-nav>.nbp-tab,.pc-prep-tabs>.pc-prep-tab,#kapTabs>.tab,.tabs>.tab';
+const PADSUBS='.subtabs>.stab,#pauseKeys .stab';
+function padItems(root){return [...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null)}
+function padSig(e){if(!e)return '';const d=e.dataset||{};return e.id||['nbp','panel','tab','sub','ps','hero','m'].map(k=>d[k]?k+':'+d[k]:'').join('')||(e.className+'|'+(e.textContent||'').trim().slice(0,40))}
+function padKeep(id,items){const ae=document.activeElement;
+  if(items.includes(ae)){const r=ae.getBoundingClientRect();PAD.keep={id,el:ae,sig:padSig(ae),x:r.left+r.width/2,y:r.top+r.height/2};return ae}
+  const K=PAD.keep&&PAD.keep.id===id?PAD.keep:null;let f=null;
+  if(K){f=items.includes(K.el)?K.el:items.find(e=>padSig(e)===K.sig)||null;
+    if(!f){let bs=1e9;for(const e of items){const r=e.getBoundingClientRect(),d=Math.hypot(r.left+r.width/2-K.x,r.top+r.height/2-K.y);if(d<bs){bs=d;f=e}}}}
+  if(!f){const s1=id==='title'?$('start1'):id==='lvl'?$('card0'):null;f=s1&&items.includes(s1)?s1:items[0]}
+  if(f){f.focus({preventScroll:true});const r=f.getBoundingClientRect();PAD.keep={id,el:f,sig:padSig(f),x:r.left+r.width/2,y:r.top+r.height/2}}return f}
+function padCycle(root,sel,step){const tb=[...root.querySelectorAll(sel)].filter(b=>!b.disabled&&!b.hidden&&b.offsetParent!==null);if(tb.length<2)return false;
+  const on=b=>b.classList.contains('on')||b.getAttribute('aria-pressed')==='true'||b.getAttribute('aria-selected')==='true';
+  let ci=tb.findIndex(on);if(ci<0)ci=Math.max(0,tb.indexOf(document.activeElement));const nx=tb[(ci+step+tb.length)%tb.length];
+  nx.click();play('pick',0);setTimeout(()=>{const n2=[...root.querySelectorAll(sel)].find(b=>b.offsetParent!==null&&padSig(b)===padSig(nx))||nx;n2.focus({preventScroll:true})},20);return true}
+function padScroll(root,ry,dt){if(Math.abs(ry)<.3)return;const can=e=>e&&e.scrollHeight>e.clientHeight+4&&/(auto|scroll)/.test(getComputedStyle(e).overflowY);
+  let t=[...root.querySelectorAll('.pc-perk-detail,#kapDet,.m2k-det,.nbp-panel,#lvl .level-build,.pane:not([hidden]),.mpane:not([hidden])')].find(e=>e.offsetParent!==null&&can(e));
+  if(!t){let e=document.activeElement;while(e&&e!==document.body&&!can(e))e=e.parentElement;if(can(e))t=e}if(!t&&can(root))t=root;
+  if(t)t.scrollTop+=Math.sign(ry)*(Math.abs(ry)-.3)/.7*dt*1300}
 function padNav(id,dt,pr,g){
   const root=$(id);if(!root)return;const items=[...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null);if(!items.length)return;
-  const ae=document.activeElement;let i=items.indexOf(ae);if(i<0){const s1=id==='title'?items.indexOf($('start1')):-1;i=s1>=0?s1:0;items[i].focus()}
+  let i=items.indexOf(padKeep(id,items));if(i<0)return;
   const cur=items[i];
   let dir=0,hor=0;const lx=g.axes[0]||0,ly=g.axes[1]||0;
   const up=PAD.cur[12]||ly<-.6,dn=PAD.cur[13]||ly>.6,lf=PAD.cur[14]||lx<-.6,rt=PAD.cur[15]||lx>.6;
@@ -6449,13 +6471,16 @@ function padNav(id,dt,pr,g){
   if(d===0){PAD.navD=0;PAD.nav=0}else{PAD.nav-=dt;if(d!==PAD.navD||PAD.nav<=0){PAD.nav=PAD.navD===d?.16:.4;PAD.navD=d;if(d===1||d===2)dir=1;else dir=-1;hor=Math.abs(d)===2}}
   const grabOff=()=>{PAD.grab=null;for(const e of document.querySelectorAll('.rng.grab'))e.classList.remove('grab')};
   if(PAD.grab&&PAD.grab!==cur)grabOff();
-  if(dir){if(PAD.grab===cur){if(hor){cur.value=String(Math.max(+cur.min,Math.min(+cur.max,+cur.value+dir*5)));cur.dispatchEvent(new Event('input',{bubbles:true}));cur.dispatchEvent(new Event('change',{bubbles:true}))}}
+  if(dir){if(PAD.grab===cur||cur.type==='range'&&hor){if(hor){cur.value=String(Math.max(+cur.min,Math.min(+cur.max,+cur.value+dir*5)));cur.dispatchEvent(new Event('input',{bubbles:true}));cur.dispatchEvent(new Event('change',{bubbles:true}))}}
     else navMove(id,d===1?'d':d===-1?'u':d===2?'r':'l')}
   if(pr(0)){if(cur.type==='range'){if(PAD.grab===cur)grabOff();else{PAD.grab=cur;if(cur.parentNode)cur.parentNode.classList.add('grab')}}else cur.click()}
   if(pr(1)&&PAD.grab){grabOff();return}
   if(pr(1)&&pcMenuBack&&pcMenuBack())return;
   // LB / RB: przełączanie zakładek w Opcjach i Instrukcji
-  if((pr(4)||pr(5))&&(id==='opts'||id==='manual'||id==='kap')){const tb=[...root.querySelectorAll('.tabs .tab')],ci=tb.findIndex(b=>b.classList.contains('on'));if(tb.length){const nx=tb[(ci+(pr(5)?1:-1)+tb.length)%tb.length];nx.click();nx.focus()}}
+  // LB / RB: górne zakładki; LT / RT: podzakładki (strony); prawa gałka: przewijanie opisów
+  if(pr(4)||pr(5))padCycle(root,PADTABS,pr(5)?1:-1);
+  if(pr(6)||pr(7))padCycle(root,PADSUBS,pr(7)?1:-1);
+  padScroll(root,g.axes[3]||0,dt);
   if(pr(1)){if(id==='pause')togglePause(false);else if(id==='shop')closeShop();else if(id==='opts')$('optsBack').click();else if(id==='manual')$('manBack').click();else if(id==='conf')$('confNo').click();else if(id==='prep')$('prepBack').click();else if(id==='kap')closeKap();else if(id==='end')$('menuBtn').click();else if(id==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home'))$('title').querySelector('.pc-home-button')?.click()}
   if(pr(9)){if(id==='prep')$('prepGo').click();else if(id==='shop')closeShop()}
 }
@@ -6468,7 +6493,7 @@ function padTick0(dt){
   {const mt=S?S.mpTurn||0:0;if(mt!==PAD.mpT){PAD.mpT=mt;PAD.lock=.4;PAD.fresh=true}}const sw=!!(g2&&pl2&&S&&S.choosing&&S.mpTurn===2);if(sw){const tg=g;g=g2;g2=tg}MPCLK=sw;pad2Tick(g2);PAD.prev=PAD.cur;PAD.g=g;
   {const pp=!!g;if(pp!==PAD.pp){PAD.pp=pp;padPrioSet(pp)}}
   if(!g){PAD.cur=[];PAD.x=PAD.y=0;PAD.atk=PAD.blk=PAD.skillHeld=PAD.skillConsumed=false;return}
-  PAD.cur=g.buttons.map(b=>!!b&&(b.pressed||b.value>.5));if(PAD.cur.some(Boolean)){INPUT_LAST='p';document.body.classList.add('padlast')}
+  PAD.cur=g.buttons.map(b=>!!b&&(b.pressed||b.value>.5));if(PAD.cur.some(Boolean)){INPUT_LAST='p';document.body.classList.add('padlast','padnav')}
   // krzyżak w nietypowych padach: oś hat (axes[9]) albo osie 6/7
   if(g.mapping!=='standard'||g.buttons.length<16){const ax=g.axes||[];let u=0,d=0,l=0,r=0;
     if(ax.length>9&&Math.abs(ax[9])<=1.01){const v=Math.round((ax[9]+1)*3.5);u=v===0||v===1||v===7;r=v===1||v===2||v===3;d=v===3||v===4||v===5;l=v===5||v===6||v===7}
@@ -6477,14 +6502,14 @@ function padTick0(dt){
   const pr=i=>PAD.cur[i]&&!PAD.prev[i];
   if(!PAD.on&&PAD.cur.some(Boolean)){PAD.on=true;document.body.classList.add('padnav');const k=$('keysPad');if(k)k.hidden=false}
   if(PAD.cur.some(Boolean)){try{if(AC&&AC.state==='suspended'&&!(S&&S.paused))acResume()}catch(e){}}
-  const mid=padMenuId();setTimeout(padMark,0);if(mid!==PAD.menu){PAD.menu=mid;PAD.lock=.4;PAD.fresh=true;PAD.grab=null;for(const e of document.querySelectorAll('.rng.grab'))e.classList.remove('grab')}if(PAD.lock>0)PAD.lock-=dt;
+  const mid=padMenuId();setTimeout(padMark,0);padHintTick(mid,dt);if(mid!==PAD.menu){PAD.menu=mid;PAD.lock=.4;PAD.fresh=true;PAD.grab=null;for(const e of document.querySelectorAll('.rng.grab'))e.classList.remove('grab')}if(PAD.lock>0)PAD.lock-=dt;
   // wstęp fabularny
   if(S&&S.intro){PAD.x=PAD.y=0;PAD.atk=PAD.blk=false;if(INTRO)INTRO.pad=!!(PAD.cur[0]||PAD.cur[1]||PAD.cur[2]);if(pr(9)&&INTRO)introEnd();return}
   // menu / sklep / wybór umiejętności / koniec
   if(mid){PAD.x=PAD.y=0;PAD.atk=PAD.blk=false;
     if(PAD.lock>0)return;
-    if(PAD.fresh){PAD.fresh=false;const f=(mid==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home')?$('title').querySelector('.premium-selected:not(:disabled)'):null)||(mid==='title'&&$('start1')&&$('start1').offsetParent!==null&&!$('start1').disabled?$('start1'):null)||[...$(mid).querySelectorAll('button,input')].filter(e=>!e.disabled&&e.offsetParent!==null)[0];if(f)f.focus();return}
-    if(mid==='lvl'){const lv=$('lvl'),ready=performance.now()>=levelReadyAt;if(!lv.contains(document.activeElement)){const f=$('card0')||lv.querySelector('button:not(:disabled)');if(f)f.focus({preventScroll:true})}if(!ready&&(pr(0)||pr(3))){play('empty',0);return}if(pr(3)){rerollLevelCards();return}}
+    if(PAD.fresh){PAD.fresh=false;PAD.keep=null;const ae0=document.activeElement,keep0=$(mid).contains(ae0)&&ae0!==$(mid)&&!ae0.disabled&&ae0.offsetParent!==null?ae0:null;const f=keep0||(mid==='lvl'&&$('card0')&&!$('card0').disabled?$('card0'):null)||(mid==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home')?$('title').querySelector('.premium-selected:not(:disabled)'):null)||(mid==='title'&&$('start1')&&$('start1').offsetParent!==null&&!$('start1').disabled?$('start1'):null)||[...$(mid).querySelectorAll('button,input')].filter(e=>!e.disabled&&e.offsetParent!==null)[0];if(f)f.focus();return}
+    if(mid==='lvl'){const ready=performance.now()>=levelReadyAt;if(pr(3)){const d=document.querySelector('#lvl .level-build');if(d)d.open=!d.open;return}if(!ready&&(pr(0)||pr(2))){play('empty',0);return}if(pr(2)){rerollLevelCards();return}}
     padNav(mid,dt,pr,g);if(pr(9)&&mid==='pause')togglePause(false);return}
   if(!S||S.phase!=='play'){PAD.x=PAD.y=0;PAD.atk=PAD.blk=false;return}
   if(pr(9)){togglePause(true);return}
@@ -6507,6 +6532,20 @@ function padPrioSet(on){document.documentElement.classList.toggle('padprio',!!on
 function padHoverRewrite(){const P=':where(:root:not(.padprio)) ';const fix=rules=>{for(const r of rules){try{if(!r.selectorText){if(r.cssRules)fix(r.cssRules);continue}const t=r.selectorText;if(!t.includes(':hover')||t.includes('.padprio'))continue;const a=[];let d=0,c='';for(const ch of t){if(ch==='('||ch==='[')d++;else if(ch===')'||ch===']')d--;if(ch===','&&d===0){a.push(c);c=''}else c+=ch}a.push(c);r.selectorText=a.map(x=>x.includes(':hover')?P+x.trim():x.trim()).join(',')}catch(e){}}};for(const ss of document.styleSheets){try{fix(ss.cssRules)}catch(e){}}}
 addEventListener('gamepadconnected',()=>padPrioSet(true));addEventListener('gamepaddisconnected',()=>setTimeout(()=>{try{padPrioSet([...navigator.getGamepads()].some(p=>p&&p.connected))}catch(e){padPrioSet(false)}},50));
 addEventListener('mousedown',()=>{if(!padPrio())document.body.classList.remove('padnav')},true);
+// kursor myszy chowa się, gdy grasz padem; wraca, gdy ruszysz myszą
+{let mx=0;addEventListener('mousemove',e=>{mx+=Math.abs(e.movementX||0)+Math.abs(e.movementY||0);if(mx>12){mx=0;document.body.classList.remove('padlast')}},{passive:true});setInterval(()=>{mx=0},400)}
+// podpowiedzi przycisków pada w menu (lewy dolny róg, jak w grach na konsoli)
+let PADHINT=null,PADHT=0;
+function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.25;
+  const show=!!mid&&mid!=='notice'&&mid!=='recovery'&&padPrio()&&document.body.classList.contains('padlast');
+  if(!PADHINT){if(!show)return;PADHINT=document.createElement('div');PADHINT.id='padHints';PADHINT.setAttribute('aria-hidden','true');document.body.append(PADHINT);
+    const st=document.createElement('style');st.textContent="#padHints{position:fixed;left:50%;transform:translateX(-50%);bottom:3px;z-index:2147483000;display:flex;gap:16px;align-items:center;padding:2px 12px 2px 4px;border-radius:13px;background:rgba(12,9,10,.78);border:1px solid rgba(200,160,90,.35);font:500 13px/1 Cinzel,Georgia,serif;letter-spacing:.04em;color:#e8dcc4;pointer-events:none;white-space:nowrap}#padHints[hidden]{display:none}#padHints span{display:inline-flex;align-items:center;gap:6px}#padHints b{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 4px;border-radius:10px;background:#2a2124;border:1px solid #c8a05a;color:#f1d79a;font:700 11px/1 Georgia,serif;letter-spacing:0}html.padprio body.padlast,html.padprio body.padlast *{cursor:none!important}";document.head.append(st)}
+  PADHINT.hidden=!show;if(!show)return;
+  const root=$(mid),T2=(a,b)=>EN?b:a,H=[];const has=sel=>root&&[...root.querySelectorAll(sel)].filter(b=>!b.hidden&&!b.disabled&&b.offsetParent!==null).length>1;
+  if(mid==='lvl'){H.push(['A',T2('Wybierz','Select')],['X',T2('Przerzuć','Reroll')],['Y',T2('Szczegóły','Details')])}
+  else{H.push(['A',T2('Wybierz','Select')]);if(!(mid==='title'&&$('title').classList.contains('pc-home')))H.push(['B',T2('Wróć','Back')])}
+  if(has(PADTABS))H.push(['LB RB',T2('Zakładki','Tabs')]);if(has(PADSUBS))H.push(['LT RT',T2('Strony','Pages')]);if(mid==='pause')H.push(['☰',T2('Wznów','Resume')]);
+  const html=H.map(([k,t])=>'<span>'+k.split(' ').map(x=>'<b>'+x+'</b>').join('')+t+'</span>').join('');if(PADHINT.innerHTML!==html)PADHINT.innerHTML=html}
 // ---- krótki samouczek: podpowiedzi w pierwszej nocy rozdziału I, tylko raz ----
 function tutorialKey(){return 'pn_tut_s'}
 function tutorialDone(){try{return localStorage.getItem(tutorialKey())==='1'}catch(e){return false}}
@@ -7773,7 +7812,7 @@ ${Z} .nbo-note{margin:0!important;text-align:center!important;color:#8c7f6c!impo
  }
  function sync(){for(const [id] of panels){const list=$(id);if(list&&!observed.has(list)){new MutationObserver(sync).observe(list,{childList:true});observed.add(list)}const box=list?.closest('.prepgrid>.prepbox');if(box)box.classList.toggle('pc-panel-hidden',id!==active)}for(const b of tabs.children){b.hidden=!$(b.dataset.panel);b.setAttribute('aria-pressed',String(b.dataset.panel===active))}const list=$(active);describe(list?.querySelector('.opt.on')||list?.querySelector('.opt'));}
  prep.addEventListener('focusin',e=>{const b=e.target.closest('.opt');if(b&&b.closest('#prepPerks,#prepCh,#prepCurseL'))describe(b)});
- prep.addEventListener('pointerover',e=>{const b=e.target.closest('.opt');if(b&&b.closest('#prepPerks,#prepCh,#prepCurseL'))describe(b)});
+ prep.addEventListener('pointerover',e=>{if(document.documentElement.classList.contains('padprio'))return;const b=e.target.closest('.opt');if(b&&b.closest('#prepPerks,#prepCh,#prepCurseL'))describe(b)});
  // Renderers replace children, not list containers. Observe those containers only.
  new MutationObserver(sync).observe(grid,{childList:true});sync();
 
