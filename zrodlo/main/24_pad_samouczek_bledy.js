@@ -113,6 +113,7 @@ function padTick0(dt){
   if(mid){PAD.x=PAD.y=0;PAD.atk=PAD.blk=false;
     if(PAD.lock>0)return;
     if(PAD.fresh){PAD.fresh=false;PAD.keep=null;const ae0=document.activeElement,keep0=$(mid).contains(ae0)&&ae0!==$(mid)&&!ae0.disabled&&ae0.offsetParent!==null&&!padIsTab(ae0)?ae0:null;const f=keep0||(mid==='lvl'&&$('card0')&&!$('card0').disabled?$('card0'):null)||(mid==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home')?$('title').querySelector('.premium-selected:not(:disabled)'):null)||(mid==='title'&&$('start1')&&$('start1').offsetParent!==null&&!$('start1').disabled?$('start1'):null)||padFirstContent($(mid),padItems($(mid)));if(f)f.focus({preventScroll:true});return}
+    if(mid==='end'&&pr(3)){const rb=$('replayBtn');if(rb&&!rb.hidden&&!rb.disabled){rb.click();return}}
     if(mid==='lvl'){const ready=performance.now()>=levelReadyAt;if(pr(2)){const d=document.querySelector('#lvl .level-build');if(d)d.open=!d.open;return}if(!ready&&(pr(0)||pr(3))){play('empty',0);return}if(pr(3)){rerollLevelCards();return}}
     padNav(mid,dt,pr,g);if(pr(9)&&mid==='pause')togglePause(false);return}
   if(!S||S.phase!=='play'){PAD.x=PAD.y=0;PAD.atk=PAD.blk=false;return}
