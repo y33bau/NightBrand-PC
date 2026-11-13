@@ -88,6 +88,7 @@ const SFX={
 for(const n of ['back','tab','toggle','pauseIn','pauseOut','shopIn','equip','card','reroll','note'])SFX[n]=SFX.ui;
 SFX.buy=SFX.purse=SFX.coin;SFX.runStart=SFX.katana;SFX.step=()=>{};SFX.doorIn=SFX.doorOut=()=>noise(.5,300,.8,.15,'lowpass',80,.2);
 // dźwięk menu: konkretne zdarzenie (zakup, zakładka, pauza) wypiera ogólne kliknięcie
+SFX.navtick=()=>{};// 13.11.2026: autor: ruch po menu bez dźwięku; w menu tylko wybór i cofanie
 let UISND=0;function uiSnd(n){UISND=1;play(n,0)}
 const lastS={};let clock=0;
 function play(n,gap=.04){if(!AC)return;if(clock-(lastS[n]||-9)<gap)return;lastS[n]=clock;SFX[n]()}
@@ -119,7 +120,7 @@ const SFX_MIX={roll:[.5,.035,2,2],ui:[.45,.06,2,3],navtick:[.14,.03,1,3],empty:[
  bell:[.75,.15,3,3], level:[.85,.5,1,3],heal:[.55,.4,2,2],bless:[.65,.3,2,2],growl:[.4,.65,2,0],
  bossGrowl:[.85,.22,2,3],warnR:[.65,.18,2,3],kill:[.4,.12,3,0],hurt:[.85,.12,2,3],
  rumble:[.5,.6,1,1],rise:[.5,.2,2,1],poiseBreak:[.8,.3,1,3],
- back:[.5,.06,1,3],tab:[.55,.06,1,3],toggle:[.5,.05,1,3],pauseIn:[.55,.15,1,3],pauseOut:[.5,.15,1,3],
+ back:[.5,.06,1,3],tab:[.45,.06,1,3],toggle:[.45,.05,1,3],pauseIn:[.45,.15,1,3],pauseOut:[.5,.15,1,3],
  buy:[.6,.08,2,3],shopIn:[.6,.3,1,3],equip:[.55,.08,1,3],runStart:[.7,.5,1,3],card:[.6,.15,1,3],reroll:[.5,.1,1,3],doorIn:[.65,.5,1,3],doorOut:[.6,.5,1,3],
  step:[.11,.15,1,0],note:[.6,.3,1,2],purse:[.6,.15,2,1]};
 const sfxPlayedAt={};

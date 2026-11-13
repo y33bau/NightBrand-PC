@@ -56,7 +56,7 @@ function padSections(root,step){let secs=[...root.querySelectorAll(PADSECS)].fil
   if(secs.length<2)return false;
   const ae=document.activeElement;let ci=secs.findIndex(x=>x.contains(ae));if(ci<0)ci=step>0?-1:0;const nx=secs[(ci+step+secs.length)%secs.length];
   const it=padItemsIn(nx).sort((a,b)=>{const p=padBox(a),q=padBox(b);return Math.abs(p.top-q.top)>8?p.top-q.top:p.left-q.left});if(!it.length)return false;
-  PAD.keep=null;it[0].focus({preventScroll:true});try{it[0].scrollIntoView({block:'nearest'})}catch(e){}play('ui',0);return true}
+  PAD.keep=null;it[0].focus({preventScroll:true});try{it[0].scrollIntoView({block:'nearest'})}catch(e){}return true}
 function padScroll(root,ry,dt){if(Math.abs(ry)<.3)return;const can=e=>e&&e.scrollHeight>e.clientHeight+4&&/(auto|scroll)/.test(getComputedStyle(e).overflowY);
   let t=[...root.querySelectorAll('.pc-perk-detail,#kapDet,.m2k-det,.nbp-panel,#lvl .level-build,.pane:not([hidden]),.mpane:not([hidden])')].find(e=>e.offsetParent!==null&&can(e));
   if(!t){let e=document.activeElement;while(e&&e!==document.body&&!can(e))e=e.parentElement;if(can(e))t=e}if(!t&&can(root))t=root;
