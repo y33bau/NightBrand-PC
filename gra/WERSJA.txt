@@ -753,3 +753,4 @@ cache675 · LB/RB w menu: bez dodatkowego dzwieku klejnotu (tylko zatrzask). Nie
 cache676 · Celownik w grze 3x większy z konturem; dźwięki menu -30%; kursor pada -40% (nie sprawdzono: odsłuch, pad, wygląd u autora)
 cache677 · Kursor pada: płynny ruch (własna pętla klatek), najechanie tylko podświetla, A wybiera (nie sprawdzono: prawdziwy pad)
 cache678 · edytor menu (?edytor=1), bez zmian w grze; nie sprawdzono: pad, itch.io, wszystkie ekrany
+cache679 · edytor menu: style banerow, kolory, przezroczystosc, obrot (nie sprawdzono: pad, inne ekrany, itch.io)
