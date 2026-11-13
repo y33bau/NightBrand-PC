@@ -84,7 +84,7 @@ const SFX={
  poiseBreak:()=>{noise(.08,3000,2,.2,'bandpass',1500);bell(520,.4,.05,0,.15);tone(180,60,.2,.18,'triangle')},
  howl:()=>{voice(240,470,.8,.05,'sine',1500,.5,5,6);voice(470,300,1.5,.05,'sine',1500,.5,5,8,.7)},
  cry:()=>{for(let i=0;i<3;i++)voice(640,470,.4,.04,'triangle',2000,.5,6,10,i*.5)}};
-// 13.11.2026: zdarzenia menu i rzemiosla (próbki Kenney); synteza tylko na czas wczytywania. Klik i ruch po menu zostają łańcuchowe (ui, navtick).
+// 13.11.2026: zdarzenia menu i rzemiosla (próbki Kenney); synteza tylko na czas wczytywania. Klik (ciężki zatrzask) i cichy tyk ruchu po menu też z próbek; łańcuch syntezy tylko na czas wczytywania.
 for(const n of ['back','tab','toggle','pauseIn','pauseOut','shopIn','equip','card','reroll','note'])SFX[n]=SFX.ui;
 SFX.buy=SFX.purse=SFX.coin;SFX.runStart=SFX.katana;SFX.step=()=>{};SFX.doorIn=SFX.doorOut=()=>noise(.5,300,.8,.15,'lowpass',80,.2);
 // dźwięk menu: konkretne zdarzenie (zakup, zakładka, pauza) wypiera ogólne kliknięcie
@@ -115,7 +115,7 @@ function loadSfxSamples(){if(sfxLoadPromise||!AC)return sfxLoadPromise;
 
 // Głośność, minimalny odstęp (czas audio), limit nakładania, priorytet.
 // Muzyka omija ten tor. Ważne sygnały mogą wyprzeć cichy efekt zbierania.
-const SFX_MIX={roll:[.5,.035,2,2],ui:[.6,.06,2,3],empty:[.55,.18,1,3],coin:[.45,.10,2,0],pick:[.25,.08,2,0],
+const SFX_MIX={roll:[.5,.035,2,2],ui:[.45,.06,2,3],navtick:[.14,.03,1,3],empty:[.55,.18,1,3],coin:[.45,.10,2,0],pick:[.25,.08,2,0],
  bell:[.75,.15,3,3], level:[.85,.5,1,3],heal:[.55,.4,2,2],bless:[.65,.3,2,2],growl:[.4,.65,2,0],
  bossGrowl:[.85,.22,2,3],warnR:[.65,.18,2,3],kill:[.4,.12,3,0],hurt:[.85,.12,2,3],
  rumble:[.5,.6,1,1],rise:[.5,.2,2,1],poiseBreak:[.8,.3,1,3],

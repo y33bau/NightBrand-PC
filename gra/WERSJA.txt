@@ -746,3 +746,4 @@ cache668 · Wstepy aktow II-IV: tylko opis rozdzialu (bez wstepu lokalizacji); n
 cache669 · Dzwiek awansu: nowy snare (wzmocniony o 14 dB do poziomu starego); nie sprawdzono: sluch, glosnosc na sprzecie autora
 cache670 · Dzwieki Kenney CC0: ksiega/zakladki/pauza, sakiewka, ekwipunek, drzwi krypty, ciche kroki (na bazie 669). Nie sprawdzono: odsluch, pad, przegladarka
 cache671 · Menu: ciezszy klik (zatrzask obnizony) i ciszy tyk galki (Kenney CC0). Nie sprawdzono: odsluch, pad
+cache672 · Menu: ciezszy klik (zatrzask obnizony) i cichy tyk galki, poprawka mapowania. Nie sprawdzono: odsluch, pad
