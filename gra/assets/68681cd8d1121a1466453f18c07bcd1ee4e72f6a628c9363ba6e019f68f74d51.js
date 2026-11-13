@@ -1798,7 +1798,7 @@ function buildDolne(I){planGround(2);
   const TR={chapel_stairs:[0,0,64,32],gate_closed:[64,0,64,32],gate_half_open:[0,32,64,32],gate_open:[64,32,64,32]};
   const fr=(img,rc)=>procFrame(img,rc[0],rc[1],rc[2],rc[3],'prop');
   const PF={};for(const k in R)PF[k]=I['p2_'+k]?fr(I['p2_'+k],[0,0,R[k][2],R[k][3]]):fr(I.dm_props,R[k]);for(const k in TR)PF[k]=fr(I.trans,TR[k]);
-  for(const [x,y] of braziers){const frames=[0,1,2,3].map(i=>PF['brazier_'+i]);propObjs.push({mesh:mkProp(frames,x+.5,y+.92,R.brazier_0),frames,fps:6,ph:Math.random()*3})}
+  for(const [x,y] of braziers){/* 13.11.2026: koksownik = jedna stala klatka (klatki roznily sie podstawa i skakaly) */const frames=[0,1,2,3].map(i=>PF['brazier_'+i]);propObjs.push({mesh:mkProp(frames,x+.5,y+.92,R.brazier_0),frames:[frames[0]],fps:0,ph:0})}
   for(const p of PROPS){
     let frames,rc;
     if(p.anim==='furnace'){frames=[PF.furnace_0,PF.furnace_1];rc=R.furnace_0}
@@ -1838,7 +1838,7 @@ function buildDungeon(I){planGround(9);
     healing_shrine:[32,64,32,32],depleted_shrine:[64,64,32,32],chains:[96,64,32,32],fallen_pillar:[0,96,64,32],dwarf_bones:[64,96,32,32],sarcophagus:[0,160,32,32],rune_lantern:[32,160,32,32],clan_banner:[96,160,32,32]};
   const TR={chapel_stairs:[0,0,64,32]};
   const PF={};for(const k in R)PF[k]=I['p2_'+k]?procFrame(I['p2_'+k],0,0,R[k][2],R[k][3],'prop'):procFrame(I.dm_props,...R[k],'prop');for(const k in TR)PF[k]=procFrame(I.trans,...TR[k],'prop');if(I.p2_chapel_stairs){TR.chapel_stairs=[0,0,32,32];PF.chapel_stairs=procFrame(I.p2_chapel_stairs,0,0,32,32,'prop')}
-  for(const [x,y] of braziers){const frames=[0,1,2,3].map(i=>PF['brazier_'+i]);propObjs.push({mesh:mkProp(frames,x+.5,y+.92,R.brazier_0),frames,fps:6,ph:Math.random()*3})}
+  for(const [x,y] of braziers){/* 13.11.2026: koksownik = jedna stala klatka (klatki roznily sie podstawa i skakaly) */const frames=[0,1,2,3].map(i=>PF['brazier_'+i]);propObjs.push({mesh:mkProp(frames,x+.5,y+.92,R.brazier_0),frames:[frames[0]],fps:0,ph:0})}
   for(const p of PROPS){const sh=p.shrine!==undefined,frames=sh?[PF.healing_shrine,PF.depleted_shrine]:[PF[p.k]],rc=R[p.k]||TR[p.k];
     const o={mesh:mkProp(frames,p.x,p.y,rc),frames,fps:0,ph:0,kind:sh?'shrine':'static',si:p.shrine};if(p.k==='dwarf_bones')o.mesh.castShadow=false;p.obj=o;propObjs.push(o)}
 }
@@ -1989,7 +1989,7 @@ function buildStolica(I){planGround(3);
   const PF={},RC={};
   for(const [img,R] of [[ZP,RZ],[I.dm_props,RD],[I.br_props,RB],[I.trans,RT]])for(const k in R){PF[k]=I['p3_'+k]?procFrame(I['p3_'+k],0,0,R[k][2],R[k][3],'prop'):(img===I.br_props&&I['p1_'+k]&&/^(debris_fire_\d|order_bonfire)$/.test(k))?procFrame(I['p1_'+k],0,0,R[k][2],R[k][3],'prop'):procFrame(img,R[k][0],R[k][1],R[k][2],R[k][3],'prop');RC[k]=R[k]}
   const ANIM={fire:['debris_fire',4],pyre:['pyre',4],bloom:['rot_bloom',2]};
-  for(const [x,y] of braziers){const frames=[0,1,2,3].map(i=>PF['brazier_'+i]);propObjs.push({mesh:mkProp(frames,x+.5,y+.92,RC.brazier_0),frames,fps:6,ph:Math.random()*3})}
+  for(const [x,y] of braziers){/* 13.11.2026: koksownik = jedna stala klatka (klatki roznily sie podstawa i skakaly) */const frames=[0,1,2,3].map(i=>PF['brazier_'+i]);propObjs.push({mesh:mkProp(frames,x+.5,y+.92,RC.brazier_0),frames:[frames[0]],fps:0,ph:0})}
   for(const p of PROPS){let frames,rc;
     if(ANIM[p.anim]){const [k,n]=ANIM[p.anim];frames=[...Array(n).keys()].map(i=>PF[k+'_'+i]);rc=RC[k+'_0']}
     else if(p.shrine!==undefined){frames=[PF.healing_shrine,PF.depleted_shrine];rc=RC.healing_shrine}
@@ -2095,7 +2095,7 @@ function buildCytadela(I){planGround(5);
     const pilGeo=new THREE.CylinderGeometry(.36,.38,4,8);pilGeo.translate(0,2,0);
     instanced(pilGeo,cutaway(phong({map:pilT})),pillars,([x,y])=>M4.makeTranslation(x+.5,0,y+.5));
     const baseGeo=new THREE.BoxGeometry(.95,.35,.95);baseGeo.translate(0,.175,0);instanced(baseGeo,phong({map:stoneT}),pillars,([x,y])=>M4.makeTranslation(x+.5,0,y+.5));
-    for(const [x,y] of braziers){const frames=[0,1,2,3].map(i=>PF['brazier_'+i]);propObjs.push({mesh:mkProp(frames,x+.5,y+.92,R.brazier_0),frames,fps:6,ph:Math.random()*3})}
+    for(const [x,y] of braziers){/* 13.11.2026: koksownik = jedna stala klatka (klatki roznily sie podstawa i skakaly) */const frames=[0,1,2,3].map(i=>PF['brazier_'+i]);propObjs.push({mesh:mkProp(frames,x+.5,y+.92,R.brazier_0),frames:[frames[0]],fps:0,ph:0})}
   }else{
     // K3 big objects [x, y, w, h, scale]; 64 px cells at 16 px per tile
     const OBJ={pillar_a:[0,0,64,64,0.9],pillar_b:[64,0,64,64,0.9],bookcase_a:[128,0,64,64,0.5],bookcase_b:[192,0,64,64,0.5],statue_a:[0,64,64,64,0.85],statue_b:[64,64,64,64,0.85],scale:[128,64,64,64,0.6],vault:[192,64,64,64,0.6],
@@ -2105,7 +2105,7 @@ function buildCytadela(I){planGround(5);
     const FR={};for(const k in OBJ){const o=OBJ[k];FR[k]=I['p5_'+k]?procFrame(I['p5_'+k],0,0,o[2],o[3],'prop'):procFrame(BG,o[0],o[1],o[2],o[3],'prop');cutCircle(FR[k].n)}
     const putObj=(k,x,y,flip)=>{const o=OBJ[k],s=o[4],m=new THREE.Mesh(G2(o[2],o[3]),FR[k].n);m.customDistanceMaterial=FR[k].d;m.userData.propAsset=true;m.castShadow=true;m.position.set(x,0,y);m.scale.set(flip?-s:s,s*SQ,s);ROOT.add(m);return m};
     pillars.forEach(([x,y],i)=>putObj((x*3+y)%2?'pillar_a':'pillar_b',x+.5,y+.92,false));
-    for(const [x,y] of braziers){const fr=[FR.brazier_0,FR.brazier_1],m=putObj('brazier_0',x+.5,y+.92,false);propObjs.push({mesh:m,frames:fr,fps:5,ph:Math.random()*3})}
+    for(const [x,y] of braziers){/* 13.11.2026: koksownik = jedna stala klatka (klatki roznily sie podstawa i skakaly) */const fr=[FR.brazier_0,FR.brazier_1],m=putObj('brazier_0',x+.5,y+.92,false);propObjs.push({mesh:m,frames:[fr[0]],fps:0,ph:0})}
     for(const p of PROPS)if(OBJ[p.k]){const artKey=p.k==='bench_a'?'bench_b':p.k;const m=putObj(artKey,p.x,p.y,false);p.obj={mesh:m}}
   }
   // K4 small props, 32 px cells; the healing shrine still comes from the Lower City sheet
@@ -7881,8 +7881,8 @@ ${Z} .nbo-note{margin:0!important;text-align:center!important;color:#8c7f6c!impo
   detail.replaceChildren(content);
  }
  function sync(){for(const [id] of panels){const list=$(id);if(list&&!observed.has(list)){new MutationObserver(sync).observe(list,{childList:true});observed.add(list)}const box=list?.closest('.prepgrid>.prepbox');if(box)box.classList.toggle('pc-panel-hidden',id!==active)}for(const b of tabs.children){b.hidden=!$(b.dataset.panel);b.setAttribute('aria-pressed',String(b.dataset.panel===active))}const list=$(active);describe(list?.querySelector('.opt.on')||list?.querySelector('.opt'));}
- prep.addEventListener('focusin',e=>{const b=e.target.closest('.opt');if(b&&b.closest('#prepPerks,#prepCh,#prepCurseL'))describe(b)});
- prep.addEventListener('pointerover',e=>{if(document.documentElement.classList.contains('padprio'))return;const b=e.target.closest('.opt');if(b&&b.closest('#prepPerks,#prepCh,#prepCurseL'))describe(b)});
+  // 13.11.2026: opis po prawej zmienia sie tylko po KLIKNIECIU opcji (nie po najechaniu ani przesunieciu zaznaczenia padem)
+ prep.addEventListener('click',e=>{const b=e.target.closest('.opt');if(b&&b.closest('#prepPerks,#prepCh,#prepCurseL'))describe(b)});
  // Renderers replace children, not list containers. Observe those containers only.
  new MutationObserver(sync).observe(grid,{childList:true});sync();
 

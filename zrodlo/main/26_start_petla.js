@@ -1159,8 +1159,8 @@ ${Z} .nbo-note{margin:0!important;text-align:center!important;color:#8c7f6c!impo
   detail.replaceChildren(content);
  }
  function sync(){for(const [id] of panels){const list=$(id);if(list&&!observed.has(list)){new MutationObserver(sync).observe(list,{childList:true});observed.add(list)}const box=list?.closest('.prepgrid>.prepbox');if(box)box.classList.toggle('pc-panel-hidden',id!==active)}for(const b of tabs.children){b.hidden=!$(b.dataset.panel);b.setAttribute('aria-pressed',String(b.dataset.panel===active))}const list=$(active);describe(list?.querySelector('.opt.on')||list?.querySelector('.opt'));}
- prep.addEventListener('focusin',e=>{const b=e.target.closest('.opt');if(b&&b.closest('#prepPerks,#prepCh,#prepCurseL'))describe(b)});
- prep.addEventListener('pointerover',e=>{if(document.documentElement.classList.contains('padprio'))return;const b=e.target.closest('.opt');if(b&&b.closest('#prepPerks,#prepCh,#prepCurseL'))describe(b)});
+  // 13.11.2026: opis po prawej zmienia sie tylko po KLIKNIECIU opcji (nie po najechaniu ani przesunieciu zaznaczenia padem)
+ prep.addEventListener('click',e=>{const b=e.target.closest('.opt');if(b&&b.closest('#prepPerks,#prepCh,#prepCurseL'))describe(b)});
  // Renderers replace children, not list containers. Observe those containers only.
  new MutationObserver(sync).observe(grid,{childList:true});sync();
 
