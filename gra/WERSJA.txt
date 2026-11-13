@@ -748,3 +748,4 @@ cache670 · START: wybór rozdziału -> Przygotowanie, w Przygotowaniu pytanie R
 cache671 · Kursor pada w menu (lewa gałka, A klika, najechanie jak myszą), kursor myszy: sztylet w menu, celownik w grze (nie sprawdzono: prawdziwy pad, prędkość kursora u autora)
 cache672 · Kursor pada wolniejszy o 40% (nie sprawdzono: prawdziwy pad)
 cache673 · Kursor myszy (sztylet) większy, z konturem i delikatną złotą poświatą (nie sprawdzono: wygląd u autora)
+cache674 · Na bazie main 673: dzwon Ostatniego Tonu, werble awansu, wstepy aktow I-IV (z 665-669, bez zmian pada) + dzwieki Kenney: menu tylko wybor i cofanie (nizszy zatrzask), sakiewki, ekwipunek, krypta, karty, ciche kroki. Nie sprawdzono: odsluch, pad, przegladarka
