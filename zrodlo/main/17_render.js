@@ -130,7 +130,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
     if(n.art==='tharm'){setFrame(m,at(fr,clock,4));m.material.opacity=st.state==='fading'?.85*Math.max(0,st.t/1.5):.6+.25*Math.sin(clock*3)}
     else if(st.state==='dead')setFrame(m,fr[3]);
     else setFrame(m,at(n.art==='marga'?fr:(fr._s3||(fr._s3=fr.slice(0,3))),clock+n.x,n.art==='wit'?5:n.art==='elder'?1.5:3));
-    m.castShadow=false;m.position.set(n.x/16,0,n.y/16);m.scale.set(1,SQ,1);if(n.art!=='tharm')blob(n.x/16,n.y/16,1)}
+    m.castShadow=false;m.position.set(n.x/16,npcLift(m),n.y/16);m.scale.set(1,SQ,1);if(n.art!=='tharm')blob(n.x/16,n.y/16,1)}
   if(S){
     heroMesh.visible=!(SETT.flash&&clock<(pl.blinkUntil||0)&&pl.roll<=0&&!pl.dead&&Math.floor(clock*24)%2);
     {const hf=heroFrame(),ek=encLevel()[0];S.heroHF=hf;setFrame(heroMesh,hf);const hv=ek&&hf?heroBladeMat(hf,ek):null;if(hv&&heroMesh.material===hf.n){hv.emissiveIntensity=.8+.35*Math.sin(clock*6);heroMesh.material=hv}}

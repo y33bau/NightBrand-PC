@@ -1579,6 +1579,8 @@ function propFoot(image){if(PROP_FEET.has(image))return PROP_FEET.get(image);if(
  if(foot!==null){const lo=Math.max(top,bottom-Math.floor(.22*H));if(bottom-lo>=12){let pr=lo;for(let y=lo;y<=bottom;y++)if(w[y]>w[pr])pr=y;const dd=bottom-pr;let mn=1e9;for(let y=Math.max(top,pr-Math.floor(.3*H));y<=Math.max(top+1,pr-Math.floor(.04*H));y++)if(w[y]>0&&w[y]<mn)mn=w[y];
   if(dd>=H*.02&&mn<1e9&&w[pr]>=1.8*mn)foot-=Math.min(.16,Math.round(dd/H/.02)*.02)+.01}}
  PROP_FEET.set(image,foot);return foot}
+// 13.11.2026: NPC staly 16 cm pod posadzka (plaszczyzna geo32 zaczyna sie pod ziemia, a rysunki NPC nie maja pustego marginesu u dolu); podnosimy tak, by najnizszy nieprzezroczysty wiersz lezal na ziemi
+const NPC_LIFT=new WeakMap();function npcLift(m){const img=m.material&&m.material.map&&m.material.map.image;if(!img)return 0;let v=NPC_LIFT.get(img);if(v===undefined){propFoot(img);const R=PROP_RAWB.get(img),g=m.geometry;if(!g.boundingBox)g.computeBoundingBox();const bb=g.boundingBox;v=R?Math.max(0,.01-(bb.max.y-R.b*(bb.max.y-bb.min.y))*SQ):0;NPC_LIFT.set(img,v)}return v}
 function settleProp(m){const g=m.geometry;if(!g.boundingBox)g.computeBoundingBox();const box=g.boundingBox,height=box.max.y-box.min.y,foot=propFoot(m.material.map.image);if(height<.3||foot===null)return;/* 12.11.2026 (autor): rekwizyt nie lewituje i nie wpada w posadzke - najnizszy nieprzezroczysty wiersz lezy tuz nad ziemia (wczesniej kotwica 'foot' topila przod podstawy, a PROP_LIFT unosil reszte o 10 cm) */const raw=PROP_RAWB.get(m.material.map.image),local=box.max.y-(raw?raw.b:foot)*height,before=m.position.y+local*m.scale.y;const lift=.008;m.position.y=.02-local*m.scale.y;m.userData.groundContact={before,after:.02};if(height*m.scale.y<1.5)m.castShadow=false;
   {const sp0=propBase(m.material.map.image);if(sp0&&height*m.scale.y>=.5&&sp0.w*(box.max.x-box.min.x)*m.scale.x<=2.8)baseFade(m.material,sp0.vb,sp0.fh)}
   // miekki cien kontaktowy pod stopa: styka rekwizyt z podlozem zamiast ostrej krawedzi sprite'a
@@ -2037,7 +2039,8 @@ function buildCzarnobor(I){planGround(4);
   let saplings=0;for(const p of PROPS){if(!p.tree||!['spruce','birch'].includes(p.k)||saplings>=8||groundHash(Math.floor(p.x),Math.floor(p.y))%7!==0)continue;const x=p.x+.26,y=p.y-.3,i=Math.floor(y)*MW+Math.floor(x);if(tileAt(Math.floor(x),Math.floor(y))!==31||W.clearways.has(i))continue;(byK[p.k]||(byK[p.k]=[])).push({...p,x,y,artSmall:true});saplings++}
 
   for(const k in byK){const o=OBJ[k],s=o[4],low=k==='ferns'||k==='reeds'||k==='mushrooms'||k==='brambles'||/^(wd|sp)\d+$/.test(k);
-    const im=instanced(G2(o[2],o[3]),FR[k].n,byK[k],p=>M4.compose(V.set(p.x,0,p.y),Q.identity(),SC.set((p.flip?-1:1)*s*(p.artSmall?.62:1)*(p.tree?(.94+.06*Math.sin(p.x*.71+p.y*.39)):1),s*SQ*(p.artSmall?.62:1)*(k==='tall_pine'?.85:p.tree?(.94+.06*Math.sin(p.x*.71+p.y*.39)):1),s)),!low,false);im.customDistanceMaterial=FR[k].d;im.frustumCulled=false}
+    const fy=(()=>{const img=FR[k].n.map&&FR[k].n.map.image;if(!img)return 0;propFoot(img);const R=PROP_RAWB.get(img);if(!R)return 0;const g=G2(o[2],o[3]);if(!g.boundingBox)g.computeBoundingBox();const bb=g.boundingBox,y=(bb.max.y-R.b*(bb.max.y-bb.min.y))*s*SQ;return y>.05?.01-y:0})(); // 13.11.2026: rekwizyt z pustym marginesem u dolu (np. swiety dab) nie wisi nad ziemia
+    const im=instanced(G2(o[2],o[3]),FR[k].n,byK[k],p=>M4.compose(V.set(p.x,fy,p.y),Q.identity(),SC.set((p.flip?-1:1)*s*(p.artSmall?.62:1)*(p.tree?(.94+.06*Math.sin(p.x*.71+p.y*.39)):1),s*SQ*(p.artSmall?.62:1)*(k==='tall_pine'?.85:p.tree?(.94+.06*Math.sin(p.x*.71+p.y*.39)):1),s)),!low,false);im.customDistanceMaterial=FR[k].d;im.frustumCulled=false}
   // standing stones are separate meshes, they light up one by one
   for(const p of PROPS)if(p.stone!==undefined){const s=OBJ.standing_stone_dark[4],m=new THREE.Mesh(G2(64,64),FR.standing_stone_dark.n);m.customDistanceMaterial=FR.standing_stone_dark.d;m.castShadow=true;m.position.set(p.x,0,p.y);m.scale.set(s,s*SQ,s);ROOT.add(m);
     propObjs.push({mesh:m,frames:[FR.standing_stone_dark,FR.standing_stone_lit],fps:0,ph:0,kind:'stone',si:p.stone})}
@@ -4964,7 +4967,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
     if(n.art==='tharm'){setFrame(m,at(fr,clock,4));m.material.opacity=st.state==='fading'?.85*Math.max(0,st.t/1.5):.6+.25*Math.sin(clock*3)}
     else if(st.state==='dead')setFrame(m,fr[3]);
     else setFrame(m,at(n.art==='marga'?fr:(fr._s3||(fr._s3=fr.slice(0,3))),clock+n.x,n.art==='wit'?5:n.art==='elder'?1.5:3));
-    m.castShadow=false;m.position.set(n.x/16,0,n.y/16);m.scale.set(1,SQ,1);if(n.art!=='tharm')blob(n.x/16,n.y/16,1)}
+    m.castShadow=false;m.position.set(n.x/16,npcLift(m),n.y/16);m.scale.set(1,SQ,1);if(n.art!=='tharm')blob(n.x/16,n.y/16,1)}
   if(S){
     heroMesh.visible=!(SETT.flash&&clock<(pl.blinkUntil||0)&&pl.roll<=0&&!pl.dead&&Math.floor(clock*24)%2);
     {const hf=heroFrame(),ek=encLevel()[0];S.heroHF=hf;setFrame(heroMesh,hf);const hv=ek&&hf?heroBladeMat(hf,ek):null;if(hv&&heroMesh.material===hf.n){hv.emissiveIntensity=.8+.35*Math.sin(clock*6);heroMesh.material=hv}}
