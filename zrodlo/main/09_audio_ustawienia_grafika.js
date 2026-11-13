@@ -41,6 +41,8 @@ function voice(f0,f1,dur,gain,type,lp,wet=0,vibHz=0,vib=0,delay=0){if(!AC)return
   const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=lp;f.Q.value=2;const g=AC.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(gain,t+Math.min(.12,dur*.3));g.gain.exponentialRampToValueAtTime(.001,t+dur);o.connect(f);f.connect(g);g.connect(sfxG||master);sfxSend(g,wet);o.start(t);o.stop(t+dur+.05)}
 // dzwonek / metal: niecałkowite alikwoty
 function bell(f,dur,gain,delay=0,wet=.25){[[1,1],[2.76,.45],[5.4,.22],[8.9,.1]].forEach(([m,a])=>tone(f*m,f*m*.998,dur/(1+m*.18),gain*a,'sine',delay,wet))}
+// 13.11.2026: ogniwo łańcucha: krótki, niski metaliczny brzęk (alikwoty nieharmoniczne), do menu i zaznaczeń
+function chainLink(f,gain,delay=0){[[1,1],[2.31,.55],[3.76,.3]].forEach(([m,a])=>tone(f*m,f*m*.985,.075/(1+m*.12),gain*a,'triangle',delay,.08))}
 let sfxRv=null;
 function sfxInitRv(){if(sfxRv||!AC)return;try{const len=Math.floor(AC.sampleRate*1.5),b=AC.createBuffer(2,len,AC.sampleRate);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.6)}
   const cv=AC.createConvolver();cv.buffer=b;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=3200;sfxRv=AC.createGain();sfxRv.connect(lp);lp.connect(cv);cv.connect(sfxG||master)}catch(e){sfxRv=null}}
@@ -50,7 +52,7 @@ const SFX={
  hitSteel:()=>{noise(.065,2100,2,.13,'bandpass',650);bell(880,.16,.025,0,.08);tone(160,65,.07,.065,'triangle')},
  block:()=>{noise(.055,2800,2,.12,'bandpass',1200);bell(690,.15,.025,0,.07);tone(240,110,.065,.055,'triangle')},
  parry:()=>{noise(.035,4300,2.8,.105,'bandpass',2100);bell(1570,.25,.035,0,.12);bell(2310,.15,.012,.018,.08)},
- ui:()=>{tone(520,300,.07,.09,'square');noise(.03,2500,1,.05,'highpass',5000)},
+ ui:()=>{chainLink(430,.055);chainLink(330,.05,.05);noise(.05,1700,1.4,.05,'bandpass',650);tone(110,66,.09,.06,'triangle')},
  swing:()=>{noise(.26,450,1.4,.2,'bandpass',3000);noise(.2,1500,.8,.07,'highpass',6000,.1)},
  katana:()=>{noise(.2,2200,3,.2,'bandpass',7500,.15);tone(2800,5200,.16,.035,'sine',0,.2);noise(.09,5000,1,.07,'highpass',9000)},
  hit:()=>{noise(.13,1400,1,.3,'lowpass',160);tone(150+Math.random()*40,48,.12,.22,'sine');noise(.03,3500,1,.12,'highpass')},
@@ -59,10 +61,11 @@ const SFX={
  kill:()=>{noise(.45,1400,1,.34,'lowpass',80,.2);tone(190,38,.32,.2,'triangle');tone(70,28,.4,.2,'sine',.06)},
  hurt:()=>{voice(300,90,.22,.14,'sawtooth',1400);noise(.16,800,1,.24,'lowpass',200);tone(80,40,.15,.2,'sine')},
  roll:()=>{noise(.2,350,1,.2,'bandpass',1000);noise(.16,600,1,.12,'bandpass',1500,0,.07)},
- navtick:()=>{tone(1250,950,.035,.03,'sine',0,.05)},
+ navtick:()=>{noise(.03,2600,2,.075,'bandpass',1300);chainLink(620,.075)},
  pick:()=>{tone(1500+Math.random()*250,2100,.07,.035,'sine',0,.2);tone(2200,2800,.05,.02,'sine',.045,.2)},
  coin:()=>{tone(1568,1580,.09,.045,'triangle',0,.25);tone(2093,2100,.22,.045,'triangle',.07,.3);tone(4186,4200,.1,.012,'sine',.07,.3)},
- level:()=>{[330,440,554,660,880].forEach((f,i)=>{bell(f,.9,.05,i*.08,.35)});voice(165,330,.7,.07,'triangle',900,.3)},
+ bell:()=>{[330,440,554,660,880].forEach((f,i)=>{bell(f,.9,.05,i*.08,.35)});voice(165,330,.7,.07,'triangle',900,.3)},
+ level:()=>{tone(98,64,.35,.16,'sine');voice(196,294,.6,.075,'sawtooth',950,.3);voice(294,440,.65,.06,'sawtooth',1150,.3,0,0,.12);voice(392,588,.7,.045,'triangle',1500,.35,0,0,.24);tone(880,1320,.5,.035,'triangle',.3,.4)},
  frost:()=>{noise(.55,6000,2,.15,'highpass',2500,.3);[2400,3100,3900].forEach((f,i)=>bell(f,.5,.025,i*.05,.4))},
  quake:()=>{noise(.9,200,.8,.42,'lowpass',35,.2);tone(52,24,.7,.32,'sine');noise(.3,90,1,.3,'lowpass',40)},
  fire:()=>{noise(.65,700,.8,.2,'bandpass',2200);for(let i=0;i<6;i++)noise(.03,3500+Math.random()*2000,2,.07,'bandpass',0,.05,Math.random()*.5);noise(.5,300,.8,.1,'lowpass',900)},
@@ -107,8 +110,8 @@ function loadSfxSamples(){if(sfxLoadPromise||!AC)return sfxLoadPromise;
 
 // Głośność, minimalny odstęp (czas audio), limit nakładania, priorytet.
 // Muzyka omija ten tor. Ważne sygnały mogą wyprzeć cichy efekt zbierania.
-const SFX_MIX={roll:[.5,.035,2,2],ui:[.6,.06,2,3],empty:[.55,.18,1,3],coin:[.45,.10,2,0],pick:[.25,.08,2,0],navtick:[.35,.05,1,0],
- level:[.85,.5,1,3],heal:[.55,.4,2,2],bless:[.65,.3,2,2],growl:[.4,.65,2,0],
+const SFX_MIX={roll:[.5,.035,2,2],ui:[.6,.06,2,3],empty:[.55,.18,1,3],coin:[.45,.10,2,0],pick:[.25,.08,2,0],
+ bell:[.75,.15,3,3],heal:[.55,.4,2,2],bless:[.65,.3,2,2],growl:[.4,.65,2,0],
  bossGrowl:[.85,.22,2,3],warnR:[.65,.18,2,3],kill:[.4,.12,3,0],hurt:[.85,.12,2,3],
  rumble:[.5,.6,1,1],rise:[.5,.2,2,1],poiseBreak:[.8,.3,1,3]};
 const sfxPlayedAt={};
