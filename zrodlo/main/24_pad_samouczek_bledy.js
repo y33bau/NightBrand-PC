@@ -39,6 +39,7 @@ function padTick0(dt){
   let g=null,g2=null;try{const l=navigator.getGamepads?navigator.getGamepads():[];for(const p of l)if(p&&p.connected){if(!g)g=p;else{g2=p;break}}}catch(e){}
   {const pn=(g?1:0)+(g2?1:0);if(pn<(PAD.n||0)&&S&&S.phase==='play'&&!S.paused&&(INPUT_LAST==='p'||pl2)){togglePause(true);if(S.paused)padLostMsg(true)}PAD.n=pn}
   {const mt=S?S.mpTurn||0:0;if(mt!==PAD.mpT){PAD.mpT=mt;PAD.lock=.4;PAD.fresh=true}}const sw=!!(g2&&pl2&&S&&S.choosing&&S.mpTurn===2);if(sw){const tg=g;g=g2;g2=tg}MPCLK=sw;pad2Tick(g2);PAD.prev=PAD.cur;PAD.g=g;
+  {const pp=!!g;if(pp!==PAD.pp){PAD.pp=pp;padPrioSet(pp)}}
   if(!g){PAD.cur=[];PAD.x=PAD.y=0;PAD.atk=PAD.blk=PAD.skillHeld=PAD.skillConsumed=false;return}
   PAD.cur=g.buttons.map(b=>!!b&&(b.pressed||b.value>.5));if(PAD.cur.some(Boolean)){INPUT_LAST='p';document.body.classList.add('padlast')}
   // krzyżak w nietypowych padach: oś hat (axes[9]) albo osie 6/7
@@ -72,7 +73,13 @@ for(const e of document.querySelectorAll('input[type=range]')){const w=document.
 function syncRanges(){for(const e of document.querySelectorAll('input[type=range]')){const mn=+e.min||0,mx=+e.max||100,v=String(Math.max(0,Math.min(1,(e.value-mn)/(mx-mn))));e.style.setProperty('--v',v);if(e.parentNode)e.parentNode.style.setProperty('--v',v)}}
 document.addEventListener('input',syncRanges,true);document.addEventListener('click',()=>setTimeout(syncRanges,0),true);document.addEventListener('keyup',syncRanges,true);syncRanges();
 addEventListener('gamepadconnected',()=>{document.body.classList.add('padnav');const k=$('keysPad');if(k)k.hidden=false});
-addEventListener('mousedown',()=>document.body.classList.remove('padnav'),true);
+// 13.11.2026: pad ma pierwszeństwo w nawigacji po menu, gdy jest podłączony. Mysz nie przejmuje fokusu ani podglądów,
+// :hover jest wyłączony (klasa padprio na <html>), a klik myszy nie zdejmuje znacznika pada. Klik nadal działa.
+const padPrio=()=>document.documentElement.classList.contains('padprio');
+function padPrioSet(on){document.documentElement.classList.toggle('padprio',!!on);if(on)padHoverRewrite()}
+function padHoverRewrite(){const P=':where(:root:not(.padprio)) ';const fix=rules=>{for(const r of rules){try{if(!r.selectorText){if(r.cssRules)fix(r.cssRules);continue}const t=r.selectorText;if(!t.includes(':hover')||t.includes('.padprio'))continue;const a=[];let d=0,c='';for(const ch of t){if(ch==='('||ch==='[')d++;else if(ch===')'||ch===']')d--;if(ch===','&&d===0){a.push(c);c=''}else c+=ch}a.push(c);r.selectorText=a.map(x=>x.includes(':hover')?P+x.trim():x.trim()).join(',')}catch(e){}}};for(const ss of document.styleSheets){try{fix(ss.cssRules)}catch(e){}}}
+addEventListener('gamepadconnected',()=>padPrioSet(true));addEventListener('gamepaddisconnected',()=>setTimeout(()=>{try{padPrioSet([...navigator.getGamepads()].some(p=>p&&p.connected))}catch(e){padPrioSet(false)}},50));
+addEventListener('mousedown',()=>{if(!padPrio())document.body.classList.remove('padnav')},true);
 // ---- krótki samouczek: podpowiedzi w pierwszej nocy rozdziału I, tylko raz ----
 function tutorialKey(){return 'pn_tut_s'}
 function tutorialDone(){try{return localStorage.getItem(tutorialKey())==='1'}catch(e){return false}}
