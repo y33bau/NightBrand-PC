@@ -241,6 +241,8 @@ ${Z} #prep .pc-prep-quick .pc-quick:hover{border-color:var(--nbs-hover,#d8b878)!
 (()=>{const Z='#orient'.repeat(140),st=document.createElement('style');st.id='pc-pause-fit';st.textContent=
 `${Z} #pause .nbp-audiogrid{max-width:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important}
 ${Z} #pause .nbp-audiogrid>.nbp-ah{grid-column:1/-1!important}
+${Z} :is(#pause .nbp-ah,#opts .nbo-ah)>:is(small,h2,h3){display:none!important}
+${Z} :is(#pause .nbp-ah,#opts .nbo-ah){margin-top:0!important;padding-top:0!important}
 ${Z} #pause .nbp-audiogrid>.nbp-audio{margin:0!important;min-width:0!important}
 ${Z} #pause .nbp-pane:has(#qualityRow){grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-template-rows:auto auto!important;align-items:stretch!important;gap:calc(14 * min(.05981vw,.10627vh))!important}
 ${Z} #pause .nbp-pane:has(#qualityRow)>section{margin:0!important;min-width:0!important}

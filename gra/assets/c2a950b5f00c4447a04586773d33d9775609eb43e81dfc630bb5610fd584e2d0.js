@@ -6608,12 +6608,14 @@ function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.15;
   const obs=[];for(const e of root.querySelectorAll('button,input,summary,h1,h2,h3,p,span,strong,small,img,label')){if(!vis(e))continue;const r=e.getBoundingClientRect();if(r.width>innerWidth*.8&&r.height>innerHeight*.5)continue;obs.push([e,r])}
   const out=[],placed=[];
   const hit=(x,y,w,h,own)=>x<2||y<2||x+w>innerWidth-2||y+h>innerHeight-2||placed.some(q=>x<q[0]+q[2]+2&&q[0]<x+w+2&&y<q[1]+q[3]+2&&q[1]<y+h+2)||obs.some(([e,r])=>{if(own.includes(e)||e.contains(own[0])||!(x<r.right&&r.left<x+w&&y<r.bottom&&r.top<y+h))return false;const t=document.elementFromPoint((Math.max(x,r.left)+Math.min(x+w,r.right))/2,(Math.max(y,r.top)+Math.min(y+h,r.bottom))/2);return !!t&&(t===e||e.contains(t)||t.contains(e))});
-  const put=(txt,el,sides,own,tr)=>{if(!vis(el))return;let r=el.getBoundingClientRect();if(tr){try{const g=document.createRange();g.selectNodeContents(el);const q=g.getBoundingClientRect();if(q.width>2)r=q}catch(e){}}const top=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);if(top&&!root.contains(top))return;const w=Math.max(H,(txt.length*11+14)*u);own=own||[el];
+  const put=(txt,el,sides,own,tr)=>{if(!vis(el))return;let r=el.getBoundingClientRect();if(tr){try{const g=document.createRange();g.selectNodeContents(el);const q=g.getBoundingClientRect();if(q.width>2)r=q}catch(e){}}const top=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);if(top&&!root.contains(top))return;const w=txt.startsWith('<')?H*1.35:Math.max(H,(txt.length*11+14)*u);own=own||[el];
     for(const sd of sides){let x,y;if(sd==='l'){x=r.left-gap-w;y=r.top+r.height/2-H/2}else if(sd==='r'){x=r.right+gap;y=r.top+r.height/2-H/2}else if(sd==='t'){x=r.left+r.width/2-w/2;y=r.top-gap-H}else if(sd==='b'){x=r.left+r.width/2-w/2;y=r.bottom+gap}else if(sd==='in'){x=r.right-w-gap;y=r.top+r.height/2-H/2}
       if(!hit(x,y,w,H,own)){placed.push([x,y,w,H]);out.push('<b style="left:'+x.toFixed(1)+'px;top:'+y.toFixed(1)+'px">'+txt+'</b>');return}}};
   const pair=(sel,a,b)=>{const tb=[...root.querySelectorAll(sel)].filter(vis);if(tb.length<2)return;const f=tb[0].getBoundingClientRect(),l=tb[tb.length-1].getBoundingClientRect(),hor=Math.abs(f.top-l.top)<f.height/2;
     if(hor){put(a,tb[0],['l','t'],tb);put(b,tb[tb.length-1],['r','t'],tb)}else{put(a,tb[0],['t','l','r'],tb);put(b,tb[tb.length-1],['b','l','r'],tb)}};
   pair(PADTABS,'LB','RB');pair(PADSUBS,'LT','RT');
+  // Back (View) otwiera Opcje: znaczek przy kole zębatym na wyborze rozdziału
+  if(mid==='title'&&!$('title').classList.contains('pc-home'))put('<svg viewBox="0 0 20 16" width="1.3em" height="1.05em" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="1.5" y="1.5" width="11" height="8" rx="1.6"/><rect x="7.5" y="6.5" width="11" height="8" rx="1.6" fill="#1c1316"/></svg>',$('optsBtn'),['l','b','r'],null,false);
   if(mid==='lvl'){put('Y',$('rerollBtn'),['r','l','t','b']);const bd=root.querySelector('.level-build>summary')||root.querySelector('.level-build');if(bd)put('X',bd,['r','l','in'],null,true)}
   else if(mid==='pause'){put('☰',$('resumeBtn'),['l','t','r','in'])}
   else{const bk=[...root.querySelectorAll('button')].filter(vis).find(e=>/(Back|Close)$/.test(e.id)||/^\s*(←|‹)/.test(e.textContent)||e.classList.contains('pc-back')||e.classList.contains('back'));if(bk)put('B',bk,['r','l','in'])}
@@ -9512,6 +9514,8 @@ ${Z} #prep .pc-prep-quick .pc-quick:hover{border-color:var(--nbs-hover,#d8b878)!
 (()=>{const Z='#orient'.repeat(140),st=document.createElement('style');st.id='pc-pause-fit';st.textContent=
 `${Z} #pause .nbp-audiogrid{max-width:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important}
 ${Z} #pause .nbp-audiogrid>.nbp-ah{grid-column:1/-1!important}
+${Z} :is(#pause .nbp-ah,#opts .nbo-ah)>:is(small,h2,h3){display:none!important}
+${Z} :is(#pause .nbp-ah,#opts .nbo-ah){margin-top:0!important;padding-top:0!important}
 ${Z} #pause .nbp-audiogrid>.nbp-audio{margin:0!important;min-width:0!important}
 ${Z} #pause .nbp-pane:has(#qualityRow){grid-template-columns:repeat(3,minmax(0,1fr))!important;grid-template-rows:auto auto!important;align-items:stretch!important;gap:calc(14 * min(.05981vw,.10627vh))!important}
 ${Z} #pause .nbp-pane:has(#qualityRow)>section{margin:0!important;min-width:0!important}
