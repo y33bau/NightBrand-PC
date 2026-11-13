@@ -745,3 +745,4 @@ cache667 · Opcje > Audio: dwa duże klasyczne suwaki zamiast kart z kafelkami (
 cache668 · Opcje > Grafika w układzie PC (wiersze: nazwa | przełącznik), rozdzielczość 4K (nie sprawdzono: pad, wydajność 4K u autora)
 cache669 · Menu główne: delikatny przełącznik Fabularny | Arcade zamiast banerów (nie sprawdzono: pad)
 cache670 · START: wybór rozdziału -> Przygotowanie, w Przygotowaniu pytanie Rozpocząć noc?; większe logo; legenda niżej (nie sprawdzono: prawdziwy pad)
+cache671 · Kursor pada w menu (lewa gałka, A klika, najechanie jak myszą), kursor myszy: sztylet w menu, celownik w grze (nie sprawdzono: prawdziwy pad, prędkość kursora u autora)

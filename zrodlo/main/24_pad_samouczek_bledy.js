@@ -42,6 +42,21 @@ function padScroll(root,ry,dt){if(Math.abs(ry)<.3)return;const can=e=>e&&e.scrol
   let t=[...root.querySelectorAll('.pc-perk-detail,#kapDet,.m2k-det,.nbp-panel,#lvl .level-build,.pane:not([hidden]),.mpane:not([hidden])')].find(e=>e.offsetParent!==null&&can(e));
   if(!t){let e=document.activeElement;while(e&&e!==document.body&&!can(e))e=e.parentElement;if(can(e))t=e}if(!t&&can(root))t=root;
   if(t)t.scrollTop+=Math.sign(ry)*(Math.abs(ry)-.3)/.7*dt*1300}
+// 13.11.2026: kursor pada w menu (jak w konsolowych wersjach wielu gier): lewa gałka przesuwa sztylet, A klika to, co pod nim.
+// Element pod kursorem dostaje fokus pada (złote podświetlenie), więc A, legenda i znaczki działają bez zmian. Krzyżak nadal skacze po przyciskach.
+const PCUR={x:innerWidth/2,y:innerHeight/2,el:null,last:0,show:false};
+{const st=document.createElement('style');st.textContent="#padCur{position:fixed;left:0;top:0;z-index:2147483050;width:calc(40 * min(.05981vw,.10627vh));height:auto;pointer-events:none;filter:drop-shadow(0 2px 3px #000c);will-change:transform}#padCur[hidden],body:not(.padlast) #padCur{display:none}"+
+ "body,body *{cursor:url(assets/ui/c47c63b4d8d3a69aaeab201893dcebaec28c3b4894fa96dd5e112dda44052b91.png) 1 1,auto!important}body canvas#gl{cursor:url(assets/ui/984955c43a7756900d2a0f63ae46771f2aa5e6c65e84147f096eaca1761fc5bb.png) 18 19,crosshair!important}";document.head.append(st)}
+function padCurPark(){const a=document.activeElement;if(a&&a!==document.body){const r=a.getBoundingClientRect();PCUR.x=r.left+r.width/2;PCUR.y=r.top+r.height/2}if(PCUR.el)PCUR.el.hidden=true;PCUR.show=false}
+function padCurTick(root,g){const now=performance.now(),dt=Math.min(.05,(now-(PCUR.last||now))/1000);PCUR.last=now;if(PAD.grab||!g)return;
+  const [x,y]=padDz(g.axes[0]||0,g.axes[1]||0,.2);if(!x&&!y)return;
+  if(!PCUR.el){PCUR.el=document.createElement('img');PCUR.el.id='padCur';PCUR.el.src='assets/ui/09ec512dc3c0387166c377318f86878d62e4c4b39f2d081fb32b9a8075d99898.png';PCUR.el.alt='';PCUR.el.setAttribute('aria-hidden','true');document.body.append(PCUR.el)}
+  if(!PCUR.show){PCUR.show=true;PCUR.el.hidden=false}
+  const m=Math.hypot(x,y),sp=(380+1500*m*m)*Math.max(.6,Math.min(innerWidth,innerHeight*16/9)/1600);
+  PCUR.x=Math.max(2,Math.min(innerWidth-2,PCUR.x+x*sp*dt));PCUR.y=Math.max(2,Math.min(innerHeight-2,PCUR.y+y*sp*dt));
+  PCUR.el.style.transform='translate('+PCUR.x.toFixed(1)+'px,'+PCUR.y.toFixed(1)+'px) translate(-50%,-50%)';
+  const t=document.elementFromPoint(PCUR.x,PCUR.y),b=t&&t.closest('button,summary,input,label,.rng,[tabindex]:not([tabindex="-1"])');if(!b||!root.contains(b))return;
+  const f=b.matches('label,.rng')?(b.querySelector('input')||b):b;if(f!==document.activeElement&&!f.disabled){if(PCUR.hov&&PCUR.hov!==b)for(const n of ['pointerout','pointerleave','mouseout','mouseleave'])PCUR.hov.dispatchEvent(new MouseEvent(n,{bubbles:!n.endsWith('leave'),clientX:PCUR.x,clientY:PCUR.y}));PCUR.hov=b;for(const n of ['pointerover','pointerenter','mouseover','mouseenter'])b.dispatchEvent(new MouseEvent(n,{bubbles:!n.endsWith('enter'),clientX:PCUR.x,clientY:PCUR.y}));f.focus({preventScroll:true})}}/* zdarzenia najechania jak myszą: podglądy i opisy reagują tak samo */
 // 13.11.2026: START na ekranie przygotowania pyta, czy rozpocząć noc (A/START — tak, B — nie, lewo/prawo — wybór)
 let PADASK=null;
 function padAskOpen(){if(PADASK)return;const T=(p,e)=>EN?e:p,d=document.createElement('div');d.id='padAsk';d.setAttribute('role','alertdialog');d.setAttribute('aria-modal','true');
@@ -53,16 +68,17 @@ function padAskClose(go){if(!PADASK)return;PADASK.el.remove();PADASK=null;if(go)
 function padNav(id,dt,pr,g){
   if(PADASK){if(id!=='prep'){padAskClose(false);return}if(pr(14)||pr(15)||pr(2)){PADASK.sel=PADASK.sel?0:1;PADASK.upd()}if(pr(9))padAskClose(true);else if(pr(0))padAskClose(PADASK.sel===0);else if(pr(1))padAskClose(false);return}
   const root=$(id);if(!root)return;const items=padItems(root);if(!items.length)return;
+  padCurTick(root,g);
   let i=items.indexOf(padKeep(id,items));if(i<0)return;
   const cur=items[i];
   let dir=0,hor=0;const lx=g.axes[0]||0,ly=g.axes[1]||0;
-  const up=PAD.cur[12]||ly<-.6,dn=PAD.cur[13]||ly>.6,lf=PAD.cur[14]||lx<-.6,rt=PAD.cur[15]||lx>.6;
+  const sk=!!PAD.grab,up=PAD.cur[12]||sk&&ly<-.6,dn=PAD.cur[13]||sk&&ly>.6,lf=PAD.cur[14]||sk&&lx<-.6,rt=PAD.cur[15]||sk&&lx>.6;/* 13.11.2026: lewa gałka steruje kursorem (padCurTick); krzyżak skacze po przyciskach; gałka zmienia suwak tylko po chwyceniu A */
   const d=up?-1:dn?1:lf?-2:rt?2:0;
   if(d===0){PAD.navD=0;PAD.nav=0}else{PAD.nav-=dt;if(d!==PAD.navD||PAD.nav<=0){PAD.nav=PAD.navD===d?.16:.4;PAD.navD=d;if(d===1||d===2)dir=1;else dir=-1;hor=Math.abs(d)===2}}
   const grabOff=()=>{PAD.grab=null;for(const e of document.querySelectorAll('.rng.grab'))e.classList.remove('grab')};
   if(PAD.grab&&PAD.grab!==cur)grabOff();
   if(dir){if(PAD.grab===cur||cur.type==='range'&&hor){if(hor){cur.value=String(Math.max(+cur.min,Math.min(+cur.max,+cur.value+dir*Math.max(5,+cur.step||0))));/* 13.11.2026: krok suwaka co najmniej jego step; przy step 10 krok 5 zaokrąglał się w górę i nie dało się zmniejszyć (Wielkość napisów) */cur.dispatchEvent(new Event('input',{bubbles:true}));cur.dispatchEvent(new Event('change',{bubbles:true}))}}
-    else navMove(id,d===1?'d':d===-1?'u':d===2?'r':'l',true)}
+    else{navMove(id,d===1?'d':d===-1?'u':d===2?'r':'l',true);padCurPark()}}
   if(pr(0)){if(cur.type==='range'){if(PAD.grab===cur)grabOff();else{PAD.grab=cur;if(cur.parentNode)cur.parentNode.classList.add('grab')}}else cur.click()}
   if(pr(1)&&PAD.grab){grabOff();return}
   if(pr(1)&&pcMenuBack&&pcMenuBack())return;
@@ -138,7 +154,7 @@ let PADHINT=null,PADHT=0;
 html.padprio body.padnav ${Z} label.pf,html.padprio body.padnav ${Z} .rng.pf{outline-offset:4px!important}`;document.head.append(st)}
 // 13.11.2026: przycisk „Wróć” widoczny także przy padzie (znaczek B obok); zastępuje ukrywanie z rundy 261 w CSS
 {const st=document.createElement('style');st.textContent="html body.padlast #orient#orient#orient#orient .backar,html body.padlast #orient#orient#orient#orient :is(#prep,#opts,#manual)>.backar{display:block!important}";document.head.append(st)}
-function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.15;
+function padHintTick(mid,dt){if(PCUR.el&&(!mid||PADASK)&&!PCUR.el.hidden){PCUR.el.hidden=true;PCUR.show=false}PADHT-=dt;if(PADHT>0)return;PADHT=.15;
   const show=!PADASK&&!!mid&&mid!=='notice'&&mid!=='recovery'&&padPrio()&&document.body.classList.contains('padlast');
   if(!PADHINT){if(!show)return;PADHINT=document.createElement('div');PADHINT.id='padHints';PADHINT.setAttribute('aria-hidden','true');document.body.append(PADHINT);
     const st=document.createElement('style');st.textContent="#padHints{--u:min(.05981vw,.10627vh);position:fixed;inset:0;z-index:2147483000;pointer-events:none}#padHints[hidden]{display:none}#padHints b{position:absolute;display:grid;place-items:center;box-sizing:border-box;height:calc(32 * var(--u));min-width:calc(32 * var(--u));padding:0 calc(7 * var(--u));border-radius:calc(16 * var(--u));background:radial-gradient(circle at 50% 35%,#3a2a2e,#160f12 75%);border:calc(1.5 * var(--u)) solid #c8a05a;box-shadow:0 0 0 calc(1 * var(--u)) #000a,0 calc(2 * var(--u)) calc(6 * var(--u)) #000c;color:#f1d79a;font:700 calc(15 * var(--u))/1 Cinzel,Georgia,serif;letter-spacing:.02em;white-space:nowrap}#padHints b.ic{display:block;background:none;border:0;box-shadow:none;padding:0;border-radius:0;min-width:0}#padHints b.ic img{display:block;width:100%;height:100%;filter:drop-shadow(0 calc(1 * var(--u)) calc(2 * var(--u)) #000d)}#padHints .leg{position:absolute;display:flex;align-items:center;gap:calc(16 * var(--u));padding:calc(5 * var(--u)) calc(14 * var(--u));background:#0d090a73;border:calc(1 * var(--u)) solid #b08a4a3a;border-radius:calc(3 * var(--u));font:600 calc(12.5 * var(--u))/1 Cinzel,Georgia,serif;letter-spacing:.04em;color:#e9dcc2e6;text-shadow:0 1px 2px #000;white-space:nowrap}#padHints .leg span{display:flex;align-items:center;gap:calc(6 * var(--u));height:calc(20 * var(--u))}#padHints .leg img{height:100%;width:auto;display:block}html.padprio body.padlast,html.padprio body.padlast *{cursor:none!important}html.padprio body.padlast #lvl .hint{visibility:hidden}";document.head.append(st)}
