@@ -6509,7 +6509,7 @@ function padTick0(dt){
   if(mid){PAD.x=PAD.y=0;PAD.atk=PAD.blk=false;
     if(PAD.lock>0)return;
     if(PAD.fresh){PAD.fresh=false;PAD.keep=null;const ae0=document.activeElement,keep0=$(mid).contains(ae0)&&ae0!==$(mid)&&!ae0.disabled&&ae0.offsetParent!==null?ae0:null;const f=keep0||(mid==='lvl'&&$('card0')&&!$('card0').disabled?$('card0'):null)||(mid==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home')?$('title').querySelector('.premium-selected:not(:disabled)'):null)||(mid==='title'&&$('start1')&&$('start1').offsetParent!==null&&!$('start1').disabled?$('start1'):null)||[...$(mid).querySelectorAll('button,input')].filter(e=>!e.disabled&&e.offsetParent!==null)[0];if(f)f.focus();return}
-    if(mid==='lvl'){const ready=performance.now()>=levelReadyAt;if(pr(3)){const d=document.querySelector('#lvl .level-build');if(d)d.open=!d.open;return}if(!ready&&(pr(0)||pr(2))){play('empty',0);return}if(pr(2)){rerollLevelCards();return}}
+    if(mid==='lvl'){const ready=performance.now()>=levelReadyAt;if(pr(2)){const d=document.querySelector('#lvl .level-build');if(d)d.open=!d.open;return}if(!ready&&(pr(0)||pr(3))){play('empty',0);return}if(pr(3)){rerollLevelCards();return}}
     padNav(mid,dt,pr,g);if(pr(9)&&mid==='pause')togglePause(false);return}
   if(!S||S.phase!=='play'){PAD.x=PAD.y=0;PAD.atk=PAD.blk=false;return}
   if(pr(9)){togglePause(true);return}
@@ -6534,18 +6534,31 @@ addEventListener('gamepadconnected',()=>padPrioSet(true));addEventListener('game
 addEventListener('mousedown',()=>{if(!padPrio())document.body.classList.remove('padnav')},true);
 // kursor myszy chowa się, gdy grasz padem; wraca, gdy ruszysz myszą
 {let mx=0;addEventListener('mousemove',e=>{mx+=Math.abs(e.movementX||0)+Math.abs(e.movementY||0);if(mx>12){mx=0;document.body.classList.remove('padlast')}},{passive:true});setInterval(()=>{mx=0},400)}
-// podpowiedzi przycisków pada w menu (lewy dolny róg, jak w grach na konsoli)
+// podpowiedzi przycisków pada w menu (13.11.2026): znaczki LB/RB, LT/RT, B, X, Y, ☰ przy samych kontrolkach,
+// nie osobny pasek. Pozycja liczona z prostokąta kontrolki; strona, na której znaczek nic nie zasłania.
 let PADHINT=null,PADHT=0;
-function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.25;
+function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.15;
   const show=!!mid&&mid!=='notice'&&mid!=='recovery'&&padPrio()&&document.body.classList.contains('padlast');
   if(!PADHINT){if(!show)return;PADHINT=document.createElement('div');PADHINT.id='padHints';PADHINT.setAttribute('aria-hidden','true');document.body.append(PADHINT);
-    const st=document.createElement('style');st.textContent="#padHints{position:fixed;left:50%;transform:translateX(-50%);bottom:3px;z-index:2147483000;display:flex;gap:16px;align-items:center;padding:2px 12px 2px 4px;border-radius:13px;background:rgba(12,9,10,.78);border:1px solid rgba(200,160,90,.35);font:500 13px/1 Cinzel,Georgia,serif;letter-spacing:.04em;color:#e8dcc4;pointer-events:none;white-space:nowrap}#padHints[hidden]{display:none}#padHints span{display:inline-flex;align-items:center;gap:6px}#padHints b{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 4px;border-radius:10px;background:#2a2124;border:1px solid #c8a05a;color:#f1d79a;font:700 11px/1 Georgia,serif;letter-spacing:0}html.padprio body.padlast,html.padprio body.padlast *{cursor:none!important}";document.head.append(st)}
+    const st=document.createElement('style');st.textContent="#padHints{--u:min(.05981vw,.10627vh);position:fixed;inset:0;z-index:2147483000;pointer-events:none}#padHints[hidden]{display:none}#padHints b{position:absolute;display:grid;place-items:center;box-sizing:border-box;height:calc(32 * var(--u));min-width:calc(32 * var(--u));padding:0 calc(7 * var(--u));border-radius:calc(16 * var(--u));background:radial-gradient(circle at 50% 35%,#3a2a2e,#160f12 75%);border:calc(1.5 * var(--u)) solid #c8a05a;box-shadow:0 0 0 calc(1 * var(--u)) #000a,0 calc(2 * var(--u)) calc(6 * var(--u)) #000c;color:#f1d79a;font:700 calc(15 * var(--u))/1 Cinzel,Georgia,serif;letter-spacing:.02em;white-space:nowrap}html.padprio body.padlast,html.padprio body.padlast *{cursor:none!important}html.padprio body.padlast #lvl .hint{visibility:hidden}";document.head.append(st)}
   PADHINT.hidden=!show;if(!show)return;
-  const root=$(mid),T2=(a,b)=>EN?b:a,H=[];const has=sel=>root&&[...root.querySelectorAll(sel)].filter(b=>!b.hidden&&!b.disabled&&b.offsetParent!==null).length>1;
-  if(mid==='lvl'){H.push(['A',T2('Wybierz','Select')],['X',T2('Przerzuć','Reroll')],['Y',T2('Szczegóły','Details')])}
-  else{H.push(['A',T2('Wybierz','Select')]);if(!(mid==='title'&&$('title').classList.contains('pc-home')))H.push(['B',T2('Wróć','Back')])}
-  if(has(PADTABS))H.push(['LB RB',T2('Zakładki','Tabs')]);if(has(PADSUBS))H.push(['LT RT',T2('Strony','Pages')]);if(mid==='pause')H.push(['☰',T2('Wznów','Resume')]);
-  const html=H.map(([k,t])=>'<span>'+k.split(' ').map(x=>'<b>'+x+'</b>').join('')+t+'</span>').join('');if(PADHINT.innerHTML!==html)PADHINT.innerHTML=html}
+  const root=$(mid);if(!root){PADHINT.innerHTML='';return}
+  const vis=e=>e&&!e.hidden&&!e.disabled&&e.offsetParent!==null&&e.getBoundingClientRect().width>2;
+  const u=Math.min(innerWidth*.0005981,innerHeight*.0010627),gap=8*u,H=32*u;
+  // przeszkody: widoczne przyciski i elementy z własnym tekstem w aktywnym menu
+  const obs=[];for(const e of root.querySelectorAll('button,input,summary,h1,h2,h3,p,span,strong,small,img,label')){if(!vis(e))continue;const r=e.getBoundingClientRect();if(r.width>innerWidth*.8&&r.height>innerHeight*.5)continue;obs.push([e,r])}
+  const out=[],placed=[];
+  const hit=(x,y,w,h,own)=>x<2||y<2||x+w>innerWidth-2||y+h>innerHeight-2||placed.some(q=>x<q[0]+q[2]+2&&q[0]<x+w+2&&y<q[1]+q[3]+2&&q[1]<y+h+2)||obs.some(([e,r])=>{if(own.includes(e)||e.contains(own[0])||!(x<r.right&&r.left<x+w&&y<r.bottom&&r.top<y+h))return false;const t=document.elementFromPoint((Math.max(x,r.left)+Math.min(x+w,r.right))/2,(Math.max(y,r.top)+Math.min(y+h,r.bottom))/2);return !!t&&(t===e||e.contains(t)||t.contains(e))});
+  const put=(txt,el,sides,own,tr)=>{if(!vis(el))return;let r=el.getBoundingClientRect();if(tr){try{const g=document.createRange();g.selectNodeContents(el);const q=g.getBoundingClientRect();if(q.width>2)r=q}catch(e){}}const top=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);if(top&&!root.contains(top))return;const w=Math.max(H,(txt.length*11+14)*u);own=own||[el];
+    for(const sd of sides){let x,y;if(sd==='l'){x=r.left-gap-w;y=r.top+r.height/2-H/2}else if(sd==='r'){x=r.right+gap;y=r.top+r.height/2-H/2}else if(sd==='t'){x=r.left+r.width/2-w/2;y=r.top-gap-H}else if(sd==='b'){x=r.left+r.width/2-w/2;y=r.bottom+gap}else if(sd==='in'){x=r.right-w-gap;y=r.top+r.height/2-H/2}
+      if(!hit(x,y,w,H,own)){placed.push([x,y,w,H]);out.push('<b style="left:'+x.toFixed(1)+'px;top:'+y.toFixed(1)+'px">'+txt+'</b>');return}}};
+  const pair=(sel,a,b)=>{const tb=[...root.querySelectorAll(sel)].filter(vis);if(tb.length<2)return;const f=tb[0].getBoundingClientRect(),l=tb[tb.length-1].getBoundingClientRect(),hor=Math.abs(f.top-l.top)<f.height/2;
+    if(hor){put(a,tb[0],['l','t'],tb);put(b,tb[tb.length-1],['r','t'],tb)}else{put(a,tb[0],['t','l','r'],tb);put(b,tb[tb.length-1],['b','l','r'],tb)}};
+  pair(PADTABS,'LB','RB');pair(PADSUBS,'LT','RT');
+  if(mid==='lvl'){put('Y',$('rerollBtn'),['r','l','t','b']);const bd=root.querySelector('.level-build>summary')||root.querySelector('.level-build');if(bd)put('X',bd,['r','l','in'],null,true)}
+  else if(mid==='pause'){put('☰',$('resumeBtn'),['l','t','r','in'])}
+  else{const bk=[...root.querySelectorAll('button')].filter(vis).find(e=>/(Back|Close)$/.test(e.id)||/^\s*(←|‹)/.test(e.textContent)||e.classList.contains('pc-back')||e.classList.contains('back'));if(bk)put('B',bk,['r','l','in'])}
+  const html=out.join('');if(PADHINT.innerHTML!==html)PADHINT.innerHTML=html}
 // ---- krótki samouczek: podpowiedzi w pierwszej nocy rozdziału I, tylko raz ----
 function tutorialKey(){return 'pn_tut_s'}
 function tutorialDone(){try{return localStorage.getItem(tutorialKey())==='1'}catch(e){return false}}
