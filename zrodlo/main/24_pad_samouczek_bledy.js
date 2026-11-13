@@ -52,7 +52,7 @@ function padCurTick(root,g){const now=performance.now(),dt=Math.min(.05,(now-(PC
   const [x,y]=padDz(g.axes[0]||0,g.axes[1]||0,.2);if(!x&&!y)return;
   if(!PCUR.el){PCUR.el=document.createElement('img');PCUR.el.id='padCur';PCUR.el.src='assets/ui/09ec512dc3c0387166c377318f86878d62e4c4b39f2d081fb32b9a8075d99898.png';PCUR.el.alt='';PCUR.el.setAttribute('aria-hidden','true');document.body.append(PCUR.el)}
   if(!PCUR.show){PCUR.show=true;PCUR.el.hidden=false}
-  const m=Math.hypot(x,y),sp=(380+1500*m*m)*Math.max(.6,Math.min(innerWidth,innerHeight*16/9)/1600);
+  const m=Math.hypot(x,y),sp=.6*(380+1500*m*m)*Math.max(.6,Math.min(innerWidth,innerHeight*16/9)/1600);
   PCUR.x=Math.max(2,Math.min(innerWidth-2,PCUR.x+x*sp*dt));PCUR.y=Math.max(2,Math.min(innerHeight-2,PCUR.y+y*sp*dt));
   PCUR.el.style.transform='translate('+PCUR.x.toFixed(1)+'px,'+PCUR.y.toFixed(1)+'px) translate(-50%,-50%)';
   const t=document.elementFromPoint(PCUR.x,PCUR.y),b=t&&t.closest('button,summary,input,label,.rng,[tabindex]:not([tabindex="-1"])');if(!b||!root.contains(b))return;
