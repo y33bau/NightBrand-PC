@@ -6521,7 +6521,7 @@ function padNav(id,dt,pr,g){
   if(d===0){PAD.navD=0;PAD.nav=0}else{PAD.nav-=dt;if(d!==PAD.navD||PAD.nav<=0){PAD.nav=PAD.navD===d?.16:.4;PAD.navD=d;if(d===1||d===2)dir=1;else dir=-1;hor=Math.abs(d)===2}}
   const grabOff=()=>{PAD.grab=null;for(const e of document.querySelectorAll('.rng.grab'))e.classList.remove('grab')};
   if(PAD.grab&&PAD.grab!==cur)grabOff();
-  if(dir){if(PAD.grab===cur||cur.type==='range'&&hor){if(hor){cur.value=String(Math.max(+cur.min,Math.min(+cur.max,+cur.value+dir*5)));cur.dispatchEvent(new Event('input',{bubbles:true}));cur.dispatchEvent(new Event('change',{bubbles:true}))}}
+  if(dir){if(PAD.grab===cur||cur.type==='range'&&hor){if(hor){cur.value=String(Math.max(+cur.min,Math.min(+cur.max,+cur.value+dir*Math.max(5,+cur.step||0))));/* 13.11.2026: krok suwaka co najmniej jego step; przy step 10 krok 5 zaokrąglał się w górę i nie dało się zmniejszyć (Wielkość napisów) */cur.dispatchEvent(new Event('input',{bubbles:true}));cur.dispatchEvent(new Event('change',{bubbles:true}))}}
     else navMove(id,d===1?'d':d===-1?'u':d===2?'r':'l',true)}
   if(pr(0)){if(cur.type==='range'){if(PAD.grab===cur)grabOff();else{PAD.grab=cur;if(cur.parentNode)cur.parentNode.classList.add('grab')}}else cur.click()}
   if(pr(1)&&PAD.grab){grabOff();return}
