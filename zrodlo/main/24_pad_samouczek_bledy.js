@@ -151,12 +151,10 @@ function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.15;
    const b={pause:EN?'Resume':'Wznów',shop:EN?'Close':'Zamknij',end:'Menu',opts:EN?'Back':'Wróć',manual:EN?'Back':'Wróć',prep:EN?'Back':'Wróć',kap:EN?'Back':'Wróć',conf:EN?'Back':'Wróć'}[mid]||(mid==='title'&&!home?(EN?'Back':'Wróć'):'');if(b)L.push(['B',b]);
    if(['title','prep','kap','manual'].includes(mid))L.push(['VIEW',EN?'Options':'Opcje']);
    const st={prep:EN?'Ready':'Gotowy',pause:EN?'Resume':'Wznów',shop:EN?'Close':'Zamknij'}[mid];if(st)L.push(['MENU',st]);
-   // pozycja: prawy dół, lewy dół, środek dołu, środek góry; pierwsza, która nie zasłania żadnej kontrolki ani tekstu
-   const LH=32*u,m=10*u;let lw=30*u;for(const [k,t] of L)lw+=20*u*PADICON[k][1]+(t.length*9.2+24)*u;
-   const free=(x,y)=>!obs.some(([e,r])=>x<r.right+4&&r.left<x+lw+4&&y<r.bottom+4&&r.top<y+LH+4);
-   const cand=[[innerWidth-lw-m,innerHeight-LH-m],[m,innerHeight-LH-m],[(innerWidth-lw)/2,innerHeight-LH-m],[(innerWidth-lw)/2,m]];
-   const [lx,ly]=cand.find(([x,y])=>free(x,y))||cand[0];placed.push([lx,ly,lw,LH]);
-   out.push('<div class="leg" style="left:'+lx.toFixed(1)+'px;top:'+ly.toFixed(1)+'px">'+L.map(([k,t])=>'<span><img src="'+PADICON[k][0]+'" alt="">'+t+'</span>').join('')+'</div>')}
+   // pozycja: zawsze prawy dolny róg (wybór autora 13.11.2026), z odstępem od ikon przeglądarki przy prawej krawędzi
+   const LH=32*u;let lw=30*u;for(const [k,t] of L)lw+=20*u*PADICON[k][1]+(t.length*9.2+24)*u;
+   const lx=innerWidth-lw-56*u,ly=innerHeight-LH-8*u;placed.push([lx,ly,lw,LH]);
+   out.push('<div class="leg" style="right:'+(56*u).toFixed(1)+'px;bottom:'+(8*u).toFixed(1)+'px">'+L.map(([k,t])=>'<span><img src="'+PADICON[k][0]+'" alt="">'+t+'</span>').join('')+'</div>')}
   pair(PADTABS,'LB','RB');pair(PADSUBS,'LT','RT');
   // Back (View) otwiera Opcje: znaczek przy kole zębatym na wyborze rozdziału
   if(mid==='title'&&!$('title').classList.contains('pc-home'))put('VIEW',$('optsBtn'),['l','b','r'],null,false);

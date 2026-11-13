@@ -736,3 +736,4 @@ cache658 · runda: koksowniki nieruchome (stala klatka), opis opcji w przygotowa
 cache659 · runda: koksowniki z nowych klatek p2_brazier (III, V), animacja przywrocona; nie sprawdzono w grze
 cache660 · Znaczki pada jako obrazki + pasek legendy w menu (nie sprawdzono: pad, wygląd na komputerze autora)
 cache661 · Znaczki pada mniejsze (jak dawne), lżejszy pasek legendy omijający kontrolki (nie sprawdzono: pad, wygląd u autora)
+cache662 · Pasek legendy pada stale w prawym dolnym rogu (nie sprawdzono: pad, wygląd u autora)
