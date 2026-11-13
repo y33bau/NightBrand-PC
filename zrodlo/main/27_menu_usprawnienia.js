@@ -89,6 +89,7 @@
 @N@ #prep .pc-prep-settings details{left:auto!important;right:0!important}
 @N@ #prep .pc-prep-settings details>div{left:auto!important;right:0!important}
 @N@ #prep .nb2-sub{position:absolute!important;left:0!important;right:0!important;bottom:-.4vh!important;margin:0!important;padding:0!important;text-align:center!important;font:500 max(12px,1.75vh)/1 Cinzel,Georgia,serif!important;letter-spacing:.22em!important;text-transform:uppercase!important;color:#c9a45a!important;background:none!important;border:0!important;pointer-events:none!important;display:block!important}
+@N@ #prep #prepK.nb2-sub{display:none!important}
 /* --- Przygotowanie: karta klasy i staly rzad klas --- */
 @N@ #prep #prepChar{display:flex!important;flex-direction:column!important;gap:1.1vh!important;overflow:hidden auto!important}
 @N@ #prep #prepChar>.premium-class-description{display:none!important}
