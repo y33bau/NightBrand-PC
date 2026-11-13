@@ -758,3 +758,4 @@ cache680 · efekty Kata kat_fx: ciecie, ciezkie uderzenie, fala po doskoku, iskr
 cache681 · Kat: mniejsze efekty ciosow (silny x0.45, lekki x0.64) (nie sprawdzono: wyglad w grze, pad, itch.io)
 cache682 · Kat: nowe, malowane efekty atakow (kat_fx) (nie sprawdzono: wyglad w grze, pad, itch.io)
 cache683 · Zabojczyni: nowe arkusze lekkich atakow (db), silnych/gora (dc) i ciosow 4-5 (atk45) (nie sprawdzono: wyglad w grze, pad, itch.io)
+cache684 · Zabojczyni: nowe arkusze (zip Remake: d, db, dc, dd, def, death, rend, fan, whirl, atk45); nie sprawdzono w grze, pad, dzwiek, FPS
