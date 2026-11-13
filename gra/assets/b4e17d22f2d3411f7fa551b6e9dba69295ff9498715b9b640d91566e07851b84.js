@@ -9646,6 +9646,9 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
  const st=document.createElement('style');st.id='nb-layout-css';document.head.append(st);
  const r2=v=>Math.round(v*100)/100;
  let EDM=false;
+ const NB_IMG_DEF={}; /* nazwa pliku -> adres obrazu w assets (uzupełnia Claude po wgraniu obrazów) */
+ let IMG=Object.assign({},NB_IMG_DEF);
+ if(EDIT){try{Object.assign(IMG,JSON.parse(localStorage.getItem('nbLayoutImg')||'{}'))}catch(e){}}
  const PRE={
   ciemny:'background:#120a09!important;border:1px solid #5a4630!important;border-image:none!important;box-shadow:none!important;',
   zlota:'background:#1a0e0ccc!important;border:2px solid #e8c16f!important;border-image:none!important;box-shadow:0 0 12px #e8c16f55!important;',
@@ -9660,6 +9663,9 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
   if(a[0]||a[1]||a[2]!==1||e.rot)o+=k+'{translate:'+r2(a[0])+'vw '+r2(a[1])+'vw!important;scale:'+(Math.round(a[2]*1000)/1000)+'!important'+(e.rot?';rotate:'+e.rot+'deg!important':'')+'}\n';
   let d='';
   if(e.pre&&PRE[e.pre])d+=PRE[e.pre];
+  if(e.img&&IMG[e.img]){const u='url("'+IMG[e.img]+'")';
+   if(e.fit==='slice')d+='background:none!important;background-image:none!important;border:24px solid transparent!important;border-image:'+u+' '+(e.sl||30)+'% fill / 24px stretch!important;box-shadow:none!important;';
+   else d+='background:'+u+' center/100% 100% no-repeat!important;border:none!important;border-image:none!important;box-shadow:none!important;'}
   if(e.bg)d+='background:'+e.bg+'!important;background-image:none!important;';
   if(e.bd)d+='border:2px solid '+e.bd+'!important;border-image:none!important;';
   if(e.r!=null)d+='border-radius:'+e.r+'px!important;';
@@ -9725,6 +9731,11 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
   <button data-a="up">▲ Rodzic</button><button data-a="down">▼ Dziecko</button><button data-a="s-">Mniejszy −</button><button data-a="s+">Większy +</button><br>
   <button data-a="r1">Reset elementu</button><button data-a="r2">Reset ekranu</button><button data-a="r3">Reset wszystkiego</button>
 <div class="st" data-st>
+   <label><span>Własny obraz</span><input type="file" accept="image/*" data-file style="flex:1;min-width:0;pointer-events:auto"></label>
+   <label><span>Sposób</span><select data-p="fit"><option value="">Rozciągnij na cały baner</option><option value="slice">Ramka 9-pól (rogi stałe)</option></select></label>
+   <label><span>Grubość rogów %</span><input type="range" data-p="sl" min="5" max="45" value="30"></label>
+   <button data-x="img">✕ Usuń obraz</button>
+  
    <label><span>Rodzaj baneru</span><select data-p="pre">${Object.keys(PREN).map(k=>'<option value="'+k+'">'+PREN[k]+'</option>').join('')}</select></label>
    <label><span>Kolor tła</span><input type="color" data-p="bg" value="#2a1410"><button data-x="bg">✕</button></label>
    <label><span>Kolor ramki</span><input type="color" data-p="bd" value="#e8c16f"><button data-x="bd">✕</button></label>
@@ -9749,7 +9760,7 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
   ui.querySelectorAll('[data-p]').forEach(c=>{const n=c.dataset.p,v=e[n];
    if(c.type==='checkbox')c.checked=!!v;else if(c.tagName==='SELECT')c.value=v||'';
    else if(c.type==='color')c.value=v||c.defaultValue;
-   else c.value=v!=null?v:(n==='r'||n==='rot'?0:100)})}
+   else c.value=v!=null?v:(n==='r'||n==='rot'?0:n==='sl'?30:100)})}
  function info(){syncSt();if(!sel){inf.textContent='Kliknij element na ekranie.';return}
   const k=keyOf(sel),a=get(k);inf.innerHTML='<b>'+screenOf(sel)+'</b> · '+k.replace(/^body>/,'').slice(-70)+'<br>x '+a[0]+' · y '+a[1]+' · skala '+a[2]}
  function draw(){if(!sel||!document.contains(sel)||mode!=='edit'){box.style.display='none';return}
@@ -9816,6 +9827,13 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
  function undo(){if(!hist.length)return;L=JSON.parse(hist.pop());save()}
  function dump(){const o={};for(const k in L)if(L[k]&&(L[k][0]||L[k][1]||L[k][2]!==1||L[k][4]))o[k]=L[k];
   return 'NBLAYOUT '+innerWidth+'x'+innerHeight+' '+JSON.stringify(o)}
+ ui.addEventListener('change',e=>{const f=e.target.closest('[data-file]');if(!f||!f.files[0]||!sel)return;
+  const file=f.files[0],name=file.name.replace(/[^\w.\-]/g,'_'),fr=new FileReader();
+  fr.onload=()=>{const im=new Image();im.onload=()=>{
+   const sc=Math.min(1,1200/im.width),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);
+   c.getContext('2d').drawImage(im,0,0,c.width,c.height);IMG[name]=c.toDataURL('image/webp',.88);
+   try{localStorage.setItem('nbLayoutImg',JSON.stringify(IMG))}catch(x){inf.textContent='Obraz za duży do zapamiętania w przeglądarce – działa do odświeżenia.'}
+   stPush=true;setX('img',name);save();f.value=''};im.src=fr.result};fr.readAsDataURL(file)});
  let stPush=false;
  ui.addEventListener('pointerdown',e=>{if(e.target.closest('[data-st]'))stPush=true});
  function setX(n,v){if(!sel)return;const k=keyOf(sel),a=get(k).slice();const x=Object.assign({},a[4]||{});
