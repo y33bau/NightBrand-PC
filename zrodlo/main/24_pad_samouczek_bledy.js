@@ -37,7 +37,7 @@ function padKeep(id,items){const ae=document.activeElement;
 function padCycle(root,sel,step){const tb=[...root.querySelectorAll(sel)].filter(b=>!b.disabled&&!b.hidden&&b.offsetParent!==null);if(tb.length<2)return false;
   const on=b=>b.classList.contains('on')||b.getAttribute('aria-pressed')==='true'||b.getAttribute('aria-selected')==='true';
   let ci=tb.findIndex(on);if(ci<0)ci=Math.max(0,tb.indexOf(document.activeElement));const nx=tb[(ci+step+tb.length)%tb.length];
-  nx.click();play('pick',0);setTimeout(()=>{const it=padItems(root),f=sel===PADSUBS?(it.find(e=>e.getBoundingClientRect().top>nx.getBoundingClientRect().bottom-2)||it[0]):padFirstContent(root,it);PAD.keep=null;if(f)f.focus({preventScroll:true})},40);return true}
+  nx.click();setTimeout(()=>{const it=padItems(root),f=sel===PADSUBS?(it.find(e=>e.getBoundingClientRect().top>nx.getBoundingClientRect().bottom-2)||it[0]):padFirstContent(root,it);PAD.keep=null;if(f)f.focus({preventScroll:true})},40);return true}
 function padScroll(root,ry,dt){if(Math.abs(ry)<.3)return;const can=e=>e&&e.scrollHeight>e.clientHeight+4&&/(auto|scroll)/.test(getComputedStyle(e).overflowY);
   let t=[...root.querySelectorAll('.pc-perk-detail,#kapDet,.m2k-det,.nbp-panel,#lvl .level-build,.pane:not([hidden]),.mpane:not([hidden])')].find(e=>e.offsetParent!==null&&can(e));
   if(!t){let e=document.activeElement;while(e&&e!==document.body&&!can(e))e=e.parentElement;if(can(e))t=e}if(!t&&can(root))t=root;
