@@ -186,7 +186,9 @@ function activeResourceFlash(k){if(ACTIVE_CFG[k].resource==='stamina'){S.stamFla
 function manaFlash(t=.3){S.manaFlash=t;play('empty',.2)}
 function gainMana(v){if(v>0&&pl.manaMax)pl.mana=Math.min(pl.manaMax,pl.mana+v)}
 function autoEquipActive(k){const slots=pl2&&S.mpTurn===2?pl2.actives.activeSlots:S.activeSlots;if(!ACTIVE_SLASHER.includes(k)||slots.includes(k))return;const i=slots.indexOf(null);if(i>=0)slots[i]=k;renderActiveHud()}
-function loadoutSafe(){return !!(S&&S.paused&&!pl.dead&&!(S.combatLock>0)&&!pl.atk&&pl.roll<=0&&!S.activeWind&&!S.shotWind&&!S.swordShots.length&&!S.swordGuardian&&!S.enemies.some(e=>!e.dead&&e.rise<=0&&Math.hypot(e.x-pl.x,e.y-pl.y)<140+e.r))}
+// 13.11.2026 (decyzja autora): zmiana wyposażenia umiejętności w pauzie zawsze, także w walce.
+// Trwające użycie (activeWind, przywołania) ma własny klucz umiejętności, więc zmiana slotu go nie przerywa.
+function loadoutSafe(){return !!(S&&S.paused&&!pl.dead)}
 function equipActive(i,k){if(!loadoutSafe()||!Number.isInteger(i)||i<0||i>=S.activeSlots.length||k!==null&&(!ACTIVE_SLASHER.includes(k)||!sk(k)))return false;const other=k?S.activeSlots.indexOf(k):-1,old=S.activeSlots[i];S.activeSlots[i]=k;if(other>=0&&other!==i)S.activeSlots[other]=old;renderLoadout();renderActiveHud();return true}
 function activateSlot(i){if(!swordCanAct())return false;const k=S.activeSlots[i],c=ACTIVE_CFG[k],L=sk(k);if(!c||!L)return false;if((S[c.cd]||0)>0){play('empty',.2);return false}if(!canPayActive(k)){activeResourceFlash(k);return false}S.combatLock=4;
  if(k==='whirl'){beginWhirl(L);return true}
