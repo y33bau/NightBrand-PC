@@ -42,7 +42,16 @@ function padScroll(root,ry,dt){if(Math.abs(ry)<.3)return;const can=e=>e&&e.scrol
   let t=[...root.querySelectorAll('.pc-perk-detail,#kapDet,.m2k-det,.nbp-panel,#lvl .level-build,.pane:not([hidden]),.mpane:not([hidden])')].find(e=>e.offsetParent!==null&&can(e));
   if(!t){let e=document.activeElement;while(e&&e!==document.body&&!can(e))e=e.parentElement;if(can(e))t=e}if(!t&&can(root))t=root;
   if(t)t.scrollTop+=Math.sign(ry)*(Math.abs(ry)-.3)/.7*dt*1300}
+// 13.11.2026: START na ekranie przygotowania pyta, czy rozpocząć noc (A/START — tak, B — nie, lewo/prawo — wybór)
+let PADASK=null;
+function padAskOpen(){if(PADASK)return;const T=(p,e)=>EN?e:p,d=document.createElement('div');d.id='padAsk';d.setAttribute('role','alertdialog');d.setAttribute('aria-modal','true');
+  d.innerHTML='<div class="pa-box"><p class="pa-q">'+T('Rozpocząć noc?','Start the night?')+'</p><div class="pa-btns"><button type="button" class="pa-yes">'+T('Tak, ruszam','Yes, begin')+'</button><button type="button" class="pa-no">'+T('Jeszcze nie','Not yet')+'</button></div></div>';
+  if(!$('padAskSt')){const st=document.createElement('style');st.id='padAskSt';st.textContent="#padAsk{position:fixed;inset:0;z-index:2147483100;display:grid;place-items:center;background:#05030499}#padAsk .pa-box{min-width:min(520px,80vw);padding:28px 36px 30px;background:linear-gradient(160deg,#241a1f,#100c0e);border:1px solid #b08a4a99;box-shadow:0 0 0 1px #000,0 20px 60px #000c;text-align:center}#padAsk .pa-q{margin:0 0 22px;font:600 30px/1.2 Cinzel,Georgia,serif;letter-spacing:.06em;color:#ecd6a6}#padAsk .pa-btns{display:flex;gap:16px;justify-content:center}#padAsk button{min-width:180px;padding:12px 22px;font:600 18px/1 Cinzel,Georgia,serif;letter-spacing:.06em;color:#d9c8a6;background:#16101399;border:1px solid #6d5a3e;cursor:pointer}#padAsk button.on{color:#fff0cf;background:linear-gradient(145deg,#572632,#2b161c);border-color:#e8c16f;box-shadow:0 0 14px #e3bb7855}";document.head.append(st)}
+  document.body.append(d);PADASK={el:d,sel:0};const upd=()=>{d.querySelector('.pa-yes').classList.toggle('on',PADASK.sel===0);d.querySelector('.pa-no').classList.toggle('on',PADASK.sel===1)};PADASK.upd=upd;upd();
+  d.querySelector('.pa-yes').onclick=()=>padAskClose(true);d.querySelector('.pa-no').onclick=()=>padAskClose(false);d.addEventListener('pointermove',e=>{const b=e.target.closest('button');if(b&&PADASK){PADASK.sel=b.classList.contains('pa-yes')?0:1;upd()}});try{play('ui',0)}catch(e){}}
+function padAskClose(go){if(!PADASK)return;PADASK.el.remove();PADASK=null;if(go){const b=$('prepGo');if(b&&!b.disabled)b.click()}}
 function padNav(id,dt,pr,g){
+  if(PADASK){if(id!=='prep'){padAskClose(false);return}if(pr(14)||pr(15)||pr(2)){PADASK.sel=PADASK.sel?0:1;PADASK.upd()}if(pr(9))padAskClose(true);else if(pr(0))padAskClose(PADASK.sel===0);else if(pr(1))padAskClose(false);return}
   const root=$(id);if(!root)return;const items=padItems(root);if(!items.length)return;
   let i=items.indexOf(padKeep(id,items));if(i<0)return;
   const cur=items[i];
@@ -65,7 +74,7 @@ function padNav(id,dt,pr,g){
   if(pr(6)||pr(7))padCycle(root,PADSUBS,pr(7)?1:-1);
   padScroll(root,g.axes[3]||0,dt);
   if(pr(1)){if(id==='pause')togglePause(false);else if(id==='shop')closeShop();else if(id==='opts')$('optsBack').click();else if(id==='manual')$('manBack').click();else if(id==='conf')$('confNo').click();else if(id==='prep')$('prepBack').click();else if(id==='kap')closeKap();else if(id==='end')$('menuBtn').click();else if(id==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home'))$('title').querySelector('.pc-home-button')?.click()}
-  if(pr(9)){if(id==='prep')$('prepGo').click();else if(id==='shop')closeShop()}
+  if(pr(9)){if(id==='prep'){const b=$('prepGo');if(b&&!b.disabled)padAskOpen()}else if(id==='shop')closeShop();else if(id==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home')){const b=$('premiumPrepare');if(b&&b.offsetParent!==null&&!b.disabled)b.click()}}
 }
 function padMark(){for(const e of document.querySelectorAll('.pf'))e.classList.remove('pf');if(!PAD.menu||!document.body.classList.contains('padnav'))return;const a=document.activeElement,root=$(PAD.menu);if(!a||!root||!root.contains(a))return;const t=a.type==='range'?a.parentNode:a.type==='checkbox'?(a.closest('label')||a):a;t.classList.add('pf')}
 let INPUT_LAST='';window.addEventListener('keydown',()=>{INPUT_LAST='k';document.body.classList.remove('padlast')},true);for(const ev of ['pointerdown','mousedown','touchstart'])window.addEventListener(ev,()=>{INPUT_LAST='m';document.body.classList.remove('padlast')},true);
@@ -130,7 +139,7 @@ html.padprio body.padnav ${Z} label.pf,html.padprio body.padnav ${Z} .rng.pf{out
 // 13.11.2026: przycisk „Wróć” widoczny także przy padzie (znaczek B obok); zastępuje ukrywanie z rundy 261 w CSS
 {const st=document.createElement('style');st.textContent="html body.padlast #orient#orient#orient#orient .backar,html body.padlast #orient#orient#orient#orient :is(#prep,#opts,#manual)>.backar{display:block!important}";document.head.append(st)}
 function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.15;
-  const show=!!mid&&mid!=='notice'&&mid!=='recovery'&&padPrio()&&document.body.classList.contains('padlast');
+  const show=!PADASK&&!!mid&&mid!=='notice'&&mid!=='recovery'&&padPrio()&&document.body.classList.contains('padlast');
   if(!PADHINT){if(!show)return;PADHINT=document.createElement('div');PADHINT.id='padHints';PADHINT.setAttribute('aria-hidden','true');document.body.append(PADHINT);
     const st=document.createElement('style');st.textContent="#padHints{--u:min(.05981vw,.10627vh);position:fixed;inset:0;z-index:2147483000;pointer-events:none}#padHints[hidden]{display:none}#padHints b{position:absolute;display:grid;place-items:center;box-sizing:border-box;height:calc(32 * var(--u));min-width:calc(32 * var(--u));padding:0 calc(7 * var(--u));border-radius:calc(16 * var(--u));background:radial-gradient(circle at 50% 35%,#3a2a2e,#160f12 75%);border:calc(1.5 * var(--u)) solid #c8a05a;box-shadow:0 0 0 calc(1 * var(--u)) #000a,0 calc(2 * var(--u)) calc(6 * var(--u)) #000c;color:#f1d79a;font:700 calc(15 * var(--u))/1 Cinzel,Georgia,serif;letter-spacing:.02em;white-space:nowrap}#padHints b.ic{display:block;background:none;border:0;box-shadow:none;padding:0;border-radius:0;min-width:0}#padHints b.ic img{display:block;width:100%;height:100%;filter:drop-shadow(0 calc(1 * var(--u)) calc(2 * var(--u)) #000d)}#padHints .leg{position:absolute;display:flex;align-items:center;gap:calc(16 * var(--u));padding:calc(5 * var(--u)) calc(14 * var(--u));background:#0d090a73;border:calc(1 * var(--u)) solid #b08a4a3a;border-radius:calc(3 * var(--u));font:600 calc(12.5 * var(--u))/1 Cinzel,Georgia,serif;letter-spacing:.04em;color:#e9dcc2e6;text-shadow:0 1px 2px #000;white-space:nowrap}#padHints .leg span{display:flex;align-items:center;gap:calc(6 * var(--u));height:calc(20 * var(--u))}#padHints .leg img{height:100%;width:auto;display:block}html.padprio body.padlast,html.padprio body.padlast *{cursor:none!important}html.padprio body.padlast #lvl .hint{visibility:hidden}";document.head.append(st)}
   PADHINT.hidden=!show;if(!show)return;
@@ -150,11 +159,11 @@ function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.15;
   {const home=mid==='title'&&$('title').classList.contains('pc-home'),L=[['DPAD',EN?'Select':'Wybierz'],['A',EN?'Confirm':'Zatwierdź']];
    const b={pause:EN?'Resume':'Wznów',shop:EN?'Close':'Zamknij',end:'Menu',opts:EN?'Back':'Wróć',manual:EN?'Back':'Wróć',prep:EN?'Back':'Wróć',kap:EN?'Back':'Wróć',conf:EN?'Back':'Wróć'}[mid]||(mid==='title'&&!home?(EN?'Back':'Wróć'):'');if(b)L.push(['B',b]);
    if(['title','prep','kap','manual'].includes(mid))L.push(['VIEW',EN?'Options':'Opcje']);
-   const st={prep:EN?'Ready':'Gotowy',pause:EN?'Resume':'Wznów',shop:EN?'Close':'Zamknij'}[mid];if(st)L.push(['MENU',st]);
+   const st={prep:EN?'Ready':'Gotowy',pause:EN?'Resume':'Wznów',shop:EN?'Close':'Zamknij'}[mid]||(mid==='title'&&!home?(EN?'Prepare':'Przygotuj się'):'');if(st)L.push(['MENU',st]);
    // pozycja: zawsze prawy dolny róg (wybór autora 13.11.2026), z odstępem od ikon przeglądarki przy prawej krawędzi
    const LH=32*u;let lw=30*u;for(const [k,t] of L)lw+=20*u*PADICON[k][1]+(t.length*9.2+24)*u;
-   const lx=innerWidth-lw-56*u,ly=innerHeight-LH-8*u;placed.push([lx,ly,lw,LH]);
-   out.push('<div class="leg" style="right:'+(56*u).toFixed(1)+'px;bottom:'+(8*u).toFixed(1)+'px">'+L.map(([k,t])=>'<span><img src="'+PADICON[k][0]+'" alt="">'+t+'</span>').join('')+'</div>')}
+   const lx=innerWidth-lw-56*u,ly=innerHeight-LH-1*u;placed.push([lx,ly,lw,LH]);
+   out.push('<div class="leg" style="right:'+(56*u).toFixed(1)+'px;bottom:'+(1*u).toFixed(1)+'px">'+L.map(([k,t])=>'<span><img src="'+PADICON[k][0]+'" alt="">'+t+'</span>').join('')+'</div>')}
   pair(PADTABS,'LB','RB');pair(PADSUBS,'LT','RT');
   // Back (View) otwiera Opcje: znaczek przy kole zębatym na wyborze rozdziału
   if(mid==='title'&&!$('title').classList.contains('pc-home'))put('VIEW',$('optsBtn'),['l','b','r'],null,false);
