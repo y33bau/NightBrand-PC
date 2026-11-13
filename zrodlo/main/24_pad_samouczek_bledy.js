@@ -7,9 +7,15 @@ function padMenuId(){if(recoveryActive)return 'recovery';if(S&&S.notice&&!$('not
 // Menus: up/down/left/right pick the nearest control in that direction on screen (not the next one in the list).
 function navMove(id,d,pad){const root=$(id);if(!root)return false;const items=pad?padItems(root):[...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null);if(!items.length)return false;
   const ae=document.activeElement,cur=items.includes(ae)?ae:null;if(!cur){const s1=id==='title'?$('start1'):null;(s1&&items.includes(s1)?s1:pad?padFirstContent(root,items):items[0]).focus();return true}
-  const c=lrect(cur),cx=c.left+c.width/2,cy=c.top+c.height/2;let best=null,bs=1e9;
-  for(const e of items){if(e===cur)continue;const r=lrect(e),dx=r.left+r.width/2-cx,dy=r.top+r.height/2-cy;const main=d==='d'?dy:d==='u'?-dy:d==='r'?dx:-dx,side=d==='d'||d==='u'?dx:dy;if(main<=2)continue;const sc=main+Math.abs(side)*2.2;if(sc<bs){bs=sc;best=e}}
-  if(!best){const i=items.indexOf(cur),step=d==='d'||d==='r'?1:-1;best=items[(i+step+items.length)%items.length]}
+  const c=lrect(cur),cx=c.left+c.width/2,cy=c.top+c.height/2,vert=d==='d'||d==='u';let best=null,bs=1e9;
+  // 13.11.2026 (grafik, pad jak na Xboksie): wybór celu po krawędziach, nie po środkach. Liczy się odstęp w kierunku ruchu,
+  // mocna kara za brak zachodzenia w poprzek (przycisk dokładnie pod spodem wygrywa z ukośnym) i lekka za odsunięcie środka.
+  for(const e of items){if(e===cur)continue;const r=lrect(e),dx=r.left+r.width/2-cx,dy=r.top+r.height/2-cy;const main=d==='d'?dy:d==='u'?-dy:d==='r'?dx:-dx;if(main<=2)continue;
+    const gap=Math.max(0,d==='d'?r.top-c.bottom:d==='u'?c.top-r.bottom:d==='r'?r.left-c.right:c.left-r.right);
+    const pg=vert?Math.max(0,r.left-c.right,c.left-r.right):Math.max(0,r.top-c.bottom,c.top-r.bottom);
+    const sc=gap+main*.25+pg*3+Math.abs(vert?dx:dy)*.35;if(sc<bs){bs=sc;best=e}}
+  // brak celu w tym kierunku = kursor stoi w miejscu (bez zawijania na drugi koniec listy, jak w menu Xboxa)
+  if(!best)return true;
   best.focus({preventScroll:true});try{best.scrollIntoView({block:'nearest'})}catch(e){}return true}
 addEventListener('keydown',e=>{const m={arrowdown:'d',arrowup:'u',arrowleft:'l',arrowright:'r'}[e.key.toLowerCase()];if(!m||recoveryActive||e.target.closest?.('[role=radiogroup]')&&['l','r'].includes(m))return;const id=padMenuId();if(!id||id==='notice')return;const ae=document.activeElement;if(ae&&ae.type==='range'&&(m==='l'||m==='r'))return;if(ae&&(ae.tagName==='SELECT'||ae.tagName==='TEXTAREA'||ae.type==='text'))return;if(navMove(id,m)){e.preventDefault();e.stopImmediatePropagation()}},true);
 // 13.11.2026 (runda pad-menu-2): nawigacja padem wg Xbox Accessibility Guideline 112.
@@ -47,9 +53,11 @@ function padNav(id,dt,pr,g){
   let i=items.indexOf(padKeep(id,items));if(i<0)return;
   const cur=items[i];
   let dir=0,hor=0;const lx=g.axes[0]||0,ly=g.axes[1]||0;
-  const up=PAD.cur[12]||ly<-.6,dn=PAD.cur[13]||ly>.6,lf=PAD.cur[14]||lx<-.6,rt=PAD.cur[15]||lx>.6;
-  const d=up?-1:dn?1:lf?-2:rt?2:0;
-  if(d===0){PAD.navD=0;PAD.nav=0}else{PAD.nav-=dt;if(d!==PAD.navD||PAD.nav<=0){PAD.nav=PAD.navD===d?.16:.4;PAD.navD=d;if(d===1||d===2)dir=1;else dir=-1;hor=Math.abs(d)===2}}
+    // gałka: wygrywa oś, w którą jest mocniej wychylona (ukos nie wybiera już zawsze góry/dołu); próg wciśnięcia .6, puszczenia .35
+  const th=PAD.navD?.35:.6,sk=Math.max(Math.abs(lx),Math.abs(ly))>th,sv=Math.abs(ly)>=Math.abs(lx);
+  const d=PAD.cur[12]?-1:PAD.cur[13]?1:PAD.cur[14]?-2:PAD.cur[15]?2:sk?(sv?(ly<0?-1:1):(lx<0?-2:2)):0;
+  // powtarzanie: pierwszy skok po .38 s, potem .17 s, po kilku krokach .11 s (szybkie przewijanie długich list)
+  if(d===0){PAD.navD=0;PAD.nav=0;PAD.navN=0}else{PAD.nav-=dt;if(d!==PAD.navD||PAD.nav<=0){PAD.navN=PAD.navD===d?(PAD.navN||0)+1:0;PAD.nav=PAD.navN===0?.38:PAD.navN<4?.17:.11;PAD.navD=d;if(d===1||d===2)dir=1;else dir=-1;hor=Math.abs(d)===2}}
   const grabOff=()=>{PAD.grab=null;for(const e of document.querySelectorAll('.rng.grab'))e.classList.remove('grab')};
   if(PAD.grab&&PAD.grab!==cur)grabOff();
   if(dir){if(PAD.grab===cur||cur.type==='range'&&hor){if(hor){cur.value=String(Math.max(+cur.min,Math.min(+cur.max,+cur.value+dir*5)));cur.dispatchEvent(new Event('input',{bubbles:true}));cur.dispatchEvent(new Event('change',{bubbles:true}))}}
