@@ -761,3 +761,4 @@ cache683 · Zabojczyni: nowe arkusze lekkich atakow (db), silnych/gora (dc) i ci
 cache684 · Zabojczyni: nowe arkusze (zip Remake: d, db, dc, dd, def, death, rend, fan, whirl, atk45); nie sprawdzono w grze, pad, dzwiek, FPS
 cache685 · Zabojczyni: usuniete blekitne refleksy w arkuszach, mocny atak szybszy x1.4 i rowniejszy podzial klatek; nie sprawdzono w grze, pad, dzwiek, FPS
 cache686 · Zabojczyni: szybkie ataki +15%; nie sprawdzono w grze, pad, dzwiek, FPS
+cache687 · Edytor układu menu (F2, ?edytor=1, własny baner) przeniesiony na main 686. Nie sprawdzono w przeglądarce, padem ani u autora.
