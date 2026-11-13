@@ -738,3 +738,4 @@ cache660 · Znaczki pada jako obrazki + pasek legendy w menu (nie sprawdzono: pa
 cache661 · Znaczki pada mniejsze (jak dawne), lżejszy pasek legendy omijający kontrolki (nie sprawdzono: pad, wygląd u autora)
 cache662 · Pasek legendy pada stale w prawym dolnym rogu (nie sprawdzono: pad, wygląd u autora)
 cache663 · Nowy ekran ładowania: tło rozdziału I, złoty tytuł i pasek (nie sprawdzono: wygląd u autora)
+cache664 · Tło ekranu ładowania wbudowane w stronę, widoczne od pierwszej chwili (nie sprawdzono: wygląd u autora)
