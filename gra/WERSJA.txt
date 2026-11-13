@@ -743,3 +743,4 @@ cache665 · Dzwieki: tyk glosniejszy i lancuchowy, menu ui jako lancuch (ciszej)
 cache666 · Dzwieki: tyk glosniejszy i lancuchowy, menu jako lancuch, dzwon przy Ostatnim Tonie (co 3. parowanie Dzwonnika), nowy dzwiek awansu (nie sprawdzono: sluch, pad)
 cache667 · Wstep aktu I bez dublujacych akapitow (usunieto 2 parafrazy); nie sprawdzono: wyglad na ekranie
 cache668 · Wstepy aktow II-IV: tylko opis rozdzialu (bez wstepu lokalizacji); nie sprawdzono: wyglad na ekranie
+cache669 · Dzwiek awansu: nowy snare (wzmocniony o 14 dB do poziomu starego); nie sprawdzono: sluch, glosnosc na sprzecie autora

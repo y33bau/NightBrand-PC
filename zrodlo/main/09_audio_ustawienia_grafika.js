@@ -111,7 +111,7 @@ function loadSfxSamples(){if(sfxLoadPromise||!AC)return sfxLoadPromise;
 // Głośność, minimalny odstęp (czas audio), limit nakładania, priorytet.
 // Muzyka omija ten tor. Ważne sygnały mogą wyprzeć cichy efekt zbierania.
 const SFX_MIX={roll:[.5,.035,2,2],ui:[.6,.06,2,3],empty:[.55,.18,1,3],coin:[.45,.10,2,0],pick:[.25,.08,2,0],
- bell:[.75,.15,3,3],heal:[.55,.4,2,2],bless:[.65,.3,2,2],growl:[.4,.65,2,0],
+ bell:[.75,.15,3,3], level:[.85,.5,1,3],heal:[.55,.4,2,2],bless:[.65,.3,2,2],growl:[.4,.65,2,0],
  bossGrowl:[.85,.22,2,3],warnR:[.65,.18,2,3],kill:[.4,.12,3,0],hurt:[.85,.12,2,3],
  rumble:[.5,.6,1,1],rise:[.5,.2,2,1],poiseBreak:[.8,.3,1,3]};
 const sfxPlayedAt={};
