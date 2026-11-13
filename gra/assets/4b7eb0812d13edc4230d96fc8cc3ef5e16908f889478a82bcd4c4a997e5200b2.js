@@ -6483,7 +6483,7 @@ addEventListener('keydown',e=>{const m={arrowdown:'d',arrowup:'u',arrowleft:'l',
 const PADTABS='.nbp-nav>.nbp-tab,.pc-prep-tabs>.pc-prep-tab,#kapTabs>.tab,.tabs>.tab';
 const PADSUBS='.subtabs>.stab,#pauseKeys .stab';
 function padIsTab(e){return !!(e.matches&&(e.matches(PADTABS)||e.matches(PADSUBS)))}
-function padTiny(e){const r=e.getBoundingClientRect();return r.width<4||r.height<4||getComputedStyle(e).opacity==='0'}
+function padTiny(e){const r=e.getBoundingClientRect();return r.width<4||r.height<4}
 function padItems(root){return [...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null&&!padIsTab(e)&&!padTiny(e))}
 // pierwszy element treści pod paskiem zakładek (lewy górny), a gdy zakładek brak: pierwszy w kolejności
 function padFirstContent(root,items){const tb=[...root.querySelectorAll(PADTABS)].filter(b=>b.offsetParent!==null);if(!tb.length)return items[0];
@@ -6583,6 +6583,11 @@ addEventListener('mousedown',()=>{if(!padPrio())document.body.classList.remove('
 // podpowiedzi przycisków pada w menu (13.11.2026): znaczki LB/RB, LT/RT, B, X, Y, ☰ przy samych kontrolkach,
 // nie osobny pasek. Pozycja liczona z prostokąta kontrolki; strona, na której znaczek nic nie zasłania.
 let PADHINT=null,PADHT=0;
+// 13.11.2026: jedno wspólne podświetlenie zaznaczenia pada (złota ramka z poświatą) na każdym elemencie,
+// na który wchodzi pad. Wiele starszych reguł miało podświetlenie tylko dla myszy/klawiatury, a dla pada żadne.
+{const Z=':is('+'#orient'.repeat(60)+',body)',st=document.createElement('style');st.id='pad-focus';st.textContent=
+`html.padprio body.padnav ${Z} .pf,html.padprio body.padnav .pf{outline:2px solid #e8c16f!important;outline-offset:2px!important;box-shadow:0 0 0 1px #000c,0 0 16px 2px #e3bb7870!important;filter:brightness(1.12)!important}
+html.padprio body.padnav ${Z} label.pf,html.padprio body.padnav ${Z} .rng.pf{outline-offset:4px!important}`;document.head.append(st)}
 // 13.11.2026: przycisk „Wróć” widoczny także przy padzie (znaczek B obok); zastępuje ukrywanie z rundy 261 w CSS
 {const st=document.createElement('style');st.textContent="html body.padlast #orient#orient#orient#orient .backar,html body.padlast #orient#orient#orient#orient :is(#prep,#opts,#manual)>.backar{display:block!important}";document.head.append(st)}
 function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.15;
