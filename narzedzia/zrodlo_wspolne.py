@@ -29,6 +29,7 @@ CZESCI=[
  ('24_pad_samouczek_bledy.js','// ---- pad Xbox'),
  ('25_grafika_wydajnosc.js','// Runda 308: dynamiczna rozdzielczosc'),
  ('26_start_petla.js','// Accessible title presentation'),
+ ('27_menu_usprawnienia.js','// ===== Menu PC: usprawnienia 13.11.2026'),
 ]
 ZNAK='/* ============ WORLDS ============ */'  # po tym rozpoznajemy glowny plik gry
 def glowny(G):

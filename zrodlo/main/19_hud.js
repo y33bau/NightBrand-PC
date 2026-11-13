@@ -50,7 +50,7 @@ $('touchTgl').addEventListener('change',e=>{coarse=e.target.checked;try{localSto
 addEventListener('resize',()=>{if($('title')&&!$('title').hidden)applyTouchMode()});
 applyTouchMode();
 // full screen on phones and tablets: standard API, Safari's webkit variant (iPad), nothing to do when launched from the home screen
-function goFull(){const d=document.documentElement,inApp=navigator.standalone||matchMedia('(display-mode: fullscreen), (display-mode: standalone)').matches;
+function goFull(){try{if(localStorage.getItem('nb_fs')==='0')return}catch(e){}const d=document.documentElement,inApp=navigator.standalone||matchMedia('(display-mode: fullscreen), (display-mode: standalone)').matches;
   if(inApp||document.fullscreenElement||document.webkitFullscreenElement)return;const fs=d.requestFullscreen||d.webkitRequestFullscreen;if(!fs)return;
   try{const p=fs.call(d);if(p&&p.then)p.then(lockLandscape,()=>{});else lockLandscape()}catch(e){}}
 function lockLandscape(){try{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}// the game is landscape only: lock where allowed, otherwise the #rot hint covers portrait

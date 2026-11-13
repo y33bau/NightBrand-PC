@@ -1,6 +1,6 @@
 # Źródło głównego pliku gry (faza 4, 2.11.2026)
 
-`main/` zawiera główny plik gry podzielony na 27 części według sekcji kodu (świat, teren, walka, wrogowie, umiejętności, render, HUD, fabuła, muzyka, grafika...). Sklejone w kolejności numerów dają plik gry identyczny bajt w bajt (dowód: `rozloz.py`, `zbuduj.py` mówi „Bez zmian").
+`main/` zawiera główny plik gry podzielony na 28 części według sekcji kodu (świat, teren, walka, wrogowie, umiejętności, render, HUD, fabuła, muzyka, grafika...). Sklejone w kolejności numerów dają plik gry identyczny bajt w bajt (dowód: `rozloz.py`, `zbuduj.py` mówi „Bez zmian").
 
 Praca:
 1. Zmieniasz tylko odpowiednią część w `main/`.
