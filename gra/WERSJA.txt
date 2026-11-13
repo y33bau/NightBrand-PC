@@ -752,3 +752,4 @@ cache674 · Na bazie main 673: dzwon Ostatniego Tonu, werble awansu, wstepy akto
 cache675 · LB/RB w menu: bez dodatkowego dzwieku klejnotu (tylko zatrzask). Nie sprawdzono: pad, odsluch
 cache676 · Celownik w grze 3x większy z konturem; dźwięki menu -30%; kursor pada -40% (nie sprawdzono: odsłuch, pad, wygląd u autora)
 cache677 · Kursor pada: płynny ruch (własna pętla klatek), najechanie tylko podświetla, A wybiera (nie sprawdzono: prawdziwy pad)
+cache678 · nowe arkusze Kata (9, smierc z klatek garda; nie sprawdzono: wyglad w grze, pad, itch.io)
