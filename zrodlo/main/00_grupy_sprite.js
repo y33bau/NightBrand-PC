@@ -121,6 +121,9 @@ const SPRITE_GROUPS={
   "skill_fx": [
     "core"
   ],
+  "kat_fx": [
+    "core"
+  ],
   "combat_fx": [
     "core"
   ],

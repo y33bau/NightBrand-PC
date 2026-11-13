@@ -67,7 +67,7 @@ function attackHit(a){const P=a.kind==='h'?SL.heavy:SL.light,R=P.range*(S.zab&&a
   if(S.zab){S.zTag=null;if(a.kind==='h')S.zWhirlBest=Math.max(S.zWhirlBest||0,S.zWhirlN||0);if(hits>0){S.zHits++;S.zCombo=Math.min(S.pk.zCap,(S.zCombo||0)+.03);S.zT=S.pk.zDecay}}
   if(hits>0&&!(S.manaHitCd>0)&&SL.mana.onHit>0){gainMana(SL.mana.onHit);S.manaHitCd=SL.mana.hitGap}
   const c=Math.cos(ang),s=Math.sin(ang),trail=COMBAT_TRAIL[encLevel()[0]]||embTrail(),visualSize=swordVisualSize(a.kind);
-  if(WEAPON_FX_ON)emitWeaponSlash(a,c,s,R);else if(S.zab&&zabSlashFx(a,c,s,R,visualSize)){}else if(!skAdd('slash',.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize*1.1,'bill',-screenAng(c,s),trail)){if(!trail||!emitCombatEffect(trail,pl.x+c*R*.12,pl.y+s*R*.12,visualSize,-screenAng(c,s)))addVfx(A.fx.slash,.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize,'bill',-screenAng(c,s))}
+  if(S.kat&&katSlashFx(a,c,s,R,visualSize)){}else if(WEAPON_FX_ON)emitWeaponSlash(a,c,s,R);else if(S.zab&&zabSlashFx(a,c,s,R,visualSize)){}else if(!skAdd('slash',.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize*1.1,'bill',-screenAng(c,s),trail)){if(!trail||!emitCombatEffect(trail,pl.x+c*R*.12,pl.y+s*R*.12,visualSize,-screenAng(c,s)))addVfx(A.fx.slash,.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize,'bill',-screenAng(c,s))}
   {const en=ENCH.filter(k=>S.sk[k]);if(en.length)for(let i=0;i<16;i++){const t=ang+rnd(-arc,arc),rr=rnd(10,R),k=en[i%en.length];S.parts.push({k:'e',x:pl.x+Math.cos(t)*rr,y:pl.y+Math.sin(t)*rr,z:rnd(8,18),vx:0,vy:0,vz:rnd(4,12),c:Math.random()<.6?ENC[k].col:ENC[k].col2,life:rnd(.2,.45)})}}
   if(crit){pl.riposte=0;const wdp=waveDmg*.8;launchWave(a,ang,wdp);const ec=sk('echo');if(ec>=1){launchWave(a,ang-.28,wdp*(ec>=3?1.2:1),1);if(ec>=2)launchWave(a,ang+.28,wdp*(ec>=3?1.2:1),1)}if(hits)ftInfo((EN?'Critical hit!':'Cios krytyczny!'))}
   else if(hits&&a.kind==='l'&&sk('zryw')){S.hitN=(S.hitN||0)+1;if(S.hitN>=ZRYW_N[sk('zryw')]){S.hitN=0;launchWave(a,ang,waveDmg)}}
@@ -153,6 +153,8 @@ function supportEnchant(e,a,crit){const k=ENCH.find(k=>sk(k)&&k!==encLevel()[0])
  if(k==='bloodblade'){e.bleed=Math.max(e.bleed||0,1.5);e.bleedDmg=Math.max(e.bleedDmg||0,(2+L)*.35)}
  swordSparks(e.x,e.y,ENC[k].col,5);
 }
+// Kat: własne efekty cięcia i ciężkiego uderzenia (arkusz kat_fx, runda 13.11.2026)
+function katSlashFx(a,c,s,R,vs){const hv=a.kind==='h',x=pl.x+c*R*(hv?.62:.5),y=pl.y+s*R*(hv?.62:.5),v=hv?skAdd('kat_heavy',.42,x,y,.5,vs*1.55,'bill',0):skAdd('kat_cut',.26,x,y,.95,vs*1.25,'bill',-screenAng(c,s));if(v)v.kat=true;return !!v}
 function swordSparks(x,y,col,n=8){for(let i=0;i<n;i++)S.parts.push({k:'e',x:x+rnd(-3,3),y:y+rnd(-2,2),z:rnd(8,16),vx:rnd(-12,12),vy:rnd(-8,8),vz:rnd(5,20),c:col,life:.2+rnd(0,.15)})}
 const REND={cost:40,cuts:6,dmg:[9,9.6,10.3],cooldown:[12,11,10],wind:.14,dist:44,dur:.28,rec:.2,maxT:3,hitR:26};
 const FAN={cost:20,dmgPct:[.60,.64,.68],cooldown:[8,7,6],wind:.25,rec:.25,cone:.39};
@@ -235,6 +237,7 @@ function leapLand(a){const dmg=(SL.heavy.dmg)*LEAP.mul[a.L-1]*(1+.07*(S.lvl-1))*
   for(const e of S.enemies){if(e===tgt||e.dead||e.rise>0||BIG.has(e.type)||e.type==='collector'||e.type==='glizzard')continue;const dx=e.x-pl.x,dy=e.y-pl.y,d=Math.hypot(dx,dy);if(d>LEAP.pushR+e.r)continue;const n=d||1,ux=d?dx/n:pl.fx,uy=d?dy/n:pl.fy;moveBox(e,ux*LEAP.push,uy*LEAP.push,e.hw||e.r-1,3);slashStagger(e,LEAP.stun,true)}
  }finally{ftMelee=oldM;ftHeavy=oldH;ftCrit=oldC;S.kTag=oldT}
  for(let i=0;i<16;i++){const an=Math.random()*Math.PI*2,sp=rnd(18,46);S.parts.push({k:'d',x:pl.x+Math.cos(an)*4,y:pl.y+Math.sin(an)*3,z:rnd(1,5),vx:Math.cos(an)*sp,vy:Math.sin(an)*sp*.6,vz:rnd(8,26),c:Math.random()<.5?'#6e6458':'#8d8272',life:rnd(.35,.7)})}
+ {const v=skAdd('kat_land',.55,pl.x,pl.y,.04,3.1,'ground',0);if(v)v.sy=1/Math.sin(PITCH)}
  shake(.35,.3);play(tgt?'hitH':'hit',.05)}
 function leapTick(dt){const a=pl.atk;if(pl.dead||pl.broken>0){endLeap();return}pl.block=false;pl.parryT=0;pl.atkHeld=false;pl.charging=false;pl.queue=false;heavyPress=false;
  pl.staDelay=Math.max(0,pl.staDelay-dt);for(const k of ['parryHealCd','parryCd','riposte','dance'])if(pl[k]>0)pl[k]=Math.max(0,pl[k]-dt);waveTick(dt);

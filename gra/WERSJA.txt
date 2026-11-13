@@ -754,3 +754,4 @@ cache676 · Celownik w grze 3x większy z konturem; dźwięki menu -30%; kursor 
 cache677 · Kursor pada: płynny ruch (własna pętla klatek), najechanie tylko podświetla, A wybiera (nie sprawdzono: prawdziwy pad)
 cache678 · nowe arkusze Kata (9, smierc z klatek garda; nie sprawdzono: wyglad w grze, pad, itch.io)
 cache679 · Kat: wlasny arkusz smierci od autora (nie sprawdzono: wyglad w grze, pad, itch.io)
+cache680 · efekty Kata kat_fx: ciecie, ciezkie uderzenie, fala po doskoku, iskry parowania (nie sprawdzono: wyglad i orientacja w grze, pad, itch.io)

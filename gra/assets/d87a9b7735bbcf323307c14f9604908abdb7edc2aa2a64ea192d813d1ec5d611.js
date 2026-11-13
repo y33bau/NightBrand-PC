@@ -121,6 +121,9 @@ const SPRITE_GROUPS={
   "skill_fx": [
     "core"
   ],
+  "kat_fx": [
+    "core"
+  ],
   "combat_fx": [
     "core"
   ],
@@ -3415,11 +3418,11 @@ function emitWeaponSlash(a,c,s,R,owner=pl,trail=COMBAT_TRAIL[encLevel()[0]]||emb
   return bindWeaponFx(f,owner);
 }
 // ---- nowe animacje skilli i pocisków (Gemini, 30.10.2026): arkusz skill_fx, 192 px na klatkę ----
-const SKM={"knock": [0, 6], "earth": [1, 6], "stone": [2, 6], "frostf": [3, 4], "frosti": [4, 6], "firef": [5, 4], "firei": [6, 6], "casc": [7, 6], "whirl": [8, 4], "wave1": [9, 4], "wave2": [10, 4], "rush": [11, 4], "slash": [12, 4], "bolt": [13, 3], "boltHit": [14, 6], "boss": [15, 4], "freeze": [16, 4], "burn": [17, 4], "poison": [18, 4], "bleed": [19, 4], "slash_fire": [20, 4], "slash_ice": [21, 4], "slash_poison": [22, 4], "slash_blood": [23, 4], "whirl_blood": [24, 4], "whirl_ice": [25, 4], "whirl_poison": [26, 4], "whirl_fire": [27, 4], "ham_h": [28, 4], "ham_v": [29, 4], "ham_d": [30, 4], "ham_r": [31, 4], "sp_h": [32, 4], "sp_d1": [33, 4], "sp_d2": [34, 4], "sp_s": [35, 4], "parry_d": [36, 4]},SKFX={};
+const SKM={"knock": [0, 6], "earth": [1, 6], "stone": [2, 6], "frostf": [3, 4], "frosti": [4, 6], "firef": [5, 4], "firei": [6, 6], "casc": [7, 6], "whirl": [8, 4], "wave1": [9, 4], "wave2": [10, 4], "rush": [11, 4], "slash": [12, 4], "bolt": [13, 3], "boltHit": [14, 6], "boss": [15, 4], "freeze": [16, 4], "burn": [17, 4], "poison": [18, 4], "bleed": [19, 4], "slash_fire": [20, 4], "slash_ice": [21, 4], "slash_poison": [22, 4], "slash_blood": [23, 4], "whirl_blood": [24, 4], "whirl_ice": [25, 4], "whirl_poison": [26, 4], "whirl_fire": [27, 4], "ham_h": [28, 4], "ham_v": [29, 4], "ham_d": [30, 4], "ham_r": [31, 4], "sp_h": [32, 4], "sp_d1": [33, 4], "sp_d2": [34, 4], "sp_s": [35, 4], "parry_d": [36, 4], "kat_cut": [0, 4, "kat_fx"], "kat_heavy": [1, 4, "kat_fx"], "kat_land": [2, 4, "kat_fx"], "kat_parry": [3, 4, "kat_fx"]},SKFX={};
 // runda 245: statusy ostrza (ogień, lód, trucizna, krew) = te same animacje co stal, tylko przebarwione (mapa gradientu po jasności)
 const SK_TINTS={fire:[[110,14,0],[255,104,18],[255,236,150]],ice:[[16,52,130],[84,184,255],[236,251,255]],poison:[[14,62,16],[108,220,58],[232,255,172]],blood:[[84,0,8],[188,18,30],[255,128,116]]};
 function skTint(c,tint){const T=SK_TINTS[tint];if(!T)return;const g=c.getContext('2d'),d=g.getImageData(0,0,c.width,c.height),p=d.data;for(let i=0;i<p.length;i+=4){if(!p[i+3])continue;let l=Math.pow((p[i]*.299+p[i+1]*.587+p[i+2]*.114)/255,.8);l=Math.min(1,l*1.15);const a=l<.5?T[0]:T[1],b=l<.5?T[1]:T[2],q=l<.5?l*2:(l-.5)*2;p[i]=a[0]+(b[0]-a[0])*q;p[i+1]=a[1]+(b[1]-a[1])*q;p[i+2]=a[2]+(b[2]-a[2])*q}g.putImageData(d,0,0)}
-function skFrames(k,tint){if(tint&&SKM[k+'_'+tint]){k+='_'+tint;tint=null}const key=tint?k+':'+tint:k;if(SKFX[key])return SKFX[key];const im=typeof IMGS!=='undefined'&&IMGS&&IMGS.skill_fx,m=SKM[k];if(!im||!m)return null;const out=[];for(let i=0;i<m[1];i++){const c=document.createElement('canvas');c.width=c.height=192;c.getContext('2d').drawImage(im,i*192,m[0]*192,192,192,0,0,192,192);if(tint)skTint(c,tint);const t=new THREE.CanvasTexture(c);t.magFilter=t.minFilter=THREE.LinearFilter;t.generateMipmaps=false;out.push({n:new THREE.MeshBasicMaterial({map:t,transparent:true,alphaTest:.04,depthWrite:false,depthTest:false,side:THREE.DoubleSide,fog:false})})}if(MAGIC_KINDS.has(k))out._magicKind=k;return SKFX[key]=out}
+function skFrames(k,tint){if(tint&&SKM[k+'_'+tint]){k+='_'+tint;tint=null}const key=tint?k+':'+tint:k;if(SKFX[key])return SKFX[key];const m=SKM[k],im=typeof IMGS!=='undefined'&&IMGS&&IMGS[m&&m[2]||'skill_fx'];if(!im||!m)return null;const out=[];for(let i=0;i<m[1];i++){const c=document.createElement('canvas');c.width=c.height=192;c.getContext('2d').drawImage(im,i*192,m[0]*192,192,192,0,0,192,192);if(tint)skTint(c,tint);const t=new THREE.CanvasTexture(c);t.magFilter=t.minFilter=THREE.LinearFilter;t.generateMipmaps=false;out.push({n:new THREE.MeshBasicMaterial({map:t,transparent:true,alphaTest:.04,depthWrite:false,depthTest:false,side:THREE.DoubleSide,fog:false})})}if(MAGIC_KINDS.has(k))out._magicKind=k;return SKFX[key]=out}
 function skLoop(fr,dur,fps){const n=Math.max(fr.length,Math.round(dur*fps/fr.length)*fr.length),o=[];for(let i=0;i<n;i++)o.push(fr[i%fr.length]);o._magicKind=fr._magicKind;return o}
 function skAdd(k,dur,x,y,h,size,mode,rot=0,tint){const fr=skFrames(k,tint);if(!fr)return null;addVfx(fr,dur,x,y,h,size,mode||'bill',rot);return S.vfx[S.vfx.length-1]}
 
@@ -3493,7 +3496,7 @@ function attackHit(a){const P=a.kind==='h'?SL.heavy:SL.light,R=P.range*(S.zab&&a
   if(S.zab){S.zTag=null;if(a.kind==='h')S.zWhirlBest=Math.max(S.zWhirlBest||0,S.zWhirlN||0);if(hits>0){S.zHits++;S.zCombo=Math.min(S.pk.zCap,(S.zCombo||0)+.03);S.zT=S.pk.zDecay}}
   if(hits>0&&!(S.manaHitCd>0)&&SL.mana.onHit>0){gainMana(SL.mana.onHit);S.manaHitCd=SL.mana.hitGap}
   const c=Math.cos(ang),s=Math.sin(ang),trail=COMBAT_TRAIL[encLevel()[0]]||embTrail(),visualSize=swordVisualSize(a.kind);
-  if(WEAPON_FX_ON)emitWeaponSlash(a,c,s,R);else if(S.zab&&zabSlashFx(a,c,s,R,visualSize)){}else if(!skAdd('slash',.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize*1.1,'bill',-screenAng(c,s),trail)){if(!trail||!emitCombatEffect(trail,pl.x+c*R*.12,pl.y+s*R*.12,visualSize,-screenAng(c,s)))addVfx(A.fx.slash,.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize,'bill',-screenAng(c,s))}
+  if(S.kat&&katSlashFx(a,c,s,R,visualSize)){}else if(WEAPON_FX_ON)emitWeaponSlash(a,c,s,R);else if(S.zab&&zabSlashFx(a,c,s,R,visualSize)){}else if(!skAdd('slash',.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize*1.1,'bill',-screenAng(c,s),trail)){if(!trail||!emitCombatEffect(trail,pl.x+c*R*.12,pl.y+s*R*.12,visualSize,-screenAng(c,s)))addVfx(A.fx.slash,.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize,'bill',-screenAng(c,s))}
   {const en=ENCH.filter(k=>S.sk[k]);if(en.length)for(let i=0;i<16;i++){const t=ang+rnd(-arc,arc),rr=rnd(10,R),k=en[i%en.length];S.parts.push({k:'e',x:pl.x+Math.cos(t)*rr,y:pl.y+Math.sin(t)*rr,z:rnd(8,18),vx:0,vy:0,vz:rnd(4,12),c:Math.random()<.6?ENC[k].col:ENC[k].col2,life:rnd(.2,.45)})}}
   if(crit){pl.riposte=0;const wdp=waveDmg*.8;launchWave(a,ang,wdp);const ec=sk('echo');if(ec>=1){launchWave(a,ang-.28,wdp*(ec>=3?1.2:1),1);if(ec>=2)launchWave(a,ang+.28,wdp*(ec>=3?1.2:1),1)}if(hits)ftInfo((EN?'Critical hit!':'Cios krytyczny!'))}
   else if(hits&&a.kind==='l'&&sk('zryw')){S.hitN=(S.hitN||0)+1;if(S.hitN>=ZRYW_N[sk('zryw')]){S.hitN=0;launchWave(a,ang,waveDmg)}}
@@ -3579,6 +3582,8 @@ function supportEnchant(e,a,crit){const k=ENCH.find(k=>sk(k)&&k!==encLevel()[0])
  if(k==='bloodblade'){e.bleed=Math.max(e.bleed||0,1.5);e.bleedDmg=Math.max(e.bleedDmg||0,(2+L)*.35)}
  swordSparks(e.x,e.y,ENC[k].col,5);
 }
+// Kat: własne efekty cięcia i ciężkiego uderzenia (arkusz kat_fx, runda 13.11.2026)
+function katSlashFx(a,c,s,R,vs){const hv=a.kind==='h',x=pl.x+c*R*(hv?.62:.5),y=pl.y+s*R*(hv?.62:.5),v=hv?skAdd('kat_heavy',.42,x,y,.5,vs*1.55,'bill',0):skAdd('kat_cut',.26,x,y,.95,vs*1.25,'bill',-screenAng(c,s));if(v)v.kat=true;return !!v}
 function swordSparks(x,y,col,n=8){for(let i=0;i<n;i++)S.parts.push({k:'e',x:x+rnd(-3,3),y:y+rnd(-2,2),z:rnd(8,16),vx:rnd(-12,12),vy:rnd(-8,8),vz:rnd(5,20),c:col,life:.2+rnd(0,.15)})}
 const REND={cost:40,cuts:6,dmg:[9,9.6,10.3],cooldown:[12,11,10],wind:.14,dist:44,dur:.28,rec:.2,maxT:3,hitR:26};
 const FAN={cost:20,dmgPct:[.60,.64,.68],cooldown:[8,7,6],wind:.25,rec:.25,cone:.39};
@@ -3661,6 +3666,7 @@ function leapLand(a){const dmg=(SL.heavy.dmg)*LEAP.mul[a.L-1]*(1+.07*(S.lvl-1))*
   for(const e of S.enemies){if(e===tgt||e.dead||e.rise>0||BIG.has(e.type)||e.type==='collector'||e.type==='glizzard')continue;const dx=e.x-pl.x,dy=e.y-pl.y,d=Math.hypot(dx,dy);if(d>LEAP.pushR+e.r)continue;const n=d||1,ux=d?dx/n:pl.fx,uy=d?dy/n:pl.fy;moveBox(e,ux*LEAP.push,uy*LEAP.push,e.hw||e.r-1,3);slashStagger(e,LEAP.stun,true)}
  }finally{ftMelee=oldM;ftHeavy=oldH;ftCrit=oldC;S.kTag=oldT}
  for(let i=0;i<16;i++){const an=Math.random()*Math.PI*2,sp=rnd(18,46);S.parts.push({k:'d',x:pl.x+Math.cos(an)*4,y:pl.y+Math.sin(an)*3,z:rnd(1,5),vx:Math.cos(an)*sp,vy:Math.sin(an)*sp*.6,vz:rnd(8,26),c:Math.random()<.5?'#6e6458':'#8d8272',life:rnd(.35,.7)})}
+ {const v=skAdd('kat_land',.55,pl.x,pl.y,.04,3.1,'ground',0);if(v)v.sy=1/Math.sin(PITCH)}
  shake(.35,.3);play(tgt?'hitH':'hit',.05)}
 function leapTick(dt){const a=pl.atk;if(pl.dead||pl.broken>0){endLeap();return}pl.block=false;pl.parryT=0;pl.atkHeld=false;pl.charging=false;pl.queue=false;heavyPress=false;
  pl.staDelay=Math.max(0,pl.staDelay-dt);for(const k of ['parryHealCd','parryCd','riposte','dance'])if(pl[k]>0)pl[k]=Math.max(0,pl[k]-dt);waveTick(dt);
@@ -3999,7 +4005,7 @@ function syncCombatEffects(dt){for(const f of combatEffects){if(!f.active)contin
 function contactSparks(x,y,nx,ny,kind,count){const angle=Math.atan2(ny,nx),soft=!SETT.flash,n=Math.max(1,Math.round(count*GFX.parts));
   for(let i=0;i<n;i++){const q=(Math.sin((i+1)*78.233+clock*12.9898)*43758.5453)%1,f=q-Math.floor(q),a=angle+(f-.5)*2.1,sp=26+f*(kind==='parry'?66:42);S.parts.push({k:'e',x,y,z:10+f*4,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.6,vz:12+f*25,c:kind==='flesh'?(i%2?'#ba7354':'#96513f'):soft?(i%2?'#b9b1a0':'#8c969c'):kind==='parry'?(i%2?'#ffe9bb':'#d3e0eb'):(i%2?'#c9c3aa':'#b8c6d0'),life:.09+f*.09})}}
 function guardFeedback(kind,nx,ny,projectile){let dx=-nx,dy=-ny,d=Math.hypot(dx,dy);if(d<.001){dx=pl.fx;dy=pl.fy;d=1}dx/=d;dy/=d;const attacker=S.attacker,reach=attacker?Math.min(10,Math.hypot(attacker.x-pl.x,attacker.y-pl.y)*.5):9,x=projectile?projectile.x:pl.x+dx*reach,y=projectile?projectile.y:pl.y+dy*reach;
-  if(!(kind==='parry'&&skAdd('parry_d',.28,x,y,.9,1.5,'bill',0))&&!emitCombatEffect(kind==='parry'?'parry':'block',x,y,kind==='parry'?1.3:.9))contactSparks(x,y,dx,dy,kind,kind==='parry'?12:7);if(kind==='parry')shockAt(x,y,.35);pl.visualGuard={t:.16,life:.16,dx:nx,dy:ny};play(kind,kind==='parry'?.03:.05)}
+  if(!(kind==='parry'&&skAdd(S.kat?'kat_parry':'parry_d',.28,x,y,.9,S.kat?1.9:1.5,'bill',0))&&!emitCombatEffect(kind==='parry'?'parry':'block',x,y,kind==='parry'?1.3:.9))contactSparks(x,y,dx,dy,kind,kind==='parry'?12:7);if(kind==='parry')shockAt(x,y,.35);pl.visualGuard={t:.16,life:.16,dx:nx,dy:ny};play(kind,kind==='parry'?.03:.05)}
 function hitSpark(e,nx,ny){const length=Math.hypot(nx,ny)||1,dx=nx/length,dy=ny/length,armour=steelEnemy(e),amplitude=BIG.has(e.type)?.35:e.type==='collector'?.55:ftHeavy?1.3:ftCrit?1.1:.75;
   if(!emitCombatEffect(ftHeavy?'heavy':'light',e.x-dx*Math.min(e.r*.55,5),e.y-dy*Math.min(e.r*.55,5),ftHeavy?1.35:.9,0,armour?'steel':'flesh'))contactSparks(e.x-dx*Math.min(e.r*.55,5),e.y-dy*Math.min(e.r*.55,5),dx,dy,armour?'steel':'flesh',ftCrit?8:ftHeavy?6:4);
   const life=COMBAT_POLISH_ON?(ftHeavy?.23:.18):.15,power=COMBAT_POLISH_ON?amplitude*(armour?2.1:2.8):amplitude;e.visualHit={t:life,life,dx,dy,amplitude:power,heavy:ftHeavy};}
