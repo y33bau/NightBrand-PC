@@ -112,12 +112,12 @@ ${Z}#lvl .level-panel{background:linear-gradient(180deg,#0e0c1033,#0e0c101f)!imp
 ${Z}#lvl .card{background:linear-gradient(150deg,#2a1f2685,#110d137a)!important;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);text-shadow:0 1px 2px #000c}
 ${Z}#lvl #cards .card:is(:focus,:focus-visible,.pf){background:linear-gradient(150deg,#502330c4,#261920b8)!important}
 ${Z}#lvl .card .fx{background:#09070a80!important}
-${Z}#lvl.lvsoft{animation:lvSoftBg .32s ease-out both}
-${Z}#lvl.lvsoft .card{animation:lvSoftCard .34s cubic-bezier(.2,.8,.2,1) both}
-${Z}#lvl.lvsoft .card:nth-child(1){animation-delay:.1s}${Z}#lvl.lvsoft .card:nth-child(2){animation-delay:.17s}${Z}#lvl.lvsoft .card:nth-child(3){animation-delay:.24s}${Z}#lvl.lvsoft .card:nth-child(4){animation-delay:.31s}
+${Z}#lvl.lvsoft{animation:lvSoftBg .42s ease-out both}
+${Z}#lvl.lvsoft .card{animation:lvSoftCard .52s cubic-bezier(.2,.8,.2,1) both}
+${Z}#lvl.lvsoft .card:nth-child(1){animation-delay:.14s}${Z}#lvl.lvsoft .card:nth-child(2){animation-delay:.24s}${Z}#lvl.lvsoft .card:nth-child(3){animation-delay:.34s}${Z}#lvl.lvsoft .card:nth-child(4){animation-delay:.44s}
 ${Z}#lvl.lvquick{animation:lvSoftBg .2s ease-out both}
 @keyframes lvSoftBg{from{opacity:0}to{opacity:1}}
-@keyframes lvSoftCard{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes lvSoftCard{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){${Z}#lvl.lvsoft,${Z}#lvl.lvquick,${Z}#lvl.lvsoft .card{animation:none}}`;
 document.head.append(st)}
 // a ring of motes bursting from the hero when a rune is taken (gold for time, red for reach, others in their colours)

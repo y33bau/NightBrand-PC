@@ -5,8 +5,8 @@ function padRumble(s,w,ms,g0){if(SETT.rumble===false)return;try{const g=g0||PAD.
 function padDz(x,y,dz){const m=Math.hypot(x,y);if(m<dz)return [0,0];const k=Math.min(1,(m-dz)/(1-dz))/m;return [x*k,y*k]}
 function padMenuId(){if(recoveryActive)return 'recovery';if(S&&S.notice&&!$('notice').hidden)return 'notice';if(S&&S.witChoice&&!$('witChoices').hidden)return 'witChoices';if(S&&S.dialog&&!$('dialog').hidden&&$('orient').classList.contains('pc-conversations'))return 'dialog';if(S&&S.phase==='end'&&!$('end').hidden)return 'end';for(const id of ['lang','pause','shop','lvl','prep','conf','manual','opts','kap','end','title']){const el=$(id);if(el&&!el.hidden)return id}return ''}
 // Menus: up/down/left/right pick the nearest control in that direction on screen (not the next one in the list).
-function navMove(id,d){const root=$(id);if(!root)return false;const items=[...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null);if(!items.length)return false;
-  const ae=document.activeElement,cur=items.includes(ae)?ae:null;if(!cur){const s1=id==='title'?$('start1'):null;(s1&&items.includes(s1)?s1:items[0]).focus();return true}
+function navMove(id,d,pad){const root=$(id);if(!root)return false;const items=pad?padItems(root):[...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null);if(!items.length)return false;
+  const ae=document.activeElement,cur=items.includes(ae)?ae:null;if(!cur){const s1=id==='title'?$('start1'):null;(s1&&items.includes(s1)?s1:pad?padFirstContent(root,items):items[0]).focus();return true}
   const c=lrect(cur),cx=c.left+c.width/2,cy=c.top+c.height/2;let best=null,bs=1e9;
   for(const e of items){if(e===cur)continue;const r=lrect(e),dx=r.left+r.width/2-cx,dy=r.top+r.height/2-cy;const main=d==='d'?dy:d==='u'?-dy:d==='r'?dx:-dx,side=d==='d'||d==='u'?dx:dy;if(main<=2)continue;const sc=main+Math.abs(side)*2.2;if(sc<bs){bs=sc;best=e}}
   if(!best){const i=items.indexOf(cur),step=d==='d'||d==='r'?1:-1;best=items[(i+step+items.length)%items.length]}
@@ -17,25 +17,33 @@ addEventListener('keydown',e=>{const m={arrowdown:'d',arrowup:'u',arrowleft:'l',
 // element (lub jego odpowiednik po id/zakładce/tekście, albo najbliższy na ekranie), a nie na pierwszy.
 const PADTABS='.nbp-nav>.nbp-tab,.pc-prep-tabs>.pc-prep-tab,#kapTabs>.tab,.tabs>.tab';
 const PADSUBS='.subtabs>.stab,#pauseKeys .stab';
-function padItems(root){return [...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null)}
+function padIsTab(e){return !!(e.matches&&(e.matches(PADTABS)||e.matches(PADSUBS)))}
+function padTiny(e){const r=e.getBoundingClientRect();return r.width<4||r.height<4||getComputedStyle(e).opacity==='0'}
+function padItems(root){return [...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null&&!padIsTab(e)&&!padTiny(e))}
+// pierwszy element treści pod paskiem zakładek (lewy górny), a gdy zakładek brak: pierwszy w kolejności
+function padFirstContent(root,items){const tb=[...root.querySelectorAll(PADTABS)].filter(b=>b.offsetParent!==null);if(!tb.length)return items[0];
+  const vert=tb.length>1&&Math.abs(tb[0].getBoundingClientRect().top-tb[1].getBoundingClientRect().top)>8;let c;
+  if(vert){const rr=Math.max(...tb.map(b=>b.getBoundingClientRect().right));c=items.filter(e=>e.getBoundingClientRect().left>=rr-2)}
+  else{const bb=Math.max(...tb.map(b=>b.getBoundingClientRect().bottom));c=items.filter(e=>e.getBoundingClientRect().top>=bb-2)}
+  c.sort((a,b)=>{const p=a.getBoundingClientRect(),q=b.getBoundingClientRect();return Math.abs(p.top-q.top)>8?p.top-q.top:p.left-q.left});return c[0]||items[0]}
 function padSig(e){if(!e)return '';const d=e.dataset||{};return e.id||['nbp','panel','tab','sub','ps','hero','m'].map(k=>d[k]?k+':'+d[k]:'').join('')||(e.className+'|'+(e.textContent||'').trim().slice(0,40))}
 function padKeep(id,items){const ae=document.activeElement;
   if(items.includes(ae)){const r=ae.getBoundingClientRect();PAD.keep={id,el:ae,sig:padSig(ae),x:r.left+r.width/2,y:r.top+r.height/2};return ae}
   const K=PAD.keep&&PAD.keep.id===id?PAD.keep:null;let f=null;
   if(K){f=items.includes(K.el)?K.el:items.find(e=>padSig(e)===K.sig)||null;
     if(!f){let bs=1e9;for(const e of items){const r=e.getBoundingClientRect(),d=Math.hypot(r.left+r.width/2-K.x,r.top+r.height/2-K.y);if(d<bs){bs=d;f=e}}}}
-  if(!f){const s1=id==='title'?$('start1'):id==='lvl'?$('card0'):null;f=s1&&items.includes(s1)?s1:items[0]}
+  if(!f){const s1=id==='title'?$('start1'):id==='lvl'?$('card0'):null;f=s1&&items.includes(s1)?s1:padFirstContent($(id),items)}
   if(f){f.focus({preventScroll:true});const r=f.getBoundingClientRect();PAD.keep={id,el:f,sig:padSig(f),x:r.left+r.width/2,y:r.top+r.height/2}}return f}
 function padCycle(root,sel,step){const tb=[...root.querySelectorAll(sel)].filter(b=>!b.disabled&&!b.hidden&&b.offsetParent!==null);if(tb.length<2)return false;
   const on=b=>b.classList.contains('on')||b.getAttribute('aria-pressed')==='true'||b.getAttribute('aria-selected')==='true';
   let ci=tb.findIndex(on);if(ci<0)ci=Math.max(0,tb.indexOf(document.activeElement));const nx=tb[(ci+step+tb.length)%tb.length];
-  nx.click();play('pick',0);setTimeout(()=>{const n2=[...root.querySelectorAll(sel)].find(b=>b.offsetParent!==null&&padSig(b)===padSig(nx))||nx;n2.focus({preventScroll:true})},20);return true}
+  nx.click();play('pick',0);setTimeout(()=>{const it=padItems(root),f=sel===PADSUBS?(it.find(e=>e.getBoundingClientRect().top>nx.getBoundingClientRect().bottom-2)||it[0]):padFirstContent(root,it);PAD.keep=null;if(f)f.focus({preventScroll:true})},40);return true}
 function padScroll(root,ry,dt){if(Math.abs(ry)<.3)return;const can=e=>e&&e.scrollHeight>e.clientHeight+4&&/(auto|scroll)/.test(getComputedStyle(e).overflowY);
   let t=[...root.querySelectorAll('.pc-perk-detail,#kapDet,.m2k-det,.nbp-panel,#lvl .level-build,.pane:not([hidden]),.mpane:not([hidden])')].find(e=>e.offsetParent!==null&&can(e));
   if(!t){let e=document.activeElement;while(e&&e!==document.body&&!can(e))e=e.parentElement;if(can(e))t=e}if(!t&&can(root))t=root;
   if(t)t.scrollTop+=Math.sign(ry)*(Math.abs(ry)-.3)/.7*dt*1300}
 function padNav(id,dt,pr,g){
-  const root=$(id);if(!root)return;const items=[...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null);if(!items.length)return;
+  const root=$(id);if(!root)return;const items=padItems(root);if(!items.length)return;
   let i=items.indexOf(padKeep(id,items));if(i<0)return;
   const cur=items[i];
   let dir=0,hor=0;const lx=g.axes[0]||0,ly=g.axes[1]||0;
@@ -45,7 +53,7 @@ function padNav(id,dt,pr,g){
   const grabOff=()=>{PAD.grab=null;for(const e of document.querySelectorAll('.rng.grab'))e.classList.remove('grab')};
   if(PAD.grab&&PAD.grab!==cur)grabOff();
   if(dir){if(PAD.grab===cur||cur.type==='range'&&hor){if(hor){cur.value=String(Math.max(+cur.min,Math.min(+cur.max,+cur.value+dir*5)));cur.dispatchEvent(new Event('input',{bubbles:true}));cur.dispatchEvent(new Event('change',{bubbles:true}))}}
-    else navMove(id,d===1?'d':d===-1?'u':d===2?'r':'l')}
+    else navMove(id,d===1?'d':d===-1?'u':d===2?'r':'l',true)}
   if(pr(0)){if(cur.type==='range'){if(PAD.grab===cur)grabOff();else{PAD.grab=cur;if(cur.parentNode)cur.parentNode.classList.add('grab')}}else cur.click()}
   if(pr(1)&&PAD.grab){grabOff();return}
   if(pr(1)&&pcMenuBack&&pcMenuBack())return;
@@ -75,13 +83,13 @@ function padTick0(dt){
   const pr=i=>PAD.cur[i]&&!PAD.prev[i];
   if(!PAD.on&&PAD.cur.some(Boolean)){PAD.on=true;document.body.classList.add('padnav');const k=$('keysPad');if(k)k.hidden=false}
   if(PAD.cur.some(Boolean)){try{if(AC&&AC.state==='suspended'&&!(S&&S.paused))acResume()}catch(e){}}
-  const mid=padMenuId();setTimeout(padMark,0);padHintTick(mid,dt);if(mid!==PAD.menu){PAD.menu=mid;PAD.lock=.4;PAD.fresh=true;PAD.grab=null;for(const e of document.querySelectorAll('.rng.grab'))e.classList.remove('grab')}if(PAD.lock>0)PAD.lock-=dt;
+  const mid=padMenuId();setTimeout(padMark,0);padHintTick(mid,dt);if(mid!==PAD.menu){if(padPrio())padHoverRewrite();PAD.menu=mid;PAD.lock=.4;PAD.fresh=true;PAD.grab=null;for(const e of document.querySelectorAll('.rng.grab'))e.classList.remove('grab')}if(PAD.lock>0)PAD.lock-=dt;
   // wstęp fabularny
   if(S&&S.intro){PAD.x=PAD.y=0;PAD.atk=PAD.blk=false;if(INTRO)INTRO.pad=!!(PAD.cur[0]||PAD.cur[1]||PAD.cur[2]);if(pr(9)&&INTRO)introEnd();return}
   // menu / sklep / wybór umiejętności / koniec
   if(mid){PAD.x=PAD.y=0;PAD.atk=PAD.blk=false;
     if(PAD.lock>0)return;
-    if(PAD.fresh){PAD.fresh=false;PAD.keep=null;const ae0=document.activeElement,keep0=$(mid).contains(ae0)&&ae0!==$(mid)&&!ae0.disabled&&ae0.offsetParent!==null?ae0:null;const f=keep0||(mid==='lvl'&&$('card0')&&!$('card0').disabled?$('card0'):null)||(mid==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home')?$('title').querySelector('.premium-selected:not(:disabled)'):null)||(mid==='title'&&$('start1')&&$('start1').offsetParent!==null&&!$('start1').disabled?$('start1'):null)||[...$(mid).querySelectorAll('button,input')].filter(e=>!e.disabled&&e.offsetParent!==null)[0];if(f)f.focus();return}
+    if(PAD.fresh){PAD.fresh=false;PAD.keep=null;const ae0=document.activeElement,keep0=$(mid).contains(ae0)&&ae0!==$(mid)&&!ae0.disabled&&ae0.offsetParent!==null&&!padIsTab(ae0)?ae0:null;const f=keep0||(mid==='lvl'&&$('card0')&&!$('card0').disabled?$('card0'):null)||(mid==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home')?$('title').querySelector('.premium-selected:not(:disabled)'):null)||(mid==='title'&&$('start1')&&$('start1').offsetParent!==null&&!$('start1').disabled?$('start1'):null)||padFirstContent($(mid),padItems($(mid)));if(f)f.focus({preventScroll:true});return}
     if(mid==='lvl'){const ready=performance.now()>=levelReadyAt;if(pr(2)){const d=document.querySelector('#lvl .level-build');if(d)d.open=!d.open;return}if(!ready&&(pr(0)||pr(3))){play('empty',0);return}if(pr(3)){rerollLevelCards();return}}
     padNav(mid,dt,pr,g);if(pr(9)&&mid==='pause')togglePause(false);return}
   if(!S||S.phase!=='play'){PAD.x=PAD.y=0;PAD.atk=PAD.blk=false;return}
@@ -102,7 +110,7 @@ addEventListener('gamepadconnected',()=>{document.body.classList.add('padnav');c
 // :hover jest wyłączony (klasa padprio na <html>), a klik myszy nie zdejmuje znacznika pada. Klik nadal działa.
 const padPrio=()=>document.documentElement.classList.contains('padprio');
 function padPrioSet(on){document.documentElement.classList.toggle('padprio',!!on);if(on)padHoverRewrite()}
-function padHoverRewrite(){const P=':where(:root:not(.padprio)) ';const fix=rules=>{for(const r of rules){try{if(!r.selectorText){if(r.cssRules)fix(r.cssRules);continue}const t=r.selectorText;if(!t.includes(':hover')||t.includes('.padprio'))continue;const a=[];let d=0,c='';for(const ch of t){if(ch==='('||ch==='[')d++;else if(ch===')'||ch===']')d--;if(ch===','&&d===0){a.push(c);c=''}else c+=ch}a.push(c);r.selectorText=a.map(x=>x.includes(':hover')?P+x.trim():x.trim()).join(',')}catch(e){}}};for(const ss of document.styleSheets){try{fix(ss.cssRules)}catch(e){}}}
+function padHoverRewrite(){const M=':where(:root:not(.padprio) *)';const fix=rules=>{for(const r of rules){try{if(!r.selectorText){if(r.cssRules)fix(r.cssRules);continue}const t=r.selectorText;if(!t.includes(':hover')||t.includes('padprio'))continue;r.selectorText=t.replace(/:hover(?![\w-])/g,':hover'+M)}catch(e){}}};for(const ss of document.styleSheets){try{fix(ss.cssRules)}catch(e){}}}
 addEventListener('gamepadconnected',()=>padPrioSet(true));addEventListener('gamepaddisconnected',()=>setTimeout(()=>{try{padPrioSet([...navigator.getGamepads()].some(p=>p&&p.connected))}catch(e){padPrioSet(false)}},50));
 addEventListener('mousedown',()=>{if(!padPrio())document.body.classList.remove('padnav')},true);
 // kursor myszy chowa się, gdy grasz padem; wraca, gdy ruszysz myszą
