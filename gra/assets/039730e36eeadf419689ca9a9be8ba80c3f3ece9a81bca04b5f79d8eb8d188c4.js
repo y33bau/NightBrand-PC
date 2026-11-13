@@ -4549,14 +4549,16 @@ const LEVEL_CHOICE_DELAY=1000;let levelReadyAt=0,levelReadyTimer=0;
 let MPCLK=false;function pickLevelCard(i){if(performance.now()<levelReadyAt)return;if(S&&pl2&&S.mpTurn===2&&PAD2.g&&!MPCLK)return;pick(i)}
 function rerollLevelCards(){if(performance.now()<levelReadyAt)return;rerollCards()}
 function armLevelCards(){clearTimeout(levelReadyTimer);levelReadyAt=performance.now()+LEVEL_CHOICE_DELAY;$('lvl').classList.add('choice-wait');$('levelWait').textContent=(EN?'Read the descriptions — you can choose in 1 s':'Przeczytaj opisy — wybór dostępny po 1 s');levelReadyTimer=setTimeout(()=>{$('lvl').classList.remove('choice-wait');$('levelWait').textContent=''},LEVEL_CHOICE_DELAY)}
-function openLevelUpNow(){const lvWasHidden=$('lvl').hidden;resetInput();padRumble(.07,.22,110);S.choosing=true;if(pl2){if(!S.mpTurn)S.mpTurn=1}else S.mpTurn=0;pl.swingT=0;play('level',0);if(!pl.dead)pl.hp=Math.min(pl.max,pl.hp+pl.max*S.pk.lvHeal);if(pl2&&!pl2.dead)pl2.hp=Math.min(pl2.max,pl2.hp+pl2.max*S.pk.lvHeal);// level healing is defined by the selected preparation perks
+function openLevelUpNow(){const lvWasHidden=$('lvl').hidden||$('lvl').classList.contains('lvout');clearTimeout(LVOUT);$('lvl').classList.remove('lvout');resetInput();padRumble(.07,.22,110);S.choosing=true;if(pl2){if(!S.mpTurn)S.mpTurn=1}else S.mpTurn=0;pl.swingT=0;play('level',0);if(!pl.dead)pl.hp=Math.min(pl.max,pl.hp+pl.max*S.pk.lvHeal);if(pl2&&!pl2.dead)pl2.hp=Math.min(pl2.max,pl2.hp+pl2.max*S.pk.lvHeal);// level healing is defined by the selected preparation perks
   S.choices=rollChoices();S.rr=1+(S.rrBonus||0);renderCards();
-  $('lvl').hidden=false;if(lvWasHidden){const L=$('lvl'),cl=LVMODE;L.classList.remove('lvsoft','lvquick');void L.offsetWidth;L.classList.add(cl);setTimeout(()=>L.classList.remove(cl),1200)}LVMODE='lvsoft';document.querySelector('#lvl .level-build').open=false;armLevelCards();$('touch').hidden=true;setTimeout(()=>{const f=$('card0');f&&f.focus({preventScroll:true});const lp=document.querySelector('#lvl .level-panel');if(lp)lp.scrollTop=0},30)}
+  $('lvl').hidden=false;if(lvWasHidden){const L=$('lvl'),cl=LVMODE;L.classList.remove('lvsoft','lvquick');void L.offsetWidth;L.classList.add(cl);setTimeout(()=>L.classList.remove(cl),1700)}LVMODE='lvsoft';document.querySelector('#lvl .level-build').open=false;armLevelCards();$('touch').hidden=true;setTimeout(()=>{const f=$('card0');f&&f.focus({preventScroll:true});const lp=document.querySelector('#lvl .level-panel');if(lp)lp.scrollTop=0},30)}
 // 13.11.2026: łagodne wejście awansu (wersja lekka, testowa). Bez spowolnienia czasu: gra toczy się 0,25 s,
 // złoty pierścień wokół postaci i napis „Nowy poziom” przy medalionie, potem okno wjeżdża (tło i karty kolejno).
 // Awans w ciągu 10 s od zamknięcia poprzedniego okna: bez pierścienia i napisu, samo płynne wejście (0,2 s).
 // Mechanika bez zmian: pauza, leczenie przy awansie, blokada wyboru 1 s. Kolejne awanse z kolejki otwierają się od razu.
-let LVPRE=0,LVCLOSED=-1e9,LVMODE='lvsoft';
+let LVPRE=0,LVCLOSED=-1e9,LVMODE='lvsoft',LVOUT=0;
+// zamknięcie okna awansu: łagodne zanikanie (0,4 s), gra rusza od razu
+function lvHide(){const L=$('lvl');L.classList.remove('lvsoft','lvquick');L.classList.add('lvout');clearTimeout(LVOUT);LVOUT=setTimeout(()=>{L.classList.remove('lvout');if(!S||!S.choosing)L.hidden=true},420)}
 function openLevelUp(){
   const live=S&&S.phase==='play'&&!S.choosing&&!S.paused&&!S.shop&&!S.dialog&&!S.notice&&!S.intro&&!(pl&&pl.dead);
   if(!live){if(!LVPRE)openLevelUpNow();return}
@@ -4575,24 +4577,26 @@ function lvPopLabel(){try{const m=document.querySelector('.pch-level'),r=m&&m.of
   d.animate([{opacity:0,transform:'translate(-50%,-80%)'},{opacity:1,transform:'translate(-50%,-100%)',offset:.22},{opacity:1,transform:'translate(-50%,-100%)',offset:.72},{opacity:0,transform:'translate(-50%,-125%)'}],{duration:1300,easing:'ease-out'}).onfinish=()=>d.remove()}catch(e){}}
 {const Z='#orient'.repeat(12)+' ',st=document.createElement('style');st.id='lv-soft';st.textContent=
 `.lvpop{position:fixed;z-index:2147482000;pointer-events:none;white-space:nowrap;font:700 calc(26 * min(.05981vw,.10627vh))/1 Cinzel,Georgia,serif;letter-spacing:.08em;color:#f5d48a;text-shadow:0 0 12px #e0a23f99,0 2px 3px #000;opacity:0}
-${Z}#lvl{background:radial-gradient(ellipse at 50% 45%,#08070b00 0%,#08070b73 80%)!important}
-${Z}#lvl .level-panel{background:linear-gradient(180deg,#0e0c1033,#0e0c101f)!important}
-${Z}#lvl .card{background:linear-gradient(150deg,#2a1f2685,#110d137a)!important;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);text-shadow:0 1px 2px #000c}
-${Z}#lvl #cards .card:is(:focus,:focus-visible,.pf){background:linear-gradient(150deg,#502330c4,#261920b8)!important}
-${Z}#lvl .card .fx{background:#09070a80!important}
-${Z}#lvl.lvsoft{animation:lvSoftBg .42s ease-out both}
-${Z}#lvl.lvsoft .card{animation:lvSoftCard .52s cubic-bezier(.2,.8,.2,1) both}
-${Z}#lvl.lvsoft .card:nth-child(1){animation-delay:.14s}${Z}#lvl.lvsoft .card:nth-child(2){animation-delay:.24s}${Z}#lvl.lvsoft .card:nth-child(3){animation-delay:.34s}${Z}#lvl.lvsoft .card:nth-child(4){animation-delay:.44s}
-${Z}#lvl.lvquick{animation:lvSoftBg .2s ease-out both}
+${Z}#lvl{background:radial-gradient(ellipse at 50% 45%,#08070b00 0%,#08070b52 82%)!important}
+${Z}#lvl .level-panel{background:linear-gradient(180deg,#0e0c101a,#0e0c100d)!important}
+${Z}#lvl .card{background:linear-gradient(150deg,#2a1f2661,#110d1757)!important;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-shadow:0 1px 2px #000c}
+${Z}#lvl #cards .card:is(:focus,:focus-visible,.pf){background:linear-gradient(150deg,#502330a6,#26192099)!important}
+${Z}#lvl .card .fx{background:#09070a59!important}
+${Z}#lvl.lvsoft{animation:lvSoftBg .6s ease-out both}
+${Z}#lvl.lvsoft .card{animation:lvSoftCard .7s cubic-bezier(.2,.8,.2,1) both}
+${Z}#lvl.lvsoft .card:nth-child(1){animation-delay:.2s}${Z}#lvl.lvsoft .card:nth-child(2){animation-delay:.32s}${Z}#lvl.lvsoft .card:nth-child(3){animation-delay:.44s}${Z}#lvl.lvsoft .card:nth-child(4){animation-delay:.56s}
+${Z}#lvl.lvquick{animation:lvSoftBg .3s ease-out both}
+${Z}#lvl.lvout{animation:lvSoftOut .42s ease-in both;pointer-events:none}
+@keyframes lvSoftOut{from{opacity:1}to{opacity:0}}
 @keyframes lvSoftBg{from{opacity:0}to{opacity:1}}
 @keyframes lvSoftCard{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){${Z}#lvl.lvsoft,${Z}#lvl.lvquick,${Z}#lvl.lvsoft .card{animation:none}}`;
+@media (prefers-reduced-motion:reduce){${Z}#lvl.lvsoft,${Z}#lvl.lvquick,${Z}#lvl.lvout,${Z}#lvl.lvsoft .card{animation:none}}`;
 document.head.append(st)}
 // a ring of motes bursting from the hero when a rune is taken (gold for time, red for reach, others in their colours)
 function pactApply(k){if(k==='szklo'){S.str*=1.5;S.vuln=(S.vuln||1)*1.3}else if(k==='cisza'){S.regenMul=(S.regenMul||1)*1.5;pl.max=Math.round(pl.max*.8);pl.hp=Math.min(pl.hp,pl.max)}ftInfo(STY[k].name)}
 function pick(i){if(!S||!S.choosing)return;const k=S.choices[i];if(!k)return;const P2T=!!(pl2&&S.mpTurn===2),onP=f=>P2T?asP2(f):f();if(SLASH_SK.includes(k)&&!canLearnSlasher(k))return;if(k==='_vit'){onP(()=>{pl.max+=15;heal(15)});play('heal',0)}else if(k==='_dex'){onP(()=>{pl.staMax+=15;pl.sta=pl.staMax});play('bless',0)}else if(k==='_str'){S.str*=1.1;play('bless',0)}else if(k==='_int'){onP(()=>{pl.manaMax+=15;pl.mana=pl.manaMax});S.int=(S.int||1)*1.02;play('bless',0)}else if(k==='_gold'){S.coins+=25;play('coin',0)}else if(k==='_heal'){onP(()=>{pl.hp=pl.max});play('heal',0)}else{const b0=STY[k]&&STY[k].br?brOn(STY[k].br):false;S.sk[k]=(S.sk[k]||0)+1;learnElement(k);autoEquipActive(k);S.hl={k,t:clock};if(STY[k]){play('bless',0);if(STY[k].pact)onP(()=>pactApply(k));else if(!b0&&brOn(STY[k].br)){ftInfo((EN?'Style set: ':'Zestaw stylu: ')+BR[STY[k].br].n);play('level',0)}}}
   if(S.sk[k]===1)S.cd[k]=.3;
-  if(HINTS_ENABLED&&sk(k)===1&&(NEW_SWORD_SK.includes(k)||ENCH.includes(k))){const nm=SK[k].name;let text;if(ENCH.includes(k))text=nm+': '+(S.mainEnchant===k?(EN?'main blade, up to lvl 10':'główne ostrze, do 10 poz.'):(EN?'support blade, max lvl 3':'ostrze wspierające, maks. 3 poz.'))+' '+elementalSummary();else if(ACTIVE_SLASHER.includes(k)){const c=ACTIVE_CFG[k],at=S.activeSlots.indexOf(k);text=nm+(at>=0?(EN?' → slot ':' → slot ')+[KB.map.s1,KB.map.s2,KB.map.s3,KB.map.s4].map(kbName)[at]:(EN?' → reserve (equip in the pause menu)':' → rezerwa (wyposaż w pauzie)'))+' · '+c.cost+' '+activeResourceName(k)+(EN?', cooldown ':', odnowienie ')+String(c.wait(1)).replace('.',',')+' s.'}else text=nm+': '+SK[k].lv[0];say(text,'hint')}if(k[0]!=='_'){S.own=S.own||{};(S.own[k]=S.own[k]||[0,0])[P2T?1:0]++}if(pl2)S.mpTurn=3-(S.mpTurn||1);S.pendLv--;chipsDirty=true;if(S.pendLv>0){openLevelUp();return}S.choosing=false;$('lvl').hidden=true;LVCLOSED=performance.now();$('touch').hidden=!coarse}
+  if(HINTS_ENABLED&&sk(k)===1&&(NEW_SWORD_SK.includes(k)||ENCH.includes(k))){const nm=SK[k].name;let text;if(ENCH.includes(k))text=nm+': '+(S.mainEnchant===k?(EN?'main blade, up to lvl 10':'główne ostrze, do 10 poz.'):(EN?'support blade, max lvl 3':'ostrze wspierające, maks. 3 poz.'))+' '+elementalSummary();else if(ACTIVE_SLASHER.includes(k)){const c=ACTIVE_CFG[k],at=S.activeSlots.indexOf(k);text=nm+(at>=0?(EN?' → slot ':' → slot ')+[KB.map.s1,KB.map.s2,KB.map.s3,KB.map.s4].map(kbName)[at]:(EN?' → reserve (equip in the pause menu)':' → rezerwa (wyposaż w pauzie)'))+' · '+c.cost+' '+activeResourceName(k)+(EN?', cooldown ':', odnowienie ')+String(c.wait(1)).replace('.',',')+' s.'}else text=nm+': '+SK[k].lv[0];say(text,'hint')}if(k[0]!=='_'){S.own=S.own||{};(S.own[k]=S.own[k]||[0,0])[P2T?1:0]++}if(pl2)S.mpTurn=3-(S.mpTurn||1);S.pendLv--;chipsDirty=true;if(S.pendLv>0){openLevelUp();return}S.choosing=false;lvHide();LVCLOSED=performance.now();$('touch').hidden=!coarse}
 const npcTalk=n=>{const s=S.npc[n.id]?.state;return s==='alive'||s==='offered'||(n.id==='chojrak'&&s==='talked')};
 function nearNpc(){if(!S||pl.dead)return null;for(const n of W.npcs){if(n.lure||!npcTalk(n))continue;if(Math.hypot(pl.x-n.x,pl.y-n.y)<30)return n}return null}
 const chojPages=mode=>FTX((STORYMODE?'chojrak.story.act'+CH:'chojrak.arcade')+'.'+(mode==='repeat'?'repeat':'first'));
@@ -6468,7 +6472,7 @@ let pcMenuBack=null;
 const PAD={x:0,y:0,ax:0,ay:0,aimT:-99,prev:[],cur:[],atk:false,blk:false,on:false,g:null,menu:'',lock:0,nav:0,navD:0};
 function padRumble(s,w,ms,g0){if(SETT.rumble===false)return;try{const g=g0||PAD.g;if(g&&g.vibrationActuator)g.vibrationActuator.playEffect('dual-rumble',{duration:ms,strongMagnitude:s,weakMagnitude:w})}catch(e){}}
 function padDz(x,y,dz){const m=Math.hypot(x,y);if(m<dz)return [0,0];const k=Math.min(1,(m-dz)/(1-dz))/m;return [x*k,y*k]}
-function padMenuId(){if(recoveryActive)return 'recovery';if(S&&S.notice&&!$('notice').hidden)return 'notice';if(S&&S.witChoice&&!$('witChoices').hidden)return 'witChoices';if(S&&S.dialog&&!$('dialog').hidden&&$('orient').classList.contains('pc-conversations'))return 'dialog';if(S&&S.phase==='end'&&!$('end').hidden)return 'end';for(const id of ['lang','pause','shop','lvl','prep','conf','manual','opts','kap','end','title']){const el=$(id);if(el&&!el.hidden)return id}return ''}
+function padMenuId(){if(recoveryActive)return 'recovery';if(S&&S.notice&&!$('notice').hidden)return 'notice';if(S&&S.witChoice&&!$('witChoices').hidden)return 'witChoices';if(S&&S.dialog&&!$('dialog').hidden&&$('orient').classList.contains('pc-conversations'))return 'dialog';if(S&&S.phase==='end'&&!$('end').hidden)return 'end';for(const id of ['lang','pause','shop','lvl','prep','conf','manual','opts','kap','end','title']){const el=$(id);if(el&&!el.hidden&&!el.classList.contains('lvout'))return id}return ''}
 // Menus: up/down/left/right pick the nearest control in that direction on screen (not the next one in the list).
 function navMove(id,d,pad){const root=$(id);if(!root)return false;const items=pad?padItems(root):[...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null);if(!items.length)return false;
   const ae=document.activeElement,cur=items.includes(ae)?ae:null;if(!cur){const s1=id==='title'?$('start1'):null;(s1&&items.includes(s1)?s1:pad?padFirstContent(root,items):items[0]).focus();return true}
@@ -9479,5 +9483,27 @@ setInterval(()=>{const p=document.getElementById('pause');if(!p||p.hidden||p.off
 html[lang=en] @N@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips:empty::after{content:'locked'!important}
 `.replace(/@N@/g,'#orient'.repeat(130)+'.nb2');document.head.append(css);
 })();
+// 13.11.2026: Przygotowanie — zamiast rozwijanego „Ustawienia” dwa przełączniki widoczne na ekranie
+// (Samouczek, 2 graczy). Przyciski klikają oryginalne pola wyboru, więc logika i zapis zostają bez zmian.
+(()=>{try{
+ const prep=$('prep'),hi=$('hintsTgl'),mp=$('mpTgl');if(!prep||!hi||!mp)return;
+ const pop=[...prep.querySelectorAll('details.pc-popover')].find(d=>d.contains(hi)||d.contains(mp));if(!pop)return;
+ const wrap=document.createElement('div');wrap.className='pc-prep-quick';
+ const mk=(inp,label,noteId,lab)=>{const b=document.createElement('button');b.type='button';b.className='pc-quick';b.innerHTML='<i aria-hidden="true"></i><span></span>';
+  const sync=()=>{const on=!!inp.checked;b.setAttribute('aria-pressed',String(on));b.classList.toggle('is-on',on);const n=noteId&&$(noteId);b.lastChild.textContent=label+(n?n.textContent:'');if(lab)b.hidden=lab.style.display==='none'};
+  b.addEventListener('click',()=>{inp.click();sync()});inp.addEventListener('change',sync);sync();setInterval(sync,700);return b};
+ wrap.append(mk(hi,EN?'Tutorial':'Samouczek'),mk(mp,EN?'2 players':'2 graczy','mpTglT',$('mpTglL')));
+ pop.after(wrap);pop.hidden=true;pop.open=false;
+ const Z='#orient'.repeat(140),st=document.createElement('style');st.id='pc-prep-quick';st.textContent=
+`${Z} #prep details.pc-popover[hidden]{display:none!important}
+${Z} #prep .pc-prep-quick{position:absolute!important;right:0!important;top:50%!important;transform:translateY(-50%)!important;display:flex!important;gap:calc(10 * min(.05981vw,.10627vh))!important;z-index:5}
+${Z} #prep .pc-prep-quick .pc-quick{display:inline-flex!important;align-items:center!important;gap:.6em!important;width:auto!important;min-width:0!important;height:auto!important;min-height:0!important;margin:0!important;padding:.95vh 1.6vh!important;border:1px solid var(--nbs-idle,#a68b5e66)!important;border-image:none!important;background:var(--nbs-cell,#16111499)!important;color:#eadcc4!important;font:500 max(12px,1.85vh)/1 Cinzel,Georgia,serif!important;letter-spacing:.04em!important;text-transform:none!important;white-space:nowrap!important;cursor:pointer}
+${Z} #prep .pc-prep-quick .pc-quick[hidden]{display:none!important}
+${Z} #prep .pc-prep-quick .pc-quick i{display:inline-grid!important;place-items:center!important;width:1.15em!important;height:1.15em!important;border:1px solid #c8a05a!important;background:#0b080a!important;font:700 .9em/1 Georgia,serif!important;font-style:normal!important;color:#f1d79a!important}
+${Z} #prep .pc-prep-quick .pc-quick.is-on i::before{content:'✓'}
+${Z} #prep .pc-prep-quick .pc-quick.is-on{border-color:#c8a05a!important;background:linear-gradient(150deg,#3a1d26e6,#1e1418e6)!important}
+${Z} #prep .pc-prep-quick .pc-quick:hover{border-color:var(--nbs-hover,#d8b878)!important}`;
+ document.head.append(st);
+}catch(e){quietErr('prepQuick',e)}})();
 requestAnimationFrame(frame);
 })();
