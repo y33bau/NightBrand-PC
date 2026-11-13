@@ -132,7 +132,7 @@ $('nextBtn').addEventListener('click',()=>preloadIntro(Math.min(5,CH+1)),true);
 $('prepGo').addEventListener('click',()=>preloadIntro(PREP.ch),true);
 STORY_INTRO[5]=FTX('story.act5');
 // runda 318 (pakiet fabularny): opisy rozdzialow z FABULA_TXT; rozdzial I zachowuje dotychczasowe wprowadzenie i dopisuje opis osady
-STORY_INTRO[1]=STORY_INTRO[1].concat(FTX('story.act1')); // pakiet fabularny 13.11.2026: wstep (5 kart) + opis rozdzialu I; noce II-IV: dodatkowe wprowadzenia (20_fabula), noc V: story.act5
+for(let c=1;c<=4;c++)STORY_INTRO[c]=STORY_INTRO[c].concat(FTX('story.act'+c)); // 13.11.2026: najpierw wstep lokalizacji (I: wstep; II-IV: dodatkowe z 20_fabula), potem opis rozdzialu story.actN; noc V: sam story.act5
 function storyIntro(ch){if(!STORY||!STORYMODE||!STORY_INTRO[ch]||!S||!SPRITE_DATA['intro'+ch])return;
   preloadIntro(ch);
   const el=$('intro');$('iimg').style.backgroundImage=`url(${SPRITE_DATA['intro'+ch]})`;$('iimg').style.animation='none';void $('iimg').offsetWidth;$('iimg').style.animation='';

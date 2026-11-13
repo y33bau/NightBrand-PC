@@ -731,3 +731,4 @@ cache653 · Audio (Opcje i pauza) bez naglowka USTAWIENIA DZWIEKU / AUDIO; znacz
 cache654 · Wybor rozdzialu: Tryb gry jako przelacznik Fabularny | Arcade z podswietlona aktywna opcja (wczesniej nazwa trybu znikala po przelaczeniu) (nie sprawdzono: fizyczny pad, test dymny I-V)
 cache655 · runda: wybor rozdzialu tylko klikiem (usuniety focus-select, pad nie zmienia rozdzialu); nie sprawdzono na padzie
 cache656 · runda: nowa fabula (PL+EN): wstep, opisy rozdzialow, Chojrak, bossowie, komunikaty, zapiski, postacie, zakonczenie; nie sprawdzono w grze
+cache657 · runda: intro nocy = wstep lokalizacji + opis rozdzialu (I-IV), V sam opis; nie sprawdzono w grze
