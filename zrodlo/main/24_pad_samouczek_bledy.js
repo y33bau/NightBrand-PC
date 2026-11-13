@@ -74,7 +74,7 @@ function padNav(id,dt,pr,g){
   const grabOff=()=>{PAD.grab=null;for(const e of document.querySelectorAll('.rng.grab'))e.classList.remove('grab')};
   if(PAD.grab&&PAD.grab!==cur)grabOff();
   if(dir){if(PAD.grab===cur||cur.type==='range'&&hor){if(hor){cur.value=String(Math.max(+cur.min,Math.min(+cur.max,+cur.value+dir*5)));cur.dispatchEvent(new Event('input',{bubbles:true}));cur.dispatchEvent(new Event('change',{bubbles:true}))}}
-    else navMove(id,d===1?'d':d===-1?'u':d===2?'r':'l',true)}
+    else{const before=document.activeElement;navMove(id,d===1?'d':d===-1?'u':d===2?'r':'l',true);if(document.activeElement!==before)play('navtick',0)}}
   if(pr(0)){if(cur.type==='range'){if(PAD.grab===cur)grabOff();else{PAD.grab=cur;if(cur.parentNode)cur.parentNode.classList.add('grab')}}else cur.click()}
   if(pr(1)&&PAD.grab){grabOff();return}
   if(pr(1)&&pcMenuBack&&pcMenuBack())return;
@@ -169,7 +169,7 @@ function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.15;
       if(!hit(x,y,w,H,own)){placed.push([x,y,w,H]);out.push('<b style="left:'+x.toFixed(1)+'px;top:'+y.toFixed(1)+'px">'+txt+'</b>');return}}};
   const pair=(sel,a,b)=>{const tb=[...root.querySelectorAll(sel)].filter(vis);if(tb.length<2)return false;const f=tb[0].getBoundingClientRect(),l=tb[tb.length-1].getBoundingClientRect(),hor=Math.abs(f.top-l.top)<f.height/2;
     if(hor){put(a,tb[0],['l','t'],tb);put(b,tb[tb.length-1],['r','t'],tb)}else{put(a,tb[0],['t','l','r'],tb);put(b,tb[tb.length-1],['b','l','r'],tb)}return true};
-  pair(PADTABS,'LB','RB');if(!pair(PADSUBS,'LT','RT'))pair(PADSECS,'LT','RT');
+  pair(PADTABS,'LB','RB');
   // Back (View) otwiera Opcje: znaczek przy kole zębatym na wyborze rozdziału
   if(mid==='title'&&!$('title').classList.contains('pc-home'))put('<svg viewBox="0 0 20 16" width="1.3em" height="1.05em" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="1.5" y="1.5" width="11" height="8" rx="1.6"/><rect x="7.5" y="6.5" width="11" height="8" rx="1.6" fill="#1c1316"/></svg>',$('optsBtn'),['l','b','r'],null,false);
   if(mid==='lvl'){put('Y',$('rerollBtn'),['r','l','t','b']);const bd=root.querySelector('.level-build>summary')||root.querySelector('.level-build');if(bd)put('X',bd,['r','l','in'],null,true)}

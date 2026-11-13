@@ -2844,6 +2844,7 @@ const SFX={
  kill:()=>{noise(.45,1400,1,.34,'lowpass',80,.2);tone(190,38,.32,.2,'triangle');tone(70,28,.4,.2,'sine',.06)},
  hurt:()=>{voice(300,90,.22,.14,'sawtooth',1400);noise(.16,800,1,.24,'lowpass',200);tone(80,40,.15,.2,'sine')},
  roll:()=>{noise(.2,350,1,.2,'bandpass',1000);noise(.16,600,1,.12,'bandpass',1500,0,.07)},
+ navtick:()=>{tone(1250,950,.035,.03,'sine',0,.05)},
  pick:()=>{tone(1500+Math.random()*250,2100,.07,.035,'sine',0,.2);tone(2200,2800,.05,.02,'sine',.045,.2)},
  coin:()=>{tone(1568,1580,.09,.045,'triangle',0,.25);tone(2093,2100,.22,.045,'triangle',.07,.3);tone(4186,4200,.1,.012,'sine',.07,.3)},
  level:()=>{[330,440,554,660,880].forEach((f,i)=>{bell(f,.9,.05,i*.08,.35)});voice(165,330,.7,.07,'triangle',900,.3)},
@@ -2891,7 +2892,7 @@ function loadSfxSamples(){if(sfxLoadPromise||!AC)return sfxLoadPromise;
 
 // Głośność, minimalny odstęp (czas audio), limit nakładania, priorytet.
 // Muzyka omija ten tor. Ważne sygnały mogą wyprzeć cichy efekt zbierania.
-const SFX_MIX={roll:[.5,.035,2,2],ui:[.6,.06,2,3],empty:[.55,.18,1,3],coin:[.45,.10,2,0],pick:[.25,.08,2,0],
+const SFX_MIX={roll:[.5,.035,2,2],ui:[.6,.06,2,3],empty:[.55,.18,1,3],coin:[.45,.10,2,0],pick:[.25,.08,2,0],navtick:[.35,.05,1,0],
  level:[.85,.5,1,3],heal:[.55,.4,2,2],bless:[.65,.3,2,2],growl:[.4,.65,2,0],
  bossGrowl:[.85,.22,2,3],warnR:[.65,.18,2,3],kill:[.4,.12,3,0],hurt:[.85,.12,2,3],
  rumble:[.5,.6,1,1],rise:[.5,.2,2,1],poiseBreak:[.8,.3,1,3]};
@@ -6543,7 +6544,7 @@ function padNav(id,dt,pr,g){
   const grabOff=()=>{PAD.grab=null;for(const e of document.querySelectorAll('.rng.grab'))e.classList.remove('grab')};
   if(PAD.grab&&PAD.grab!==cur)grabOff();
   if(dir){if(PAD.grab===cur||cur.type==='range'&&hor){if(hor){cur.value=String(Math.max(+cur.min,Math.min(+cur.max,+cur.value+dir*5)));cur.dispatchEvent(new Event('input',{bubbles:true}));cur.dispatchEvent(new Event('change',{bubbles:true}))}}
-    else navMove(id,d===1?'d':d===-1?'u':d===2?'r':'l',true)}
+    else{const before=document.activeElement;navMove(id,d===1?'d':d===-1?'u':d===2?'r':'l',true);if(document.activeElement!==before)play('navtick',0)}}
   if(pr(0)){if(cur.type==='range'){if(PAD.grab===cur)grabOff();else{PAD.grab=cur;if(cur.parentNode)cur.parentNode.classList.add('grab')}}else cur.click()}
   if(pr(1)&&PAD.grab){grabOff();return}
   if(pr(1)&&pcMenuBack&&pcMenuBack())return;
@@ -6638,7 +6639,7 @@ function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.15;
       if(!hit(x,y,w,H,own)){placed.push([x,y,w,H]);out.push('<b style="left:'+x.toFixed(1)+'px;top:'+y.toFixed(1)+'px">'+txt+'</b>');return}}};
   const pair=(sel,a,b)=>{const tb=[...root.querySelectorAll(sel)].filter(vis);if(tb.length<2)return false;const f=tb[0].getBoundingClientRect(),l=tb[tb.length-1].getBoundingClientRect(),hor=Math.abs(f.top-l.top)<f.height/2;
     if(hor){put(a,tb[0],['l','t'],tb);put(b,tb[tb.length-1],['r','t'],tb)}else{put(a,tb[0],['t','l','r'],tb);put(b,tb[tb.length-1],['b','l','r'],tb)}return true};
-  pair(PADTABS,'LB','RB');if(!pair(PADSUBS,'LT','RT'))pair(PADSECS,'LT','RT');
+  pair(PADTABS,'LB','RB');
   // Back (View) otwiera Opcje: znaczek przy kole zębatym na wyborze rozdziału
   if(mid==='title'&&!$('title').classList.contains('pc-home'))put('<svg viewBox="0 0 20 16" width="1.3em" height="1.05em" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="1.5" y="1.5" width="11" height="8" rx="1.6"/><rect x="7.5" y="6.5" width="11" height="8" rx="1.6" fill="#1c1316"/></svg>',$('optsBtn'),['l','b','r'],null,false);
   if(mid==='lvl'){put('Y',$('rerollBtn'),['r','l','t','b']);const bd=root.querySelector('.level-build>summary')||root.querySelector('.level-build');if(bd)put('X',bd,['r','l','in'],null,true)}
