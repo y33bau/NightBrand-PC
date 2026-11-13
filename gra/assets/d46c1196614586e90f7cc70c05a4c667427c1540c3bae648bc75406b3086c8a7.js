@@ -9537,5 +9537,24 @@ ${Z} #pause .nbp-pane:has(#qualityRow) .musrow{min-width:0!important}
 ${Z} #pause .nbp-pane:has(#qualityRow) .musrow .rng{flex:1 1 auto!important;width:auto!important;min-width:0!important;max-width:100%!important}
 ${Z} #pause .nbp-pane:has(#qualityRow) .musrow .rng input{width:100%!important}`;
 document.head.append(st)})();
+// 13.11.2026: „Tryb gry” na wyborze rozdziału jako czytelny przełącznik dwóch opcji (Fabularny | Arcade).
+// Wcześniej nazwa trybu była obrazkiem z gotyckich liter, który po przełączeniu znikał (pusty przycisk).
+(()=>{try{
+ const b=document.querySelector('#title .pc-journey-mode');if(!b)return;
+ const seg=document.createElement('span');seg.className='nb2-seg';seg.setAttribute('aria-hidden','true');
+ const a1=document.createElement('i'),a2=document.createElement('i');a1.textContent=EN?'Story':'Fabularny';a2.textContent='Arcade';seg.append(a1,a2);b.append(seg);
+ const sync=()=>{a1.classList.toggle('is-on',!!STORYMODE);a2.classList.toggle('is-on',!STORYMODE);b.setAttribute('aria-label',(EN?'Game mode: ':'Tryb gry: ')+(STORYMODE?a1.textContent:'Arcade'))};
+ sync();b.addEventListener('click',()=>setTimeout(sync,0));for(const id of ['sFab','sArc'])$(id)?.addEventListener('click',()=>setTimeout(sync,0));
+ const st0=b.querySelector('strong');if(st0)new MutationObserver(sync).observe(st0,{childList:true,characterData:true,subtree:true});
+ const Z='#orient'.repeat(140),U='min(.05981vw,.10627vh)',st=document.createElement('style');st.id='nb2-mode-seg';st.textContent=
+`${Z} #title .pc-journey-mode.nb2-mode{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:calc(7 * ${U})!important}
+${Z} #title .pc-journey-mode.nb2-mode>strong,${Z} #title .pc-journey-mode.nb2-mode>.nb2-mode-hint{display:none!important}
+${Z} #title .pc-journey-mode.nb2-mode>small{font:500 calc(13 * ${U})/1 Cinzel,Georgia,serif!important;letter-spacing:.18em!important;text-transform:uppercase!important;color:#b89a68!important}
+${Z} #title .pc-journey-mode.nb2-mode>small .pcg-glyph{display:none!important}
+${Z} #title .pc-journey-mode .nb2-seg{display:flex!important;gap:calc(6 * ${U})!important}
+${Z} #title .pc-journey-mode .nb2-seg i{font:600 calc(18 * ${U})/1 Cinzel,Georgia,serif!important;font-style:normal!important;letter-spacing:.06em!important;padding:calc(7 * ${U}) calc(16 * ${U})!important;border:1px solid #6d5a3e66!important;background:#0c090b8c!important;color:#8f8170!important;transition:background .15s,color .15s,border-color .15s}
+${Z} #title .pc-journey-mode .nb2-seg i.is-on{background:linear-gradient(150deg,#5a2433,#2c161d)!important;border-color:#d8b46e!important;color:#f3e2bf!important;box-shadow:0 0 10px #c9a45a33,inset 0 0 8px #0006!important}`;
+ document.head.append(st);
+}catch(e){quietErr('modeSeg',e)}})();
 requestAnimationFrame(frame);
 })();
