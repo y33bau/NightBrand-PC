@@ -735,3 +735,5 @@ cache657 · runda: intro nocy = wstep lokalizacji + opis rozdzialu (I-IV), V sam
 cache658 · runda: koksowniki nieruchome (stala klatka), opis opcji w przygotowaniu tylko po kliku; nie sprawdzono w grze
 cache659 · runda: koksowniki z nowych klatek p2_brazier (III, V), animacja przywrocona; nie sprawdzono w grze
 cache660 · Pad w menu: wybor celu po krawedziach, os dominujaca galki, bez zawijania kursora, przyspieszone powtarzanie (nie sprawdzono: prawdziwy pad)
+cache661 · Pad w menu: checkboxy, Dane zapisu, LT/RT miedzy sekcjami, ramka przycisku Zloz ofiare, wybor rozdzialu (nie sprawdzono: prawdziwy pad)
+cache662 · Pad w menu: checkboxy, Dane zapisu, LT/RT miedzy sekcjami, ramki zaznaczenia nie ucinane (Kaplica, rozdzialy), wybor rozdzialu czytelniejszy (nie sprawdzono: prawdziwy pad)

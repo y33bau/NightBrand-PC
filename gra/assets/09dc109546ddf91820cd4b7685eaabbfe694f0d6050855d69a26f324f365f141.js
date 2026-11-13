@@ -6476,10 +6476,10 @@ function padMenuId(){if(recoveryActive)return 'recovery';if(S&&S.notice&&!$('not
 // Menus: up/down/left/right pick the nearest control in that direction on screen (not the next one in the list).
 function navMove(id,d,pad){const root=$(id);if(!root)return false;const items=pad?padItems(root):[...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null);if(!items.length)return false;
   const ae=document.activeElement,cur=items.includes(ae)?ae:null;if(!cur){const s1=id==='title'?$('start1'):null;(s1&&items.includes(s1)?s1:pad?padFirstContent(root,items):items[0]).focus();return true}
-  const c=lrect(cur),cx=c.left+c.width/2,cy=c.top+c.height/2,vert=d==='d'||d==='u';let best=null,bs=1e9;
+  const c=padBox(cur),cx=c.left+c.width/2,cy=c.top+c.height/2,vert=d==='d'||d==='u';let best=null,bs=1e9;
   // 13.11.2026 (grafik, pad jak na Xboksie): wybór celu po krawędziach, nie po środkach. Liczy się odstęp w kierunku ruchu,
   // mocna kara za brak zachodzenia w poprzek (przycisk dokładnie pod spodem wygrywa z ukośnym) i lekka za odsunięcie środka.
-  for(const e of items){if(e===cur)continue;const r=lrect(e),dx=r.left+r.width/2-cx,dy=r.top+r.height/2-cy;const main=d==='d'?dy:d==='u'?-dy:d==='r'?dx:-dx;if(main<=2)continue;
+  for(const e of items){if(e===cur)continue;const r=padBox(e),dx=r.left+r.width/2-cx,dy=r.top+r.height/2-cy;const main=d==='d'?dy:d==='u'?-dy:d==='r'?dx:-dx;if(main<=2)continue;
     const gap=Math.max(0,d==='d'?r.top-c.bottom:d==='u'?c.top-r.bottom:d==='r'?r.left-c.right:c.left-r.right);
     const pg=vert?Math.max(0,r.left-c.right,c.left-r.right):Math.max(0,r.top-c.bottom,c.top-r.bottom);
     const sc=gap+main*.25+pg*3+Math.abs(vert?dx:dy)*.35;if(sc<bs){bs=sc;best=e}}
@@ -6494,25 +6494,38 @@ const PADTABS='.nbp-nav>.nbp-tab,.pc-prep-tabs>.pc-prep-tab,#kapTabs>.tab,.tabs>
 const PADSUBS='.subtabs>.stab,#pauseKeys .stab';
 function padIsTab(e){return !!(e.matches&&(e.matches(PADTABS)||e.matches(PADSUBS)))}
 function padTiny(e){const r=e.getBoundingClientRect();return r.width<4||r.height<4}
-function padItems(root){return [...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null&&!padIsTab(e)&&!padTiny(e))}
+// 13.11.2026: przełączniki (checkbox/radio) mają w grze ukryty input 1x1, a widoczny jest tylko napis z kwadracikiem w <label>.
+// Dla pada liczy się prostokąt etykiety: input zostaje na liście (można go wybrać), a kursor skacze po tym, co widać.
+function padBox(e){if((e.type==='checkbox'||e.type==='radio')&&padTiny(e)){const l=e.closest('label')||e.parentElement;if(l)return l.getBoundingClientRect()}return e.getBoundingClientRect()}
+function padItems(root){return [...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null&&!padIsTab(e)&&(!padTiny(e)||(padBox(e).width>=4&&padBox(e).height>=4&&(e.type==='checkbox'||e.type==='radio'))))}
 // pierwszy element treści pod paskiem zakładek (lewy górny), a gdy zakładek brak: pierwszy w kolejności
 function padFirstContent(root,items){const tb=[...root.querySelectorAll(PADTABS)].filter(b=>b.offsetParent!==null);if(!tb.length)return items[0];
   const vert=tb.length>1&&Math.abs(tb[0].getBoundingClientRect().top-tb[1].getBoundingClientRect().top)>8;let c;
-  if(vert){const rr=Math.max(...tb.map(b=>b.getBoundingClientRect().right));c=items.filter(e=>e.getBoundingClientRect().left>=rr-2)}
-  else{const bb=Math.max(...tb.map(b=>b.getBoundingClientRect().bottom));c=items.filter(e=>e.getBoundingClientRect().top>=bb-2)}
-  c.sort((a,b)=>{const p=a.getBoundingClientRect(),q=b.getBoundingClientRect();return Math.abs(p.top-q.top)>8?p.top-q.top:p.left-q.left});return c[0]||items[0]}
+  if(vert){const rr=Math.max(...tb.map(b=>padBox(b).right));c=items.filter(e=>padBox(e).left>=rr-2)}
+  else{const bb=Math.max(...tb.map(b=>padBox(b).bottom));c=items.filter(e=>padBox(e).top>=bb-2)}
+  c.sort((a,b)=>{const p=padBox(a),q=padBox(b);return Math.abs(p.top-q.top)>8?p.top-q.top:p.left-q.left});return c[0]||items[0]}
 function padSig(e){if(!e)return '';const d=e.dataset||{};return e.id||['nbp','panel','tab','sub','ps','hero','m'].map(k=>d[k]?k+':'+d[k]:'').join('')||(e.className+'|'+(e.textContent||'').trim().slice(0,40))}
 function padKeep(id,items){const ae=document.activeElement;
-  if(items.includes(ae)){const r=ae.getBoundingClientRect();PAD.keep={id,el:ae,sig:padSig(ae),x:r.left+r.width/2,y:r.top+r.height/2};return ae}
+  if(items.includes(ae)){const r=padBox(ae);PAD.keep={id,el:ae,sig:padSig(ae),x:r.left+r.width/2,y:r.top+r.height/2};return ae}
   const K=PAD.keep&&PAD.keep.id===id?PAD.keep:null;let f=null;
   if(K){f=items.includes(K.el)?K.el:items.find(e=>padSig(e)===K.sig)||null;
-    if(!f){let bs=1e9;for(const e of items){const r=e.getBoundingClientRect(),d=Math.hypot(r.left+r.width/2-K.x,r.top+r.height/2-K.y);if(d<bs){bs=d;f=e}}}}
+    if(!f){let bs=1e9;for(const e of items){const r=padBox(e),d=Math.hypot(r.left+r.width/2-K.x,r.top+r.height/2-K.y);if(d<bs){bs=d;f=e}}}}
   if(!f){const s1=id==='title'?$('start1'):id==='lvl'?$('card0'):null;f=s1&&items.includes(s1)?s1:padFirstContent($(id),items)}
-  if(f){f.focus({preventScroll:true});const r=f.getBoundingClientRect();PAD.keep={id,el:f,sig:padSig(f),x:r.left+r.width/2,y:r.top+r.height/2}}return f}
+  if(f){f.focus({preventScroll:true});const r=padBox(f);PAD.keep={id,el:f,sig:padSig(f),x:r.left+r.width/2,y:r.top+r.height/2}}return f}
 function padCycle(root,sel,step){const tb=[...root.querySelectorAll(sel)].filter(b=>!b.disabled&&!b.hidden&&b.offsetParent!==null);if(tb.length<2)return false;
   const on=b=>b.classList.contains('on')||b.getAttribute('aria-pressed')==='true'||b.getAttribute('aria-selected')==='true';
   let ci=tb.findIndex(on);if(ci<0)ci=Math.max(0,tb.indexOf(document.activeElement));const nx=tb[(ci+step+tb.length)%tb.length];
   nx.click();play('pick',0);setTimeout(()=>{const it=padItems(root),f=sel===PADSUBS?(it.find(e=>e.getBoundingClientRect().top>nx.getBoundingClientRect().bottom-2)||it[0]):padFirstContent(root,it);PAD.keep=null;if(f)f.focus({preventScroll:true})},40);return true}
+// 13.11.2026: LT/RT skaczą między sekcjami ustawień (Jasność, Jakość grafiki, Płynność, Zaawansowane...), gdy zakładka nie ma podzakładek.
+const PADSECS='.pc-option-section,.nb2-danger';
+function padItemsIn(x){return x.matches('button,input,summary')?(padItems(x.parentElement).includes(x)?[x]:[]):padItems(x)}
+function padSections(root,step){let secs=[...root.querySelectorAll(PADSECS)].filter(x=>x.offsetParent!==null&&x.getBoundingClientRect().height>8&&padItemsIn(x).length);
+  // zakładki bez sekcji w układzie (np. Dane zapisu): grupami są kolejne bloki wprost w aktywnym panelu
+  if(secs.length<2){const pane=root.querySelector('.pane:not([hidden]),.mpane:not([hidden])');if(pane)secs=[...pane.children].filter(x=>x.offsetParent!==null&&padItemsIn(x).length)}
+  if(secs.length<2)return false;
+  const ae=document.activeElement;let ci=secs.findIndex(x=>x.contains(ae));if(ci<0)ci=step>0?-1:0;const nx=secs[(ci+step+secs.length)%secs.length];
+  const it=padItemsIn(nx).sort((a,b)=>{const p=padBox(a),q=padBox(b);return Math.abs(p.top-q.top)>8?p.top-q.top:p.left-q.left});if(!it.length)return false;
+  PAD.keep=null;it[0].focus({preventScroll:true});try{it[0].scrollIntoView({block:'nearest'})}catch(e){}play('pick',0);return true}
 function padScroll(root,ry,dt){if(Math.abs(ry)<.3)return;const can=e=>e&&e.scrollHeight>e.clientHeight+4&&/(auto|scroll)/.test(getComputedStyle(e).overflowY);
   let t=[...root.querySelectorAll('.pc-perk-detail,#kapDet,.m2k-det,.nbp-panel,#lvl .level-build,.pane:not([hidden]),.mpane:not([hidden])')].find(e=>e.offsetParent!==null&&can(e));
   if(!t){let e=document.activeElement;while(e&&e!==document.body&&!can(e))e=e.parentElement;if(can(e))t=e}if(!t&&can(root))t=root;
@@ -6539,7 +6552,7 @@ function padNav(id,dt,pr,g){
   // Back (View): z każdego menu poza grą otwiera Opcje; B wraca tam, skąd przyszliśmy
   if(pr(8)&&['title','prep','kap','manual'].includes(id)){$('optsBtn').click();PAD.fresh=true;return}
   if(pr(4)||pr(5))padCycle(root,PADTABS,pr(5)?1:-1);
-  if(pr(6)||pr(7))padCycle(root,PADSUBS,pr(7)?1:-1);
+  if(pr(6)||pr(7)){const st=pr(7)?1:-1;if(!padCycle(root,PADSUBS,st))padSections(root,st)}
   padScroll(root,g.axes[3]||0,dt);
   if(pr(1)){if(id==='pause')togglePause(false);else if(id==='shop')closeShop();else if(id==='opts')$('optsBack').click();else if(id==='manual')$('manBack').click();else if(id==='conf')$('confNo').click();else if(id==='prep')$('prepBack').click();else if(id==='kap')closeKap();else if(id==='end')$('menuBtn').click();else if(id==='title'&&$('orient').classList.contains('pc-menu')&&!$('title').classList.contains('pc-home'))$('title').querySelector('.pc-home-button')?.click()}
   if(pr(9)){if(id==='prep')$('prepGo').click();else if(id==='shop')closeShop()}
@@ -6601,7 +6614,11 @@ let PADHINT=null,PADHT=0;
 // na który wchodzi pad. Wiele starszych reguł miało podświetlenie tylko dla myszy/klawiatury, a dla pada żadne.
 {const Z=':is('+'#orient'.repeat(60)+',body)',st=document.createElement('style');st.id='pad-focus';st.textContent=
 `html.padprio body.padnav ${Z} .pf,html.padprio body.padnav .pf{outline:2px solid #e8c16f!important;outline-offset:2px!important;box-shadow:0 0 0 1px #000c,0 0 16px 2px #e3bb7870!important;filter:brightness(1.12)!important}
-html.padprio body.padnav ${Z} label.pf,html.padprio body.padnav ${Z} .rng.pf{outline-offset:4px!important}`;document.head.append(st)}
+html.padprio body.padnav ${Z} label.pf,html.padprio body.padnav ${Z} .rng.pf{outline-offset:4px!important}
+/* przyciski na całą szerokość panelu (Kaplica: Złóż ofiarę, Kronika: Graj...) leżą w kontenerze z overflow:hidden; złota ramka na zewnątrz była ucinana z prawej i z góry, więc rysujemy ją do środka */
+html.padprio body.padnav ${Z} :is(.m2k-buy,#kapReset,.m2-ch).pf{outline-offset:-4px!important;box-shadow:inset 0 0 0 1px #000c,inset 0 0 16px 2px #e3bb7870!important}
+/* wybrany rozdział na liście aktów: stała, wyraźna oprawa, żeby było widać wybór także wtedy, gdy złota ramka pada stoi na innej mapie */
+html body ${Z} #title .premium-map .m2-ch.premium-selected:not(.pf){outline:3px solid #b2475a!important;outline-offset:-3px!important;box-shadow:inset 0 0 0 1px #000a,inset 0 0 34px 4px #7a2a3dcc!important}`;document.head.append(st)}
 // 13.11.2026: przycisk „Wróć” widoczny także przy padzie (znaczek B obok); zastępuje ukrywanie z rundy 261 w CSS
 {const st=document.createElement('style');st.textContent="html body.padlast #orient#orient#orient#orient .backar,html body.padlast #orient#orient#orient#orient :is(#prep,#opts,#manual)>.backar{display:block!important}";document.head.append(st)}
 function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.15;
@@ -6619,9 +6636,9 @@ function padHintTick(mid,dt){PADHT-=dt;if(PADHT>0)return;PADHT=.15;
   const put=(txt,el,sides,own,tr)=>{if(!vis(el))return;let r=el.getBoundingClientRect();if(tr){try{const g=document.createRange();g.selectNodeContents(el);const q=g.getBoundingClientRect();if(q.width>2)r=q}catch(e){}}const top=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);if(top&&!root.contains(top))return;const w=txt.startsWith('<')?H*1.35:Math.max(H,(txt.length*11+14)*u);own=own||[el];
     for(const sd of sides){let x,y;if(sd==='l'){x=r.left-gap-w;y=r.top+r.height/2-H/2}else if(sd==='r'){x=r.right+gap;y=r.top+r.height/2-H/2}else if(sd==='t'){x=r.left+r.width/2-w/2;y=r.top-gap-H}else if(sd==='b'){x=r.left+r.width/2-w/2;y=r.bottom+gap}else if(sd==='in'){x=r.right-w-gap;y=r.top+r.height/2-H/2}
       if(!hit(x,y,w,H,own)){placed.push([x,y,w,H]);out.push('<b style="left:'+x.toFixed(1)+'px;top:'+y.toFixed(1)+'px">'+txt+'</b>');return}}};
-  const pair=(sel,a,b)=>{const tb=[...root.querySelectorAll(sel)].filter(vis);if(tb.length<2)return;const f=tb[0].getBoundingClientRect(),l=tb[tb.length-1].getBoundingClientRect(),hor=Math.abs(f.top-l.top)<f.height/2;
-    if(hor){put(a,tb[0],['l','t'],tb);put(b,tb[tb.length-1],['r','t'],tb)}else{put(a,tb[0],['t','l','r'],tb);put(b,tb[tb.length-1],['b','l','r'],tb)}};
-  pair(PADTABS,'LB','RB');pair(PADSUBS,'LT','RT');
+  const pair=(sel,a,b)=>{const tb=[...root.querySelectorAll(sel)].filter(vis);if(tb.length<2)return false;const f=tb[0].getBoundingClientRect(),l=tb[tb.length-1].getBoundingClientRect(),hor=Math.abs(f.top-l.top)<f.height/2;
+    if(hor){put(a,tb[0],['l','t'],tb);put(b,tb[tb.length-1],['r','t'],tb)}else{put(a,tb[0],['t','l','r'],tb);put(b,tb[tb.length-1],['b','l','r'],tb)}return true};
+  pair(PADTABS,'LB','RB');if(!pair(PADSUBS,'LT','RT'))pair(PADSECS,'LT','RT');
   // Back (View) otwiera Opcje: znaczek przy kole zębatym na wyborze rozdziału
   if(mid==='title'&&!$('title').classList.contains('pc-home'))put('<svg viewBox="0 0 20 16" width="1.3em" height="1.05em" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="1.5" y="1.5" width="11" height="8" rx="1.6"/><rect x="7.5" y="6.5" width="11" height="8" rx="1.6" fill="#1c1316"/></svg>',$('optsBtn'),['l','b','r'],null,false);
   if(mid==='lvl'){put('Y',$('rerollBtn'),['r','l','t','b']);const bd=root.querySelector('.level-build>summary')||root.querySelector('.level-build');if(bd)put('X',bd,['r','l','in'],null,true)}
