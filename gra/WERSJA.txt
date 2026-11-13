@@ -734,3 +734,4 @@ cache656 · runda: nowa fabula (PL+EN): wstep, opisy rozdzialow, Chojrak, bossow
 cache657 · runda: intro nocy = wstep lokalizacji + opis rozdzialu (I-IV), V sam opis; nie sprawdzono w grze
 cache658 · runda: koksowniki nieruchome (stala klatka), opis opcji w przygotowaniu tylko po kliku; nie sprawdzono w grze
 cache659 · runda: koksowniki z nowych klatek p2_brazier (III, V), animacja przywrocona; nie sprawdzono w grze
+cache660 · Znaczki pada jako obrazki + pasek legendy w menu (nie sprawdzono: pad, wygląd na komputerze autora)
