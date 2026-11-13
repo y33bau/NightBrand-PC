@@ -730,3 +730,4 @@ cache652 · Pauza: Audio trzy karty w rzedzie, Grafika trzy panele + Zaawansowan
 cache653 · Audio (Opcje i pauza) bez naglowka USTAWIENIA DZWIEKU / AUDIO; znaczek Back (View) przy kole zebatym na wyborze rozdzialu, gdy gra sie padem (nie sprawdzono: fizyczny pad, test dymny I-V)
 cache654 · Wybor rozdzialu: Tryb gry jako przelacznik Fabularny | Arcade z podswietlona aktywna opcja (wczesniej nazwa trybu znikala po przelaczeniu) (nie sprawdzono: fizyczny pad, test dymny I-V)
 cache655 · runda: wybor rozdzialu tylko klikiem (usuniety focus-select, pad nie zmienia rozdzialu); nie sprawdzono na padzie
+cache656 · runda: nowa fabula (PL+EN): wstep, opisy rozdzialow, Chojrak, bossowie, komunikaty, zapiski, postacie, zakonczenie; nie sprawdzono w grze
