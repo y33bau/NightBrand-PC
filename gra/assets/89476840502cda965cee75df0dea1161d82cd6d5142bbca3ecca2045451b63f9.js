@@ -4547,14 +4547,50 @@ const LEVEL_CHOICE_DELAY=1000;let levelReadyAt=0,levelReadyTimer=0;
 let MPCLK=false;function pickLevelCard(i){if(performance.now()<levelReadyAt)return;if(S&&pl2&&S.mpTurn===2&&PAD2.g&&!MPCLK)return;pick(i)}
 function rerollLevelCards(){if(performance.now()<levelReadyAt)return;rerollCards()}
 function armLevelCards(){clearTimeout(levelReadyTimer);levelReadyAt=performance.now()+LEVEL_CHOICE_DELAY;$('lvl').classList.add('choice-wait');$('levelWait').textContent=(EN?'Read the descriptions — you can choose in 1 s':'Przeczytaj opisy — wybór dostępny po 1 s');levelReadyTimer=setTimeout(()=>{$('lvl').classList.remove('choice-wait');$('levelWait').textContent=''},LEVEL_CHOICE_DELAY)}
-function openLevelUp(){resetInput();padRumble(.15,.45,140);S.choosing=true;if(pl2){if(!S.mpTurn)S.mpTurn=1}else S.mpTurn=0;pl.swingT=0;play('level',0);if(!pl.dead)pl.hp=Math.min(pl.max,pl.hp+pl.max*S.pk.lvHeal);if(pl2&&!pl2.dead)pl2.hp=Math.min(pl2.max,pl2.hp+pl2.max*S.pk.lvHeal);// level healing is defined by the selected preparation perks
+function openLevelUpNow(){const lvWasHidden=$('lvl').hidden;resetInput();padRumble(.07,.22,110);S.choosing=true;if(pl2){if(!S.mpTurn)S.mpTurn=1}else S.mpTurn=0;pl.swingT=0;play('level',0);if(!pl.dead)pl.hp=Math.min(pl.max,pl.hp+pl.max*S.pk.lvHeal);if(pl2&&!pl2.dead)pl2.hp=Math.min(pl2.max,pl2.hp+pl2.max*S.pk.lvHeal);// level healing is defined by the selected preparation perks
   S.choices=rollChoices();S.rr=1+(S.rrBonus||0);renderCards();
-  $('lvl').hidden=false;document.querySelector('#lvl .level-build').open=false;armLevelCards();$('touch').hidden=true;setTimeout(()=>{const f=$('card0');f&&f.focus({preventScroll:true});const lp=document.querySelector('#lvl .level-panel');if(lp)lp.scrollTop=0},30)}
+  $('lvl').hidden=false;if(lvWasHidden){const L=$('lvl'),cl=LVMODE;L.classList.remove('lvsoft','lvquick');void L.offsetWidth;L.classList.add(cl);setTimeout(()=>L.classList.remove(cl),1200)}LVMODE='lvsoft';document.querySelector('#lvl .level-build').open=false;armLevelCards();$('touch').hidden=true;setTimeout(()=>{const f=$('card0');f&&f.focus({preventScroll:true});const lp=document.querySelector('#lvl .level-panel');if(lp)lp.scrollTop=0},30)}
+// 13.11.2026: łagodne wejście awansu (wersja lekka, testowa). Bez spowolnienia czasu: gra toczy się 0,25 s,
+// złoty pierścień wokół postaci i napis „Nowy poziom” przy medalionie, potem okno wjeżdża (tło i karty kolejno).
+// Awans w ciągu 10 s od zamknięcia poprzedniego okna: bez pierścienia i napisu, samo płynne wejście (0,2 s).
+// Mechanika bez zmian: pauza, leczenie przy awansie, blokada wyboru 1 s. Kolejne awanse z kolejki otwierają się od razu.
+let LVPRE=0,LVCLOSED=-1e9,LVMODE='lvsoft';
+function openLevelUp(){
+  const live=S&&S.phase==='play'&&!S.choosing&&!S.paused&&!S.shop&&!S.dialog&&!S.notice&&!S.intro&&!(pl&&pl.dead);
+  if(!live){if(!LVPRE)openLevelUpNow();return}
+  if(LVPRE)return;
+  if(performance.now()-LVCLOSED<10000){LVMODE='lvquick';openLevelUpNow();return}
+  LVPRE=performance.now()+250;const run=S;
+  try{for(let i=0;i<28;i++){const an=i/28*Math.PI*2,c=Math.cos(an),sn=Math.sin(an);S.parts.push({k:'e',x:pl.x+c*10,y:pl.y+sn*6,z:rnd(6,14),vx:c*130,vy:sn*78,vz:rnd(2,8),c:i%2?'#ffd98a':'#f2b84b',life:.55})}}catch(e){}
+  lvPopLabel();
+  const wait=()=>{if(S!==run||!S||S.phase!=='play'||(pl&&pl.dead)){LVPRE=0;return}
+    if(performance.now()<LVPRE||S.paused||S.shop||S.dialog||S.notice||S.intro){setTimeout(wait,40);return}
+    LVPRE=0;LVMODE='lvsoft';if(S.pendLv>0&&!S.choosing)openLevelUpNow()};
+  setTimeout(wait,40)}
+function lvPopLabel(){try{const m=document.querySelector('.pch-level'),r=m&&m.offsetParent!==null?m.getBoundingClientRect():null;
+  const d=document.createElement('div');d.className='lvpop';d.textContent=EN?'New level':'Nowy poziom';
+  d.style.left=(r?r.left+r.width/2:innerWidth/2)+'px';d.style.top=(r?Math.max(8,r.top-8):innerHeight*.72)+'px';document.body.append(d);
+  d.animate([{opacity:0,transform:'translate(-50%,-80%)'},{opacity:1,transform:'translate(-50%,-100%)',offset:.22},{opacity:1,transform:'translate(-50%,-100%)',offset:.72},{opacity:0,transform:'translate(-50%,-125%)'}],{duration:1300,easing:'ease-out'}).onfinish=()=>d.remove()}catch(e){}}
+{const Z='#orient'.repeat(12)+' ',st=document.createElement('style');st.id='lv-soft';st.textContent=
+`.lvpop{position:fixed;z-index:2147482000;pointer-events:none;white-space:nowrap;font:700 calc(26 * min(.05981vw,.10627vh))/1 Cinzel,Georgia,serif;letter-spacing:.08em;color:#f5d48a;text-shadow:0 0 12px #e0a23f99,0 2px 3px #000;opacity:0}
+${Z}#lvl{background:radial-gradient(ellipse at 50% 45%,#08070b00 0%,#08070b73 80%)!important}
+${Z}#lvl .level-panel{background:linear-gradient(180deg,#0e0c1033,#0e0c101f)!important}
+${Z}#lvl .card{background:linear-gradient(150deg,#2a1f2685,#110d137a)!important;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);text-shadow:0 1px 2px #000c}
+${Z}#lvl #cards .card:is(:focus,:focus-visible,.pf){background:linear-gradient(150deg,#502330c4,#261920b8)!important}
+${Z}#lvl .card .fx{background:#09070a80!important}
+${Z}#lvl.lvsoft{animation:lvSoftBg .32s ease-out both}
+${Z}#lvl.lvsoft .card{animation:lvSoftCard .34s cubic-bezier(.2,.8,.2,1) both}
+${Z}#lvl.lvsoft .card:nth-child(1){animation-delay:.1s}${Z}#lvl.lvsoft .card:nth-child(2){animation-delay:.17s}${Z}#lvl.lvsoft .card:nth-child(3){animation-delay:.24s}${Z}#lvl.lvsoft .card:nth-child(4){animation-delay:.31s}
+${Z}#lvl.lvquick{animation:lvSoftBg .2s ease-out both}
+@keyframes lvSoftBg{from{opacity:0}to{opacity:1}}
+@keyframes lvSoftCard{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){${Z}#lvl.lvsoft,${Z}#lvl.lvquick,${Z}#lvl.lvsoft .card{animation:none}}`;
+document.head.append(st)}
 // a ring of motes bursting from the hero when a rune is taken (gold for time, red for reach, others in their colours)
 function pactApply(k){if(k==='szklo'){S.str*=1.5;S.vuln=(S.vuln||1)*1.3}else if(k==='cisza'){S.regenMul=(S.regenMul||1)*1.5;pl.max=Math.round(pl.max*.8);pl.hp=Math.min(pl.hp,pl.max)}ftInfo(STY[k].name)}
 function pick(i){if(!S||!S.choosing)return;const k=S.choices[i];if(!k)return;const P2T=!!(pl2&&S.mpTurn===2),onP=f=>P2T?asP2(f):f();if(SLASH_SK.includes(k)&&!canLearnSlasher(k))return;if(k==='_vit'){onP(()=>{pl.max+=15;heal(15)});play('heal',0)}else if(k==='_dex'){onP(()=>{pl.staMax+=15;pl.sta=pl.staMax});play('bless',0)}else if(k==='_str'){S.str*=1.1;play('bless',0)}else if(k==='_int'){onP(()=>{pl.manaMax+=15;pl.mana=pl.manaMax});S.int=(S.int||1)*1.02;play('bless',0)}else if(k==='_gold'){S.coins+=25;play('coin',0)}else if(k==='_heal'){onP(()=>{pl.hp=pl.max});play('heal',0)}else{const b0=STY[k]&&STY[k].br?brOn(STY[k].br):false;S.sk[k]=(S.sk[k]||0)+1;learnElement(k);autoEquipActive(k);S.hl={k,t:clock};if(STY[k]){play('bless',0);if(STY[k].pact)onP(()=>pactApply(k));else if(!b0&&brOn(STY[k].br)){ftInfo((EN?'Style set: ':'Zestaw stylu: ')+BR[STY[k].br].n);play('level',0)}}}
   if(S.sk[k]===1)S.cd[k]=.3;
-  if(HINTS_ENABLED&&sk(k)===1&&(NEW_SWORD_SK.includes(k)||ENCH.includes(k))){const nm=SK[k].name;let text;if(ENCH.includes(k))text=nm+': '+(S.mainEnchant===k?(EN?'main blade, up to lvl 10':'główne ostrze, do 10 poz.'):(EN?'support blade, max lvl 3':'ostrze wspierające, maks. 3 poz.'))+' '+elementalSummary();else if(ACTIVE_SLASHER.includes(k)){const c=ACTIVE_CFG[k],at=S.activeSlots.indexOf(k);text=nm+(at>=0?(EN?' → slot ':' → slot ')+[KB.map.s1,KB.map.s2,KB.map.s3,KB.map.s4].map(kbName)[at]:(EN?' → reserve (equip in the pause menu)':' → rezerwa (wyposaż w pauzie)'))+' · '+c.cost+' '+activeResourceName(k)+(EN?', cooldown ':', odnowienie ')+String(c.wait(1)).replace('.',',')+' s.'}else text=nm+': '+SK[k].lv[0];say(text,'hint')}if(k[0]!=='_'){S.own=S.own||{};(S.own[k]=S.own[k]||[0,0])[P2T?1:0]++}if(pl2)S.mpTurn=3-(S.mpTurn||1);S.pendLv--;chipsDirty=true;if(S.pendLv>0){openLevelUp();return}S.choosing=false;$('lvl').hidden=true;$('touch').hidden=!coarse}
+  if(HINTS_ENABLED&&sk(k)===1&&(NEW_SWORD_SK.includes(k)||ENCH.includes(k))){const nm=SK[k].name;let text;if(ENCH.includes(k))text=nm+': '+(S.mainEnchant===k?(EN?'main blade, up to lvl 10':'główne ostrze, do 10 poz.'):(EN?'support blade, max lvl 3':'ostrze wspierające, maks. 3 poz.'))+' '+elementalSummary();else if(ACTIVE_SLASHER.includes(k)){const c=ACTIVE_CFG[k],at=S.activeSlots.indexOf(k);text=nm+(at>=0?(EN?' → slot ':' → slot ')+[KB.map.s1,KB.map.s2,KB.map.s3,KB.map.s4].map(kbName)[at]:(EN?' → reserve (equip in the pause menu)':' → rezerwa (wyposaż w pauzie)'))+' · '+c.cost+' '+activeResourceName(k)+(EN?', cooldown ':', odnowienie ')+String(c.wait(1)).replace('.',',')+' s.'}else text=nm+': '+SK[k].lv[0];say(text,'hint')}if(k[0]!=='_'){S.own=S.own||{};(S.own[k]=S.own[k]||[0,0])[P2T?1:0]++}if(pl2)S.mpTurn=3-(S.mpTurn||1);S.pendLv--;chipsDirty=true;if(S.pendLv>0){openLevelUp();return}S.choosing=false;$('lvl').hidden=true;LVCLOSED=performance.now();$('touch').hidden=!coarse}
 const npcTalk=n=>{const s=S.npc[n.id]?.state;return s==='alive'||s==='offered'||(n.id==='chojrak'&&s==='talked')};
 function nearNpc(){if(!S||pl.dead)return null;for(const n of W.npcs){if(n.lure||!npcTalk(n))continue;if(Math.hypot(pl.x-n.x,pl.y-n.y)<30)return n}return null}
 const chojPages=mode=>FTX((STORYMODE?'chojrak.story.act'+CH:'chojrak.arcade')+'.'+(mode==='repeat'?'repeat':'first'));
