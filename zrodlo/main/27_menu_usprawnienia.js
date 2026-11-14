@@ -568,6 +568,7 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
   IK={'premium-journey':A('assets/ui/de7572b3ab143465b2bffd81fd6516e066bbb9bbed4088b9b7c94c9fdfc3ee29.webp'),kapBtn:A('assets/ui/09c2709d88e884e8fb245450a7c371617c68d7b5fb1452a5956ead6c57cf33ee.webp'),kronBtn:A('assets/ui/65573edb49b7e9f6506f19263870f7d4e2f30c32233621a1b26b37675767b78c.webp'),manBtn:A('assets/ui/7c65e8bd51920f28d168cf22b7eab6cfdcb943622d1424c5d053388d742a6ac9.webp'),optsBtn:A('assets/ui/c18aafac5bf475178a58ebc01f17e3fc4dd47acb1461ce60ecc4e865f8355c06.webp')},
   ON=':is(:hover,:focus,:focus-visible,.pf)',NAV=Z+' .premium-nav>:is(.premium-journey,#kapBtn,#kronBtn,#manBtn,#optsBtn)',
   KURSOR="url('assets/ui/f2bdfe0d27c4a8f08d3ffa8134a8a68bff08b21b4d9738ab1163dc0abff798b6.png') 1 1",KURSOR_ON="url('assets/ui/bbb913eb13015dbe4642b534d69766dd39a04688ad6f98bd4b3611032eea7bf7.png') 1 1";
+ const PAS_G=`url('assets/ui/eacf8e623d8575a62966b86c0f4baf6c00e3f31f40fbc778335edece46b7a824.webp')`,S='#orient'.repeat(220)+' :is(#prep,#kap,#opts,#manual,#pause,#lvl,#shop,#end,#conf,#title:not(.pc-home))',PAS_EL='.tab,.stab,.nbp-tab,.slot-tab,.nb-mode,.m2-b:not(.m2k-buy),.m2-kap,.backar,.pc-home-button,.nb2-mode,.pc-journey-mode,#pause .go.alt,#end .go.alt',CARD='.m2k-row,.m2-ch,#opts .go.alt,.lvl-card,.card,.shopc .it',MAIN='.premium-go,.m2k-buy,#prepGo,.go:not(.alt):not(.slot-tab)',PANEL='.premium-banner,#kapDet,#manual .premium-page-content,#pause #skillLoadout,#lvl .level-panel,#shop .shopc,#end .nbs-grid,#conf';
  const st=document.createElement('style');st.id='nb-menu-odswiezenie';st.textContent=`
 ${Z} .premium-rail{overflow:visible!important}
 ${NAV}{border-color:transparent!important;border-image:none!important;background-color:transparent!important;background-image:none!important;position:relative!important;isolation:isolate!important;overflow:visible!important}
@@ -595,6 +596,27 @@ ${Z} .pc-profile-stat+.pc-profile-stat{position:relative!important;padding-left:
 ${Z} .pc-profile-stat+.pc-profile-stat::before{content:''!important;position:absolute!important;left:0!important;top:50%!important;width:2.1em!important;height:2.1em!important;transform:translateY(-50%)!important;background:${A('assets/ui/516bd88256fbc226fa5570719b9fd6743b2086353a5a9e8c156f936324dc5a0a.webp')} center/contain no-repeat!important}
 ${'#orient'.repeat(150)} :is(#title,#kap,#opts,#manual,#prep,#conf,#end,#lang){cursor:${KURSOR},auto!important}
 ${'#orient'.repeat(150)} :is(#title,#kap,#opts,#manual,#prep,#conf,#end,#lang) :is(button,a,summary,label,input,[role=button],[role=tab],[role=radio]){cursor:${KURSOR_ON},pointer!important}
+
+/* 14.11.2026: reszta menu w tym samym stylu (Przygotowanie, Kaplica, Kronika, Opcje, Instrukcja, Pauza, Awans, Kram, Koniec nocy) */
+${S} :is(.pf,:focus-visible){outline:2px solid rgba(255,138,58,.85)!important;outline-offset:2px!important;box-shadow:0 0 0 1px #000c,0 0 16px 2px rgba(255,110,40,.42)!important;filter:none!important}
+${S} :is(${PAS_EL})>:is(.pc-route-edge,.pcg-edge){display:none!important}
+${S} :is(${PAS_EL})::before,${S} :is(${PAS_EL})::after{border:none!important;border-image:none!important;box-shadow:none!important;background:none!important}
+${S} :is(${PAS_EL}){outline:none!important;border-color:transparent!important;border-image:none!important;background:${PAS_G} center/100% 100% no-repeat!important;box-shadow:none!important}
+${S} :is(${PAS_EL}):is(.on,.chosen,[aria-pressed=true],[aria-selected=true],.premium-selected,${ON.slice(4,-1)}){background:${PAS_ON} center/100% 100% no-repeat!important;outline:none!important;box-shadow:none!important}
+${S} :is(${PAS_EL})${ON}{outline:none!important;box-shadow:none!important;animation:nbZar 1.8s ease-in-out infinite!important}
+${S} :is(${CARD}){border-image:none!important}
+${S} :is(${CARD}):is(.on,.chosen,[aria-pressed=true],[aria-selected=true],.premium-selected){border-color:rgba(255,140,70,.65)!important;box-shadow:inset 0 -3px 0 -1px rgba(255,150,70,.9),inset 0 -22px 26px -18px rgba(255,110,40,.55)!important}
+${S} :is(${CARD})${ON}{outline:none!important;border-color:rgba(255,150,80,.85)!important;box-shadow:inset 0 -3px 0 -1px rgba(255,170,90,1),inset 0 -26px 30px -18px rgba(255,120,40,.7),0 0 14px 1px rgba(255,110,40,.35)!important}
+${S} .nb2-seg>i{border:none!important;box-shadow:none!important;background:none!important;color:rgba(230,214,184,.55)!important}
+${S} .nb2-seg>i.is-on{background:${PAS_ON} center/100% 100% no-repeat!important;color:#f3e2c2!important}
+${S} .pc-fantasy-title{border-image:none!important;border-color:transparent!important;background:none!important;box-shadow:none!important;position:relative!important;overflow:visible!important}
+${S} .pc-fantasy-title::after{content:''!important;display:block!important;position:absolute!important;left:50%!important;top:100%!important;width:min(78%,320px)!important;height:24px!important;transform:translate(-50%,-4px)!important;background:${SEP} center/contain no-repeat!important;pointer-events:none!important}
+/* glowne akcje: spalona deska z okuciami; zaznaczenie: zar od spodu */
+${S} :is(${MAIN}){border-color:transparent!important;border-image:none!important;background:url('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp') center/100% 100% no-repeat!important;box-shadow:none!important;outline:none!important}
+${S} :is(${MAIN})${ON}{filter:brightness(1.12)!important;box-shadow:0 10px 18px -10px rgba(255,120,40,.9),inset 0 -14px 18px -12px rgba(255,130,50,.75)!important;animation:nbZar 1.8s ease-in-out infinite!important}
+/* panele: zweglona rama z zelaznymi naroznikami */
+${S} :is(${PANEL}){border:18px solid transparent!important;border-image:url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp') 48 stretch!important;box-shadow:none!important}
+${S} :is(${PANEL})>.pcg-edge{display:none!important}
 `;document.head.append(st);
 }catch(e){quietErr('menuOdswiezenie',e)}})();
 requestAnimationFrame(frame);

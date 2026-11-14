@@ -777,3 +777,4 @@ cache699 · Menu glowne etap 1: pasy mgly, pietno przy zaznaczeniu, ikony, ornam
 cache700 · Menu glowne: zaznaczenie zarem (pas z okuciami, zarzacy sie napis) zamiast zlotej ramki, ikona Graj. Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
 cache701 · Menu glowne: zaznaczenie pasem autora z zarem od spodu, naprawione przesuniecie (stary styl wymuszal rozmiar ozdobnika). Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
 cache702 · Menu glowne: banery w przydymionym bordo (miedzy dymem a bordo). Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
+cache703 · Cale menu w nowym stylu: banery dym-bordo bez ramek, zar przy zaznaczeniu, ornamenty pod naglowkami, spalona deska dla glownych akcji, zweglona rama paneli. Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
