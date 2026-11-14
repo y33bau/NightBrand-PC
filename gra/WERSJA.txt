@@ -775,3 +775,4 @@ cache697 · Solne Nabrzeze jako rozdzial III (szesc rozdzialow): port, zaloga, B
 cache698 · Port: zaloga patrzy w strone gracza, Bosman z hakiem na lancuchu i druga faza. Nie sprawdzono: pelna walka z Bosmanem, pad, dzwiek, FPS autora, kooperacja, itch.io.
 cache699 · Menu glowne etap 1: pasy mgly, pietno przy zaznaczeniu, ikony, ornamenty, urna i ramka licznika, kursor myszy. Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
 cache700 · Menu glowne: zaznaczenie zarem (pas z okuciami, zarzacy sie napis) zamiast zlotej ramki, ikona Graj. Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
+cache701 · Menu glowne: zaznaczenie pasem autora z zarem od spodu, naprawione przesuniecie (stary styl wymuszal rozmiar ozdobnika). Nie sprawdzono: fizyczny pad, monitor autora, itch.io.

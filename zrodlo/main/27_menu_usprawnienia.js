@@ -564,22 +564,22 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
 // Zaznaczenie: pas mgly z zarem i rozzarzone pietno. Zlota ramka padu (.pf, styl pad-focus) zostaje bez zmian.
 (()=>{try{
  const Z='#orient'.repeat(150)+' #title.pc-home',A=u=>`url('${u}')`,
-  PAS=A('assets/ui/0263883b608f3e7b380f68af2575a046dd834eeb561ebc73af5641469dd4e45a.webp'),PAS_ON=A('assets/ui/31f7a4bb087755b640edb1ed8e1d4c44649b7b70fdb7afa6b688f0b99ed0fef7.webp'),GRAJ=A('assets/ui/94a14dac03245fb2b6bdbad243ff76c16d68d88ed8b3de2dca3e39c48653e067.webp'),SEP=A('assets/ui/dc953247d88ddda8bd2dbc13f0f1ec4f6427ab12419da7836ac468cad25ea55d.webp'),PIET=A('assets/ui/a8a2aa56606d05baf32c926ae36412f62a4fa8eaaf6c81f0a4b6a23cfa6808c7.webp'),
+  PAS=A('assets/ui/1df1ed51f7e1370ee2e123a4825c76a6f376ef6a383fb392a8ab4fecc49f0844.webp'),PAS_ON=A('assets/ui/e421deb515bd9efb27a4290c5f69dce77ea8582c011b6f41f40cff0f1a712898.webp'),GRAJ=A('assets/ui/94a14dac03245fb2b6bdbad243ff76c16d68d88ed8b3de2dca3e39c48653e067.webp'),SEP=A('assets/ui/dc953247d88ddda8bd2dbc13f0f1ec4f6427ab12419da7836ac468cad25ea55d.webp'),PIET=A('assets/ui/a8a2aa56606d05baf32c926ae36412f62a4fa8eaaf6c81f0a4b6a23cfa6808c7.webp'),
   IK={'premium-journey':A('assets/ui/de7572b3ab143465b2bffd81fd6516e066bbb9bbed4088b9b7c94c9fdfc3ee29.webp'),kapBtn:A('assets/ui/09c2709d88e884e8fb245450a7c371617c68d7b5fb1452a5956ead6c57cf33ee.webp'),kronBtn:A('assets/ui/65573edb49b7e9f6506f19263870f7d4e2f30c32233621a1b26b37675767b78c.webp'),manBtn:A('assets/ui/7c65e8bd51920f28d168cf22b7eab6cfdcb943622d1424c5d053388d742a6ac9.webp'),optsBtn:A('assets/ui/c18aafac5bf475178a58ebc01f17e3fc4dd47acb1461ce60ecc4e865f8355c06.webp')},
   ON=':is(:hover,:focus,:focus-visible,.pf)',NAV=Z+' .premium-nav>:is(.premium-journey,#kapBtn,#kronBtn,#manBtn,#optsBtn)',
   KURSOR="url('assets/ui/f2bdfe0d27c4a8f08d3ffa8134a8a68bff08b21b4d9738ab1163dc0abff798b6.png') 1 1",KURSOR_ON="url('assets/ui/bbb913eb13015dbe4642b534d69766dd39a04688ad6f98bd4b3611032eea7bf7.png') 1 1";
  const st=document.createElement('style');st.id='nb-menu-odswiezenie';st.textContent=`
 ${Z} .premium-rail{overflow:visible!important}
 ${NAV}{border-color:transparent!important;border-image:none!important;background-color:transparent!important;background-image:none!important;position:relative!important;isolation:isolate!important;overflow:visible!important}
-${NAV}::after{content:''!important;display:block!important;position:absolute!important;inset:-34% -6% -34% -6%!important;z-index:-1!important;pointer-events:none!important;background:${PAS} center/100% 100% no-repeat!important;opacity:.78!important;transition:opacity .2s!important}
-${NAV}${ON}::after{inset:-30% -15% -76% -15%!important;background-image:${GRAJ}!important;opacity:1!important;animation:nbZar 1.8s ease-in-out infinite!important}
-${Z} .premium-nav>.premium-journey::after{inset:-42% -10% -42% -10%!important;opacity:.9!important}
-${Z} .premium-nav>.premium-journey${ON}::after{inset:-34% -17% -82% -17%!important}
-${NAV}::before{content:''!important;display:block!important;position:absolute!important;left:3%!important;right:auto!important;top:-6%!important;bottom:-6%!important;width:11%!important;z-index:1!important;pointer-events:none!important;background:center/contain no-repeat!important;transform:none!important;opacity:1!important;font-size:0!important;color:transparent!important}
+${NAV}::after{content:''!important;display:block!important;position:absolute!important;inset:-40% -9% -40% -9%!important;width:auto!important;height:auto!important;margin:0!important;transform:none!important;z-index:-1!important;pointer-events:none!important;background:${PAS} center/100% 100% no-repeat!important;opacity:.8!important}
+${Z} .premium-nav>:is(.premium-journey,#nbBrak)::after{inset:-46% -12% -46% -12%!important;opacity:.9!important}
+/* zaznaczenie: ten sam prostokat, zmienia sie tylko obrazek (pas z zarem od spodu) */
+${NAV}${ON}::after{background:${PAS_ON} center/100% 100% no-repeat!important;opacity:1!important;filter:none!important;animation:nbZar 1.8s ease-in-out infinite!important}
+${NAV}::before{content:''!important;display:block!important;position:absolute!important;height:auto!important;margin:0!important;left:3%!important;right:auto!important;top:-6%!important;bottom:-6%!important;width:11%!important;z-index:1!important;pointer-events:none!important;background:center/contain no-repeat!important;transform:none!important;opacity:1!important;font-size:0!important;color:transparent!important}
 ${NAV}${ON}{outline:none!important;box-shadow:none!important;filter:none!important}
-${NAV}${ON} .pcg-glyph{filter:brightness(1.12) drop-shadow(0 0 5px rgba(255,138,58,.75)) drop-shadow(0 0 14px rgba(255,110,40,.35))!important}
-@keyframes nbZar{0%,100%{filter:brightness(1.02) saturate(1)}50%{filter:brightness(1.32) saturate(1.25)}}
-${Z} :is(.nb2-daily,.nb-mode,.pc-language)${ON}{outline:none!important;box-shadow:none!important;filter:drop-shadow(0 0 6px rgba(255,138,58,.7))!important}
+@keyframes nbZar{0%,100%{filter:brightness(1.05) saturate(1)}50%{filter:brightness(1.3) saturate(1.25)}}
+${Z} .nb2-daily${ON}{outline:none!important;box-shadow:none!important;filter:none!important}
+${Z} :is(.nb-mode,.pc-language)${ON}{outline:none!important;box-shadow:none!important;filter:drop-shadow(0 0 6px rgba(255,138,58,.7))!important}
 ${Object.entries(IK).map(([id,u])=>`${Z} .premium-nav>:is(${id==='premium-journey'?'.'+id:'#'+id},#nbBrak)::before{background-image:${u}!important}`).join('\n')}
 ${Z} .premium-nav{background:none!important}
 ${Z} .premium-nav::before,${Z} .premium-nav::after{content:''!important;display:block!important;position:absolute!important;left:12%!important;right:12%!important;height:30px!important;background:${SEP} center/contain no-repeat!important;pointer-events:none!important;opacity:.9!important}
