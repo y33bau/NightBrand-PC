@@ -256,7 +256,7 @@ function buildAnims(imgs,group="all"){
     else if(k==='drowner')anims.drowner={rise:row(S_,0,0,2),walk:row(S_,0,2,4),attack:row(S_,1,0,2),death:row(S_,1,2,4),sheet:1};
     else anims[k]={walk:row(S_,0,0,4,kd),attack:row(S_,1,0,2,kd),death:row(S_,1,2,4,kd),sheet:1}}
   // NPC models (12.11.2026): one sheet per character, 4 columns x 256 px (frames 0-2 idle, frame 3 = dead/gone), in the group of the act where they live
-  const NPC_GROUPS={'core':['chojrak','marga','elder','wit','nawoj'],'r2':['mila','tharm','rudna'],'r3':['heri','izolda','ottokar','aurel','seweryna'],'r4':['wierz','bartosz','wolch','dobromir'],'r5':['skryba','straznik','pieczetnik','lucjan']};
+  const NPC_GROUPS={'core':['chojrak','marga','elder','wit','nawoj'],'r2':['mila','tharm','rudna'],'r3':['heri','izolda','ottokar','aurel','seweryna'],'r4':['wierz','bartosz','wolch','dobromir'],'r5':['skryba','straznik','pieczetnik','lucjan'],'r6':['ambrozy','wieslawa']};
   for(const g in NPC_GROUPS)if(has(g))for(const k of NPC_GROUPS[g])if(imgs['npc_'+k])anims[k]=row('npc_'+k,0,0,4,k==='tharm'?'ghost':'npc');
   // old one-piece hero (protagonist_a/b): only a fallback behind heroD, so its frames are built on first use, not at start (5.11.2026: ~35 MB of canvases)
   if(has("core"))Object.defineProperty(anims,'hero',{configurable:true,enumerable:false,get(){const v={idle_down:row(ha,0),walk_down:row(ha,1),walk_up:row(ha,2),walk_side:row(ha,3),roll:row(ha,4),hurt:row(ha,5,0,2),
