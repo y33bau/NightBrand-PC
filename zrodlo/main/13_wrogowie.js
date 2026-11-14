@@ -9,15 +9,15 @@ const ET={madman:{hp:22,spd:26,r:5,dmg:8,xp:1,coin:.08},hound:{hp:16,spd:33,r:5,
   militia:{hp:60,spd:19,r:6,dmg:11,xp:3,coin:.2},marauder:{hp:135,spd:18,r:6,dmg:17,xp:6,coin:.35},gravedigger:{hp:75,spd:21,r:5,dmg:12,xp:4,coin:.25}};
 // runda 233: tempo wrogow (zwykli x1,4; szybcy i lekcy x1,18; bossowie x1,15), bohater 72 -> 58 px/s
 for(const k of Object.keys(ET)){const t=ET[k];if(!t.spd)continue;t.spd*=['bat','courtraven','paperrat','wolf','hound','strzygon'].includes(k)?1.18:['beast','collector','glizzard','boss','cumlin','leszy','strzyga','boginka'].includes(k)?1.15:1.4}
-// 9.11.2026: plansza wejścia bossa (imię + przydomek) i spowolnienie czasu (wejście bossa, ostatni cios)
-const BOSS_TITLES={'1:boss':['Zrost','Plaga Spalonej Osady','The Conjoined','Blight of the Scorched Settlement'],'5:boss':['Wierzyciel','Pan Pierwszego Wpisu','The Creditor','Lord of the First Entry'],'5:collector':['Arcysędzia Rachmistrz','Ostatnia instancja','Arch-Judge Reckoner','The Final Court'],'collector':['Poborca Zakonu','Ten, który przychodzi o północy','Order Collector','He Who Comes at Midnight'],'boginka':['Pani Lasu','Ta, co topi we mgle','The Lady of the Forest','She Who Drowns in Mist']};
+// 9.11.2026: plansza wej�cia bossa (imi� + przydomek) i spowolnienie czasu (wej�cie bossa, ostatni cios)
+const BOSS_TITLES={'1:boss':['Zrost','Plaga Spalonej Osady','The Conjoined','Blight of the Scorched Settlement'],'5:boss':['Wierzyciel','Pan Pierwszego Wpisu','The Creditor','Lord of the First Entry'],'5:collector':['Arcys�dzia Rachmistrz','Ostatnia instancja','Arch-Judge Reckoner','The Final Court'],'collector':['Poborca Zakonu','Ten, kt�ry przychodzi o p��nocy','Order Collector','He Who Comes at Midnight'],'boginka':['Pani Lasu','Ta, co topi we mgle','The Lady of the Forest','She Who Drowns in Mist']};
 function bossTitle(e){const t=BOSS_TITLES[CH+':'+e.type]||BOSS_TITLES[e.type];if(t)return EN?[t[2],t[3]]:[t[0],t[1]];const n=deathCauseName(e),i=n.indexOf(', ');return i>0?[n.slice(0,i),n.slice(i+2)]:[n,'']}
 function slowMo(d,min){if(!S)return;S.slowD=Math.max(S.slowT>0?S.slowD:0,d);S.slowT=Math.max(S.slowT||0,d);S.slowMin=Math.min(S.slowT>0&&S.slowMin?S.slowMin:1,min)}
 let BOSS_CARD_UNTIL=0;
 function slowTick(dt,frozen){if(BOSS_CARD_UNTIL&&performance.now()>BOSS_CARD_UNTIL){BOSS_CARD_UNTIL=0;const c=$('bossCard');if(c){c.style.transition='opacity .6s ease';c.style.opacity='0'}}if(!S||!(S.slowT>0))return 1;if(!frozen)S.slowT-=dt;if(S.slowT<=0){S.slowT=0;S.slowMin=1;return 1}const k=S.slowT/S.slowD,m=S.slowMin;return k>.35?m:m+(1-m)*(1-k/.35)}
 function bossIntro(e){if(S.dg&&!e.dgBoss)return;const[n,t]=bossTitle(e);let c=$('bossCard');if(!c){c=document.createElement('div');c.id='bossCard';c.setAttribute('aria-live','polite');c.innerHTML='<b></b><i></i>';($('msg')&&$('msg').parentNode||document.body).appendChild(c);const st=document.createElement('style');st.textContent='#bossCard{position:absolute;left:50%;top:26%;transform:translate(-50%,-50%);z-index:40;pointer-events:none;text-align:center;opacity:0;transition:opacity .45s ease;min-width:60vw;padding:1.1em 2em;background:radial-gradient(ellipse at center,rgba(8,4,6,.82) 0%,rgba(8,4,6,.55) 45%,rgba(8,4,6,0) 72%)}#bossCard.nbbc-show{opacity:1}#bossCard b{display:block;font:700 clamp(28px,4.4vw,64px)/1.05 Georgia,serif;letter-spacing:.14em;text-transform:uppercase;color:#f0d79a;text-shadow:0 0 18px rgba(170,30,30,.75),0 3px 0 #2a0c0c}#bossCard i{display:block;margin-top:.45em;font:italic 400 clamp(15px,1.7vw,26px)/1.2 Georgia,serif;color:#d9c3a0;letter-spacing:.04em}#bossCard b:after{content:"";display:block;width:46%;height:2px;margin:.32em auto 0;background:linear-gradient(90deg,transparent,#a8322a,transparent)}';document.head.appendChild(st)}
  c.querySelector('b').textContent=n;c.querySelector('i').textContent=t;c.querySelector('i').hidden=!t;c.style.transition='none';c.style.opacity='1';BOSS_CARD_UNTIL=performance.now()+2600;slowMo(1.2,.35);padRumble(.6,.6,500)}
-function spawnEnemy(type,x,y,extra){if((type==='xbow'||type==='monk')&&S.enemies.reduce((n,o)=>n+(!o.dead&&(o.type==='xbow'||o.type==='monk')?1:0),0)>=2)type=type==='monk'?'madman':'bandit';// max 2 strzelców naraz; reszta walczy w zwarciu
+function spawnEnemy(type,x,y,extra){if((type==='xbow'||type==='monk')&&S.enemies.reduce((n,o)=>n+(!o.dead&&(o.type==='xbow'||o.type==='monk')?1:0),0)>=2)type=type==='monk'?'madman':'bandit';// max 2 strzelc�w naraz; reszta walczy w zwarciu
   const T=ET[type],mul=(BIG.has(type)||type==='collector'?1:1+Math.min(S.t,NIGHT)/ENEMY_HP_T)*S.pk.ehp*DF[DIFFK].hp*chapterHp(type);
   const e=Object.assign({type,x,y,hp:T.hp*mul,max:T.hp*mul,spd:T.spd*rnd(.9,1.1),r:T.r,dmg:T.dmg,xp:T.xp,vx:0,vy:0,flash:0,walk:Math.random()*5,s:1,ph:Math.random()*9,leap:0,lcd:2,side:Math.random()<.5?1:-1,
     frozen:0,bleed:0,bleedT:0,rise:type==='bat'?0:.5,atkA:0,slamT:4,atkT:0,dead:false},extra||{});
@@ -62,8 +62,8 @@ function damageEnemy(e,dmg,nx,ny,kb=1,src){if(e.dead||e.trans>0||e.inv>0)return 
   if(S.zab&&e.mini&&e.fhT==null)e.fhT=S.t;if(dmg>=.5&&Math.hypot(e.x-pl.x,e.y-pl.y)<190)ftx(dmg,e.x,e.y,ftEntH(e),ftCrit?'c':'d',e);// Kat: Guillotine perk finishes regular enemies; hit counter for 'One Verdict'
   if(S.pk.kExec&&ftHeavy&&ftMelee&&!e.mini&&!BIG.has(e.type)&&e.type!=='collector'&&e.hp-dmg>0&&e.hp-dmg<e.max*.35)dmg=e.hp;
   e.hN=(e.hN||0)+1;S.dealt=(S.dealt||0)+dmg;if(src!=='trn'){const sk=typeof src==='string'&&src.slice(0,3)==='sk:'?src.slice(3):'',D=S.dsrc||(S.dsrc={}),k=src==='parry'?'p':src==='dot'?'d':sk?'s':DSRC||'s';D[k]=(D[k]||0)+dmg;if(sk){const Q=S.dsk||(S.dsk={});Q[sk]=(Q[sk]||0)+dmg}}if(dmg>(S.bigHit||0))S.bigHit=dmg;e.hp-=dmg;if(!e.ph2&&e.hp>0&&e.hp<=e.max*.5&&!e.mini&&(BIG.has(e.type)||e.type==='collector'||e.type==='boginka'))bossPhase2(e);e.flash=ftCrit?.17:ftHeavy?.12:.08;if(ftMelee&&dmg>=.5)hitSpark(e,nx,ny);else if(COMBAT_POLISH_ON&&dmg>=.5&&src!=='dot'&&src!=='trn'){const len=Math.hypot(nx,ny)||1;e.visualHit={t:.17,life:.17,dx:nx/len,dy:ny/len,amplitude:BIG.has(e.type)?.3:1.2,heavy:false}}if(e.type==='collector'&&!(e.hurtCd>0)&&dmg>=20){e.hurtA=.3;e.hurtCd=2.5}const k=(BIG.has(e.type)?.05:e.type==='collector'?.15:(e.type==='warden'||e.type==='knight'||e.type==='rotknight'||e.type==='wight'||e.type==='bies'||e.type==='boginka'||e.type==='marauder'||e.type==='cursed'||e.type==='arbiter')?.35:1)*110*kb;if(e.frozen<=0){e.vx+=nx*k;e.vy+=ny*k}
-  if(Math.random()<.6)blood(e.x,e.y,2,nx||rnd(-1,1),ny||rnd(-1,1));play(ftCrit?'hitC':ftHeavy?'hitH':ftMelee&&steelEnemy(e)?'hitSteel':'hit',.05);if(e.hp<=0){if(e.type==='strzyga'&&!e.phase){e.phase=1;e.hp=e.max*.6;e.trans=1.8;e.mode=null;e.lh=0;shake(.6,.8);S.flash=.7;blood(e.x,e.y,80,0,1,3);play('bossGrowl',0);for(let i=0;i<40;i++){const a=Math.random()*Math.PI*2;S.parts.push({k:'d',x:e.x,y:e.y,z:rnd(10,40),vx:Math.cos(a)*rnd(40,120),vy:Math.sin(a)*rnd(20,60),vz:rnd(10,40),c:Math.random()<.6?'#141014':P.blood,life:rnd(.8,1.6)})}say((EN?'The Striga\'s first heart bursts. But she has two souls…':'Pierwsze serce Strzygi pęka. Ale ona ma dwie dusze…'))}else killEnemy(e,nx,ny)}return true}
-// serduszko: wypada z 15% szansą z zabitego wroga, leczy 10% maks. życia (piksel-art rysowany w kodzie)
+  if(Math.random()<.6)blood(e.x,e.y,2,nx||rnd(-1,1),ny||rnd(-1,1));play(ftCrit?'hitC':ftHeavy?'hitH':ftMelee&&steelEnemy(e)?'hitSteel':'hit',.05);if(e.hp<=0){if(e.type==='strzyga'&&!e.phase){e.phase=1;e.hp=e.max*.6;e.trans=1.8;e.mode=null;e.lh=0;shake(.6,.8);S.flash=.7;blood(e.x,e.y,80,0,1,3);play('bossGrowl',0);for(let i=0;i<40;i++){const a=Math.random()*Math.PI*2;S.parts.push({k:'d',x:e.x,y:e.y,z:rnd(10,40),vx:Math.cos(a)*rnd(40,120),vy:Math.sin(a)*rnd(20,60),vz:rnd(10,40),c:Math.random()<.6?'#141014':P.blood,life:rnd(.8,1.6)})}say((EN?'The Striga\'s first heart bursts. But she has two souls':'Pierwsze serce Strzygi p�ka. Ale ona ma dwie dusze'))}else killEnemy(e,nx,ny)}return true}
+// serduszko: wypada z 15% szans� z zabitego wroga, leczy 10% maks. �ycia (piksel-art rysowany w kodzie)
 const HEART_MAT=(()=>{const c=document.createElement('canvas');c.width=c.height=32;const x=c.getContext('2d');x.scale(2,2);
   const rows=['................','..XXXX....XXXX..','.XXXXXX..XXXXXX.','XXXXXXXXXXXXXXXX','XXXXXXXXXXXXXXXX','XXXXXXXXXXXXXXXX','.XXXXXXXXXXXXXX.','..XXXXXXXXXXXX..','...XXXXXXXXXX...','....XXXXXXXX....','.....XXXXXX.....','......XXXX......','.......XX.......','................','................','................'];
   rows.forEach((r,j)=>{for(let i=0;i<16;i++)if(r[i]==='X'){const edge=(j<2||!rows[j-1]||rows[j-1][i]!=='X'||rows[j][i-1]!=='X'||rows[j][i+1]!=='X'||!rows[j+1]||rows[j+1][i]!=='X');x.fillStyle=edge?'#7a0f1c':(i<5&&j<6?'#ff7a86':'#d8202f');x.fillRect(i,j,1,1)}});
@@ -76,7 +76,7 @@ function dropPick(k,x,y,v=1){if(k==='w'){awardXp(v);return}const fr=k==='c'?{n:C
   S.picks.push({k,x,y,v,mag:false,sp:0,visualAge:0,ph:Math.random()*6,mesh:m,glow:g})}
 // 8.11.2026 boss second phase: at half health the boss enrages (faster, harder hits) and calls two of the night's creatures
 function bossPhase2(e){e.ph2=1;if(e.spd)e.spd*=1.2;if(e.dmg)e.dmg*=1.15;e.flash=.5;S.flash=Math.max(S.flash||0,.35);shake(.5,.45);play('hitH',0);padRumble(1,.6,320);
-  ftInfo(EN?'Second phase!':'Druga faza!');say((ENAME[e.type]||(EN?'The boss':'Boss'))+(EN?' flies into a rage.':' wpada w szał.'),'event');
+  ftInfo(EN?'Second phase!':'Druga faza!');say((ENAME[e.type]||(EN?'The boss':'Boss'))+(EN?' flies into a rage.':' wpada w sza�.'),'event');
   const pool=S.enemies.filter(x=>!x.dead&&!x.mini&&!BIG.has(x.type)&&x.type!=='collector'&&x.type!=='boginka'&&x.type!=='glizzard'),t=pool.length?pool[0].type:null;
   if(t)for(const s of [-1,1]){try{const a=spawnEnemy(t,e.x+s*34,e.y+8);if(a)a.rise=Math.max(a.rise||0,.6)}catch(err){quietErr('bossAdd',err)}}}
 function killEnemy(e,nx,ny){if(e.mini||BIG.has(e.type)){S.hitstop=Math.max(S.hitstop||0,.1);shake(.3,.22)}if(bossBar(e)){slowMo(1.4,.22);shockAt(e.x,e.y,1)}else if(e.mini){slowMo(.5,.45);shockAt(e.x,e.y,.55)}swordOnKill(e);e.dead=true;S.kills++;S.streak=(S.streak||0)+1;if(S.streak>(S.bestStreak||0))S.bestStreak=S.streak;metaKill(e);
@@ -96,9 +96,9 @@ function killEnemy(e,nx,ny){if(e.mini||BIG.has(e.type)){S.hitstop=Math.max(S.hit
   const big=BIG.has(e.type),jz=e.type==='glizzard',ghost=e.type==='wisp'||e.type==='zmora'||e.type==='wraith';
   if(e.type==='wisp'){scene.remove(e.mesh);return}
   if(e.type==='wraith'&&e.stolen>0){dropPick('c',e.x,e.y,e.stolen);S.picks[S.picks.length-1].returned=true}
-  if(e.type==='leszy'&&!e.dgBoss){startBreak();S.leszy=null;say((EN?'Leshy crumbles into rotten wood. The forest releases you from its grip.':'Leszy rozpada się w próchno. Las wypuszcza cię z objęć.'));for(let i=0;i<30;i++)dropPick('c',e.x+rnd(-26,26),e.y+rnd(-16,16));for(let i=0;i<10;i++)dropPick('w',e.x+rnd(-20,20),e.y+rnd(-12,12),3)}
-  if(e.type==='boginka'){say((EN?'The Lady of the Forest crumbles into leaves. What is left is a handful of coins from those who were only passing through.':'Pani Lasu rozsypuje się w liście. Zostaje garść monet po tych, co tylko tędy przechodzili.'));bossSay('ladyOfTheForest','defeat');for(let i=0;i<25;i++)dropPick('c',e.x+rnd(-22,22),e.y+rnd(-14,14));for(let i=0;i<5;i++)dropPick('w',e.x+rnd(-16,16),e.y+rnd(-10,10),3)}
-  if(e.type==='collector'){S.collector=null;startBreak();const total=Math.floor(e.stolen||0)+20,n=Math.min(40,total);say((EN?`${CH===5?'The Arch-Judge Reckoner falls':'The Collector falls'}. Your gold returns to you: ${total} coins.`:`${CH===5?'Arcysędzia Rachmistrz pada':'Poborca pada'}. Złoto wraca do ciebie: ${total} monet.`));bossSay(CH===5?'auditor':CH===2?'collector':null,'defeat');shake(.4,.5);
+  if(e.type==='leszy'&&!e.dgBoss){startBreak();S.leszy=null;say((EN?'Leshy crumbles into rotten wood. The forest releases you from its grip.':'Leszy rozpada si� w pr�chno. Las wypuszcza ci� z obj��.'));for(let i=0;i<30;i++)dropPick('c',e.x+rnd(-26,26),e.y+rnd(-16,16));for(let i=0;i<10;i++)dropPick('w',e.x+rnd(-20,20),e.y+rnd(-12,12),3)}
+  if(e.type==='boginka'){say((EN?'The Lady of the Forest crumbles into leaves. What is left is a handful of coins from those who were only passing through.':'Pani Lasu rozsypuje si� w li�cie. Zostaje gar�� monet po tych, co tylko t�dy przechodzili.'));bossSay('ladyOfTheForest','defeat');for(let i=0;i<25;i++)dropPick('c',e.x+rnd(-22,22),e.y+rnd(-14,14));for(let i=0;i<5;i++)dropPick('w',e.x+rnd(-16,16),e.y+rnd(-10,10),3)}
+  if(e.type==='collector'){S.collector=null;startBreak();const total=Math.floor(e.stolen||0)+20,n=Math.min(40,total);say((EN?`${CH===5?'The Arch-Judge Reckoner falls':'The Collector falls'}. Your gold returns to you: ${total} coins.`:`${CH===5?'Arcys�dzia Rachmistrz pada':'Poborca pada'}. Z�oto wraca do ciebie: ${total} monet.`));bossSay(CH===5?'auditor':CH===2?'collector':null,'defeat');shake(.4,.5);
     for(let i=0;i<n;i++){dropPick('c',e.x+rnd(-26,26),e.y+rnd(-16,16));Object.assign(S.picks[S.picks.length-1],{v:Math.floor(total/n)+(i<total%n?1:0),returned:true})}for(let i=0;i<8;i++)dropPick('w',e.x+rnd(-20,20),e.y+rnd(-12,12),3)}
   if(jz){say((EN?'Glizard, The Glizzy G-Lord, falls. The air reeks of mustard.':'Glizzard, Wielki Paruwiak, pada. W powietrzu wisi zapach musztardy.'));shake(.3,.4);for(let i=0;i<40;i++){const a=Math.random()*Math.PI*2,sp=rnd(30,110);S.parts.push({k:'d',x:e.x,y:e.y,z:rnd(6,16),vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.6,vz:rnd(20,60),c:Math.random()<.6?'#d8a820':'#8a2a1a',life:rnd(1,2)})}
     for(let i=0;i<30;i++)dropPick('c',e.x+rnd(-26,26),e.y+rnd(-16,16));for(let i=0;i<8;i++)dropPick('w',e.x+rnd(-18,18),e.y+rnd(-12,12),2)}
@@ -107,7 +107,7 @@ function killEnemy(e,nx,ny){if(e.mini||BIG.has(e.type)){S.hitstop=Math.max(S.hit
   // corpse keeps the death animation and stays on the floor
   e.mesh.castShadow=false;if(e.type==='bat'){e.mesh.geometry=geo32;e.mesh.position.y=0}const ck=jz?1.3:e.type==='beast'?(A.beast.sheet?1.2:1.35):e.type==='collector'?(CH===5&&A.collectorC5?.95:1.25):e.type==='leszy'?1.25:e.type==='strzyga'?1.2:e.type==='bies'?1.15:e.type==='cumlin'?1.2:1;const fire=e.burn>0;S.corpses.push({mesh:e.mesh,anim:A[e.type].death,t:0,s:e.s*ck,k:ck,big,gone:ghost?1:0,ash:!ghost&&!big,x:e.x,y:e.y,fire,fall:COMBAT_POLISH_ON&&!ghost&&e.type!=='bat'&&e.type!=='courtraven'?{dx:(nx||0)/(Math.hypot(nx||0,ny||0)||1),dy:(ny||0)/(Math.hypot(nx||0,ny||0)||1),power:big?.7:2.8,y:e.mesh.position.y,sx:Math.abs(e.mesh.position.x*16-e.x)<16?e.mesh.position.x*16-e.x:0,sy:Math.abs(e.mesh.position.z*16-e.y)<16?e.mesh.position.z*16-e.y:0,rz:e.mesh.rotation.z}:null});if(!ghost&&!big)ashFx(e.x,e.y,big,fire,SETT.quality==='low'?3:6,20);
   {let n=0;for(const c of S.corpses)if(!c.big)n++;if(n>36){const i=S.corpses.findIndex(c=>!c.big);if(i>=0){const c=S.corpses.splice(i,1)[0];scene.remove(c.mesh);if(c.own)c.mesh.material.dispose()}}}
-  if(big&&e.type!=='leszy'){if(S.stage==='final')S.won=true;{const bk=e.type==='beast'?'morhad':e.type==='cumlin'?'cumlin':e.type==='boss'?(CH===5?'creditor':CH===1?'outgrowth':null):null;if(bk)setTimeout(()=>{if(S&&S.phase==='play')bossSay(bk,bk==='creditor'?'beforeLedgerDestroyed':'defeat')},0)}say(e.type==='strzyga'?(EN?'Mother Striga bursts into a flock of ravens and ash. Her second heart stops beating.':'Strzyga Matka rozpada się w stado kruków i popiół. Drugie serce przestaje bić.'):e.type==='beast'?(EN?'Morhad falls onto the golden flagstones. His victims\' blood will be a long time draining out of him.':'Morhad pada na złote płyty. Krew jego ofiar jeszcze długo z niego wypływa.'):e.type==='cumlin'?(EN?'Cumlin falls to his knees. The crown rolls across the stone, and the last gold pours from his armour.':'Cumlin pada na kolana. Korona toczy się po kamieniu, a z jego zbroi sypie się ostatnie złoto.'):CH===5?(EN?'The Creditor falls. The ledger burns, and the seals crack one after another.':'Wierzyciel pada. Rejestr płonie, a pieczęcie pękają jedna po drugiej.'):(EN?'The Conjoined falls. Its faces are still whispering.':'Zrost pada. Jego twarze wciąż szepczą.'));if(e.type==='beast'){for(let i=0;i<6;i++)pool(e.x+rnd(-30,30),e.y+rnd(-14,14),36,12)}shake(.6,.7);for(let i=0;i<14;i++)dropPick('w',e.x+rnd(-24,24),e.y+rnd(-14,14),3);for(let i=0;i<20;i++)dropPick('c',e.x+rnd(-26,26),e.y+rnd(-16,16))}
+  if(big&&e.type!=='leszy'){if(S.stage==='final')S.won=true;{const bk=e.type==='beast'?'morhad':e.type==='cumlin'?'cumlin':e.type==='boss'?(CH===5?'creditor':CH===1?'outgrowth':null):null;if(bk)setTimeout(()=>{if(S&&S.phase==='play')bossSay(bk,bk==='creditor'?'beforeLedgerDestroyed':'defeat')},0)}say(e.type==='strzyga'?(EN?'Mother Striga bursts into a flock of ravens and ash. Her second heart stops beating.':'Strzyga Matka rozpada si� w stado kruk�w i popi��. Drugie serce przestaje bi�.'):e.type==='beast'?(EN?'Morhad falls onto the golden flagstones. His victims\' blood will be a long time draining out of him.':'Morhad pada na z�ote p�yty. Krew jego ofiar jeszcze d�ugo z niego wyp�ywa.'):e.type==='cumlin'?(EN?'Cumlin falls to his knees. The crown rolls across the stone, and the last gold pours from his armour.':'Cumlin pada na kolana. Korona toczy si� po kamieniu, a z jego zbroi sypie si� ostatnie z�oto.'):CH===5?(EN?'The Creditor falls. The ledger burns, and the seals crack one after another.':'Wierzyciel pada. Rejestr p�onie, a piecz�cie p�kaj� jedna po drugiej.'):(EN?'The Conjoined falls. Its faces are still whispering.':'Zrost pada. Jego twarze wci�� szepcz�.'));if(e.type==='beast'){for(let i=0;i<6;i++)pool(e.x+rnd(-30,30),e.y+rnd(-14,14),36,12)}shake(.6,.7);for(let i=0;i<14;i++)dropPick('w',e.x+rnd(-24,24),e.y+rnd(-14,14),3);for(let i=0;i<20;i++)dropPick('c',e.x+rnd(-26,26),e.y+rnd(-16,16))}
   else if(!big){if(e.xp>0)dropPick('w',e.x,e.y,e.xp);if(Math.random()<.03)dropPick('h',e.x+rnd(-5,5),e.y+rnd(-3,3));
     if(e.mini){for(let i=0;i<3;i++){dropPick("c",e.x+rnd(-14,14),e.y+rnd(-9,9));S.picks[S.picks.length-1].v=SL.coinStrong}ftx(e.named?e.nmN+(EN?' falls':' pada'):(EN?'Elite defeated':'Elita pokonana'),e.x,e.y,ftEntH(e)+.8,'i');if(e.named)metaNamed(e)}
     {const strong=ET[e.type].hp>=90;if(strong||Math.random()<SL.coinDrop){dropPick('c',e.x+rnd(-4,4),e.y+rnd(-3,3));if(strong)S.picks[S.picks.length-1].v=SL.coinStrong}}}
@@ -121,12 +121,12 @@ function powderBlast(p){const x=p.x*16,y=p.y*16;shockAt(x,y,1);if(p.obj)p.obj.me
   for(const q of PROPS)if(q!==p&&q.k==='black_powder'&&!S.boom.has(q)&&Math.hypot(q.x-p.x,q.y-p.y)<4){S.boom.add(q);S.delayed.push({t:.25,fn:()=>powderBlast(q)})}}
 function hurtPlayer(dmg,nx,ny,source='night'){if(S.zab&&pl.roll>0&&pl.inv>0&&!S.notice&&!pl.dead)S.zDodgeOk=1;if(S.notice||pl.inv>0||pl.dead)return false;if(TRN.god)return false;dmg*=S.pk.hurt*(S.zDance>0?1.2:1);if(S.pk.kBlock&&(pl.charging||pl.atk&&pl.atk.kind==='h'))dmg*=.7;if(S.gut)dmg*=S.pk.mFlame||1;if(S.vuln)dmg*=S.vuln;
   if(S.attacker)[nx,ny]=incomingMelee(S.attacker,nx,ny);
-  if(S.redHit&&pl.block)ftInfo((EN?'Heavy blow — dodge!':'Ciężki cios — unik!'));
+  if(S.redHit&&pl.block)ftInfo((EN?'Heavy blow - dodge!':'Ci��ki cios - unik!'));
   if(!S.redHit&&pl.block&&-(pl.fx*nx+pl.fy*ny)>.3){
     if(pl.blockT<parryWin()&&S.attacker&&!S.attacker.dead&&!S.redHit){const e=S.attacker;e.stun=S.kat?2:S.dzw?1.7:1.4;if(S.kat)S.kStun=(S.kStun||0)+1;e.sw=0;e.recov=0;onParry();pl.parryT=.45;S.hitstop=.12;padRumble(.6,.3,140);guardFeedback('parry',nx,ny);shake(.15,.15);ftInfo((EN?'Parry!':'Parowanie!'));return}
     if(S.redHit&&pl.blockT<parryWin()+.1)ftInfo((EN?'Unparryable':'Nie do sparowania'));pl.sta-=dmg*blockMulX()*S.pk.blockSta*(S.redHit?2.2:1);pl.staDelay=SL.delay;pl.gHitT=.25;guardFeedback('block',nx,ny);
     if(pl.sta>=0){if(S.pk.leak&&!pl.dead)pl.hp=Math.max(1,pl.hp-dmg*S.pk.leak);pl.inv=.18;moveBox(pl,nx*6,ny*4,4,3);return}
-    pl.sta=0;pl.broken=SL.guardBreak;S.dBroken=1;pl.block=false;dmg*=.5;play('empty',0);ftInfo((EN?'Guard broken':'Garda przełamana'))}
+    pl.sta=0;pl.broken=SL.guardBreak;S.dBroken=1;pl.block=false;dmg*=.5;play('empty',0);ftInfo((EN?'Guard broken':'Garda prze�amana'))}
   if(S.dzw&&S.pledgeT>0&&S.pledge>0){const ab=Math.min(S.pledge,dmg);S.pledge-=ab;S.dAbs=(S.dAbs||0)+ab;dmg-=ab;swordSparks(pl.x,pl.y,'#a8d8cf',8);if(dmg<=.01){S.combatLock=4;pl.inv=Math.max(pl.inv,.3);guardFeedback('block',nx,ny);shake(.12,.1);return false}}
   S.combatLock=4;S.hitsT++;S.streak=0;pl.hp-=dmg;if(S.zab){S.zCombo=0;S.zT=0;S.zFull=0}padRumble(.8,.5,200);pl.inv=.45;pl.blinkUntil=clock+.45;pl.hurtT=.22;S.hurt=.3;shake(.25,.18);blood(pl.x,pl.y,10,nx,ny);play('hurt',.1);
   if(S.train&&pl.hp<=0)pl.hp=1;if(pl.hp<=0){if(S.lastCh&&!S.lastChUsed&&!pl2&&!pl.dead){S.lastChUsed=1;pl.hp=1;pl.inv=Math.max(pl.inv,1.5);pl.blinkUntil=clock+1.5;S.flash=.6;shake(.3,.3);play('bless',0);ftInfo(EN?'Last Chance!':'Ostatnia szansa!');return true}if(pl2&&withRb(pl,tryRebirth))return true;{const o=pl===pl2?pl1:pl2;if(o&&!o.dead){pl.hp=0;pl.dead=true;pl.deadT=0;pl.revT=0;padRumble(1,1,450,pl===pl2&&typeof PAD2!=='undefined'?PAD2.g:null);blood(pl.x,pl.y,40,nx,ny,3);play('kill',0);return true}}if(tryRebirth())return true;S.deathCause=deathCauseName(source);S.deathSrc=typeof source==='string'?source:source&&source.type?source.type:'night';loseSecondLife();clearSwordTransient();S.swordTrails=[];pl.hp=0;pl.dead=true;pl.deadT=0;padRumble(1,1,520);blood(pl.x,pl.y,70,nx,ny,3);play('kill',0);S.endT=2.6;pool(pl.x,pl.y,20,8)}return true}
@@ -161,16 +161,16 @@ function stepEnemyAI(e,dt){
   if(pl.dead)return;if(e.ghoulWind>0){e.ghoulWind-=dt;if(e.ghoulWind<=0){e.leap=.3;e.lhit=0;e.atkA=.3;e.lx=e.ghoulDX*82;e.ly=e.ghoulDY*82}return}
   if(e.type==='collector'){e.stealCd=(e.stealCd||0)-dt;e.drain=(e.drain||0)-dt;e.hurtA=(e.hurtA||0)-dt;e.hurtCd=(e.hurtCd||0)-dt;e.tauntA=(e.tauntA||0)-dt;e.tauntCd=(e.tauntCd===undefined?4:e.tauntCd)-dt;
     if(e.tauntCd<=0&&e.stolen>0&&d>90){e.tauntCd=rnd(6,9);e.tauntA=1}
-    if(e.stealWind>0){e.stealWind-=dt;if(e.stealWind<=0&&d<e.r+15){S.attacker=e;const hit=hitT(e,enemyDamage(12,0),dx/d,dy/d);S.attacker=null;if(hit){const n=Math.min(S.coins,Math.max(3,Math.floor(S.coins*.15)));S.coins-=n;e.stolen+=n;if(n)ftInfo('−'+n+(EN?' coins':' monet'))}}}
+    if(e.stealWind>0){e.stealWind-=dt;if(e.stealWind<=0&&d<e.r+15){S.attacker=e;const hit=hitT(e,enemyDamage(12,0),dx/d,dy/d);S.attacker=null;if(hit){const n=Math.min(S.coins,Math.max(3,Math.floor(S.coins*.15)));S.coins-=n;e.stolen+=n;if(n)ftInfo('-'+n+(EN?' coins':' monet'))}}}
     else if(d<e.r+10&&e.stealCd<=0&&(golemTgt(e)||pl.inv<=0)){e.stealWind=.65;e.stealCd=2;telegraph(e)}
     else if(!golemTgt(e)&&d<56&&e.drain<=0&&S.coins>0&&pl.inv<=0&&sight(e.x,e.y,T.x,T.y)){e.drain=1;e.drainAt=clock;S.coins--;e.stolen++;if(e.type==='collector')bossSay(CH===5?'auditor':CH===2?'collector':null,'combat');S.parts.push({k:'g2',x:pl.x,y:pl.y,z:10,tx:e,life:.6,c:'#e0b84a'})}}
 
-  if(e.type==='collector'&&CH===5&&A.collectorC5){// Arcysędzia Rachmistrz: wyrok młotem, strony nakazu, wezwanie ławników
+  if(e.type==='collector'&&CH===5&&A.collectorC5){// Arcys�dzia Rachmistrz: wyrok m�otem, strony nakazu, wezwanie �awnik�w
     e.hamCd=(e.hamCd===undefined?4:e.hamCd)-dt;e.sumCd=(e.sumCd===undefined?15:e.sumCd)-dt;e.fanCd=(e.fanCd===undefined?3:e.fanCd)-dt;
     if(e.hamT>0){e.hamT-=dt;e.tauntA=.2;if(e.hamT<=0){shake(.5,.4);play('slam',0);shockAt(e.x,e.y,.75);addVfx(A.fx.nova,.35,e.x,e.y,.08,60/8,'ground');if(pl.inv<=0)aoeP(e,56,enemyDamage(20));e.atkA=.4;
         for(let i=0;i<20;i++){const a=i/20*Math.PI*2;S.parts.push({k:'d',x:e.x+Math.cos(a)*12,y:e.y+Math.sin(a)*6,z:1,vx:Math.cos(a)*90,vy:Math.sin(a)*45,vz:18,c:'#e0b84a',life:.6})}}return}
     if(d<64&&e.hamCd<=0&&!(e.stealWind>0)){e.hamT=.7;e.hamCd=5.5;telegraph(e);for(let k=0;k<3;k++)telegraph(e);play('bossGrowl',0);return}
-    if(e.sumCd<=0&&S.enemies.length<ENEMY_CAP-6){e.sumCd=22;e.tauntA=.8;say((EN?'The Arch-Judge summons the jurors: "The sentence is already written."':'Arcysędzia wzywa ławników: „Wyrok jest już spisany”.'));for(let k=0;k<2;k++){const a=Math.random()*6.28,q=spawnEnemy('scribe',e.x+Math.cos(a)*26,e.y+Math.sin(a)*16);q.rise=.8}}
+    if(e.sumCd<=0&&S.enemies.length<ENEMY_CAP-6){e.sumCd=22;e.tauntA=.8;say((EN?'The Arch-Judge summons the jurors: "The sentence is already written."':'Arcys�dzia wzywa �awnik�w: "Wyrok jest ju� spisany".'));for(let k=0;k<2;k++){const a=Math.random()*6.28,q=spawnEnemy('scribe',e.x+Math.cos(a)*26,e.y+Math.sin(a)*16);q.rise=.8}}
     if(e.fanWind>0){e.fanWind-=dt;if(e.fanWind<=0){for(const o of [-.25,0,.25])S.eproj.push({source:{type:e.type,chapter:CH},x:e.x,y:e.y,vx:Math.cos(e.fanAim+o)*95,vy:Math.sin(e.fanAim+o)*95,life:2.4,bolt:1});e.atkA=.35;play('swing',.2)}return}
     if(e.fanCd<=0&&d>70&&d<210&&sight(e.x,e.y,T.x,T.y)){e.fanCd=4.8;e.fanWind=.75;e.fanAim=Math.atan2(dy,dx);telegraph(e);return}}
   if(e.type==='cumlin'&&cumlinAI(e,dx,dy,d,dt,hw))return;
@@ -183,12 +183,12 @@ function stepEnemyAI(e,dt){
     if(d<64){moveBox(e,-dx/d*e.spd*dt,-dy/d*e.spd*dt,hw,3);e.walk+=dt;return}if(d<110){e.walk+=dt*.3;return}}
   if(!BIG.has(e.type)&&e.type!=='collector'&&e.type!=='glizzard'&&e.type!=='wisp'&&e.dmg>0&&e.leap<=0){if(slashEnemy(e,dx,dy,d,dt)){e.walk+=dt*.2;return}}
   else if(d<e.r+6&&e.dmg>0&&e.type!=='collector'&&BIG.has(e.type)){
-    if(BIG.has(e.type)){if(!(e.ctw>0)&&!(e.ccd>0)){e.ctw=.4;for(let k=0;k<3;k++)telegraph(e)}}// boss: zapowiedź .4 s, potem przerwa 1,4 s (unik w tym czasie ratuje)
+    if(BIG.has(e.type)){if(!(e.ctw>0)&&!(e.ccd>0)){e.ctw=.4;for(let k=0;k<3;k++)telegraph(e)}}// boss: zapowied� .4 s, potem przerwa 1,4 s (unik w tym czasie ratuje)
     else{hitT(e,enemyDamage(e.dmg,480),dx/d,dy/d);if(e.atkA<=0)e.atkA=.35}}
   if(BIG.has(e.type)){if(e.ccd>0)e.ccd-=dt;if(e.ctw>0){e.ctw-=dt;if(e.ctw<=0){e.ccd=1.4;if(d<e.r+10){hitT(e,enemyDamage(e.dmg,480),dx/d,dy/d,true);e.atkA=.35}}}}
-  if(e.type==='boss'&&CH===5&&A.bossC5){// Wierzyciel: faza I (strony), faza II (po połowie życia: monety, wyrok, szybszy)
+  if(e.type==='boss'&&CH===5&&A.bossC5){// Wierzyciel: faza I (strony), faza II (po po�owie �ycia: monety, wyrok, szybszy)
     for(const k of ['lashF','castF','callF','slamF'])if(e[k]>0)e[k]-=dt;
-    if(!e.ph2&&e.hp<e.max*.5){e.ph2=1;bossSay('creditor','phase2');e.trans=1.6;e.ctw=0;e.ccd=2;e.atkT=0;e.castWind=0;e.cast=2;e.spd*=1.35;shake(.7,.8);play('bossGrowl',0);addVfx(A.fx.nova,.6,e.x,e.y,.08,80/8,'ground');say((EN?'The Creditor rises from the throne. The chains snap, and a new ledger opens in his hands.':'Wierzyciel wstaje z tronu. Łańcuchy pękają, a w jego dłoniach otwiera się nowa księga.'));
+    if(!e.ph2&&e.hp<e.max*.5){e.ph2=1;bossSay('creditor','phase2');e.trans=1.6;e.ctw=0;e.ccd=2;e.atkT=0;e.castWind=0;e.cast=2;e.spd*=1.35;shake(.7,.8);play('bossGrowl',0);addVfx(A.fx.nova,.6,e.x,e.y,.08,80/8,'ground');say((EN?'The Creditor rises from the throne. The chains snap, and a new ledger opens in his hands.':'Wierzyciel wstaje z tronu. �a�cuchy p�kaj�, a w jego d�oniach otwiera si� nowa ksi�ga.'));
       for(let i=0;i<20;i++){const a=i/20*Math.PI*2;S.parts.push({k:'d',x:e.x,y:e.y,z:6,vx:Math.cos(a)*70,vy:Math.sin(a)*35,vz:22,c:'#e0b84a',life:.7})}}
     if(e.trans>0){e.trans-=dt;return}
     e.cast=(e.cast===undefined?3:e.cast)-dt;
@@ -216,7 +216,7 @@ function cumlinFx(k,dur,x,y,h,size,mode){const f=A.cumlinFx&&A.cumlinFx[k];if(f)
 function cumlinAI(e,dx,dy,d,dt,hw){
   if(Math.random()<dt*16)S.parts.push({k:'b',x:e.x+rnd(-12,12),y:e.y+rnd(-3,3),z:rnd(10,34),vx:rnd(-5,5),vy:rnd(-3,3),vz:rnd(-8,4),c:Math.random()<.7?P.blood:P.blood2});
   if(Math.random()<dt*9)S.parts.push({k:'d',x:e.x+rnd(-12,12),y:e.y+rnd(-3,3),z:rnd(14,38),vx:rnd(-6,6),vy:rnd(-3,3),vz:rnd(-4,6),c:Math.random()<.5?'#e0b84a':'#b8902f',life:.6});
-  if(!e.cmEn&&e.hp<e.max*.5){e.cmEn=1;e.spd*=1.2;shake(.5,.8);play('bossGrowl',0);S.flash=.5;blood(e.x,e.y,60,0,1,3);say((EN?'Cumlin roars. Gold pours from his armour, and the cracks glow red.':'Cumlin ryczy. Ze zbroi sypie się złoto, a szczeliny rozżarzają się na czerwono.'));bossSay('cumlin','controlBroken')}
+  if(!e.cmEn&&e.hp<e.max*.5){e.cmEn=1;e.spd*=1.2;shake(.5,.8);play('bossGrowl',0);S.flash=.5;blood(e.x,e.y,60,0,1,3);say((EN?'Cumlin roars. Gold pours from his armour, and the cracks glow red.':'Cumlin ryczy. Ze zbroi sypie si� z�oto, a szczeliny roz�arzaj� si� na czerwono.'));bossSay('cumlin','controlBroken')}
   const wins={slam:[.95,.85],sweep:[.8,.7],rage:[1.25,1.0]};
   if(e.cmA){
     const W=wins[e.cmA];e.cmT+=dt;e.cmMv=false;
@@ -233,7 +233,7 @@ function cumlinAI(e,dx,dy,d,dt,hw){
           for(let i=0;i<(red?30:20);i++){const a=i/(red?30:20)*Math.PI*2;S.parts.push({k:'d',x:cx+Math.cos(a)*12,y:cy+Math.sin(a)*6,z:1,vx:Math.cos(a)*100,vy:Math.sin(a)*50,vz:20,c:Math.random()<.4?'#e0b84a':P.st3,life:.6})}
           if(red){cumlinFx('shards',.6,cx,cy,0,4.6,'bill');blood(cx,cy,24,0,1,3)}
           S.attacker=e;S.redHit=!!red;const hit=aoeP(e,R,enemyDamage(red?e.dmg*1.35:e.dmg),cx,cy);S.attacker=null;S.redHit=false;
-          if(red&&!hit&&e.stun<=0){e.stun=2.4;e.cmA=null;ftx((EN?'Exposed!':'Odsłonięty!'),e.x,e.y,ftEntH(e)+.8,'i');cumlinFx('dust',.5,e.x,e.y,0,4,'bill');return true}
+          if(red&&!hit&&e.stun<=0){e.stun=2.4;e.cmA=null;ftx((EN?'Exposed!':'Ods�oni�ty!'),e.x,e.y,ftEntH(e)+.8,'i');cumlinFx('dust',.5,e.x,e.y,0,4,'bill');return true}
         }
         if(e.stun>0){e.cmA=null;e.sw=0;return true}
       }
@@ -265,7 +265,7 @@ function cumlinFrame(e,an){
 function beastAI(e,dx,dy,d,dt){
   if(Math.random()<dt*22)S.parts.push({k:'b',x:e.x+rnd(-12,12),y:e.y+rnd(-3,3),z:rnd(14,40)+(e.lh||0)*16,vx:rnd(-6,6),vy:rnd(-3,3),vz:rnd(-10,5),c:Math.random()<.7?P.blood:P.blood2});
   if(e.roarT>0){e.roarT-=dt;return true}
-  if(!e.enraged&&e.hp<e.max*.5){e.enraged=true;if(e.type==='beast')bossSay('morhad','phase2');e.roarT=1.4;e.spd*=1.25;e.mode=null;e.atkA=.6;e.lT=1.5;shake(.5,.8);play('bossGrowl',0);S.flash=.8;blood(e.x,e.y,60,0,1,3);say((EN?'Morhad spreads his wings. Horns tear through his skin and keep growing.':'Morhad rozkłada skrzydła. Rogi rozrywają mu skórę i rosną dalej.'))}
+  if(!e.enraged&&e.hp<e.max*.5){e.enraged=true;if(e.type==='beast')bossSay('morhad','phase2');e.roarT=1.4;e.spd*=1.25;e.mode=null;e.atkA=.6;e.lT=1.5;shake(.5,.8);play('bossGrowl',0);S.flash=.8;blood(e.x,e.y,60,0,1,3);say((EN?'Morhad spreads his wings. Horns tear through his skin and keep growing.':'Morhad rozk�ada skrzyd�a. Rogi rozrywaj� mu sk�r� i rosn� dalej.'))}
   const hit=k=>{const ddx=pl.x-e.x,ddy=pl.y-e.y,dd=Math.hypot(ddx,ddy)||1;hurtPlayer(enemyDamage(k),ddx/dd,ddy/dd,e)};
   if(e.mode==='wind'){e.mt-=dt;e.atkA=.15;if(e.mt<=0){e.mode='charge';e.mt=.85;play('roll',0)}return true}
   if(e.mode==='charge'){e.mt-=dt;const ox=e.x,oy=e.y;moveBox(e,e.cx*200*dt,e.cy*200*dt,e.hw,3);e.walk+=dt*3;
@@ -294,13 +294,13 @@ const CZAI={
   // chapter V: the scribe shoots like the crossbowman, the account wraith drains coins on touch
   // chapter V: the debtor throws a chain and drags the hero to him
   debtor(e,dx,dy,d,dt){e.chCd=(e.chCd===undefined?rnd(3,6):e.chCd)-dt;
-    if(e.chT>0){e.chT-=dt;if(e.chT<=0){const a=e.chainAim,along=dx*a[0]+dy*a[1],side=Math.abs(dx*a[1]-dy*a[0]);if(pl.inv>0||pl.roll>0||d>140||along<0||side>15||!sight(e.x,e.y,pl.x,pl.y)){e.chCd=4;ftx((EN?'Chain missed':'Łańcuch chybił'),e.x,e.y,2,'i')}else e.pull=.3}return true}
+    if(e.chT>0){e.chT-=dt;if(e.chT<=0){const a=e.chainAim,along=dx*a[0]+dy*a[1],side=Math.abs(dx*a[1]-dy*a[0]);if(pl.inv>0||pl.roll>0||d>140||along<0||side>15||!sight(e.x,e.y,pl.x,pl.y)){e.chCd=4;ftx((EN?'Chain missed':'�a�cuch chybi�'),e.x,e.y,2,'i')}else e.pull=.3}return true}
     if(e.pull>0){if(pl.inv>0||pl.roll>0||d>150||!sight(e.x,e.y,pl.x,pl.y)){e.pull=0;e.chCd=5;return true}e.pull-=dt;moveBox(pl,-dx/d*140*dt,-dy/d*140*dt,4,3);
       for(let i=1;i<=8;i++){const t=i/8;S.parts.push({k:'d',x:e.x+(pl.x-e.x)*t,y:e.y+(pl.y-e.y)*t,z:8,vx:0,vy:0,vz:0,c:'#dce7ef',life:.1})}
       if(e.pull<=0||d<e.r+8){e.pull=0;e.chCd=rnd(6,8);if(d<e.r+14)hurtPlayer(enemyDamage(8),dx/d,dy/d,e)}return true}
     if(!golemTgt(e)&&d>46&&d<125&&e.chCd<=0&&pl.inv<=0&&sight(e.x,e.y,pl.x,pl.y)){e.chainAim=[dx/d,dy/d];e.chT=.7;e.chCd=6;telegraph(e);return true}return false},
   wraith(e,dx,dy,d,dt){e.dcd=(e.dcd||0)-dt;
-    if(e.drainWind>0){e.drainWind-=dt;if(e.drainWind<=0&&d<e.r+14){S.attacker=e;const hit=hitT(e,enemyDamage(e.dmg,SL.dmgDiv),dx/d,dy/d);S.attacker=null;if(hit&&S.coins>0){const n=Math.min(S.coins,3+Math.floor(Math.min(S.t,NIGHT)/180));S.coins-=n;e.stolen=(e.stolen||0)+n;ftInfo('−'+n+(EN?' coins — you will get them back after the fight':' monet — odzyskasz je po walce'))}}return true}
+    if(e.drainWind>0){e.drainWind-=dt;if(e.drainWind<=0&&d<e.r+14){S.attacker=e;const hit=hitT(e,enemyDamage(e.dmg,SL.dmgDiv),dx/d,dy/d);S.attacker=null;if(hit&&S.coins>0){const n=Math.min(S.coins,3+Math.floor(Math.min(S.t,NIGHT)/180));S.coins-=n;e.stolen=(e.stolen||0)+n;ftInfo('-'+n+(EN?' coins - you will get them back after the fight':' monet - odzyskasz je po walce'))}}return true}
     if(d<e.r+9&&e.dcd<=0&&(golemTgt(e)||pl.inv<=0)){e.drainWind=.6;e.dcd=2.5;telegraph(e);return true}return false},
 
   // drowned corpse grabs and holds the hero for a moment
@@ -343,7 +343,7 @@ function mustardSplash(x,y,sz){const f=A.glzFx;if(f&&f.splash)addVfx(f.splash,.5
 function glizzSausage(e,ang,spd,dm){const f={source:{type:e.type,chapter:CH},x:e.x,y:e.y,vx:Math.cos(ang)*spd,vy:Math.sin(ang)*spd,life:2.6,ph:Math.random(),sau:1,dm,anim:A.glzFx&&A.glzFx.fly};if(f.anim)f.mesh=(()=>{const m=new THREE.Mesh(geoC,f.anim[0].n);scene.add(m);return m})();S.eproj.push(f)}
 function glizzardAI(e,dx,dy,d,dt,hw){
   const P=!!e.ph2;e.moving=false;e.gcd=(e.gcd===undefined?1.6:e.gcd)-dt;e.curlCd=(e.curlCd===undefined?4:e.curlCd)-dt;
-  if(!P&&e.hp<e.max*.5){e.ph2=1;e.mode='roar';e.mt=1;e.spd*=1.15;play('bossGrowl',0);shake(.3,.5);say((EN?'Glizard bristles with fury. The sausages fly thicker now.':'Glizzard jeży się z wściekłości. Kiełbasy lecą gęściej.'))}
+  if(!P&&e.hp<e.max*.5){e.ph2=1;e.mode='roar';e.mt=1;e.spd*=1.15;play('bossGrowl',0);shake(.3,.5);say((EN?'Glizard bristles with fury. The sausages fly thicker now.':'Glizzard je�y si� z w�ciek�o�ci. Kie�basy lec� g��ciej.'))}
   if(e.mode==='roar'){e.mt-=dt;if(e.mt<=0)e.mode=null;return true}
   if(e.mode==='curl'){e.mt-=dt;e.inv=Math.max(e.inv||0,.1);if(e.mt<=0){const p=ringSpot(95,150);mustardSplash(e.x,e.y,.6);if(p){e.x=p[0];e.y=p[1]}mustardSplash(e.x,e.y,.6);e.mode=null;e.inv=0;e.gcd=Math.min(e.gcd,.6);play('rise',0)}return true}
   if(e.mode==='tell'){e.mt-=dt;e.moving=false;
@@ -360,7 +360,7 @@ function glizzardAI(e,dx,dy,d,dt,hw){
 // the Strzyga Mother: first soul flies, screams (slows you) and dives with her talons; second soul crawls, leaps and raises barrow wights
 function strzygaAI(e,dx,dy,d,dt){
   if(Math.random()<dt*8)S.parts.push({k:'d',x:e.x+rnd(-18,18),y:e.y+rnd(-6,6),z:rnd(20,50),vx:rnd(-20,20),vy:0,vz:rnd(-2,8),c:'#141014',life:rnd(.6,1.2)});
-  if(e.trans>0){e.trans-=dt;if(e.trans<=0){e.phase=2;e.spd=30;e.roarT=1.2;e.lT=2.5;e.wT=4;play('bossGrowl',0);shake(.4,.8);say((EN?'The Striga rises with her second soul. She crawls on all fours, faster than before.':'Strzyga wstaje z drugą duszą. Pełznie na czworakach, szybsza niż przedtem.'))}return true}
+  if(e.trans>0){e.trans-=dt;if(e.trans<=0){e.phase=2;e.spd=30;e.roarT=1.2;e.lT=2.5;e.wT=4;play('bossGrowl',0);shake(.4,.8);say((EN?'The Striga rises with her second soul. She crawls on all fours, faster than before.':'Strzyga wstaje z drug� dusz�. Pe�znie na czworakach, szybsza ni� przedtem.'))}return true}
   if(e.roarT>0){e.roarT-=dt;return true}
   if(e.phase!==2){e.scT=(e.scT===undefined?4:e.scT)-dt;e.cT=(e.cT===undefined?3:e.cT)-dt;e.bT=(e.bT===undefined?7:e.bT)-dt;
     if(e.mode==='scream'){e.mt-=dt;if(e.mt<=0){e.mode=null;if(Math.hypot(pl.x-e.x,pl.y-e.y)<180){S.slowT=2.5;ftInfo((EN?'Slow':'Spowolnienie'))}for(let i=0;i<36;i++){const a=i/36*Math.PI*2;S.parts.push({k:'d',x:e.x+Math.cos(a)*10,y:e.y+Math.sin(a)*6,z:16,vx:Math.cos(a)*140,vy:Math.sin(a)*70,vz:0,c:'#c8d2dc',life:.6})}}return true}
@@ -381,7 +381,7 @@ function strzygaAI(e,dx,dy,d,dt){
   return false}
 const warningColor=()=>SETT.contrast?'#ffe270':'#ff5a4e';
 function telegraph(e){S.parts.push({k:'e',x:e.x,y:e.y,z:26,vx:0,vy:0,vz:4,c:warningColor(),life:.45});e.atkA=.2}
-// Runda 212: sparowany pocisk wroga wraca i zawsze trafia najbliższego wroga (naprowadzany, przelatuje nad ścianami).
+// Runda 212: sparowany pocisk wroga wraca i zawsze trafia najbli�szego wroga (naprowadzany, przelatuje nad �cianami).
 function nearestFoe(x,y){let b=null,bd=1e9;for(const e of S.enemies){if(e.dead||e.rise>0||e.trans>0)continue;const d=Math.hypot(e.x-x,e.y-y);if(d<bd){bd=d;b=e}}return b}
 function updEproj(dt){const _pl=pl;try{updEprojX(dt)}finally{pl=_pl}}
 function updEprojX(dt){S.enemyShotCd=Math.max(0,(S.enemyShotCd||0)-dt);for(let i=S.eproj.length-1;i>=0;i--){const f=S.eproj[i];if(pl2)pl=pickTarget(f);f.life-=dt;f.x+=f.vx*dt;f.y+=f.vy*dt;
@@ -404,8 +404,8 @@ function updEprojX(dt){S.enemyShotCd=Math.max(0,(S.enemyShotCd||0)-dt);for(let i
   if(gone){for(let k=0;k<12;k++)S.parts.push({k:'e',x:f.x,y:f.y,z:8,vx:rnd(-40,40),vy:rnd(-25,25),vz:rnd(5,30),c:Math.random()<.5?'#ff6a1a':'#ffb347',life:rnd(.2,.5)});if(f.mesh)scene.remove(f.mesh);if(f.vfe)f.vfe.t=f.vfe.dur;S.eproj.splice(i,1)}}}
 // player sword strikes (light/heavy, cascade, whirl) are stopped only by walls/cliffs, not by prop tiles (31) whose collision box is bigger than the sprite (cache 200)
 function sightSword(x0,y0,x1,y1){const n=Math.ceil(Math.hypot(x1-x0,y1-y0)/8);for(let i=1;i<n;i++){const px=x0+(x1-x0)*i/n,py=y0+(y1-y0)*i/n,t=tileAt(Math.floor(px/TS),Math.floor(py/TS));if(t!==31&&SOLID.has(t))return false}return true}
-// Nawigacja wrogów: mapa odległości po kaflach (BFS) od bohatera, odświeżana co 0,35 s.
-// Wróg, który nie widzi bohatera przez ścianę, idzie po niej: wychodzi z domów drzwiami i obchodzi przeszkody.
+// Nawigacja wrog�w: mapa odleg�o�ci po kaflach (BFS) od bohatera, od�wie�ana co 0,35 s.
+// Wr�g, kt�ry nie widzi bohatera przez �cian�, idzie po niej: wychodzi z dom�w drzwiami i obchodzi przeszkody.
 const NAV={d:null,q:null,t:0};
 function navUpdate(dt){NAV.t-=dt;if(NAV.t>0||!pl)return;NAV.t=.35;const n=MW*MH;if(!NAV.d||NAV.d.length!==n){NAV.d=new Int16Array(n);NAV.q=new Int32Array(n)}
   const D=NAV.d,Q=NAV.q,tx=Math.floor(pl.x/TS),ty=Math.floor(pl.y/TS);D.fill(-1);if(tx<0||ty<0||tx>=MW||ty>=MH)return;let h=0,t=0;D[ty*MW+tx]=0;Q[t++]=ty*MW+tx;
@@ -447,65 +447,66 @@ function spawnTick(dt){
     if(t>45&&Math.random()<.14){spawnEnemy('shieldman',p[0],p[1]);continue}
     if(CH===1)spawnEnemy(t>110&&r<.25?'knight':t>50&&r<.5?'ghoul':'possessed',p[0],p[1]);else spawnEnemy(t>70&&r<.25?'warden':t>35&&r<.5?'ghoul':'dwarf',p[0],p[1])}
 }
-// ---- elity: 3 na noc (3., 7. i 10. minuta; w pierwszej nocy nieco później), zwykły wróg z rozdziału, bordowa poświata ----
+// ---- elity: 3 na noc (3., 7. i 10. minuta; w pierwszej nocy nieco p��niej), zwyk�y wr�g z rozdzia�u, bordowa po�wiata ----
 const ELITE={times:[180,420,600],timesFirst:[210,440,610],t:180,hp:3.5,dmg:1.65,type:{1:'knight',2:'warden',3:'rotknight',4:'bandit',5:'executioner'}};
-// 9.11.2026: elity z imieniem: czasem (30%, najwyżej jedna na noc) elita ma imię, własną kartę w Bestiariuszu i jednorazową nagrodę; statystyki jak zwykła elita
-const NAMED={1:[['bogumil','Sir Bogumił Wiarołomny','Sir Bogumil the Oathbreaker','Przysięgał bronić osady, a otworzył bramę Zakonowi. Do dziś nosi herb, którego się wyparł.','He swore to hold the settlement, then opened its gate to the Holy Order. He still wears the crest he renounced.'],['dobieslaw','Dobiesław Spopielały','Dobieslaw the Ashen','Spłonął razem z kaplicą, ale zbroja nie pozwoliła mu upaść. Przy każdym kroku sypie się z niej popiół.','He burned with the chapel, but his armour would not let him fall. Ash sifts out of it with every step.'],['wojmir','Wojmir Krwawa Ostroga','Wojmir Bloodspur','Najmłodszy z rycerzy osady. Noc obiecała mu chwałę i dotrzymała słowa po swojemu.','The youngest of the settlement\'s knights. The Night promised him glory, and kept its word in its own fashion.']],
- 2:[['gromislaw','Gromisław Żelazna Brama','Gromislaw Irongate','Pilnował krasnoludzkiej bramy przez sto zim. Nikt mu nie powiedział, że może już odejść.','He guarded the dwarven gate for a hundred winters. No one has told him he may stand down.'],['bolko','Bolko Kamiennoręki','Bolko Stonehand','Stracił dłonie w zawale i wykuł sobie nowe z granitu. Teraz bije nimi wszystko, co się rusza.','He lost his hands in a cave-in and cut new ones from granite. Now he uses them on anything that moves.'],['mszczuj','Mszczuj, ostatni klucznik','Mszczuj, the Last Keykeeper','Nosi na szyi klucze do każdych drzwi Dolnego Miasta. Żadne z nich już się nie otwierają.','Round his neck hang the keys to every door in the Lower City. None of them opens now.']],
- 3:[['gniewomir','Gniewomir Zgniły','Gniewomir the Rotten','Złotogród płacił mu w złocie, Noc płaci w pleśni. Wciąż walczy za tego, kto da więcej.','Goldheim paid him in gold; the Night pays in mould. He still fights for the higher bidder.'],['radost','Sir Radost bez twarzy','Sir Radost the Faceless','Pod przyłbicą nie ma już twarzy, tylko ciemność. Słychać, jak oddycha.','There is no face behind the visor now, only the dark. You can hear it breathing.'],['czcibor','Czcibor Pleśniopancerny','Czcibor Mouldmail','Jego kolczuga zrosła się z grzybnią. Każdy cios, który przyjmie, wypuszcza obłok zarodników.','His mail has fused with the mycelium. Every blow he takes lets out a cloud of spores.']],
- 4:[['jagna','Jagna Wilcza Hersztka','Jagna the Wolf Chief','Prowadziła zbójów Czarnoboru, zanim wilki zaczęły prowadzić ją. Nie wiadomo już, kto komu służy.','She led the Blackwood robbers until the wolves began leading her. No one can say any more who serves whom.'],['maciej','Maciej Siedem Noży','Maciej Seven Knives','Każdy nóż nosi imię kogoś, kogo zdradził. Siódmy wciąż jest bezimienny.','Each knife bears the name of someone he betrayed. The seventh has no name yet.'],['bartosz','Bartosz Szubienicznik','Bartosz Gallowbird','Wisiał na dębie trzy dni, aż Noc przecięła sznur. Od tamtej pory nie boi się niczego.','He hung from an oak for three days before the Night cut him down. He has feared nothing since.']],
- 5:[['wiktor','Wiktor, pierwszy wyrok','Wiktor, the First Verdict','Wykonał pierwszy wyrok Cytadeli i każdy następny. Liczy głowy, nie lata.','He carried out the Citadel\'s first sentence and every one since. He counts heads, not years.'],['ignacy','Mistrz Ignacy od Topora','Master Ignacy of the Axe','Uczył katów fachu. Mówi, że czysty cios to jedyna łaska, jaką zna.','He taught executioners their trade. A clean stroke, he says, is the only mercy he knows.'],['bezimienny','Kat bez imienia','The Nameless Headsman','W księgach Cytadeli zapisano go jako dług. Spłaca go cudzymi głowami.','The Citadel\'s ledgers list him only as a debt. He pays it off in other people\'s heads.']]};
+// 9.11.2026: elity z imieniem: czasem (30%, najwy�ej jedna na noc) elita ma imi�, w�asn� kart� w Bestiariuszu i jednorazow� nagrod�; statystyki jak zwyk�a elita
+const NAMED={1:[['bogumil','Sir Bogumi� Wiaro�omny','Sir Bogumil the Oathbreaker','Przysi�ga� broni� osady, a otworzy� bram� Zakonowi. Do dzi� nosi herb, kt�rego si� wypar�.','He swore to hold the settlement, then opened its gate to the Holy Order. He still wears the crest he renounced.'],['dobieslaw','Dobies�aw Spopiela�y','Dobieslaw the Ashen','Sp�on�� razem z kaplic�, ale zbroja nie pozwoli�a mu upa��. Przy ka�dym kroku sypie si� z niej popi��.','He burned with the chapel, but his armour would not let him fall. Ash sifts out of it with every step.'],['wojmir','Wojmir Krwawa Ostroga','Wojmir Bloodspur','Najm�odszy z rycerzy osady. Noc obieca�a mu chwa�� i dotrzyma�a s�owa po swojemu.','The youngest of the settlement\'s knights. The Night promised him glory, and kept its word in its own fashion.']],
+ 2:[['gromislaw','Gromis�aw �elazna Brama','Gromislaw Irongate','Pilnowa� krasnoludzkiej bramy przez sto zim. Nikt mu nie powiedzia�, �e mo�e ju� odej��.','He guarded the dwarven gate for a hundred winters. No one has told him he may stand down.'],['bolko','Bolko Kamiennor�ki','Bolko Stonehand','Straci� d�onie w zawale i wyku� sobie nowe z granitu. Teraz bije nimi wszystko, co si� rusza.','He lost his hands in a cave-in and cut new ones from granite. Now he uses them on anything that moves.'],['mszczuj','Mszczuj, ostatni klucznik','Mszczuj, the Last Keykeeper','Nosi na szyi klucze do ka�dych drzwi Dolnego Miasta. �adne z nich ju� si� nie otwieraj�.','Round his neck hang the keys to every door in the Lower City. None of them opens now.']],
+ 3:[['gniewomir','Gniewomir Zgni�y','Gniewomir the Rotten','Z�otogr�d p�aci� mu w z�ocie, Noc p�aci w ple�ni. Wci�� walczy za tego, kto da wi�cej.','Goldheim paid him in gold; the Night pays in mould. He still fights for the higher bidder.'],['radost','Sir Radost bez twarzy','Sir Radost the Faceless','Pod przy�bic� nie ma ju� twarzy, tylko ciemno��. S�ycha�, jak oddycha.','There is no face behind the visor now, only the dark. You can hear it breathing.'],['czcibor','Czcibor Ple�niopancerny','Czcibor Mouldmail','Jego kolczuga zros�a si� z grzybni�. Ka�dy cios, kt�ry przyjmie, wypuszcza ob�ok zarodnik�w.','His mail has fused with the mycelium. Every blow he takes lets out a cloud of spores.']],
+ 4:[['jagna','Jagna Wilcza Hersztka','Jagna the Wolf Chief','Prowadzi�a zb�j�w Czarnoboru, zanim wilki zacz��y prowadzi� j�. Nie wiadomo ju�, kto komu s�u�y.','She led the Blackwood robbers until the wolves began leading her. No one can say any more who serves whom.'],['maciej','Maciej Siedem No�y','Maciej Seven Knives','Ka�dy n�� nosi imi� kogo�, kogo zdradzi�. Si�dmy wci�� jest bezimienny.','Each knife bears the name of someone he betrayed. The seventh has no name yet.'],['bartosz','Bartosz Szubienicznik','Bartosz Gallowbird','Wisia� na d�bie trzy dni, a� Noc przeci��a sznur. Od tamtej pory nie boi si� niczego.','He hung from an oak for three days before the Night cut him down. He has feared nothing since.']],
+ 5:[['wiktor','Wiktor, pierwszy wyrok','Wiktor, the First Verdict','Wykona� pierwszy wyrok Cytadeli i ka�dy nast�pny. Liczy g�owy, nie lata.','He carried out the Citadel\'s first sentence and every one since. He counts heads, not years.'],['ignacy','Mistrz Ignacy od Topora','Master Ignacy of the Axe','Uczy� kat�w fachu. M�wi, �e czysty cios to jedyna �aska, jak� zna.','He taught executioners their trade. A clean stroke, he says, is the only mercy he knows.'],['bezimienny','Kat bez imienia','The Nameless Headsman','W ksi�gach Cytadeli zapisano go jako d�ug. Sp�aca go cudzymi g�owami.','The Citadel\'s ledgers list him only as a debt. He pays it off in other people\'s heads.']]};
 const NAMED_ALL=Object.entries(NAMED).flatMap(([ch,l])=>l.map(r=>({id:r[0],ch:+ch,type:ELITE.type[ch],n:EN?r[2]:r[1],d:EN?r[4]:r[3]}))),NAMED_ASH=15,NAMED_P=.3;
 function pickNamed(){if(S.namedDone)return null;const l=NAMED_ALL.filter(r=>r.ch===CH);if(!l.length||Math.random()>=NAMED_P)return null;const nm=(typeof META!=='undefined'&&META.nm)||{},fresh=l.filter(r=>!nm[r.id]);const q=fresh.length?fresh:l;return q[(Math.random()*q.length)|0]}
 function miniTick(){const n=S?S.miniN||0:0,ts=S&&S.firstNight?ELITE.timesFirst:ELITE.times;if(!S||!(S.t>=(n<ts.length?ts[n]:S.endless?ts[ts.length-1]+150*(n-ts.length+1):1e9))||pl.dead||S.dg||S.stage==='break'||S.opening)return;
   const type=ELITE.type[CH]||'knight';if(!A[type])return;S.miniN=n+1;S.miniDone=true;
   const p=ringSpot(150,230)||ringSpot(90,300)||[pl.x+110,pl.y],e=spawnEnemy(type,p[0],p[1],{rise:1,mini:true,bornT:S.t});
-  const hm=S.firstNight?2.8:ELITE.hp;e.hp*=hm;e.max*=hm;e.dmg*=S.firstNight?1.4:ELITE.dmg;e.xp*=hm;e.s=1.2;play('bossGrowl',0);shake(.15,.6);const nd=pickNamed();if(nd){S.namedDone=1;e.named=nd.id;e.nmN=nd.n;e.s=1.28;padRumble(.7,.4,380);say((EN?nd.n+' steps out of the dark. This one has a name.':nd.n+' wychodzi z mroku. Ten ma imię.'))}else say((EN?'An elite emerges from the dark in a crimson glow.':'Z mroku wychodzi elita w bordowej poświacie.'))}
+  const hm=S.firstNight?2.8:ELITE.hp;e.hp*=hm;e.max*=hm;e.dmg*=S.firstNight?1.4:ELITE.dmg;e.xp*=hm;e.s=1.2;play('bossGrowl',0);shake(.15,.6);const nd=pickNamed();if(nd){S.namedDone=1;e.named=nd.id;e.nmN=nd.n;e.s=1.28;padRumble(.7,.4,380);say((EN?nd.n+' steps out of the dark. This one has a name.':nd.n+' wychodzi z mroku. Ten ma imi�.'))}else say((EN?'An elite emerges from the dark in a crimson glow.':'Z mroku wychodzi elita w bordowej po�wiacie.'))}
 function events(){
+  if(SOLNE_TEST&&CH===1)return;
   const ev=(k,c,fn)=>{if(c&&!S.ev.has(k)){S.ev.add(k);fn()}};
   
   if(CH<4&&W.altar){
     ev('alt',S.t>34,()=>say(W.altar.hint));
     ev('wave',S.t>DZIADY_AT&&!S.won,()=>{play('rise',0);play('bossGrowl',0);shake(.2,1);say(W.wave.msg);for(const [t,n] of W.wave.list)for(let i=0;i<n;i++){const p=ringSpot(150,240)||ringSpot(100,300);if(p)spawnEnemy(t,p[0],p[1],{rise:1})}});
     ev('pw',CH===2,()=>{for(const p of PROPS)if(p.obj&&p.k==='black_powder')p.obj.mesh.visible=true});
-    // traps: the shrouded dead in Brzeźnica rise when you step close, rot blooms in Złotogród burst into spores
+    // traps: the shrouded dead in Brze�nica rise when you step close, rot blooms in Z�otogr�d burst into spores
     for(const p of PROPS){if(!(p.ambush||p.k==='rot_bloom'))continue;const d=Math.hypot(pl.x-p.x*16,pl.y-p.y*16);if(d>24)continue;const cd=S.trapCd.get(p);
       if(p.ambush&&!cd){S.trapCd.set(p,1);for(let i=0;i<3;i++)spawnEnemy('possessed',p.x*16+rnd(-14,14),p.y*16+rnd(-6,8),{rise:.8});play('rise',0)}
       else if(p.k==='rot_bloom'&&!(cd>S.t)&&d<18){S.trapCd.set(p,S.t+8);S.slowT=1.5;hurtPlayer(6,0,1,'poison');play('fire',.3);
         for(let i=0;i<24;i++){const a=Math.random()*Math.PI*2;S.parts.push({k:'m',x:p.x*16,y:p.y*16,z:rnd(2,10),vx:Math.cos(a)*rnd(20,60),vy:Math.sin(a)*rnd(10,30),vz:rnd(4,16),c:Math.random()<.5?'#e07a30':'#c24a20',life:rnd(.6,1.2)})}
         ftInfo((EN?'Spores':'Zarodniki'))}}}
   // OBDYP shows up only in the Lower City (chapter II)
-  ev('gl',CH===2&&S.glizT>0&&S.t>S.glizT,()=>{const p=ringSpot(110,150)||ringSpot(80,200)||[pl.x+100,pl.y];spawnEnemy('glizzard',p[0],p[1],{rise:1});play('boing',0);say((EN?'Glizard, The Glizzy G-Lord, shuffles out of the dark!':'Z mroku wytacza się Glizzard, Wielki Paruwiak!'))});
+  ev('gl',CH===2&&S.glizT>0&&S.t>S.glizT,()=>{const p=ringSpot(110,150)||ringSpot(80,200)||[pl.x+100,pl.y];spawnEnemy('glizzard',p[0],p[1],{rise:1});play('boing',0);say((EN?'Glizard, The Glizzy G-Lord, shuffles out of the dark!':'Z mroku wytacza si� Glizzard, Wielki Paruwiak!'))});
   if(CH===1){const N=S.npc;
-    ev('a',S.t>.5,()=>say((EN?'Night falls over the Scorched Settlement.':'Noc zapada nad Spaloną Osadą.')));
-    ev('b',S.t>5,()=>say((EN?'Every kill gives experience at once. Survive until dawn.':'Każde zabójstwo od razu daje doświadczenie. Przetrwaj do świtu.')));
+    ev('a',S.t>.5,()=>say((EN?'Night falls over the Scorched Settlement.':'Noc zapada nad Spalon� Osad�.')));
+    ev('b',S.t>5,()=>say((EN?'Every kill gives experience at once. Survive until dawn.':'Ka�de zab�jstwo od razu daje do�wiadczenie. Przetrwaj do �witu.')));
     ev('c',S.t>14,()=>0);
     ev('s',S.t>24,()=>0);
     ev('pal',S.t>30,()=>0);
     ev('d',S.t>36,()=>0);
     ev('el',S.t>62&&N.elder.state==='alive',()=>{N.elder.state='dead';N.elder.deadAt=S.t;const n=W.npcs[0];pool(n.x,n.y,14,6)});
-    ev('er',N.elder.state==='dead'&&S.t>(N.elder.deadAt||1e9)+14&&!!A.rotknight,()=>{N.elder.state='risen';const n=W.npcs[0];spawnEnemy('rotknight',n.x,n.y+2,{elder:true,rise:1.2,hp:220,max:220});play('rise',0);S.flash=1;shake(.12,.6);say((EN?'The old man from the well rises in rusted armour. Rot pours out from under his visor.':'Starzec spod studni wstaje w zardzewiałej zbroi. Zgnilizna wylewa się spod przyłbicy.'))});
+    ev('er',N.elder.state==='dead'&&S.t>(N.elder.deadAt||1e9)+14&&!!A.rotknight,()=>{N.elder.state='risen';const n=W.npcs[0];spawnEnemy('rotknight',n.x,n.y+2,{elder:true,rise:1.2,hp:220,max:220});play('rise',0);S.flash=1;shake(.12,.6);say((EN?'The old man from the well rises in rusted armour. Rot pours out from under his visor.':'Starzec spod studni wstaje w zardzewia�ej zbroi. Zgnilizna wylewa si� spod przy�bicy.'))});
     ev('k',S.t>(S.firstNight?110:70),()=>0);
-    ev('mg',S.t>100&&N.marga.state==='alive',()=>{N.marga.state='gone';say((EN?'The trader\'s lantern goes out in the rain.':'Latarnia handlarki gaśnie w deszczu.'))});
-    ev('w',S.t>150&&N.wit.state==='alive',()=>{N.wit.state='dead';const n=W.npcs[2];pool(n.x,n.y+1,20,8);say((EN?'The screams from the stocks suddenly fall silent.':'Krzyki od strony dybów nagle ucichły.'))});
+    ev('mg',S.t>100&&N.marga.state==='alive',()=>{N.marga.state='gone';say((EN?'The trader\'s lantern goes out in the rain.':'Latarnia handlarki ga�nie w deszczu.'))});
+    ev('w',S.t>150&&N.wit.state==='alive',()=>{N.wit.state='dead';const n=W.npcs[2];pool(n.x,n.y+1,20,8);say((EN?'The screams from the stocks suddenly fall silent.':'Krzyki od strony dyb�w nagle ucich�y.'))});
     return}
   if(CH===5){
-    ev('a',S.t>.5,()=>say((EN?'The Creditors\' Citadel. Seat of the Holy Order, where every debt has been entered in the ledgers.':'Cytadela Wierzycieli. Siedziba Zakonu, w której każdy dług zapisano w księgach.')));
-    ev('b',S.t>6,()=>say((EN?'The gate slammed shut behind you. The guards close ranks.':'Brama zatrzasnęła się za tobą. Straż zamyka szeregi.')));
-    ev('k',S.t>70,()=>say((EN?'In the Chancery, the scribes whisper your name and the sum you owe.':'W kancelarii skrybowie szepczą twoje imię i wysokość długu.')));
-    ev('rk',S.t>150,()=>say((EN?'Shackles clank in the dungeons. The debtors can tell their turn is coming.':'Z lochów dobiega brzęk kajdan. Dłużnicy czują, że po nich też przyjdą.')));
-    ev('roz',S.t>DZIADY_AT,()=>{play('rise',0);play('bossGrowl',0);shake(.2,1);say((EN?'The Trial. The court bell tolls nine times, and the guards march to carry out the sentence.':'Rozprawa. Dzwon sądowy bije dziewięć razy, a straż rusza po wyrok.'));
+    ev('a',S.t>.5,()=>say((EN?'The Creditors\' Citadel. Seat of the Holy Order, where every debt has been entered in the ledgers.':'Cytadela Wierzycieli. Siedziba Zakonu, w kt�rej ka�dy d�ug zapisano w ksi�gach.')));
+    ev('b',S.t>6,()=>say((EN?'The gate slammed shut behind you. The guards close ranks.':'Brama zatrzasn��a si� za tob�. Stra� zamyka szeregi.')));
+    ev('k',S.t>70,()=>say((EN?'In the Chancery, the scribes whisper your name and the sum you owe.':'W kancelarii skrybowie szepcz� twoje imi� i wysoko�� d�ugu.')));
+    ev('rk',S.t>150,()=>say((EN?'Shackles clank in the dungeons. The debtors can tell their turn is coming.':'Z loch�w dobiega brz�k kajdan. D�u�nicy czuj�, �e po nich te� przyjd�.')));
+    ev('roz',S.t>DZIADY_AT,()=>{play('rise',0);play('bossGrowl',0);shake(.2,1);say((EN?'The Trial. The court bell tolls nine times, and the guards march to carry out the sentence.':'Rozprawa. Dzwon s�dowy bije dziewi�� razy, a stra� rusza po wyrok.'));
       for(const [t,c] of [['condemned',9],['guard',3],['executioner',1]])for(let i=0;i<c;i++){let p=null;for(let j=0;j<12&&!p;j++){const q=ringSpot(150,240)||ringSpot(100,300);if(q&&sight(q[0],q[1],pl.x,pl.y))p=q}if(p)spawnEnemy(t,p[0],p[1],{rise:1})}});
     return}
   if(CH===4){
-    ev('a',S.t>.5,()=>say((EN?'Beyond Goldheim stretch the wild valleys of Blackwood. The refugee camp is the last safe place.':'Za Złotogrodem ciągną się dzikie doliny Czarnoboru. Obóz uciekinierów to ostatnie bezpieczne miejsce.')));
+    ev('a',S.t>.5,()=>say((EN?'Beyond Goldheim stretch the wild valleys of Blackwood. The refugee camp is the last safe place.':'Za Z�otogrodem ci�gn� si� dzikie doliny Czarnoboru. Ob�z uciekinier�w to ostatnie bezpieczne miejsce.')));
     ev('b',S.t>6,()=>{play('howl',0);0});
     ev('c',S.t>16,()=>0);
     ev('s',S.t>26,()=>0);
     ev('st',S.t>34,()=>0);
-    ev('k',S.t>70,()=>say((EN?'The Holy Order has reached even here. Fanatics are burning the shrines of the old faith.':'Zakon dotarł i tutaj. Fanatycy palą chramy starej wiary.')));
-    ev('rk',S.t>150,()=>say((EN?'Knocking comes from the barrows. Something wants to get out.':'Z kurhanów dobiega stukanie. Coś chce wyjść.')));
-    ev('dz',S.t>DZIADY_AT,()=>{play('rise',0);shake(.15,1);say((EN?'The Forefathers\' Eve. The mist turns green, and the dead leave the barrows to claim what is theirs.':'Dziady. Mgła zielenieje, a umarli wychodzą z kurhanów po swoje.'));
+    ev('k',S.t>70,()=>say((EN?'The Holy Order has reached even here. Fanatics are burning the shrines of the old faith.':'Zakon dotar� i tutaj. Fanatycy pal� chramy starej wiary.')));
+    ev('rk',S.t>150,()=>say((EN?'Knocking comes from the barrows. Something wants to get out.':'Z kurhan�w dobiega stukanie. Co� chce wyj��.')));
+    ev('dz',S.t>DZIADY_AT,()=>{play('rise',0);shake(.15,1);say((EN?'The Forefathers\' Eve. The mist turns green, and the dead leave the barrows to claim what is theirs.':'Dziady. Mg�a zielenieje, a umarli wychodz� z kurhan�w po swoje.'));
       for(const b of W.barrows)if(Math.hypot(b.x-pl.x,b.y-pl.y)<420)for(let i=0;i<2;i++)spawnEnemy('wight',b.x+rnd(-12,12),b.y+rnd(2,10),{rise:1.2})});
     // false will-o'-wisps wait over the marsh
     const wisps=()=>{for(const q of W.wisps)if(Math.hypot(q.x*16-pl.x,q.z*16-pl.y)>90)spawnEnemy('wisp',q.x*16+rnd(-20,20),q.z*16+rnd(-10,10),{rise:0})};
@@ -513,14 +514,14 @@ function events(){
     ev('np',S.t>12,()=>0);
     ev('wo',S.t>44,()=>0);
     const N=S.npc,bt=W.npcs.find(n=>n.id==='bartosz');
-    ev('bd',S.t>200&&N.bartosz&&N.bartosz.state==='alive',()=>{N.bartosz.state='dead';pool(bt.x,bt.y,18,7);for(let i=0;i<3;i++)spawnEnemy('wolf',bt.x+rnd(-20,20),bt.y+rnd(-12,12),{rise:.3});say((EN?'A howl and a short scream come from the road. The wolves have caught the scout.':'Od strony drogi dobiega wycie i krótki krzyk. Wilki dopadły tropiciela.'))});
+    ev('bd',S.t>200&&N.bartosz&&N.bartosz.state==='alive',()=>{N.bartosz.state='dead';pool(bt.x,bt.y,18,7);for(let i=0;i<3;i++)spawnEnemy('wolf',bt.x+rnd(-20,20),bt.y+rnd(-12,12),{rise:.3});say((EN?'A howl and a short scream come from the road. The wolves have caught the scout.':'Od strony drogi dobiega wycie i kr�tki krzyk. Wilki dopad�y tropiciela.'))});
     const bg=W.npcs.find(n=>n.lure);
-    if(bg&&N.boginka){ev('cry',S.t>240,()=>{play('cry',0);say((EN?'A child\'s crying comes from deep within Blackwood.':'Z głębi Czarnoboru dobiega płacz dziecka.'))});
+    if(bg&&N.boginka){ev('cry',S.t>240,()=>{play('cry',0);say((EN?'A child\'s crying comes from deep within Blackwood.':'Z g��bi Czarnoboru dobiega p�acz dziecka.'))});
       if(S.ev.has('cry')&&N.boginka.state==='alive'&&Math.random()<1/240)play('cry',0);
-      if(N.boginka.state==='alive'&&Math.hypot(pl.x-bg.x,pl.y-bg.y)<46){N.boginka.state='gone';spawnEnemy('boginka',bg.x,bg.y,{rise:0});play('bossGrowl',0);shake(.25,.6);S.flash=.4;say((EN?'That is no child! The Lady of the Forest spreads her long arms.':'To nie dziecko! Pani Lasu rozkłada długie ramiona.'));bossSay('ladyOfTheForest','intro')}}
+      if(N.boginka.state==='alive'&&Math.hypot(pl.x-bg.x,pl.y-bg.y)<46){N.boginka.state='gone';spawnEnemy('boginka',bg.x,bg.y,{rise:0});play('bossGrowl',0);shake(.25,.6);S.flash=.4;say((EN?'That is no child! The Lady of the Forest spreads her long arms.':'To nie dziecko! Pani Lasu rozk�ada d�ugie ramiona.'));bossSay('ladyOfTheForest','intro')}}
     return}
   if(CH===3){const N=S.npc;
-    ev('a',S.t>.5,()=>say((EN?'The lift carries you to the surface. Fallen Goldheim: golden domes above a city that is rotting.':'Winda wynosi cię na powierzchnię. Upadły Złotogród: złote kopuły nad miastem, które gnije.')));
+    ev('a',S.t>.5,()=>say((EN?'The lift carries you to the surface. Fallen Goldheim: golden domes above a city that is rotting.':'Winda wynosi ci� na powierzchni�. Upad�y Z�otogr�d: z�ote kopu�y nad miastem, kt�re gnije.')));
     ev('b',S.t>5,()=>0);
     ev('c',S.t>14,()=>0);
     ev('s',S.t>24,()=>0);
@@ -528,14 +529,13 @@ function events(){
     ev('d',S.t>36,()=>0);
     ev('k',S.t>70,()=>0);
     ev('m',S.t>110,()=>0);
-    ev('ot',S.t>210&&N.ottokar.state!=='dead',()=>{N.ottokar.state='dead';const n=W.npcs[1];pool(n.x,n.y+2,22,8);for(let i=0;i<4;i++)spawnEnemy('madman',n.x+rnd(-14,14),n.y+rnd(4,12),{rise:.6});say((EN?'Madmen have broken down Count Ottokar\'s door. Gold did not save him.':'Szaleńcy wyważyli drzwi hrabiego Ottokara. Złoto go nie uratowało.'))});
-    ev('roar',S.t>600,()=>{play('bossGrowl',0);shake(.15,1.2);say((EN?'Something enormous beats its wings above the domes. The basilica bells begin to ring by themselves.':'Nad kopułami coś ogromnego łopocze skrzydłami. Dzwony bazyliki zaczynają bić same.'))});
+    ev('ot',S.t>210&&N.ottokar.state!=='dead',()=>{N.ottokar.state='dead';const n=W.npcs[1];pool(n.x,n.y+2,22,8);for(let i=0;i<4;i++)spawnEnemy('madman',n.x+rnd(-14,14),n.y+rnd(4,12),{rise:.6});say((EN?'Madmen have broken down Count Ottokar\'s door. Gold did not save him.':'Szale�cy wywa�yli drzwi hrabiego Ottokara. Z�oto go nie uratowa�o.'))});
+    ev('roar',S.t>600,()=>{play('bossGrowl',0);shake(.15,1.2);say((EN?'Something enormous beats its wings above the domes. The basilica bells begin to ring by themselves.':'Nad kopu�ami co� ogromnego �opocze skrzyd�ami. Dzwony bazyliki zaczynaj� bi� same.'))});
     return}
-  ev('a',S.t>.5,()=>say((EN?'You descend into the Lower City. The sun has never reached here.':'Schodzisz do Dolnego Miasta. Tu nigdy nie było słońca.')));
+  ev('a',S.t>.5,()=>say((EN?'You descend into the Lower City. The sun has never reached here.':'Schodzisz do Dolnego Miasta. Tu nigdy nie by�o s�o�ca.')));
   ev('b',S.t>5,()=>0);
   ev('c',S.t>14,()=>0);
   ev('mi',S.t>28,()=>0);
   ev('d',S.t>70,()=>0);
 
 }
-
