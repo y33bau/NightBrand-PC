@@ -148,7 +148,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
     for(const e of S.enemies){
       const an=A[e.type];let fr;
       if(e.portArt){
-        const art=e.portArt,alt=art.chain&&e.portBoss&&e.leap>0?art.chain:art.attack;fr=e.atkA>0||e.leap>0?alt[1]:e.sw>0||e.atkT>0||e.slamA>0?(art.chain&&e.slamA>0?art.chain[0]:art.attack[0]):at(art.walk,e.walk+e.ph,e.portBoss?4:7);
+        const art=e.portArt;fr=e.portBoss&&art.chain?(e.hookWind>0?art.chain[0]:e.hookF>0?art.chain[1]:e.atkA>0?art.attack[1]:e.atkT>0||e.ctw>0?art.attack[0]:at(art.walk,e.walk+e.ph,4)):e.atkA>0||e.leap>0?art.attack[1]:e.sw>0||e.atkT>0||e.ghoulWind>0?art.attack[0]:at(art.walk,e.walk+e.ph,7);
       }else if(e.type==='bat')fr=at(an.walk,clock+e.ph,12);
       else if(e.type==='glizzard'){if(e.rise>0||e.mode==='curl')fr=at(an.curl,clock,7);else if(e.mode==='tell')fr=e.atk==='bomb'?at(an.tell,clock,6):an.attack[0];else if(e.atkA>0)fr=at(an.attack,.35-e.atkA,9,false);else if(e.mode==='roar')fr=at(an.tell,clock,10);else fr=at(Math.hypot(e.vx,e.vy)>1||e.moving?an.walk:an.idle,e.walk+e.ph,e.moving?7:4)}
       else if(e.type==='collector'){const cdx=pl.x-e.x,cdy=pl.y-e.y;

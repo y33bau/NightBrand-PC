@@ -4285,8 +4285,12 @@ const portSkins=new Map();
 function portEnemyArt(key){
  if(!key)return null;
  if(portSkins.has(key))return portSkins.get(key);
- const img=IMGS['port_'+key];if(!img)return null;
+ let img=IMGS['port_'+key];if(!img)return null;
  const density=img.width/128;img.nbDensity=density;
+ // arkusze portu sa namalowane twarza w lewo, a silnik zaklada postacie patrzace w prawo: kazda klatke odbijamy raz, przy wczytaniu
+ {const cell=img.width/4,cv=document.createElement('canvas');cv.width=img.width;cv.height=img.height;const g=cv.getContext('2d');
+  for(let y=0;y<img.height;y+=cell)for(let x=0;x<img.width;x+=cell){g.save();g.translate(x+cell,y);g.scale(-1,1);g.drawImage(img,x,y,cell,cell,0,0,cell,cell);g.restore()}
+  cv.nbDensity=img.nbDensity;img=cv}
  const rows=Math.round(img.height/img.width*4),frames=Array.from({length:rows*4},(_,i)=>procFrame(img,(i%4)*32,(i>>2)*32,32,32,'portCrew'));
  // zaloga: 4 klatki chodu, 2 ataku, 2 smierci. Bosman (4x4): chod, hak (zamach, cios), lancuch (zamach, cios), smierc
  const skin=rows>=4?{scale:portSkinScale[key],walk:frames.slice(0,4),attack:[frames[5],frames[6]],chain:[frames[9],frames[10]],death:frames.slice(13,16)}:{scale:portSkinScale[key],walk:frames.slice(0,4),attack:frames.slice(4,6),death:frames.slice(6)};
@@ -4298,9 +4302,9 @@ function spawnEnemy(type,x,y,extra){if((type==='xbow'||type==='monk')&&S.enemies
     frozen:0,bleed:0,bleedT:0,rise:type==='bat'?0:.5,atkA:0,slamT:4,atkT:0,dead:false},extra||{});
   if(CH===PORT){
    if(type==='boss')e.portBoss=true;
-   let key=e.portBoss?'bosman':({knight:'latarnik',shieldman:'kalafater'})[type];
+   let key=e.portBoss?'bosman':({knight:'latarnik',ghoul:'krab'})[type];
    if(type==='possessed'){S.portCrew=(S.portCrew||0)+1;key=['tragarz','sieciarka','cumownik'][S.portCrew%3]}
-   if(type==='ghoul'){S.portDeep=(S.portDeep||0)+1;key=S.portDeep%3===0?'nurek':'krab'}
+   if(type==='shieldman'){S.portDeep=(S.portDeep||0)+1;key=S.portDeep%2?'kalafater':'nurek'}// ciezcy: mlot kalafatera i topielec w skafandrze
    e.portArt=portEnemyArt(key);e.portKey=key;
   }
   e.spd*=S.pk.espd||1;
@@ -4478,6 +4482,14 @@ function stepEnemyAI(e,dt){
     if(e.cast<=0&&d<240&&sight(e.x,e.y,T.x,T.y)){e.cast=e.ph2?3.4:4.2;e.castWind=e.ph2?.9:.75;e.castAim=Math.atan2(dy,dx);telegraph(e);return}
   }
 
+  if(e.portBoss){// Bosman: cios hakiem z bliska, rzut hakiem na lancuchu z daleka, a od polowy zycia trzy haki naraz i zaloga spod pomostow
+    if(e.hookF>0)e.hookF-=dt;
+    if(!e.ph2&&e.hp<e.max*.5){e.ph2=1;e.spd*=1.2;e.hook=1.2;shake(.6,.7);play('bossGrowl',0);say(EN?'The Harbour Master rattles his chains. Something answers from under the piers.':'Bosman szarpie łańcuchami. Spod pomostów coś mu odpowiada.');
+      for(let i=0;i<4;i++){const p=ringSpot();if(p)spawnEnemy('ghoul',p[0],p[1])}}
+    e.hook=(e.hook===undefined?3:e.hook)-dt;
+    if(e.hookWind>0){e.hookWind-=dt;if(e.hookWind<=0){for(const o of e.ph2?[-.24,0,.24]:[0])S.eproj.push({source:{type:e.type,chapter:CH},x:e.x,y:e.y,vx:Math.cos(e.hookAim+o)*125,vy:Math.sin(e.hookAim+o)*125,life:2,bolt:1});e.hookF=.45;play('swing',.2)}return}
+    if(e.hook<=0&&e.atkT<=0&&d>46&&d<230&&sight(e.x,e.y,T.x,T.y)){e.hook=e.ph2?3.6:5;e.hookWind=.7;e.hookAim=Math.atan2(dy,dx);telegraph(e);return}
+  }
   if(BIG.has(e.type)){
     if(e.atkT>0){e.atkT-=dt;if(e.atkT<=0){e.atkA=.4;shake(.5,.35);play('slam',0);shockAt(e.x,e.y,.75);addVfx(A.fx.nova,.35,e.x,e.y,.08,54/8,'ground');aoeP(e,54,enemyDamage(e.type==='beast'?24:20));
       for(let i=0;i<24;i++){const a=i/24*Math.PI*2;S.parts.push({k:'d',x:e.x+Math.cos(a)*12,y:e.y+Math.sin(a)*6,z:1,vx:Math.cos(a)*90,vy:Math.sin(a)*45,vz:18,c:P.st3,life:.6})}}return}
@@ -5420,7 +5432,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
     for(const e of S.enemies){
       const an=A[e.type];let fr;
       if(e.portArt){
-        const art=e.portArt,alt=art.chain&&e.portBoss&&e.leap>0?art.chain:art.attack;fr=e.atkA>0||e.leap>0?alt[1]:e.sw>0||e.atkT>0||e.slamA>0?(art.chain&&e.slamA>0?art.chain[0]:art.attack[0]):at(art.walk,e.walk+e.ph,e.portBoss?4:7);
+        const art=e.portArt;fr=e.portBoss&&art.chain?(e.hookWind>0?art.chain[0]:e.hookF>0?art.chain[1]:e.atkA>0?art.attack[1]:e.atkT>0||e.ctw>0?art.attack[0]:at(art.walk,e.walk+e.ph,4)):e.atkA>0||e.leap>0?art.attack[1]:e.sw>0||e.atkT>0||e.ghoulWind>0?art.attack[0]:at(art.walk,e.walk+e.ph,7);
       }else if(e.type==='bat')fr=at(an.walk,clock+e.ph,12);
       else if(e.type==='glizzard'){if(e.rise>0||e.mode==='curl')fr=at(an.curl,clock,7);else if(e.mode==='tell')fr=e.atk==='bomb'?at(an.tell,clock,6):an.attack[0];else if(e.atkA>0)fr=at(an.attack,.35-e.atkA,9,false);else if(e.mode==='roar')fr=at(an.tell,clock,10);else fr=at(Math.hypot(e.vx,e.vy)>1||e.moving?an.walk:an.idle,e.walk+e.ph,e.moving?7:4)}
       else if(e.type==='collector'){const cdx=pl.x-e.x,cdy=pl.y-e.y;
