@@ -680,6 +680,7 @@ const SPRITE_GROUPS={
  add('port_sol','assets/tekstury/67797f6c19e6b7beb78c7e3b1c77752da8e44e4a434984eab2cf352e060543f3.webp');
  add('port_mech','assets/tekstury/8454bbaadb3452d3e06c571e38f6b7eeafdada0921c731747d114c0fce0c3809.webp');
  add('port_plyty','assets/tekstury/4732ad1c63e0c41e0450a874ad6bba9e3bfd4b12136a9cc9a5721b2fdeeca9db.webp');
+ add('port_nalot','assets/tekstury/4e76e1d91b2d570539cfc8432932a77a15478bb3eecc030f0484889d60a6a33f.webp');
  add('port_deski','assets/tekstury/23136565c5788d197ac9283c4a84c215f0a55380fc7808305435fd441077e4a5.webp');
  // zaloga portu (8 klatek 4x2) i Bosman (16 klatek 4x4)
  add('port_bosman','assets/wrogowie/9fd97da68af597d33274217703940fa8e6277a88331c949002db0dff34ea1dcd.webp');
@@ -1972,6 +1973,46 @@ function buildSolneNabrzeze(I){
   const deck=name==='deck'||name==='crossdeck',wet=deck||name==='slip';
   const mesh=new THREE.Mesh(geo,phong({map:wallTex(f.img),vertexColors:true,shininess:wet?26:name==='salt'?10:16,specular:wet?0x25363e:0x141d21}));
   mesh.receiveShadow=true;ROOT.add(mesh);
+ }
+ // --- przejscia miedzy nawierzchniami: mech pochylni i sol zachodza nierowno na bruk, bez prostej granicy; na placu solnym lezy popekana skorupa soli
+ {
+  const hash=(x,y)=>{const s=Math.sin(x*127.1+y*311.7)*43758.5453;return s-Math.floor(s)};
+  const vnoise=(x,y)=>{const ix=Math.floor(x),iy=Math.floor(y),fx=x-ix,fy=y-iy,u=fx*fx*(3-2*fx),v=fy*fy*(3-2*fy),a=hash(ix,iy),b=hash(ix+1,iy),c=hash(ix,iy+1),d=hash(ix+1,iy+1);return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v};
+  const fbm=(x,y,s)=>.62*vnoise(x*.3+s,y*.3)+.38*vnoise(x*.85+s*3,y*.85+7);
+  const overlay=(kind,img,u,tint,reach,patch,inside)=>{
+   if(!img)return;
+   // odleglosc kazdego pola od obszaru danej nawierzchni (do "reach" pol, tylko po bruku i trakcie)
+   const dist=new Float32Array(MW*MH).fill(99),queue=[];
+   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=ground(x,y);if(land(t)&&t!==48&&t!==43&&kindAt(x,y)===kind){dist[y*MW+x]=0;queue.push(x,y)}}
+   for(let h=0;h<queue.length;h+=2){const x=queue[h],y=queue[h+1],d=dist[y*MW+x];if(d>=reach)continue;
+    for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const X=x+a,Y=y+b;if(X<0||Y<0||X>=MW||Y>=MH)continue;const t=ground(X,Y);if(!land(t)||t===48||t===43)continue;const i=Y*MW+X;if(dist[i]<=d+1)continue;dist[i]=d+1;queue.push(X,Y)}}
+   const cornerDist=(X,Y)=>{let m=99;for(const [a,b] of [[0,0],[-1,0],[0,-1],[-1,-1]]){const x=X+a,y=Y+b;if(x>=0&&y>=0&&x<MW&&y<MH)m=Math.min(m,dist[y*MW+x])}return m};
+   const pos=[],uv=[],col=[],idx=[],c=new THREE.Color(tint);
+   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const d0=dist[y*MW+x];if(d0>reach||(d0===0&&!inside))continue;
+    const base=pos.length/3;
+    for(const [dx,dz] of [[0,0],[0,1],[1,1],[1,0]]){const X=x+dx,Z=y+dz,n=fbm(X,Z,kind.length*13),d=cornerDist(X,Z);
+     const edge=Math.max(0,Math.min(1,1-(d+(n-.5)*2.6)/reach)),alpha=edge*(patch?patch(fbm(X*1.7,Z*1.7,5)):1);
+     pos.push(X,.032,Z);uv.push(X/u,-Z/u);col.push(c.r,c.g,c.b,alpha)}
+    idx.push(base,base+1,base+2,base,base+2,base+3);
+   }
+   if(!idx.length)return;
+   const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setAttribute('color',new THREE.Float32BufferAttribute(col,4));geo.setIndex(idx);geo.computeVertexNormals();
+   const mat=phong({map:wallTex(img),vertexColors:true,transparent:true,depthWrite:false,shininess:kind==='slip'?26:12,specular:kind==='slip'?0x25363e:0x1c2428});
+   const mesh=new THREE.Mesh(geo,mat);mesh.receiveShadow=true;mesh.renderOrder=1;ROOT.add(mesh);
+  };
+  overlay('slip',I.port_mech,5.6,0xe2e8e0,2.6);
+  overlay('salt',I.port_nalot,3.4,0xdfe3e3,1.8,n=>Math.max(.14,Math.min(.86,(n-.3)*2.4)),true);
+  // zaspy soli przy scianach skladow i pod skrzyniami: niskie, plaskie, nie zaslaniaja walki
+  const drift=[];
+  for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++){if(ground(x,y)!==47)continue;
+   const wall=[[1,0],[-1,0],[0,1],[0,-1]].find(([a,b])=>built(x+a,y+b));
+   if(wall&&random()<.4)drift.push([x+.5+wall[0]*.3,y+.5+wall[1]*.3,.5+random()*.4,wall[0]?Math.PI/2:0]);
+  }
+  if(drift.length&&I.port_nalot){
+   const mound=new THREE.SphereGeometry(1,10,6,0,Math.PI*2,0,Math.PI/2);
+   const saltMat=worldSurf(phong({color:0xc2c8ca,shininess:4,specular:0x0c1012}),I.port_nalot,2.4,'portSaltDrift');
+   instanced(mound,saltMat,drift,([x,y,s,a])=>{M4.makeRotationY(a);SC.set(s*1.3,s*.13,s*.55);M4.scale(SC);M4.setPosition(x,-.02,y);return M4});
+  }
  }
  // --- rzeka
  const harbourWater=waterHD(I.cc0_water,W.waters,-.19,5.8,0x3f5a68,true);
