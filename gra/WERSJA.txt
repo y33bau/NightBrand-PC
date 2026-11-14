@@ -784,3 +784,4 @@ cache706 · Licznik Popiolow i poziomu na wszystkich ekranach w stylu menu glown
 cache707 · nowe tla rozdzialow (baner, kafelki, wstepy nocy I-VI) z ChatGPT; nie sprawdzono: wyglad u autora
 cache708 · oboz: bohater wtopiony w scene (grading, poswiata ognia, piorkowanie, ziarno), cien pod kamieniem, niska mgla, wspolne ziarno; nie sprawdzono: klasy inne niz Rycerz na zrzucie
 cache709 · kursor w grze: nowy grot z cienka jasna obwodka zamiast okraglego celownika; nie sprawdzono: wyglad kursora u autora
+cache710 · pauza i koniec mapy: zaznaczenie glownych przyciskow bez prostokatnej ramki i paska (zar wewnatrz tabliczki); nie sprawdzono: pad u autora
