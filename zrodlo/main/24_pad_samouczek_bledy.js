@@ -42,11 +42,12 @@ function padScroll(root,ry,dt){if(Math.abs(ry)<.3)return;const can=e=>e&&e.scrol
   let t=[...root.querySelectorAll('.pc-perk-detail,#kapDet,.m2k-det,.nbp-panel,#lvl .level-build,.pane:not([hidden]),.mpane:not([hidden])')].find(e=>e.offsetParent!==null&&can(e));
   if(!t){let e=document.activeElement;while(e&&e!==document.body&&!can(e))e=e.parentElement;if(can(e))t=e}if(!t&&can(root))t=root;
   if(t)t.scrollTop+=Math.sign(ry)*(Math.abs(ry)-.3)/.7*dt*1300}
+// 14.11.2026: kursor w grze = nowy grot z menu z cienka jasna obwodka (lepiej widoczny na mapie).
 // 13.11.2026: kursor pada w menu (jak w konsolowych wersjach wielu gier): lewa gałka przesuwa sztylet, A klika to, co pod nim.
 // Element pod kursorem dostaje fokus pada (złote podświetlenie), więc A, legenda i znaczki działają bez zmian. Krzyżak nadal skacze po przyciskach.
 const PCUR={x:innerWidth/2,y:innerHeight/2,el:null,last:0,show:false,hov:null,src:'assets/ui/09ec512dc3c0387166c377318f86878d62e4c4b39f2d081fb32b9a8075d99898.png'};
 {const st=document.createElement('style');st.textContent="#padCur{position:fixed;left:0;top:0;z-index:2147483050;width:calc(40 * min(.05981vw,.10627vh));height:auto;pointer-events:none;filter:drop-shadow(0 2px 3px #000c);will-change:transform}#padCur[hidden],body:not(.padlast) #padCur{display:none}"+
- "body,body *{cursor:url(assets/ui/2dfdc2fc66033fbcd3f5390f5bc2a46db7430e13661669505a33f098dadb7e3d.png) 4 4,auto!important}body canvas#gl{cursor:url(assets/ui/2d0002a17b0013321dc41b3a13c1adb471c9bcfed6efbf666273a533187ed031.png) 55 58,crosshair!important}";document.head.append(st)}
+ "body,body *{cursor:url(assets/ui/f2bdfe0d27c4a8f08d3ffa8134a8a68bff08b21b4d9738ab1163dc0abff798b6.png) 1 1,auto!important}body canvas#gl{cursor:url(assets/ui/fc21d21915564f152d019ed9b75b358a75419b3be310550a73c1dc943825f24e.png) 3 3,crosshair!important}";document.head.append(st)}
 function padCurPark(){const a=document.activeElement;if(a&&a!==document.body){const r=a.getBoundingClientRect();PCUR.x=r.left+r.width/2;PCUR.y=r.top+r.height/2}if(PCUR.el)PCUR.el.hidden=true;PCUR.show=false;padCurHover(null)}
 // 13.11.2026 (poprawka): kursor ma własną pętlę klatek (requestAnimationFrame), niezależną od pętli gry, więc porusza się płynnie.
 // Najechanie NIE przenosi fokusu ani nie wysyła zdarzeń najechania (w menu rozdziałów wybierały mapę); tylko złote podświetlenie.
