@@ -787,4 +787,5 @@ cache709 · kursor w grze: nowy grot z cienka jasna obwodka zamiast okraglego ce
 cache710 · pauza i koniec mapy: zaznaczenie glownych przyciskow bez prostokatnej ramki i paska (zar wewnatrz tabliczki); nie sprawdzono: pad u autora
 cache711 · jeden standard zaznaczen: komunikaty, rozmowy, wybor u Wita, final, Pomin na wstepie, ekran bledu (wstegi/zar, Cinzel+Georgia); nie sprawdzono: pad, final z prawdziwym obrazem
 cache712 · publikacja: menu AAA (699-711) + szlif portu (runda-port-szlif); usuniete nieuzywane stare tla i postacie (1,9 MB); nie sprawdzono: pad, itch.io
-cache713 · Zabojczyni: 14 nowych arkuszy z MASTER polaczonych w 10 atlasow; bez zmian mechanik. Nie sprawdzono: animacje w grze, pad, dzwiek, FPS, itch.io.
+cache713 · Port: fabula rozdz. III, nowi NPC Ambrozy i Wieslawa (bez bialych obwodek), Chojrak w porcie, smierc Bosmana, zakonczenia. Nie sprawdzono: NPC w grze, mieszczenie sie tekstow, EN, pad, FPS.
+cache714 · Zabojczyni: 14 arkuszy MASTER w 10 atlasach, na aktualnym main z portem 713. Nie sprawdzono: animacje w grze, pad, dzwiek, FPS, itch.io.

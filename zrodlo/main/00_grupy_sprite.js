@@ -692,6 +692,12 @@ const SPRITE_GROUPS={
  add('port_nurek','assets/wrogowie/ceabd7f50f97183a098da5904e45b189cab27ad05f3f9d46f3e1f339c90630da.webp');
  add('port_cumownik','assets/wrogowie/46ebef6a2ee63decbfe6368e784b1e752233b120ec56d7b326bc20a1f1563bb2.webp');
  add('intro1','assets/tla/c8c3968edb367c7be327106c1fafd57e5edf67ba28a6181eda3bb585e73f84ef.webp');add('intro2','assets/tla/7c2d199370c18c4f9538807b7ed4ea2710679c89c412cdfb964d73c229e04c11.webp');add('intro3','assets/tla/3dc098a98d1294fe0047673365fdfb738239db093f7bdb89d526acf2c8d4f7ad.webp');add('intro4','assets/tla/b5acdd84a065fd7fbd3dc0d51dda1175fd3a0551641b5bf02964dafd288473a7.webp');add('intro5','assets/tla/76c4abede7b11dab955422e0b91d11d6a38a1feecdd13c62d91f37a0813a6057.webp');add('intro6','assets/tla/d1fa360949a93c4762b2578a14cf8957aaeb8e64bbf3a69445d984fc7aaa7c93.webp');
+ // NPC portu (14.11.2026): Ambrozy (celnik) i Wieslawa (karczmarka); arkusz 4 klatki 256 px (gestosc 4) i portret
+ add('npc_ambrozy','assets/npc/81a5fb580d7f0a1a390e467469ebc2904c26209d111626e0c0db1e4dd92c4d7c.webp');
+ add('npc_wieslawa','assets/npc/20125bc556763b19c895c2be1c978cc264a38532b0fc627c4bdb81d3a5fb0772.webp');
+ add('npcp_ambrozy','assets/npc/5effebccbad8f9e48fc9326cc40bb086b7c8d0379eccd5b6b9be53ee93906266.webp');
+ add('npcp_wieslawa','assets/npc/1fbd07cb44e343db2b4a085e6797eb3f92fa5cf6c51deb22bfac206785b4bea9.webp');
+ SPRITE_RES.npc_ambrozy=4;SPRITE_RES.npc_wieslawa=4;
  // koksowniki i mur oporowy korzystaja z grafik innych rozdzialow
  for(const k of ['p2_brazier_0','p2_brazier_1','p2_brazier_2','p2_brazier_3','wl_fort','wl_cap'])if(SPRITE_GROUPS[k]&&!SPRITE_GROUPS[k].includes('r6'))SPRITE_GROUPS[k].push('r6');
 }

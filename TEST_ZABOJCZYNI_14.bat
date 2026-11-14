@@ -1,7 +1,7 @@
 @echo off
 setlocal
 cd /d "%~dp0gra"
-echo NightBrand - nowe arkusze Zabojczyni, cache 713
+echo NightBrand - nowe arkusze Zabojczyni, cache 714
 echo Wybierz Zabojczynie i sprawdz: chod, 5 lekkich ciosow, ciezki,
 echo blok, parowanie, unik, Rozszarpanie, Wachlarz Ostrzy i smierc.
 echo Zamkniecie tego okna zatrzyma serwer testowy.
