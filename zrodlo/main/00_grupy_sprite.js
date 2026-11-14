@@ -680,6 +680,7 @@ const SPRITE_GROUPS={
  add('port_sol','assets/tekstury/67797f6c19e6b7beb78c7e3b1c77752da8e44e4a434984eab2cf352e060543f3.webp');
  add('port_mech','assets/tekstury/8454bbaadb3452d3e06c571e38f6b7eeafdada0921c731747d114c0fce0c3809.webp');
  add('port_plyty','assets/tekstury/4732ad1c63e0c41e0450a874ad6bba9e3bfd4b12136a9cc9a5721b2fdeeca9db.webp');
+ add('port_nalot','assets/tekstury/4e76e1d91b2d570539cfc8432932a77a15478bb3eecc030f0484889d60a6a33f.webp');
  add('port_deski','assets/tekstury/23136565c5788d197ac9283c4a84c215f0a55380fc7808305435fd441077e4a5.webp');
  // zaloga portu (8 klatek 4x2) i Bosman (16 klatek 4x4)
  add('port_bosman','assets/wrogowie/9fd97da68af597d33274217703940fa8e6277a88331c949002db0dff34ea1dcd.webp');
