@@ -17,7 +17,7 @@
  // ---------- Przygotowanie ----------
  // Karta wybranej klasy (portret, przydomek, opis, wspolny poziom) nad stalym rzedem pieciu klas.
  function heroCard(){const pc=$('prepChar');if(!pc)return;const on=pc.querySelector('.nb-prep-class.on');if(!on)return;const id=on.dataset.hero,H=HEROES[id],q=prog();
-  const lv=T('Poziom ','Level ')+q.lv+(q.lv>=PMAX?'':' · '+q.xp+' / '+PNEED(q.lv)+' XP');
+  const lv=T('Poziom ','Level ')+q.lv+(q.lv>=PMAX?'':'  '+q.xp+' / '+PNEED(q.lv)+' XP');
   let card=pc.querySelector('.nb2-hero');
   if(!card){card=mk('div','nb2-hero');const im=mk('img','');im.alt='';card.append(im,mk('b',''),mk('small','nb2-ep'),mk('small','nb2-cls'),mk('p','nb2-desc'),mk('small','nb2-lv'));pc.prepend(card)}
   const [im,nm,ep,cl,ds,lvE]=card.children,src=PREMIUM_ASSETS['portret-'+H.art];if(im.getAttribute('src')!==src)im.src=src;
@@ -30,35 +30,40 @@
  // Trudnosc: trzy przyciski i opis stale widoczne w stopce; nazwa rozdzialu jako podtytul naglowka.
  {const head=prep.querySelector('.premium-prep-head'),dest=prep.querySelector('.pc-prep-destination'),sw=$('diffSw'),cap=$('diffCap'),kicker=$('prepK');
   if(head&&dest&&sw&&cap&&kicker){const old=sw.closest('details');kicker.classList.add('nb2-sub');head.append(kicker);
-   const box=mk('section','nb2-diff');box.setAttribute('aria-label',T('Trudność','Difficulty'));box.append(mk('h3','',T('Trudność','Difficulty')),sw,cap);dest.replaceWith(box);if(old)old.remove()}}
+   const box=mk('section','nb2-diff');box.setAttribute('aria-label',T('Trudno��','Difficulty'));box.append(mk('h3','',T('Trudno��','Difficulty')),sw,cap);dest.replaceWith(box);if(old)old.remove()}}
 
  // ---------- Wybor rozdzialu ----------
  const DESC=EN?['A village, a cemetery and the crypt beneath it. Boss: The Conjoined.','Dwarven mines and forges. Boss: Cumlin, the Possessed Dwarf King.','A rotting city of the rich. Boss: Morhad, Beast of a Thousand Slaughters.','The forest and Bleak Peak. Bosses: Leshy and Mother Striga.','Seat of the Holy Order. Bosses: the Arch-Judge Reckoner and the Creditor.']
-  :['Wioska, cmentarz i krypta pod nim. Boss: Zrost.','Krasnoludzkie kopalnie i kuźnie. Boss: Cumlin, Opętany Król Krasnoludów.','Zgniłe miasto bogaczy. Boss: Morhad, Bestia Tysiąca Rzezi.','Las i Łysa Góra. Bossowie: Leszy i Strzyga Matka.','Siedziba Zakonu. Bossowie: Arcysędzia Rachmistrz i Wierzyciel.'];
+  :['Wioska, cmentarz i krypta pod nim. Boss: Zrost.','Krasnoludzkie kopalnie i ku�nie. Boss: Cumlin, Op�tany Kr�l Krasnolud�w.','Zgni�e miasto bogaczy. Boss: Morhad, Bestia Tysi�ca Rzezi.','Las i �ysa G�ra. Bossowie: Leszy i Strzyga Matka.','Siedziba Zakonu. Bossowie: Arcys�dzia Rachmistrz i Wierzyciel.'];
  const banner=title.querySelector('.premium-banner'),caption=title.querySelector('.premium-caption'),facts=title.querySelector('.pc-destination-facts'),chDesc=mk('p','nb2-chdesc');
  if(caption)caption.after(chDesc);
  const medCell=facts&&facts.firstElementChild,medRow=mk('div','nb2-medrow');
  if(medCell){medCell.classList.add('nb2-medcell');put(medCell.querySelector('small'),T('Medale klas','Class medals'));
   for(const c of CLS){const it=mk('span','nb2-med'),im=mk('img','');im.alt='';im.src=PREMIUM_ASSETS['portret-'+HEROES[c].art];it.dataset.c=c;it.append(im);medRow.append(it)}medCell.append(medRow)}
  function journey2(){if(title.hidden)return;const sel=title.querySelector('.premium-selected'),ch=Number(sel?.id.slice(5))||1,locked=chLocked(ch);
-  put(chDesc,DESC[ch-1]);if(medCell)medCell.classList.toggle('nb2-locked',locked);
+  if(SOLNE_TEST&&ch===1){
+   put(caption,T('Solne Nabrze�e','Salt Quay'));
+   caption.dataset.k=T('Mapa testowa','Test map');
+   if(banner)banner.style.backgroundImage='linear-gradient(180deg,rgba(9,24,31,.22),rgba(9,15,19,.94)),url("'+SPRITE_DATA.water_shallow+'")';
+  }
+  put(chDesc,SOLNE_TEST&&ch===1?T('Port, sk�ad soli i przeprawa. Zwolnij dwa �a�cuchy i pokonaj Bosmana.','Harbour, salt warehouse and ferry. Release both chains and defeat the harbour master.'):DESC[ch-1]);if(medCell)medCell.classList.toggle('nb2-locked',locked);
   for(const it of medRow.children){const v=medalOf(it.dataset.c,ch),h=HEROES[it.dataset.c],tip=h.n+' ('+h.cls+'): '+(v?MEDAL_N[v]:T('brak medalu','no medal'));if(it.title!==tip){it.title=tip;it.style.setProperty('--ring',medalRing(v));it.classList.toggle('nb2-has',!!v)}}
   for(let i=1;i<=5;i++){const b=$('start'+i);if(!b)continue;let m=b.querySelector('.nb2-meds');if(!m){m=mk('span','nb2-meds');m.setAttribute('aria-hidden','true');for(const c of CLS){const d=mk('i','');d.dataset.c=c;m.append(d)}b.append(m)}
    const key=CLS.map(c=>medalOf(c,i)).join('');if(m.dataset.k!==key){m.dataset.k=key;[...m.children].forEach((d,k)=>d.style.background=medalRing(+key[k]))}}}
  for(const [node,opt] of [[title.querySelector('.m2-right'),{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-status']}],[title,{attributes:true,attributeFilter:['hidden','class']}]])if(node)new MutationObserver(journey2).observe(node,opt);
  journey2();
- // „Tryb gry" jest przelacznikiem (dotad zmiana tylko w menu glownym).
- {const info=title.querySelector('.pc-journey-mode');if(info){const b=mk('button','pc-journey-mode nb2-mode');b.type='button';while(info.firstChild)b.append(info.firstChild);b.append(mk('span','nb2-mode-hint',T('zmień','change')));info.replaceWith(b);
+ // "Tryb gry" jest przelacznikiem (dotad zmiana tylko w menu glownym).
+ {const info=title.querySelector('.pc-journey-mode');if(info){const b=mk('button','pc-journey-mode nb2-mode');b.type='button';while(info.firstChild)b.append(info.firstChild);b.append(mk('span','nb2-mode-hint',T('zmie�','change')));info.replaceWith(b);
    b.addEventListener('click',()=>{(STORYMODE?$('sArc'):$('sFab'))?.click();const sel=title.querySelector('.premium-selected'),ch=Number(sel?.id.slice(5))||1;if(chLocked(ch))$('start1')?.focus();setTimeout(()=>{journey2();b.focus()},0)})}}
 
  // ---------- Menu glowne ----------
  {const rail=title.querySelector('.premium-rail'),nav=title.querySelector('.premium-nav');
   if(rail&&nav){const b=mk('button','nb2-daily');b.type='button';const k=mk('small',''),v=mk('strong','');b.append(k,v);nav.after(b);
-   const fill=()=>{if(title.hidden)return;const D=dayNight(),done=META.dy.done===D.key;put(k,T('Wyzwanie dnia','Daily challenge'));put(v,done?T('✓ Wygrane dzisiaj · wróć jutro','✓ Won today · come back tomorrow'):D.ruleN+' · '+HEROES[D.cls].n+' · +'+DAILY_ASH+T(' Popiołów',' Ashes'));b.classList.toggle('nb2-done',done)};
+   const fill=()=>{if(title.hidden)return;const D=dayNight(),done=META.dy.done===D.key;put(k,T('Wyzwanie dnia','Daily challenge'));put(v,done?T('? Wygrane dzisiaj  wr�� jutro','? Won today  come back tomorrow'):D.ruleN+'  '+HEROES[D.cls].n+'  +'+DAILY_ASH+T(' Popio��w',' Ashes'));b.classList.toggle('nb2-done',done)};
    b.addEventListener('click',()=>{KRONTAB=0;$('kronBtn')?.click()});new MutationObserver(fill).observe(title,{attributes:true,attributeFilter:['hidden','class']});fill()}}
 
  // ---------- Pauza ----------
- put($('pauseMenuBtn'),T('Porzuć noc','Abandon night'));
+ put($('pauseMenuBtn'),T('Porzu� noc','Abandon night'));
  {const pz=$('pause'),src=$('pane-gfx'),dst=pz.querySelector('.nbp-pane[data-pane="gfx"]');
   if(src&&dst){const home=()=>{const from=pz.hidden?dst:src,to=pz.hidden?src:dst;while(from.firstChild)to.append(from.firstChild)};new MutationObserver(home).observe(pz,{attributes:true,attributeFilter:['hidden']})}}
 
@@ -66,19 +71,19 @@
  $('optsBtn').addEventListener('click',()=>{document.querySelector('#opts .tab[data-tab="gfx"]')?.click()});
  if(!coarse){ // PC: bez wzmianek o telefonie i baterii (kod dotyku zostaje)
   for(const p of document.querySelectorAll('#pane-gfx .figcap')){const t=p.textContent;
-   const n=t.replace('Auto: telefon i tablet dostają Średnią, komputer Wysoką.','Auto: na komputerze Wysoka.').replace('dla mocnych komputerów i tabletów','dla mocnych komputerów').replace('Niższy limit oszczędza baterię i może pomóc','Niższy limit może pomóc')
+   const n=t.replace('Auto: telefon i tablet dostaj� �redni�, komputer Wysok�.','Auto: na komputerze Wysoka.').replace('dla mocnych komputer�w i tablet�w','dla mocnych komputer�w').replace('Ni�szy limit oszcz�dza bateri� i mo�e pom�c','Ni�szy limit mo�e pom�c')
     .replace(/Auto: phones and tablets get Medium, (?:a )?computers? (?:gets? )?High\./i,'Auto: High on a computer.').replace(/A lower limit saves battery and (?:can|may) help/i,'A lower limit can help').replace('strong computers and tablets','strong computers');
    if(n!==t)p.textContent=n}}
- // Pelny ekran: przelacznik w Grafice. Wybor „W oknie" pamieta klucz nb_fs (goFull go szanuje).
+ // Pelny ekran: przelacznik w Grafice. Wybor "W oknie" pamieta klucz nb_fs (goFull go szanuje).
  {const d=document.documentElement,can=!!(d.requestFullscreen||d.webkitRequestFullscreen)&&document.fullscreenEnabled!==false,host=document.querySelector('#pane-gfx .pc-brightness-tile')||$('pane-gfx');
-  if(can&&host){const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement),lab=mk('p','figcap nb2-fslab',T('Tryb wyświetlania','Display mode')),row=mk('div','qrow');row.id='fsRow';row.setAttribute('role','group');row.setAttribute('aria-label',T('Tryb wyświetlania','Display mode'));
+  if(can&&host){const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement),lab=mk('p','figcap nb2-fslab',T('Tryb wy�wietlania','Display mode')),row=mk('div','qrow');row.id='fsRow';row.setAttribute('role','group');row.setAttribute('aria-label',T('Tryb wy�wietlania','Display mode'));
    const mkB=(on,text)=>{const b=mk('button','go alt',text);b.type='button';b.dataset.fs=on?'1':'0';b.addEventListener('click',()=>{try{localStorage.setItem('nb_fs',on?'1':'0')}catch(e){}try{if(on&&!isFs()){const r=(d.requestFullscreen||d.webkitRequestFullscreen).call(d);if(r&&r.catch)r.catch(()=>{})}else if(!on&&isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){}setTimeout(sync,60)});return b};
    const sync=()=>{for(const b of row.children){const on=(b.dataset.fs==='1')===isFs();b.setAttribute('aria-pressed',String(on));b.classList.toggle('on',on)}};
-   row.append(mkB(false,T('W oknie','Windowed')),mkB(true,T('Pełny ekran','Full screen')));const edge=host.querySelector(':scope>.pcg-edge');if(edge)edge.before(lab,row);else host.append(lab,row);
+   row.append(mkB(false,T('W oknie','Windowed')),mkB(true,T('Pe�ny ekran','Full screen')));const edge=host.querySelector(':scope>.pcg-edge');if(edge)edge.before(lab,row);else host.append(lab,row);
    for(const ev of ['fullscreenchange','webkitfullscreenchange'])document.addEventListener(ev,sync);sync()}}
  // Dane zapisu: najpierw postep i kopia, raport bledow nizej, kasowanie osobno na dole.
  {const pane=$('pane-dat'),copy=$('copyErrors'),clear=$('clearSave');
-  if(pane&&copy&&clear){const zone=mk('section','nb2-danger');zone.append(mk('h3','',T('Usuwanie zapisu','Delete save')),mk('p','figcap',T('Usuwa rekordy, poziomy i odblokowane perki w obu trybach. Tego nie da się cofnąć.','Removes records, levels and unlocked perks in both modes. This cannot be undone.')),clear);pane.append(copy,zone)}}
+  if(pane&&copy&&clear){const zone=mk('section','nb2-danger');zone.append(mk('h3','',T('Usuwanie zapisu','Delete save')),mk('p','figcap',T('Usuwa rekordy, poziomy i odblokowane perki w obu trybach. Tego nie da si� cofn��.','Removes records, levels and unlocked perks in both modes. This cannot be undone.')),clear);pane.append(copy,zone)}}
 
  // ---------- Styl ----------
  const css=mk('style','');css.id='nb2Css';css.textContent=`/* NightBrand PC: usprawnienia menu 13.11.2026. ?menu2=0 wylacza. */
@@ -214,8 +219,8 @@
 html[lang=en] @N@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips:empty::after{content:'locked'!important}
 `.replace(/@N@/g,'#orient'.repeat(130)+'.nb2');document.head.append(css);
 })();
-// 13.11.2026: Przygotowanie — zamiast rozwijanego „Ustawienia” dwa przełączniki widoczne na ekranie
-// (Samouczek, 2 graczy). Przyciski klikają oryginalne pola wyboru, więc logika i zapis zostają bez zmian.
+// 13.11.2026: Przygotowanie - zamiast rozwijanego "Ustawienia" dwa prze��czniki widoczne na ekranie
+// (Samouczek, 2 graczy). Przyciski klikaj� oryginalne pola wyboru, wi�c logika i zapis zostaj� bez zmian.
 (()=>{try{
  const prep=$('prep'),hi=$('hintsTgl'),mp=$('mpTgl');if(!prep||!hi||!mp)return;
  const pop=[...prep.querySelectorAll('details.pc-popover')].find(d=>d.contains(hi)||d.contains(mp));if(!pop)return;
@@ -231,13 +236,13 @@ ${Z} #prep .pc-prep-quick{position:absolute!important;right:0!important;top:50%!
 ${Z} #prep .pc-prep-quick .pc-quick{display:inline-flex!important;align-items:center!important;gap:.6em!important;width:auto!important;min-width:0!important;height:auto!important;min-height:0!important;margin:0!important;padding:.95vh 1.6vh!important;border:1px solid var(--nbs-idle,#a68b5e66)!important;border-image:none!important;background:var(--nbs-cell,#16111499)!important;color:#eadcc4!important;font:500 max(12px,1.85vh)/1 Cinzel,Georgia,serif!important;letter-spacing:.04em!important;text-transform:none!important;white-space:nowrap!important;cursor:pointer}
 ${Z} #prep .pc-prep-quick .pc-quick[hidden]{display:none!important}
 ${Z} #prep .pc-prep-quick .pc-quick i{display:inline-grid!important;place-items:center!important;width:1.15em!important;height:1.15em!important;border:1px solid #c8a05a!important;background:#0b080a!important;font:700 .9em/1 Georgia,serif!important;font-style:normal!important;color:#f1d79a!important}
-${Z} #prep .pc-prep-quick .pc-quick.is-on i::before{content:'✓'}
+${Z} #prep .pc-prep-quick .pc-quick.is-on i::before{content:'?'}
 ${Z} #prep .pc-prep-quick .pc-quick.is-on{border-color:#c8a05a!important;background:linear-gradient(150deg,#3a1d26e6,#1e1418e6)!important}
 ${Z} #prep .pc-prep-quick .pc-quick:hover{border-color:var(--nbs-hover,#d8b878)!important}`;
  document.head.append(st);
 }catch(e){quietErr('prepQuick',e)}})();
-// 13.11.2026: pauza bez przewijania. Audio: trzy karty w jednym rzędzie. Grafika: lewa kolumna Jasność + Płynność,
-// prawa Jakość + Zaawansowane (te w dwóch kolumnach), zamiast długiej listy pod spodem.
+// 13.11.2026: pauza bez przewijania. Audio: trzy karty w jednym rz�dzie. Grafika: lewa kolumna Jasno�� + P�ynno��,
+// prawa Jako�� + Zaawansowane (te w dw�ch kolumnach), zamiast d�ugiej listy pod spodem.
 (()=>{const Z='#orient'.repeat(140),st=document.createElement('style');st.id='pc-pause-fit';st.textContent=
 `${Z} #pause .nbp-audiogrid{max-width:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important}
 ${Z} #pause .nbp-audiogrid>.nbp-ah{grid-column:1/-1!important}
@@ -264,8 +269,8 @@ ${Z} #pause .nbp-pane:has(#qualityRow) .musrow{min-width:0!important}
 ${Z} #pause .nbp-pane:has(#qualityRow) .musrow .rng{flex:1 1 auto!important;width:auto!important;min-width:0!important;max-width:100%!important}
 ${Z} #pause .nbp-pane:has(#qualityRow) .musrow .rng input{width:100%!important}`;
 document.head.append(st)})();
-// 13.11.2026: „Tryb gry” na wyborze rozdziału jako czytelny przełącznik dwóch opcji (Fabularny | Arcade).
-// Wcześniej nazwa trybu była obrazkiem z gotyckich liter, który po przełączeniu znikał (pusty przycisk).
+// 13.11.2026: "Tryb gry" na wyborze rozdzia�u jako czytelny prze��cznik dw�ch opcji (Fabularny | Arcade).
+// Wcze�niej nazwa trybu by�a obrazkiem z gotyckich liter, kt�ry po prze��czeniu znika� (pusty przycisk).
 (()=>{try{
  const b=document.querySelector('#title .pc-journey-mode');if(!b)return;
  const seg=document.createElement('span');seg.className='nb2-seg';seg.setAttribute('aria-hidden','true');
@@ -283,8 +288,8 @@ ${Z} #title .pc-journey-mode .nb2-seg i{font:600 calc(18 * ${U})/1 Cinzel,Georgi
 ${Z} #title .pc-journey-mode .nb2-seg i.is-on{background:linear-gradient(150deg,#5a2433,#2c161d)!important;border-color:#d8b46e!important;color:#f3e2bf!important;box-shadow:0 0 10px #c9a45a33,inset 0 0 8px #0006!important}`;
  document.head.append(st);
 }catch(e){quietErr('modeSeg',e)}})();
-// 13.11.2026: Opcje > Grafika w układzie PC: jedna kolumna, w każdym wierszu nazwa po lewej i przełącznik po prawej,
-// sekcje jako paski nagłówków, objaśnienia drobnym tekstem pod sekcją. Same przyciski i ich obsługa bez zmian.
+// 13.11.2026: Opcje > Grafika w uk�adzie PC: jedna kolumna, w ka�dym wierszu nazwa po lewej i prze��cznik po prawej,
+// sekcje jako paski nag��wk�w, obja�nienia drobnym tekstem pod sekcj�. Same przyciski i ich obs�uga bez zmian.
 (()=>{try{const pane=$('pane-gfx');if(!pane||pane.classList.contains('pcs'))return;pane.classList.add('pcs');
  const row=(lab,ctl)=>{const r=document.createElement('div');r.className='pcs-row';lab.before(r);lab.classList.add('pcs-lab');ctl.classList.add('pcs-ctl');r.append(lab,ctl);return r};
  for(const sec of pane.querySelectorAll('.pc-option-section')){
@@ -312,8 +317,8 @@ ${Z} .pcs-row.pcs-tgl>span:last-child{order:-1;flex:1 1 auto;text-align:left!imp
 ${Z} .pcs-help{margin:calc(8 * var(--pc-u,1px)) calc(22 * var(--pc-u,1px)) 0!important;max-width:none!important;text-align:left!important;font:italic 400 calc(14.5 * var(--pc-u,1px))/1.5 Georgia,serif!important;color:#a8977acc!important}`;
  document.head.append(st);
 }catch(e){quietErr('gfxPcLayout',e)}})();
-// 13.11.2026: wybór trybu w menu głównym jako delikatny przełącznik tekstowy (Fabularny | Arcade) zamiast dwóch dużych banerów.
-// Te same przyciski #sFab/#sArc i ich obsługa; zmienia się tylko wygląd. Opis widoczny tylko pod wybranym trybem.
+// 13.11.2026: wyb�r trybu w menu g��wnym jako delikatny prze��cznik tekstowy (Fabularny | Arcade) zamiast dw�ch du�ych baner�w.
+// Te same przyciski #sFab/#sArc i ich obs�uga; zmienia si� tylko wygl�d. Opis widoczny tylko pod wybranym trybem.
 (()=>{try{const S='#orient'.repeat(50)+' #title.pc-home .nb-mode-select',st=document.createElement('style');st.textContent=`
 ${S}{display:flex!important;justify-content:center!important;align-items:flex-start!important;gap:0!important;width:auto!important;height:auto!important;min-height:0!important;margin:calc(6 * var(--pc-u,1px)) auto 0!important;padding:0!important;background:none!important;border:0!important;border-image:none!important;box-shadow:none!important}
 ${S}>.nb-mode{position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:calc(3 * var(--pc-u,1px))!important;width:auto!important;min-width:calc(150 * var(--pc-u,1px))!important;height:auto!important;min-height:0!important;margin:0!important;padding:calc(4 * var(--pc-u,1px)) calc(22 * var(--pc-u,1px))!important;background:none!important;background-image:none!important;border:0!important;border-image:none!important;border-radius:0!important;box-shadow:none!important;filter:none!important;opacity:.45!important;transition:opacity .15s!important}
@@ -323,7 +328,7 @@ ${S}>.nb-mode.on,${S}>.nb-mode[aria-checked=true]{opacity:1!important}
 ${S}>.nb-mode:is(:hover,:focus-visible,.pf){opacity:.85!important;outline:0!important}
 ${S}>.nb-mode.on:is(:hover,:focus-visible,.pf){opacity:1!important}
 ${S} :is(.nb-mode__icon,.nb-mode__marker,.pc-mode-check){display:none!important}
-${'#orient'.repeat(50)} #title.pc-home .m2-logo{transform:translateY(calc(-6 * var(--pc-u,1px))) scale(1.26)!important;transform-origin:50% 0!important}/* 13.11.2026: logo większe od przycisków menu */
+${'#orient'.repeat(50)} #title.pc-home .m2-logo{transform:translateY(calc(-6 * var(--pc-u,1px))) scale(1.26)!important;transform-origin:50% 0!important}/* 13.11.2026: logo wi�ksze od przycisk�w menu */
 ${S} .pcg-glyph{--pcg-h:calc(19 * var(--pc-u,1px))!important;letter-spacing:.12em!important;color:#d9c8a6!important;padding-bottom:calc(3 * var(--pc-u,1px))!important;border-bottom:1px solid transparent!important}
 ${S}>.nb-mode.on .pcg-glyph{color:#ecc779!important;border-bottom-color:#c9a45a!important}
 ${S} .pc-mode-note{display:block!important;visibility:hidden!important;margin:0!important;font:italic 400 calc(12.5 * var(--pc-u,1px))/1.3 Georgia,serif!important;color:#a89a7fcc!important;white-space:nowrap!important}
@@ -331,16 +336,16 @@ ${S}>.nb-mode.on .pc-mode-note{visibility:visible!important}
 html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px solid #e8c16f88!important;outline-offset:2px!important;filter:none!important}`;
  document.head.append(st);
 }catch(e){quietErr('modeSwitchSoft',e)}})();
-/* ===== EDYTOR UKŁADU MENU (?edytor=1) + wbudowany układ NB_LAYOUT_DEF ===== */
+/* ===== EDYTOR UK�ADU MENU (?edytor=1) + wbudowany uk�ad NB_LAYOUT_DEF ===== */
 (function(){try{
- const NB_LAYOUT_DEF={}; /* tu trafia układ zapisany przez autora: {"selektor":[x,y,skala,"ekran"]} (x,y w % szerokości okna) */
+ const NB_LAYOUT_DEF={}; /* tu trafia uk�ad zapisany przez autora: {"selektor":[x,y,skala,"ekran"]} (x,y w % szeroko�ci okna) */
  const LSK='nbLayoutEd', LOKALNIE=location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname), EDIT=LOKALNIE&&/[?&]edytor=1/.test(location.search); /* edytor tylko u autora (serwer lokalny), na itch.io zablokowany */
  let L=Object.assign({},NB_LAYOUT_DEF);
  if(EDIT){try{const s=localStorage.getItem(LSK);if(s)L=JSON.parse(s)||L}catch(e){}}
  const st=document.createElement('style');st.id='nb-layout-css';document.head.append(st);
  const r2=v=>Math.round(v*100)/100;
  let EDM=false;
- const NB_IMG_DEF={}; /* nazwa pliku -> adres obrazu w assets (uzupełnia Claude po wgraniu obrazów) */
+ const NB_IMG_DEF={}; /* nazwa pliku -> adres obrazu w assets (uzupe�nia Claude po wgraniu obraz�w) */
  let IMG=Object.assign({},NB_IMG_DEF);
  if(EDIT){try{Object.assign(IMG,JSON.parse(localStorage.getItem('nbLayoutImg')||'{}'))}catch(e){}}
  const PRE={
@@ -351,7 +356,7 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
   krew:'background:#3a0a0e!important;border:2px solid #8a1a22!important;border-image:none!important;box-shadow:0 0 10px #8a1a2266!important;',
   kamien:'background:#2a2623!important;border:3px ridge #6b6258!important;border-image:none!important;box-shadow:inset 0 0 12px #000a!important;',
   bezobr:'border:none!important;border-image:none!important;box-shadow:none!important;'};
- const PREN={'':'Domyślny (z gry)',ciemny:'Ciemny',zlota:'Złota ramka',szklo:'Szkło',przezr:'Przezroczysty',krew:'Krwisty',kamien:'Kamień',bezobr:'Bez ramki (tło zostaje)'};
+ const PREN={'':'Domy�lny (z gry)',ciemny:'Ciemny',zlota:'Z�ota ramka',szklo:'Szk�o',przezr:'Przezroczysty',krew:'Krwisty',kamien:'Kamie�',bezobr:'Bez ramki (t�o zostaje)'};
  const PFX='#orient'.repeat(60)+' ';
  function css(){let o='',o2='';for(const k in L){const a=L[k];if(!a)continue;const e=a[4]||{};
   if(a[0]||a[1]||a[2]!==1||e.rot)o+=k+'{translate:'+r2(a[0])+'vw '+r2(a[1])+'vw!important;scale:'+(Math.round(a[2]*1000)/1000)+'!important'+(e.rot?';rotate:'+e.rot+'deg!important':'')+'}\n';
@@ -387,7 +392,7 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
    c=par}
   return p.join('>').replace(/^([^#])/,'body>$1')}
  const screenOf=el=>{const o=el.closest(OV);return o?(o.id||'inne'):'gra'};
- function pick(el){ /* pomiń elementy liniowe i malutkie */
+ function pick(el){ /* pomi� elementy liniowe i malutkie */
   while(el&&el.parentElement&&el!==document.body){
    const cs=getComputedStyle(el),r=el.getBoundingClientRect();
    if(cs.display!=='inline'&&r.width>14&&r.height>10)break;el=el.parentElement}
@@ -420,32 +425,32 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
  </style>
  <div class="box"><i class="hd a" data-h="a"></i><i class="hd b" data-h="b"></i><i class="hd c" data-h="c"></i><i class="hd d" data-h="d"></i></div>
  <div class="g gx" style="width:1px;top:0;bottom:0"></div><div class="g gy" style="height:1px;left:0;right:0"></div>
- <div class="pn"><b class="t" data-a="side">EDYTOR MENU ⇄</b>
-  <button data-a="mode" class="on">✎ Edycja (F2)</button><button data-a="undo">↶ Cofnij</button><br>
-  <button data-a="up">▲ Rodzic</button><button data-a="down">▼ Dziecko</button><button data-a="s-">Mniejszy −</button><button data-a="s+">Większy +</button><br>
+ <div class="pn"><b class="t" data-a="side">EDYTOR MENU ?</b>
+  <button data-a="mode" class="on">? Edycja (F2)</button><button data-a="undo">? Cofnij</button><br>
+  <button data-a="up"> Rodzic</button><button data-a="down"> Dziecko</button><button data-a="s-">Mniejszy -</button><button data-a="s+">Wi�kszy +</button><br>
   <button data-a="r1">Reset elementu</button><button data-a="r2">Reset ekranu</button><button data-a="r3">Reset wszystkiego</button>
 <div class="st" data-st>
-   <label><span>Własny obraz</span><input type="file" accept="image/*" data-file style="flex:1;min-width:0;pointer-events:auto"></label>
-   <label><span>Sposób</span><select data-p="fit"><option value="">Rozciągnij na cały baner</option><option value="slice">Ramka 9-pól (rogi stałe)</option></select></label>
-   <label><span>Grubość rogów %</span><input type="range" data-p="sl" min="5" max="45" value="30"></label>
-   <button data-x="img">✕ Usuń obraz</button>
+   <label><span>W�asny obraz</span><input type="file" accept="image/*" data-file style="flex:1;min-width:0;pointer-events:auto"></label>
+   <label><span>Spos�b</span><select data-p="fit"><option value="">Rozci�gnij na ca�y baner</option><option value="slice">Ramka 9-p�l (rogi sta�e)</option></select></label>
+   <label><span>Grubo�� rog�w %</span><input type="range" data-p="sl" min="5" max="45" value="30"></label>
+   <button data-x="img">? Usu� obraz</button>
   
    <label><span>Rodzaj baneru</span><select data-p="pre">${Object.keys(PREN).map(k=>'<option value="'+k+'">'+PREN[k]+'</option>').join('')}</select></label>
-   <label><span>Kolor tła</span><input type="color" data-p="bg" value="#2a1410"><button data-x="bg">✕</button></label>
-   <label><span>Kolor ramki</span><input type="color" data-p="bd" value="#e8c16f"><button data-x="bd">✕</button></label>
-   <label><span>Kolor tekstu</span><input type="color" data-p="fg" value="#f3e3b8"><button data-x="fg">✕</button></label>
-   <label><span>Przezroczystość</span><input type="range" data-p="o" min="10" max="100" value="100"></label>
-   <label><span>Jasność</span><input type="range" data-p="br" min="40" max="160" value="100"></label>
+   <label><span>Kolor t�a</span><input type="color" data-p="bg" value="#2a1410"><button data-x="bg">?</button></label>
+   <label><span>Kolor ramki</span><input type="color" data-p="bd" value="#e8c16f"><button data-x="bd">?</button></label>
+   <label><span>Kolor tekstu</span><input type="color" data-p="fg" value="#f3e3b8"><button data-x="fg">?</button></label>
+   <label><span>Przezroczysto��</span><input type="range" data-p="o" min="10" max="100" value="100"></label>
+   <label><span>Jasno��</span><input type="range" data-p="br" min="40" max="160" value="100"></label>
    <label><span>Rozmiar tekstu</span><input type="range" data-p="fs" min="50" max="200" value="100"></label>
-   <label><span>Zaokrąglenie</span><input type="range" data-p="r" min="0" max="40" value="0"></label>
-   <label><span>Obrót</span><input type="range" data-p="rot" min="-30" max="30" step="0.5" value="0"></label>
+   <label><span>Zaokr�glenie</span><input type="range" data-p="r" min="0" max="40" value="0"></label>
+   <label><span>Obr�t</span><input type="range" data-p="rot" min="-30" max="30" step="0.5" value="0"></label>
    <label><span>Ukryj element</span><input type="checkbox" data-p="hide"></label>
-   <button data-a="rstyle">Reset wyglądu elementu</button>
+   <button data-a="rstyle">Reset wygl�du elementu</button>
   </div>
   <div class="inf" data-i>Kliknij element na ekranie.</div>
-  <button data-a="copy">📋 Kopiuj układ</button><button data-a="load">⬇ Wczytaj z pola</button>
-  <textarea data-t placeholder="Tu pojawi się układ do wklejenia Claude'owi. Można też wkleić układ i kliknąć Wczytaj."></textarea>
-  <div class="hp">Przeciągnij = ruch · róg = rozmiar · strzałki = ruch (Shift ×10) · +/− = rozmiar · Del = reset elementu · Alt = bez przyciągania · F2 = przełącz Edycja/Gra (w trybie Gra klikasz po grze normalnie, żeby zmienić ekran).</div>
+  <button data-a="copy">?? Kopiuj uk�ad</button><button data-a="load">? Wczytaj z pola</button>
+  <textarea data-t placeholder="Tu pojawi si� uk�ad do wklejenia Claude'owi. Mo�na te� wklei� uk�ad i klikn�� Wczytaj."></textarea>
+  <div class="hp">Przeci�gnij = ruch  r�g = rozmiar  strza�ki = ruch (Shift �10)  +/- = rozmiar  Del = reset elementu  Alt = bez przyci�gania  F2 = prze��cz Edycja/Gra (w trybie Gra klikasz po grze normalnie, �eby zmieni� ekran).</div>
  </div>`;
  document.body.append(ui);
  box=ui.querySelector('.box');gx=ui.querySelector('.gx');gy=ui.querySelector('.gy');panel=ui.querySelector('.pn');
@@ -456,13 +461,13 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
    else if(c.type==='color')c.value=v||c.defaultValue;
    else c.value=v!=null?v:(n==='r'||n==='rot'?0:n==='sl'?30:100)})}
  function info(){syncSt();if(!sel){inf.textContent='Kliknij element na ekranie.';return}
-  const k=keyOf(sel),a=get(k);inf.innerHTML='<b>'+screenOf(sel)+'</b> · '+k.replace(/^body>/,'').slice(-70)+'<br>x '+a[0]+' · y '+a[1]+' · skala '+a[2]}
+  const k=keyOf(sel),a=get(k);inf.innerHTML='<b>'+screenOf(sel)+'</b>  '+k.replace(/^body>/,'').slice(-70)+'<br>x '+a[0]+'  y '+a[1]+'  skala '+a[2]}
  function draw(){if(!sel||!document.contains(sel)||mode!=='edit'){box.style.display='none';return}
   const r=sel.getBoundingClientRect();if(r.width<1){box.style.display='none';return}
   Object.assign(box.style,{display:'block',left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'})}
  (function lp(){draw();requestAnimationFrame(lp)})();
  function setMode(m){mode=m;EDM=m==='edit';css();document.body.classList.toggle('nbed-edit',m==='edit');
-  const b=ui.querySelector('[data-a=mode]');b.classList.toggle('on',m==='edit');b.textContent=m==='edit'?'✎ Edycja (F2)':'▶ Gra (F2)';draw()}
+  const b=ui.querySelector('[data-a=mode]');b.classList.toggle('on',m==='edit');b.textContent=m==='edit'?'? Edycja (F2)':'? Gra (F2)';draw()}
  setMode('edit');
  /* ---- blokada gry w trybie edycji ---- */
  const stop=e=>{if(mode!=='edit'||inUi(e.target))return;e.preventDefault();e.stopImmediatePropagation()};
@@ -526,7 +531,7 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
   fr.onload=()=>{const im=new Image();im.onload=()=>{
    const sc=Math.min(1,1200/im.width),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);
    c.getContext('2d').drawImage(im,0,0,c.width,c.height);IMG[name]=c.toDataURL('image/webp',.88);
-   try{localStorage.setItem('nbLayoutImg',JSON.stringify(IMG))}catch(x){inf.textContent='Obraz za duży do zapamiętania w przeglądarce – działa do odświeżenia.'}
+   try{localStorage.setItem('nbLayoutImg',JSON.stringify(IMG))}catch(x){inf.textContent='Obraz za du�y do zapami�tania w przegl�darce - dzia�a do od�wie�enia.'}
    stPush=true;setX('img',name);save();f.value=''};im.src=fr.result};fr.readAsDataURL(file)});
  let stPush=false;
  ui.addEventListener('pointerdown',e=>{if(e.target.closest('[data-st]'))stPush=true});
@@ -554,10 +559,10 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
   else if(a==='r2'&&sel){const sc=screenOf(sel);push();for(const q in L)if(L[q][3]===sc)delete L[q];save()}
   else if(a==='r3'){push();L={};save()}
   else if(a==='copy'){const t=dump();ta.value=t;ta.select();
-   let ok=false;try{navigator.clipboard.writeText(t).then(()=>{b.textContent='✓ Skopiowano'},()=>{b.textContent='Zaznacz i Ctrl+C'});ok=true}catch(x){}
-   if(!ok){try{document.execCommand('copy');b.textContent='✓ Skopiowano'}catch(x){b.textContent='Zaznacz i Ctrl+C'}}
-   setTimeout(()=>{b.textContent='📋 Kopiuj układ'},2000)}
-  else if(a==='load'){const m=ta.value.match(/\{[\s\S]*\}/);if(m){try{push();L=JSON.parse(m[0]);save()}catch(x){inf.textContent='Błędny układ w polu.'}}}
+   let ok=false;try{navigator.clipboard.writeText(t).then(()=>{b.textContent='? Skopiowano'},()=>{b.textContent='Zaznacz i Ctrl+C'});ok=true}catch(x){}
+   if(!ok){try{document.execCommand('copy');b.textContent='? Skopiowano'}catch(x){b.textContent='Zaznacz i Ctrl+C'}}
+   setTimeout(()=>{b.textContent='?? Kopiuj uk�ad'},2000)}
+  else if(a==='load'){const m=ta.value.match(/\{[\s\S]*\}/);if(m){try{push();L=JSON.parse(m[0]);save()}catch(x){inf.textContent='B��dny uk�ad w polu.'}}}
  });
 }catch(e){quietErr('menuEditor',e)}})();
 requestAnimationFrame(frame);

@@ -1,5 +1,5 @@
 // Accessible title presentation; existing checkbox change handler owns mode/save logic.
-function syncTitleMode(){for(const [id,selected] of [['sFab',!$('storyTgl').checked],['sArc',$('storyTgl').checked]]){const b=$(id);b.setAttribute('aria-checked',String(selected));b.removeAttribute('aria-pressed');b.tabIndex=selected?0:-1}$('storyModeHint').textContent=$('storyTgl').checked?(EN?'All acts right away.':'Wszystkie rozdziały od razu.'):(EN?'You unlock acts one by one.':'Rozdziały odblokowujesz po kolei.')}
+function syncTitleMode(){for(const [id,selected] of [['sFab',!$('storyTgl').checked],['sArc',$('storyTgl').checked]]){const b=$(id);b.setAttribute('aria-checked',String(selected));b.removeAttribute('aria-pressed');b.tabIndex=selected?0:-1}$('storyModeHint').textContent=$('storyTgl').checked?(EN?'All acts right away.':'Wszystkie rozdzia�y od razu.'):(EN?'You unlock acts one by one.':'Rozdzia�y odblokowujesz po kolei.')}
 $('storyTgl').addEventListener('change',syncTitleMode);new MutationObserver(syncTitleMode).observe($('sFab'),{attributes:true,attributeFilter:['class']});syncTitleMode();
 $('sFab').parentElement.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Enter',' '].includes(e.key))return;e.preventDefault();e.stopPropagation();if(e.repeat)return;const b=e.key==='ArrowLeft'?$('sFab'):e.key==='ArrowRight'?$('sArc'):e.target.closest('[role=radio]');if(b){b.click();b.focus()}});
 
@@ -45,9 +45,9 @@ ${scope} :is(.premium-nav>button,.premium-journey,.premium-go,.modesw button,.pr
 ${scope} #opts button.go{padding:16px 32px!important;min-height:54px!important;height:auto!important;max-width:100%!important;white-space:normal!important;font:700 18px/1.2 Grenze,Georgia,serif!important;text-align:center!important}
 @media(max-height:550px){${scope} #opts button.go{font-size:16px!important}}
 /* Persistent selection marks are distinct from the transient red hover banner. */
-${scope} #diffSw .premium-difficulty.on:before{content:'✓'!important;position:static!important;display:inline-block!important;flex:none!important;margin:0 .45em 0 0!important;padding:0!important;background:none!important;border:0!important;transform:none!important;color:#ffe2a2!important;font:800 .9em/1 Georgia,serif!important}
+${scope} #diffSw .premium-difficulty.on:before{content:'?'!important;position:static!important;display:inline-block!important;flex:none!important;margin:0 .45em 0 0!important;padding:0!important;background:none!important;border:0!important;transform:none!important;color:#ffe2a2!important;font:800 .9em/1 Georgia,serif!important}
 
-${scope} .premium-map .m2-ch.premium-selected:before{content:'✓ ' attr(data-roman)!important;background:#211b12ed!important;color:#ffe2a2!important;padding:2px 7px!important;font-weight:800!important;text-shadow:0 2px 2px #000!important}
+${scope} .premium-map .m2-ch.premium-selected:before{content:'? ' attr(data-roman)!important;background:#211b12ed!important;color:#ffe2a2!important;padding:2px 7px!important;font-weight:800!important;text-shadow:0 2px 2px #000!important}
 ${scope} .premium-map .m2-ch.premium-selected:after{color:#ffe2a2!important;background:#211b12ed!important}
 ${scope} :is(#prepPerks,#prepCh,#prepCurseL) .opt.on{background:linear-gradient(115deg,#534025,#30271d 65%,#211c17)!important;position:relative!important}
 ${scope} :is(#prepPerks,#prepCh,#prepCurseL) .opt.on:after{content:none!important}
@@ -97,12 +97,12 @@ ${scope} #skillLoadout .slot-tab .empty-name{grid-row:2/4!important}
 @media(max-height:550px){${scope} #skillLoadout .slot-tab{min-height:128px!important;padding:28px 16% 26px!important;gap:5px!important}${scope} #skillLoadout .slot-tab .loadout-key{font-size:12px!important}${scope} #skillLoadout .slot-tab .loadout-name{font-size:15px!important}}
 /* Regression fixes: persistent loadout selection, painted inventory actions, agreed Chronicle type. */
 ${scope} #skillLoadout .slot-tab.chosen .loadout-key{color:#ffe2a2!important}
-${scope} #skillLoadout .slot-tab.chosen .loadout-key:after{content:' ✓';color:#ffe2a2;font-size:19px;font-weight:800}
+${scope} #skillLoadout .slot-tab.chosen .loadout-key:after{content:' ?';color:#ffe2a2;font-size:19px;font-weight:800}
 ${scope} #skillLoadout .slot-inventory button.go{padding:26px 12%!important;min-height:116px!important;grid-template-columns:40px minmax(0,1fr)!important;background-position:center!important;background-size:100% 100%!important;background-repeat:no-repeat!important}
 ${scope} #skillLoadout .slot-inventory button.go .ic{width:40px!important;height:40px!important}
 ${scope} #skillLoadout .slot-inventory button.go:not(:hover):not(:focus-visible):not(.pf){background-image:url('assets/ui/42b2bf5e40f0b339e8de7ada0e7158c311f35714370b56a33b11e2586e0dc3ea.webp')!important}
 ${scope} #skillLoadout .slot-inventory button.selected-skill .loadout-copy{color:#ffe2a2!important;padding-right:25px!important}
-${scope} #skillLoadout .slot-inventory button.selected-skill:after{content:'✓';position:absolute;right:12%;top:26px;color:#ffe2a2;font:800 22px/1 Georgia,serif;pointer-events:none}
+${scope} #skillLoadout .slot-inventory button.selected-skill:after{content:'?';position:absolute;right:12%;top:26px;color:#ffe2a2;font:800 22px/1 Georgia,serif;pointer-events:none}
 ${scope}:has(.nbui-kron-row) #kapDet p{font-size:19px!important}
 ${scope}:has(.nbui-kron-row) #kapDet small{font-size:16px!important}
 ${scope} #prepCurse>p,${scope} #prepCurse>h3{flex:none!important}
@@ -262,10 +262,10 @@ const PREMIUM_ASSETS={"portret-kat": "assets/ui/2e521529cc87cb038d6f06ceadb3fef8
 const title=$('title'),logo=title.querySelector('.m2-logo'),chapters=title.querySelector('.m2-right');
 const el=(tag,cls)=>{const n=document.createElement(tag);n.className=cls;return n};
 const mast=el('header','premium-mast'),body=el('div','premium-body'),nav=el('nav','premium-nav'),map=el('section','premium-map'),banner=el('div','premium-banner'),hero=el('aside','premium-hero'),portrait=el('img','premium-portrait'),caption=el('h2','premium-caption'),ashes=el('div','premium-ashes'),name=el('b','premium-name'),go=el('button','premium-go');
-go.type='button';go.id='premiumPrepare';go.textContent=EN?'PREPARE':'PRZYGOTUJ SIĘ';
+go.type='button';go.id='premiumPrepare';go.textContent=EN?'PREPARE':'PRZYGOTUJ SI�';
 let chosen=1;
 title.classList.remove('m2');logo.style.backgroundImage='url(assets/ui/702ff214967aa716ea2d0daa9f67099929b12d3a46f35dad3e3ca018d13feb1a.webp)';mast.append(logo);banner.append(caption);map.append(banner,chapters);hero.append(ashes,portrait,name,$('charCard'),go);const xp=el('div','premium-xp');hero.insertBefore(xp,go);
-const journey=el('button','premium-journey');journey.type='button';journey.textContent=EN?'Journey':'Podróż';nav.append(journey,$('kapBtn'),$('manBtn'),$('optsBtn'));
+const journey=el('button','premium-journey');journey.type='button';journey.textContent=EN?'Journey':'Podr��';nav.append(journey,$('kapBtn'),$('manBtn'),$('optsBtn'));
 const kapLabel=el('span','premium-kap-label');kapLabel.textContent=EN?'Shrine':'Kaplica';nav.querySelector('#kapBtn').append(kapLabel);
 const controls=el('div','premium-controls');controls.append(title.querySelector('.m2-assist'),title.querySelector('.m2-mode'));nav.append(controls);
 // Stage 2: keep the mode selector outside the navigation's scroll area.
@@ -278,9 +278,9 @@ function refresh(){
  const q=prog(),c=q.char||'r',p=PREMIUM_ASSETS['portret-'+HEROES[c].art];
  if(portrait.getAttribute('src')!==p)portrait.src=p;
  portrait.alt='';name.textContent=heroName(c,true);name.title=HEROES[c].cls;
- name.textContent+=' · '+(EN?'Level ':'Poziom ')+q.lv;xp.textContent=q.lv>=PMAX?(EN?'Max level':'Poziom maksymalny'):q.xp+' / '+PNEED(q.lv)+' XP';xp.style.setProperty('--xp',String(q.lv>=PMAX?1:q.xp/PNEED(q.lv)));ashes.textContent=EMB.e+' '+(EN?'Ashes':'Popiołów');caption.textContent=CHN[chosen-1];
+ name.textContent+='  '+(EN?'Level ':'Poziom ')+q.lv;xp.textContent=q.lv>=PMAX?(EN?'Max level':'Poziom maksymalny'):q.xp+' / '+PNEED(q.lv)+' XP';xp.style.setProperty('--xp',String(q.lv>=PMAX?1:q.xp/PNEED(q.lv)));ashes.textContent=EMB.e+' '+(EN?'Ashes':'Popio��w');caption.textContent=CHN[chosen-1];
  banner.style.backgroundImage='linear-gradient(0deg,#080808,transparent 65%),'+url('rozdzial-'+chosen);
- for(let i=1;i<=5;i++){$('start'+i).style.backgroundImage=url('rozdzial-'+i+'-mini');$('start'+i).classList.toggle('premium-selected',chosen===i);$('start'+i).dataset.roman=CHR[i-1];$('start'+i).dataset.status=chLocked(i)?(EN?'Complete Act ':'Ukończ rozdział ')+CHR[i-2]:SETT.save['s'+i]?.win?(EN?'Completed':'Ukończony'):SETT.save['s'+i]?(EN?'Not completed':'Nieukończony'):'';$('start'+i).setAttribute('aria-label',CHN[i-1]+($('start'+i).dataset.status?' — '+$('start'+i).dataset.status:''))}
+ for(let i=1;i<=5;i++){$('start'+i).style.backgroundImage=url('rozdzial-'+i+'-mini');$('start'+i).classList.toggle('premium-selected',chosen===i);$('start'+i).dataset.roman=CHR[i-1];$('start'+i).dataset.status=chLocked(i)?(EN?'Complete Act ':'Uko�cz rozdzia� ')+CHR[i-2]:SETT.save['s'+i]?.win?(EN?'Completed':'Uko�czony'):SETT.save['s'+i]?(EN?'Not completed':'Nieuko�czony'):'';$('start'+i).setAttribute('aria-label',CHN[i-1]+($('start'+i).dataset.status?' - '+$('start'+i).dataset.status:''))}
  go.disabled=$('start'+chosen).disabled;
 }
 for(let i=1;i<=5;i++){const b=$('start'+i);b.addEventListener('pointerenter',e=>{if(e.isTrusted)return;chosen=i;refresh()});b.addEventListener('click',()=>{chosen=i;refresh()})}
@@ -340,9 +340,9 @@ const style=el('style','premium-style');style.textContent=`
 $('manBtn').setAttribute('aria-label',EN?'Guide':'Instrukcja');
 // 8.11.2026: control diagrams match the four skill slots (Q E F R / LT+X Y B A); R rerolls only on the level-up screen
 {const fix=(sel,old,html)=>{const e=[...document.querySelectorAll(sel)].find(x=>x.textContent.replace(/\s+/g,' ').trim().startsWith(old));if(e)e.innerHTML=html};
- fix('#sub-kb .lb, .fig .lb','Q E F',EN?'<b>Q E F R</b> Skills · <b>Enter</b> Talk':'<b>Q E F R</b> Skille · <b>Enter</b> Rozmowa');
- fix('#sub-kb .lb, .fig .lb','1 2 3',EN?'<b>1–4</b> Pick card · <b>R</b> Reroll':'<b>1–4</b> Wybór karty · <b>R</b> Przerzut');
- fix('.fig.pad .lb','LT',EN?'<b>LT</b> Skills + X / Y / B / A':'<b>LT</b> Umiejętności + X / Y / B / A')}
+ fix('#sub-kb .lb, .fig .lb','Q E F',EN?'<b>Q E F R</b> Skills  <b>Enter</b> Talk':'<b>Q E F R</b> Skille  <b>Enter</b> Rozmowa');
+ fix('#sub-kb .lb, .fig .lb','1 2 3',EN?'<b>1-4</b> Pick card  <b>R</b> Reroll':'<b>1-4</b> Wyb�r karty  <b>R</b> Przerzut');
+ fix('.fig.pad .lb','LT',EN?'<b>LT</b> Skills + X / Y / B / A':'<b>LT</b> Umiej�tno�ci + X / Y / B / A')}
 for(const [button,key] of [[journey,'nawigacja-podroz'],[$('kapBtn'),'kaplica-cos_seal'],[$('manBtn'),'tryby-fabula'],[$('optsBtn'),'nawigacja-opcje']]){
  const im=el('img','premium-nav-icon');im.src=PREMIUM_ICONS[key];im.alt='';im.width=28;im.height=28;button.prepend(im);
 }
@@ -376,7 +376,7 @@ const prepStyle=el('style','premium-prep-style');prepStyle.textContent=`
 new MutationObserver(()=>{if($('prep').hidden)for(const im of $('prep').querySelectorAll('img.premium-class-art,img.premium-perk-art'))im.removeAttribute('src')}).observe($('prep'),{attributes:true,attributeFilter:['hidden']});
 const prep=$('prep'),prepHead=el('header','premium-prep-head'),prepBody=el('div','premium-prep-body'),prepControls=el('aside','premium-prep-controls');
 prepHead.style.flexShrink='0';prepHead.append($('prepBack'),$('prepK'));
-const difficultyTitle=el('h3','premium-difficulty-title');difficultyTitle.textContent=EN?'Difficulty':'Trudność';
+const difficultyTitle=el('h3','premium-difficulty-title');difficultyTitle.textContent=EN?'Difficulty':'Trudno��';
 prepControls.append(difficultyTitle,$('diffSw'),$('diffCap'),prep.querySelector('.prepassist'),prep.querySelector('.btnrow'));
 prepBody.append(prep.querySelector('.prepgrid'),prepControls);prep.append(prepHead,prepBody);
 // Stage 3: only explanatory controls scroll; difficulty, summary and launch stay in view.
@@ -386,9 +386,9 @@ prepSummary.setAttribute('role','status');prepSummary.setAttribute('aria-live','
 prepControls.insertBefore(controlScroll,prepControls.querySelector('.btnrow'));
 prepControls.insertBefore(prepSummary,prepControls.querySelector('.btnrow'));
 function refreshPrepSummary(){if(prep.hidden)return;const pc=$('prepChar');if(pc){let info=pc.querySelector('.premium-class-description');if(!info){info=el('p','premium-class-description');pc.append(info)}const selected=pc.querySelector('.opt.on>span'),description=selected?.textContent||'';if(info.textContent!==description)info.textContent=description;for(const b of pc.querySelectorAll('.opt')){const text=b.querySelector('span')?.textContent||'';if(b.title!==text)b.title=text}}
-const cls=heroName(charId()),counts=(EN?'Perks ':'Perki ')+PREP.perks.length+'/1 · '+(EN?'Challenges ':'Wyzwania ')+(PREP.chal?1:0)+' · '+(EN?'Curses ':'Klątwy ')+PREP.curses.length+'/3',text=cls+' · '+DF[DIFFK].n+'\n'+counts;
+const cls=heroName(charId()),counts=(EN?'Perks ':'Perki ')+PREP.perks.length+'/1  '+(EN?'Challenges ':'Wyzwania ')+(PREP.chal?1:0)+'  '+(EN?'Curses ':'Kl�twy ')+PREP.curses.length+'/3',text=cls+'  '+DF[DIFFK].n+'\n'+counts;
  if(prepSummary.textContent!==text)prepSummary.textContent=text;
- const detail=[...PERKS.filter(x=>PREP.perks.includes(x.id)).map(x=>x.n),...chalList().filter(x=>x.id===PREP.chal).map(x=>x.n),...CURSES.filter(x=>PREP.curses.includes(x.id)).map(x=>x.n)].join(' · ');if(prepSummary.title!==detail)prepSummary.title=detail;
+ const detail=[...PERKS.filter(x=>PREP.perks.includes(x.id)).map(x=>x.n),...chalList().filter(x=>x.id===PREP.chal).map(x=>x.n),...CURSES.filter(x=>PREP.curses.includes(x.id)).map(x=>x.n)].join('  ');if(prepSummary.title!==detail)prepSummary.title=detail;
 }
 new MutationObserver(refreshPrepSummary).observe(prep,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden','class','aria-pressed']});
 
@@ -512,7 +512,7 @@ Object.assign(PREMIUM_ICONS,{'skille-odlew':'assets/ikony/148dbad2e707a9efbdb5ae
 for(const [key,src] of Object.entries(PREMIUM_ICONS)){if(!key.startsWith('skille-'))continue;const k=key.slice(7);windowStyle.textContent+=`:is(#lvl,#pause,#manual) [data-premium-skill="${k}"]{background:url('${src}') center/contain no-repeat!important;width:64px!important;height:64px!important;display:inline-block!important;image-rendering:auto!important;filter:none!important;mask:none!important}:is(#lvl,#pause,#manual) [data-premium-skill="${k}"]:before,:is(#lvl,#pause,#manual) [data-premium-skill="${k}"]:after{content:none!important}@media(max-height:550px){:is(#lvl,#pause,#manual) [data-premium-skill="${k}"]{width:40px!important;height:40px!important}}`}
 windowStyle.textContent=windowStyle.textContent.replace(/:is\(#[^)]*\)|#(?:pause|shop|conf|end|lvl|msg|dialog)\b/g,m=>'#orient#orient#orient#orient#orient#orient#orient#orient#orient '+m);document.head.append(windowStyle);
 // Final sizing corrections requested after reviewing cache 432.
-for(const b of $('diffSw').querySelectorAll('[data-d]')){b.classList.remove('mlab');b.classList.add('premium-difficulty');b.textContent=({e:EN?'Easy':'Łatwy',n:EN?'Normal':'Normalny',h:EN?'Hard':'Trudny'})[b.dataset.d]}
+for(const b of $('diffSw').querySelectorAll('[data-d]')){b.classList.remove('mlab');b.classList.add('premium-difficulty');b.textContent=({e:EN?'Easy':'�atwy',n:EN?'Normal':'Normalny',h:EN?'Hard':'Trudny'})[b.dataset.d]}
 $('prepBack').classList.remove('backar');$('prepBack').classList.add('premium-back');
 const corrections=el('style','premium-review-corrections');corrections.textContent=`
 #prep .premium-prep-body{grid-template-columns:minmax(0,1fr) clamp(280px,23vw,360px)!important}
@@ -612,11 +612,11 @@ const root=mk('div','nbh',`<section class="nbh-vitals"><div class="nbh-id"><span
  `<div class="nbh-chal" hidden><small>${T('WYZWANIE NOCY','NIGHT CHALLENGE')}</small><span></span><i></i></div><div class="nbh-more"></div></section>`+
  `<section class="nbh-night"><small></small><strong></strong><span class="nbh-coins"><img alt="" src="${PREMIUM_ICONS['kaplica-purse']}"><b>0</b><small>${T('monet','coins')}</small></span></section>`+
  `<div class="nbh-radar"></div><div class="nbh-hint"></div>`+
- `<section class="nbh-boss" hidden><div class="nbh-bh"><small>${T('WŁADCA NOCY','LORD OF THE NIGHT')}</small><strong></strong><span></span></div><div class="nbh-btr"><i></i></div><div class="nbh-poise"><i></i></div></section>`);
+ `<section class="nbh-boss" hidden><div class="nbh-bh"><small>${T('W�ADCA NOCY','LORD OF THE NIGHT')}</small><strong></strong><span></span></div><div class="nbh-btr"><i></i></div><div class="nbh-poise"><i></i></div></section>`);
 root.id='nbHud';root.hidden=true;hudEl.after(root);
 const q=s=>root.querySelector(s),V={lv:q('.nbh-lv span'),hp:q('.nbh-hp'),st:q('.nbh-st'),mn:q('.nbh-mn'),xp:q('.nbh-xp i'),xpv:q('.nbh-xpv'),chal:q('.nbh-chal'),more:q('.nbh-more'),
  ph:q('.nbh-night>small'),clk:q('.nbh-night>strong'),coin:q('.nbh-coins b'),radar:q('.nbh-radar'),hint:q('.nbh-hint'),boss:q('.nbh-boss'),bn:q('.nbh-bh strong'),bp:q('.nbh-bh span'),bf:q('.nbh-btr i'),pf:q('.nbh-poise i')};
-V.radar.append($('mini'));ash.dataset.cap=T('AKTYWNE UMIEJĘTNOŚCI','ACTIVE SKILLS');
+V.radar.append($('mini'));ash.dataset.cap=T('AKTYWNE UMIEJ�TNO�CI','ACTIVE SKILLS');
 const setBar=(row,v,mx)=>{row.querySelector('.nbh-tr i').style.width=(Math.max(0,Math.min(1,v/mx))*100).toFixed(2)+'%';row.querySelector('.nbh-lab span').innerHTML=`${Math.max(0,Math.ceil(v))} <i>/ ${Math.round(mx)}</i>`};
 // skale: PC liczony od 1280x720, dotyk od 844x390 (jak w makiecie)
 let lastScale='';
@@ -639,7 +639,7 @@ function upd(){const show=!!S&&!hudEl.hidden;root.hidden=!show;if(!show){shown=f
  if(key!==last){last=key;V.lv.textContent=S.lvl;setBar(V.hp,hp,mx);setBar(V.st,pl.sta||0,sm);setBar(V.mn,pl.mana||0,mm);root.classList.toggle('low',hp<mx*.3);{const fq=!!SETT.flash;V.hp.classList.toggle('q4',fq&&hp>0&&hp<=mx*.25);V.st.classList.toggle('q4',fq&&(pl.sta||0)<=sm*.25);V.mn.classList.toggle('q4',fq&&(pl.mana||0)<=mm*.25)}
   const xr=Math.max(0,Math.min(1,S.xp/(S.need||1)));V.xp.style.width=(xr*100).toFixed(1)+'%';V.xpv.textContent=Math.floor(xr*100)+'%';V.coin.textContent=S.coins;
   const m=tt.match(/^(.*?)\s+(\d+:\d\d)$/);if(m){V.ph.textContent=m[1];V.clk.textContent=m[2];V.clk.classList.remove('txt')}
-  else{V.ph.textContent=S.dg?T('Krypta','Crypt'):S.stage==='break'?T('Przerwa','Break'):S.stage==='collector'?T('Zagrożenie','Threat'):T('Finał Nocy','Night\'s end');V.clk.textContent=tt.replace(/^[^·]*·\s*/,'').replace(/!$/,'');V.clk.classList.add('txt')}
+  else{V.ph.textContent=S.dg?T('Krypta','Crypt'):S.stage==='break'?T('Przerwa','Break'):S.stage==='collector'?T('Zagro�enie','Threat'):T('Fina� Nocy','Night\'s end');V.clk.textContent=tt.replace(/^[^]*\s*/,'').replace(/!$/,'');V.clk.classList.add('txt')}
   V.chal.hidden=ch.hidden;if(!ch.hidden){const t=ch.textContent,i=t.indexOf(': ');V.chal.querySelector('span').textContent=i>0?t.slice(0,i):t;V.chal.querySelector('i').textContent=i>0?t.slice(i+2):'';V.chal.classList.toggle('done',ch.classList.contains('done'))}
   V.hint.innerHTML='';V.hint.hidden=true}
  V.st.classList.toggle('flash',$('stam').classList.contains('flash'));V.mn.classList.toggle('flash',$('mana').classList.contains('flash'));
@@ -688,7 +688,7 @@ ${NB} .nbh-chal{margin:12px 0 0 2px;padding-left:10px;border-left:2px solid #a27
 ${NB} .nbh-chal small{display:block;font-size:9px;letter-spacing:1.6px;color:#ceb68f}
 ${NB} .nbh-chal span{display:block;font-size:19px;line-height:1.15}
 ${NB} .nbh-chal i{display:block;font-size:13px;color:#c4b89f;font-style:normal}
-${NB} .nbh-chal.done span:before{content:'✓ ';color:#d8c27a}
+${NB} .nbh-chal.done span:before{content:'? ';color:#d8c27a}
 ${NB} .nbh-more #buffs{position:static!important;margin:8px 0 0 2px!important;font-size:12px!important;line-height:1.35;max-width:240px}
 ${NB} .nbh-more #chips{position:static!important;margin:6px 0 0!important;flex-wrap:wrap}
 ${NB} .nbh-night{position:absolute;top:34px;right:calc(24px + 104px*var(--hs,1));text-align:right;transform:scale(var(--hs,1));transform-origin:100% 0;text-shadow:-1px 0 #050609,1px 0 #050609,0 -1px #050609,0 1px #050609,0 2px 3px #000}
@@ -795,7 +795,7 @@ const bt0=bannerTick;
 bannerTick=function(dt){
  bt0(dt);
  const b=S&&S.banner;
- if(b){const k=b.kind==='boss'?T('NIEBEZPIECZEŃSTWO','DANGER'):b.kind==='hint'?'':NBJ.place();if(msg.dataset.k!==k)msg.dataset.k=k}
+ if(b){const k=b.kind==='boss'?T('NIEBEZPIECZE�STWO','DANGER'):b.kind==='hint'?'':NBJ.place();if(msg.dataset.k!==k)msg.dataset.k=k}
  if(!S||S.phase!=='play'){gS=null;return}
  if(gS!==S){gS=S;gC=S.coins;gAcc=0;gT=0;gain.classList.remove('on')}
  const hold=!!(S.paused||S.choosing||S.shop||S.dialog||S.intro||S.witChoice);
@@ -830,22 +830,22 @@ const mus=pbox.querySelector('.musSl'),sfx=pbox.querySelector('.sfxSl'),fts=pbox
 const lab=i=>i.closest('label');
 pz.classList.add('nbp');
 const top=mk('header','nbp-head'),sub=mk('span','nbp-sub'),wrap=mk('div','nbp-layout'),nav=mk('nav','nbp-nav'),panel=mk('section','nbp-panel');
-top.append(head,sub);nav.setAttribute('aria-label',T('Zakładki pauzy','Pause tabs'));
-const TABS=[['skills',T('Umiejętności','Skills')],['controls',T('Sterowanie','Controls')],['audio','Audio'],['gfx',T('Grafika','Graphics')],['journal',T('Dziennik','Journal')],['map',T('Mapa','Map')]];
+top.append(head,sub);nav.setAttribute('aria-label',T('Zak�adki pauzy','Pause tabs'));
+const TABS=[['skills',T('Umiej�tno�ci','Skills')],['controls',T('Sterowanie','Controls')],['audio','Audio'],['gfx',T('Grafika','Graphics')],['journal',T('Dziennik','Journal')],['map',T('Mapa','Map')]];
 const panes={};
 for(const [k,n] of TABS){const b=mk('button','nbp-tab',n);b.type='button';b.dataset.nbp=k;b.setAttribute('aria-pressed','false');nav.append(b);const d=mk('div','nbp-pane');d.dataset.pane=k;d.hidden=true;panes[k]=d;panel.append(d)}
 nav.append(row);
 panes.skills.append(load);panes.controls.append(keys);
 const card=(inp,name,desc)=>{const a=mk('article','nbp-audio',`<div class="nbp-al"><span>${name}</span><output>0<span>%</span></output></div><p>${desc}</p>`);a.append(lab(inp));a.append(mk('div','nbp-scale',`<span>${T('Wycisz','Mute')}</span><span>100%</span>`));return a};
 const aud=mk('div','nbp-audiogrid');
-aud.append(mk('div','nbp-ah',`<small>${T('USTAWIENIA DŹWIĘKU','SOUND SETTINGS')}</small><h2>Audio</h2><p>${T('Dopasuj muzykę i odgłosy walki.','Adjust the music and the sounds of combat.')}</p>`),
- card(mus,T('Muzyka','Music'),T('Muzyka świata i walk z bossami.','Music of the world and boss fights.')),
- card(sfx,T('Efekty','Effects'),T('Ciosy, umiejętności i dźwięki otoczenia.','Blows, skills and ambient sounds.')));
+aud.append(mk('div','nbp-ah',`<small>${T('USTAWIENIA D�WI�KU','SOUND SETTINGS')}</small><h2>Audio</h2><p>${T('Dopasuj muzyk� i odg�osy walki.','Adjust the music and the sounds of combat.')}</p>`),
+ card(mus,T('Muzyka','Music'),T('Muzyka �wiata i walk z bossami.','Music of the world and boss fights.')),
+ card(sfx,T('Efekty','Effects'),T('Ciosy, umiej�tno�ci i d�wi�ki otoczenia.','Blows, skills and ambient sounds.')));
 const more=mk('article','nbp-audio nbp-more',`<div class="nbp-al"><span>${T('Napisy','Text')}</span></div>`);more.append(lab(fts),lab(dmg));aud.append(more);
 panes.audio.append(aud);pbox.remove();
 const jr=mk('div','nbp-journal');panes.journal.append(jr);
-// 9.11.2026: pełna mapa rozdziału w pauzie (odkryte tereny, kapliczki, ogniska, kupiec, boss, zapiska, gracz)
-const mp=mk('div','nbp-map',`<small>${T('PAUZA · MAPA','PAUSE · MAP')}</small><h2>${T('Mapa rozdziału','Act map')}</h2><canvas width="624" height="546"></canvas><ul class="nbp-leg"><li><i style="background:#fff"></i>${T('Ty','You')}</li><li><i style="background:#7fd0ff"></i>${T('Kapliczka','Shrine')}</li><li><i style="background:#ff8a2a"></i>${T('Ognisko','Campfire')}</li><li><i style="background:#e0b84a"></i>${T('Kupiec','Merchant')}</li><li><i style="background:#ff2a2a"></i>Boss</li><li><i style="background:#f3d38a;border-radius:2px"></i>${T('Zapiska','Note')}</li></ul>`);panes.map.append(mp);
+// 9.11.2026: pe�na mapa rozdzia�u w pauzie (odkryte tereny, kapliczki, ogniska, kupiec, boss, zapiska, gracz)
+const mp=mk('div','nbp-map',`<small>${T('PAUZA  MAPA','PAUSE  MAP')}</small><h2>${T('Mapa rozdzia�u','Act map')}</h2><canvas width="624" height="546"></canvas><ul class="nbp-leg"><li><i style="background:#fff"></i>${T('Ty','You')}</li><li><i style="background:#7fd0ff"></i>${T('Kapliczka','Shrine')}</li><li><i style="background:#ff8a2a"></i>${T('Ognisko','Campfire')}</li><li><i style="background:#e0b84a"></i>${T('Kupiec','Merchant')}</li><li><i style="background:#ff2a2a"></i>Boss</li><li><i style="background:#f3d38a;border-radius:2px"></i>${T('Zapiska','Note')}</li></ul>`);panes.map.append(mp);
 function drawPauseMap(){const c=mp.querySelector('canvas');c.width=MW*6;c.height=MH*6;const g=c.getContext('2d'),k=6;g.imageSmoothingEnabled=false;g.fillStyle='#050407';g.fillRect(0,0,c.width,c.height);if(!S||!W||!W.mini)return;
  g.drawImage(W.mini,0,0,MW*k,MH*k);g.globalAlpha=.82;g.drawImage(MINI.fog,0,0,MW*k,MH*k);g.globalAlpha=1;
  const dot=(x,y,r,col,ring)=>{g.fillStyle=col;g.beginPath();g.arc(x*k,y*k,r,0,6.2832);g.fill();if(ring){g.strokeStyle=col;g.lineWidth=2;g.beginPath();g.arc(x*k,y*k,r+5,0,6.2832);g.stroke()}};
@@ -855,7 +855,7 @@ function drawPauseMap(){const c=mp.querySelector('canvas');c.width=MW*6;c.height
  if(S.note&&!S.note.got){g.fillStyle='#f3d38a';g.fillRect(S.note.x/16*k-5,S.note.y/16*k-4,10,8);g.strokeStyle='#6a4a2a';g.strokeRect(S.note.x/16*k-5,S.note.y/16*k-4,10,8)}
  for(const e of S.enemies)if(!e.dead&&(bossBar(e)||e.hunt))dot(e.x/16,e.y/16,7,e.hunt?'#ffd04a':'#ff2a2a',1);
  for(const p of [pl2,pl])if(p&&!p.dead){dot(p.x/16,p.y/16,9,'rgba(255,255,255,.25)');dot(p.x/16,p.y/16,5,p===pl?'#ffffff':'#9ad0ff')}}
-function journal(){const L=NBJ.S===S?NBJ.log:[];jr.innerHTML=`<small>${STORYMODE?T('PAUZA · FABUŁA','PAUSE · STORY'):T('PAUZA · ARCADE','PAUSE · ARCADE')}</small><h2>${T('Dziennik Nocy','Night Journal')}</h2><p class="nbp-jp"></p><ol></ol>`;jr.querySelector('.nbp-jp').textContent=NBJ.place();const ol=jr.querySelector('ol');if(!L.length){const li=mk('li','');li.textContent=T('W tej Nocy nie ma jeszcze wiadomości.','No messages yet tonight.');ol.append(li)}for(const it of L){const li=mk('li',it.kind==='boss'?'warn':''),sm=mk('small');sm.textContent=it.kind==='boss'?T('OSTRZEŻENIE','WARNING'):(it.place||'');li.append(sm,document.createTextNode(it.text));ol.append(li)}}
+function journal(){const L=NBJ.S===S?NBJ.log:[];jr.innerHTML=`<small>${STORYMODE?T('PAUZA  FABU�A','PAUSE  STORY'):T('PAUZA  ARCADE','PAUSE  ARCADE')}</small><h2>${T('Dziennik Nocy','Night Journal')}</h2><p class="nbp-jp"></p><ol></ol>`;jr.querySelector('.nbp-jp').textContent=NBJ.place();const ol=jr.querySelector('ol');if(!L.length){const li=mk('li','');li.textContent=T('W tej Nocy nie ma jeszcze wiadomo�ci.','No messages yet tonight.');ol.append(li)}for(const it of L){const li=mk('li',it.kind==='boss'?'warn':''),sm=mk('small');sm.textContent=it.kind==='boss'?T('OSTRZE�ENIE','WARNING'):(it.place||'');li.append(sm,document.createTextNode(it.text));ol.append(li)}}
 wrap.append(nav,panel);pz.prepend(top);top.after(wrap);if(oldBody&&!oldBody.children.length)oldBody.remove();
 // trener (tryb testera) wstawia sie za #pauseKeys; trzymamy go w zakladce Umiejetnosci
 new MutationObserver(()=>{const t=$('trnBox');if(t&&t.parentElement!==panes.skills)panes.skills.append(t)}).observe(panes.controls,{childList:true});
@@ -985,7 +985,7 @@ if(go)go.textContent=T('GRAJ','PLAY');
 // klik w miniature rozdzialu tylko ja zaznacza (jak najechanie); przygotowanie otwiera wylacznie przycisk GRAJ
 title.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('#start1,#start2,#start3,#start4,#start5');if(!b)return;e.stopImmediatePropagation();e.preventDefault();b.dispatchEvent(new Event('pointerenter'));try{preloadIntro(+b.id.slice(5))}catch(_){quietErr('preloadIntro',_)}},true);
 // naglowek ROZDZIAL I nad nazwa rozdzialu (rzymska cyfra z zaznaczonej miniatury)
-function kick(){if(!cap)return;const s=title.querySelector('.premium-selected');const k=T('ROZDZIAŁ ','ACT ')+(s&&s.dataset.roman||'I');if(cap.dataset.k!==k)cap.dataset.k=k}
+function kick(){if(!cap)return;const s=title.querySelector('.premium-selected');const k=T('ROZDZIA� ','ACT ')+(s&&s.dataset.roman||'I');if(cap.dataset.k!==k)cap.dataset.k=k}
 if(cap)new MutationObserver(kick).observe(cap,{childList:true,characterData:true,subtree:true});kick();
 const bg=`linear-gradient(#0a090b12,#08090b45),url('${C}') center/cover no-repeat #09090b`,st=document.createElement('style');st.className='nbm-style';
 st.textContent=`
@@ -1005,7 +1005,7 @@ ${Ti} .premium-controls .modesw{gap:10px}
 ${Ti} .premium-controls .modesw button{min-height:78px!important}
 ${Ti} .premium-caption{bottom:20px!important;line-height:1.1}
 ${Ti} .premium-caption:before{content:attr(data-k);display:block;font:600 13px Grenze,Georgia,serif;letter-spacing:4px;color:#c99a62;margin-bottom:6px}
-${Ti} .premium-caption:after{content:'${T('Wybierz drogę. Przygotuj się na kolejną Noc.','Choose your road. Prepare for another Night.')}';display:block;font:400 17px Grenze,Georgia,serif;color:#d8cbb3;margin-top:6px}
+${Ti} .premium-caption:after{content:'${T('Wybierz drog�. Przygotuj si� na kolejn� Noc.','Choose your road. Prepare for another Night.')}';display:block;font:400 17px Grenze,Georgia,serif;color:#d8cbb3;margin-top:6px}
 ${Ti} .premium-ashes{display:flex!important;align-items:center;justify-content:center;gap:8px;white-space:nowrap;font:600 18px Grenze,Georgia,serif!important;padding:10px 6px!important;line-height:1}
 ${Ti} .premium-ashes:before{content:'';width:24px;height:24px;flex:none;background:url('${ASH}') center/contain no-repeat;filter:drop-shadow(0 0 4px #ff5a1f88)}
 ${Ti} .premium-portrait{flex:1 1 0!important;min-height:60px!important;object-fit:cover!important;object-position:50% 12%!important}
@@ -1049,11 +1049,11 @@ function tintAnims(part){const A=part;
 
 }
 function groupProgress(g){const st=GROUP_STATE[g];return st.keys.length?st.keys.filter(k=>imgs[k]).length/st.keys.length:1}
-function refreshGroup(g){const st=GROUP_STATE[g];for(const w of st.watchers)w(st.error?(EN?'Error — click to retry':'Błąd — kliknij, aby ponowić'):'Wczytywanie… '+Math.floor(groupProgress(g)*100)+'%');if(g==='core')window.NB_BOOT?.progress?.(groupProgress(g))}
+function refreshGroup(g){const st=GROUP_STATE[g];for(const w of st.watchers)w(st.error?(EN?'Error - click to retry':'B��d - kliknij, aby ponowi�'):'Wczytywanie '+Math.floor(groupProgress(g)*100)+'%');if(g==='core')window.NB_BOOT?.progress?.(groupProgress(g))}
 function finishGroup(g){const st=GROUP_STATE[g];if(st.ready||st.error||!st.keys.every(k=>imgs[k]))return;if(g!=='core'){const part=buildAnims(imgs,g);tintAnims(part);Object.assign(A,part)}st.ready=true;refreshGroup(g);for(const w of st.waiters.splice(0))w.resolve();if(GROUP_ORDER.every(g=>GROUP_STATE[g].ready))window.NB_GROUPS_READY=true}
-function pumpImages(){while(imageWorkers<2){const g=GROUP_ORDER.find(g=>{const s=GROUP_STATE[g];return s.enabled&&!s.ready&&!s.error&&s.keys.some(k=>!imgs[k]&&!IMAGE_PENDING.has(k))});if(!g)break;const st=GROUP_STATE[g],k=st.keys.find(k=>!imgs[k]&&!IMAGE_PENDING.has(k));st.loading.add(k);IMAGE_PENDING.add(k);imageWorkers++;const im=new Image();im.nbDensity=SPRITE_RES[k]||1;im.nbKey=k;im.onload=()=>{imgs[k]=im;imageWorkers--;st.loading.delete(k);IMAGE_PENDING.delete(k);for(const h of GROUP_ORDER){refreshGroup(h);if(GROUP_STATE[h].enabled)finishGroup(h)}pumpImages()};im.onerror=()=>{const backup=SPRITE_DATA[k+'_fallback'];if(backup&&!im.nbFallback){im.nbFallback=true;SPRITE_DATA[k]=backup;im.src=backup;return}imageWorkers--;st.loading.delete(k);IMAGE_PENDING.delete(k);st.error=true;refreshGroup(g);for(const w of st.waiters.splice(0))w.reject(Error((EN?'Cannot load image: ':'Nie można wczytać obrazu: ')+k));pumpImages()};im.src=SPRITE_DATA[k]}}
+function pumpImages(){while(imageWorkers<2){const g=GROUP_ORDER.find(g=>{const s=GROUP_STATE[g];return s.enabled&&!s.ready&&!s.error&&s.keys.some(k=>!imgs[k]&&!IMAGE_PENDING.has(k))});if(!g)break;const st=GROUP_STATE[g],k=st.keys.find(k=>!imgs[k]&&!IMAGE_PENDING.has(k));st.loading.add(k);IMAGE_PENDING.add(k);imageWorkers++;const im=new Image();im.nbDensity=SPRITE_RES[k]||1;im.nbKey=k;im.onload=()=>{imgs[k]=im;imageWorkers--;st.loading.delete(k);IMAGE_PENDING.delete(k);for(const h of GROUP_ORDER){refreshGroup(h);if(GROUP_STATE[h].enabled)finishGroup(h)}pumpImages()};im.onerror=()=>{const backup=SPRITE_DATA[k+'_fallback'];if(backup&&!im.nbFallback){im.nbFallback=true;SPRITE_DATA[k]=backup;im.src=backup;return}imageWorkers--;st.loading.delete(k);IMAGE_PENDING.delete(k);st.error=true;refreshGroup(g);for(const w of st.waiters.splice(0))w.reject(Error((EN?'Cannot load image: ':'Nie mo�na wczyta� obrazu: ')+k));pumpImages()};im.src=SPRITE_DATA[k]}}
 function loadGroup(ch,watch){const g=typeof ch==='string'?ch:groupFor(ch),st=GROUP_STATE[g];if(st.ready)return Promise.resolve();st.error=false;st.enabled=true;if(watch)st.watchers.add(watch);const p=new Promise((resolve,reject)=>st.waiters.push({resolve,reject}));const i=GROUP_ORDER.indexOf(g);if(g!=='core'){GROUP_ORDER.splice(i,1);GROUP_ORDER.splice(1,0,g)}refreshGroup(g);finishGroup(g);pumpImages();return p.finally(()=>{if(watch)st.watchers.delete(watch)})}
-function waitChapter(ch,action,button){if(groupReady(ch))return action();const focused=document.activeElement,b=focused?.matches('#againBtn,#nextBtn,#prepGo')?focused:button||$('prepGo');if(b.nbWait)return b.nbWait;const label=b.innerHTML;b.nbWait=loadGroup(ch,t=>{b.textContent=t}).then(()=>{b.innerHTML=label;return action()},()=>{b.textContent=(EN?'Error — click to retry':'Błąd — kliknij, aby ponowić')}).finally(()=>{b.nbWait=null});return b.nbWait}
+function waitChapter(ch,action,button){if(groupReady(ch))return action();const focused=document.activeElement,b=focused?.matches('#againBtn,#nextBtn,#prepGo')?focused:button||$('prepGo');if(b.nbWait)return b.nbWait;const label=b.innerHTML;b.nbWait=loadGroup(ch,t=>{b.textContent=t}).then(()=>{b.innerHTML=label;return action()},()=>{b.textContent=(EN?'Error - click to retry':'B��d - kliknij, aby ponowi�')}).finally(()=>{b.nbWait=null});return b.nbWait}
 for(const g of GROUP_ORDER)GROUP_STATE[g]={keys:Object.keys(SPRITE_DATA).filter(k=>!/_fallback$/.test(k)&&!/^intro[1-5]$/.test(k)&&SPRITE_GROUPS[k].includes(g)&& (g==='core'||!SPRITE_GROUPS[k].includes('core'))),loading:new Set(),watchers:new Set(),waiters:[],ready:false,error:false,enabled:false};
 loadGroup('core').then(()=>{
   A=buildAnims(imgs,'core');IMGS=imgs;tintAnims(A);try{trnFill()}catch(e){quietErr('trnFill',e)}initCombatEffects();initWhirlVisuals();decals(imgs);
@@ -1061,9 +1061,9 @@ loadGroup('core').then(()=>{
   ROOT=scene;useWorld(1);
   heroMesh=new THREE.Mesh(geo32,heroIdleMat());heroMesh.visible=false;scene.add(heroMesh);
   margaMesh=new THREE.Mesh(geo32,A.marga[0].n);margaMesh.customDistanceMaterial=A.marga[0].d;margaMesh.castShadow=true;margaMesh.visible=false;scene.add(margaMesh);
-  for(const id of ['start1','start2','start3'])$(id).disabled=false;$('start4').disabled=false;$('start5').disabled=false;$('start5').innerHTML=(EN?'<small>Act V</small>The Creditors\' Citadel':'<small>Rozdział V</small>Cytadela Wierzycieli');$('start4').innerHTML=(EN?'<small>Act IV</small>Blackwood':'<small>Rozdział IV</small>Czarnobór');$('start1').innerHTML=(EN?'<small>Act I</small>The Scorched Settlement':'<small>Rozdział I</small>Spalona Osada');$('start2').innerHTML=(EN?'<small>Act II</small>The Lower City':'<small>Rozdział II</small>Dolne Miasto');$('start3').innerHTML=(EN?'<small>Act III</small>Fallen Goldheim':'<small>Rozdział III</small>Upadły Złotogród');renderRecords();window.NB_BOOT?.ready();
+  for(const id of ['start1','start2','start3'])$(id).disabled=false;$('start4').disabled=false;$('start5').disabled=false;$('start5').innerHTML=(EN?'<small>Act V</small>The Creditors\' Citadel':'<small>Rozdzia� V</small>Cytadela Wierzycieli');$('start4').innerHTML=(EN?'<small>Act IV</small>Blackwood':'<small>Rozdzia� IV</small>Czarnob�r');$('start1').innerHTML=(SOLNE_TEST?(EN?'<small>Test map</small>Salt Quay':'<small>Mapa testowa</small>Solne Nabrze�e'):(EN?'<small>Act I</small>The Scorched Settlement':'<small>Rozdzia� I</small>Spalona Osada'));$('start2').innerHTML=(EN?'<small>Act II</small>The Lower City':'<small>Rozdzia� II</small>Dolne Miasto');$('start3').innerHTML=(EN?'<small>Act III</small>Fallen Goldheim':'<small>Rozdzia� III</small>Upad�y Z�otogr�d');renderRecords();window.NB_BOOT?.ready();
   for(const g of ['r2','r3','r4','r5'])GROUP_STATE[g].enabled=true;for(const g of ['r2','r3','r4','r5'])finishGroup(g);pumpImages();
-}).catch(err=>{console.error(err);window.NB_BOOT?.fail(err);$('start1').textContent=(EN?'Failed to load graphics':'Nie udało się wczytać grafik')});
+}).catch(err=>{console.error(err);window.NB_BOOT?.fail(err);$('start1').textContent=(EN?'Failed to load graphics':'Nie uda�o si� wczyta� grafik')});
 // 9.11.2026: author's control diagrams (PL and EN images replace the drawn keyboard / pad).
 // The text lists stay in the DOM for screen readers; fillPauseKeys copies this markup into the pause, so both places change.
 {const KB=EN?'assets/ui/dadca33542655c56e7c88a0c1be7394a6716a3250526dfb29db1df91c0144548.webp':'assets/ui/8d6f9789af7270abae2ecd0ed9a42e48b9466c82ccee7da597c97b51760300d0.webp',PD=EN?'assets/ui/1c380bccce9943755d604581e451da377ebaf3621aa56e9c67426c8fb8908b63.webp':'assets/ui/bfb4247af105e9a06e15632ae2b8c23925efd2f81ac29cc8ed6d8e160ed1dc69.webp';
@@ -1071,12 +1071,12 @@ loadGroup('core').then(()=>{
   put($('sub-kb'),KB,EN?'Controls: keyboard and mouse':'Sterowanie: klawiatura i mysz','#figKb,#figMouse,.keys');put($('sub-pad'),PD,EN?'Controls: controller':'Sterowanie: kontroler','.fig.pad,.figcap,.keys');
   const st=document.createElement('style');st.textContent=`.nb-ctl-img{display:block;width:auto;max-width:min(100%,1400px);max-height:calc(100vh - 230px);height:auto;object-fit:contain;margin:0 auto;border-radius:4px;box-shadow:0 10px 30px #0008}
 .nb-ctl-old{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important}`;document.head.appendChild(st)}}
-// 13.11.2026 (wcześniej 9.11 karty z kafelkami): Opcje > Audio jako dwa klasyczne, duże suwaki na całą szerokość:
-// nazwa po lewej, suwak w środku, wartość po prawej. Suwak to ten sam .rng (pad: A chwyta, lewo/prawo zmienia).
+// 13.11.2026 (wcze�niej 9.11 karty z kafelkami): Opcje > Audio jako dwa klasyczne, du�e suwaki na ca�� szeroko��:
+// nazwa po lewej, suwak w �rodku, warto�� po prawej. Suwak to ten sam .rng (pad: A chwyta, lewo/prawo zmienia).
 {const pa=$('pane-aud'),T=(p,e)=>EN?e:p;if(pa&&!pa.querySelector('.nbo-aud')){const mus=pa.querySelector('.musSl'),sfx=pa.querySelector('.sfxSl');
  if(mus&&sfx){const mk=(t,c,h)=>{const n=document.createElement(t);if(c)n.className=c;if(h!==undefined)n.innerHTML=h;return n};
   const pct=i=>Math.round((+i.value-(+i.min||0))/((+i.max||100)-(+i.min||0))*100);
-  const row=(inp,name)=>{const r=mk('div','nbo-row');const lab=inp.closest('label');const sp=lab.querySelector(':scope>span:first-child');if(sp)sp.textContent=name;r.append(lab,mk('output','nbo-val','0'));const g=lab.querySelector('.rng');if(g)for(const [k,v] of [['font-size','clamp(30px,4.6vh,50px)'],['height','clamp(56px,8vh,84px)'],['width','100%'],['max-width','none']])g.style.setProperty(k,v,'important');const st2=(sel,props)=>{const e=g.querySelector(sel);if(e)for(const [k,v] of props)e.style.setProperty(k,v,'important')};if(g){st2('.rk',[['height','clamp(22px,3.2vh,34px)'],['top','50%'],['bottom','auto'],['transform','translateY(-50%)']]);st2('.rf',[['height','clamp(8px,1.2vh,13px)'],['top','50%'],['bottom','auto'],['transform','translateY(-50%)'],['margin','0']]);st2('.rh',[['width','clamp(34px,5vh,52px)'],['height','clamp(34px,5vh,52px)']])}return r};/* style w linii z !important: inne arkusze menu mają wyższą wagę dla .rng */
+  const row=(inp,name)=>{const r=mk('div','nbo-row');const lab=inp.closest('label');const sp=lab.querySelector(':scope>span:first-child');if(sp)sp.textContent=name;r.append(lab,mk('output','nbo-val','0'));const g=lab.querySelector('.rng');if(g)for(const [k,v] of [['font-size','clamp(30px,4.6vh,50px)'],['height','clamp(56px,8vh,84px)'],['width','100%'],['max-width','none']])g.style.setProperty(k,v,'important');const st2=(sel,props)=>{const e=g.querySelector(sel);if(e)for(const [k,v] of props)e.style.setProperty(k,v,'important')};if(g){st2('.rk',[['height','clamp(22px,3.2vh,34px)'],['top','50%'],['bottom','auto'],['transform','translateY(-50%)']]);st2('.rf',[['height','clamp(8px,1.2vh,13px)'],['top','50%'],['bottom','auto'],['transform','translateY(-50%)'],['margin','0']]);st2('.rh',[['width','clamp(34px,5vh,52px)'],['height','clamp(34px,5vh,52px)']])}return r};/* style w linii z !important: inne arkusze menu maj� wy�sz� wag� dla .rng */
   const wrap=mk('div','nbo-aud');wrap.append(row(mus,T('Muzyka','Music')),mk('div','nbo-sep'),row(sfx,T('Efekty','Effects')));pa.prepend(wrap);
   const outs=()=>{for(const r of wrap.querySelectorAll('.nbo-row'))r.querySelector('output').textContent=pct(r.querySelector('input[type=range]'))};
   for(const i of [mus,sfx])i.addEventListener('input',outs);new MutationObserver(()=>{if(!pa.hidden)outs()}).observe(pa,{attributes:true,attributeFilter:['hidden']});outs();
@@ -1098,7 +1098,7 @@ ${Z} .nbo-sep{height:1px;background:linear-gradient(90deg,#0000,#b08a4a55,#0000)
  root.classList.toggle('pc-menu',enabled);if(!enabled)return;
  Object.assign(PREMIUM_ASSETS,{'portret-woskownica':'assets/ui/f02195e1fb9431e1610f3b80209762e46e53a9d3cd82b94e357519012df9b20d.webp','portret-rycerz':'assets/ui/5b34b85844e657eca2c40af65c5a8744f7175b81ebe8b37e9614215ef8cda24e.png','portret-kat':'assets/ui/5496889094dbd50b342769c840ab925bcac7c6da2bea4b64307a20dce787cffa.png','portret-zabojczyni':'assets/ui/3a7c4c89940259420bcc50b5647ff9d712a117a9d5f3ea4915a67034db1f5df3.png','portret-dzwonnik':'assets/ui/5857e9efd70536997aa98e905aec4855bc6b8912b04a498e662ff7370327f36f.webp'});
  const T=(pl,en)=>EN?en:pl,make=(tag,cls,text)=>{const e=document.createElement(tag);e.className=cls;if(text)e.textContent=text;return e};
- const home=make('button','pc-home-button',T('Menu główne','Main menu'));home.type='button';
+ const home=make('button','pc-home-button',T('Menu g��wne','Main menu'));home.type='button';
  const nav=title.querySelector('.premium-nav'),journey=nav.querySelector('.premium-journey');nav.append(home);journey.textContent=T('Graj','Play');journey.classList.add('pc-play');
  const lang=make('button','pc-language','PL / EN');lang.type='button';lang.addEventListener('click',()=>{$('lang').hidden=false;$('lang').querySelector('button')?.focus()});title.append(lang);const guideLabel=make('span','pc-guide-label',T('Instrukcja','Guide'));$('manBtn').append(guideLabel);
  title.classList.add('pc-home');
@@ -1109,7 +1109,7 @@ ${Z} .nbo-sep{height:1px;background:linear-gradient(90deg,#0000,#b08a4a55,#0000)
  // Existing lists and handlers stay intact; only panel visibility and contextual copy change.
  const grid=prep.querySelector('.prepgrid'),tabs=make('nav','pc-prep-tabs'),detail=make('aside','pc-perk-detail');
  tabs.setAttribute('aria-label',T('Przygotowanie','Preparation'));detail.setAttribute('aria-live','polite');grid.append(tabs,detail);
- const panels=[['prepPerks',T('Perki','Perks')],['prepCh',T('Wyzwania','Challenges')],['prepCurseL',T('Klątwy','Curses')]];let active='prepPerks';const observed=new WeakSet();
+ const panels=[['prepPerks',T('Perki','Perks')],['prepCh',T('Wyzwania','Challenges')],['prepCurseL',T('Kl�twy','Curses')]];let active='prepPerks';const observed=new WeakSet();
  const setPanel=id=>{active=id;sync()};
  for(const [id,label] of panels){const b=make('button','pc-prep-tab',label);b.type='button';b.dataset.panel=id;b.addEventListener('click',()=>setPanel(id));tabs.append(b)}
  function describe(b){
@@ -1123,13 +1123,13 @@ ${Z} .nbo-sep{height:1px;background:linear-gradient(90deg,#0000,#b08a4a55,#0000)
     const rewards=make('section','pc-detail-rewards'),row=make('div','pc-reward-row');
     rewards.append(make('h4','',T('Nagroda','Reward')));
     for(const icon of child.querySelectorAll(':scope > i')){
-     const ash=icon.classList.contains('nb-ash'),label=T(ash?'Popioły':'Monety',ash?'Ashes':'Coins');
+     const ash=icon.classList.contains('nb-ash'),label=T(ash?'Popio�y':'Monety',ash?'Ashes':'Coins');
      const item=make('span','pc-reward'),im=icon.cloneNode(true);
      im.setAttribute('aria-hidden','true');item.append(im,make('strong','pc-reward-value',icon.nextSibling?.textContent.trim()||''),make('small','pc-reward-name',label));row.append(item);
     }
     rewards.append(row);const note=child.querySelector('small');if(note)rewards.append(make('p','pc-reward-note',note.textContent));content.append(rewards);
    }else if(!child.matches('i')&&child.textContent.trim()){
-    content.append(make(child.matches('b')?'h3':'p',child.matches('small')?'pc-lock-note':'',child.textContent.replace(/^✓\s*/,'')));
+    content.append(make(child.matches('b')?'h3':'p',child.matches('small')?'pc-lock-note':'',child.textContent.replace(/^?\s*/,'')));
    }
   }
   detail.replaceChildren(content);
@@ -1144,7 +1144,7 @@ ${Z} .nbo-sep{height:1px;background:linear-gradient(90deg,#0000,#b08a4a55,#0000)
  const ph=make('h2','pc-prep-title',T('Przygotowanie do nocy','Before Nightfall'));prep.querySelector('.premium-prep-head').append(ph);
  const controls=prep.querySelector('.premium-prep-controls'),info=make('div','pc-footer-info');
  info.append($('prepK'),prep.querySelector('.premium-prep-summary'));controls.prepend(info);
- const difficulty=make('details','pc-popover'),ds=make('summary','',T('Trudność','Difficulty')),db=make('div','');db.append($('diffSw'));difficulty.append(ds,db);controls.prepend(difficulty);
+ const difficulty=make('details','pc-popover'),ds=make('summary','',T('Trudno��','Difficulty')),db=make('div','');db.append($('diffSw'));difficulty.append(ds,db);controls.prepend(difficulty);
  const assists=make('details','pc-popover'),as=make('summary','',T('Ustawienia','Settings')),ab=make('div','');ab.append(prep.querySelector('.premium-prep-control-scroll'));assists.append(as,ab);controls.insertBefore(assists,info);
  for(const pop of [difficulty,assists])pop.addEventListener('keydown',e=>{if(e.key==='Escape'&&pop.open){e.stopImmediatePropagation();pop.open=false;pop.querySelector('summary').focus()}});
  const kap=$('kap'),markKron=()=>kap.classList.toggle('pc-chronicle',KAPMODE==='kron');new MutationObserver(markKron).observe(kap,{attributes:true,attributeFilter:['hidden']});new MutationObserver(markKron).observe($('kapH'),{childList:true,subtree:true});markKron();
@@ -1153,23 +1153,23 @@ ${Z} .nbo-sep{height:1px;background:linear-gradient(90deg,#0000,#b08a4a55,#0000)
  for(const head of document.querySelectorAll('#opts .premium-page-head,#manual .premium-page-head,#kap .m2-top,#pause .nbp-head')){const rule=make('span','pc-heading-rule');rule.setAttribute('aria-hidden','true');head.append(rule)}
  for(const heading of document.querySelectorAll('.premium-page-heading,#kapH,.premium-pause-title,.pc-prep-title'))heading.classList.add('pc-fantasy-title');
  for(const id of ['pane-set','pane-gfx']){const pane=$(id);if(!pane)continue;let section=null;for(const child of [...pane.children]){if(child.matches('.opsep')){child.classList.add('pc-section-separator');continue}if(child.matches('.nbts-wrap')){child.classList.add('pc-option-section');section=null;continue}if(child.matches('h3')){section=make('section','pc-option-section');child.before(section)}if(section)section.append(child)}}
- const loadout=$('skillLoadout'),polishLoadout=()=>{const inv=loadout?.querySelector('.slot-inventory');if(inv?.querySelector('[data-equip]:not([data-equip=""])')&&!loadout.querySelector('.pc-loadout-reserve')){const focused=document.activeElement,restore=inv.contains(focused),reserve=make('section','pc-loadout-reserve');inv.before(reserve);reserve.append(make('h3','pc-reserve-title',T('Zdobyte umiejętności','Learned skills')),inv);if(restore)focused.focus({preventScroll:true})}};
+ const loadout=$('skillLoadout'),polishLoadout=()=>{const inv=loadout?.querySelector('.slot-inventory');if(inv?.querySelector('[data-equip]:not([data-equip=""])')&&!loadout.querySelector('.pc-loadout-reserve')){const focused=document.activeElement,restore=inv.contains(focused),reserve=make('section','pc-loadout-reserve');inv.before(reserve);reserve.append(make('h3','pc-reserve-title',T('Zdobyte umiej�tno�ci','Learned skills')),inv);if(restore)focused.focus({preventScroll:true})}};
  if(loadout){new MutationObserver(polishLoadout).observe(loadout,{childList:true});polishLoadout()}
  // PC Journey is a chapter hub. Reuse the real chapter buttons and their existing handlers.
  const map=title.querySelector('.premium-map'),banner=title.querySelector('.premium-banner'),chapterList=map.querySelector('.m2-right'),caption=map.querySelector('.premium-caption'),oldAshes=title.querySelector('.premium-ashes');
- const journeyHead=make('header','pc-journey-head'),journeyTitle=make('h2','pc-fantasy-title',T('Wybór rozdziału','Act selection'));
+ const journeyHead=make('header','pc-journey-head'),journeyTitle=make('h2','pc-fantasy-title',T('Wyb�r rozdzia�u','Act selection'));
  journeyHead.append(home,journeyTitle);title.prepend(journeyHead);map.prepend(chapterList);
  const profile=make('aside','pc-profile'),ashIcon=make('img','pc-profile-ash'),ashBlock=make('div','pc-profile-stat'),ashValue=make('strong','',String(EMB.e)),levelBlock=make('div','pc-profile-stat'),levelValue=make('strong','',String(prog().lv));
  ashIcon.src='assets/efekty/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp';ashIcon.alt='';
- ashBlock.append(make('small','',T('Popioły','Ashes')),ashValue);levelBlock.append(make('small','',T('Poziom','Level')),levelValue);profile.append(ashIcon,ashBlock,levelBlock);title.append(profile);
+ ashBlock.append(make('small','',T('Popio�y','Ashes')),ashValue);levelBlock.append(make('small','',T('Poziom','Level')),levelValue);profile.append(ashIcon,ashBlock,levelBlock);title.append(profile);
  const facts=make('div','pc-destination-facts'),factValues=[];
- for(const label of [T('Dostępność','Availability'),T('Najdłuższa noc','Longest night'),T('Rekord zabójstw','Most kills')]){const cell=make('div',''),value=make('strong','','—');cell.append(make('small','',label),value);facts.append(cell);factValues.push(value)}banner.append(facts);
+ for(const label of [T('Dost�pno��','Availability'),T('Najd�u�sza noc','Longest night'),T('Rekord zab�jstw','Most kills')]){const cell=make('div',''),value=make('strong','','-');cell.append(make('small','',label),value);facts.append(cell);factValues.push(value)}banner.append(facts);
  const journeyFooter=make('footer','pc-journey-footer'),modeInfo=make('div','pc-journey-mode'),modeName=make('strong','','');modeInfo.append(make('small','',T('Tryb gry','Game mode')),modeName);
- const prepare=$('premiumPrepare');prepare.textContent=T('Przygotuj się','Prepare');journeyFooter.append(modeInfo,prepare);title.append(journeyFooter);
+ const prepare=$('premiumPrepare');prepare.textContent=T('Przygotuj si�','Prepare');journeyFooter.append(modeInfo,prepare);title.append(journeyFooter);
  const opts=$('optsBtn'),gear=make('img','pc-journey-gear');gear.src=PREMIUM_ICONS['nawigacja-opcje'];gear.alt='';gear.setAttribute('aria-hidden','true');opts.append(gear);opts.setAttribute('aria-label',T('Opcje','Options'));opts.title=T('Opcje','Options');
  // The original multiplayer checkbox belongs with preparation, not the chapter atlas.
  const multiplayer=$('mpTglL');if(multiplayer)ab.append(multiplayer);
- for(const [id,note] of [['sFab',T('Rozdziały po kolei','Acts in order')],['sArc',T('Wszystkie rozdziały','All acts available')]]){const b=$(id),n=make('small','pc-mode-note',note),check=make('span','pc-mode-check','◆');check.setAttribute('aria-hidden','true');b.append(n,check)}
+ for(const [id,note] of [['sFab',T('Rozdzia�y po kolei','Acts in order')],['sArc',T('Wszystkie rozdzia�y','All acts available')]]){const b=$(id),n=make('small','pc-mode-note',note),check=make('span','pc-mode-check','?');check.setAttribute('aria-hidden','true');b.append(n,check)}
  const put=(el,text)=>{if(el.textContent!==text)el.textContent=text};
  function refreshJourney(){
   if(title.hidden)return;
@@ -1177,11 +1177,11 @@ ${Z} .nbo-sep{height:1px;background:linear-gradient(90deg,#0000,#b08a4a55,#0000)
   put(modeName,STORYMODE?T('Fabularny','Story'):'Arcade');
   for(let i=1;i<=5;i++){
    const b=$('start'+i);let label=b.querySelector('.pc-chapter-label');
-   if(!label){label=make('span','pc-chapter-label');label.append(make('small','',T('Rozdział ','Act ')+CHR[i-1]),make('strong','',CHN[i-1]));b.append(label)}
+   if(!label){label=make('span','pc-chapter-label');label.append(make('small','',T('Rozdzia� ','Act ')+CHR[i-1]),make('strong','',CHN[i-1]));b.append(label)}
   }
   const chosen=title.querySelector('.premium-selected'),ch=Number(chosen?.id.slice(5))||1,r=SETT.save['s'+ch];
   if(!title.classList.contains('pc-home')){last=ch;try{localStorage.setItem('nb_pc_last_chapter',String(ch))}catch(e){}}
-  put(factValues[0],chosen?.dataset.status||T('Dostępny','Available'));put(factValues[1],r?.t?mmss(r.t):'—');put(factValues[2],r?String(r.kills||0):'—');
+  put(factValues[0],chosen?.dataset.status||T('Dost�pny','Available'));put(factValues[1],r?.t?mmss(r.t):'-');put(factValues[2],r?String(r.kills||0):'-');
  }
  new MutationObserver(refreshJourney).observe(chapterList,{childList:true,subtree:true,attributes:true,attributeFilter:['class','data-status']});
  new MutationObserver(refreshJourney).observe(oldAshes,{childList:true,subtree:true,characterData:true});
@@ -1449,7 +1449,7 @@ ${Z} #title .premium-map #start4{background-image:url('${PREMIUM_ASSETS['rozdzia
 ${Z} #title .premium-map #start5{background-image:url('${PREMIUM_ASSETS['rozdzial-5-mini']}')!important}
 ${Z} #title .premium-map .m2-ch{background-size:cover!important;background-position:center!important}
 ${Z} #title:not(.pc-home) .premium-go{min-height:calc(70 * var(--pc-u))!important;height:auto!important;flex:none!important;font-size:calc(29 * var(--pc-u))!important}
-${Z} #title.pc-home .premium-nav>button:is(:hover,:focus-visible,.pf):before{content:'▸'!important;position:absolute!important;left:calc(18 * var(--pc-u))!important;top:50%!important;transform:translateY(-50%)!important;display:block!important;color:#d6b578!important;font:400 calc(28 * var(--pc-u)) Georgia!important;background:none!important;width:auto!important;height:auto!important}
+${Z} #title.pc-home .premium-nav>button:is(:hover,:focus-visible,.pf):before{content:'?'!important;position:absolute!important;left:calc(18 * var(--pc-u))!important;top:50%!important;transform:translateY(-50%)!important;display:block!important;color:#d6b578!important;font:400 calc(28 * var(--pc-u)) Georgia!important;background:none!important;width:auto!important;height:auto!important}
 ${Z} #prep :is(#prepPerks,#prepCh,#prepCurseL) .opt.on>b{color:#eed09a!important}
 
 ${Z} :is(#title,#prep,#kap,#manual,#opts,#pause,#lvl,#shop,#end,#conf,#dialog,#lang)[hidden]{display:none!important}
@@ -1476,9 +1476,9 @@ ${Z} #lvl #lvlTitle{font:400 calc(50 * var(--pc-u))/1.2 Georgia!important}
 ${Z} #lvl .level-panel .btnrow{display:flex!important;justify-content:center!important;flex:none!important}
 ${Z} #shop .card .ic{width:calc(105 * var(--pc-u))!important;height:calc(105 * var(--pc-u))!important;flex:none!important}
 ${Z} #shop .card .ck{font:400 calc(14 * var(--pc-u))/1.3 Georgia!important;color:#ad9674!important}
-${Z} #kap .m2-emb:before{content:'${T('Popioły','Ashes')} ·';display:inline!important;position:static!important;width:auto!important;height:auto!important;background:none!important;font:400 calc(18 * var(--pc-u)) Georgia!important;color:var(--pc-muted)!important;margin-right:.5em!important}
+${Z} #kap .m2-emb:before{content:'${T('Popio�y','Ashes')} ';display:inline!important;position:static!important;width:auto!important;height:auto!important;background:none!important;font:400 calc(18 * var(--pc-u)) Georgia!important;color:var(--pc-muted)!important;margin-right:.5em!important}
 ${Z} #kap .m2k-row.on{background:none!important}
-${Z} #kap .m2k-row.on:before{content:'◆'!important;display:block!important;position:absolute!important;left:calc(8 * var(--pc-u))!important;top:calc(12 * var(--pc-u))!important;right:auto!important;bottom:auto!important;width:auto!important;height:auto!important;background:none!important;color:#d6b578!important;font:400 calc(15 * var(--pc-u)) Georgia!important;transform:none!important;border:0!important;pointer-events:none!important}
+${Z} #kap .m2k-row.on:before{content:'?'!important;display:block!important;position:absolute!important;left:calc(8 * var(--pc-u))!important;top:calc(12 * var(--pc-u))!important;right:auto!important;bottom:auto!important;width:auto!important;height:auto!important;background:none!important;color:#d6b578!important;font:400 calc(15 * var(--pc-u)) Georgia!important;transform:none!important;border:0!important;pointer-events:none!important}
 ${Z} #end #endKicker{width:100%!important;max-width:none!important;align-self:center!important;text-align:center!important}
 ${Z} #end .nbs-t{padding:calc(8 * var(--pc-u))!important;gap:calc(4 * var(--pc-u))!important}
 ${Z} #end .nbs-t i{min-height:0!important;font-size:calc(13 * var(--pc-u))!important}
@@ -1514,7 +1514,7 @@ ${Z} #prep .pc-reward-value{font:400 calc(29 * var(--pc-u))/1.2 Georgia!importan
 ${Z} #prep .pc-reward-name{font:400 calc(15 * var(--pc-u))/1.3 Georgia!important;color:#c0ac89!important;grid-column:1/3!important;grid-row:2!important;text-align:center!important}
 ${Z} #prep .pc-detail-copy .pc-reward-note{font-size:calc(14 * var(--pc-u))!important;margin:calc(16 * var(--pc-u)) 0 0!important;color:#ad9c81!important}
 ${Z} #title #kronBtn .nbk-new{display:inline-grid!important;place-items:center!important;position:absolute!important;top:50%!important;right:calc(26 * var(--pc-u))!important;transform:translateY(-50%)!important;width:calc(27 * var(--pc-u))!important;height:calc(27 * var(--pc-u))!important;min-width:0!important;margin:0!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;font-size:0!important;line-height:0!important;color:#e9c584!important}
-${Z} #title #kronBtn .nbk-new:before{content:'✦'!important;font:400 calc(23 * var(--pc-u))/1 Georgia!important;color:#dfb76e!important;display:block!important}
+${Z} #title #kronBtn .nbk-new:before{content:'?'!important;font:400 calc(23 * var(--pc-u))/1 Georgia!important;color:#dfb76e!important;display:block!important}
 ${Z} #pause .nbp-sub{font:400 calc(15 * var(--pc-u))/1.3 Georgia!important;margin-left:calc(18 * var(--pc-u))!important;color:#b09971!important}
 ${Z} #pause #skillLoadout{max-width:calc(1250 * var(--pc-u))!important;margin:0 auto!important;padding:calc(24 * var(--pc-u)) calc(34 * var(--pc-u))!important;background:linear-gradient(145deg,#121015a8,#0b0a0e55)!important;border-top:1px solid #a4895e44!important;border-bottom:1px solid #a4895e33!important;text-align:left!important}
 ${Z} #pause #skillLoadout>p{font:400 calc(18 * var(--pc-u))/1.65 Georgia!important;color:#b9aa91!important;text-align:left!important;margin:0 0 calc(23 * var(--pc-u))!important;max-width:82ch!important}
@@ -1610,7 +1610,7 @@ ${J} .premium-map .m2-ch{display:flex!important;align-items:center!important;pos
 ${J} .premium-map .m2-ch.lk{opacity:.55!important}
 ${J} .premium-map .m2-ch.premium-selected{border-color:#c4a16a!important;box-shadow:inset calc(3 * var(--pc-u)) 0 #c4a16a!important}
 ${J} .premium-map .m2-ch:before{content:attr(data-roman)!important;position:absolute!important;left:calc(14 * var(--pc-u))!important;top:calc(13 * var(--pc-u))!important;bottom:auto!important;right:auto!important;padding:0!important;background:none!important;color:#f0d3a0!important;font:400 calc(19 * var(--pc-u))/1 Georgia!important}
-${J} .premium-map .m2-ch.premium-selected:before{content:'◆'!important;font-size:calc(14 * var(--pc-u))!important}
+${J} .premium-map .m2-ch.premium-selected:before{content:'?'!important;font-size:calc(14 * var(--pc-u))!important}
 ${J} .premium-map .m2-ch:after{content:attr(data-status)!important;position:absolute!important;left:calc(117 * var(--pc-u))!important;right:calc(10 * var(--pc-u))!important;bottom:calc(10 * var(--pc-u))!important;top:auto!important;width:auto!important;height:auto!important;background:none!important;padding:0!important;color:#b69e74!important;font:400 calc(12 * var(--pc-u))/1.1 Georgia!important;filter:none!important;transform:none!important;z-index:0!important;text-align:left!important}
 ${J} .premium-map .m2-ch .pc-chapter-label{display:flex!important;position:relative!important;flex-direction:column!important;align-items:flex-start!important;gap:calc(7 * var(--pc-u))!important;width:100%!important;z-index:1!important}
 ${J} .pc-chapter-label small{display:block!important;font:400 calc(11 * var(--pc-u))/1.2 Georgia!important;letter-spacing:.12em!important;color:#a98a5b!important;text-transform:uppercase!important}
@@ -1669,7 +1669,7 @@ ${J} .premium-map .m2-ch:not(:disabled):is(:hover,:focus-visible,.pf) .pc-chapte
   if(im.dataset.key!==key){const [x,y,w,h]=box,W=atlas==='menu'?1448:['play','flow'].includes(atlas)?1774:1254,H=atlas==='menu'?1086:['play','flow'].includes(atlas)?887:1254;im.dataset.key=key;im.style.backgroundImage=`url('${atlas==='menu'?GF.menu:atlas==='play'?GF.play:atlas==='flow'?GF.flow:GF.heads}')`;for(const [n,v] of Object.entries({r:w/h,bw:W/h,bh:H/h,bx:-x/h,by:-y/h}))im.style.setProperty('--pcg-'+n,String(v))}
   if(!el.classList.contains('pcg-'+kind))el.classList.add('pcg-'+kind);
   const extra=kind==='menu'&&el.id==='kronBtn'?el.querySelector('.nbk-new')?.getAttribute('aria-label'):kind==='mode'?el.querySelector('.pc-mode-note')?.textContent:'';
-  const label=text+(extra?' · '+extra:'');if(el.getAttribute('aria-label')!==label)el.setAttribute('aria-label',label);
+  const label=text+(extra?'  '+extra:'');if(el.getAttribute('aria-label')!==label)el.setAttribute('aria-label',label);
  }
  const panelSelector='#title .premium-banner,#title .pc-profile,#prep .pc-detail-copy,#kap #kapDet,#opts .pc-option-section,#opts .nbo-card,#manual .premium-page-content,#pause #skillLoadout,#pause .slot-tab,#pause .nbp-audio,#lvl .level-panel,#shop .shopc,#end .nbs-grid,#conf';
  let gfxScheduled=false;
@@ -1679,18 +1679,18 @@ ${J} .premium-map .m2-ch:not(:disabled):is(:hover,:focus-visible,.pf) .pc-chapte
   for(const [sel,n,text] of menu)glyph(title.querySelector(sel),sel==='.premium-journey'?'play':'menu',n,text,'menu');
   for(const [el,a,n,text] of [
    [prep.querySelector('.pc-prep-title'),'heads',0,T('Przygotowanie do nocy','Before Nightfall')],
-   [$('kapH'),KAPMODE==='kron'?'menu':'heads',KAPMODE==='kron'?3:1,KAPMODE==='kron'?T('Kronika','Chronicle'):T('Kaplica Popiołów','Shrine of Ashes')],
+   [$('kapH'),KAPMODE==='kron'?'menu':'heads',KAPMODE==='kron'?3:1,KAPMODE==='kron'?T('Kronika','Chronicle'):T('Kaplica Popio��w','Shrine of Ashes')],
    [$('manual').querySelector('.premium-page-heading'),'menu',4,T('Instrukcja','Guide')],
    [$('opts').querySelector('.premium-page-heading'),'menu',5,T('Opcje','Options')],
    [$('pause').querySelector('.premium-pause-title'),'heads',2,T('Pauza','Pause')],
-   [$('shop').querySelector('.lvlhead h2'),'heads',3,T('Kram Margi',"Marga’s Stall")],
-   [journeyTitle,'play',1,T('Wybór rozdziału','Act selection')]
+   [$('shop').querySelector('.lvlhead h2'),'heads',3,T('Kram Margi',"Marga's Stall")],
+   [journeyTitle,'play',1,T('Wyb�r rozdzia�u','Act selection')]
   ])glyph(el,a,n,text,'heading');
   glyph($('sFab'),'heads',6,T('Fabularny','Story'),'mode');glyph($('sArc'),'heads',7,'Arcade','mode');
-  glyph(home,'flow',0,T('Menu główne','Main menu'),'action');
+  glyph(home,'flow',0,T('Menu g��wne','Main menu'),'action');
   glyph(modeInfo.querySelector('small'),'flow',1,T('Tryb gry','Game mode'),'action');
   glyph(modeInfo.querySelector('strong'),'heads',STORYMODE?6:7,STORYMODE?T('Fabularny','Story'):'Arcade','action');
-  for(const [el,n,text] of [[prepare,4,T('Przygotuj się','Prepare')],[$('prepGo'),5,T('Gotowy','Ready')]]){
+  for(const [el,n,text] of [[prepare,4,T('Przygotuj si�','Prepare')],[$('prepGo'),5,T('Gotowy','Ready')]]){
    // Loading/error feedback remains live text, with the original handler and timing.
    if(el.textContent.trim()===text)glyph(el,'heads',n,text,'action');else{el.classList.remove('pcg-action');el.querySelector(':scope>.pcg-glyph')?.remove();el.setAttribute('aria-label',el.textContent.trim())}
   }
@@ -1771,8 +1771,8 @@ ${G} #lvl #lvlTitle,${G} #conf h1{font-family:'Grenze Gotisch',Georgia,serif!imp
  function refreshTileSummary(){
   if(prep.hidden)return;
   const cls=heroName(charId());
-  put(identity,cls+' · '+DF[DIFFK].n);
-  const values=[[T('Perki','Perks'),PREP.perks.length+'/1'],[T('Wyzwania','Challenges'),String(PREP.chal?1:0)],[T('Klątwy','Curses'),PREP.curses.length+'/3']];
+  put(identity,cls+'  '+DF[DIFFK].n);
+  const values=[[T('Perki','Perks'),PREP.perks.length+'/1'],[T('Wyzwania','Challenges'),String(PREP.chal?1:0)],[T('Kl�twy','Curses'),PREP.curses.length+'/3']];
   for(let i=0;i<values.length;i++){let cell=counts.children[i];if(!cell){cell=make('span','');cell.append(make('small',''),make('strong',''));counts.append(cell)}put(cell.firstChild,values[i][0]);put(cell.lastChild,values[i][1])}
  }
  new MutationObserver(refreshTileSummary).observe(sourceSummary,{childList:true,characterData:true,subtree:true});
@@ -1898,7 +1898,7 @@ ${U} #shop #shopCoins{position:absolute!important;right:0!important;top:50%!impo
 `;
  document.head.append(ts);
  // One Play entry, a centered mode field, and only the full chapter contour selected.
- root.classList.add('pc-flow');home.textContent=T('← Menu główne','← Main menu');
+ root.classList.add('pc-flow');home.textContent=T(' Menu g��wne',' Main menu');
  const shortcutSpace=make('span','pc-shortcuts-space');shortcutSpace.setAttribute('aria-hidden','true');journeyFooter.prepend(shortcutSpace);
  function routeFrame(el){if(!el)return;if(!el.querySelector(':scope>.pc-route-edge')){const edge=make('span','pc-route-edge');edge.setAttribute('aria-hidden','true');el.append(edge)}}
  function refreshRouteFrames(){for(const el of [home,$('kapBtn'),$('kronBtn'),prepare,modeInfo])routeFrame(el)}
@@ -1915,7 +1915,7 @@ ${CJ} .pc-home-button:is(:hover,:focus-visible,.pf){filter:brightness(1.22)!impo
 ${CJ} .pc-home-button:after{content:none!important;display:none!important}
 ${CJ} .pc-home-button.pcg-action{font-size:0!important;color:transparent!important}
 ${CJ} .pc-home-button.pcg-action .pcg-glyph{--pcg-h:${ST(27)}}
-${CJ} .pc-home-button.pcg-action:before{content:'←'!important;display:block!important;position:absolute!important;left:${SU(16)}!important;top:50%!important;transform:translateY(-50%)!important;font:400 ${ST(19)}/1 Georgia,serif!important;color:#cfb98e!important;background:none!important;width:auto!important;height:auto!important}
+${CJ} .pc-home-button.pcg-action:before{content:''!important;display:block!important;position:absolute!important;left:${SU(16)}!important;top:50%!important;transform:translateY(-50%)!important;font:400 ${ST(19)}/1 Georgia,serif!important;color:#cfb98e!important;background:none!important;width:auto!important;height:auto!important}
 ${CJ} .pc-profile{right:${SU(175)}!important}
 ${CJ} #optsBtn,${CJ} #optsBtn:is(:hover,:focus-visible,.pf,:active){display:grid!important;place-items:center!important;right:${SU(70)}!important;top:${SU(27)}!important;width:${SU(80)}!important;height:${SU(80)}!important;min-width:0!important;min-height:0!important;padding:${SU(12)}!important;margin:0!important;border:0!important;border-image:none!important;border-radius:0!important;background:none!important;background-image:none!important;box-shadow:none!important;outline:0!important;filter:none!important}
 ${CJ} #optsBtn:before,${CJ} #optsBtn:after{content:none!important;display:none!important;background:none!important}
@@ -1991,7 +1991,7 @@ ${UP} :is(.pc-detail-copy p,.pc-option-section p,.loadout-state,.loadout-copy,.c
 `;
  document.head.append(ty);
 
- // Wspólna oprawa paneli i akcji. Osobne stany dla wyboru i wskazania.
+ // Wsp�lna oprawa paneli i akcji. Osobne stany dla wyboru i wskazania.
  const polish = make('style','');
  const ui = '#orient'.repeat(40)+'.pc-menu.pc-gfx';
  const menus = ui+' :is(#title,#prep,#opts,#kap,#manual,#pause,#lvl,#shop,#end,#conf,#intro,#dialog)';
@@ -2053,8 +2053,8 @@ ${menus} :is(.tab,.stab,.nbp-tab,.pc-prep-tab):hover:not(.on):not([aria-pressed=
  const make=(tag,c,h)=>{const e=document.createElement(tag);e.className=c;if(h!==undefined)e.innerHTML=h;return e};
  const orb=(c,label)=>`<div class="pch-orb pch-${c}" role="meter" aria-label="${label}" aria-valuemin="0"><div class="pch-glass"><img class="pch-liquid" alt="" src="${A.glass}"></div><i class="pch-thorns"></i><strong></strong></div>`;
  const root=make('div','pch',orb('health',T('Zdrowie','Health'))+orb('mana','Mana')+
- `<div class="pch-wallet"><span class="pch-cell pch-coins" title="${T('Monety','Coins')}"><img alt="" src="${PREMIUM_ICONS['kaplica-purse']}"><b></b></span><span class="pch-cell pch-ashes" title="${T('Popioły','Ashes')}"><img alt="" src="assets/efekty/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp"><b></b></span></div>`+
- `<div class="pch-dock"><i class="pch-rail"></i><div class="pch-level"><small>${T('POZIOM NOCY','NIGHT LEVEL')}</small><strong></strong></div><div class="pch-enchants"></div><div class="pch-actions"><span class="pch-cell pch-attack"><i></i><kbd></kbd></span><span class="pch-cell pch-block"><i></i><kbd></kbd></span></div><div class="pch-stamina" role="meter" aria-label="Stamina" aria-valuemin="0"><i></i><small></small></div><div class="pch-experience" role="meter" aria-label="${T('Doświadczenie','Experience')}" aria-valuemin="0"><i></i></div></div><div class="pch-effects"></div><div class="pch-challenge"></div>`);
+ `<div class="pch-wallet"><span class="pch-cell pch-coins" title="${T('Monety','Coins')}"><img alt="" src="${PREMIUM_ICONS['kaplica-purse']}"><b></b></span><span class="pch-cell pch-ashes" title="${T('Popio�y','Ashes')}"><img alt="" src="assets/efekty/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp"><b></b></span></div>`+
+ `<div class="pch-dock"><i class="pch-rail"></i><div class="pch-level"><small>${T('POZIOM NOCY','NIGHT LEVEL')}</small><strong></strong></div><div class="pch-enchants"></div><div class="pch-actions"><span class="pch-cell pch-attack"><i></i><kbd></kbd></span><span class="pch-cell pch-block"><i></i><kbd></kbd></span></div><div class="pch-stamina" role="meter" aria-label="Stamina" aria-valuemin="0"><i></i><small></small></div><div class="pch-experience" role="meter" aria-label="${T('Do�wiadczenie','Experience')}" aria-valuemin="0"><i></i></div></div><div class="pch-effects"></div><div class="pch-challenge"></div>`);
  old.append(root);const q=s=>root.querySelector(s),health=q('.pch-health'),mana=q('.pch-mana'),stamina=q('.pch-stamina'),xp=q('.pch-experience');
  // Zloty luk staminy biegnie po wewnetrznej stronie kuli many; EXP zostaje na listwie.
  stamina.innerHTML='<svg viewBox="0 0 156 156" aria-hidden="true"><defs><linearGradient id="pch-st-gold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f4d77a"/><stop offset=".5" stop-color="#cfac48"/><stop offset="1" stop-color="#9e7730"/></linearGradient></defs><path class="pch-st-track" d="M80.3 20 A59.7 59.7 0 0 0 80.3 139.4"/><path class="pch-st-fill" pathLength="100" d="M80.3 20 A59.7 59.7 0 0 0 80.3 139.4"/></svg><small></small>';mana.append(stamina);
@@ -2068,22 +2068,22 @@ ${menus} :is(.tab,.stab,.nbp-tab,.pc-prep-tab):hover:not(.on):not([aria-pressed=
   const tag=make('div','pcmp-tag'),state=make('div','pcmp-state'),skills=make('div','pcmp-skills'),heading=make('small','pcmp-skills-title');tag.textContent=T('Gracz ','Player ')+(i+1);heading.textContent=T('Zdobyte','Acquired');
   el.append(tag,state,hp,mp,heading,skills);co.append(el);return{el,hp,mp,arc,state,skills,signature:''}});
  const centre=make('div','pcmp-centre'),coLevel=q('.pch-level').cloneNode(true),coXp=xp.cloneNode(true),coWallet=wallet.cloneNode(true),coRevive=make('div','pcmp-revive');
- coWallet.setAttribute('aria-label',T('Wspólne zasoby','Shared resources'));centre.append(coLevel,coXp,coWallet,coRevive);co.append(centre);old.append(co);
+ coWallet.setAttribute('aria-label',T('Wsp�lne zasoby','Shared resources'));centre.append(coLevel,coXp,coWallet,coRevive);co.append(centre);old.append(co);
  co.addEventListener('click',e=>{const b=e.target.closest('[data-coop-slot]');if(!b||b.disabled)return;const use=()=>activateSlot(+b.dataset.coopSlot);if(b.dataset.player==='2')asP2(use);else use()});
  co.addEventListener('keydown',e=>{if(e.target.closest('[data-coop-slot]')&&['Enter',' '].includes(e.key)){e.stopPropagation();if(e.repeat)e.preventDefault()}});
  function coopHud(){
   for(const [i,v] of coPanels.entries()){const p=i?pl2:pl1;if(!p)continue;
    text(v.hp.querySelector('strong'),meter(v.hp,p.dead?0:p.hp,p.max||1));text(v.mp.querySelector('strong'),meter(v.mp,p.mana||0,p.manaMax||SL.mana.max));
-   const st=meter(v.arc,p.sta||0,p.staMax||1);v.arc.title='Stamina · '+st;text(v.arc.querySelector('small'),'STA · '+Math.round(p.sta||0));v.arc.querySelector('.pch-st-fill').style.strokeDasharray=parseFloat(v.arc.style.getPropertyValue('--fill'))+' 100';
+   const st=meter(v.arc,p.sta||0,p.staMax||1);v.arc.title='Stamina  '+st;text(v.arc.querySelector('small'),'STA  '+Math.round(p.sta||0));v.arc.querySelector('.pch-st-fill').style.strokeDasharray=parseFloat(v.arc.style.getPropertyValue('--fill'))+' 100';
    v.hp.setAttribute('aria-label',T('Zdrowie gracza ','Player health ')+(i+1));v.mp.setAttribute('aria-label',T('Mana gracza ','Player mana ')+(i+1));v.arc.setAttribute('aria-label',T('Stamina gracza ','Player stamina ')+(i+1));
    v.el.classList.toggle('pcmp-dead',!!p.dead);v.hp.classList.toggle('pch-low',!!SETT.flash&&!p.dead&&p.hp/p.max<=.25);
    const rb=i?p.rbF:S.rebirth,used=i?p.rbU:S.rebirthUsed;
-   text(v.state,p.dead?T('Poległ · czeka na wskrzeszenie','Fallen · awaiting revival'):rb?(used?T('Odrodzenie zużyte','Revival used'):T('Odrodzenie gotowe','Revival ready')):'');
+   text(v.state,p.dead?T('Poleg�  czeka na wskrzeszenie','Fallen  awaiting revival'):rb?(used?T('Odrodzenie zu�yte','Revival used'):T('Odrodzenie gotowe','Revival ready')):'');
    const state=i?p.actives:S,labels=i||PAD.on?['LT+X','LT+Y','LT+B','LT+A']:[KB.map.s1,KB.map.s2,KB.map.s3,KB.map.s4].map(kbName);
-   const markup=state.activeSlots.map((k,j)=>{const c=ACTIVE_CFG[k],cd=c?Math.ceil(state[c.cd]||0):0,low=c&&(c.resource==='stamina'?p.sta:p.mana)<c.cost,nm=k?SK[k].name:T('Wolny slot','Empty slot');return `<button type="button" data-player="${i+1}" data-coop-slot="${j}" class="pch-cell pcmp-slot${low?' no-mana':''}${cd?' cooling':''}" title="${nm}" aria-label="${T('Gracz ','Player ')}${i+1}: ${labels[j]} · ${nm}" ${!k||p.dead?'disabled':''}>${k?`<img alt="" src="${PREMIUM_ICONS['skille-'+k]}">`:''}<kbd>${labels[j]}</kbd>${cd?`<b>${cd}</b>`:''}</button>`}).join('');
+   const markup=state.activeSlots.map((k,j)=>{const c=ACTIVE_CFG[k],cd=c?Math.ceil(state[c.cd]||0):0,low=c&&(c.resource==='stamina'?p.sta:p.mana)<c.cost,nm=k?SK[k].name:T('Wolny slot','Empty slot');return `<button type="button" data-player="${i+1}" data-coop-slot="${j}" class="pch-cell pcmp-slot${low?' no-mana':''}${cd?' cooling':''}" title="${nm}" aria-label="${T('Gracz ','Player ')}${i+1}: ${labels[j]}  ${nm}" ${!k||p.dead?'disabled':''}>${k?`<img alt="" src="${PREMIUM_ICONS['skille-'+k]}">`:''}<kbd>${labels[j]}</kbd>${cd?`<b>${cd}</b>`:''}</button>`}).join('');
    if(markup!==v.signature){v.signature=markup;v.skills.innerHTML=markup}v.skills.previousElementSibling.hidden=true;
   }
-  meter(coXp,S.xp,S.need||1);coXp.title=T('Wspólne doświadczenie: ','Shared experience: ')+S.xp+' / '+S.need;text(coLevel.querySelector('strong'),S.lvl);text(coWallet.querySelector('.pch-coins b'),S.coins);text(coWallet.querySelector('.pch-ashes b'),EMB.e);
+  meter(coXp,S.xp,S.need||1);coXp.title=T('Wsp�lne do�wiadczenie: ','Shared experience: ')+S.xp+' / '+S.need;text(coLevel.querySelector('strong'),S.lvl);text(coWallet.querySelector('.pch-coins b'),S.coins);text(coWallet.querySelector('.pch-ashes b'),EMB.e);
   text(coRevive,mpTotTxt());
  }
  const oldHud=hud;let key='',buffKey='',scaleKey='';
@@ -2091,21 +2091,21 @@ ${menus} :is(.tab,.stab,.nbp-tab,.pc-prep-tab):hover:not(.on):not([aria-pressed=
   const sk=innerWidth+'x'+innerHeight;if(sk!==scaleKey){scaleKey=sk;const r=scr.getBoundingClientRect();scr.style.setProperty('--hu',Math.min(r.width/1040,r.height/577)+'px')}
   if(coop){coopHud();return}
   text(health.querySelector('strong'),meter(health,pl.hp,pl.max||1));text(mana.querySelector('strong'),meter(mana,pl.mana||0,pl.manaMax||SL.mana.max));
-  const st=meter(stamina,pl.sta||0,pl.staMax||1);stamina.title='Stamina · '+st;text(stamina.querySelector('small'),'STA · '+st);const dash=parseFloat(stamina.style.getPropertyValue('--fill'))+' 100';if(stamina._dash!==dash){stamina._dash=dash;stamina.querySelector('.pch-st-fill').style.strokeDasharray=dash}
-  meter(xp,S.xp,S.need||1);xp.title=T('Doświadczenie','Experience')+' · '+S.xp+' / '+S.need;
+  const st=meter(stamina,pl.sta||0,pl.staMax||1);stamina.title='Stamina  '+st;text(stamina.querySelector('small'),'STA  '+st);const dash=parseFloat(stamina.style.getPropertyValue('--fill'))+' 100';if(stamina._dash!==dash){stamina._dash=dash;stamina.querySelector('.pch-st-fill').style.strokeDasharray=dash}
+  meter(xp,S.xp,S.need||1);xp.title=T('Do�wiadczenie','Experience')+'  '+S.xp+' / '+S.need;
   for(const [e,id] of [[health,'hpbar'],[stamina,'stam'],[mana,'mana']]){e.classList.toggle('pch-flash',!!SETT.flash&&$(id).classList.contains('flash'));e.classList.toggle('pch-low',!!SETT.flash&&parseFloat(e.style.getPropertyValue('--fill'))<=25)}
   text(q('.pch-level strong'),S.lvl);text(q('.pch-coins b'),S.coins);text(q('.pch-ashes b'),EMB.e);
-  q('.pch-coins').setAttribute('aria-label',T('Monety: ','Coins: ')+S.coins);q('.pch-ashes').setAttribute('aria-label',T('Popioły: ','Ashes: ')+EMB.e);
+  q('.pch-coins').setAttribute('aria-label',T('Monety: ','Coins: ')+S.coins);q('.pch-ashes').setAttribute('aria-label',T('Popio�y: ','Ashes: ')+EMB.e);
   const en=ENCH.filter(k=>S.sk[k]).sort((a,b)=>(b===S.mainEnchant)-(a===S.mainEnchant));
   const k=en.map(k=>k+S.sk[k]).join('|')+'|'+PAD.on+'|'+S.activeSlots.length;
-  if(k!==key){key=k;q('.pch-enchants').innerHTML=[0,1].map(i=>{const k=en[i],label=k?SK[k].name+' · '+S.sk[k]:T('Wolne zaklęcie ostrza','Empty blade spell');return `<span class="pch-cell" title="${label}" aria-label="${label}">${k?`<img alt="" src="${PREMIUM_ICONS['skille-'+k]}"><b>${S.sk[k]}</b>`:''}</span>`}).join('');
-   text(q('.pch-attack kbd'),PAD.on?'RT':T('LPM','LMB'));text(q('.pch-block kbd'),PAD.on?'LB':T('PPM','RMB'));q('.pch-attack').title=T('Szybki atak · przytrzymaj: silny atak','Quick attack · hold: strong attack');q('.pch-block').title=T('Blok i parowanie','Block and parry');active.classList.toggle('pch-five',S.activeSlots.length>4)}
-  for(const e of active.querySelectorAll('.active-slot.empty')){e.title=T('Wolny slot — wyposaż w pauzie','Empty slot — equip in pause');e.setAttribute('aria-label',e.querySelector('kbd').textContent+': '+T('wolny slot','empty slot'))}
+  if(k!==key){key=k;q('.pch-enchants').innerHTML=[0,1].map(i=>{const k=en[i],label=k?SK[k].name+'  '+S.sk[k]:T('Wolne zakl�cie ostrza','Empty blade spell');return `<span class="pch-cell" title="${label}" aria-label="${label}">${k?`<img alt="" src="${PREMIUM_ICONS['skille-'+k]}"><b>${S.sk[k]}</b>`:''}</span>`}).join('');
+   text(q('.pch-attack kbd'),PAD.on?'RT':T('LPM','LMB'));text(q('.pch-block kbd'),PAD.on?'LB':T('PPM','RMB'));q('.pch-attack').title=T('Szybki atak  przytrzymaj: silny atak','Quick attack  hold: strong attack');q('.pch-block').title=T('Blok i parowanie','Block and parry');active.classList.toggle('pch-five',S.activeSlots.length>4)}
+  for(const e of active.querySelectorAll('.active-slot.empty')){e.title=T('Wolny slot - wyposa� w pauzie','Empty slot - equip in pause');e.setAttribute('aria-label',e.querySelector('kbd').textContent+': '+T('wolny slot','empty slot'))}
   // Statusy zachowuja pelne opisy i pozostaly czas w podpowiedziach.
   const b=$('buffs').innerHTML,c=$('chal'),bk=b+'|'+c.hidden+'|'+c.textContent+'|'+(S.sk.aard||0);
   if(bk!==buffKey){buffKey=bk;const temp=make('div','');temp.innerHTML=b.replace(/<br\s*\/?\s*>/gi,'\n');const labels=temp.textContent.split('\n').filter(Boolean),icons=['kaplica-lastch','kaplica-elite','kaplica-vigor','kaplica-venge','kaplica-breath','skille-bloodblade','skille-retaliation','skille-stoneguard','perki-riposta','skille-garda','kaplica-vigor','skille-iceblade','skille-aard'];
    const flags=[S.rebirth,S.trial,S.bless,S.fury>0,S.heri>0,S.bloodPrimed>0,S.swordGuardian,pl.riposte>0,pl.broken>0,S.herb>0,S.slowT>0,S.snare>0];let i=0;const effects=q('.pch-effects');effects.replaceChildren();flags.forEach((v,j)=>{if(!v)return;const e=make('span','pch-cell');e.title=labels[i]||'';e.setAttribute('aria-label',labels[i++]||'');const im=make('img','');im.alt='';im.src=PREMIUM_ICONS[icons[j]];e.append(im);effects.append(e)});
-   if(S.sk.aard){const e=make('span','pch-cell');e.title=SK.aard.name+' · '+S.sk.aard;e.setAttribute('aria-label',e.title);const im=make('img','');im.src=PREMIUM_ICONS['skille-aard'];im.alt='';e.append(im);effects.append(e)}
+   if(S.sk.aard){const e=make('span','pch-cell');e.title=SK.aard.name+'  '+S.sk.aard;e.setAttribute('aria-label',e.title);const im=make('img','');im.src=PREMIUM_ICONS['skille-aard'];im.alt='';e.append(im);effects.append(e)}
    const ch=q('.pch-challenge');ch.hidden=c.hidden;text(ch,c.textContent);ch.classList.toggle('done',c.classList.contains('done'))}
  };
  const O='#orient'.repeat(14)+' #screen.pc-hud',N=O+' #nbHud',H=O+' .pch',AS=O+' #activeSkillHud',u=n=>`calc(var(--hu,1px)*${n})`;
@@ -2313,7 +2313,7 @@ ${D} :is(.next,#dlgBtns,#witChoices)[hidden]{display:none!important}
 (()=>{
  const root=$('orient');if(!root.classList.contains('pc-menu')||coarse||isPort()||new URLSearchParams(location.search).get('tutorialui')==='0')return;
  root.classList.add('pc-tutorial');const card=$('tut'),skip=$('tutSkip'),head=document.createElement('div'),label=document.createElement('span'),count=document.createElement('span'),foot=document.createElement('div');
- head.className='pc-tut-head';label.textContent=EN?'Hint':'Podpowiedź';count.id='pcTutCount';count.textContent='';count.setAttribute('aria-hidden','true');head.append(label,count);foot.className='pc-tut-foot';foot.append(skip);card.prepend(head);card.append(foot);card.setAttribute('role','status');card.setAttribute('aria-atomic','true');
+ head.className='pc-tut-head';label.textContent=EN?'Hint':'Podpowied�';count.id='pcTutCount';count.textContent='';count.setAttribute('aria-hidden','true');head.append(label,count);foot.className='pc-tut-foot';foot.append(skip);card.prepend(head);card.append(foot);card.setAttribute('role','status');card.setAttribute('aria-atomic','true');
  const P='#orient'.repeat(48)+'.pc-menu.pc-tutorial #screen:not(.port)',T=P+' #tut',B=P+' #tutSkip',I=P+' #intro #iskip',style=document.createElement('style');style.id='pc-quiet-tutorial';
  style.textContent=`
 ${P}{--hint-u:clamp(.75px,.092vh,1.25px)}
@@ -2410,8 +2410,8 @@ if(new URLSearchParams(location.search).get('menufix')!=='0'){const st=document.
 @P@ #kap:not(.pc-chronicle) .m2k-row b{font-size:1.95vh!important;line-height:1.2!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important;text-align:left!important;align-self:end!important}
 @P@ #kap:not(.pc-chronicle) .m2k-row small,@P@ #kap:not(.pc-chronicle) .m2k-row .m2k-pips{text-align:left!important;white-space:normal!important;line-height:1.3!important;font-size:max(13px,1.6vh)!important;margin:0!important}
 @P@ #kap:not(.pc-chronicle) .m2k-row.lk>*{opacity:.58}
-@P@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips::after{content:' · zablokowane'}
-html[lang=en] @P@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips::after{content:' · locked'}
+@P@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips::after{content:'  zablokowane'}
+html[lang=en] @P@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips::after{content:'  locked'}
 @P@ #kap #kapBuy{white-space:nowrap!important;font-size:2.15vh!important;letter-spacing:.02em}
 @P@ #kap #kapBuy[disabled]{opacity:.62!important;filter:saturate(.45)!important;cursor:default}
 @P@ #kap #kapBuy:not([disabled]):hover{filter:brightness(1.18)!important}
@@ -2448,7 +2448,7 @@ html[lang=en] @P@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips::after{content:'
 /* Jednolity przycisk powrotu */
 @P@ :is(#kapBack,#optsBack,#manBack,#prepBack){border:1px solid var(--nbs-idle)!important;background:var(--nbs-cell)!important;padding:.95vh 1.9vh!important;border-radius:2px!important;opacity:1!important;transition:border-color .12s,filter .12s}
 @P@ :is(#kapBack,#optsBack,#manBack,#prepBack):hover{border-color:var(--nbs-hover)!important}
-@P@ :is(#kapBack,#optsBack,#manBack,#prepBack)::before{content:'←  '!important;position:static!important;display:inline!important;background:none!important;width:auto!important;height:auto!important}
+@P@ :is(#kapBack,#optsBack,#manBack,#prepBack)::before{content:'��'!important;position:static!important;display:inline!important;background:none!important;width:auto!important;height:auto!important}
 /* Minimalny rozmiar drobnych napisow */
 @P@ :is(#title .pc-mode-note,#title .pc-profile-stat small,#title .pc-chapter-label small,#opts .nbo-ah small,#prep .pc-detail-kicker,#lvl .level-heading .kicker,#lvl .card .ck,#lvl .card .fx em,#lvl .lvbtns .hint,#pause .nbp-sub){font-size:max(13px,1.5vh)!important}
 @P@ #opts .nbo-ah small{display:block!important;text-align:left!important}
@@ -2480,8 +2480,8 @@ html[lang=en] @P@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips::after{content:'
 @Q@ #prep .nb-prep-class:not(.on) b{font-size:2.05vh!important;white-space:nowrap!important}
 @Q@ #prep .nb-prep-class.on .premium-class-art{max-height:25vh!important;width:auto!important;max-width:100%!important;object-fit:contain!important;align-self:center!important}
 @Q@ #prep .nb-prep-class.on{height:auto!important;min-height:0!important}
-@Q@ #prep .nb-prep-class:not(.on)::after{content:'Wybierz  ›'!important;display:block!important;position:static!important;flex:0 0 auto!important;font:600 max(13px,1.55vh) Cinzel,Georgia,serif!important;letter-spacing:.08em!important;text-transform:uppercase!important;color:#d9b876!important;background:none!important;width:auto!important;height:auto!important;opacity:1!important}
-html[lang=en] @Q@ #prep .nb-prep-class:not(.on)::after{content:'Select  ›'!important}
+@Q@ #prep .nb-prep-class:not(.on)::after{content:'Wybierz  >'!important;display:block!important;position:static!important;flex:0 0 auto!important;font:600 max(13px,1.55vh) Cinzel,Georgia,serif!important;letter-spacing:.08em!important;text-transform:uppercase!important;color:#d9b876!important;background:none!important;width:auto!important;height:auto!important;opacity:1!important}
+html[lang=en] @Q@ #prep .nb-prep-class:not(.on)::after{content:'Select  >'!important}
 @Q@ #prep .nb-prep-class:not(.on):hover{border-color:var(--nbs-hover)!important;background:var(--nbs-cellh)!important;box-shadow:var(--nbs-glow)!important;filter:none!important}
 @Q@ #prep .nb-prep-class:not(.on):hover::after{color:#fff0d5!important}
 @Q@ #prep #prepCh .opt.nb-chal-art{padding-left:calc(88 * var(--pc-u,1px))!important;min-height:calc(78 * var(--pc-u,1px))!important}
