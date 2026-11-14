@@ -773,3 +773,4 @@ cache695 · Opis poziomów trudności zgodny z liczbami + podpowiedź (nie spraw
 cache696 · Łatwy: −10% wrogów przez pierwsze 3 min nocy (nie sprawdzono w przeglądarce, pad, EN na ekranie)
 cache697 · Solne Nabrzeze jako rozdzial III (szesc rozdzialow): port, zaloga, Bosman, koga, nowe nawierzchnie. Nie sprawdzono: pelne przejscie, pad, dzwiek, FPS autora, kooperacja, itch.io.
 cache698 · Port: zaloga patrzy w strone gracza, Bosman z hakiem na lancuchu i druga faza. Nie sprawdzono: pelna walka z Bosmanem, pad, dzwiek, FPS autora, kooperacja, itch.io.
+cache699 · Menu glowne etap 1: pasy mgly, pietno przy zaznaczeniu, ikony, ornamenty, urna i ramka licznika, kursor myszy. Nie sprawdzono: fizyczny pad, monitor autora, itch.io.

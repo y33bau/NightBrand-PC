@@ -10317,6 +10317,41 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
   else if(a==='load'){const m=ta.value.match(/\{[\s\S]*\}/);if(m){try{push();L=JSON.parse(m[0]);save()}catch(x){inf.textContent='Błędny układ w polu.'}}}
  });
 }catch(e){quietErr('menuEditor',e)}})();
+// 14.11.2026: odswiezenie menu glownego, etap 1 (grafiki ChatGPT). Tylko wyglad: te same przyciski, kolejnosc, nawigacja padem i klawiatura.
+// Zaznaczenie: pas mgly z zarem i rozzarzone pietno. Zlota ramka padu (.pf, styl pad-focus) zostaje bez zmian.
+(()=>{try{
+ const Z='#orient'.repeat(150)+' #title.pc-home',A=u=>`url('${u}')`,
+  PAS=A('assets/ui/0263883b608f3e7b380f68af2575a046dd834eeb561ebc73af5641469dd4e45a.webp'),PAS_ON=A('assets/ui/31f7a4bb087755b640edb1ed8e1d4c44649b7b70fdb7afa6b688f0b99ed0fef7.webp'),GRAJ=A('assets/ui/94a14dac03245fb2b6bdbad243ff76c16d68d88ed8b3de2dca3e39c48653e067.webp'),SEP=A('assets/ui/dc953247d88ddda8bd2dbc13f0f1ec4f6427ab12419da7836ac468cad25ea55d.webp'),PIET=A('assets/ui/a8a2aa56606d05baf32c926ae36412f62a4fa8eaaf6c81f0a4b6a23cfa6808c7.webp'),
+  IK={kapBtn:A('assets/ui/09c2709d88e884e8fb245450a7c371617c68d7b5fb1452a5956ead6c57cf33ee.webp'),kronBtn:A('assets/ui/65573edb49b7e9f6506f19263870f7d4e2f30c32233621a1b26b37675767b78c.webp'),manBtn:A('assets/ui/7c65e8bd51920f28d168cf22b7eab6cfdcb943622d1424c5d053388d742a6ac9.webp'),optsBtn:A('assets/ui/c18aafac5bf475178a58ebc01f17e3fc4dd47acb1461ce60ecc4e865f8355c06.webp')},
+  ON=':is(:hover,:focus,:focus-visible,.pf)',NAV=Z+' .premium-nav>:is(.premium-journey,#kapBtn,#kronBtn,#manBtn,#optsBtn)',
+  KURSOR="url('assets/ui/f2bdfe0d27c4a8f08d3ffa8134a8a68bff08b21b4d9738ab1163dc0abff798b6.png') 1 1",KURSOR_ON="url('assets/ui/bbb913eb13015dbe4642b534d69766dd39a04688ad6f98bd4b3611032eea7bf7.png') 1 1";
+ const st=document.createElement('style');st.id='nb-menu-odswiezenie';st.textContent=`
+${NAV}{border-color:transparent!important;border-image:none!important;background-color:transparent!important;background-image:none!important;position:relative!important;isolation:isolate!important;overflow:visible!important}
+${NAV}::after{content:''!important;display:block!important;position:absolute!important;inset:-38% -9% -38% -9%!important;z-index:-1!important;pointer-events:none!important;background:${PAS} center/100% 100% no-repeat!important;opacity:.85!important;transition:opacity .18s!important}
+${NAV}${ON}::after{background-image:${PAS_ON}!important;opacity:1!important}
+${Z} .premium-nav>.premium-journey::after{inset:-46% -13% -46% -13%!important;background-image:${GRAJ}!important;opacity:.92!important}
+${Z} .premium-nav>.premium-journey${ON}::after{background-image:${GRAJ}!important;opacity:1!important;filter:brightness(1.28) saturate(1.15)!important}
+${NAV}::before{content:''!important;display:block!important;position:absolute!important;top:-14%!important;bottom:-14%!important;left:auto!important;right:3%!important;width:9.5%!important;background:${PIET} center/contain no-repeat!important;opacity:0!important;transform:scale(.8)!important;transition:opacity .16s,transform .16s!important;pointer-events:none!important;color:transparent!important;font-size:0!important}
+${NAV}${ON}::before{opacity:1!important;transform:scale(1)!important;animation:nbPietno 1.6s ease-in-out infinite!important}
+${Z} .premium-nav>.premium-journey::before{right:6%!important;top:-18%!important;bottom:-18%!important}
+@keyframes nbPietno{0%,100%{filter:brightness(1)}50%{filter:brightness(1.35) drop-shadow(0 0 6px #ff8a3a)}}
+${Object.entries(IK).map(([id,u])=>`${Z} .premium-nav>#${id}{background-image:${u}!important;background-repeat:no-repeat!important;background-position:4% 50%!important;background-size:auto 104%!important}`).join('\n')}
+${Z} .premium-nav{background:none!important}
+${Z} .premium-nav::before,${Z} .premium-nav::after{content:''!important;display:block!important;position:absolute!important;left:12%!important;right:12%!important;height:30px!important;background:${SEP} center/contain no-repeat!important;pointer-events:none!important;opacity:.9!important}
+${Z} .premium-nav{position:relative!important}
+${Z} .premium-nav::before{top:2px!important}
+${Z} .premium-nav::after{bottom:2px!important}
+${Z} .nb2-daily{border:none!important;background:${A('assets/ui/6679e28f0d4528a14db5abaeb1f51f96eefc35d966cdec24f48246011b086585.webp')} 4% 50%/auto 92% no-repeat,${PAS} center/100% 160% no-repeat!important;padding-left:13%!important}
+${Z} .nb2-daily${ON}{background:${A('assets/ui/6679e28f0d4528a14db5abaeb1f51f96eefc35d966cdec24f48246011b086585.webp')} 4% 50%/auto 92% no-repeat,${PAS_ON} center/100% 160% no-repeat!important}
+${Z} .pc-profile{border:none!important;border-image:none!important;background:${A('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp')} center/100% 100% no-repeat!important;box-shadow:none!important;padding-left:2.2%!important;padding-right:2.2%!important}
+${Z} .pc-profile>.pcg-edge{display:none!important}
+${Z} img.pc-profile-ash{content:${A('assets/ui/bec1edb981cde86153bfc1f97330a541237d7963c2926133284dbc3f9ef457bf.webp')}!important;filter:none!important;object-fit:contain!important}
+${Z} .pc-profile-stat+.pc-profile-stat{position:relative!important;padding-left:2.4em!important}
+${Z} .pc-profile-stat+.pc-profile-stat::before{content:''!important;position:absolute!important;left:0!important;top:50%!important;width:2.1em!important;height:2.1em!important;transform:translateY(-50%)!important;background:${A('assets/ui/516bd88256fbc226fa5570719b9fd6743b2086353a5a9e8c156f936324dc5a0a.webp')} center/contain no-repeat!important}
+${'#orient'.repeat(150)} :is(#title,#kap,#opts,#manual,#prep,#conf,#end,#lang){cursor:${KURSOR},auto!important}
+${'#orient'.repeat(150)} :is(#title,#kap,#opts,#manual,#prep,#conf,#end,#lang) :is(button,a,summary,label,input,[role=button],[role=tab],[role=radio]){cursor:${KURSOR_ON},pointer!important}
+`;document.head.append(st);
+}catch(e){quietErr('menuOdswiezenie',e)}})();
 requestAnimationFrame(frame);
 })();
 
