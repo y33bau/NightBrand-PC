@@ -10340,7 +10340,7 @@ ${Z} .nb2-daily${ON}{outline:none!important;box-shadow:none!important;filter:non
 ${Z} :is(.nb-mode,.pc-language)${ON}{outline:none!important;box-shadow:none!important;filter:drop-shadow(0 0 6px rgba(255,138,58,.7))!important}
 ${Object.entries(IK).map(([id,u])=>`${Z} .premium-nav>:is(${id==='premium-journey'?'.'+id:'#'+id},#nbBrak)::before{background-image:${u}!important}`).join('\n')}
 ${Z} .premium-nav{background:none!important}
-${Z} .premium-nav::before,${Z} .premium-nav::after{content:''!important;display:block!important;position:absolute!important;left:12%!important;right:12%!important;height:30px!important;background:${SEP} center/contain no-repeat!important;pointer-events:none!important;opacity:.9!important}
+${Z} .premium-nav::before,${Z} .premium-nav::after{content:none!important;display:block!important;position:absolute!important;left:12%!important;right:12%!important;height:30px!important;background:${SEP} center/contain no-repeat!important;pointer-events:none!important;opacity:.9!important}
 ${Z} .premium-nav{position:relative!important}
 ${Z} .premium-nav::before{top:2px!important}
 ${Z} .premium-nav::after{bottom:2px!important}
@@ -10367,7 +10367,7 @@ ${S} :is(${CARD})${ON}{outline:none!important;border-color:rgba(255,150,80,.85)!
 ${S} .nb2-seg>i{border:none!important;box-shadow:none!important;background:none!important;color:rgba(230,214,184,.55)!important}
 ${S} .nb2-seg>i.is-on{background:${PAS_ON} center/100% 100% no-repeat!important;color:#f3e2c2!important}
 ${S} .pc-fantasy-title{border-image:none!important;border-color:transparent!important;background:none!important;box-shadow:none!important;position:relative!important;overflow:visible!important}
-${S} .pc-fantasy-title::after{content:''!important;display:block!important;position:absolute!important;left:50%!important;top:100%!important;width:min(78%,320px)!important;height:24px!important;transform:translate(-50%,-4px)!important;background:${SEP} center/contain no-repeat!important;pointer-events:none!important}
+${S} .pc-fantasy-title::after{content:''!important;display:block!important;position:absolute!important;left:0!important;right:0!important;width:100%!important;top:100%!important;height:34px!important;transform:translateY(-3px)!important;background:url('assets/ui/e87781cfaa14780d76e1373114c875c6decbcc7790153c52696e97dd6354f281.webp') center/auto 100% no-repeat,url('assets/ui/6912c5b070f1130d9bcc48c7936b6fd3effa4128a0d462ce9145f932770cdce7.webp') left center/calc(50% - 9px) 100% no-repeat,url('assets/ui/789a7c5e5aeb6b48e8a1ff01e6e8a985a2fa162fca2d479e8075b1cd2c5fc64f.webp') right center/calc(50% - 9px) 100% no-repeat!important;filter:brightness(1.15) drop-shadow(0 2px 3px rgba(0,0,0,.8))!important;pointer-events:none!important}
 /* glowne akcje: spalona deska z okuciami; zaznaczenie: zar od spodu */
 ${S} :is(${MAIN}){border-color:transparent!important;border-image:none!important;background:url('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp') center/100% 100% no-repeat!important;box-shadow:none!important;outline:none!important}
 ${S} :is(${MAIN})${ON}{filter:brightness(1.12)!important;box-shadow:0 10px 18px -10px rgba(255,120,40,.9),inset 0 -14px 18px -12px rgba(255,130,50,.75)!important;animation:nbZar 1.8s ease-in-out infinite!important}
