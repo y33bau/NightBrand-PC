@@ -41,10 +41,10 @@ function applyTouchMode(){$('opts').classList.add('sl');$('figKb').hidden=false;
 function applyStory(){$('storyTgl').checked=!STORYMODE;$('sFab').classList.toggle('on',STORYMODE);$('sArc').classList.toggle('on',!STORYMODE);$('sFab').setAttribute('aria-pressed',String(STORYMODE));$('sArc').setAttribute('aria-pressed',String(!STORYMODE));$('storyModeHint').textContent=STORYMODE?(EN?'You unlock acts one by one.':'Rozdziały odblokowujesz po kolei.'):(EN?'All acts available right away.':'Wszystkie rozdziały dostępne od razu.');}
 $('sFab').addEventListener('click',()=>{$('storyTgl').checked=false;$('storyTgl').dispatchEvent(new Event('change'))});$('sArc').addEventListener('click',()=>{$('storyTgl').checked=true;$('storyTgl').dispatchEvent(new Event('change'))});
 // 14.11.2026: opis poziomów zgodny z liczbami w DF (10_stan_gry.js) i Popiołami (22_postac_zapis_ustawienia.js, mnożnik .8/1/1.3)
-const DIFFCAP=EN?{e:['A calm start.',[['Enemies','−20% count, −25% health, −30% damage'],['Rewards','experience unchanged, coins −10%, Ashes −20%'],['Cauldrons','heal more (+33%)']],'Act I starts more gently.'],
+const DIFFCAP=EN?{e:['A calm start.',[['Enemies','−20% count, −25% health, −30% damage'],['Rewards','experience unchanged, coins −10%, Ashes −20%'],['Cauldrons','heal more (+33%)']],'First 3 minutes of each night: 10% fewer enemies. Act I starts more gently.'],
  n:['Balanced play, as designed.',[['Enemies','standard'],['Rewards','standard'],['Cauldrons','standard']]],
  h:['For the battle-hardened.',[['Enemies','+12% count, +25% health, +20% damage'],['Rewards','experience +15%, coins +15%, Ashes +30%'],['Cauldrons','heal less (−33%)']]]}
-:{e:['Spokojny początek.',[['Wrogowie','−20% liczby, −25% życia, −30% obrażeń'],['Nagrody','doświadczenie bez zmian, monety −10%, Popioły −20%'],['Kociołki','leczą więcej (+33%)']],'Rozdział I zaczyna się łagodniej.'],
+:{e:['Spokojny początek.',[['Wrogowie','−20% liczby, −25% życia, −30% obrażeń'],['Nagrody','doświadczenie bez zmian, monety −10%, Popioły −20%'],['Kociołki','leczą więcej (+33%)']],'Pierwsze 3 minuty każdej nocy: o 10% mniej wrogów. Rozdział I zaczyna się łagodniej.'],
  n:['Zrównoważona rozgrywka, tak jak ją zaprojektowano.',[['Wrogowie','bez zmian'],['Nagrody','bez zmian'],['Kociołki','bez zmian']]],
  h:['Dla zaprawionych w boju.',[['Wrogowie','+12% liczby, +25% życia, +20% obrażeń'],['Nagrody','doświadczenie +15%, monety +15%, Popioły +30%'],['Kociołki','leczą mniej (−33%)']]]};
 // 14.11.2026: nienachalna podpowiedź o poziomach trudności na ekranie przygotowania (prośba autora)

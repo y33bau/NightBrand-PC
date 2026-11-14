@@ -770,3 +770,4 @@ cache692 · Zaklęcie ostrza nie barwi sprite'a bohatera; 1 s zatrzymania świat
 cache693 · Menu drobne: pauza zaczyna od Sterowania bez umiejętności, mniejsze Porzuć noc, fokus przy wyborze języka i w Instrukcji, komunikat blokady kart, noc rusza po pierwszym ruchu (najpóźniej po 4 s). Sprawdzono w przeglądarce (PC, klawiatura). Nie sprawdzono: pad, dotyk.
 cache694 · Łatwy: łagodniejszy start rozdz. I + podpowiedź o trudności na ekranie przygotowania (nie sprawdzono w przeglądarce, pad, EN na ekranie)
 cache695 · Opis poziomów trudności zgodny z liczbami + podpowiedź (nie sprawdzono wyglądu w przeglądarce, pad, EN na ekranie)
+cache696 · Łatwy: −10% wrogów przez pierwsze 3 min nocy (nie sprawdzono w przeglądarce, pad, EN na ekranie)
