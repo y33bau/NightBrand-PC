@@ -701,3 +701,6 @@ const SPRITE_GROUPS={
  // koksowniki i mur oporowy korzystaja z grafik innych rozdzialow
  for(const k of ['p2_brazier_0','p2_brazier_1','p2_brazier_2','p2_brazier_3','wl_fort','wl_cap'])if(SPRITE_GROUPS[k]&&!SPRITE_GROUPS[k].includes('r6'))SPRITE_GROUPS[k].push('r6');
 }
+
+// Rycerz, nowy styl (15.11.2026): arkusz Wypadu (4 klatki: bok, dol, gora; rzad 4 = powrot: bok, dol, gora)
+SPRITE_DATA.knight_lunge='assets/bohaterowie/0ea995147f7f64c077746bd794a08fe5cf7a7c9d21fea2b747f9a1dad3f6f35f.webp';SPRITE_RES.knight_lunge=4;SPRITE_GROUPS.knight_lunge=['core'];

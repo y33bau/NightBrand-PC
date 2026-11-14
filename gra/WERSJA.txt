@@ -788,3 +788,4 @@ cache710 · pauza i koniec mapy: zaznaczenie glownych przyciskow bez prostokatne
 cache711 · jeden standard zaznaczen: komunikaty, rozmowy, wybor u Wita, final, Pomin na wstepie, ekran bledu (wstegi/zar, Cinzel+Georgia); nie sprawdzono: pad, final z prawdziwym obrazem
 cache712 · publikacja: menu AAA (699-711) + szlif portu (runda-port-szlif); usuniete nieuzywane stare tla i postacie (1,9 MB); nie sprawdzono: pad, itch.io
 cache713 · Port: fabula rozdz. III, nowi NPC Ambrozy i Wieslawa (bez bialych obwodek), Chojrak w porcie, smierc Bosmana, zakonczenia. Nie sprawdzono: NPC w grze, mieszczenie sie tekstow, EN, pad, FPS.
+cache714 · Bohaterowie nowy styl: Rycerz (12 arkuszy + Wypad) i Zabojczyni (czysta przezroczystosc, ciezki atak dol/gora), nowa technika Rycerza Wypad z ikona. Nie sprawdzono: pad, dzwiek, FPS u autora, kooperacja, itch.io.

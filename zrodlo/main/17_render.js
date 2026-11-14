@@ -7,6 +7,7 @@ function heroFrameV2(D){const MI=S&&S.mil&&D.mil?D.mil:null,fd=()=>Math.abs(pl.f
   const K=S&&S.kat&&D.kat?D.kat:S&&S.kn&&D.kn?D.kn:S&&S.dzw&&D.dzw?D.dzw:null,Z=S&&S.zab&&D.zab?D.zab:null,DZ=S&&S.dzw&&D.dzw?D.dzw:null;
   if(DZ&&pl.tonT>0&&!pl.atk)return ix(DZ.ton,(.5-pl.tonT)/.5*4);if(DZ&&DZ.cast&&pl.castT>0&&!pl.atk)return ix(DZ.cast[fd()],(.45-pl.castT)/.45*4);
   if(K&&pl.atk&&pl.atk.kind==='whirl'){const a=pl.atk;if(a.stage==='rec')return ix(K.whirlRec,(1-a.t/WHIRL.recovery)*4);if(a.elapsed<.12)return ix(K.whirlWind,a.elapsed/.12*4);return at(K.whirlLoop,a.elapsed,13.3,true)}
+  if(K&&K.lunge&&pl.atk&&pl.atk.kind==='wypad'){const a=pl.atk,arr=K.lunge[fd()];return ix(arr,a.stage==='wind'?(1-a.t/LUNGE.wind)*1.99:a.stage==='dash'?(a.at<LUNGE.dur*.45?2:3):a.t>LUNGE.rec*.45?3:4)}
   if(K&&pl.atk&&pl.atk.kind==='leap'){const a=pl.atk,arr=K.leap[fd()];return ix(arr,a.stage==='wind'?0:a.stage==='air'?(a.at<LEAP.air*.5?1:2):3)}
   if(Z&&pl.atk&&pl.atk.kind==='h'){const a=pl.atk;if(a.stage==='wind')return ix(Z.whirlWind,(1-a.t/(a.visualWind||SL.heavy.wind))*4);if(a.stage==='act')return ix(Z.whirlLoop,(1-a.t/SL.heavy.act)*Z.whirlLoop.length);return ix(Z.whirlRec,(1-a.t/SL.heavy.rec)*Z.whirlRec.length)}
   if(Z&&pl.atk&&pl.atk.kind==='rend'){const a=pl.atk,arr=Z.rend[fd()];return ix(arr,a.stage==='wind'?(1-a.t/REND.wind)*1.99:a.stage==='cut'?2+a.at/REND.dur*3.99:6+Math.min(1.99,(1-a.t/REND.rec)*2))}

@@ -174,7 +174,7 @@ const EMB_TABS=[EN?'Body and Steel':'Ciało i stal',EN?'Pact and Cunning':'Pakt 
 const EMB_OLD={hart:[20,35,55,80,110],ostrze:[25,40,60,90,130],wytrz:[20,40,70],magnes:[15,30,50],pamiec:[20,35,55,80,110],zapas:[15,30,50]};
 const TR_IDS=['cos_tr_fire','cos_tr_blood','cos_tr_rot','cos_tr_ice'];
 // armour set ids (must exist before loadEmb/cleanEmb run)
-const ARM_V=['kosc','otch','zloto','plat'],ARM_PRE={r:'knight_',k:'kat_',z:'zab_',d:'dzw_',m:'mil_'},ARM_EXTRA={r:['knight_death','knight_whirl'],k:['kat_death','kat_leap','kat_whirl','kat_hook'],z:['zab_death','zab_rend','zab_fan','zab_whirl','zab_atk45'],d:['dzw_ex'],m:['mil_ex']};
+const ARM_V=['kosc','otch','zloto','plat'],ARM_PRE={r:'knight_',k:'kat_',z:'zab_',d:'dzw_',m:'mil_'},ARM_EXTRA={r:['knight_death','knight_whirl','knight_lunge'],k:['kat_death','kat_leap','kat_whirl','kat_hook'],z:['zab_death','zab_rend','zab_fan','zab_whirl','zab_atk45'],d:['dzw_ex'],m:['mil_ex']};
 const CLS_ORIG={};
 function cleanEmb(raw){const r=isRecord(raw)?raw:{},ru=isRecord(r.u)?r.u:{},u={};let e=Math.floor(clampNumber(r.e,0,1e7,0));
   if(r.v!==2){for(const k in EMB_OLD){const n=Math.floor(clampNumber(ru[k],0,EMB_OLD[k].length,0));for(let i=0;i<n;i++)e+=EMB_OLD[k][i]}}
