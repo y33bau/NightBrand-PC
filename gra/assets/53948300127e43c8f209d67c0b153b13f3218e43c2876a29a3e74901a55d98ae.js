@@ -683,7 +683,7 @@ trDom(document.body);
   const pick=l=>{try{localStorage.setItem('pn_lang',l)}catch(e){}if(l!==LANG){location.reload();return}if(box&&!box.hidden){box.hidden=true;const t=document.querySelector('#title button:not([disabled])');t&&t.focus()}};
   for(const b of document.querySelectorAll('[data-lang],[data-setlang]')){const l=b.dataset.lang||b.dataset.setlang;b.classList.toggle('on',l===LANG);b.setAttribute('aria-pressed',String(l===LANG));b.addEventListener('click',()=>pick(l))}
   if(!box)return;box.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){const bs=[...box.querySelectorAll('button')],i=bs.indexOf(document.activeElement);bs[(i+1+bs.length)%bs.length].focus();e.preventDefault()}});
-  if(!saved){box.hidden=false;const fo=()=>{if(box.hidden)return;const f=box.querySelector('button.on');if(f&&!box.contains(document.activeElement))f.focus()};for(const t of [60,400,1500])setTimeout(fo,t)}})();
+  if(!saved){box.hidden=false;const fo=()=>{if(box.hidden)return;const f=box.querySelector('button.on');if(f&&!box.contains(document.activeElement))f.focus()};for(const t of [60,400,1500,4000,8000,14000])setTimeout(fo,t);addEventListener('keydown',e=>{if(!box.hidden&&!box.contains(document.activeElement)&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Enter',' '].includes(e.key)){e.preventDefault();e.stopImmediatePropagation();fo()}},true)}})();
 if(!window.THREE){$('screen').insertAdjacentHTML('beforeend',(EN?'<div id="err">Failed to load the 3D library. Please refresh the page.</div>':'<div id="err">Nie udało się wczytać biblioteki 3D. Odśwież stronę.</div>'));return}
 const TS=16,MW=104,MH=91,WW=MW*TS,WH=MH*TS,NIGHT=720,BREAK_AT=360,PITCH=55*Math.PI/180,DIST=30,
   // the 3D scene is drawn at this height and scaled up: higher = sharper sprites; phones get a lighter setting
@@ -4572,7 +4572,7 @@ function rerollCards(){if(!S||!S.choosing)return;if(pl2&&S.mpTurn===2&&PAD2.g&&!
 const LEVEL_CHOICE_DELAY=1000;let levelReadyAt=0,levelReadyTimer=0;
 let MPCLK=false;function pickLevelCard(i){if(performance.now()<levelReadyAt)return;if(S&&pl2&&S.mpTurn===2&&PAD2.g&&!MPCLK)return;pick(i)}
 function rerollLevelCards(){if(performance.now()<levelReadyAt)return;rerollCards()}
-function armLevelCards(){clearTimeout(levelReadyTimer);levelReadyAt=performance.now()+LEVEL_CHOICE_DELAY;$('lvl').classList.add('choice-wait');$('levelWait').textContent=(EN?'Read the descriptions — you can choose in 1 s':'Przeczytaj opisy — wybór dostępny po 1 s');levelReadyTimer=setTimeout(()=>{$('lvl').classList.remove('choice-wait');$('levelWait').textContent=''},LEVEL_CHOICE_DELAY)}
+function armLevelCards(){clearTimeout(levelReadyTimer);levelReadyAt=performance.now()+LEVEL_CHOICE_DELAY;$('lvl').classList.add('choice-wait');$('levelWait').textContent=(EN?'Cards unlock in a moment':'Karty odblokują się za chwilę');levelReadyTimer=setTimeout(()=>{$('lvl').classList.remove('choice-wait');$('levelWait').textContent=''},LEVEL_CHOICE_DELAY)}
 function openLevelUpNow(){const lvWasHidden=$('lvl').hidden||$('lvl').classList.contains('lvout');clearTimeout(LVOUT);$('lvl').classList.remove('lvout');resetInput();padRumble(.07,.22,110);S.choosing=true;if(pl2){if(!S.mpTurn)S.mpTurn=1}else S.mpTurn=0;pl.swingT=0;play('level',0);if(!pl.dead)pl.hp=Math.min(pl.max,pl.hp+pl.max*S.pk.lvHeal);if(pl2&&!pl2.dead)pl2.hp=Math.min(pl2.max,pl2.hp+pl2.max*S.pk.lvHeal);// level healing is defined by the selected preparation perks
   S.choices=rollChoices();S.rr=1+(S.rrBonus||0);renderCards();
   $('lvl').hidden=false;if(lvWasHidden){const L=$('lvl'),cl=LVMODE;L.classList.remove('lvsoft','lvquick');void L.offsetWidth;L.classList.add(cl);setTimeout(()=>L.classList.remove(cl),1700)}LVMODE='lvsoft';document.querySelector('#lvl .level-build').open=false;armLevelCards();$('touch').hidden=true;setTimeout(()=>{const f=$('card0');f&&f.focus({preventScroll:true});const lp=document.querySelector('#lvl .level-panel');if(lp)lp.scrollTop=0},30)}
@@ -4707,6 +4707,8 @@ function update(dt){if(S&&S.exec>0){S.exec-=dt;dt*=S.exec>.35?.2:.5}
   if(S&&S.phase==='play')bannerTick(dt);
   if(S&&S.intro){introTick(dt);return}
   if(S&&S.phase==='play')pumpNotice();if(!S||S.phase!=='play'||S.notice||S.choosing||S.shop||S.paused)return;
+  // 14.11.2026: noc rusza dopiero po pierwszym ruchu lub przycisku gracza (najpóźniej po 4 s), żeby zegar nie biegł, zanim gracz zobaczy bohatera
+  if(!S.go){S.goT=(S.goT||0)+dt;let any=!!(S.dg||S.train||S.goT>=4||mouseL||mouseR||tAtk||tBlock||tj.x||tj.y||rollPress||heavyPress||PAD.atk||PAD.blk||PAD.x||PAD.y);if(!any)for(const k in keys)if(keys[k]){any=true;break}if(!any)return;S.go=1}
   if(TRN.god&&!pl.dead){pl.hp=pl.max;pl.sta=pl.staMax;pl.mana=pl.manaMax}if(S.train&&!pl.dead){pl.hp=Math.min(pl.max,pl.hp+pl.max*.12*dt);if(pl.manaMax)pl.mana=Math.min(pl.manaMax,(pl.mana||0)+pl.manaMax*.25*dt)}
   if(S.hitstop>0){S.hitstop-=dt;if(rollPress)S.bufRoll=1;return}
   if(S.dialog){if(talkPress||rollPress)advanceDialog();return}
@@ -6315,7 +6317,7 @@ function manPage(id){
 let manTab='start';
 function manShow(id){manTab=id;$('manBody').innerHTML=manPage(id);for(const b of $('manTabs').children)b.classList.toggle('on',b.dataset.t===id);$('manual').scrollTop=0}
 function manInit(){if($('manTabs').children.length)return;for(const [id,n] of MAN_TABS){const b=document.createElement('button');b.type='button';b.className='tab'+(id===manTab?' on':'');b.dataset.t=id;b.textContent=n;b.addEventListener('click',()=>manShow(id));$('manTabs').appendChild(b)}}
-$('manBtn').addEventListener('click',()=>{manInit();trainTab();$('title').hidden=true;$('manual').hidden=false;manShow(manTab);setTimeout(()=>{const b=$('manTabs').querySelector('.tab.on');b&&b.focus()},30)});
+$('manBtn').addEventListener('click',()=>{manInit();trainTab();$('title').hidden=true;$('manual').hidden=false;manShow(manTab);for(const t of [30,250])setTimeout(()=>{const b=$('manTabs').querySelector('.tab.on');if(b&&!$('manual').hidden&&!$('manual').contains(document.activeElement))b.focus()},t)});
 function trainTab(){if($('trainBtn'))return;const tb=document.createElement('button');tb.type='button';tb.id='trainBtn';tb.className='tab';tb.dataset.t='train';tb.textContent=EN?'Training ground ▸':'Plac ćwiczeń ▸';tb.title=EN?'Practise on act I: no death, nothing saved':'Ćwicz w rozdziale I: bez śmierci, nic się nie zapisuje';$('manTabs').appendChild(tb);tb.addEventListener('click',startTraining)}
 $('manBack').addEventListener('click',()=>{$('manual').hidden=true;$('title').hidden=false;setTimeout(()=>$('manBtn').focus(),30)});
 $('optsBtn').addEventListener('click',()=>{$('title').hidden=true;$('opts').hidden=false;refreshDat();setTimeout(()=>document.querySelector('#opts .tab.on').focus(),30)});
@@ -7674,7 +7676,7 @@ function show(k){tab=k;for(const b of nav.querySelectorAll('.nbp-tab'))b.setAttr
 nav.addEventListener('click',e=>{const b=e.target.closest('.nbp-tab');if(b)show(b.dataset.nbp)});
 new MutationObserver(()=>{if(pz.hidden)return;
  const nm=$('start'+CH),t=nm&&CH<=5?[...nm.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim():'';sub.textContent=t;
- show(load.hidden?'controls':'skills');outs();
+ show(load.hidden||!(S&&S.sk&&ACTIVE_SLASHER.some(k=>S.sk[k]))?'controls':'skills');outs();// bez żadnej aktywnej umiejętności pauza zaczyna od Sterowania
  if(!keys.querySelector('.stab.on'))pauseSub(coarse?'touch':PAD.on?'pad':'kb')}).observe(pz,{attributes:true,attributeFilter:['hidden']});
 show('skills');
 const R=PREMIUM_ASSETS,P='#orient'.repeat(12)+' #pause.nbp',st=mk('style','nbp-style');
@@ -9396,7 +9398,7 @@ setInterval(()=>{const p=document.getElementById('pause');if(!p||p.hidden||p.off
    b.addEventListener('click',()=>{KRONTAB=0;$('kronBtn')?.click()});new MutationObserver(fill).observe(title,{attributes:true,attributeFilter:['hidden','class']});fill()}}
 
  // ---------- Pauza ----------
- put($('pauseMenuBtn'),T('Porzuć noc','Abandon night'));
+ put($('pauseMenuBtn'),T('Porzuć noc','Abandon night'));{const q=$('pauseMenuBtn').style;q.setProperty('transform','scale(.8)','important');q.setProperty('margin-left','6vh','important');q.setProperty('opacity','.82','important')}// mniejszy i odsunięty od „Wróć do gry”
  {const pz=$('pause'),src=$('pane-gfx'),dst=pz.querySelector('.nbp-pane[data-pane="gfx"]');
   if(src&&dst){const home=()=>{const from=pz.hidden?dst:src,to=pz.hidden?src:dst;while(from.firstChild)to.append(from.firstChild)};new MutationObserver(home).observe(pz,{attributes:true,attributeFilter:['hidden']})}}
 

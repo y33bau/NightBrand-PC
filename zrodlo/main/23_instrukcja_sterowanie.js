@@ -50,7 +50,7 @@ function manPage(id){
 let manTab='start';
 function manShow(id){manTab=id;$('manBody').innerHTML=manPage(id);for(const b of $('manTabs').children)b.classList.toggle('on',b.dataset.t===id);$('manual').scrollTop=0}
 function manInit(){if($('manTabs').children.length)return;for(const [id,n] of MAN_TABS){const b=document.createElement('button');b.type='button';b.className='tab'+(id===manTab?' on':'');b.dataset.t=id;b.textContent=n;b.addEventListener('click',()=>manShow(id));$('manTabs').appendChild(b)}}
-$('manBtn').addEventListener('click',()=>{manInit();trainTab();$('title').hidden=true;$('manual').hidden=false;manShow(manTab);setTimeout(()=>{const b=$('manTabs').querySelector('.tab.on');b&&b.focus()},30)});
+$('manBtn').addEventListener('click',()=>{manInit();trainTab();$('title').hidden=true;$('manual').hidden=false;manShow(manTab);for(const t of [30,250])setTimeout(()=>{const b=$('manTabs').querySelector('.tab.on');if(b&&!$('manual').hidden&&!$('manual').contains(document.activeElement))b.focus()},t)});
 function trainTab(){if($('trainBtn'))return;const tb=document.createElement('button');tb.type='button';tb.id='trainBtn';tb.className='tab';tb.dataset.t='train';tb.textContent=EN?'Training ground ▸':'Plac ćwiczeń ▸';tb.title=EN?'Practise on act I: no death, nothing saved':'Ćwicz w rozdziale I: bez śmierci, nic się nie zapisuje';$('manTabs').appendChild(tb);tb.addEventListener('click',startTraining)}
 $('manBack').addEventListener('click',()=>{$('manual').hidden=true;$('title').hidden=false;setTimeout(()=>$('manBtn').focus(),30)});
 $('optsBtn').addEventListener('click',()=>{$('title').hidden=true;$('opts').hidden=false;refreshDat();setTimeout(()=>document.querySelector('#opts .tab.on').focus(),30)});

@@ -867,7 +867,7 @@ function show(k){tab=k;for(const b of nav.querySelectorAll('.nbp-tab'))b.setAttr
 nav.addEventListener('click',e=>{const b=e.target.closest('.nbp-tab');if(b)show(b.dataset.nbp)});
 new MutationObserver(()=>{if(pz.hidden)return;
  const nm=$('start'+CH),t=nm&&CH<=5?[...nm.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim():'';sub.textContent=t;
- show(load.hidden?'controls':'skills');outs();
+ show(load.hidden||!(S&&S.sk&&ACTIVE_SLASHER.some(k=>S.sk[k]))?'controls':'skills');outs();// bez żadnej aktywnej umiejętności pauza zaczyna od Sterowania
  if(!keys.querySelector('.stab.on'))pauseSub(coarse?'touch':PAD.on?'pad':'kb')}).observe(pz,{attributes:true,attributeFilter:['hidden']});
 show('skills');
 const R=PREMIUM_ASSETS,P='#orient'.repeat(12)+' #pause.nbp',st=mk('style','nbp-style');

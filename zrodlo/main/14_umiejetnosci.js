@@ -80,7 +80,7 @@ function rerollCards(){if(!S||!S.choosing)return;if(pl2&&S.mpTurn===2&&PAD2.g&&!
 const LEVEL_CHOICE_DELAY=1000;let levelReadyAt=0,levelReadyTimer=0;
 let MPCLK=false;function pickLevelCard(i){if(performance.now()<levelReadyAt)return;if(S&&pl2&&S.mpTurn===2&&PAD2.g&&!MPCLK)return;pick(i)}
 function rerollLevelCards(){if(performance.now()<levelReadyAt)return;rerollCards()}
-function armLevelCards(){clearTimeout(levelReadyTimer);levelReadyAt=performance.now()+LEVEL_CHOICE_DELAY;$('lvl').classList.add('choice-wait');$('levelWait').textContent=(EN?'Read the descriptions — you can choose in 1 s':'Przeczytaj opisy — wybór dostępny po 1 s');levelReadyTimer=setTimeout(()=>{$('lvl').classList.remove('choice-wait');$('levelWait').textContent=''},LEVEL_CHOICE_DELAY)}
+function armLevelCards(){clearTimeout(levelReadyTimer);levelReadyAt=performance.now()+LEVEL_CHOICE_DELAY;$('lvl').classList.add('choice-wait');$('levelWait').textContent=(EN?'Cards unlock in a moment':'Karty odblokują się za chwilę');levelReadyTimer=setTimeout(()=>{$('lvl').classList.remove('choice-wait');$('levelWait').textContent=''},LEVEL_CHOICE_DELAY)}
 function openLevelUpNow(){const lvWasHidden=$('lvl').hidden||$('lvl').classList.contains('lvout');clearTimeout(LVOUT);$('lvl').classList.remove('lvout');resetInput();padRumble(.07,.22,110);S.choosing=true;if(pl2){if(!S.mpTurn)S.mpTurn=1}else S.mpTurn=0;pl.swingT=0;play('level',0);if(!pl.dead)pl.hp=Math.min(pl.max,pl.hp+pl.max*S.pk.lvHeal);if(pl2&&!pl2.dead)pl2.hp=Math.min(pl2.max,pl2.hp+pl2.max*S.pk.lvHeal);// level healing is defined by the selected preparation perks
   S.choices=rollChoices();S.rr=1+(S.rrBonus||0);renderCards();
   $('lvl').hidden=false;if(lvWasHidden){const L=$('lvl'),cl=LVMODE;L.classList.remove('lvsoft','lvquick');void L.offsetWidth;L.classList.add(cl);setTimeout(()=>L.classList.remove(cl),1700)}LVMODE='lvsoft';document.querySelector('#lvl .level-build').open=false;armLevelCards();$('touch').hidden=true;setTimeout(()=>{const f=$('card0');f&&f.focus({preventScroll:true});const lp=document.querySelector('#lvl .level-panel');if(lp)lp.scrollTop=0},30)}
@@ -215,6 +215,8 @@ function update(dt){if(S&&S.exec>0){S.exec-=dt;dt*=S.exec>.35?.2:.5}
   if(S&&S.phase==='play')bannerTick(dt);
   if(S&&S.intro){introTick(dt);return}
   if(S&&S.phase==='play')pumpNotice();if(!S||S.phase!=='play'||S.notice||S.choosing||S.shop||S.paused)return;
+  // 14.11.2026: noc rusza dopiero po pierwszym ruchu lub przycisku gracza (najpóźniej po 4 s), żeby zegar nie biegł, zanim gracz zobaczy bohatera
+  if(!S.go){S.goT=(S.goT||0)+dt;let any=!!(S.dg||S.train||S.goT>=4||mouseL||mouseR||tAtk||tBlock||tj.x||tj.y||rollPress||heavyPress||PAD.atk||PAD.blk||PAD.x||PAD.y);if(!any)for(const k in keys)if(keys[k]){any=true;break}if(!any)return;S.go=1}
   if(TRN.god&&!pl.dead){pl.hp=pl.max;pl.sta=pl.staMax;pl.mana=pl.manaMax}if(S.train&&!pl.dead){pl.hp=Math.min(pl.max,pl.hp+pl.max*.12*dt);if(pl.manaMax)pl.mana=Math.min(pl.manaMax,(pl.mana||0)+pl.manaMax*.25*dt)}
   if(S.hitstop>0){S.hitstop-=dt;if(rollPress)S.bufRoll=1;return}
   if(S.dialog){if(talkPress||rollPress)advanceDialog();return}
