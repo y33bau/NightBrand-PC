@@ -782,3 +782,4 @@ cache704 · Menu: separator pod naglowkami na cala szerokosc i grubszy, bez sepa
 cache705 · Menu glowne: oboz przy ognisku z siedzaca postacia (ostatnio wybrana klasa), zywy ogien. Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
 cache706 · Licznik Popiolow i poziomu na wszystkich ekranach w stylu menu glownego (spalona ramka, urna, emblemat).
 cache707 · nowe tla rozdzialow (baner, kafelki, wstepy nocy I-VI) z ChatGPT; nie sprawdzono: wyglad u autora
+cache708 · oboz: bohater wtopiony w scene (grading, poswiata ognia, piorkowanie, ziarno), cien pod kamieniem, niska mgla, wspolne ziarno; nie sprawdzono: klasy inne niz Rycerz na zrzucie

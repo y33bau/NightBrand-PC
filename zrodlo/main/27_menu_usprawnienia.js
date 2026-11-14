@@ -626,7 +626,7 @@ ${S} .pc-fantasy-title::before{display:none!important}
 }catch(e){quietErr('menuOdswiezenie',e)}})();
 // 14.11.2026: menu glowne - oboz przy ognisku; przy ogniu siedzi ostatnio wybrana postac (prog().char). Tylko wyglad, bez wplywu na nawigacje.
 (()=>{try{
- const H={r:'assets/ui/df538b08b5411b4aa902cc61eff6cefd3f5b3c03b06e1e742792068fd347fd3c.webp',k:'assets/ui/1bcc7b3c54607053255cfdd8c151157ec4681dab188522962065ac24ba661f40.webp',z:'assets/ui/c5b49cf2acadc2c1d972365c41133187948fdbe8dfae8a8bacfa992a3977cf2b.webp',d:'assets/ui/2ee7049106e08597e673db1ba91d275e6257b7b35e213c6fa4a8af0d3874cdd4.webp',m:'assets/ui/ac5def97ebf63481376a2f441fb4a9c799a76baaf6b5d50d7b4582d18318f450.webp'},T=document.getElementById('title');if(!T)return;
+ const H={r:'assets/ui/ab094563c70beb21edbc52b0950ae6877c4427f01de1e8504b7a58b202770b31.webp',k:'assets/ui/d2dede7350c7ec6c21d0244c572766b677e2792c18b529282a49b28279f1f263.webp',z:'assets/ui/a6c3862e2bcd435f81ee2e0130a0772bd6166094bafd1936696775823fc1bd7b.webp',d:'assets/ui/f26a5d308bb8c63ae7b955c0da08ca4d7b43988b3e33a4a6e2fe8e0521390fd7.webp',m:'assets/ui/faa53ea5bdb0a3da4d6f1be6c451222d1b2940547ead703a061937fae637c54d.webp'},T=document.getElementById('title');if(!T)return;
  const st=document.createElement('style');st.id='nb-oboz';const Z='#orient'.repeat(150)+' #title.pc-home';
  st.textContent=`${Z}{background-image:none!important;background-color:#08070a!important;isolation:isolate!important}
 #title:not(.pc-home)>#nbOboz{display:none}
@@ -636,15 +636,20 @@ ${S} .pc-fantasy-title::before{display:none!important}
 #nbOboz .cien{inset:0;background:linear-gradient(90deg,rgba(8,7,10,.82) 0%,rgba(8,7,10,.7) 38%,rgba(8,7,10,.38) 62%,rgba(8,7,10,.08) 80%,rgba(8,7,10,0) 100%),linear-gradient(0deg,rgba(8,7,10,.55),rgba(8,7,10,0) 30%)}
 #nbOboz .luna{left:62%;top:42%;width:34%;height:46%;background:radial-gradient(ellipse at 50% 55%,rgba(255,140,60,.28),rgba(255,110,40,0) 65%);mix-blend-mode:screen;animation:nbLuna 2.3s ease-in-out infinite}
 #nbOboz .ogien{left:76.2%;top:44%;width:6%;height:18%;background:url('assets/ui/ab3c5151e7493800881f61cad7db0eb404cda287d4e7684c8d5a67af41b24971.webp') 0 0/800% 100% no-repeat;mix-blend-mode:screen;opacity:.92;animation:nbOgien .85s steps(8) infinite}
-#nbOboz .bohater{left:65.5%;bottom:17%;height:31%;aspect-ratio:var(--ar,.9);background:center bottom/contain no-repeat;transform-origin:50% 100%;filter:drop-shadow(10px 0 16px rgba(255,120,40,.25)) brightness(.92);animation:nbOddech 4.2s ease-in-out infinite,nbBlask 2.3s ease-in-out infinite}
+#nbOboz .bohater{left:65.5%;bottom:17%;height:31%;aspect-ratio:var(--ar,.9);background:center bottom/contain no-repeat;transform-origin:50% 100%;filter:brightness(.94);animation:nbOddech 4.2s ease-in-out infinite,nbBlask 2.3s ease-in-out infinite}
+#nbOboz .kontakt{left:64.5%;bottom:15.4%;width:15%;height:4.5%;background:radial-gradient(closest-side,rgba(6,3,2,.85),rgba(6,3,2,.45) 55%,rgba(6,3,2,0));filter:blur(2px)}
+#nbOboz .mgla{left:61%;bottom:11.5%;width:27%;height:12%;background:url('assets/ui/b5aa0b5f36f083311f26a7dd935871b17ce548e28b3915092de5be30df5207be.webp') center/100% 100% no-repeat;opacity:.6;filter:sepia(.4) brightness(.85);animation:nbMgla 14s ease-in-out infinite alternate}
+#nbOboz .ziarno{inset:0;background:url('assets/ui/7c8deda4dcbd2ff1b4e8381167626c58a6e734b1cd9bdc331a3399749f2b8595.webp') 0 0/256px 256px repeat;mix-blend-mode:overlay;opacity:.13;animation:nbZiarno .5s steps(1) infinite}
 #nbOboz .bohater.lustro{transform:scaleX(-1)}
 @keyframes nbOgien{to{background-position:100% 0}}
 @keyframes nbLuna{0%,100%{opacity:.85}45%{opacity:1}70%{opacity:.75}}
 @keyframes nbOddech{0%,100%{scale:1 1}50%{scale:1 1.012}}
-@keyframes nbBlask{0%,100%{filter:drop-shadow(10px 0 16px rgba(255,120,40,.22)) brightness(.9)}50%{filter:drop-shadow(12px 0 20px rgba(255,130,50,.34)) brightness(1)}}`;
+@keyframes nbBlask{0%,100%{filter:brightness(.9)}50%{filter:brightness(1.02)}}
+@keyframes nbMgla{from{translate:-3% 0}to{translate:3% -4%}}
+@keyframes nbZiarno{0%{background-position:0 0}20%{background-position:-61px 37px}40%{background-position:83px -29px}60%{background-position:-17px -91px}80%{background-position:45px 70px}}`;
  document.head.append(st);
  const box=document.createElement('div');box.id='nbOboz';box.setAttribute('aria-hidden','true');
- box.innerHTML='<i class="tlo"></i><i class="cien"></i><i class="luna"></i><i class="ogien"></i><i class="bohater"></i>';T.prepend(box);
+ box.innerHTML='<i class="tlo"></i><i class="cien"></i><i class="luna"></i><i class="ogien"></i><i class="kontakt"></i><i class="bohater"></i><i class="mgla"></i><i class="ziarno"></i>';T.prepend(box);
  const AR={r:.877,k:.973,z:.675,d:.68,m:.908},LUSTRO={r:1,m:1};
  const hero=box.querySelector('.bohater');
  const pokaz=()=>{let c='r';try{const q=prog();if(q&&H[q.char])c=q.char}catch(e){}if(hero.dataset.c===c)return;hero.dataset.c=c;hero.style.backgroundImage=`url('${H[c]}')`;hero.style.setProperty('--ar',AR[c]);hero.classList.toggle('lustro',!!LUSTRO[c])};
