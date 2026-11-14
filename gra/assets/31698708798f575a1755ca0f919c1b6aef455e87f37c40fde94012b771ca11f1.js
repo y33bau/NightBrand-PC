@@ -10325,7 +10325,7 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
   IK={'premium-journey':A('assets/ui/de7572b3ab143465b2bffd81fd6516e066bbb9bbed4088b9b7c94c9fdfc3ee29.webp'),kapBtn:A('assets/ui/09c2709d88e884e8fb245450a7c371617c68d7b5fb1452a5956ead6c57cf33ee.webp'),kronBtn:A('assets/ui/65573edb49b7e9f6506f19263870f7d4e2f30c32233621a1b26b37675767b78c.webp'),manBtn:A('assets/ui/7c65e8bd51920f28d168cf22b7eab6cfdcb943622d1424c5d053388d742a6ac9.webp'),optsBtn:A('assets/ui/c18aafac5bf475178a58ebc01f17e3fc4dd47acb1461ce60ecc4e865f8355c06.webp')},
   ON=':is(:hover,:focus,:focus-visible,.pf)',NAV=Z+' .premium-nav>:is(.premium-journey,#kapBtn,#kronBtn,#manBtn,#optsBtn)',
   KURSOR="url('assets/ui/f2bdfe0d27c4a8f08d3ffa8134a8a68bff08b21b4d9738ab1163dc0abff798b6.png') 1 1",KURSOR_ON="url('assets/ui/bbb913eb13015dbe4642b534d69766dd39a04688ad6f98bd4b3611032eea7bf7.png') 1 1";
- const PAS_G=`url('assets/ui/eacf8e623d8575a62966b86c0f4baf6c00e3f31f40fbc778335edece46b7a824.webp')`,S='#orient'.repeat(220)+' :is(#prep,#kap,#opts,#manual,#pause,#lvl,#shop,#end,#conf,#title:not(.pc-home))',PAS_EL='.tab,.stab,.nbp-tab,.slot-tab,.nb-mode,.m2-b:not(.m2k-buy),.m2-kap,.backar,.pc-home-button,.nb2-mode,.pc-journey-mode,#pause .go.alt,#end .go.alt',CARD='.m2k-row,.m2-ch,#opts .go.alt,.lvl-card,.card,.shopc .it',MAIN='.premium-go,.m2k-buy,#prepGo,.go:not(.alt):not(.slot-tab)',PANEL='.premium-banner,#kapDet,#manual .premium-page-content,#pause #skillLoadout,#lvl .level-panel,#shop .shopc,#end .nbs-grid,#conf';
+ const URNA=`url('assets/ui/bec1edb981cde86153bfc1f97330a541237d7963c2926133284dbc3f9ef457bf.webp')`,RAMKA=`url('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp')`,PR='#orient'.repeat(150)+' :is(#title,#prep,#kap,#opts,#manual)',PAS_G=`url('assets/ui/eacf8e623d8575a62966b86c0f4baf6c00e3f31f40fbc778335edece46b7a824.webp')`,S='#orient'.repeat(220)+' :is(#prep,#kap,#opts,#manual,#pause,#lvl,#shop,#end,#conf,#title:not(.pc-home))',PAS_EL='.tab,.stab,.nbp-tab,.slot-tab,.nb-mode,.m2-b:not(.m2k-buy),.m2-kap,.backar,.pc-home-button,.nb2-mode,.pc-journey-mode,#pause .go.alt,#end .go.alt',CARD='.m2k-row,.m2-ch,#opts .go.alt,.lvl-card,.card,.shopc .it',MAIN='.premium-go,.m2k-buy,#prepGo,.go:not(.alt):not(.slot-tab)',PANEL='.premium-banner,#kapDet,#manual .premium-page-content,#pause #skillLoadout,#lvl .level-panel,#shop .shopc,#end .nbs-grid,#conf';
  const st=document.createElement('style');st.id='nb-menu-odswiezenie';st.textContent=`
 ${Z} .premium-rail{overflow:visible!important}
 ${NAV}{border-color:transparent!important;border-image:none!important;background-color:transparent!important;background-image:none!important;position:relative!important;isolation:isolate!important;overflow:visible!important}
@@ -10346,11 +10346,11 @@ ${Z} .premium-nav::before{top:2px!important}
 ${Z} .premium-nav::after{bottom:2px!important}
 ${Z} .nb2-daily{border:none!important;background:${A('assets/ui/6679e28f0d4528a14db5abaeb1f51f96eefc35d966cdec24f48246011b086585.webp')} 4% 50%/auto 92% no-repeat,${PAS} center/100% 160% no-repeat!important;padding-left:13%!important}
 ${Z} .nb2-daily${ON}{background:${A('assets/ui/6679e28f0d4528a14db5abaeb1f51f96eefc35d966cdec24f48246011b086585.webp')} 4% 50%/auto 92% no-repeat,${PAS_ON} center/100% 160% no-repeat!important}
-${Z} .pc-profile{border:none!important;border-image:none!important;background:${A('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp')} center/100% 100% no-repeat!important;box-shadow:none!important;padding-left:2.2%!important;padding-right:2.2%!important}
-${Z} .pc-profile>.pcg-edge{display:none!important}
-${Z} img.pc-profile-ash{content:${A('assets/ui/bec1edb981cde86153bfc1f97330a541237d7963c2926133284dbc3f9ef457bf.webp')}!important;filter:none!important;object-fit:contain!important}
-${Z} .pc-profile-stat+.pc-profile-stat{position:relative!important;padding-left:2.4em!important}
-${Z} .pc-profile-stat+.pc-profile-stat::before{content:''!important;position:absolute!important;left:0!important;top:50%!important;width:2.1em!important;height:2.1em!important;transform:translateY(-50%)!important;background:${A('assets/ui/516bd88256fbc226fa5570719b9fd6743b2086353a5a9e8c156f936324dc5a0a.webp')} center/contain no-repeat!important}
+${PR} .pc-profile{border:none!important;border-image:none!important;background:${A('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp')} center/100% 100% no-repeat!important;box-shadow:none!important;padding-left:2.2%!important;padding-right:2.2%!important}
+${PR} .pc-profile>.pcg-edge{display:none!important}
+${PR} img.pc-profile-ash{content:${A('assets/ui/bec1edb981cde86153bfc1f97330a541237d7963c2926133284dbc3f9ef457bf.webp')}!important;filter:none!important;object-fit:contain!important}
+${PR} .pc-profile-stat+.pc-profile-stat{position:relative!important;padding-left:2.4em!important}
+${PR} .pc-profile-stat+.pc-profile-stat::before{content:''!important;position:absolute!important;left:0!important;top:50%!important;width:2.1em!important;height:2.1em!important;transform:translateY(-50%)!important;background:${A('assets/ui/516bd88256fbc226fa5570719b9fd6743b2086353a5a9e8c156f936324dc5a0a.webp')} center/contain no-repeat!important}
 ${'#orient'.repeat(150)} :is(#title,#kap,#opts,#manual,#prep,#conf,#end,#lang){cursor:${KURSOR},auto!important}
 ${'#orient'.repeat(150)} :is(#title,#kap,#opts,#manual,#prep,#conf,#end,#lang) :is(button,a,summary,label,input,[role=button],[role=tab],[role=radio]){cursor:${KURSOR_ON},pointer!important}
 
@@ -10374,6 +10374,11 @@ ${S} :is(${MAIN})${ON}{filter:brightness(1.12)!important;box-shadow:0 10px 18px 
 /* panele: zweglona rama z zelaznymi naroznikami */
 ${S} :is(${PANEL}){border:18px solid transparent!important;border-image:url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp') 48 stretch!important;box-shadow:none!important}
 ${S} :is(${PANEL})>.pcg-edge{display:none!important}
+
+/* licznik Popiolow na kazdym ekranie: ta sama spalona ramka z urna co w menu glownym */
+${S} .m2-emb{border:none!important;border-image:none!important;box-shadow:none!important;background:${URNA} 12px center/auto 64% no-repeat,${RAMKA} center/100% 100% no-repeat!important;padding:10px 22px 10px 48px!important;display:flex!important;align-items:center!important;gap:8px!important}
+${S} .m2-emb>.m2-ico-emb{background:${URNA} center/contain no-repeat!important;width:30px!important;height:30px!important;filter:none!important}
+${S} .pc-fantasy-title::before{display:none!important}
 `;document.head.append(st);
 }catch(e){quietErr('menuOdswiezenie',e)}})();
 // 14.11.2026: menu glowne - oboz przy ognisku; przy ogniu siedzi ostatnio wybrana postac (prog().char). Tylko wyglad, bez wplywu na nawigacje.
