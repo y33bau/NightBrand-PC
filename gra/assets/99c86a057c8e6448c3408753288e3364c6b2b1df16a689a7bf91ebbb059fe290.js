@@ -10376,6 +10376,32 @@ ${S} :is(${PANEL}){border:18px solid transparent!important;border-image:url('ass
 ${S} :is(${PANEL})>.pcg-edge{display:none!important}
 `;document.head.append(st);
 }catch(e){quietErr('menuOdswiezenie',e)}})();
+// 14.11.2026: menu glowne - oboz przy ognisku; przy ogniu siedzi ostatnio wybrana postac (prog().char). Tylko wyglad, bez wplywu na nawigacje.
+(()=>{try{
+ const H={r:'assets/ui/df538b08b5411b4aa902cc61eff6cefd3f5b3c03b06e1e742792068fd347fd3c.webp',k:'assets/ui/1bcc7b3c54607053255cfdd8c151157ec4681dab188522962065ac24ba661f40.webp',z:'assets/ui/c5b49cf2acadc2c1d972365c41133187948fdbe8dfae8a8bacfa992a3977cf2b.webp',d:'assets/ui/2ee7049106e08597e673db1ba91d275e6257b7b35e213c6fa4a8af0d3874cdd4.webp',m:'assets/ui/ac5def97ebf63481376a2f441fb4a9c799a76baaf6b5d50d7b4582d18318f450.webp'},T=document.getElementById('title');if(!T)return;
+ const st=document.createElement('style');st.id='nb-oboz';const Z='#orient'.repeat(150)+' #title.pc-home';
+ st.textContent=`${Z}{background-image:none!important;background-color:#08070a!important;isolation:isolate!important}
+#title:not(.pc-home)>#nbOboz{display:none}
+#nbOboz{position:absolute;left:50%;top:50%;width:max(100%,177.78vh);height:max(100%,56.25vw);transform:translate(-50%,-50%);z-index:-1;pointer-events:none;overflow:hidden}
+#nbOboz>i{position:absolute;display:block}
+#nbOboz .tlo{inset:0;background:url('assets/ui/3bd17f48aa2077bfee3633ea875fb4407ca63c0374c52d2fd8e34176d9728747.webp') center/100% 100% no-repeat}
+#nbOboz .cien{inset:0;background:linear-gradient(90deg,rgba(8,7,10,.82) 0%,rgba(8,7,10,.7) 38%,rgba(8,7,10,.38) 62%,rgba(8,7,10,.08) 80%,rgba(8,7,10,0) 100%),linear-gradient(0deg,rgba(8,7,10,.55),rgba(8,7,10,0) 30%)}
+#nbOboz .luna{left:62%;top:42%;width:34%;height:46%;background:radial-gradient(ellipse at 50% 55%,rgba(255,140,60,.28),rgba(255,110,40,0) 65%);mix-blend-mode:screen;animation:nbLuna 2.3s ease-in-out infinite}
+#nbOboz .ogien{left:76.2%;top:44%;width:6%;height:18%;background:url('assets/ui/ab3c5151e7493800881f61cad7db0eb404cda287d4e7684c8d5a67af41b24971.webp') 0 0/800% 100% no-repeat;mix-blend-mode:screen;opacity:.92;animation:nbOgien .85s steps(8) infinite}
+#nbOboz .bohater{left:65.5%;bottom:17%;height:31%;aspect-ratio:var(--ar,.9);background:center bottom/contain no-repeat;transform-origin:50% 100%;filter:drop-shadow(10px 0 16px rgba(255,120,40,.25)) brightness(.92);animation:nbOddech 4.2s ease-in-out infinite,nbBlask 2.3s ease-in-out infinite}
+#nbOboz .bohater.lustro{transform:scaleX(-1)}
+@keyframes nbOgien{to{background-position:100% 0}}
+@keyframes nbLuna{0%,100%{opacity:.85}45%{opacity:1}70%{opacity:.75}}
+@keyframes nbOddech{0%,100%{scale:1 1}50%{scale:1 1.012}}
+@keyframes nbBlask{0%,100%{filter:drop-shadow(10px 0 16px rgba(255,120,40,.22)) brightness(.9)}50%{filter:drop-shadow(12px 0 20px rgba(255,130,50,.34)) brightness(1)}}`;
+ document.head.append(st);
+ const box=document.createElement('div');box.id='nbOboz';box.setAttribute('aria-hidden','true');
+ box.innerHTML='<i class="tlo"></i><i class="cien"></i><i class="luna"></i><i class="ogien"></i><i class="bohater"></i>';T.prepend(box);
+ const AR={r:.877,k:.973,z:.675,d:.68,m:.908},LUSTRO={r:1,m:1};
+ const hero=box.querySelector('.bohater');
+ const pokaz=()=>{let c='r';try{const q=prog();if(q&&H[q.char])c=q.char}catch(e){}if(hero.dataset.c===c)return;hero.dataset.c=c;hero.style.backgroundImage=`url('${H[c]}')`;hero.style.setProperty('--ar',AR[c]);hero.classList.toggle('lustro',!!LUSTRO[c])};
+ pokaz();new MutationObserver(pokaz).observe(T,{attributes:true,attributeFilter:['hidden','class']});
+}catch(e){quietErr('menuOboz',e)}})();
 requestAnimationFrame(frame);
 })();
 

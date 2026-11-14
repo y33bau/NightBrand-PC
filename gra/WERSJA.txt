@@ -779,3 +779,4 @@ cache701 · Menu glowne: zaznaczenie pasem autora z zarem od spodu, naprawione p
 cache702 · Menu glowne: banery w przydymionym bordo (miedzy dymem a bordo). Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
 cache703 · Cale menu w nowym stylu: banery dym-bordo bez ramek, zar przy zaznaczeniu, ornamenty pod naglowkami, spalona deska dla glownych akcji, zweglona rama paneli. Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
 cache704 · Menu: separator pod naglowkami na cala szerokosc i grubszy, bez separatorow w menu glownym.
+cache705 · Menu glowne: oboz przy ognisku z siedzaca postacia (ostatnio wybrana klasa), zywy ogien. Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
