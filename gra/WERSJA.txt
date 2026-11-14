@@ -781,3 +781,4 @@ cache703 · Cale menu w nowym stylu: banery dym-bordo bez ramek, zar przy zaznac
 cache704 · Menu: separator pod naglowkami na cala szerokosc i grubszy, bez separatorow w menu glownym.
 cache705 · Menu glowne: oboz przy ognisku z siedzaca postacia (ostatnio wybrana klasa), zywy ogien. Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
 cache706 · Licznik Popiolow i poziomu na wszystkich ekranach w stylu menu glownego (spalona ramka, urna, emblemat).
+cache707 · nowe tla rozdzialow (baner, kafelki, wstepy nocy I-VI) z ChatGPT; nie sprawdzono: wyglad u autora
