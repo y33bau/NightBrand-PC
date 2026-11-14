@@ -776,3 +776,4 @@ cache698 · Port: zaloga patrzy w strone gracza, Bosman z hakiem na lancuchu i d
 cache699 · Menu glowne etap 1: pasy mgly, pietno przy zaznaczeniu, ikony, ornamenty, urna i ramka licznika, kursor myszy. Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
 cache700 · Menu glowne: zaznaczenie zarem (pas z okuciami, zarzacy sie napis) zamiast zlotej ramki, ikona Graj. Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
 cache701 · Menu glowne: zaznaczenie pasem autora z zarem od spodu, naprawione przesuniecie (stary styl wymuszal rozmiar ozdobnika). Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
+cache702 · Menu glowne: banery w przydymionym bordo (miedzy dymem a bordo). Nie sprawdzono: fizyczny pad, monitor autora, itch.io.
