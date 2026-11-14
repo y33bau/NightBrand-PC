@@ -1,0 +1,133 @@
+<!doctype html><html lang="pl"><base href="../../gra/"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>NightBrand · Solne Nabrzeże</title><style>*{box-sizing:border-box}body{margin:0;background:#101416;color:#eee5ce;font:16px Georgia,serif}canvas{display:block;width:100vw;height:100vh}header,footer{position:fixed;left:2%;background:#101214ed;border-left:2px solid #ab9266;padding:10px 16px;pointer-events:none}header{top:3%}footer{bottom:3%}h1{font-size:22px;margin:0 0 4px;color:#d3bd8d}small{display:block;margin-top:4px;color:#d4c9b4}</style><canvas></canvas><header><h1>Solne Nabrzeże</h1><span id="goal"></span></header><footer><span id="hint"></span><small>WASD / strzałki · E interakcja · J cios · L parowanie · Spacja unik · M plan</small></footer><script>
+'use strict';
+if (!(location.protocol==='file:'||['localhost','127.0.0.1','[::1]'].includes(location.hostname)) || !new URLSearchParams(location.search).has('nabrzeze')) {
+ document.body.textContent='Uruchom TEST_SOLNE_NABRZEZE.bat'; throw Error('Podgląd lokalny');
+}
+const urls={"mob_xbow":"assets/wrogowie/fcda187e659ada5606150bf83183445eb4b904ea7b397d4b24b3290c35776a21.webp","water_shallow":"assets/tekstury/0a9c8d6effb4333775e526c9880b40b87ceade8faeb30c297fa318ae5c7c3bbc.webp","cc0_zl_street":"assets/tekstury/35711ed803bca66fdd017c5c7e41601910c83f8df8141aebeffc3dec3ab13b6b.webp","cc0_deski":"assets/tekstury/ecbf7d5c9384850e5fae44e69f7df58746b0c32e8ffb446694cea47d4171923f.webp","cc0_ash":"assets/tekstury/1fa4f8b222b3bf3fcf962df503cf0af5a311141ace162dac29e502dfa3421187.webp","cc0_mud":"assets/tekstury/0d670d079813d2aa8dcd63582124af319fe5d54da82b2aefce6491927175ede2.webp","p1_barrel":"assets/rekwizyty/c47b9169ecc8e4cf8b415063432e265705bd2726a18663fc3967cfef24ae0cc8.webp","p5_scale":"assets/rekwizyty/8defe8ff75e52e6e5e2e06d03abc18902b1da15788088d93c0a0b38126c95cc5.webp","p4_drowned_cart":"assets/rekwizyty/453978bf95d84230ab82018a199d4cba23e13cd3fd755b12b5f73755bf7481e4.webp","p1_wheel":"assets/rekwizyty/c6a569daac26c8a11e9b5dc0ee96ca76ae1c86601d813136455872028e8d389c.webp","p2_mine_cart":"assets/rekwizyty/9f14a06a6fe1ade9209c42ee4d2d9ce1c8d07b3712a1b34542d70a4cff1ac82a.webp","p2_chains":"assets/rekwizyty/303897b7fc3a44765a6a746813c922e4922f61192f439d88d5bf6d05bafb374e.webp","p3_street_lantern":"assets/rekwizyty/892d86ab9521f54c48a50ce460c199496341e6abefd9cbbb18a76a7ae4891d37.webp","p1_crypt_stairs":"assets/rekwizyty/f2d60a2031126425447f3d47911dabf2447687ca88acf15606ef1ecee228aac2.webp","p2_pickaxe_rack":"assets/rekwizyty/170fcc6ecfbf12246190c404414fc4ef012fdf33e5538ad263adb960b29b90a1.webp","p5_gallows":"assets/rekwizyty/6af820ae25b26fc19533458b275a63cee95b3686d82bf5fed24d7a027196b31d.webp","knight_d":"assets/bohaterowie/5d808ba272abbb568db6716fee81179b9612cda0affd84bba72fa9d0d6fa1cb2.webp","knight_db":"assets/bohaterowie/c3e84c35558064d72b11554fadb051620376aa3b4bd2b60f0bd40496f8d25ff5.webp","mob_warden":"assets/wrogowie/854531b091d17aaf2f7d32ca234770adbf9962dbc0a4c42edeb65a567b856ddc.webp","mob_militia":"assets/wrogowie/d69ecc579226d721938366c63e1eade3c6c0508dcedc48fab57d8e452f1a6fcd.webp","p3_cathedral_gate":"assets/rekwizyty/ac934fba37b2b6c5148ba4be2f81d23145fa8cea755097834ae050d27843a7cf.webp","p4_reeds":"assets/rekwizyty/fad7918a697ecd9856490edd136ae68a39f8498a7f4a88a48f186e368bf10e2d.webp"}, art={}, canvas=document.querySelector('canvas'), ctx=canvas.getContext('2d');
+const zones=[
+ ['Winda',27,42,10,6,'cc0_deski'],['Droga z szybu',29,33,6,10,'cc0_mud'],
+ ['Plac wagowy',20,26,24,12,'cc0_zl_street'],['Zachodnia droga',10,29,14,5,'cc0_mud'],
+ ['Skład soli',5,13,15,19,'cc0_ash'],['Zachodni pomost',10,10,15,5,'cc0_deski'],
+ ['Przyczółek',23,9,19,11,'cc0_zl_street'],['Wschodni pomost',40,10,15,5,'cc0_deski'],
+ ['Dziedziniec dźwigu',47,13,14,19,'cc0_zl_street'],['Wschodnia droga',41,29,12,5,'cc0_mud'],
+ ['Droga na prom',30,18,5,9,'cc0_zl_street'],['Trap',31,6,3,5,'cc0_deski'],['Prom',27,2,11,5,'cc0_deski']];
+const inRect=(x,y,z)=>x>=z[1]&&y>=z[2]&&x<z[1]+z[3]&&y<z[2]+z[4];
+const zoneAt=(x,y)=>zones.findLast(z=>inRect(x,y,z));
+const props=[], place=(key,x,y,w,h,r=0)=>props.push({key,x,y,w,h,r});
+place('p1_crypt_stairs',32,46,4,3);place('p5_scale',23,33,3,3,0.7);
+for(const [x,y] of [[7,17],[8,18],[16,22],[17,22],[7,27],[48,28],[57,20],[29,4]])place('p1_barrel',x,y,1.45,1.65,.42);
+for(const [x,y] of [[8,22],[16,28],[49,23]])place('p2_mine_cart',x,y,2.7,2.1,.7);
+place('p4_drowned_cart',53,24,4,3,.8);place('p5_gallows',57,17,4.7,5,.8);
+place('p2_chains',57,17,1.2,2.4);place('p2_pickaxe_rack',7,15,2.8,2,.5);
+for(const [x,y] of [[25,19],[40,19],[21,29],[43,29]])place('p3_street_lantern',x,y,1,2.8,.28);
+for(const [x,y] of [[3,20],[21,18],[45,19],[61,27],[18,37]])place('p4_reeds',x,y,2,1.4);
+const winches=[{x:12,y:15,open:false},{x:53,y:15,open:false}];
+winches.forEach(w=>place('p1_wheel',w.x,w.y,2.3,2.2,.55));
+const walk=(x,y)=>!!zoneAt(x,y)&&!props.some(o=>o.r&&Math.hypot(x-o.x,y-o.y)<o.r+.22);
+const keys=new Set(), player={x:32,y:44,hp:5,face:0,dx:0,dy:-1,hit:0,guard:0,dash:0,cool:0,inv:0};
+const guards=[{x:11,y:24,hp:2,cool:1,ranged:false},{x:52,y:21,hp:2,cool:1,ranged:true}];
+let bolts=[];
+let boss=null, won=false, mapOpen=false, note='', noteTime=0,time=0;
+function message(t){note=t;noteTime=2.8}
+function move(actor,dx,dy){if(walk(actor.x+dx,actor.y))actor.x+=dx;if(walk(actor.x,actor.y+dy))actor.y+=dy}
+function interact(){
+ for(const w of winches)if(!w.open&&Math.hypot(player.x-w.x,player.y-w.y)<2.6){
+  w.open=true;message('Łańcuch opadł do wody.');
+  if(winches.every(v=>v.open))boss={x:34,y:14,hp:5,phase:'chase',timer:.8,turn:0,dx:0,dy:1};
+  return;
+ }
+ if(inRect(player.x,player.y,zones.at(-1))){
+  if(boss&&boss.hp<=0){won=true;message('Prom odbija od brzegu. Przed tobą Złotogród.')}
+  else message(boss?'Bosman pilnuje przeprawy.':'Prom wciąż trzymają łańcuchy.');
+ }
+}
+onkeydown=e=>{
+ const k=e.key.toLowerCase(); if(k.startsWith('arrow')||k===' ')e.preventDefault();
+ keys.add(k);if(e.repeat)return;
+ if(k==='m')mapOpen=!mapOpen;
+ if(mapOpen||won||player.hp<=0)return;
+ if(k==='e')interact();
+ if(k===' '&&player.cool<=0){player.dash=.19;player.inv=.23;player.cool=.85}
+ if(k==='l'&&player.cool<=0){player.guard=.34;player.cool=.55}
+ if(k==='j'&&player.cool<=0){player.hit=.28;player.cool=.43;for(const g of guards)if(g.hp>0&&Math.hypot(g.x-player.x,g.y-player.y)<2.2)g.hp--;if(boss&&boss.hp>0&&Math.hypot(boss.x-player.x,boss.y-player.y)<2.2){boss.hp-=boss.phase==='stun'?2:1;if(boss.hp<=0)message('Przeprawa wolna. Wejdź na prom.');}}
+};
+onkeyup=e=>keys.delete(e.key.toLowerCase());onblur=()=>keys.clear();
+function tick(dt){
+ if(mapOpen||won||player.hp<=0)return;
+ time+=dt;noteTime-=dt;
+ for(const k of ['hit','guard','cool','inv','dash'])player[k]=Math.max(0,player[k]-dt);
+ let dx=Number(keys.has('d')||keys.has('arrowright'))-Number(keys.has('a')||keys.has('arrowleft'));
+ let dy=Number(keys.has('s')||keys.has('arrowdown'))-Number(keys.has('w')||keys.has('arrowup'));
+ let len=Math.hypot(dx,dy);if(len){player.dx=dx/len;player.dy=dy/len;player.face=dx?1:dy>0?0:2}
+ if(player.dash||len)move(player,player.dx*dt*(player.dash?13:4.8),player.dy*dt*(player.dash?13:4.8));
+ for(const g of guards){
+  if(g.hp<=0)continue;
+  const dx=player.x-g.x,dy=player.y-g.y,d=Math.hypot(dx,dy)||1;g.cool-=dt;
+  if(d>8)continue;
+  if(g.ranged){if(g.cool<=0){bolts.push({x:g.x,y:g.y,dx:dx/d,dy:dy/d,life:1.6});g.cool=2.7}}
+  else if(d>1.2)move(g,dx/d*dt*1.8,dy/d*dt*1.8);
+  else if(g.cool<=0){if(!player.inv&&!player.guard){player.hp--;player.inv=1}g.cool=1.4}
+ }
+ for(const b of bolts){
+  b.x+=b.dx*dt*6;b.y+=b.dy*dt*6;b.life-=dt;
+  if(!walk(b.x,b.y))b.life=0;
+  else if(Math.hypot(b.x-player.x,b.y-player.y)<.6){if(!player.inv&&!player.guard){player.hp--;player.inv=1}b.life=0}
+ }
+ bolts=bolts.filter(b=>b.life>0);
+ if(!boss||boss.hp<=0)return;
+ let b=boss, ax=player.x-b.x,ay=player.y-b.y,d=Math.hypot(ax,ay);b.timer-=dt;
+ if(b.phase==='chase'){
+  if(d>1.65)move(b,ax/d*dt*2.65,ay/d*dt*2.65);
+  else if(b.timer<=0){b.turn++;b.phase=b.turn%2?'thrust':'sweep';b.dx=ax/(d||1);b.dy=ay/(d||1);b.timer=b.phase==='thrust'?.65:.95;}
+ }else if(b.timer<=0){
+  if(b.phase==='stun'){b.phase='chase';b.timer=.55;return}
+  const sweep=b.phase==='sweep',front=(ax*b.dx+ay*b.dy)/(d||1);
+  const struck=d<(sweep?2.5:2.2)&&front>(sweep?-.25:.72)&&player.inv===0;
+  const parry=struck&&!sweep&&player.guard>0;
+  const snag=sweep&&!struck&&posts.some(p=>Math.hypot(b.x-p[0],b.y-p[1])<2.8);
+  if(struck&&!parry){player.hp--;player.inv=1}
+  b.phase=parry||snag?'stun':'chase';b.timer=parry||snag?1.6:.7;
+  if(parry||snag)message(parry?'Parowanie! Teraz uderz.':'Hak ugrzązł w odboju!');
+ }
+}
+const posts=[[27,13],[38,16]];posts.forEach(([x,y])=>place('p1_barrel',x,y,1.15,1.4,.35));
+let terrain;
+function makeTerrain(){
+ const c=document.createElement('canvas');c.width=64*32;c.height=50*24;const g=c.getContext('2d');
+ function surface(key,x,y,w,h,unit){const tile=document.createElement('canvas');tile.width=unit;tile.height=unit*.75;tile.getContext('2d').drawImage(art[key],0,0,tile.width,tile.height);g.fillStyle=g.createPattern(tile,'repeat');g.fillRect(x*32,y*24,w*32,h*24)}
+ surface('water_shallow',0,0,64,50,146);g.fillStyle='rgba(9,31,40,.58)';g.fillRect(0,0,c.width,c.height);
+ for(const [,x,y,w,h,key] of zones){g.fillStyle='#242323';g.fillRect(x*32,y*24+5,w*32,h*24);surface(key,x,y,w,h,96)}
+ // Uneven salt heaps leave visible aisles around the carts.
+ for(const [x,y] of [[7,19],[17,17],[8,26]]){g.fillStyle='#b1afa3';g.beginPath();g.ellipse(x*32,y*24,39,13,-.2,0,7);g.fill();g.fillStyle='#d0ccba';g.beginPath();g.ellipse(x*32-5,y*24-4,27,8,-.2,0,7);g.fill()}
+ return c;
+}
+function draw(){
+ const w=canvas.clientWidth,h=canvas.clientHeight;if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}
+ const z=mapOpen?Math.min(w/2048,h/1200):Math.max(.62,Math.min(1.7,h/510));
+ const camera=(v,total,size)=>total<size?(total-size)/2:Math.max(0,Math.min(total-size,v-size/2));
+ const cx=mapOpen?(2048-w/z)/2:camera(player.x*32,2048,w/z),cy=mapOpen?(1200-h/z)/2:camera(player.y*24,1200,h/z);
+ ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#101519';ctx.fillRect(0,0,w,h);ctx.setTransform(z,0,0,z,-cx*z,-cy*z);ctx.drawImage(terrain,0,0);
+ for(const v of winches){if(v.open)continue;ctx.beginPath();ctx.moveTo(v.x*32,v.y*24);ctx.lineTo((v.x<32?28:37)*32,5*24);ctx.strokeStyle='#252625';ctx.lineWidth=5;ctx.stroke();ctx.setLineDash([4,4]);ctx.strokeStyle='#afa797';ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([])}
+ const items=props.map(p=>({...p}));for(const g of guards)if(g.hp>0)items.push({...g,guardNpc:true});items.push({...player,hero:true});if(boss&&boss.hp>0)items.push({...boss,bos:true});
+ for(const p of items.sort((a,b)=>a.y-b.y)){
+  const x=p.x*32,y=p.y*24;
+  if(!p.hero&&!p.bos&&!p.guardNpc){ctx.drawImage(art[p.key],x-p.w*16,y-p.h*24,p.w*32,p.h*24);continue}
+  const img=p.hero?(player.hit?art.knight_db:art.knight_d):p.guardNpc?(p.ranged?art.mob_xbow:art.mob_militia):art.mob_warden;
+  const row=p.hero?(player.hit?(player.face===0?3:0):player.face+(keys.size?3:0)):0;
+  const fw=img.width/4,fh=img.height/(p.hero?6:2),frame=Math.floor(time*7)%4;
+  ctx.save();ctx.translate(x,y);if(p.hero&&player.face===1&&player.dx<0)ctx.scale(-1,1);
+  if(p.bos&&p.phase==='sweep')ctx.filter='sepia(1) saturate(5)';ctx.drawImage(img,fw*frame,fh*row,fw,fh,-34,-62,68,68);ctx.restore();
+  if(p.bos){ctx.fillStyle=p.phase==='sweep'?'#ff6860':'#f0dec0';ctx.textAlign='center';ctx.font='bold 14px Georgia';ctx.fillText('Bosman · '+p.hp+(p.phase==='thrust'?' · pchnięcie':p.phase==='sweep'?' · zamach':''),x,y-64)}
+ }
+ for(const b of bolts){ctx.strokeStyle='#e2c898';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(b.x*32,b.y*24-12);ctx.lineTo((b.x-b.dx*.55)*32,(b.y-b.dy*.55)*24-12);ctx.stroke()}
+ if(mapOpen){ctx.textAlign='center';ctx.font='bold 24px Georgia';for(const [label,x,y,ww,hh] of zones.filter((_,i)=>[0,2,4,6,8,12].includes(i))){ctx.lineWidth=5;ctx.strokeStyle='#181715';ctx.strokeText(label,(x+ww/2)*32,(y+hh/2)*24);ctx.fillStyle='#ffedc6';ctx.fillText(label,(x+ww/2)*32,(y+hh/2)*24)}}
+ const count=winches.filter(w=>w.open).length;
+ goal.textContent=won?'Przeprawa do Złotogrodu ukończona':player.hp<=0?'Poległeś · odśwież stronę, aby powtórzyć':(count<2?'Zwolnij łańcuchy · '+count+'/2':boss.hp>0?'Pokonaj Bosmana':'Wejdź na prom i wciśnij E')+'   ·   Zdrowie '+player.hp+'/5';
+ hint.textContent=won?'Drugi brzeg · koniec prototypu':mapOpen?'Plan nabrzeża · M powrót':noteTime>0?note:winches.some(v=>!v.open&&Math.hypot(player.x-v.x,player.y-v.y)<2.6)?'E · Zwolnij kołowrót':zoneAt(player.x,player.y)?.[0]||'Solne Nabrzeże';
+}
+async function load(){
+ await Promise.all(Object.entries(urls).map(([key,url])=>new Promise((ok,fail)=>{const i=new Image();i.onload=()=>{art[key]=i;ok()};i.onerror=()=>fail(Error(key));i.src=url})));
+ terrain=makeTerrain();let prev=performance.now();function loop(t){tick(Math.min(.045,(t-prev)/1000));prev=t;draw();requestAnimationFrame(loop)}requestAnimationFrame(loop);
+}
+load().catch(e=>goal.textContent='Brak zasobu: '+e.message);
+</script></html>
