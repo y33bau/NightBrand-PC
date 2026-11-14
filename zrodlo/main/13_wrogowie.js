@@ -478,7 +478,7 @@ function events(){
   ev('gl',CH===2&&S.glizT>0&&S.t>S.glizT,()=>{const p=ringSpot(110,150)||ringSpot(80,200)||[pl.x+100,pl.y];spawnEnemy('glizzard',p[0],p[1],{rise:1});play('boing',0);say((EN?'Glizard, The Glizzy G-Lord, shuffles out of the dark!':'Z mroku wytacza się Glizzard, Wielki Paruwiak!'))});
   if(CH===1){const N=S.npc;
     ev('a',S.t>.5,()=>say((EN?'Night falls over the Scorched Settlement.':'Noc zapada nad Spaloną Osadą.')));
-    ev('b',S.t>5,()=>say((EN?'Every kill gives experience at once. Survive until dawn.':'Każde zabójstwo od razu daje doświadczenie. Przetrwaj do świtu.')));
+    ev('b',S.t>5,()=>tutActive()||say((EN?'Every kill gives experience at once. Survive until dawn.':'Każde zabójstwo od razu daje doświadczenie. Przetrwaj do świtu.')));
     ev('c',S.t>14,()=>0);
     ev('s',S.t>24,()=>0);
     ev('pal',S.t>30,()=>0);

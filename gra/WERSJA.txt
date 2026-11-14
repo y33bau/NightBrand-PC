@@ -763,3 +763,4 @@ cache685 · Zabojczyni: usuniete blekitne refleksy w arkuszach, mocny atak szybs
 cache686 · Zabojczyni: szybkie ataki +15%; nie sprawdzono w grze, pad, dzwiek, FPS
 cache687 · Edytor układu menu (F2, ?edytor=1, własny baner) przeniesiony na main 686. Nie sprawdzono w przeglądarce, padem ani u autora.
 cache688 · Edytor menu tylko lokalnie (127.0.0.1/localhost/file), na itch.io zablokowany. Nie sprawdzono w przeglądarce.
+cache689 · Nowy samouczek: porady wg działań gracza, ramka na dole ze znaczkami klawiszy, bez kroku o nieistniejących umiejętnościach. Sprawdzono w przeglądarce (PC, klawiatura): ruch, atak, blok, karta awansu. Nie sprawdzono: parowanie, silny atak, slot, Marga, pad, dotyk, EN.

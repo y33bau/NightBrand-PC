@@ -397,7 +397,7 @@ function fillPauseKeys(){const t=$('pauseKeys');if(!t)return;const g=id=>($(id)?
 function pauseSub(k){const t=$('pauseKeys');for(const x of t.querySelectorAll('[data-ps]'))x.classList.toggle('on',x.dataset.ps===k);for(const x of t.querySelectorAll('[data-pp]'))x.hidden=x.dataset.pp!==k}
 $('pauseKeys').addEventListener('click',e=>{const b=e.target.closest('[data-ps]');if(b)pauseSub(b.classList.contains('on')?'':b.dataset.ps)});
 $('rerollBtn').addEventListener('click',rerollLevelCards);
-const SAVE_KEYS=['pn_save','pn_prog','pn_mode','pn_story','pn_bri','pn_sfx','pn_fts','pn_dmg','pn_mus','pn_touch','pn_diff','pn_access','pn_tut_s','pn_tut_a','pn_hints'];
+const SAVE_KEYS=['pn_save','pn_prog','pn_mode','pn_story','pn_bri','pn_sfx','pn_fts','pn_dmg','pn_mus','pn_touch','pn_diff','pn_access','pn_tut_s','pn_tut_a','pn_tut_h','pn_hints'];
 function saveMsg(s){$('saveMsg').textContent=s}
 $('expSave').addEventListener('click',()=>{try{const d={};for(const k of SAVE_KEYS){try{const v=localStorage.getItem(k);if(v!==null)d[k]=v}catch(e){}}
   d.pn_prog=JSON.stringify(PROG);d.pn_save=JSON.stringify(SETT.save);const blob=new Blob([JSON.stringify({game:'nightbrand',v:1,saved:new Date().toISOString(),data:d},null,1)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='nightbrand-zapis.json';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);saveMsg((EN?'Saved the file nightbrand-zapis.json. Keep it somewhere safe.':'Zapisano plik nightbrand-zapis.json. Trzymaj go w bezpiecznym miejscu.'))}catch(e){saveMsg((EN?'Could not save the file in this browser.':'Nie udało się zapisać pliku w tej przeglądarce.'))}});

@@ -2333,7 +2333,15 @@ ${I}{position:absolute!important;top:clamp(18px,2.5vh,32px)!important;right:clam
 ${I}:after{content:'Esc'!important;display:inline-flex!important;align-items:center;justify-content:center;min-width:2em;padding:.15em .3em;border:1px solid #ad93604d;background:#08090c55;color:#c9b896;font:400 .76em/1.1 Georgia,serif;letter-spacing:0!important}
 body.padlast ${I}:after{content:'Menu'!important}
 ${P} #intro .ihint{font:400 max(13px,calc(14 * var(--hint-u) * var(--nbts,1)))/1.4 Georgia,serif!important;color:#c2b59f!important;text-transform:none!important;letter-spacing:.015em!important;animation:none!important;text-shadow:0 1px 3px #000!important}
-@media(max-width:1100px){${T}{width:36vw!important;max-width:44%!important}}
+${T}{top:auto!important;bottom:max(150px,21vh)!important;left:50%!important;transform:translateX(-50%)!important;width:max-content!important;max-width:min(92vw,calc(780 * var(--hint-u) * var(--nbts,1)))!important;padding:calc(14 * var(--hint-u)) calc(26 * var(--hint-u)) calc(6 * var(--hint-u))!important;border-color:#c9a86a99!important;background:linear-gradient(180deg,#141216f2,#0a0b0ef5)!important;box-shadow:0 8px 26px #000a!important;font:400 max(17px,calc(20 * var(--hint-u) * var(--nbts,1)))/1.4 Georgia,serif!important;text-align:center!important}
+${T} .pc-tut-head{display:none!important}
+${T} #tutText{display:flex!important;flex-wrap:wrap;align-items:center;justify-content:center;gap:calc(8 * var(--hint-u)) calc(9 * var(--hint-u))}
+${T} #tutText kbd{display:inline-flex;align-items:center;justify-content:center;min-width:1.7em;padding:.16em .5em;border:1px solid #e3c790;border-radius:4px;background:#0b0c10;box-shadow:0 2px 0 #6b5a3a;font:700 .95em/1.25 Georgia,serif!important;color:#fff0d5;letter-spacing:.02em}
+${T} #tutText b{margin-left:calc(6 * var(--hint-u));font:600 1.08em/1.25 Cinzel,Georgia,serif;color:#f0dcae;letter-spacing:.04em}
+${T} #tutText .tut-d{flex-basis:100%;color:#dfd5c3}
+${T} .pc-tut-foot{justify-content:center!important;margin-top:calc(4 * var(--hint-u))!important;padding-top:0!important;border-top:0!important}
+${B}{font-size:max(11px,calc(12 * var(--hint-u) * var(--nbts,1)))!important;min-height:28px!important;color:#9f927c!important}
+@media(max-width:1100px){${T}{max-width:92vw!important}}
 @media(prefers-reduced-motion:reduce){${T}{transition:none!important}}
 `;
  document.head.append(style);
