@@ -3,7 +3,8 @@
 // enemies wind up before they strike instead of hurting on touch, there are fewer of them, bosses have less health.
 let STORYMODE=true;try{STORYMODE=localStorage.getItem('pn_story')!=='0'}catch(e){}
 const chWon=c=>!!((SETT.save['s'+c]&&SETT.save['s'+c].win)||(SETT.save['a'+c]&&SETT.save['a'+c].win));
-const chLocked=c=>STORYMODE&&c>1&&!chWon(c-1);
+// kampania: 1,2,6(port),3,4,5. Rozdzial jest otwarty po wygraniu poprzedniego; kto gral Zlotogrod przed dodaniem portu, zachowuje do niego dostep.
+const chLocked=c=>{if(!STORYMODE||c===1)return false;if(chWon(chPrev(c))||chWon(c))return false;return !(c===3&&(SETT.save.s3||SETT.save.a3||chWon(2)&&[4,5].some(chWon)))};
 let heavyPress=false,signPress=false,mouseL=false,mouseR=false,mouseX=0,mouseY=0,mouseT=-99,tAtk=false,tBlock=false;
 const SL={regen:28,delay:.55,roll:24,blockRegen:.25,stepCost:8,
   mana:{max:60,regen:2.5,delay:.75,onHit:1,onParry:0,onKill:0,hitGap:.5},

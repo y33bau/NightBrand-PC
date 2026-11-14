@@ -188,10 +188,10 @@ function chojrakSpot(w){const st=w.start,bad=t=>SOLID.has(t)||VOID.has(t)||t===2
   for(let r=4;r<=10;r++)for(let k=0;k<8*r;k++){const a=k/(8*r)*Math.PI*2+r,X=Math.round(cx+Math.cos(a)*r),Y=Math.round(cy+Math.sin(a)*r);if(open(X,Y)&&!(w.clearways&&w.clearways.has(Y*MW+X)))return[(X+.5)*TS,(Y+.4)*TS]}
   return null}
 function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefined)WORLD_SEEDS[ch]=(Math.random()*2147483647)|0;
-  const w=upscaleWorld(ch===1?genBrzeznica():ch===2?genDolne():ch===3?genStolica():ch===9?genDungeon((Math.random()*2147483647)|0):ch===5?genCytadela(WORLD_SEEDS[ch]):genCzarnobor(WORLD_SEEDS[ch]));if(ch<4)enrich(w,ch);
+  const w=upscaleWorld(ch===1?genBrzeznica():ch===2?genDolne():ch===3?genStolica():ch===9?genDungeon((Math.random()*2147483647)|0):ch===PORT?genSolneNabrzeze():ch===5?genCytadela(WORLD_SEEDS[ch]):genCzarnobor(WORLD_SEEDS[ch]));if(ch<4)enrich(w,ch);
   if(ch===9)w.rooms=w.rooms.map(R=>Object.assign(SR(R),{k:R.k}));
   Object.assign(w,{ch,group:new THREE.Group(),propObjs:[],npcMeshes:{},walls:[],cliffs:[],pillars:[],lavas:[],braziers:[],waters:[],rots:[],shallow:[],LSRC:[]});
-  if(ch>=2&&ch<=5){const sp=chojrakSpot(w);if(sp)w.npcs.push({id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:sp[0],y:sp[1],lines:[]})}
+  if(ch>=2&&ch<=6){const sp=chojrakSpot(w);if(sp)w.npcs.push({id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:sp[0],y:sp[1],lines:[]})}
   for(const n of w.npcs)if(n.solid)w.map[n.solid[1]*MW+n.solid[0]]=31;if(ch===4){deepMarsh(w);clearNpcTrees(w)}if(ch===1)clearCryptSurrounds(w);if(ch>=1&&ch<=5){thinFires(w);decorFill(w,ch)}
   // runda 215: bez ognisk (koksowników) tuż przy lawie w rozdz. II
   if(ch===2)for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const i=y*MW+x;if(w.map[i]!==27)continue;let n=false;for(let dy=-3;dy<=3&&!n;dy++)for(let dx=-3;dx<=3;dx++){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<MW&&Y<MH&&w.map[Y*MW+X]===24){n=true;break}}if(n)w.map[i]=(w.under&&w.under[i]&&w.under[i]!==27)?w.under[i]:20}
@@ -253,6 +253,10 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
     w.braziers.forEach(([x,y])=>lsrc(0xff6a1a,1.4,7,x+.5,1.6,y+.6,'fire'));
     for(const p of w.PROPS){if(p.k==='rune_lantern')lsrc(0x4a90e0,.6,3.5,p.x,1,p.y-.9,'rune');if(p.exit)lsrc(0x58b4ff,1.3,6.5,p.x,1.5,p.y-.3,'rune')}
     w.shrines.forEach((s,i)=>lsrc(0x5fb0ff,1.2,5,s.x/16,1.2,s.y/16+.6,'shrine',{si:i}));
+  }else if(ch===PORT){
+    w.braziers.forEach(([x,y])=>lsrc(0xff8a3a,1.45,7.5,x+.5,1.5,y+.6,'fire'));
+    w.shrines.forEach((s,i)=>lsrc(0xffc070,1.1,5,s.x/16,1.2,s.y/16+.6,'shrine',{si:i}));
+    for(const n of w.npcs)lsrc(n.id==='chojrak'?0xfff0c0:0xffb060,n.id==='chojrak'?.3:.8,n.id==='chojrak'?4.5:5,n.x/16+.2,1.2,n.y/16-.2,'npc',{npc:n.id});
   }else{
     {const cs=w.PROPS.find(p=>p.k==='crypt_stairs');if(cs){w.crypt={x:(cs.x+1.2)*16,y:(cs.y+.6)*16};lsrc(0xff9a48,1,5.5,cs.x+1.2,1.4,cs.y+.1,'fire')}}
     for(const p of w.PROPS)if(p.fire)lsrc(0xff7a2a,p.big?2.2:1.7,p.big?10:8,p.x,1.3,p.y-.2,'fire');
@@ -264,10 +268,11 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
   w.zoneLight=lsrc(0xff6a1a,0,7,0,1,0,'zone');w.merchantLight=lsrc(0xffb060,1.4,6,0,1.1,0,'merchant');
   WORLDS[ch]=w;
 }
-function ensureWorld(ch){if(!groupReady(ch))return loadGroup(ch).then(()=>ensureWorld(ch));if(WORLDS[ch])return;if(ch===4&&!IMGS.cz_ground||ch===5&&!IMGS.cy_ground)throw Error((EN?'Missing graphics for act ':'Brak grafik rozdziału ')+ch);initWorld(ch);useWorld(ch);ROOT=W.group;try{[null,buildBrzeznica,buildDolne,buildStolica,buildCzarnobor,buildCytadela][ch](IMGS);fitWorldProps(W,ch);finishWorldArt(W);for(const n of W.npcs){const fr=A[n.art],m=new THREE.Mesh(geo32,fr[0].n);if(fr[0].d){m.customDistanceMaterial=fr[0].d;m.castShadow=true}ROOT.add(m);W.npcMeshes[n.id]=m}try{wallShade()}catch(e){quietErr('wallShade',e)}buildMini()}finally{ROOT=scene}}
+function ensureWorld(ch){if(!groupReady(ch))return loadGroup(ch).then(()=>ensureWorld(ch));if(WORLDS[ch])return;if(ch===4&&!IMGS.cz_ground||ch===5&&!IMGS.cy_ground||ch===PORT&&!IMGS.port_atlas)throw Error((EN?'Missing graphics for act ':'Brak grafik rozdziału ')+ch);initWorld(ch);useWorld(ch);ROOT=W.group;try{[null,buildBrzeznica,buildDolne,buildStolica,buildCzarnobor,buildCytadela,buildSolneNabrzeze][ch](IMGS);fitWorldProps(W,ch);finishWorldArt(W);for(const n of W.npcs){const fr=A[n.art],m=new THREE.Mesh(geo32,fr[0].n);if(fr[0].d){m.customDistanceMaterial=fr[0].d;m.castShadow=true}ROOT.add(m);W.npcMeshes[n.id]=m}try{wallShade()}catch(e){quietErr('wallShade',e)}buildMini()}finally{ROOT=scene}}
 function useWorld(ch){CH=ch;W=WORLDS[ch];setGrid(ch);if(A&&A.collectorC5){if(!A.collectorC0)A.collectorC0=A.collector;A.collector=ch===5?A.collectorC5:A.collectorC0}
   if(A&&A.bossC5){if(!A.boss0)A.boss0=A.boss;A.boss=ch===5?A.bossC5:A.boss0}
   ({map,PROPS,LSRC,propObjs,walls,cliffs,pillars,lavas,braziers,waters,region}=W);START=W.start;SHRINES=W.shrines;
   for(const k in WORLDS)WORLDS[k].group.visible=(+k===ch);
   if(typeof applyAtmos==='function')applyAtmos()}
+
 

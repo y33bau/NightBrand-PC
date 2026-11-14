@@ -121,18 +121,29 @@ function musStop(f=1.8){MUS.pend=0;if(!MUS.cur)return;const G=MUS.G,mb=MUS.mb,k=
   try{mb.gain.cancelScheduledValues(AC.currentTime);mb.gain.setValueAtTime(mb.gain.value,AC.currentTime);mb.gain.linearRampToValueAtTime(0,AC.currentTime+f)}catch(e){}
   setTimeout(()=>{G.stop();try{mb.disconnect()}catch(e){}musRelease(k)},f*1000+3500)}
 function musSetVol(v){musVol=v;try{localStorage.setItem('pn_mus',String(v))}catch(e){}if(MUS.mb&&AC)MUS.mb.gain.setTargetAtTime(v*(MUS.scale||1),AC.currentTime,.1);for(const e of document.querySelectorAll('.musSl'))e.value=Math.round(v*100)}
-const INTRO_KICK={1:(EN?'Act I · The Scorched Settlement':'Rozdział I · Spalona Osada'),2:(EN?'Act II · The Lower City':'Rozdział II · Dolne Miasto'),3:(EN?'Act III · Fallen Goldheim':'Rozdział III · Upadły Złotogród'),4:(EN?'Act IV · Blackwood':'Rozdział IV · Czarnobór'),5:(EN?'Act V · The Creditors\' Citadel':'Rozdział V · Cytadela Wierzycieli')};
+const INTRO_KICK={1:(EN?'Act I · The Scorched Settlement':'Rozdział I · Spalona Osada'),2:(EN?'Act II · The Lower City':'Rozdział II · Dolne Miasto'),3:(EN?'Act IV · Fallen Goldheim':'Rozdział IV · Upadły Złotogród'),4:(EN?'Act V · Blackwood':'Rozdział V · Czarnobór'),5:(EN?'Act VI · The Creditors\' Citadel':'Rozdział VI · Cytadela Wierzycieli'),6:(EN?'Act III · Salt Quay':'Rozdział III · Solne Nabrzeże')};
 let INTRO=null;
 // Start loading at chapter selection, while the preparation screen is open.
 const INTRO_IMAGES=new Map();
 function preloadIntro(ch){const key='intro'+ch;if(!STORY||!SPRITE_DATA[key]||INTRO_IMAGES.has(ch))return;const im=new Image();INTRO_IMAGES.set(ch,im);im.onerror=()=>{const backup=SPRITE_DATA[key+'_fallback'];if(backup&&!im.nbFallback){im.nbFallback=true;SPRITE_DATA[key]=backup;im.src=backup;if(INTRO&&INTRO.ch===ch)$('iimg').style.backgroundImage=`url(${backup})`}else INTRO_IMAGES.delete(ch)};im.src=SPRITE_DATA[key]}
-for(let ch=1;ch<=5;ch++)$('start'+ch).addEventListener('click',()=>preloadIntro(ch),true);
+for(const ch of CAMPAIGN)$('start'+ch).addEventListener('click',()=>preloadIntro(ch),true);
 $('againBtn').addEventListener('click',()=>preloadIntro(CH===9?1:CH),true);
-$('nextBtn').addEventListener('click',()=>preloadIntro(Math.min(5,CH+1)),true);
+$('nextBtn').addEventListener('click',()=>preloadIntro((chNext(CH)||CH)),true);
 $('prepGo').addEventListener('click',()=>preloadIntro(PREP.ch),true);
 STORY_INTRO[5]=FTX('story.act5');
 // runda 318 (pakiet fabularny): opisy rozdzialow z FABULA_TXT; rozdzial I zachowuje dotychczasowe wprowadzenie i dopisuje opis osady
 for(let c=1;c<=4;c++)STORY_INTRO[c]=STORY_INTRO[c].concat(FTX('story.act'+c)); // 13.11.2026: najpierw wstep lokalizacji (I: wstep; II-IV: dodatkowe z 20_fabula), potem opis rozdzialu story.actN; noc V: sam story.act5
+STORY_INTRO[6]=EN?[
+ "The lift carries you out of the Lower City and sets you down on the riverbank. There are no more shafts or rails. There is only Salt Quay, the harbour through which dwarven salt and ore once went up to the capital.",
+ "The fare board still hangs on its nail. A copper for a crossing. Two if you bring a goat. Someone has scored out the prices with a hook. Underneath, in a clerk’s small hand: Crossings suspended by order of the Holy Order.",
+ "The ferry lies chained to both quays. The keys hang at the belt of the Harbour Master, who served the Order in life and serves it still. Those who were waiting in line for the crossing have not left either.",
+ "Across the water you can already see the golden domes of Goldheim. You step onto the wet boards. From the far bank comes the knock of a wooden leg."
+]:[
+ "Winda wywozi cię z Dolnego Miasta i zostawia na brzegu rzeki. Dalej nie ma już szybów ani torów. Jest tylko Solne Nabrzeże, port, przez który krasnoludzka sól i kruszec płynęły do stolicy.",
+ "Tabliczka z cennikiem wciąż wisi na gwoździu. Miedziak za przeprawę. Dwa, jeśli prowadzisz kozę. Ktoś wydrapał ceny hakiem. Niżej drobnym pismem urzędnika: Przeprawy wstrzymane z polecenia Zakonu.",
+ "Prom stoi przykuty łańcuchami do obu nabrzeży. Klucze nosi u pasa Bosman, który służył Zakonowi za życia i służy mu nadal. Ci, którzy czekali w kolejce na przeprawę, też stąd nie odeszli.",
+ "Za wodą widać już złote kopuły Złotogrodu. Wchodzisz na mokre deski. Z drugiego brzegu odpowiada ci stuk drewnianej nogi."
+];
 function storyIntro(ch){if(!STORY||!STORYMODE||!STORY_INTRO[ch]||!S||!SPRITE_DATA['intro'+ch])return;
   preloadIntro(ch);
   const el=$('intro');$('iimg').style.backgroundImage=`url(${SPRITE_DATA['intro'+ch]})`;$('iimg').style.animation='none';void $('iimg').offsetWidth;$('iimg').style.animation='';
@@ -165,4 +176,5 @@ for(const e of document.querySelectorAll('.musSl')){e.value=Math.round(musVol*10
 function storyBoss(e){if(!STORY||S.dg||e.dgBoss)return;const t=STORY_BOSS[CH+e.type]||STORY_BOSS[e.type];if(t)setTimeout(()=>{if(S&&S.phase==='play'&&!pl.dead)say(t,'story')},3600)}
 let startBusy=false;
 function beginRun(){if(startBusy)return;startBusy=true;uiSnd('runStart');const b=$('prepGo'),label=b.innerHTML;b.disabled=true;b.textContent=(EN?'Preparing the act…':'Przygotowywanie rozdziału…');if(coarse)goFull();requestAnimationFrame(()=>setTimeout(()=>{try{if(!$('prep').hidden)start(PREP.ch)}catch(e){console.error(e);toMenu();say((EN?'Failed to prepare the act. Refresh the game and try again.':'Nie udało się przygotować rozdziału. Odśwież grę i spróbuj ponownie.'))}finally{startBusy=false;b.disabled=false;b.innerHTML=label}},0))}
-function start(ch){if(!A)return;if(!groupReady(ch))return waitChapter(ch,()=>start(ch));ftClear();hbClear();$('pause').hidden=true;$('bAtk').hidden=$('bBlock').hidden=$('bHeavy').hidden=false;$('btns').classList.add('sl');resetInput();if(coarse)goFull();if(coarse||SETT.quality==='low')for(const k of Object.keys(WORLDS))if(+k!==ch)releaseWorld(+k);ensureWorld(ch);useWorld(ch);initAudio();if(AC&&AC.state==='suspended')acResume();newGame();applyPrep();lastHud='';MUS.base=ch;for(const k of Object.keys(MUS_BUFS))musRelease(k);if(ch===1)musLoadBuf('crypt');if(ch===1&&STORY)musLoadBuf('intro');if(!(ch===1&&AUDIO_DATA.intro))musStart(ch);for(const id of ['title','end','lvl','dialog','prep'])$(id).hidden=true;$('hud').hidden=false;$('touch').hidden=!coarse;camTarget.set(pl.x/16,0,pl.y/16);if(ch>=1&&ch<=5)storyIntro(ch);if(ch===1&&INTRO&&AUDIO_DATA.intro)musStart('intro')}
+function start(ch){if(!A)return;if(!groupReady(ch))return waitChapter(ch,()=>start(ch));ftClear();hbClear();$('pause').hidden=true;$('bAtk').hidden=$('bBlock').hidden=$('bHeavy').hidden=false;$('btns').classList.add('sl');resetInput();if(coarse)goFull();if(coarse||SETT.quality==='low')for(const k of Object.keys(WORLDS))if(+k!==ch)releaseWorld(+k);ensureWorld(ch);useWorld(ch);initAudio();if(AC&&AC.state==='suspended')acResume();newGame();applyPrep();lastHud='';MUS.base=ch;for(const k of Object.keys(MUS_BUFS))musRelease(k);if(ch===1)musLoadBuf('crypt');if(ch===1&&STORY)musLoadBuf('intro');if(!(ch===1&&AUDIO_DATA.intro))musStart(ch);for(const id of ['title','end','lvl','dialog','prep'])$(id).hidden=true;$('hud').hidden=false;$('touch').hidden=!coarse;camTarget.set(pl.x/16,0,pl.y/16);if(ch>=1&&ch<=6)storyIntro(ch);if(ch===1&&INTRO&&AUDIO_DATA.intro)musStart('intro')}
+

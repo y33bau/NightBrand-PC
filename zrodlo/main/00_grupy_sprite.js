@@ -667,3 +667,30 @@ const SPRITE_GROUPS={
     "r5"
   ]
 };
+
+
+// Rozdzial III (Solne Nabrzeze, numer techniczny 6): zasoby portu w grupie r6
+{
+ const add=(k,url)=>{SPRITE_DATA[k]=url;SPRITE_GROUPS[k]=['r6']};
+ add('port_atlas','assets/rekwizyty/201e598e7e7a138e23dd51003cc170649947d446e51da7f4b2bdf698bf36a749.png');
+ add('port_statek','assets/rekwizyty/ea7da3fa084717e705a0a0623c6ea968952c27be15984027ebc12257248bc1a6.webp');
+ // nawierzchnie: malowane tekstury gry (bruk, plyty, deski) przetworzone na mokry, chlodny, przesolony port
+ add('port_bruk','assets/tekstury/7660f4dd57a7fc0e2a8bbacfdb499d589938ca75409482b72d9882bf460f2206.webp');
+ add('port_trakt','assets/tekstury/d87776dd8beda5559f9bdafe07a810e23e40b02077de14c38dfcf1794faf19f8.webp');
+ add('port_sol','assets/tekstury/67797f6c19e6b7beb78c7e3b1c77752da8e44e4a434984eab2cf352e060543f3.webp');
+ add('port_mech','assets/tekstury/8454bbaadb3452d3e06c571e38f6b7eeafdada0921c731747d114c0fce0c3809.webp');
+ add('port_plyty','assets/tekstury/4732ad1c63e0c41e0450a874ad6bba9e3bfd4b12136a9cc9a5721b2fdeeca9db.webp');
+ add('port_deski','assets/tekstury/23136565c5788d197ac9283c4a84c215f0a55380fc7808305435fd441077e4a5.webp');
+ // zaloga portu (8 klatek 4x2) i Bosman (16 klatek 4x4)
+ add('port_bosman','assets/wrogowie/9fd97da68af597d33274217703940fa8e6277a88331c949002db0dff34ea1dcd.webp');
+ add('port_tragarz','assets/wrogowie/f6badec3520606a7f3f243ec35d1491e298d31f79d70b75ee0919c26d3ac3e6c.png');
+ add('port_sieciarka','assets/wrogowie/d7493a58f1437c92023c676c36d80f9184f8dbdeb1356aa3e8ff0b2effe5a45b.png');
+ add('port_kalafater','assets/wrogowie/067530c0285c6e6a6d1097e1957aa50720354f1363168868ada923351153ab7f.png');
+ add('port_krab','assets/wrogowie/fe0db64037d50a3c27ae4dd025951bc3b0c9174e733663ee1733bb91b5e353a9.png');
+ add('port_latarnik','assets/wrogowie/fe9117ee9dd5d0fb998b34308bd90d348558c4cf6ff2ec57fca77a17ab157a0d.png');
+ add('port_nurek','assets/wrogowie/ceabd7f50f97183a098da5904e45b189cab27ad05f3f9d46f3e1f339c90630da.webp');
+ add('port_cumownik','assets/wrogowie/46ebef6a2ee63decbfe6368e784b1e752233b120ec56d7b326bc20a1f1563bb2.webp');
+ add('intro6','assets/tla/f9250daf17aedd2d2feff1a9b253cd5fc2dcdfb2082a1921fb8ded8d0d84a670.webp');
+ // koksowniki i mur oporowy korzystaja z grafik innych rozdzialow
+ for(const k of ['p2_brazier_0','p2_brazier_1','p2_brazier_2','p2_brazier_3','wl_fort','wl_cap'])if(SPRITE_GROUPS[k]&&!SPRITE_GROUPS[k].includes('r6'))SPRITE_GROUPS[k].push('r6');
+}

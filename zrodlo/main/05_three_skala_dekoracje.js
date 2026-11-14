@@ -7,7 +7,7 @@ const HUMAN_PROP_SCALE={chapel_stairs:1.5,dead_tree:1.02,impaled_head:.65,grave_
 // Runda 259: rozdz. I - skala wg wzrostu bohatera (180 cm = ok. 1,44 j.; 1 j. = ok. 125 cm). Wartosci dla nowych rekwizytow HD (p1_*).
 const HUMAN_PROP_SCALE_1={house_fire:.5,shop_sign:.9,crypt_stairs:.75,dead_tree:1.6,impaled_head:1.1,grave_cross:.6,tombstone:.55,well:.8,stocks:.81,shrine:.8,gallows:1.67,wheel:.6,barrel:.5,marga_cart:1.15,crow_post:1.04,covered_corpses:.8,order_banner:1.4,burnt_hay:.8,dead_horse:1};
 function fitWorldProps(w,ch){if(ch===5)return;const assigned=new Set();
-  for(const p of w.PROPS){const s=(ch===1&&HUMAN_PROP_SCALE_1[p.k]!==undefined)?HUMAN_PROP_SCALE_1[p.k]:HUMAN_PROP_SCALE[p.k];if(s===undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);if(!o)continue;
+  for(const p of w.PROPS){const s=((ch===1||ch===PORT)&&HUMAN_PROP_SCALE_1[p.k]!==undefined)?HUMAN_PROP_SCALE_1[p.k]:HUMAN_PROP_SCALE[p.k];if(s===undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);if(!o)continue;
     o.mesh.scale.set(s,s*SQ,s);p.obj=o;assigned.add(o);if(['wheel','burnt_hay','covered_corpses','dwarf_bones','beggar_bodies','doorway_bones','cz_pelts','cz_bones'].includes(p.k))o.mesh.castShadow=false}
   for(const o of w.propObjs)if(!assigned.has(o)&&o.fps===6&&!o.kind)o.mesh.scale.set(.55,.55*SQ,.55);
 }
@@ -175,7 +175,7 @@ function depthApron(w){const m=new THREE.Mesh(new THREE.PlaneGeometry(MW+260,MH+
 function softenProps(w){// 12.11.2026: Akt I - rekwizyty bez twardego cienia z swiatla bohatera i lekko sciemnione do koloru ziemi (?softprops=0 = przed)
  if(new URLSearchParams(location.search).get('softprops')==='0')return;const seen=new Set(),tint=new THREE.Color(.76,.77,.8);
  w.group.traverse(o=>{if(!o.userData||!o.userData.propAsset)return;o.castShadow=false;const ms=Array.isArray(o.material)?o.material:[o.material];for(const m of ms){if(!m||seen.has(m)||!m.color||m.userData.noSoften)continue;seen.add(m);m.color.multiply(tint);if(m.emissiveMap&&m.emissive&&m.emissiveIntensity>0)m.emissiveIntensity*=.72}})}
-function finishWorldArt(w){if(depthOn(w.ch))depthApron(w);buildRoofs(w);preparePowerFires(w);composeWorldProps(w);dressSettlementsHD(w);dressNeutral(w);settleWorldProps(w);if(w.ch===1&&depthOn(1))softenProps(w);const flat=new Set(['dwarf_bones','covered_corpses','beggar_bodies','doorway_bones','wheel','burnt_hay','cz_bones','cz_pelts','cz_walk','cz_wisp','cz_crow','mushrooms','ferns','brambles','reeds','wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11','scroll','book','pages','keys','seal','purse','shackles','skull']);
+function finishWorldArt(w){if(depthOn(w.ch))depthApron(w);buildRoofs(w);preparePowerFires(w);if(w.ch!==PORT)composeWorldProps(w);dressSettlementsHD(w);dressNeutral(w);settleWorldProps(w);if(w.ch===1&&depthOn(1))softenProps(w);const flat=new Set(['dwarf_bones','covered_corpses','beggar_bodies','doorway_bones','wheel','burnt_hay','cz_bones','cz_pelts','cz_walk','cz_wisp','cz_crow','mushrooms','ferns','brambles','reeds','wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11','scroll','book','pages','keys','seal','purse','shackles','skull']);
   const props=w.PROPS.filter(p=>!flat.has(p.k)&&!VOID.has(tileAt(Math.floor(p.x),Math.floor(p.y-.2))));
   w.groundShadows=instanced(groundFxGeo,groundShadowMat,props,p=>{const m=p.obj&&p.obj.mesh,s=p.k==='sacred_oak'?2.2:p.tree?.8:m?Math.min(2,Math.max(.3,m.geometry.parameters.width*Math.abs(m.scale.x)*.5)):.65;return M4.compose(V.set(p.x,.024,p.y-.1),Q.identity(),SC.set(s*1.1,1,s*.6))},false,false);
   const lights=w.LSRC.filter(l=>['fire','shrine','rune','npc','stone','merchant'].includes(l.kind)&&l.base>0&&[-1,0,1].every(dy=>[-1,0,1].every(dx=>!VOID.has(tileAt(Math.floor(l.x)+dx,Math.floor(l.z)+dy))))).slice(0,48);w.groundL=lights;
@@ -196,4 +196,5 @@ function floorAO(fg,solidish){for(let ty=0;ty<MH;ty++)for(let tx=0;tx<MW;tx++){c
   if(WALLC.has(tileAt(tx,ty-1))){const shade=fg.createLinearGradient(0,ty*16,0,ty*16+12);shade.addColorStop(0,'rgba(4,3,6,.32)');shade.addColorStop(1,'rgba(4,3,6,0)');fg.fillStyle=shade;fg.fillRect(tx*16,ty*16,16,12)}}}
 function decals(I){const dec=row=>[0,1,2,3].map(i=>{const cv=canvas(32,32);cv.getContext('2d').drawImage(I.decals,i*32,row*32,32,32,0,0,32,32);return cv});
   DEC.pool=dec(0);DEC.spray=dec(1);DEC.scorch=dec(2);DEC.crack=dec(3);DEC.bones=dec(5)}
+
 

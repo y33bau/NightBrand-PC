@@ -104,6 +104,219 @@ function buildDungeon(I){planGround(9);
     const o={mesh:mkProp(frames,p.x,p.y,rc),frames,fps:0,ph:0,kind:sh?'shrine':'static',si:p.shrine};if(p.k==='dwarf_bones')o.mesh.castShadow=false;p.obj=o;propObjs.push(o)}
 }
 
+// Chapter III (technical number 6): Solne Nabrzeze, the river harbour between the Lower City lift and the ferry to Goldheim.
+const PORT_LAMPS=[[12,47.6],[51.8,47.6],[11.4,15.6],[54.6,15.6],[26,19],[40,19],[30,40],[28.3,46],[35.6,46],[22,25.6],[45,25.6],[9,24.4],[57.4,30.2],[30.6,10.6],[35.4,10.6]];// slupy z latarniami [x,y] w siatce mapy
+const PORT_PROP_SIZE={winch:[2.25,1.85],crane:[4.8,5.2],cargo:[1.8,1.65],salt:[1.65,1.45],bollard:[1.05,1.05]};// szerokosc i wysokosc w jednostkach swiata (1 j. = ok. 125 cm)
+const PORT_SHIP=[52,8.7,14.4],PORT_FERRY_ART=[32.5,7.9,8.6,6.4];
+function buildSolneNabrzeze(I){
+ const random=rng(60139);
+ const ground=(x,y)=>{if(x<0||y<0||x>=MW||y>=MH)return 45;const i=y*MW+x,t=map[i];return t===31||t===27?(W.under[i]||40):t};
+ const land=t=>t!==45&&t!==21;
+ // --- nawierzchnie: ciagla siatka UV, kolor wierzcholkow niesie wilgoc przy wodzie, cien pod scianami i przejscia miedzy materialami
+ const surfaces=new Map();
+ const surface=(key,img,u,tint,turn=false)=>surfaces.set(key,{img,u,tint,turn,pos:[],uv:[],colors:[],indices:[]});
+ surface('quay',I.port_bruk,5.2,0xe9ecee);
+ const laneA=FT(30),laneB=FT(35);// trakt wozow z sola: jeden pas od windy do trapu promu, szeroki na jeden kafel tekstury
+ surface('cartway',I.port_trakt,laneB-laneA,0xe6e6e2);
+ surface('salt',I.port_sol,5.2,0xf2f3f1);
+ surface('slip',I.port_mech,5.6,0xe2e8e0);
+ surface('deck',I.port_deski,5.4,0xf0ece6);
+ surface('crossdeck',I.port_deski,5.4,0xf0ece6,true);
+ const built=(x,y)=>ground(x,y)===48;
+ const kindAt=(x,y)=>{const t=ground(x,y);if(t===43){const horizontal=(y>=FT(10)&&y<FT(15))||(y>=FT(44)&&(x<FT(27)||x>=FT(37)));return horizontal?'deck':'crossdeck'}
+  return t===47?'salt':t===42?'slip':t===40&&y>=FT(11)&&y<FT(46)&&x>=laneA&&x<laneB?'cartway':'quay'};
+ const tone=new THREE.Color();
+ for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){
+  const t=ground(x,y);if(!land(t)||t===48)continue;
+  const f=surfaces.get(kindAt(x,y)),base=f.pos.length/3;
+  for(const [dx,dz] of [[0,0],[0,1],[1,1],[1,0]]){
+   const X=x+dx,Z=y+dz;f.pos.push(X,.025,Z);
+   f.uv.push(((f.turn?Z:X)-(f===surfaces.get('cartway')?laneA:0))/f.u,-(f.turn?X:Z)/f.u);
+   const around=[[0,0],[-1,0],[0,-1],[-1,-1]];
+   const wet=around.some(([ox,oz])=>ground(X+ox,Z+oz)===45),wall=around.some(([ox,oz])=>built(X+ox,Z+oz));
+   let near=false;if(!wet)for(let oz=-2;oz<=1&&!near;oz++)for(let ox=-2;ox<=1;ox++)if(ground(X+ox,Z+oz)===45){near=true;break}
+   const shade=.94+.04*Math.sin(X*.31+Z*.17)+.03*Math.cos(Z*.53-X*.12);
+   tone.setHex(f.tint).multiplyScalar(shade*(wet?.66:near?.86:1)*(wall?.62:1));
+   if(wet||near){tone.r*=.94;tone.b*=1.04}
+   f.colors.push(tone.r,tone.g,tone.b);
+  }
+  f.indices.push(base,base+1,base+2,base,base+2,base+3);
+ }
+ for(const [name,f] of surfaces){if(!f.indices.length)continue;
+  const geo=new THREE.BufferGeometry();
+  for(const [key,values,size] of [['position',f.pos,3],['uv',f.uv,2],['color',f.colors,3]])geo.setAttribute(key,new THREE.Float32BufferAttribute(values,size));
+  geo.setIndex(f.indices);geo.computeVertexNormals();
+  const deck=name==='deck'||name==='crossdeck',wet=deck||name==='slip';
+  const mesh=new THREE.Mesh(geo,phong({map:wallTex(f.img),vertexColors:true,shininess:wet?26:name==='salt'?10:16,specular:wet?0x25363e:0x141d21}));
+  mesh.receiveShadow=true;ROOT.add(mesh);
+ }
+ // --- rzeka
+ const harbourWater=waterHD(I.cc0_water,W.waters,-.19,5.8,0x3f5a68,true);
+ if(harbourWater){harbourWater.mesh.material.shininess=48;harbourWater.mesh.material.specular.setHex(0x314754)}
+ shoreFX(W.waters,W.waters,-.175,'water',true);
+ // --- krawedzie nabrzezy: kamienne ciosy, belki pomostow i pale
+ const stone=worldSurf(phong({color:0xc9d0d2}),I.port_plyty,3.2,'portStone');
+ const wood=worldSurf(phong({color:0xc4bcb2}),I.port_deski,3,'portWood');
+ const edgeStone=[],edgeWood=[],piles=[];
+ for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++){
+  const t=ground(x,y);if(!land(t))continue;
+  for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]])if(ground(x+dx,y+dy)===45){
+   const record=[x+.5+dx*.43,y+.5+dy*.43,dx];(t===43?edgeWood:edgeStone).push(record);
+   if(t===43&&(x+y)%4===0)piles.push([record[0],record[1]]);
+  }
+ }
+ const rim=new THREE.BoxGeometry(1,.74,.2),beam=new THREE.BoxGeometry(1,.23,.15);
+ const edges=(geo,mat,list)=>instanced(geo,mat,list,([x,y,dx])=>{M4.makeRotationY(dx?Math.PI/2:0);M4.setPosition(x,-.3,y);return M4});
+ edges(rim,stone,edgeStone);edges(beam,wood,edgeWood);
+ instanced(new THREE.CylinderGeometry(.1,.14,1.3,6),wood,piles,([x,y])=>M4.makeTranslation(x,-.15,y));
+ // --- budynki: sklady, kantor i karczma. Sciany znikaja przed bohaterem (cutaway), wiec nie zaslaniaja walki.
+ const siding=worldSurf(cutaway(phong({color:0xb9b1a8})),I.port_deski,3,'portSiding');
+ const plaster=worldSurf(cutaway(phong({color:0xa9a59c})),I.wl_chata||I.port_deski,3,'portLogs');
+ const foot=worldSurf(cutaway(phong({color:0xb4bcbc})),I.port_plyty,3.2,'portFoot');
+ const slate=worldSurf(cutaway(phong({color:0x9aa1a8})),I.rf_lupek,2.5,'portSlate');slate.color.setHex(0x8f8479);
+ const timbers=cutaway(phong({color:0x554b40})),shadow=cutaway(phong({color:0x1c1f1f}));
+ const glow=cutaway(new THREE.MeshBasicMaterial({color:0xf2b25c}));
+ const unit=new THREE.BoxGeometry(1,1,1),parts=new Map();
+ const part=(mat,x,h,z,w,height,depth,angle=0)=>{if(!parts.has(mat))parts.set(mat,[]);parts.get(mat).push([x,h,z,w,height,depth,angle])};
+ const inBuilding=new Set();
+ for(const [x,y,w,h,kind] of PORT_BUILDINGS){
+  for(let Y=FT(y);Y<FT(y+h);Y++)for(let X=FT(x);X<FT(x+w);X++)inBuilding.add(Y*MW+X);
+  const bx=MP(x),bz=MP(y),bw=MP(x+w)-bx,bd=MP(y+h)-bz;
+  const cx=bx+bw/2,cz=bz+bd/2,front=bz+bd,eave=kind==='inn'?2.5:kind==='office'?2.9:2.72,half=bw/2+.22,pitch=.37;
+  if(kind==='store'){
+   // sklad przechodni: dwie bramy leza dokladnie na polach otwartych w siatce kolizji; dach znika, gdy bohater jest w srodku
+   const left=FT(x+1),right=FT(x+3),room=new THREE.Group(),cover=new THREE.Group();
+   ROOT.add(room);room.add(cover);
+   const box=(parent,material,px,py,pz,sx,sy,sz,angle=0)=>{const mesh=new THREE.Mesh(unit,material);mesh.scale.set(sx,sy,sz);mesh.rotation.z=angle;mesh.position.set(px,py,pz);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh)};
+   for(const [outer,inner] of [[bx,left],[bx+bw,right]]){
+    const side=outer<inner?-1:1,center=(outer+inner)/2,width=Math.abs(outer-inner);
+    box(room,foot,center,.22,cz,width,.44,bd);
+    box(room,siding,outer-side*.10,1.22,cz,.20,2.44,bd);
+    for(const z of [bz,front]){
+     box(cover,siding,center,1.25,z,width,2.5,.18);
+     box(cover,timbers,inner+side*.08,1.26,z,.18,2.52,.26);
+     box(room,timbers,inner+side*.20,1.12,z-side*.03,.30,2.24,.23);
+    }
+    for(const f of [.29,.63]){box(room,wood,center,.83,bz+f*bd,width*.76,.76,1.18);box(room,timbers,center,1.13,bz+f*bd,width*.8,.12,1.22)}
+   }
+   for(const z of [bz,front]){box(cover,timbers,cx,2.64,z,bw+.1,.24,.28);box(room,foot,(left+right)/2,.04,z,right-left,.08,.33)}
+   for(const side of [-1,1])box(cover,slate,cx+side*half/2,eave+Math.tan(pitch)*half/2,cz,half/Math.cos(pitch)+.05,.16,bd+.5,-side*pitch);
+   box(cover,timbers,cx,eave+Math.tan(pitch)*half,cz,.18,.16,bd+.5);
+   W.portRoom={cover,left:bx,right:bx+bw,north:bz,south:front};
+   W.LSRC.push({col:0xffcaaa,base:.7,dist:5,x:left+.1,y:1.5,z:cz,kind:'fire',ph:0});
+   continue;
+  }
+  const wall=kind==='shed'?siding:plaster;
+  part(foot,cx,.25,cz,bw+.1,.5,bd+.1);
+  part(wall,cx,(eave+.46)/2,cz,bw,eave-.46,bd);
+  for(const side of [-1,1]){
+   part(slate,cx+side*half/2,eave+Math.tan(pitch)*half/2,cz,half/Math.cos(pitch)+.04,.13,bd+.48,-side*pitch);
+   for(const end of [bz,front])part(timbers,cx+side*(bw/2-.1),eave/2,end,.17,eave,.16);
+   part(timbers,cx+side*bw/2,eave-.1,cz,.16,.17,bd+.25);
+  }
+  // szczyty zamykaja oba konce pod kalenica
+  const gable=new THREE.BufferGeometry(),verts=[];
+  for(const z of [bz,front])verts.push(bx,eave,z,bx+bw,eave,z,cx,eave+Math.tan(pitch)*bw/2,z);
+  gable.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));
+  gable.setAttribute('uv',new THREE.Float32BufferAttribute([0,0,2,0,1,1,0,0,2,0,1,1],2));
+  gable.computeVertexNormals();const endMat=wall.clone();endMat.onBeforeCompile=wall.onBeforeCompile;endMat.customProgramCacheKey=wall.customProgramCacheKey;endMat.side=THREE.DoubleSide;
+  ROOT.add(new THREE.Mesh(gable,endMat));
+  // drzwi w ludzkiej skali (ok. 2,3 m), okna z okiennicami; w kantorze i karczmie pali sie swiatlo
+  const lit=kind!=='shed';
+  part(shadow,cx,.99,front+.045,1.42,1.98,.08);
+  part(siding,cx,.94,front+.095,1.23,1.88,.05);
+  part(timbers,cx,1.97,front+.12,1.57,.14,.16);
+  for(const side of [-1,1])part(timbers,cx+side*.69,.98,front+.12,.12,1.96,.16);
+  part(timbers,cx,.94,front+.14,1.21,.09,.08);
+  part(foot,cx,.075,front+.27,1.57,.15,.55);
+  for(const side of [-1,1]){
+   const wx=cx+side*bw*.32;
+   part(lit?glow:shadow,wx,1.53,front+.06,.76,.87,.10);
+   for(const offset of lit?[-.2,.2]:[-.20,0,.20])part(timbers,wx+offset,1.54,front+.12,lit?.06:.125,.74,.07);
+   if(lit)part(timbers,wx,1.54,front+.12,.76,.06,.07);
+   part(foot,wx,1.10,front+.13,.90,.11,.25);
+   part(timbers,cx+side*bw*.24,eave+.16,front+.075,.12,Math.hypot(bw*.46,.61),.1,-side*Math.atan2(bw*.46,.61));
+   if(lit)W.LSRC.push({col:0xffb866,base:.75,dist:4.6,x:wx,y:1.5,z:front+.7,kind:'fire',ph:wx});
+  }
+  part(timbers,cx,eave-.08,front+.09,bw,.13,.16);
+ }
+ // --- mur oporowy pod szybem windy Dolnego Miasta
+ {const list=walls.filter(([x,y,t])=>t===48&&!inBuilding.has(y*MW+x)).map(([x,y])=>[x,y]);
+  if(list.length){const geo=new THREE.BoxGeometry(1,3.4,1);geo.translate(0,1.7,0);
+   const side=I.wl_fort?worldSurf(cutaway(phong({color:0x9aa2a6})),I.wl_fort,4,'portWall'):foot,cap=I.wl_cap?worldSurf(cutaway(phong({color:0xa4acb0})),I.wl_cap,3,'portCap'):foot;
+   instanced(geo,[side,side,cap,cap,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5)).frustumCulled=false}}
+ // --- wieza wyciagowa windy: tu bohater wysiada po wyjezdzie z Dolnego Miasta
+ {const lx=MP(PORT_LIFT[0]+.5),lz=MP(PORT_LIFT[1])-1.1,iron=cutaway(phong({color:0x3a3f40,shininess:14}));
+  for(const sx of [-1,1])for(const sz of [-1,1])part(timbers,lx+sx*1.5,1.75,lz+sz*1.1,.26,3.5,.26);
+  for(const sz of [-1,1])part(timbers,lx,3.42,lz+sz*1.1,3.4,.24,.26);
+  for(const sx of [-1,1]){part(timbers,lx+sx*1.5,3.42,lz,.26,.24,2.5);part(timbers,lx+sx*1.5,1.2,lz,.12,.12,2.2)}
+  part(timbers,lx,3.75,lz,.3,.42,2.7);part(iron,lx,3.2,lz,.9,.9,.16);part(iron,lx,3.2,lz,.2,.2,.5);
+  part(shadow,lx,.035,lz,2.7,.03,1.9);part(iron,lx,.06,lz,2.9,.05,.14);part(iron,lx,.06,lz-.95,2.9,.05,.14);part(iron,lx,.06,lz+.95,2.9,.05,.14);
+  for(const sx of [-1,1])part(iron,lx+sx*.42,1.9,lz,.05,2.7,.05);
+  W.LSRC.push({col:0xffb46a,base:.95,dist:6,x:lx+1.5,y:2.5,z:lz+1.3,kind:'fire',ph:1.7});
+  const lamp=new THREE.Mesh(new THREE.BoxGeometry(.22,.3,.2),new THREE.MeshBasicMaterial({color:0xf4c480}));lamp.position.set(lx+1.5,2.5,lz+1.3);ROOT.add(lamp)}
+ // --- porecze z lina na zewnetrznych krawedziach pomostow przeladunkowych
+ const ropeMat=phong({color:0x7c7160}),strands=[];
+ const ropeSpan=(x1,z1,x2,z2)=>{const steps=4;for(let j=0;j<steps;j++)strands.push([j/steps,(j+1)/steps].map(t=>new THREE.Vector3(x1+(x2-x1)*t,.65-.15*4*t*(1-t),z1+(z2-z1)*t)))};
+ const rail=(ax,az,bx,bz)=>{const n=Math.ceil(Math.hypot(bx-ax,bz-az)/3.5);let prev=null;
+  for(let i=0;i<=n;i++){const x=MP(ax+(bx-ax)*i/n),z=MP(az+(bz-az)*i/n);part(wood,x,.41,z,.19,.82,.19);part(timbers,x,.67,z,.215,.09,.215);if(prev)ropeSpan(prev[0],prev[1],x,z);prev=[x,z]}};
+ rail(11.25,33,11.25,48.65);rail(11.55,48.65,26.5,48.65);rail(52.65,33,52.65,48.65);rail(37.3,48.65,52.35,48.65);
+ rail(10.2,10.25,24.6,10.25);rail(40.4,10.25,54.8,10.25);
+ instanced(new THREE.CylinderGeometry(.026,.026,1,5),ropeMat,strands,([a,b])=>{V.subVectors(b,a);SC.set(1,V.length(),1);Q.setFromUnitVectors(UP,V.normalize());V.addVectors(a,b).multiplyScalar(.5);M4.compose(V,Q,SC)});
+ // --- slupy z latarniami: swiatlo wychodzi ze srodka oprawy
+ const ironwork=phong({color:0x373d3d,shininess:16}),lanternGlass=new THREE.MeshBasicMaterial({color:0xf6c88a}),lanterns=[];
+ for(const [sx,sy] of PORT_LAMPS){
+  const x=MP(sx),z=MP(sy);if(!land(ground(Math.floor(x),Math.floor(z))))continue;
+  part(timbers,x,1.08,z,.17,2.16,.17);part(ironwork,x,.29,z,.205,.11,.205);
+  part(ironwork,x+.19,2.05,z,.53,.095,.12);part(ironwork,x+.36,1.94,z,.043,.20,.043);
+  part(ironwork,x+.36,1.80,z,.31,.10,.28);part(ironwork,x+.36,1.45,z,.28,.065,.26);
+  for(const dx of [-.105,.105])part(ironwork,x+.36+dx,1.62,z+.10,.026,.31,.035);
+  lanterns.push([x+.36,1.62,z]);
+  W.LSRC.push({col:0xffbb79,base:.90,dist:5.3,x:x+.36,y:1.62,z,kind:'fire',ph:sx*.71});
+ }
+ instanced(new THREE.BoxGeometry(.20,.27,.18),lanternGlass,lanterns,([x,y,z])=>M4.makeTranslation(x,y,z),false,false);
+ for(const [mat,list] of parts)instanced(unit,mat,list,([x,h,z,w,height,depth,angle])=>{M4.makeRotationZ(angle);SC.set(w,height,depth);M4.scale(SC);M4.setPosition(x,h,z)});
+ // --- rekwizyty portu (atlas HD) i wspolne rekwizyty gry
+ const atlas=I.port_atlas;atlas.nbDensity=atlas.width/192;
+ const frames={};
+ for(const [key,col,row] of [['ferry',0,0],['winch',1,0],['crane',2,0],['salt',0,1],['bollard',1,1],['cargo',2,1]])frames[key]=procFrame(atlas,col*64,row*64,64,64,'prop');
+ const sprite=(frame,x,y,w,h,flip)=>{const geo=new THREE.PlaneGeometry(w,h).translate(0,h/2,0),m=new THREE.Mesh(geo,frame.n);
+  m.position.set(x,0,y);m.scale.set(flip?-1:1,SQ,1);m.castShadow=true;m.customDistanceMaterial=frame.d;ROOT.add(m);return m};
+ // prom: poklad, po ktorym sie chodzi, lezy plasko pod stopami postaci
+ {const [fx,fy,fw,fh]=PORT_FERRY_ART,m=sprite(frames.ferry,MP(fx),MP(fy),fw,fh);m.rotation.x=-Math.PI/2;m.scale.y=1.38;m.position.y=.052;m.castShadow=false;m.receiveShadow=true}
+ // koga Zakonu na kotwicy przy wschodnim pomoscie: sama dekoracja, stoi na wodzie poza polem gry
+ if(I.port_statek){const img=I.port_statek;img.nbDensity=img.width/96;const fr=procFrame(img,0,0,96,64,'prop'),[sx,sy,sw]=PORT_SHIP,m=sprite(fr,MP(sx),MP(sy),sw,sw*2/3);m.position.y=-.55;m.castShadow=false;W.portShip=m;
+  W.LSRC.push({col:0xffb46a,base:.8,dist:6,x:MP(sx)+sw*.29,y:3.9,z:MP(sy)-.4,kind:'fire',ph:2.2})}
+ const R={well:[32,32,32,32],stocks:[64,32,32,32],shrine:[96,32,32,32],gallows:[0,64,64,32],wheel:[64,96,32,32],barrel:[96,96,32,32],marga_cart:[0,128,64,32],crow_post:[64,128,32,32],covered_corpses:[96,128,32,32],order_banner:[32,160,32,32],burnt_hay:[64,160,32,32],dead_horse:[96,160,32,32],shop_sign:[0,0,32,32]};
+ const PF={};for(const k in R)PF[k]=I['p1_'+k]?procFrame(I['p1_'+k],0,0,R[k][2],R[k][3],'prop'):procFrame(I.br_props,R[k][0],R[k][1],R[k][2],R[k][3],'prop');
+ for(const p of PROPS){
+  if(frames[p.k]){const [w,h]=PORT_PROP_SIZE[p.k],m=sprite(frames[p.k],p.x,p.y,w,h,p.flip);m.userData.propAsset=true;const o={mesh:m,frames:[frames[p.k]],fps:0,ph:0,kind:'static'};propObjs.push(o);p.obj=o;continue}
+  const fr=p.shrine!==undefined?PF.shrine:PF[p.k];if(!fr)continue;
+  const rc=p.shrine!==undefined?R.shrine:R[p.k],m=mkProp([fr],p.x,p.y,rc);if(p.flip)m.scale.x=-1;
+  propObjs.push({mesh:m,frames:p.shrine!==undefined?[fr,fr]:[fr],fps:0,ph:Math.random()*3,kind:p.shrine!==undefined?'shrine':'static',si:p.shrine});
+ }
+ if(I.p2_brazier_0){const bz=[0,1,2,3].map(i=>procFrame(I['p2_brazier_'+i],0,0,32,32,'prop'));
+  for(const [x,y] of braziers)propObjs.push({mesh:mkProp(bz,x+.5,y+.92,[0,0,32,32]),frames:bz,fps:6,ph:Math.random()*3})}
+ // --- lancuchy od kolowrotow do promu
+ W.solneChains=[];
+ const iron=phong({color:0x4a4f52,shininess:22,specular:0x39424a}),linkGeo=new THREE.CylinderGeometry(.034,.034,1,5);
+ for(const [x,y,tx] of [[12.5,14.8,30.8],[53.5,14.8,34.2]]){
+  // lancuch zwisa lukiem od bebna kolowrotu do burty promu i w polowie drogi dotyka wody
+  const from=new THREE.Vector3(MP(x),.72,MP(y)),to=new THREE.Vector3(MP(tx),.3,MP(5.2)),chain=new THREE.Group(),steps=14;
+  for(let j=0;j<steps;j++){const [a,b]=[j/steps,(j+1)/steps].map(t=>from.clone().lerp(to,t).setY(from.y+(to.y-from.y)*t-1.0*4*t*(1-t)));
+   const link=new THREE.Mesh(linkGeo,iron),d=b.clone().sub(a);link.scale.y=d.length();link.position.copy(a).add(b).multiplyScalar(.5);link.quaternion.setFromUnitVectors(UP,d.normalize());link.castShadow=false;chain.add(link)}
+  ROOT.add(chain);W.solneChains.push(chain);
+ }
+ // --- trzciny przy palach i brzegu (ta sama grafika co w Czarnoborze)
+ const reeds=procFrame(I.p4_reeds,0,0,I.p4_reeds.width/(I.p4_reeds.nbDensity||1),I.p4_reeds.height/(I.p4_reeds.nbDensity||1),'prop');
+ for(const [x,y] of piles)if(random()<.6)sprite(reeds,x+.35,y+.8,1.2,1.2);
+ for(let n=0;n<85;n++){
+  const x=2+(random()*(MW-4)|0),y=2+(random()*(MH-4)|0);if(ground(x,y)!==45)continue;
+  if(![[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>land(ground(x+a,y+b))))continue;
+  sprite(reeds,x+.5,y+.7,1.3,1.15);
+ }
+}
+
 // Chapter I meshes: M1 ground, M2 walls, M3 props
 function buildBrzeznica(I){
   const F=I.br_ground,Wl=I.br_walls,r=rng(77);planGround(1);
@@ -451,4 +664,5 @@ function beastSheet(){
   cell(0,2,()=>dead(0));cell(1,2,()=>dead(1));
   return c;
 }
+
 

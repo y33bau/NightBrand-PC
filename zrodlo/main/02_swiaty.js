@@ -1,5 +1,8 @@
 /* ============ WORLDS ============ */
 // Each chapter has its own tile map, props, NPCs, lights and meshes. useWorld(ch) swaps the active one.
+// 14.11.2026: szesc rozdzialow. Solne Nabrzeze to rozdzial III kampanii, ale ma numer techniczny 6 (zapisy s3-s5 i tablice rozdzialow zostaja bez zmian).
+// CAMPAIGN = kolejnosc kampanii; chNo = numer widoczny dla gracza; chRoman = ten numer rzymski; chPrev/chNext = sasiedzi w kampanii.
+const PORT=6,CAMPAIGN=[1,2,6,3,4,5],ROMAN=['I','II','III','IV','V','VI'],chNo=c=>CAMPAIGN.indexOf(c)+1,chRoman=c=>ROMAN[chNo(c)-1]||'',chPrev=c=>CAMPAIGN[CAMPAIGN.indexOf(c)-1],chNext=c=>CAMPAIGN[CAMPAIGN.indexOf(c)+1];
 const SOLID=new Set([21,22,23,24,27,31,45,48,58,59,68,69,78,80,91]),WALLC=new Set([21,48,58,59,78,80]),VOID=new Set([23,24,25]);
 let CH=2,W=null,map,PROPS,START,SHRINES,region,walls,cliffs,pillars,lavas,braziers,waters,LSRC,propObjs;
 const WORLDS={},WORLD_SEEDS={};
@@ -21,7 +24,7 @@ function mapKit(fillWith,skip){const map=new Uint8Array(GW*GH).fill(fillWith),un
 // FT(i) is the first big-map tile of source tile i, MP(u) maps a continuous source coordinate, GTX/GTY give the source tile of a big-map tile.
 let MK=1.625,GW=64,GH=56,GTX=[],GTY=[];
 const FT=i=>Math.ceil(i*MK-1e-9),MP=u=>{const i=Math.floor(u);return FT(i)+(u-i)*(FT(i+1)-FT(i))};
-const GRID={1:[64,56],2:[64,56],3:[64,56],4:[80,70],5:[80,70],9:[64,56]};
+const GRID={1:[64,56],2:[64,56],3:[64,56],4:[80,70],5:[80,70],6:[64,56],9:[64,56]};
 function setGrid(ch){[GW,GH]=GRID[ch];MK=MW/GW;GTX=[];GTY=[];for(let X=0;X<MW;X++){let i=0;while(FT(i+1)<=X)i++;GTX[X]=i}for(let Y=0;Y<MH;Y++){let i=0;while(FT(i+1)<=Y)i++;GTY[Y]=i}}
 const SR=B=>({x:FT(B.x),y:FT(B.y),w:FT(B.x+B.w)-FT(B.x),h:FT(B.y+B.h)-FT(B.y)});
 // pillars and braziers stay single tiles; inlaid gold lines stay one tile thick; everything else is stretched block by block
@@ -96,6 +99,45 @@ function genDolne(){
 
 // Chapter I: the burned village of Brzeźnica
 // codes: 40 road, 41 ash, 42 dead grass, 43 charred planks, 44 rubble, 45 water, 46 graveyard, 47 blood mud, 48 house wall, 21 palisade/outside
+// Chapter III: Solne Nabrzeze, the river harbour below Goldheim (technical number 6)
+// codes: 40 stone quay, 42 slipway, 43 planks (piers, ferry deck), 45 river, 47 salt yard, 48 building / retaining wall, 27 brazier
+const PORT_BUILDINGS=[[7,18,4,7,'store'],[15,18,3,6,'shed'],[55,20,4,7,'shed'],[39,27,4,4,'office'],[21,27,3,3,'inn']];// [x,y,w,h,kind]; 'store' = sklad przechodni (bramy od polnocy i poludnia)
+const PORT_FERRY_DECK=[28,2,9,4],PORT_LIFT=[32,52];
+function genSolneNabrzeze(){
+ const {map,under,PROPS,set,fill,prop,reserve,clearways}=mapKit(45);
+ const at=(x,y)=>map[y*GW+x];
+ const areas=[[27,43,10,8,43],[29,33,6,12,40],[20,26,24,12,40],[10,29,14,5,42],
+ [5,13,15,19,47],[10,10,15,5,43],[23,9,19,11,40],[40,10,15,5,43],
+ [47,13,14,19,40],[41,29,12,5,42],[30,18,5,9,40],[31,6,3,5,43]];
+ for(const a of areas)fill(...a);
+ fill(...PORT_FERRY_DECK,43);
+ // Southern freight walk: two elbow piers meet the landing and the side yards.
+ const piers=[[11,31,5,14],[11,44,18,5],[48,31,5,14],[36,44,17,5]];
+ for(const [x,y,w,h] of piers)for(let j=y;j<y+h;j++)for(let i=x;i<x+w;i++)if(at(i,j)===45)set(i,j,43);
+ // The lift head: a stone terrace under the retaining wall of the Lower City shaft.
+ fill(25,46,14,6,40);fill(21,52,22,2,48);
+ for(const [x,y,w,h,kind] of PORT_BUILDINGS){fill(x,y,w,h,48);if(kind==='store')fill(x+1,y,2,h,43)}
+ const brazier=(x,y)=>{under[y*GW+x]=at(x,y);set(x,y,27)};
+ for(const [x,y] of [[29,11],[35,11],[27,47],[36,47],[24,27],[37,36]])brazier(x,y);
+
+ const port=(k,x,y,solid,extra)=>prop(k,x+.5,y+.92,solid?[[x,y]]:[],Object.assign({port:true},extra||{}));
+ port('winch',12,14,true);port('winch',53,14,true);port('crane',57,17,true);port('crane',18,11,true,{flip:true});
+ // cargo waiting for a crossing that never came
+ for(const [x,y,f] of [[8,16],[17,26,1],[6,28],[49,28,1],[52,22],[35,3,1],[59,15],[60,28,1],[24,13],[40,16,1],[13,17,1],[26,36],[42,33,1],[50,17],[12,45,1],[51,45]])port('cargo',x,y,true,{flip:!!f});
+ for(const [x,y,f] of [[6,21],[13,25,1],[18,17],[14,30],[6,14,1],[11,21],[17,29,1],[5,25],[12,27,1],[59,24],[29,3]])port('salt',x,y,true,{flip:!!f});
+ for(const [x,y] of [[24,18],[40,18],[23,10],[41,10],[48,12],[19,12],[28,44],[35,44],[26,49],[37,49],[11,33],[15,43],[52,33],[48,43],[23,37],[40,37],[10,10],[54,10]])port('bollard',x,y,false);
+ for(const [x,y,f] of [[9,26],[16,15,1],[19,22],[48,19],[53,26,1],[58,13],[25,31],[38,31,1],[36,15],[26,17,1],[22,36],[47,30],[5,18,1],[10,31],[44,12,1],[13,12],[33,48,1],[60,19]])port('barrel',x,y,true,{flip:!!f});
+ // the Order's blockade on the salt square
+ port('order_banner',28,26,true);port('order_banner',35,26,true);port('order_banner',26,10,true);port('order_banner',38,10,true);
+ port('gallows',24,34,true);port('marga_cart',40,34,true);port('covered_corpses',38,35,false);port('covered_corpses',26,33,false,{flip:true});
+ port('marga_cart',50,30,true,{flip:true});port('well',27,30,true);port('crow_post',44,36,true);port('crow_post',21,12,true);port('stocks',35,33,true);port('burnt_hay',57,28,false);port('dead_horse',46,33,false);
+ port('shop_sign',24,30,false);port('wheel',37,30,false);port('wheel',9,30,false,{flip:true});
+ prop('shrine',16.5,28.92,[[16,28]],{port:true,shrine:0});prop('shrine',50.5,25.92,[[50,25]],{port:true,shrine:1});
+ return {map,under,PROPS,clearways,roofs:[],start:{x:32*TS,y:49*TS+8},
+ shrines:[{x:16*TS+8,y:29*TS+8},{x:50*TS+8,y:26*TS+8}],region:()=>'port',idle:[32,24,10,9],
+ npcs:[{id:'przewoznik',art:'nawoj',name:EN?'Sulisław, the Old Ferryman':'Sulisław, stary przewoźnik',x:36*TS+8,y:17*TS+6,lines:EN?["I would know that ferry by her sound. One plank always knocks against the hull.","When the Holy Order came, the Harbour Master chained her to both quays. He kept the keys. We were told to mind the queue. We are minding it still.","There is a winch on each quay, at the end of the plank piers. Let both chains go and she will float free. He will hear it, mind. He hears everything that leaves this bank."]:["Poznałbym ten prom po stukocie. Jedna deska zawsze bije o burtę.","Kiedy przyszedł Zakon, Bosman przykuł go do obu nabrzeży. Klucze zatrzymał. Nam kazał pilnować kolejki. Pilnujemy do dziś.","Na każdym nabrzeżu stoi kołowrót, na końcu pomostu z desek. Zwolnij oba łańcuchy, a prom będzie wolny. Tylko że on to usłyszy. Słyszy wszystko, co odbija od tego brzegu."]}]};
+}
+
 function genBrzeznica(){
   const {map,under,PROPS,set,fill,prop,reserve,clearways}=mapKit(21,GONE_PROPS);const r=rng(1349);
   reserve(30,2,3,GH-4);reserve(2,27,GW-4,3);reserve(49,16,6,5);
@@ -439,4 +481,5 @@ function genDungeonTry(seed,force){
   if(!force)for(const R of rooms){let ok=false;for(let y=R.y;y<R.y+R.h&&!ok;y++)for(let x=R.x;x<R.x+R.w;x++)if(seen[y*GW+x]){ok=true;break}if(!ok)return null}
   return{map,under,PROPS,seed,start:{x:sx*TS+8,y:(S0.y+2)*TS+8},shrines:shrine?[shrine]:[],region:()=>'hall',npcs:[],idle:[...cen(S0),6,4],rooms:rooms.map(R=>({x:R.x,y:R.y,w:R.w,h:R.h,k:R.k}))};
 }
+
 

@@ -12,7 +12,28 @@ function startBreak(){S.stage='break';dissolveAll(null);let spot=CH===1?[1427,54
     spot=spot||[pl.x+20,pl.y];S.merchant={x:spot[0],y:spot[1],state:'in',t:1,wait:120};play('bless',0);
     for(let i=0;i<26;i++)S.parts.push({k:'a',x:spot[0]+rnd(-8,8),y:spot[1],z:rnd(0,20),vx:rnd(-8,8),vy:0,vz:rnd(8,20),c:'#3d4a3a',life:rnd(1,2)});
     setTimeout(()=>{if(S&&S.merchant&&S.merchant.state==='here'||S&&S.merchant&&S.merchant.state==='in')say((EN?'Marga sets up her stall. You have two minutes to trade.':'Marga rozkłada kram. Masz dwie minuty na handel.'))},2500)}
-function stageTick(dt){
+// Rozdzial III, Solne Nabrzeze: dwa kolowroty trzymaja lancuchy promu. Noc biegnie jak w innych rozdzialach (Poborca o polnocy, kram Margi),
+// o swicie wraca Bosman. Wygrana: Bosman pokonany, oba lancuchy zwolnione i bohater odbija promem od nabrzeza.
+const PORT_WINCH=[[12.5,15.7],[53.5,15.7]],PORT_FERRY=[27,2,38,7];
+const portWinchAt=i=>({x:MP(PORT_WINCH[i][0])*TS,y:MP(PORT_WINCH[i][1])*TS});
+const portOnFerry=p=>!!p&&!p.dead&&p.x>MP(PORT_FERRY[0])*TS&&p.x<MP(PORT_FERRY[2])*TS&&p.y>MP(PORT_FERRY[1])*TS&&p.y<MP(PORT_FERRY[3])*TS;
+function portRelease(i){const st=S.solne;if(!st||st.open[i])return;st.open[i]=true;if(W.solneChains&&W.solneChains[i])W.solneChains[i].visible=false;
+  const q=portWinchAt(i);play('doorOut',0);play('coin',0);shake(.12,.5);padRumble(.5,.3,260);
+  for(let k=0;k<16;k++)S.parts.push({k:'d',x:q.x+rnd(-10,10),y:q.y-14+rnd(-4,4),z:rnd(4,16),vx:rnd(-16,16),vy:rnd(-8,8),vz:rnd(6,20),c:Math.random()<.5?'#8f8c82':'#5d6a74',life:rnd(.4,.9)});
+  for(let k=0;k<8;k++)dropPick('c',q.x+rnd(-20,20),q.y+rnd(4,18));dropPick('w',q.x,q.y+10,12);
+  if(st.open.every(Boolean)){say(st.bossDead?(EN?'Both chains are down. The ferry is free. Board her.':'Oba łańcuchy opadły. Prom jest wolny. Wejdź na pokład.'):(EN?'Both chains are down. The ferry strains at her moorings, but the Harbour Master still holds the far bank.':'Oba łańcuchy opadły. Prom szarpie cumy, ale drugi brzeg wciąż trzyma Bosman.'))}
+  else say((EN?'The chain rattles off the drum and sinks. One more winch, on the other quay.':'Łańcuch z łoskotem schodzi z bębna i tonie. Został drugi kołowrót, na przeciwnym nabrzeżu.'));
+  // lancuch budzi to, co siedzi pod pomostem
+  if(!st.bossDead&&S.stage!=='break')for(let k=0;k<5;k++){const p=ringSpot(70,130)||ringSpot(60,200);if(p)spawnEnemy('ghoul',p[0],p[1],{rise:1})}}
+function portDepart(){const st=S.solne;if(!st||!st.bossDead||!st.open.every(Boolean)||S.won)return;S.won=true}
+function solneTick(){
+ if(!S.solne){S.solne={open:[false,false],bossDead:false,told:false};if(W.solneChains)for(const c of W.solneChains)c.visible=true}
+ const st=S.solne;
+ if(st.bossDead&&st.open.every(Boolean)&&!st.told){st.told=true;say((EN?'The ferry is free. Board her and cast off.':'Prom jest wolny. Wejdź na pokład i odbij od nabrzeża.'))}
+ if(st.bossDead&&!st.open.every(Boolean)&&!st.told2){st.told2=true;say((EN?'The Harbour Master is dead, but the ferry is still chained. Release the winches.':'Bosman nie żyje, ale prom wciąż jest przykuty. Zwolnij kołowroty.'))}
+}
+
+function stageTick(dt){if(CH===PORT)solneTick();
   if(S.stage==='p1'&&S.t>=BREAK_AT&&!S.dg&&!S.endless){S.stage='collector';S.collT=2.5;dissolveAll((EN?'Midnight. The dead retreat into the darkness.':'Północ. Martwi cofają się w ciemność.'))}
   const m=S.merchant;
   if(m){if(m.state==='in'){m.t-=dt*1.5;if(m.t<=0)m.state='here'}
@@ -26,7 +47,7 @@ function stageTick(dt){
     {const ord=S.enemies.filter(e=>!e.dead&&!BIG.has(e.type)&&e.type!=='collector'&&e.type!=='glizzard'&&e.type!=='boginka'&&e.type!=='wisp').sort((a,b)=>Math.hypot(b.x-pl.x,b.y-pl.y)-Math.hypot(a.x-pl.x,a.y-pl.y)),cut=Math.floor(ord.length*(1-BOSS_MOB));
       for(const e of ord.slice(0,cut)){for(let k=0;k<5;k++)S.parts.push({k:'d',x:e.x,y:e.y,z:rnd(0,8),vx:rnd(-14,14),vy:rnd(-8,8),vz:rnd(8,22),c:'#3a2c34',life:.5});scene.remove(e.mesh);const i=S.enemies.indexOf(e);if(i>=0)S.enemies.splice(i,1)}}
     {const fb=spawnEnemy(bt,p[0],p[1],{rise:1.6,hp,max:hp});if(fb&&fb.spd)fb.spd*=BOSS_SPD_MUL}play('rise',0);play('bossGrowl',0);shake(.3,1);if(CH===1)S.flash=1;
-    say(CH===5?(EN?'The seal on the Throne Room floor cracks. The Creditor rises from his throne to settle the account.':'Pieczęć na podłodze Sali Tronowej pęka. Wierzyciel wstaje z tronu, by zamknąć rachunek.'):CH===4?(bt==='strzyga'?(EN?'Ravens take flight from Bleak Peak. Mother Striga, Queen of the Barrows, rises from her barrow.':'Kruki zrywają się z Łysej Góry. Z kurhanu wstaje Strzyga Matka, Królowa Kurhanów.'):(EN?'The ground splits on Bleak Peak. The Conjoined crawls out of the barrow, fused from buried bodies.':'Na Łysej Górze ziemia pęka. Z kurhanu wypełza Zrost, zrośnięty z ciał pogrzebanych.')):CH===1?(EN?'The Conjoined rises from the ashes of the granary, fused from the bodies of the burned.':'Z popiołów spichlerza wstaje Zrost, zrośnięty z ciał spalonych.'):CH===2?(A.cumlin?(EN?'Cumlin, the Possessed Dwarf King, steps out from behind the Great Scales, the seals in him glowing.':'Zza Wielkiej Wagi wychodzi Cumlin, Opętany Król Krasnoludów. Żarzą się w nim pieczęcie.'):(EN?'The Conjoined crawls out of the abyss, fused from many bodies.':'Z przepaści wypełza Zrost, zrośnięty z wielu ciał.')):(EN?'Morhad, Beast of a Thousand Slaughters, drops from the basilica tower. He has come to enter you in the foundations.':'Z wieży bazyliki spada Morhad, Bestia Tysiąca Rzezi. Przyszedł wpisać cię w fundamenty.'));bossSay(bt==='cumlin'?'cumlin':bt==='beast'?'morhad':CH===5?'creditor':CH===1?'outgrowth':null,'intro')}
+    say(CH===PORT?(EN?'A wooden leg knocks on the boards. The Harbour Master steps onto the landing, hook in hand. No one crosses without his leave.':'Drewniana noga stuka o deski. Bosman wchodzi na przyczółek z hakiem w garści. Bez jego zgody nikt się nie przeprawi.'):CH===5?(EN?'The seal on the Throne Room floor cracks. The Creditor rises from his throne to settle the account.':'Pieczęć na podłodze Sali Tronowej pęka. Wierzyciel wstaje z tronu, by zamknąć rachunek.'):CH===4?(bt==='strzyga'?(EN?'Ravens take flight from Bleak Peak. Mother Striga, Queen of the Barrows, rises from her barrow.':'Kruki zrywają się z Łysej Góry. Z kurhanu wstaje Strzyga Matka, Królowa Kurhanów.'):(EN?'The ground splits on Bleak Peak. The Conjoined crawls out of the barrow, fused from buried bodies.':'Na Łysej Górze ziemia pęka. Z kurhanu wypełza Zrost, zrośnięty z ciał pogrzebanych.')):CH===1?(EN?'The Conjoined rises from the ashes of the granary, fused from the bodies of the burned.':'Z popiołów spichlerza wstaje Zrost, zrośnięty z ciał spalonych.'):CH===2?(A.cumlin?(EN?'Cumlin, the Possessed Dwarf King, steps out from behind the Great Scales, the seals in him glowing.':'Zza Wielkiej Wagi wychodzi Cumlin, Opętany Król Krasnoludów. Żarzą się w nim pieczęcie.'):(EN?'The Conjoined crawls out of the abyss, fused from many bodies.':'Z przepaści wypełza Zrost, zrośnięty z wielu ciał.')):(EN?'Morhad, Beast of a Thousand Slaughters, drops from the basilica tower. He has come to enter you in the foundations.':'Z wieży bazyliki spada Morhad, Bestia Tysiąca Rzezi. Przyszedł wpisać cię w fundamenty.'));bossSay(bt==='cumlin'?'cumlin':bt==='beast'?'morhad':CH===5?'creditor':CH===1?'outgrowth':null,'intro')}
 }
 function nearMerchant(){const m=S&&S.merchant;return m&&m.state==='here'&&!pl.dead&&Math.hypot(pl.x-m.x,pl.y-m.y)<34?m:null}
 function leaveMerchant(){const m=S.merchant;if(!m||m.state==='out')return;m.state='out';m.t=1;for(let i=0;i<26;i++)S.parts.push({k:'a',x:m.x+rnd(-8,8),y:m.y,z:rnd(0,20),vx:rnd(-8,8),vy:0,vz:rnd(8,20),c:'#3d4a3a',life:rnd(1,2)})}
@@ -95,3 +116,4 @@ function noteTick(){if(S.noteInit||S.train||S.dg||!W||!(CH>=1&&CH<=5))return;S.n
   const m=new THREE.Mesh(new THREE.PlaneGeometry(.9,.9),new THREE.MeshBasicMaterial({map:noteTex(),transparent:true,depthWrite:false,fog:false}));m.position.set(x/TS,.55,y/TS);m.scale.set(1,SQ,1);m.renderOrder=2;scene.add(m);NOTE_MESH=m;S.note={...n,x,y,m};return}}
 function notePickTick(){const n=S.note;if(!n||n.got)return;n.m.position.y=.55+Math.sin(clock*2.4)*.08;const near=[pl,pl2].some(p=>p&&!p.dead&&Math.hypot(p.x-n.x,p.y-n.y)<20);if(!near)return;
  n.got=1;clearNoteMesh();(META.notes||(META.notes={}))[n.id]=1;try{saveMeta()}catch(e){}play('note',0);padRumble(.25,.35,140);ftInfo(EN?'Note found':'Znaleziono zapiskę');say(EN?`You found a note: “${n.t}”. Read it in the Chronicle.`:`Znalazłeś zapiskę: „${n.t}”. Przeczytasz ją w Kronice.`)}
+

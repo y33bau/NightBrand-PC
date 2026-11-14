@@ -44,7 +44,10 @@ function dungeonCleared(e){const d=S.dg;if(!d||d.done)return;d.done=true;d.boss=
 // stairs: down into the crypt from the graveyard (before midnight, once), back up from the entrance room or, after the boss, from the boss hall
 function nearExit(){if(!S||pl.dead)return null;
   if(CH===1&&W.crypt&&Math.hypot(pl.x-W.crypt.x,pl.y-W.crypt.y)<30)return{x:W.crypt.x,y:W.crypt.y-6,kind:S.dgDone||S.stage!=='p1'?'sealed':'enter'};
+  if(CH===PORT&&S.solne){const st=S.solne;for(let i=0;i<2;i++){if(st.open[i])continue;const q=portWinchAt(i);if(Math.hypot(pl.x-q.x,pl.y-q.y)<34)return{x:q.x,y:q.y-12,kind:'winch',i}}
+    if(portOnFerry(pl)&&S.stage==='final'&&st.bossDead&&!S.won)return{x:pl.x,y:pl.y-8,kind:st.open.every(Boolean)?'ferry':'ferryLocked'}}
   if(CH===9&&S.dg)for(const p of PROPS){if(!p.exit)continue;const x=p.x*16,y=(p.y+.5)*16;if(Math.hypot(pl.x-x,pl.y-y)<30&&(p.exit==='start'||S.dg.done))return{x,y:y-6,kind:'leave'}}
   return null}
-function useExit(n){if(n.kind==='enter')enterDungeon();else if(n.kind==='leave')exitDungeon();
+function useExit(n){if(n.kind==='winch')return portRelease(n.i);if(n.kind==='ferry')return portDepart();if(n.kind==='ferryLocked')return say((EN?'The ferry is still chained. Release both winches.':'Prom wciąż jest przykuty. Zwolnij oba kołowroty.'));
+  if(n.kind==='enter')enterDungeon();else if(n.kind==='leave')exitDungeon();
   else say(S.dgDone?(EN?'The crypt entrance has collapsed.':'Wejście do krypty zawaliło się.'):(EN?'At midnight the crypt seals shut. Try again next night.':'O północy krypta zamyka się na głucho. Spróbuj następnej nocy.'))}

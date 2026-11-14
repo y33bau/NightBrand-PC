@@ -49,6 +49,15 @@ if(ART_ON){
   9:[[.96,1,1.04],[1.04,1.02,.98],.96,1.06]
  });
 }
+// Rozdzial III, Solne Nabrzeze (numer techniczny 6): mgla znad wody, stalowy ksiezyc, bursztynowe latarnie.
+{
+  DEPTH_CH[6]=DEPTH_CH[1];
+  ATM[6]={amb:0x788998,ai:.93,hs:0x9bb9ce,hg:0x283038,hi:.54,
+    fog:0x293e4b,fd:.017,clear:0x16232d,mi:.33,mc:0xc0d9ec,
+    cold:0xc1dce9,warm:0xefc596};
+  GRADE[6]=[[.84,.98,1.09],[1.03,1.02,.99],.91,1.05];
+  ART_LIGHT[6]=[0xd3e0e5,1.28,8.5];
+}
 function applyAtmos(){const a=ATM[CH],dp=depthOn();amb.color.setHex(a.amb);amb.intensity=a.ai*(dp?dp[0]:1);hemi.color.setHex(a.hs);hemi.groundColor.setHex(a.hg);hemi.intensity=a.hi*(dp?dp[1]:1);scene.fog.color.setHex(a.fog);scene.fog.density=a.fd;renderer.setClearColor(a.clear);moon.intensity=a.mi||0;if(a.mc)moon.color.setHex(a.mc);RIMU.k.value=RIM_K*(.5+(a.mi||0)*3);RIMU.col.value.setHex(a.mc||0x9ebbea);if(filmUniforms){filmUniforms.cold.value.setHex(a.cold);filmUniforms.warm.value.setHex(a.warm);const g=GRADE[CH]||GRADE[9];filmUniforms.gSh.value.set(...g[0]);filmUniforms.gHi.value.set(...g[1]);filmUniforms.gSat.value=g[2];filmUniforms.gCon.value=g[3]}if(typeof setAmbience==='function')setAmbience()}
 // moon rim light on sprites: figure pixels whose screen-left neighbour is empty get a cold edge glow (flips with the sprite mirroring)
 const RIM_K=.55;
@@ -305,4 +314,5 @@ const floorGeo=new THREE.PlaneGeometry(MW,MH);floorGeo.rotateX(-Math.PI/2);
 const decalC=canvas(WW,WH),dg=decalC.getContext('2d');const decalTex=texFrom(decalC);
 const decal=new THREE.Mesh(floorGeo,phong({map:decalTex,transparent:true,depthWrite:false}));decal.position.set(MW/2,.02,MH/2);decal.receiveShadow=true;scene.add(decal);
 let decalDirty=false,decalT=0;
+
 
