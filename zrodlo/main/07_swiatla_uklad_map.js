@@ -4,11 +4,11 @@ const plLight=new THREE.PointLight(0xffd2a0,2.1,13,2);plLight.castShadow=true;pl
 
 // Chapters I-III keep their hand-made layouts, stretched to the bigger map; enrich() fills the new room
 // with extra buildings, props, four "altars" for the kill-next-to-it event, traps and the 9:00 wave (big-map coordinates)
-// Runda 216: dodatkowe dekoracje bez kolizji na każdej mapie. Stawiane tylko na wolnej posadzce (bez cieczy, z dala od ścian),
-// z dala od innych obiektów, NPC, kapliczek, startu i korytarzy (clearways); nie zmieniają mapy kolizji.
+// Runda 216: dodatkowe dekoracje bez kolizji na ka�dej mapie. Stawiane tylko na wolnej posadzce (bez cieczy, z dala od �cian),
+// z dala od innych obiekt�w, NPC, kapliczek, startu i korytarzy (clearways); nie zmieniaj� mapy kolizji.
 const UND=['wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11'];const DECOR={1:[['covered_corpses',8],['burnt_hay',9],['wheel',7]],2:[],3:[['beggar_bodies',12],['doorway_bones',10],['rot_bloom',8,{anim:'bloom'}]],4:[['cz_bones',22],['wolf_skull_bush',14]],5:[['ledgers',8,null,['kancelaria','sala']],['chair',6,null,['kancelaria']],['rack',5,null,['skarbiec','krypta']],['armour',4,null,['sala','skarbiec']],['cage',3,null,['krypta']]]};
-// Runda 217: przerzedzenie zwykłych ognisk (ogniska z gruzu, obozowe, stosy): żadne dwa nie stoją bliżej niż 9 pól.
-// Nie dotyczy ognisk mocy (kapliczek odrodzenia), koksowników, pochodni i latarni ani kręgu ognisk wokół bożka w rozdz. IV.
+// Runda 217: przerzedzenie zwyk�ych ognisk (ogniska z gruzu, obozowe, stosy): �adne dwa nie stoj� bli�ej ni� 9 p�l.
+// Nie dotyczy ognisk mocy (kapliczek odrodzenia), koksownik�w, pochodni i latarni ani kr�gu ognisk wok�� bo�ka w rozdz. IV.
 function thinFires(w){const P=w.PROPS,M=w.map,U=w.under,idol=P.find(p=>p.k==='cz_idol'),sh=w.shrines||[],R=9;
  const fires=P.filter(p=>p.fire&&!p.keep&&!(idol&&Math.hypot(p.x-idol.x,p.y-idol.y)<9)&&!sh.some(s=>Math.hypot(s.x/16-p.x,s.y/16-p.y)<3));
  fires.sort((a,b)=>(b.big?1:0)-(a.big?1:0));const kept=[],gone=new Set();
@@ -53,7 +53,7 @@ function layoutPatch1(w){const P=w.PROPS,M=w.map,U=w.under,T=(x,y)=>M[y*MW+x];
   P.push(Object.assign({k,x:x+.5,y:y+.92},extra||{}));for(const [a,b] of tiles)occupy(a,b)};
  const npc=(id,dx,dy)=>{const n=w.npcs.find(q=>q.id===id);if(!n)return;n.x+=dx*16;n.y+=dy*16;if(n.solid){free(n.solid[0],n.solid[1]);n.solid=[n.solid[0]+dx,n.solid[1]+dy];occupy(n.solid[0],n.solid[1])}};
  // sklep Margi
- mv('marga_cart',94,43,95,42,[[91,43],[92,43],[93,43],[94,43]]);mv('house_fire',95,39,97,39,[[95,40]]);{const f=find('house_fire',97,39);if(f)f.x=97.1}mv('burnt_hay',94,42,97,43);add('shop_sign',95,40,[[95,40]],{x:95.5,y:39.4});/* 9.11.2026: szyld przesunięty w prawo, poza wnękę drzwi */
+ mv('marga_cart',94,43,95,42,[[91,43],[92,43],[93,43],[94,43]]);mv('house_fire',95,39,97,39,[[95,40]]);{const f=find('house_fire',97,39);if(f)f.x=97.1}mv('burnt_hay',94,42,97,43);add('shop_sign',95,40,[[95,40]],{x:95.5,y:39.4});/* 9.11.2026: szyld przesuni�ty w prawo, poza wn�k� drzwi */
  // cmentarz: szubienice pod gorna krawedz, mala kwatera z krzyzami wokol nagrobka (nagrobek altarowy NE przeniesiony tutaj)
  add('gallows',79,25,[[78,25],[79,25],[80,25]]);add('gallows',88,25,[[87,25],[88,25],[89,25]]);
  for(const [x,y] of [[76,29],[74,31],[76,31]])add('grave_cross',x,y,[[x,y]]);
@@ -109,7 +109,7 @@ function layoutPatch1c(w){const P=w.PROPS,M=w.map,U=w.under,T=(x,y)=>M[y*MW+x];
  // osierocone kolizje po usunietych ogniskach (niewidzialne sciany): (26,16) przy strumieniu, (39,40), (41,50), (75,40), (78,74)
  for(const [x,y] of [[26,16],[39,40],[41,50],[75,40],[78,74]])if(!P.some(q=>Math.abs(q.x-x-.5)<1.6&&Math.abs(q.y-y-.5)<1.6&&!q.decor))free(x,y)
  // wozy Margi o pole do siebie, usuniete drobiazgi i ogniska
- mv('marga_cart',85,42,1,[[83,42],[84,42],[85,42],[86,42]]);mv('marga_cart',95,42,-1,[[92,42],[93,42],[94,42],[95,42]]);free(91,42);free(92,42);occupy(95,42);/* 9.11.2026: kolizja prawego wozu pod jego skrzynią (lewe pola były niewidzialną ścianą) */
+ mv('marga_cart',85,42,1,[[83,42],[84,42],[85,42],[86,42]]);mv('marga_cart',95,42,-1,[[92,42],[93,42],[94,42],[95,42]]);free(91,42);free(92,42);occupy(95,42);/* 9.11.2026: kolizja prawego wozu pod jego skrzyni� (lewe pola by�y niewidzialn� �cian�) */
  drop('barrel',35,61);drop('burnt_hay',26,26);drop('dead_tree',34,57);drop('wheel',18,86);drop('wheel',22,55);drop('wheel',71,82);drop('wheel',81,61);
  drop('order_banner',28,66);drop('order_bonfire',26,67,[[26,67],[28,66]]);drop('order_bonfire',21,81,[[20,81],[21,81]]);drop('debris_fire',34,40,[[33,40],[34,40]]);drop('debris_fire',15,27);
  // domy w plomieniach (bez kolizji, jak dotychczasowe house_fire); 12.11.2026: ogien (89,26) spod szubienicy usuniety na prosbe autora
@@ -132,7 +132,7 @@ function decorFill(w,ch){const L=DECOR[ch];if(!L)return;const r=rng(ch*104729+77
   for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)if(keep.has((y+dy)*MW+x+dx))return false;if(Math.hypot(st.x/16-x,st.y/16-y)<7)return false;
   if(others.some(n=>Math.abs(n.x/16-x)<3&&Math.abs(n.y/16-y)<3))return false;return !P.some(p=>Math.abs(p.x-x-.5)<2.2&&Math.abs(p.y-y-.92)<2.2)};
  for(const [k,n,extra,regs] of L)for(let i=0,c=0;i<n*60&&c<n;i++){const x=2+((r()*(MW-4))|0),y=2+((r()*(MH-4))|0);if(regs&&!regs.includes(w.region(x,y)))continue;if(!ok(x,y))continue;P.push(Object.assign({k,x:x+.5,y:y+.92,flip:r()<.5,decor:1},extra||{}));c++}}
-function enrich(w,ch){
+function enrich(w,ch){if(SOLNE_TEST&&ch===1)return;
   const r=rng(ch*7919+13),M=w.map,U=w.under,P=w.PROPS;
   const keep=w.clearways||(w.clearways=new Set()),keepRect=(x,y,ww,hh)=>{for(let Y=y;Y<y+hh;Y++)for(let X=x;X<x+ww;X++)keep.add(Y*MW+X)};
   const T=(x,y)=>(x<1||y<1||x>=MW-1||y>=MH-1)?21:M[y*MW+x];
@@ -158,15 +158,15 @@ function enrich(w,ch){
     // trap: some of the shrouded dead are not dead
     scatter('covered_corpses',3,false,3,null,{ambush:1});
     for(let i=0;i<4;i++){const s=spot(quad(i),4);if(s)add('tombstone',s[0],s[1],true,{stone:i})}
-    w.altar={col:0x9ad0ff,pc:'#bfe8ff',hint:(EN?'The graves of the burned stand at the four corners of the village. Spill their killers\' blood beside them, and the souls will go in peace.':'W czterech krańcach wsi stoją groby spalonych. Przelej przy nich krew ich oprawców, a dusze odejdą w spokoju.'),
-      one:n=>(EN?`The grave flares with a pale light. Souls at rest: ${n} of 4.`:`Grób rozbłyska bladym światłem. Dusze w spokoju: ${n} z 4.`),all:(EN?'The souls of the burned depart. They heal your wounds and leave 30 coins behind.':'Dusze spalonych odchodzą. Leczą twoje rany i zostawiają 30 monet.')};
-    w.wave={msg:(EN?'A crusade of the Holy Order marches in from the southern road. Fanatics advance in column.':'Od południowej drogi nadciąga krucjata Zakonu. Fanatycy maszerują kolumną.'),list:[['knight',7],['possessed',6]]}}
+    w.altar={col:0x9ad0ff,pc:'#bfe8ff',hint:(EN?'The graves of the burned stand at the four corners of the village. Spill their killers\' blood beside them, and the souls will go in peace.':'W czterech kra�cach wsi stoj� groby spalonych. Przelej przy nich krew ich oprawc�w, a dusze odejd� w spokoju.'),
+      one:n=>(EN?`The grave flares with a pale light. Souls at rest: ${n} of 4.`:`Gr�b rozb�yska bladym �wiat�em. Dusze w spokoju: ${n} z 4.`),all:(EN?'The souls of the burned depart. They heal your wounds and leave 30 coins behind.':'Dusze spalonych odchodz�. Lecz� twoje rany i zostawiaj� 30 monet.')};
+    w.wave={msg:(EN?'A crusade of the Holy Order marches in from the southern road. Fanatics advance in column.':'Od po�udniowej drogi nadci�ga krucjata Zakonu. Fanatycy maszeruj� kolumn�.'),list:[['knight',7],['possessed',6]]}}
   if(ch===2){
     // more of the dead dwarven city: bones, sarcophagi, carts, banners, braziers, and barrels of black powder that blow up
     // runda 296: rekwizyty sali rozstawione recznie w genDolne (przy scianach), bez losowego rozsiewania
-    w.altar={col:0x5fb0ff,pc:'#7fd0ff',hint:(EN?'Four dead rune lanterns stand in the corners of the hall. Blood spilled nearby will wake the runes. Powder kegs go off when someone dies beside them.':'W rogach sali stoją cztery wygasłe latarnie runiczne. Krew przelana obok obudzi runy. Beczki prochu wybuchają, gdy ktoś przy nich zginie.'),
-      one:n=>(EN?`A rune lantern awakens. Lit: ${n} of 4.`:`Latarnia runiczna budzi się. Zapalone: ${n} z 4.`),all:(EN?'The smiths\' runes sing. Your wounds close, and 30 coins spill from the stone.':'Runy kowali śpiewają. Rany się zamykają, a z kamienia sypie się 30 monet.')};
-    w.wave={msg:(EN?'The mine shaft collapses. Dead miners pour out of the darkness.':'Sztolnia się zawala. Z ciemności wysypują się martwi górnicy.'),list:[['dwarf',12],['warden',2]]}}
+    w.altar={col:0x5fb0ff,pc:'#7fd0ff',hint:(EN?'Four dead rune lanterns stand in the corners of the hall. Blood spilled nearby will wake the runes. Powder kegs go off when someone dies beside them.':'W rogach sali stoj� cztery wygas�e latarnie runiczne. Krew przelana obok obudzi runy. Beczki prochu wybuchaj�, gdy kto� przy nich zginie.'),
+      one:n=>(EN?`A rune lantern awakens. Lit: ${n} of 4.`:`Latarnia runiczna budzi si�. Zapalone: ${n} z 4.`),all:(EN?'The smiths\' runes sing. Your wounds close, and 30 coins spill from the stone.':'Runy kowali �piewaj�. Rany si� zamykaj�, a z kamienia sypie si� 30 monet.')};
+    w.wave={msg:(EN?'The mine shaft collapses. Dead miners pour out of the darkness.':'Sztolnia si� zawala. Z ciemno�ci wysypuj� si� martwi g�rnicy.'),list:[['dwarf',12],['warden',2]]}}
   if(ch===3){
     // more slum shacks and townhouses, plague carts, gibbets, lanterns, beggars, rot blooms that burst when you pass
     for(let i=0;i<2;i++)building(3+((r()*2)|0),2+((r()*2)|0),59,53,false,(x,y)=>y>MH*.6);
@@ -174,9 +174,9 @@ function enrich(w,ch){
     scatter('beggar_bodies',5,false,2);scatter('plague_cart',2);scatter('gibbet',2);scatter('street_lantern',4,true,4);scatter('barrel',3);scatter('royal_banner',2);scatter('dead_tree',2,true,2.5,(x,y)=>T(x,y)===57||y<MH*.6);
     scatter('rot_bloom',6,false,2.5,null,{anim:'bloom'});
     for(let i=0;i<4;i++){const s=spot(quad(i),4);if(s)add('offering_bowl',s[0],s[1],true,{stone:i})}
-    w.altar={col:0xffcf70,pc:'#ffd27a',hint:(EN?'Empty golden offering bowls stand in four districts. Enemy blood spilled nearby will fill them. Beware the rot flowers: they burst when you walk past.':'W czterech dzielnicach stoją puste złote misy ofiarne. Krew wrogów przelana obok je napełni. Uważaj na kwiaty zgnilizny: pękają, gdy przechodzisz.'),
-      one:n=>(EN?`An offering bowl fills with golden light. Full: ${n} of 4.`:`Misa ofiarna napełnia się złotym światłem. Pełne: ${n} z 4.`),all:(EN?'The golden bowls overflow. Your wounds heal, and you gather 30 coins.':'Złote misy przelewają się. Rany się goją, a ty zbierasz 30 monet.')};
-    w.wave={msg:(EN?'A procession of fire leaves the monastery. Monks lead a mob of madmen.':'Z klasztoru wychodzi procesja ognia. Mnisi prowadzą tłum szaleńców.'),list:[['monk',5],['madman',8]]}}
+    w.altar={col:0xffcf70,pc:'#ffd27a',hint:(EN?'Empty golden offering bowls stand in four districts. Enemy blood spilled nearby will fill them. Beware the rot flowers: they burst when you walk past.':'W czterech dzielnicach stoj� puste z�ote misy ofiarne. Krew wrog�w przelana obok je nape�ni. Uwa�aj na kwiaty zgnilizny: p�kaj�, gdy przechodzisz.'),
+      one:n=>(EN?`An offering bowl fills with golden light. Full: ${n} of 4.`:`Misa ofiarna nape�nia si� z�otym �wiat�em. Pe�ne: ${n} z 4.`),all:(EN?'The golden bowls overflow. Your wounds heal, and you gather 30 coins.':'Z�ote misy przelewaj� si�. Rany si� goj�, a ty zbierasz 30 monet.')};
+    w.wave={msg:(EN?'A procession of fire leaves the monastery. Monks lead a mob of madmen.':'Z klasztoru wychodzi procesja ognia. Mnisi prowadz� t�um szale�c�w.'),list:[['monk',5],['madman',8]]}}
 }
 // fabula: Chojrak czeka w rozdzialach II-V w otwartym miejscu 4-10 pol od wejscia (w trybie Arcade jest ukryty - stan 'gone')
 function chojrakSpot(w){const st=w.start,bad=t=>SOLID.has(t)||VOID.has(t)||t===27,M=w.map;
@@ -192,20 +192,20 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
   if(ch===9)w.rooms=w.rooms.map(R=>Object.assign(SR(R),{k:R.k}));
   Object.assign(w,{ch,group:new THREE.Group(),propObjs:[],npcMeshes:{},walls:[],cliffs:[],pillars:[],lavas:[],braziers:[],waters:[],rots:[],shallow:[],LSRC:[]});
   if(ch>=2&&ch<=5){const sp=chojrakSpot(w);if(sp)w.npcs.push({id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:sp[0],y:sp[1],lines:[]})}
-  for(const n of w.npcs)if(n.solid)w.map[n.solid[1]*MW+n.solid[0]]=31;if(ch===4){deepMarsh(w);clearNpcTrees(w)}if(ch===1)clearCryptSurrounds(w);if(ch>=1&&ch<=5){thinFires(w);decorFill(w,ch)}
-  // runda 215: bez ognisk (koksowników) tuż przy lawie w rozdz. II
+  for(const n of w.npcs)if(n.solid)w.map[n.solid[1]*MW+n.solid[0]]=31;if(ch===4){deepMarsh(w);clearNpcTrees(w)}if(ch===1)clearCryptSurrounds(w);if(ch>=1&&ch<=5&&!(SOLNE_TEST&&ch===1)){thinFires(w);decorFill(w,ch)}
+  // runda 215: bez ognisk (koksownik�w) tu� przy lawie w rozdz. II
   if(ch===2)for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const i=y*MW+x;if(w.map[i]!==27)continue;let n=false;for(let dy=-3;dy<=3&&!n;dy++)for(let dx=-3;dx<=3;dx++){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<MW&&Y<MH&&w.map[Y*MW+X]===24){n=true;break}}if(n)w.map[i]=(w.under&&w.under[i]&&w.under[i]!==27)?w.under[i]:20}
-  // runda 242: zasada świata: żadnych ognisk na lawie ani w promieniu 4 pól od niej (ogniska z gruzu, obozowe, stosy, koksowniki); ogniska mocy bez zmian
+  // runda 242: zasada �wiata: �adnych ognisk na lawie ani w promieniu 4 p�l od niej (ogniska z gruzu, obozowe, stosy, koksowniki); ogniska mocy bez zmian
   {const M2=w.map,U2=w.under,P2=w.PROPS,lv=[];for(let i=0;i<MW*MH;i++)if(M2[i]===24||M2[i]===54)lv.push(i);
    if(lv.length){const near=(x,y)=>{for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<MW&&Y<MH&&(M2[Y*MW+X]===24||M2[Y*MW+X]===54))return true}return false};
     const back=(x,y)=>{const i=y*MW+x;let v=U2&&U2[i];if(!v||v===31||v===27||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=M2[(y+b)*MW+x+a];if(!SOLID.has(t)&&t!==27&&t!==24&&t!==54){v=t;break}}}return v||20};
     for(let k=P2.length-1;k>=0;k--){const p=P2[k];if(p.shrine!==undefined)continue;if(!(p.fire||/debris_fire|cz_fire|pyre|bonfire/.test(p.k||'')))continue;const x=Math.floor(p.x),y=Math.floor(p.y);if(!near(x,y))continue;P2.splice(k,1);const i=y*MW+x;if(M2[i]===31&&!P2.some(q=>Math.floor(q.y)===y&&Math.abs(q.x-(x+.5))<1.2))M2[i]=back(x,y)}
     for(let y=0;y<MH;y++)for(let x=0;x<MW;x++)if(M2[y*MW+x]===27&&near(x,y))M2[y*MW+x]=back(x,y)}}
-  // runda 244: zasada świata: żadnych ognisk w promieniu 6 pól od kociołka (ognisk mocy)
+  // runda 244: zasada �wiata: �adnych ognisk w promieniu 6 p�l od kocio�ka (ognisk mocy)
   {const M3=w.map,U3=w.under,P3=w.PROPS,sh3=w.shrines||[];if(sh3.length)for(let k=P3.length-1;k>=0;k--){const p=P3[k];if(p.shrine!==undefined)continue;if(!(p.fire||/debris_fire|cz_fire|pyre|bonfire/.test(p.k||'')))continue;
    if(!sh3.some(s=>Math.hypot(s.x/16-p.x,s.y/16-p.y)<6))continue;P3.splice(k,1);const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;
    if(M3[i]===31&&!P3.some(q=>Math.floor(q.y)===y&&Math.abs(q.x-(x+.5))<1.2)){let v=U3&&U3[i];if(!v||v===31||v===27||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=M3[(y+b)*MW+x+a];if(!SOLID.has(t)&&t!==27&&t!==24&&t!==54){v=t;break}}}M3[i]=v||20}}}
-  if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}
+  if(ch===1&&!SOLNE_TEST){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}
   if(ch===2)layoutPatch2(w);
   scene.add(w.group);
   const ta=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?21:w.map[y*MW+x];
@@ -241,7 +241,7 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
     for(const n of w.npcs)if(!n.lure)lsrc(0xffc070,n.id==='chojrak'?.3:.65,4.5,n.x/16,1.3,n.y/16-.4,'npc',{npc:n.id});
     w.treeP=w.PROPS.filter(p=>p.tree).map(p=>({x:p.x*16,y:p.y*16}));
     w.stoneP=w.PROPS.filter(p=>p.stone!==undefined).sort((a,b)=>a.stone-b.stone).map(p=>({x:p.x*16,y:p.y*16}));
-    w.altar={pc:'#7fd0ff',one:n=>(EN?`The stone flares blue. Stones awakened: ${n} of 5.`:`Kamień rozbłyska błękitem. Obudzone kamienie: ${n} z 5.`),all:(EN?'The circle closes. An old power heals your wounds and casts 30 coins from the earth.':'Krąg się zamyka. Stara moc leczy twoje rany i wyrzuca z ziemi 30 monet.')};
+    w.altar={pc:'#7fd0ff',one:n=>(EN?`The stone flares blue. Stones awakened: ${n} of 5.`:`Kamie� rozb�yska b��kitem. Obudzone kamienie: ${n} z 5.`),all:(EN?'The circle closes. An old power heals your wounds and casts 30 coins from the earth.':'Kr�g si� zamyka. Stara moc leczy twoje rany i wyrzuca z ziemi 30 monet.')};
     w.barrows=w.PROPS.filter(p=>p.barrow).map(p=>({x:p.x*16,y:p.y*16+10}));
   }else if(ch===5){
     w.braziers.forEach(([x,y])=>lsrc(0xff8a30,1.5,8,x+.5,1.6,y+.6,'fire'));
@@ -264,10 +264,9 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
   w.zoneLight=lsrc(0xff6a1a,0,7,0,1,0,'zone');w.merchantLight=lsrc(0xffb060,1.4,6,0,1.1,0,'merchant');
   WORLDS[ch]=w;
 }
-function ensureWorld(ch){if(!groupReady(ch))return loadGroup(ch).then(()=>ensureWorld(ch));if(WORLDS[ch])return;if(ch===4&&!IMGS.cz_ground||ch===5&&!IMGS.cy_ground)throw Error((EN?'Missing graphics for act ':'Brak grafik rozdziału ')+ch);initWorld(ch);useWorld(ch);ROOT=W.group;try{[null,buildBrzeznica,buildDolne,buildStolica,buildCzarnobor,buildCytadela][ch](IMGS);fitWorldProps(W,ch);finishWorldArt(W);for(const n of W.npcs){const fr=A[n.art],m=new THREE.Mesh(geo32,fr[0].n);if(fr[0].d){m.customDistanceMaterial=fr[0].d;m.castShadow=true}ROOT.add(m);W.npcMeshes[n.id]=m}try{wallShade()}catch(e){quietErr('wallShade',e)}buildMini()}finally{ROOT=scene}}
+function ensureWorld(ch){if(!groupReady(ch))return loadGroup(ch).then(()=>ensureWorld(ch));if(WORLDS[ch])return;if(ch===4&&!IMGS.cz_ground||ch===5&&!IMGS.cy_ground)throw Error((EN?'Missing graphics for act ':'Brak grafik rozdzia�u ')+ch);initWorld(ch);useWorld(ch);ROOT=W.group;try{[null,buildBrzeznica,buildDolne,buildStolica,buildCzarnobor,buildCytadela][ch](IMGS);fitWorldProps(W,ch);finishWorldArt(W);for(const n of W.npcs){const fr=A[n.art],m=new THREE.Mesh(geo32,fr[0].n);if(fr[0].d){m.customDistanceMaterial=fr[0].d;m.castShadow=true}ROOT.add(m);W.npcMeshes[n.id]=m}try{wallShade()}catch(e){quietErr('wallShade',e)}buildMini()}finally{ROOT=scene}}
 function useWorld(ch){CH=ch;W=WORLDS[ch];setGrid(ch);if(A&&A.collectorC5){if(!A.collectorC0)A.collectorC0=A.collector;A.collector=ch===5?A.collectorC5:A.collectorC0}
   if(A&&A.bossC5){if(!A.boss0)A.boss0=A.boss;A.boss=ch===5?A.bossC5:A.boss0}
   ({map,PROPS,LSRC,propObjs,walls,cliffs,pillars,lavas,braziers,waters,region}=W);START=W.start;SHRINES=W.shrines;
   for(const k in WORLDS)WORLDS[k].group.visible=(+k===ch);
   if(typeof applyAtmos==='function')applyAtmos()}
-

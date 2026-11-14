@@ -1,30 +1,30 @@
-// ===== MUZYKA (syntezator w stylu 16-bit, cała w kodzie) =====
-// Motyw na rozdział w MTH[numer]. Kanały: lead (fala prostokątna 25%, ślizgi i vibrato), pad (dwie fale + filtr),
-// bas (trójkąt), werbel/tom (sinus) i szum. Muzyka wchodzi w start(ch) i cichnie w toMenu()/endGame().
+// ===== MUZYKA (syntezator w stylu 16-bit, ca�a w kodzie) =====
+// Motyw na rozdzia� w MTH[numer]. Kana�y: lead (fala prostok�tna 25%, �lizgi i vibrato), pad (dwie fale + filtr),
+// bas (tr�jk�t), werbel/tom (sinus) i szum. Muzyka wchodzi w start(ch) i cichnie w toMenu()/endGame().
 let musVol=.55;try{const v=localStorage.getItem('pn_mus');if(v!==null&&!isNaN(+v))musVol=Math.max(0,Math.min(1,+v))}catch(e){}
 const mf=m=>440*Math.pow(2,(m-69)/12);
 const MCH={Dm:[50,57,65],Bb:[46,53,62],Gm:[43,50,58],A:[45,52,61],Eb:[51,58,63],Cm:[48,55,63],Db:[49,56,65],Fm:[41,48,56],G:[43,50,59],Ab:[44,51,60],D:[50,57,66],Em:[52,59,67],C:[48,55,64],Am:[45,52,60],B:[47,54,63]},
   MROOT={Dm:38,Bb:34,Gm:31,A:33,Eb:39,Cm:36,Db:37,Fm:29,G:31,Ab:32,D:38,Em:28,C:36,Am:33,B:35};
 const MTH={
- // I: Spalona Brzeźnica. D-moll z frygijskim Es, wolno (56 uderzeń), zawodzący lead, ciężki tom, szum jak deszcz i żar
+ // I: Spalona Brze�nica. D-moll z frygijskim Es, wolno (56 uderze�), zawodz�cy lead, ci��ki tom, szum jak deszcz i �ar
  1:{bpm:56,bars:16,
   ch:['Dm','Bb','Gm','A','Dm','Bb','Gm','A', 'Dm','Eb','Dm','Gm','Bb','A','A','A'],
   lead:[[],[[0,69,6],[6,67,2]],[[0,70,4],[4,69,2],[6,67,2]],[[0,73,5],[5,69,3]],[[0,74,8]],[[0,72,4],[4,70,4]],[[0,70,3],[3,69,3],[6,67,2]],[[0,66,4],[4,69,2],[6,66,2]],
         [[0,74,6],[6,72,2]],[[0,75,4],[4,74,4]],[[0,74,2],[2,77,6]],[[0,74,4],[4,72,2],[6,70,2]],[[0,72,4],[4,74,4]],[[0,73,4],[4,69,4]],[[0,66,8]],[[4,69,2],[6,73,2]]],
   tom2:2,hiss:8,kp:[.95,0,0,0,.62,0,0,0],kpB:[.95,0,0,0,.62,0,0,.34],duty:.25,lg:.062,vib:9,lf:1700,scoop:.6},
- // II: Dolne Miasto. c-moll z Des, 78 uderzeń, kuźnia: ciężka stopa, kowadło, krótki jasny lead (fala 12,5%), galopujący bas, dudnienie lawy
+ // II: Dolne Miasto. c-moll z Des, 78 uderze�, ku�nia: ci��ka stopa, kowad�o, kr�tki jasny lead (fala 12,5%), galopuj�cy bas, dudnienie lawy
  2:{bpm:78,bars:16,
   ch:['Cm','Cm','Db','Cm','Fm','Db','G','G', 'Cm','Ab','Db','Cm','Fm','Fm','G','G'],
   lead:[[],[[0,67,2],[2,72,2],[4,75,4]],[[0,73,2],[2,72,2],[4,70,4]],[[0,67,2],[2,72,2],[4,75,2],[6,74,2]],[[0,68,4],[4,72,4]],[[0,73,4],[4,70,4]],[[0,71,2],[2,74,2],[4,71,4]],[[0,67,2],[4,71,2],[6,74,2]],
         [[0,79,2],[2,75,2],[4,72,4]],[[0,75,2],[2,72,2],[4,68,4]],[[0,73,2],[2,77,2],[4,73,4]],[[0,72,2],[2,75,2],[4,79,4]],[[0,77,4],[4,72,4]],[[0,80,2],[2,77,2],[4,72,4]],[[0,74,2],[2,71,2],[4,74,4]],[[4,67,2],[6,71,2]]],
   tom2:2,hiss:99,kp:[.95,0,.42,0,.8,0,.42,.3],kpB:[.95,0,.42,.3,.8,0,.5,.3],cl:[0,0,0,0,1,0,0,1],clFrom:3,duty:.125,lg:.06,vib:4,lf:2600,scoop:.3,bp:[[0,1.5],[2,1.5],[4,1.5],[6,1.5]],es:.3,efb:.35,ed:.38,bf:260,bg:.016},
- // III: Złotogród. g-moll z durowym D, 64 uderzenia, organy (fala 50%), długie nuty, dzwony, oszczędna stopa, wyniosły i zgniły splendor
+ // III: Z�otogr�d. g-moll z durowym D, 64 uderzenia, organy (fala 50%), d�ugie nuty, dzwony, oszcz�dna stopa, wynios�y i zgni�y splendor
  3:{bpm:64,bars:16,
   ch:['Gm','Eb','Cm','D','Gm','Eb','D','D', 'Gm','Cm','Eb','D','Cm','Gm','D','D'],
   lead:[[],[[0,74,6],[6,72,2]],[[0,75,4],[4,72,4]],[[0,74,5],[5,69,3]],[[0,70,4],[4,74,4]],[[0,75,6],[6,74,2]],[[0,74,4],[4,66,4]],[[0,69,8]],
         [[0,79,6],[6,77,2]],[[0,75,4],[4,72,4]],[[0,79,4],[4,75,4]],[[0,78,5],[5,74,3]],[[0,75,4],[4,72,4]],[[0,74,4],[4,70,4]],[[0,69,4],[4,66,4]],[[4,69,2],[6,74,2]]],
   tom2:4,hiss:99,kp:[.8,0,0,0,.4,0,0,0],kpB:[.8,0,0,0,.5,0,.25,0],duty:.5,lg:.05,vib:6,lf:1500,scoop:.4,bell:{every:2,v:.055},es:.5,efb:.4,ed:.52,bf:500,bg:.008},
- // IV: Czarnobór. e-moll, 52 uderzenia, zimny ambient: rzadki flet, wycie (duży ślizg), serce zamiast stopy, wiatr
+ // IV: Czarnob�r. e-moll, 52 uderzenia, zimny ambient: rzadki flet, wycie (du�y �lizg), serce zamiast stopy, wiatr
  4:{bpm:52,bars:16,
   ch:['Em','Em','C','D','Em','C','Am','B', 'Em','Am','C','B','Em','C','D','B'],
   lead:[[],[],[[0,71,8]],[[0,69,4],[4,66,4]],[[0,67,8]],[[0,72,6],[6,71,2]],[[0,69,8]],[[0,71,4],[4,75,4]],
@@ -51,7 +51,7 @@ function musGraph(c,out,T){T=T||{};const bus=c.createGain();bus.gain.value=1;bus
   const nz=c.createBufferSource();nz.buffer=musNoiseBuf(c);nz.loop=true;const nb=c.createBiquadFilter();nb.type='bandpass';nb.frequency.value=T.bf||700;nb.Q.value=.6;const ng=c.createGain();ng.gain.value=T.bg||.011;
   const lf=c.createOscillator();lf.frequency.value=.11;const lfg=c.createGain();lfg.gain.value=.006;lf.connect(lfg);lfg.connect(ng.gain);nz.connect(nb);nb.connect(ng);ng.connect(bus);nz.start();lf.start();
   return {bus,send,stop:()=>{try{nz.stop();lf.stop()}catch(e){}}}}
-// jeden krok (ósemka) motywu: zwraca nowy stan "poprzednia nuta lead"
+// jeden krok (�semka) motywu: zwraca nowy stan "poprzednia nuta lead"
 function musStep(c,G,T,s,t,sd,st){if(T===MTH.title)return musTitleStep(c,G,T,s,t,sd,st);const bar=(s/8)|0,k=s%8,name=T.ch[bar];
   if(k===0)musPad(c,G.bus,G.send,MCH[name],t,sd*8+.4);
   const kv=(bar>=8&&T.kpB?T.kpB:T.kp)[k];if(kv&&(k===0||bar>=T.tom2))musKick(c,G.bus,t,kv);
@@ -60,7 +60,7 @@ function musStep(c,G,T,s,t,sd,st){if(T===MTH.title)return musTitleStep(c,G,T,s,t
   if(T.bell&&k===0&&bar%T.bell.every===0)musBell(c,G.bus,G.send,MCH[name][2]+24,t,T.bell.v);
   for(const [bk,bl] of (T.bp||[[0,6],[6,2]]))if(bk===k)musBass(c,G.bus,MROOT[name],t+(bk?.01:0),sd*bl);
   for(const [a,m,len] of T.lead[bar]){if(a!==k)continue;const prev=(st.end>=s-.1&&st.m)?st.m:m-(T.scoop||.6);musLead(c,G.bus,G.send,m,prev,t,len*sd*.97,T);st.m=m;st.end=s+len}}
-// ---- Motyw tytułowy „Piętno”: ciężki riff w d-moll (przester), bas, chór „aaa”, bęben wojenny, dzwon, haczyk melodyczny ----
+// ---- Motyw tytu�owy "Pi�tno": ci��ki riff w d-moll (przester), bas, ch�r "aaa", b�ben wojenny, dzwon, haczyk melodyczny ----
 function musDist(c){if(!c._ds){const n=512,cv=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;cv[i]=Math.tanh(x*5)}c._ds=cv}return c._ds}
 let RIFF_G=.12;
 function musRiff(c,bus,m,t,dur,v){const g=c.createGain();musEnv(c,g,t,.008,v,dur,.05);const ws=c.createWaveShaper();ws.curve=musDist(c);const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1300;lp.Q.value=2.5;
@@ -113,7 +113,7 @@ function musStart(ch){if(!AC)return;
   const G=musGraph(AC,mb,MTH[ch]);MUS.cur=ch;MUS.scale=1;MUS.G=G;MUS.mb=mb;MUS.next=AC.currentTime+.4;MUS.s=0;MUS.st={m:0,end:-9};
   const run=()=>{if(MUS.G!==G||AC.state!=='running')return;const T=MTH[ch],sd=60/T.bpm/2;while(MUS.next<AC.currentTime+.4){musStep(AC,G,T,MUS.s,MUS.next,sd,MUS.st);MUS.s=(MUS.s+1)%(T.bars*8);MUS.next+=sd}};
   MUS.timer=setInterval(run,80);run()}
-// utwór walki (boss / krypta) włącza się, gdy blisko jest boss albo gdy gracz jest w krypcie; po walce wraca motyw rozdziału
+// utw�r walki (boss / krypta) w��cza si�, gdy blisko jest boss albo gdy gracz jest w krypcie; po walce wraca motyw rozdzia�u
 function musTick(dt){if(!MUS.base||!S||!AC||MUS.cur==='intro')return;MUS.tk=(MUS.tk||0)-dt;if(MUS.tk>0)return;MUS.tk=.5;
   const want=!!(S.dg&&!S.dg.done);
   if(want){MUS.off=0;if(MUS.cur!=='crypt')musStart('crypt')}else if(MUS.cur==='crypt'){MUS.off=(MUS.off||0)+.5;if(MUS.off>=4)musStart(MUS.base)}}
@@ -121,7 +121,7 @@ function musStop(f=1.8){MUS.pend=0;if(!MUS.cur)return;const G=MUS.G,mb=MUS.mb,k=
   try{mb.gain.cancelScheduledValues(AC.currentTime);mb.gain.setValueAtTime(mb.gain.value,AC.currentTime);mb.gain.linearRampToValueAtTime(0,AC.currentTime+f)}catch(e){}
   setTimeout(()=>{G.stop();try{mb.disconnect()}catch(e){}musRelease(k)},f*1000+3500)}
 function musSetVol(v){musVol=v;try{localStorage.setItem('pn_mus',String(v))}catch(e){}if(MUS.mb&&AC)MUS.mb.gain.setTargetAtTime(v*(MUS.scale||1),AC.currentTime,.1);for(const e of document.querySelectorAll('.musSl'))e.value=Math.round(v*100)}
-const INTRO_KICK={1:(EN?'Act I · The Scorched Settlement':'Rozdział I · Spalona Osada'),2:(EN?'Act II · The Lower City':'Rozdział II · Dolne Miasto'),3:(EN?'Act III · Fallen Goldheim':'Rozdział III · Upadły Złotogród'),4:(EN?'Act IV · Blackwood':'Rozdział IV · Czarnobór'),5:(EN?'Act V · The Creditors\' Citadel':'Rozdział V · Cytadela Wierzycieli')};
+const INTRO_KICK={1:(EN?'Act I  The Scorched Settlement':'Rozdzia� I  Spalona Osada'),2:(EN?'Act II  The Lower City':'Rozdzia� II  Dolne Miasto'),3:(EN?'Act III  Fallen Goldheim':'Rozdzia� III  Upad�y Z�otogr�d'),4:(EN?'Act IV  Blackwood':'Rozdzia� IV  Czarnob�r'),5:(EN?'Act V  The Creditors\' Citadel':'Rozdzia� V  Cytadela Wierzycieli')};
 let INTRO=null;
 // Start loading at chapter selection, while the preparation screen is open.
 const INTRO_IMAGES=new Map();
@@ -133,15 +133,15 @@ $('prepGo').addEventListener('click',()=>preloadIntro(PREP.ch),true);
 STORY_INTRO[5]=FTX('story.act5');
 // runda 318 (pakiet fabularny): opisy rozdzialow z FABULA_TXT; rozdzial I zachowuje dotychczasowe wprowadzenie i dopisuje opis osady
 for(let c=1;c<=4;c++)STORY_INTRO[c]=STORY_INTRO[c].concat(FTX('story.act'+c)); // 13.11.2026: najpierw wstep lokalizacji (I: wstep; II-IV: dodatkowe z 20_fabula), potem opis rozdzialu story.actN; noc V: sam story.act5
-function storyIntro(ch){if(!STORY||!STORYMODE||!STORY_INTRO[ch]||!S||!SPRITE_DATA['intro'+ch])return;
+function storyIntro(ch){if(SOLNE_TEST&&ch===1)return;if(!STORY||!STORYMODE||!STORY_INTRO[ch]||!S||!SPRITE_DATA['intro'+ch])return;
   preloadIntro(ch);
   const el=$('intro');$('iimg').style.backgroundImage=`url(${SPRITE_DATA['intro'+ch]})`;$('iimg').style.animation='none';void $('iimg').offsetWidth;$('iimg').style.animation='';
   $('ikick').textContent=INTRO_KICK[ch];
   // 8.11.2026: the whole text scrolls up by itself; hold (tap/Space/pad) = faster, "Skip" ends the intro at once
   const roll=$('iroll');roll.textContent='';for(const l of STORY_INTRO[ch]){const p=document.createElement('p');p.textContent=l;roll.appendChild(p)}
   roll.style.transform='translateY(100%)';
-  const sk=$('iskip');sk.textContent=EN?'Skip':'Pomiń';sk.setAttribute('aria-label',EN?'Skip the introduction':'Pomiń wprowadzenie');
-  $('ihint').textContent=EN?'Hold to speed up':'Przytrzymaj, aby przyspieszyć';
+  const sk=$('iskip');sk.textContent=EN?'Skip':'Pomi�';sk.setAttribute('aria-label',EN?'Skip the introduction':'Pomi� wprowadzenie');
+  $('ihint').textContent=EN?'Hold to speed up':'Przytrzymaj, aby przyspieszy�';
   el.classList.remove('out');el.hidden=false;$('touch').hidden=true;
   INTRO={ch,lines:STORY_INTRO[ch],y:0,t:0,wait:.8,hold:false,pad:false,linger:0,chars:STORY_INTRO[ch].join('').length};S.intro=true;}
 function introEnd(){if(!INTRO)return;for(const k of[' ','enter','e','j'])keys[k]=false;if(MUS.cur==='intro'||MUS.pend==='intro'){MUS.pend=0;if(MUS.base)musStart(MUS.base)}const el=$('intro');el.classList.add('out');INTRO=null;S.intro=false;musRelease('intro');setTimeout(()=>{if(!INTRO)el.hidden=true},950);$('touch').hidden=!coarse}
@@ -158,11 +158,11 @@ function introTick(dt){if(!INTRO)return;const I=INTRO;I.t+=dt;if(I.wait>0){I.wai
 {const el=$('intro'),hold=v=>e=>{if(INTRO&&!(e.target&&e.target.closest&&e.target.closest('#iskip')))INTRO.hold=v};
  el.addEventListener('pointerdown',hold(true));for(const ev of['pointerup','pointercancel','pointerleave'])el.addEventListener(ev,hold(false));
  $('iskip').addEventListener('click',e=>{e.stopPropagation();introEnd()})}
-// muzyka tytułowa startuje przy pierwszym dotknięciu/klawiszu (przeglądarki blokują dźwięk przed gestem użytkownika)
+// muzyka tytu�owa startuje przy pierwszym dotkni�ciu/klawiszu (przegl�darki blokuj� d�wi�k przed gestem u�ytkownika)
 function musFirst(){try{if(AC&&AC.state==='suspended'&&!(S&&S.paused))acResume()}catch(e){}if(S||MUS.cur)return;try{initAudio();if(AC&&AC.state==='suspended')acResume();musStart(AUDIO_DATA.intro?'intro':'title')}catch(e){quietErr('audioStart',e)}}
 addEventListener('pointerdown',musFirst,true);addEventListener('keydown',musFirst,true);addEventListener('click',musFirst,true);addEventListener('touchend',musFirst,true);
 for(const e of document.querySelectorAll('.musSl')){e.value=Math.round(musVol*100);e.addEventListener('input',()=>musSetVol(e.value/100))}
 function storyBoss(e){if(!STORY||S.dg||e.dgBoss)return;const t=STORY_BOSS[CH+e.type]||STORY_BOSS[e.type];if(t)setTimeout(()=>{if(S&&S.phase==='play'&&!pl.dead)say(t,'story')},3600)}
 let startBusy=false;
-function beginRun(){if(startBusy)return;startBusy=true;uiSnd('runStart');const b=$('prepGo'),label=b.innerHTML;b.disabled=true;b.textContent=(EN?'Preparing the act…':'Przygotowywanie rozdziału…');if(coarse)goFull();requestAnimationFrame(()=>setTimeout(()=>{try{if(!$('prep').hidden)start(PREP.ch)}catch(e){console.error(e);toMenu();say((EN?'Failed to prepare the act. Refresh the game and try again.':'Nie udało się przygotować rozdziału. Odśwież grę i spróbuj ponownie.'))}finally{startBusy=false;b.disabled=false;b.innerHTML=label}},0))}
+function beginRun(){if(startBusy)return;startBusy=true;uiSnd('runStart');const b=$('prepGo'),label=b.innerHTML;b.disabled=true;b.textContent=(EN?'Preparing the act':'Przygotowywanie rozdzia�u');if(coarse)goFull();requestAnimationFrame(()=>setTimeout(()=>{try{if(!$('prep').hidden)start(PREP.ch)}catch(e){console.error(e);toMenu();say((EN?'Failed to prepare the act. Refresh the game and try again.':'Nie uda�o si� przygotowa� rozdzia�u. Od�wie� gr� i spr�buj ponownie.'))}finally{startBusy=false;b.disabled=false;b.innerHTML=label}},0))}
 function start(ch){if(!A)return;if(!groupReady(ch))return waitChapter(ch,()=>start(ch));ftClear();hbClear();$('pause').hidden=true;$('bAtk').hidden=$('bBlock').hidden=$('bHeavy').hidden=false;$('btns').classList.add('sl');resetInput();if(coarse)goFull();if(coarse||SETT.quality==='low')for(const k of Object.keys(WORLDS))if(+k!==ch)releaseWorld(+k);ensureWorld(ch);useWorld(ch);initAudio();if(AC&&AC.state==='suspended')acResume();newGame();applyPrep();lastHud='';MUS.base=ch;for(const k of Object.keys(MUS_BUFS))musRelease(k);if(ch===1)musLoadBuf('crypt');if(ch===1&&STORY)musLoadBuf('intro');if(!(ch===1&&AUDIO_DATA.intro))musStart(ch);for(const id of ['title','end','lvl','dialog','prep'])$(id).hidden=true;$('hud').hidden=false;$('touch').hidden=!coarse;camTarget.set(pl.x/16,0,pl.y/16);if(ch>=1&&ch<=5)storyIntro(ch);if(ch===1&&INTRO&&AUDIO_DATA.intro)musStart('intro')}

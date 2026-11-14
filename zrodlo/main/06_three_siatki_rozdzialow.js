@@ -106,7 +106,7 @@ function buildDungeon(I){planGround(9);
 
 // Chapter I meshes: M1 ground, M2 walls, M3 props
 function buildBrzeznica(I){
-  const F=I.br_ground,Wl=I.br_walls,r=rng(77);planGround(1);
+  const F=I.br_ground,Wl=I.br_walls,r=rng(77);if(!SOLNE_TEST)planGround(1);
   const fc=canvas(WW,WH),fg=fc.getContext('2d');
   const tile=(c,row,tx,ty)=>groundTile(fg,F,c,row,tx,ty);
   const ROW={40:0,41:1,42:2,43:3,44:4,46:6,47:7,48:3,21:2};
@@ -141,7 +141,22 @@ function buildBrzeznica(I){
   const PF={};for(const k in R)PF[k]=I['p1_'+k]?procFrame(I['p1_'+k],0,0,R[k][2],R[k][3],'prop'):procFrame(I.br_props,R[k][0],R[k][1],R[k][2],R[k][3],'prop');
   // stairs down into the crypt (Lower City transition sheet)
   if(I.p1_crypt_stairs){R.crypt_stairs=[0,0,96,72];PF.crypt_stairs=procFrame(I.p1_crypt_stairs,0,0,96,72,'prop')}else{R.crypt_stairs=[0,0,64,32];PF.crypt_stairs=procFrame(I.trans,0,0,64,32,'prop')}
-  for(const p of PROPS){
+  if(SOLNE_TEST){
+ W.solneChains=[];
+ for(const [x,y,tx] of [[12.5,14.8,28],[53.5,14.8,37]]){
+  const from=new THREE.Vector3(MP(x),.5,MP(y)),to=new THREE.Vector3(MP(tx),.35,MP(5));
+  const d=to.clone().sub(from),geo=new THREE.CylinderGeometry(.045,.045,d.length(),6);
+  const chain=new THREE.Mesh(geo,phong({color:0x888477}));
+  chain.position.copy(from.clone().add(to).multiplyScalar(.5));chain.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());
+  ROOT.add(chain);W.solneChains.push(chain);
+ }
+ const deck=worldSurf(phong({color:0xa49d90}),I.cc0_deski,3,'a');
+ for(const [x,y,w,h] of [[27,43,10,8],[10,10,15,5],[40,10,15,5],[31,6,3,5],[27,2,11,5]]){
+  const g=new THREE.PlaneGeometry(MP(x+w)-MP(x),MP(y+h)-MP(y));g.rotateX(-Math.PI/2);
+  const m=new THREE.Mesh(g,deck);m.position.set((MP(x)+MP(x+w))/2,.025,(MP(y)+MP(y+h))/2);m.receiveShadow=true;ROOT.add(m);
+ }
+}
+for(const p of PROPS){
     let frames,rc;
     if(p.anim==='fire'){frames=[0,1,2,3].map(i=>PF['debris_fire_'+i]);rc=R.debris_fire_0}else if(p.anim==='hfire'){frames=[0,1,2,3].map(i=>PF['house_fire_'+i]);rc=R.house_fire_0}
     else if(p.shrine!==undefined){frames=[PF.shrine,PF.shrine];rc=R.shrine}
@@ -451,4 +466,3 @@ function beastSheet(){
   cell(0,2,()=>dead(0));cell(1,2,()=>dead(1));
   return c;
 }
-

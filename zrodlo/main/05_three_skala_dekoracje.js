@@ -127,7 +127,7 @@ function dressSettlementsHD(w){
    if(SOLID.has(tileAt(ix,iy))||VOID.has(tileAt(ix,iy))||w.clearways?.has(i)||w.groundPlan.road[i]||w.npcs.some(a=>Math.hypot(a.x/TS-x,a.y/TS-y)<3)||w.PROPS.some(a=>Math.hypot(a.x-x,a.y-y)<1)||used.some(a=>Math.hypot(a.x-x,a.y-y)<.6))continue;
    const k=j===0?'brambles':'ferns',fr=frames[k],m=new THREE.Mesh(geo,fr.n),z=j===0?.24:.18;m.position.set(x,0,y);m.scale.set(z,z*SQ,z);m.userData.propAsset=true;m.castShadow=false;w.group.add(m);used.push({x,y});
   }}
-  // Roślinność bez kolizji po całej mapie: paprocie (trawa), jeżyny (krzaki), grzyby; przy stawie trzciny.
+  // Ro�linno�� bez kolizji po ca�ej mapie: paprocie (trawa), je�yny (krzaki), grzyby; przy stawie trzciny.
   {const ex={mushrooms:[128,256,64,64],reeds:[0,256,64,64]};for(const [k,r]of Object.entries(ex)){frames[k]=IMGS['p4_'+k]?procFrame(IMGS['p4_'+k],0,0,r[2],r[3],'prop'):procFrame(IMGS.cz_trees,...r,'prop');cutCircle(frames[k].n)}
    const rr=rng(4711),byK={ferns:[],brambles:[],mushrooms:[],reeds:[]},
      near=(x,y,t,R)=>{for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++)if(tileAt(x+dx,y+dy)===t)return true;return false},
@@ -175,7 +175,7 @@ function depthApron(w){const m=new THREE.Mesh(new THREE.PlaneGeometry(MW+260,MH+
 function softenProps(w){// 12.11.2026: Akt I - rekwizyty bez twardego cienia z swiatla bohatera i lekko sciemnione do koloru ziemi (?softprops=0 = przed)
  if(new URLSearchParams(location.search).get('softprops')==='0')return;const seen=new Set(),tint=new THREE.Color(.76,.77,.8);
  w.group.traverse(o=>{if(!o.userData||!o.userData.propAsset)return;o.castShadow=false;const ms=Array.isArray(o.material)?o.material:[o.material];for(const m of ms){if(!m||seen.has(m)||!m.color||m.userData.noSoften)continue;seen.add(m);m.color.multiply(tint);if(m.emissiveMap&&m.emissive&&m.emissiveIntensity>0)m.emissiveIntensity*=.72}})}
-function finishWorldArt(w){if(depthOn(w.ch))depthApron(w);buildRoofs(w);preparePowerFires(w);composeWorldProps(w);dressSettlementsHD(w);dressNeutral(w);settleWorldProps(w);if(w.ch===1&&depthOn(1))softenProps(w);const flat=new Set(['dwarf_bones','covered_corpses','beggar_bodies','doorway_bones','wheel','burnt_hay','cz_bones','cz_pelts','cz_walk','cz_wisp','cz_crow','mushrooms','ferns','brambles','reeds','wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11','scroll','book','pages','keys','seal','purse','shackles','skull']);
+function finishWorldArt(w){if(SOLNE_TEST&&w.ch===1){preparePowerFires(w);return;}if(depthOn(w.ch))depthApron(w);buildRoofs(w);preparePowerFires(w);composeWorldProps(w);dressSettlementsHD(w);dressNeutral(w);settleWorldProps(w);if(w.ch===1&&depthOn(1))softenProps(w);const flat=new Set(['dwarf_bones','covered_corpses','beggar_bodies','doorway_bones','wheel','burnt_hay','cz_bones','cz_pelts','cz_walk','cz_wisp','cz_crow','mushrooms','ferns','brambles','reeds','wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11','scroll','book','pages','keys','seal','purse','shackles','skull']);
   const props=w.PROPS.filter(p=>!flat.has(p.k)&&!VOID.has(tileAt(Math.floor(p.x),Math.floor(p.y-.2))));
   w.groundShadows=instanced(groundFxGeo,groundShadowMat,props,p=>{const m=p.obj&&p.obj.mesh,s=p.k==='sacred_oak'?2.2:p.tree?.8:m?Math.min(2,Math.max(.3,m.geometry.parameters.width*Math.abs(m.scale.x)*.5)):.65;return M4.compose(V.set(p.x,.024,p.y-.1),Q.identity(),SC.set(s*1.1,1,s*.6))},false,false);
   const lights=w.LSRC.filter(l=>['fire','shrine','rune','npc','stone','merchant'].includes(l.kind)&&l.base>0&&[-1,0,1].every(dy=>[-1,0,1].every(dx=>!VOID.has(tileAt(Math.floor(l.x)+dx,Math.floor(l.z)+dy))))).slice(0,48);w.groundL=lights;
@@ -196,4 +196,3 @@ function floorAO(fg,solidish){for(let ty=0;ty<MH;ty++)for(let tx=0;tx<MW;tx++){c
   if(WALLC.has(tileAt(tx,ty-1))){const shade=fg.createLinearGradient(0,ty*16,0,ty*16+12);shade.addColorStop(0,'rgba(4,3,6,.32)');shade.addColorStop(1,'rgba(4,3,6,0)');fg.fillStyle=shade;fg.fillRect(tx*16,ty*16,16,12)}}}
 function decals(I){const dec=row=>[0,1,2,3].map(i=>{const cv=canvas(32,32);cv.getContext('2d').drawImage(I.decals,i*32,row*32,32,32,0,0,32,32);return cv});
   DEC.pool=dec(0);DEC.spray=dec(1);DEC.scorch=dec(2);DEC.crack=dec(3);DEC.bones=dec(5)}
-

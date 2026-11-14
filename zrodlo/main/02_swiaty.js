@@ -1,5 +1,6 @@
 /* ============ WORLDS ============ */
 // Each chapter has its own tile map, props, NPCs, lights and meshes. useWorld(ch) swaps the active one.
+const SOLNE_TEST=['localhost','127.0.0.1','[::1]'].includes(location.hostname)&&new URLSearchParams(location.search).get('nabrzeze')==='1';
 const SOLID=new Set([21,22,23,24,27,31,45,48,58,59,68,69,78,80,91]),WALLC=new Set([21,48,58,59,78,80]),VOID=new Set([23,24,25]);
 let CH=2,W=null,map,PROPS,START,SHRINES,region,walls,cliffs,pillars,lavas,braziers,waters,LSRC,propObjs;
 const WORLDS={},WORLD_SEEDS={};
@@ -78,7 +79,7 @@ function genDolne(){
   // 12.11.2026: warsztaty miedzy kanalami lawy (pas x48..52 wolny): kowadla, proch, stojaki; kosci jako drobiazgi
   for(const [k,x,y] of [['anvil',45,20],['anvil',45,27],['black_powder',42,18],['pickaxe_rack',41,29],['anvil',55,20],['anvil',55,28],['black_powder',58,27],['pickaxe_rack',46,39],['mine_cart',56,39],['anvil',44,11],['black_powder',59,11]])W1(k,x,y);
   for(const [x,y] of [[46,30],[54,17],[53,37],[43,40]])prop('dwarf_bones',x+.5,y+.92,[],{floorDetail:true});
-  // kopalnia: stojaki przy polnocnej scianie, wozki przy poludniowej, skład prochu przy wschodniej
+  // kopalnia: stojaki przy polnocnej scianie, wozki przy poludniowej, sk�ad prochu przy wschodniej
   for(const x of [43,47,51])W1('pickaxe_rack',x,45);
   for(const x of [44,50])W1('mine_cart',x,51);
   prop('fallen_pillar',53,51.92,[[52,51],[53,51]]);
@@ -91,12 +92,33 @@ function genDolne(){
     region:(x,y)=>x>=40&&y>=42?'mine':x>=40?'forge':'hall',
     npcs:[{id:'tharm',art:'tharm',name:(EN?'Tharm\'s Ghost':'Duch kowala Tharma'),x:52*TS+8,y:24*TS+12,lines:THARM_LINES},
           (()=>{const [x,y]=freeNear(map,PROPS,[20,26,30],22,34);return{id:'mila',art:'mila',name:(EN?'Mila, the Amazon':'Mila, amazonka'),x:(x+.5)*TS,y:(y+.4)*TS,lines:MILA_LINES}})(),
-          (()=>{const [x,y]=freeNear(map,PROPS,[20,26,30],46,46);return{id:'rudna',art:'rudna',name:(EN?'Rudna, Listener of the Veins':'Rudna, Słuchaczka Żył'),x:(x+.5)*TS,y:(y+.4)*TS,lines:RUDNA_LINES}})()],idle:[18,23,12,8]};
+          (()=>{const [x,y]=freeNear(map,PROPS,[20,26,30],46,46);return{id:'rudna',art:'rudna',name:(EN?'Rudna, Listener of the Veins':'Rudna, S�uchaczka �y�'),x:(x+.5)*TS,y:(y+.4)*TS,lines:RUDNA_LINES}})()],idle:[18,23,12,8]};
 }
 
-// Chapter I: the burned village of Brzeźnica
+// Chapter I: the burned village of Brze�nica
 // codes: 40 road, 41 ash, 42 dead grass, 43 charred planks, 44 rubble, 45 water, 46 graveyard, 47 blood mud, 48 house wall, 21 palisade/outside
-function genBrzeznica(){
+function genSolneNabrzeze(){
+ const {map,under,PROPS,set,fill,prop,reserve,clearways}=mapKit(45);
+ const areas=[[27,43,10,8,43],[29,33,6,12,40],[20,26,24,12,40],[10,29,14,5,42],
+ [5,13,15,19,47],[10,10,15,5,43],[23,9,19,11,40],[40,10,15,5,43],
+ [47,13,14,19,40],[41,29,12,5,42],[30,18,5,9,40],[31,6,3,5,43],[27,2,11,5,43]];
+ for(const a of areas)fill(...a);
+ // Solid masonry foundation of the two warehouses, with wide lanes on both sides.
+ fill(7,18,4,7,48);fill(15,18,3,6,48);fill(55,20,4,7,48);
+ for(const [x,y] of [[8,16],[17,26],[8,28],[49,28],[52,22],[29,5],[36,5]])prop('barrel',x+.5,y+.92,[[x,y]]);
+ prop('marga_cart',49.5,25.92,[[49,25],[50,25]]);
+ prop('gallows',57.5,17.92,[[57,17]]);
+ prop('wheel',12.5,14.92,[]);prop('wheel',53.5,14.92,[]);
+ prop('well',23.5,34.92,[[23,34]]);
+ // Boarding bollards and a clear landing deck.
+ for(const x of [28,37])prop('barrel',x+.5,5.92,[[x,5]]);
+ return {map,under,PROPS,clearways,roofs:[],start:{x:32*TS,y:47*TS},
+ shrines:[],region:()=> 'village',idle:[32,28,8,6],
+ npcs:[{id:'port_guard',art:'elder',name:EN?'Dock labourer':'Robotnik portowy',x:26*TS,y:34*TS,lines:[EN?'Both chains hold the ferry. The winches are on opposite sides of the harbour.':'Prom trzymaj� dwa �a�cuchy. Ko�owroty stoj� po obu stronach portu.']},
+ {id:'marga',art:'marga',name:EN?'Marga':'Marga',x:39*TS,y:34*TS,lines:MARGA_LINES}]};
+}
+
+function genBrzeznica(){if(SOLNE_TEST)return genSolneNabrzeze();
   const {map,under,PROPS,set,fill,prop,reserve,clearways}=mapKit(21,GONE_PROPS);const r=rng(1349);
   reserve(30,2,3,GH-4);reserve(2,27,GW-4,3);reserve(49,16,6,5);
   const at=(x,y)=>map[y*GW+x];
@@ -108,7 +130,7 @@ function genBrzeznica(){
   // graveyard to the north-east and a stagnant pond to the south-east
   fill(43,15,17,9,46);
   for(let y=29;y<38;y++)for(let x=44;x<61;x++){const q=Math.hypot((x-52.5)/6.6,(y-33.2)/2.9);if(q<1)set(x,y,q<.66?45:90)}
-  // bajoro: sama płytka woda (runda 214)
+  // bajoro: sama p�ytka woda (runda 214)
   for(let y=14;y<22;y++)for(let x=17;x<28;x++)if(Math.hypot((x-22.2)/3.6,(y-17.6)/2.3)<1)set(x,y,90);
   // burned houses [x, y, w, h, door side]; the big one in the west is the barn where the order burned the villagers
   const H=[[6,5,9,7,'s'],[18,5,8,6,'s'],[38,5,8,7,'s'],[50,5,9,7,'s'],[6,37,8,7,'n'],[18,40,7,6,'n'],[38,40,9,7,'n'],[50,42,9,7,'n']];
@@ -123,7 +145,7 @@ function genBrzeznica(){
   {const hx=50,hy=19,w=10,h=5;for(let y=hy;y<hy+h;y++)for(let x=hx;x<hx+w;x++){const edge=x===hx||y===hy||x===hx+w-1||y===hy+h-1;set(x,y,edge?((x*7+y*3)%6===0?44:48):43)}
    fill(54,23,3,1,43);fill(50,20,1,2,43);fill(59,22,1,1,43);fill(58,19,1,1,43);
    reserve(hx,hy,w,h);reserve(54,23,3,2);reserve(48,20,3,2);reserve(59,22,3,1);reserve(58,17,1,3);reserve(59,20,4,7);H.push([hx,hy,w,h,'s'])}
-  fill(4,15,13,10,41); // runda 242: stodoły już nie ma, w jej miejscu pogorzelisko (ziemia z popiołem i żarem)
+  fill(4,15,13,10,41); // runda 242: stodo�y ju� nie ma, w jej miejscu pogorzelisko (ziemia z popio�em i �arem)
   // blood-soaked mud around the gallows, the stakes and the barn
   for(let i=0;i<90;i++){const c=[[35,32],[31,44],[17,20],[12,48],[28,25]][i%5],x=c[0]+((r()-.5)*7)|0,y=c[1]+((r()-.5)*5)|0;if(at(x,y)===40||at(x,y)===41||at(x,y)===42)set(x,y,47)}
   // square: well, gallows, Marga's cart
@@ -151,14 +173,14 @@ function genBrzeznica(){
   for(let i=0;i<500;i++){const side=i%4,t=r();let x,y;if(side===0){x=3+((t*(GW-6))|0);y=3+((r()*2)|0)}else if(side===1){x=3+((t*(GW-6))|0);y=GH-4-((r()*2)|0)}else if(side===2){x=3+((r()*2)|0);y=3+((t*(GH-6))|0)}else{x=GW-4-((r()*2)|0);y=3+((t*(GH-6))|0)}
     if(r()>.22)continue;const c=at(x,y);if(c!==42&&c!==41)continue;if(PROPS.some(p=>p.k==='dead_tree'&&Math.abs(p.x-x)<3.5&&Math.abs(p.y-y)<3.5))continue;prop('dead_tree',x+.5,y+.92,[[x,y]])}
   return{map,under,PROPS,clearways,roofs:H,start:{x:31*TS+8,y:51*TS+8},shrines:[{x:24*TS+8,y:14*TS+8},{x:46*TS+8,y:48*TS+8}],region:()=>'village',
-    npcs:[{id:'elder',art:'elder',name:(EN?'Dying Old Man':'Umierający przy studni'),x:29.6*TS,y:26.4*TS,lines:ELDER_LINES},
-          {id:'marga',art:'marga',name:(EN?'Marga, the Bone Trader':'Marga, handlarka kości'),x:54.9*TS,y:21.1*TS,lines:MARGA_LINES},
-          {id:'wit',art:'wit',name:(EN?'Brother Wit, Prisoner in the Stocks':'Brat Wit, więzień w dybach'),x:14.5*TS,y:30.92*TS,lines:WIT_LINES,solid:[14,30]},
+    npcs:[{id:'elder',art:'elder',name:(EN?'Dying Old Man':'Umieraj�cy przy studni'),x:29.6*TS,y:26.4*TS,lines:ELDER_LINES},
+          {id:'marga',art:'marga',name:(EN?'Marga, the Bone Trader':'Marga, handlarka ko�ci'),x:54.9*TS,y:21.1*TS,lines:MARGA_LINES},
+          {id:'wit',art:'wit',name:(EN?'Brother Wit, Prisoner in the Stocks':'Brat Wit, wi�zie� w dybach'),x:14.5*TS,y:30.92*TS,lines:WIT_LINES,solid:[14,30]},
           (()=>{const [x,y]=freeNear(map,PROPS,[40,41,42,47],27,15);return{id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:(x+.5)*TS,y:(y+.4)*TS,lines:CHOJRAK_LINES}})(),
-          (()=>{const [x,y]=freeNear(map,PROPS,[41,40,42,44,47],10,20);return{id:'nawoj',art:'nawoj',name:(EN?'Nawoj, Keeper of Names':'Nawoj, Strażnik Imion'),x:(x+.5)*TS,y:(y+.4)*TS,lines:NAWOJ_LINES}})()],idle:[31,28,13,9]};
+          (()=>{const [x,y]=freeNear(map,PROPS,[41,40,42,44,47],10,20);return{id:'nawoj',art:'nawoj',name:(EN?'Nawoj, Keeper of Names':'Nawoj, Stra�nik Imion'),x:(x+.5)*TS,y:(y+.4)*TS,lines:NAWOJ_LINES}})()],idle:[31,28,13,9]};
 }
 
-// Chapter III: Złotogród, the golden capital rotting under its domes
+// Chapter III: Z�otogr�d, the golden capital rotting under its domes
 // codes: 50 street flagstones, 51 gold inlay, 52 cracked flagstones, 53 slum mud, 54 rot pool (slows), 55 blood mud, 56 monastery floor, 57 dead garden, 58 noble stone (houses, cathedral, palace), 59 slum shack
 const CATH={x:24,y:14,w:16,h:10},PALACE={x:18,y:2,w:28,h:4},CHAPEL={x:8,y:41,w:5,h:4};
 const SHACKS=[[3,37,4,3],[15,37,3,3],[20,39,4,2],[24,36,3,3],[3,46,3,3],[15,44,3,3],[20,47,3,3],[24,42,3,2],[37,38,4,3],[44,37,3,3],[50,38,4,2],[56,37,4,3],[38,45,3,3],[45,44,4,3],[52,46,3,3],[57,43,3,3],[8,50,4,2],[47,50,4,2],[24,50,3,2],[54,51,4,2]];
@@ -225,14 +247,14 @@ function genStolica(){
   prop('gate',32,54.92,[[30,54],[31,54],[32,54],[33,54]],{sheet:'trans',still:'gate_open'});
   return{map,under,PROPS,clearways,start:{x:32*TS,y:51*TS+8},shrines:[{x:41*TS+8,y:29*TS+12},{x:13*TS+8,y:46*TS+12}],
     region:(x,y)=>y>=35?'slums':x>=43&&y>=14&&y<=32?'monastery':'city',
-    npcs:[{id:'izolda',art:'izolda',name:(EN?'Countess Isolda of Vermar':'Hrabina Izolda z Vermarów'),x:6.5*TS,y:18.4*TS,lines:IZOLDA_LINES},
+    npcs:[{id:'izolda',art:'izolda',name:(EN?'Countess Isolda of Vermar':'Hrabina Izolda z Vermar�w'),x:6.5*TS,y:18.4*TS,lines:IZOLDA_LINES},
           {id:'ottokar',art:'ottokar',name:(EN?'Count Ottokar, King\'s Treasurer':'Hrabia Ottokar, skarbnik korony'),x:50*TS,y:9.4*TS,lines:OTTOKAR_LINES},
-          {id:'aurel',art:'aurel',name:(EN?'Young Aurel of House Halder':'Młody Aurel z rodu Halderów'),x:16.5*TS,y:27.4*TS,lines:AUREL_LINES},
-          (()=>{const [x,y]=freeNear(map,PROPS,[50,52,53,55],24,42);return{id:'heri',art:'heri',name:(EN?'Heri of the Royal Guard':'Heri, wojak z gwardii królewskiej'),x:(x+.5)*TS,y:(y+.4)*TS,lines:HERI_LINES}})(),
-          (()=>{const [x,y]=freeNear(map,PROPS,[50,52,53,55],10,46);return{id:'seweryna',art:'seweryna',name:(EN?'Seweryna, the Mourning Seamstress':'Seweryna, Krawcowa Żałobna'),x:(x+.5)*TS,y:(y+.4)*TS,lines:SEWERYNA_LINES}})()],idle:[32,30,11,8]};
+          {id:'aurel',art:'aurel',name:(EN?'Young Aurel of House Halder':'M�ody Aurel z rodu Halder�w'),x:16.5*TS,y:27.4*TS,lines:AUREL_LINES},
+          (()=>{const [x,y]=freeNear(map,PROPS,[50,52,53,55],24,42);return{id:'heri',art:'heri',name:(EN?'Heri of the Royal Guard':'Heri, wojak z gwardii kr�lewskiej'),x:(x+.5)*TS,y:(y+.4)*TS,lines:HERI_LINES}})(),
+          (()=>{const [x,y]=freeNear(map,PROPS,[50,52,53,55],10,46);return{id:'seweryna',art:'seweryna',name:(EN?'Seweryna, the Mourning Seamstress':'Seweryna, Krawcowa �a�obna'),x:(x+.5)*TS,y:(y+.4)*TS,lines:SEWERYNA_LINES}})()],idle:[32,30,11,8]};
 }
 
-// Chapter IV: Czarnobór, the wild valleys of the old faith (plan: docs/prompty-rozdzial4.md)
+// Chapter IV: Czarnob�r, the wild valleys of the old faith (plan: docs/prompty-rozdzial4.md)
 // codes: 60 forest floor, 61 dirt road, 62 valley meadow, 63 stone-field gravel, 64 river ford (slows), 65 marsh water (slows more),
 // 66 barrow earth, 67 camp and ritual ground, 68 ruined watchtower masonry, 69 log palisade; 21 rock walls around the valley
 // landmarks stay in place; woods, glades, pools, boulders and the river bends come from a random seed, so the valley differs on every load
@@ -255,7 +277,7 @@ function genCzarnobor(seed){
     else if(y<CZY.north)set(x,y,n>.8?60:63);
     else if(y<CZY.stones)set(x,y,n>.15?63:62);
     else if(n>1.25)set(x,y,60)}
-  // Łysa Góra: a bare hill with a ritual ring on top
+  // �ysa G�ra: a bare hill with a ritual ring on top
   for(let y=2;y<15;y++)for(let x=24;x<57;x++){const d=Math.hypot((x-CZ.hill[0])/15,(y-CZ.hill[1])/7.5);if(d<1)set(x,y,d<.42?67:63)}
   // the river bends across the valley; all of it is a shallow ford that slows you down
   const riverY=x=>48+2.7*Math.sin(x*.152+ph[0])+1.2*Math.sin(x*.056+ph[2]);
@@ -335,8 +357,8 @@ function genCzarnobor(seed){
   return{map,under,PROPS,seed,clearways,start:{x:40*TS+8,y:63*TS+8},shrines:shr,
     region:(x,y)=>y>=CZY.campTop?'camp':y>=CZY.stones?'meadows':y>=CZY.north?'stones':y<15&&x>23&&x<58?'hill':x<CZX.marsh?'marsh':'forest',
     npcs:(()=>{const OK=[60,61,62,63,66,67],nn=(id,art,name,lines,x,y,extra)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);for(let i=PROPS.length-1;i>=0;i--){const p=PROPS[i],dy=p.y-(Y+.4);if(p.tree&&Math.abs(p.x-X-.5)<2.2&&dy<.8&&dy>-4.6){const tx=Math.floor(p.x),ty=Math.floor(p.y);if(map[ty*GW+tx]===31)map[ty*GW+tx]=under[ty*GW+tx]||60;PROPS.splice(i,1)}}/*12.11.2026: drzewo tuz za NPC zaslanialo go (NPC na sosnie)*/return Object.assign({id,art,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines},extra||{})};
-      return[nn('wierz','wierz',(EN?'Wierzchoslava, the Whisperer':'Wierzchosława, szeptucha'),WIERZ_LINES,36,62),nn('bartosz','bartosz',(EN?'Bart the Scout':'Bartosz Tropiciel'),BARTOSZ_LINES,roadX(44)-3,43),
-        nn('wolch','wolch',(EN?'Volch, Pagan Priest':'Żerca Wołch'),WOLCH_LINES,CZ.oak[0],CZ.oak[1]+4),nn('dobromir','dobromir',(EN?'Dobromir, Keeper of Empty Hives':'Dobromir, Pszczelarz Pustych Uli'),DOBROMIR_LINES,47,62),nn('boginka','boginka_lure','',[],62+((r()*10)|0),10+((r()*10)|0),{lure:true})]})(),idle:[40,48,14,10]};
+      return[nn('wierz','wierz',(EN?'Wierzchoslava, the Whisperer':'Wierzchos�awa, szeptucha'),WIERZ_LINES,36,62),nn('bartosz','bartosz',(EN?'Bart the Scout':'Bartosz Tropiciel'),BARTOSZ_LINES,roadX(44)-3,43),
+        nn('wolch','wolch',(EN?'Volch, Pagan Priest':'�erca Wo�ch'),WOLCH_LINES,CZ.oak[0],CZ.oak[1]+4),nn('dobromir','dobromir',(EN?'Dobromir, Keeper of Empty Hives':'Dobromir, Pszczelarz Pustych Uli'),DOBROMIR_LINES,47,62),nn('boginka','boginka_lure','',[],62+((r()*10)|0),10+((r()*10)|0),{lure:true})]})(),idle:[40,48,14,10]};
 }
 
 // Chapter V: Cytadela Wierzycieli, seat of the Order (plan: docs/prompty-rozdzial5.md)
@@ -371,7 +393,7 @@ function genCytadela(seed){
   for(const y of [58,47,35,24,13,3])for(const x of [8,71]){if(y===13&&x===71)P('chains',x,y,[],{anim:'chains'});else P('order_bonfire',x,y,[],{fire:true})}
   // Six deliberate, non-blocking details beside furniture, never scattered into passageways.
   for(const [k,x,y] of [['shackles',7,19]])P(k,x,y,[],{floorDetail:true,...(k==='pages'?{anim:'pages'}:{})});
-  // 12.11.2026: dziedziniec ubrany po bokach (wozy, stojaki, sztandary przy bramach, paleniska), krypta z sarkofagami i kośćmi; pasy x16..23 i x56..63 oraz środek wolne
+  // 12.11.2026: dziedziniec ubrany po bokach (wozy, stojaki, sztandary przy bramach, paleniska), krypta z sarkofagami i ko��mi; pasy x16..23 i x56..63 oraz �rodek wolne
   for(const [x,y] of [[13,59],[26,59],[53,59],[66,59],[31,61],[49,61],[26,15],[53,15],[5,20],[74,20]])set(x,y,27);
   for(const x of [14,25,54,65])P('order_banner',x,58);
   P('cart',12,65,true);P('cart',67,65,true);P('armour',5,62);P('armour',74,62);P('rack',5,65,true);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
@@ -381,10 +403,10 @@ function genCytadela(seed){
   const SH=[[69,60],[10,42],[40,19]];SH.forEach(([x,y],i)=>P('healing_shrine',x,y,true,{shrine:i}));
   return{map,under,PROPS,seed,start:{x:40*TS+8,y:63*TS+8},shrines:SH.map(([x,y])=>({x:x*TS+8,y:y*TS+12})),region:cyRegion,idle:[40,58,14,6],
     npcs:(()=>{const OK=[70,71,72,73,74,75],nn=(id,name,lines,x,y)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);return{id,art:id,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines}};
-      return[nn('skryba',(EN?'Condemned Scribe':'Skazany Skryba'),SKRYBA_LINES,28,16),nn('straznik',(EN?'The Guard Who Fled':'Strażnik, który uciekł'),STRAZNIK_LINES,24,64),nn('pieczetnik',(EN?'The Senior Bookkeeper':'Starszy Księgowy'),PIECZETNIK_LINES,40,54),nn('lucjan',(EN?'Lucjan, the Eraser':'Lucjan, Wymazywacz'),LUCJAN_LINES,56,50)]})()};
+      return[nn('skryba',(EN?'Condemned Scribe':'Skazany Skryba'),SKRYBA_LINES,28,16),nn('straznik',(EN?'The Guard Who Fled':'Stra�nik, kt�ry uciek�'),STRAZNIK_LINES,24,64),nn('pieczetnik',(EN?'The Senior Bookkeeper':'Starszy Ksi�gowy'),PIECZETNIK_LINES,40,54),nn('lucjan',(EN?'Lucjan, the Eraser':'Lucjan, Wymazywacz'),LUCJAN_LINES,56,50)]})()};
 }
 
-// Crypt under the Brzeźnica graveyard (side quest of chapter I), built from the Lower City tiles and props.
+// Crypt under the Brze�nica graveyard (side quest of chapter I), built from the Lower City tiles and props.
 // Random rooms joined by corridors: an entrance room, crypts full of sleeping dead, a shrine room and a boss hall with one single door.
 // A new layout is generated on every descent; a layout that fails the checks (unreachable room, too wide boss door) is thrown away.
 function genDungeon(seed){let w=null;for(let i=0;i<120&&!w;i++)w=genDungeonTry(seed+i*7717,false);return w||genDungeonTry(seed,true)}
@@ -439,4 +461,3 @@ function genDungeonTry(seed,force){
   if(!force)for(const R of rooms){let ok=false;for(let y=R.y;y<R.y+R.h&&!ok;y++)for(let x=R.x;x<R.x+R.w;x++)if(seen[y*GW+x]){ok=true;break}if(!ok)return null}
   return{map,under,PROPS,seed,start:{x:sx*TS+8,y:(S0.y+2)*TS+8},shrines:shrine?[shrine]:[],region:()=>'hall',npcs:[],idle:[...cen(S0),6,4],rooms:rooms.map(R=>({x:R.x,y:R.y,w:R.w,h:R.h,k:R.k}))};
 }
-
