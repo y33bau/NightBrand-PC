@@ -331,32 +331,59 @@ ${S}>.nb-mode.on .pc-mode-note{visibility:visible!important}
 html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px solid #e8c16f88!important;outline-offset:2px!important;filter:none!important}`;
  document.head.append(st);
 }catch(e){quietErr('modeSwitchSoft',e)}})();
-/* ===== EDYTOR UKŁADU MENU (?edytor=1) + wbudowany układ NB_LAYOUT_DEF ===== */
+/* ===== EDYTOR UKŁADU MENU (?edytor=1) + wbudowany układ NB_LAYOUT_DEF =====
+   Wersja 2 (14.11.2026): stałe klucze elementów, plik układu, lista zmian, Ponów, banery do wyboru,
+   podgląd ekranów / rozdzielczości / języka / podświetlenia pada. Działa tylko lokalnie (LOKALNIE). */
 (function(){try{
- const NB_LAYOUT_DEF={}; /* tu trafia układ zapisany przez autora: {"selektor":[x,y,skala,"ekran"]} (x,y w % szerokości okna) */
- const LSK='nbLayoutEd', LOKALNIE=location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname), EDIT=LOKALNIE&&/[?&]edytor=1/.test(location.search); /* edytor tylko u autora (serwer lokalny), na itch.io zablokowany */
- let L=Object.assign({},NB_LAYOUT_DEF);
- if(EDIT){try{const s=localStorage.getItem(LSK);if(s)L=JSON.parse(s)||L}catch(e){}}
+ const NB_LAYOUT_DEF={}; /* tu trafia układ zapisany przez autora: {"selektor":[x,y,skala,"ekran",{wygląd}]} (x,y w % szerokości okna); wbudowuje narzedzia/wbuduj_uklad.py */
+ const NB_IMG_DEF={}; /* nazwa pliku -> adres obrazu w assets (uzupełnia narzedzia/wbuduj_uklad.py) */
+ const LSK='nbLayoutEd', LOKALNIE=location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname),
+  EDIT=LOKALNIE&&/[?&]edytor=1/.test(location.search), PODGLAD=LOKALNIE&&!EDIT&&/[?&]podglad=1/.test(location.search); /* edytor i podgląd tylko u autora, na itch.io zablokowane */
+ let L=Object.assign({},NB_LAYOUT_DEF),IMG=Object.assign({},NB_IMG_DEF);
+ const readLS=()=>{try{const s=localStorage.getItem(LSK);if(s)L=JSON.parse(s)||L}catch(e){}try{Object.assign(IMG,JSON.parse(localStorage.getItem('nbLayoutImg')||'{}'))}catch(e){}};
+ if(EDIT||PODGLAD)readLS();
+ /* obrazy autora w IndexedDB (bez limitu ~5 MB pamięci przeglądarki) */
+ let dbP=null;const idb=()=>dbP||(dbP=new Promise((ok,no)=>{try{const r=indexedDB.open('nbLayoutEd',1);r.onupgradeneeded=()=>r.result.createObjectStore('img');r.onsuccess=()=>ok(r.result);r.onerror=()=>no(r.error)}catch(e){no(e)}}));
+ const idbAll=()=>idb().then(db=>new Promise(ok=>{const o={},c=db.transaction('img').objectStore('img').openCursor();c.onsuccess=()=>{const q=c.result;if(q){o[q.key]=q.value;q.continue()}else ok(o)};c.onerror=()=>ok(o)}));
+ const idbPut=(k,v)=>idb().then(db=>new Promise((ok,no)=>{const t=db.transaction('img','readwrite');t.objectStore('img').put(v,k);t.oncomplete=ok;t.onerror=()=>no(t.error)}));
  const st=document.createElement('style');st.id='nb-layout-css';document.head.append(st);
  const r2=v=>Math.round(v*100)/100;
  let EDM=false;
- const NB_IMG_DEF={}; /* nazwa pliku -> adres obrazu w assets (uzupełnia Claude po wgraniu obrazów) */
- let IMG=Object.assign({},NB_IMG_DEF);
- if(EDIT){try{Object.assign(IMG,JSON.parse(localStorage.getItem('nbLayoutImg')||'{}'))}catch(e){}}
+ /* ---- banery do wyboru (czysty CSS, bez nowych plików) ---- */
+ const imp=s=>s.replace(/;/g,'!important;');
+ const BASE='border-image:none;clip-path:none;outline:none;';
  const PRE={
-  ciemny:'background:#120a09!important;border:1px solid #5a4630!important;border-image:none!important;box-shadow:none!important;',
-  zlota:'background:#1a0e0ccc!important;border:2px solid #e8c16f!important;border-image:none!important;box-shadow:0 0 12px #e8c16f55!important;',
-  szklo:'background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.28)!important;border-image:none!important;box-shadow:none!important;backdrop-filter:blur(6px)!important;',
-  przezr:'background:none!important;border:none!important;border-image:none!important;box-shadow:none!important;',
-  krew:'background:#3a0a0e!important;border:2px solid #8a1a22!important;border-image:none!important;box-shadow:0 0 10px #8a1a2266!important;',
-  kamien:'background:#2a2623!important;border:3px ridge #6b6258!important;border-image:none!important;box-shadow:inset 0 0 12px #000a!important;',
-  bezobr:'border:none!important;border-image:none!important;box-shadow:none!important;'};
- const PREN={'':'Domyślny (z gry)',ciemny:'Ciemny',zlota:'Złota ramka',szklo:'Szkło',przezr:'Przezroczysty',krew:'Krwisty',kamien:'Kamień',bezobr:'Bez ramki (tło zostaje)'};
+  ciemny:{n:'Ciemny',c:'background:#120a09;border:1px solid #5a4630;box-shadow:none;'},
+  zlota:{n:'Złota ramka',c:'background:#1a0e0ccc;border:2px solid #e8c16f;box-shadow:0 0 12px #e8c16f55;'},
+  zloto2:{n:'Złoto kute',c:'border:3px solid transparent;background:linear-gradient(#1a0e0c,#1a0e0c) padding-box,linear-gradient(135deg,#f6e2a0,#9a6a24 30%,#f3d78a 50%,#8a5a1a 70%,#f6e2a0) border-box;box-shadow:0 0 14px #e8c16f44,0 4px 10px #000a;'},
+  gotyk:{n:'Gotycka podwójna',c:'background:linear-gradient(180deg,#24120fe6,#120807e6);border:1px solid #c9a45a;box-shadow:0 0 0 4px #120807,0 0 0 5px #c9a45a88,0 6px 14px #000c;'},
+  sciete:{n:'Ścięte rogi',c:'background:linear-gradient(135deg,#4a2a1e,#1a0d0a);border:none;box-shadow:inset 0 0 0 2px #c9a45a;clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px),0 12px);'},
+  wstega:{n:'Wstęga',c:'background:linear-gradient(180deg,#8a1f25,#4a0c10);border:none;box-shadow:inset 0 2px 0 #ffffff22,inset 0 -3px 0 #0006;clip-path:polygon(0 0,100% 0,calc(100% - 16px) 50%,100% 100%,0 100%,16px 50%);'},
+  krew:{n:'Krwisty',c:'background:#3a0a0e;border:2px solid #8a1a22;box-shadow:0 0 10px #8a1a2266;'},
+  zelazo:{n:'Żelazo z nitami',c:'background:radial-gradient(circle at 9px 9px,#c9c0b0 0 2px,transparent 3px),radial-gradient(circle at calc(100% - 9px) 9px,#c9c0b0 0 2px,transparent 3px),radial-gradient(circle at 9px calc(100% - 9px),#c9c0b0 0 2px,transparent 3px),radial-gradient(circle at calc(100% - 9px) calc(100% - 9px),#c9c0b0 0 2px,transparent 3px),linear-gradient(180deg,#4a4642,#2b2826);border:2px solid #77706a;box-shadow:inset 0 1px 0 #ffffff22,inset 0 -2px 6px #0008,0 2px 6px #000a;'},
+  kamien:{n:'Kamień',c:'background:#2a2623;border:3px ridge #6b6258;box-shadow:inset 0 0 12px #000a;'},
+  drewno:{n:'Drewno',c:'background:repeating-linear-gradient(90deg,#4a2e1a 0 7px,#55361f 7px 11px,#432817 11px 19px);border:2px solid #2a170c;box-shadow:inset 0 0 0 1px #7a5232,inset 0 0 14px #0009;'},
+  pergamin:{n:'Pergamin',c:'background:linear-gradient(180deg,#e9d8b0,#cdb27f);border:2px solid #6b4a24;box-shadow:inset 0 0 18px #7a5a2a88,0 2px 6px #000a;',fg:'#2a1a0e'},
+  kosc:{n:'Kość',c:'background:linear-gradient(180deg,#e8e0cc,#bdb196);border:2px solid #5d5444;box-shadow:inset 0 0 10px #5d544466;',fg:'#231d14'},
+  swiety:{n:'Zakon (jasny)',c:'background:linear-gradient(180deg,#f3ecd8,#d8c9a2);border:2px solid #c9a45a;box-shadow:0 0 14px #fff3c466;',fg:'#2a1e10'},
+  popiol:{n:'Popiół i żar',c:'background:linear-gradient(180deg,#3b3836,#1d1b1a);border:1px solid #6a625c;box-shadow:inset 0 -12px 18px -8px #ff6a2a66,0 2px 8px #000a;'},
+  zar:{n:'Ognisko',c:'background:radial-gradient(ellipse at 50% 130%,#ff7a2a77,transparent 65%),#1a0c08;border:1px solid #a8481c;box-shadow:0 0 12px #ff6a2a44;'},
+  ksiezyc:{n:'Księżycowa noc',c:'background:linear-gradient(180deg,#16203aee,#0a0e1aee);border:1px solid #8aa4d6;box-shadow:0 0 12px #8aa4d644;',fg:'#dfe8ff'},
+  runy:{n:'Runy',c:'background:repeating-linear-gradient(45deg,#ffffff08 0 2px,transparent 2px 10px),linear-gradient(180deg,#1b1413,#0d0909);border:1px solid #6a8a6a;box-shadow:0 0 10px #6aaa7a33,inset 0 0 12px #6aaa7a22;'},
+  trucizna:{n:'Trucizna',c:'background:linear-gradient(180deg,#1e2a12,#0e1608);border:1px solid #7aa83a;box-shadow:0 0 10px #8ac84a44;'},
+  szklo:{n:'Szkło',c:'background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.28);box-shadow:none;backdrop-filter:blur(6px);'},
+  cien:{n:'Pas cienia',c:'background:linear-gradient(90deg,transparent,#000c 18%,#000c 82%,transparent);border:none;box-shadow:none;'},
+  przezr:{n:'Przezroczysty',c:'background:none;border:none;box-shadow:none;'},
+  bezobr:{n:'Bez ramki (tło zostaje)',c:'border:none;box-shadow:none;'}};
+ /* ramki z gry jako baner 9-polowy */
+ try{for(const [k,n] of [['ramka-okno','Z gry: okno'],['ramka-karta','Z gry: karta'],['przycisk-zwykly','Z gry: przycisk']])if(typeof PREMIUM_ASSETS==='object'&&PREMIUM_ASSETS[k])
+  PRE['gra-'+k]={n,c:'background:none;border:20px solid transparent;box-shadow:none;',bi:'url("'+PREMIUM_ASSETS[k]+'") 30% fill / 20px stretch'}}catch(e){}
+ const preCss=p=>imp(BASE+p.c)+(p.bi?'border-image:'+p.bi+'!important;':'');
  const PFX='#orient'.repeat(60)+' ';
  function css(){let o='',o2='';for(const k in L){const a=L[k];if(!a)continue;const e=a[4]||{};
   if(a[0]||a[1]||a[2]!==1||e.rot)o+=k+'{translate:'+r2(a[0])+'vw '+r2(a[1])+'vw!important;scale:'+(Math.round(a[2]*1000)/1000)+'!important'+(e.rot?';rotate:'+e.rot+'deg!important':'')+'}\n';
-  let d='';
-  if(e.pre&&PRE[e.pre])d+=PRE[e.pre];
+  let d='';const P=e.pre&&PRE[e.pre];
+  if(P)d+=preCss(P);
   if(e.img&&IMG[e.img]){const u='url("'+IMG[e.img]+'")';
    if(e.fit==='slice')d+='background:none!important;background-image:none!important;border:24px solid transparent!important;border-image:'+u+' '+(e.sl||30)+'% fill / 24px stretch!important;box-shadow:none!important;';
    else d+='background:'+u+' center/100% 100% no-repeat!important;border:none!important;border-image:none!important;box-shadow:none!important;'}
@@ -367,25 +394,50 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
   if(e.br!=null&&e.br!==100)d+='filter:brightness('+e.br/100+')!important;';
   if(e.fs&&e.fs!==100)d+='font-size:'+e.fs+'%!important;';
   if(e.hide)d+=EDM?'opacity:.25!important;':'display:none!important;';
-  const pk=k.indexOf('body>')===0?k:PFX+k;
+  const pk=/^body[ >]/.test(k)?k:PFX+k,fg=e.fg||(P&&P.fg);
   if(d)o2+=pk+'{'+d+'}\n';
-  if(e.fg)o2+=pk+', '+pk+' *{color:'+e.fg+'!important}\n'}
+  if(fg)o2+=pk+', '+pk+' *{color:'+fg+'!important}\n'}
   st.textContent=o+o2}
  css();
+ if(EDIT||PODGLAD)idbAll().then(o=>{Object.assign(IMG,o);css()}).catch(()=>{});
+ if(PODGLAD){addEventListener('storage',e=>{if(e.key===LSK||e.key==='nbLayoutImg'||e.key==='nbLayoutPing'){readLS();idbAll().then(o=>{Object.assign(IMG,o);css()}).catch(()=>css())}});return}
  if(!EDIT)return;
  const OV='#title,#prep,#opts,#kap,#manual,#pause,#lvl,#shop,#end,#conf,#intro,#lang,#dialog';
- let mode='play',sel=null,last=null,hist=[],ui,box,gx,gy,drag=null,panel;
- const $=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+ const OVN={title:'Menu główne / rozdziały',prep:'Przygotowanie do nocy',opts:'Opcje',kap:'Kaplica',manual:'Instrukcja',pause:'Pauza',lvl:'Awans (karty)',shop:'Sklep Margi',end:'Koniec nocy',conf:'Potwierdzenie',intro:'Wstęp fabularny',lang:'Wybór języka',dialog:'Rozmowa',gra:'Ekran gry (HUD)',inne:'Inne'};
+ let mode='play',sel=null,last=null,hist=[],fut=[],ui,box,gx,gy,drag=null,panel,padOn=false,dry=null;
+ const mkE=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
  const inUi=e=>!!(e&&e.closest&&e.closest('#nbed'));
- function keyOf(el){
-  if(el.id&&document.querySelectorAll('#'+CSS.escape(el.id)).length===1)return '#'+CSS.escape(el.id);
-  const p=[];let c=el;
+ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ /* ---- stałe klucze: id, potem atrybut data-*, potem klasa w obrębie najbliższego id, na końcu ścieżka ---- */
+ const uniq=s=>{try{return document.querySelectorAll(s).length===1}catch(e){return false}};
+ const STATE=/^(on|off|pf|sel|selected|active|open|hidden|lk|locked|focus|hover|done|cur|now|nb2-more|lvsoft|lvquick|lvout|choice-wait|dis|disabled|is-|has-|nbed)/;
+ const SKIPA=/^(data-opening|data-mp|data-state|data-on|data-sel|data-v$)/;
+ function pathKey(el){const p=[];let c=el;
   while(c&&c!==document.body){
-   if(c.id&&c!==el){p.unshift('#'+CSS.escape(c.id));break}
+   if(c.id&&c!==el&&uniq('#'+CSS.escape(c.id))){p.unshift('#'+CSS.escape(c.id));break}
    const par=c.parentElement;if(!par)break;
    p.unshift(c.tagName.toLowerCase()+':nth-child('+(Array.prototype.indexOf.call(par.children,c)+1)+')');
    c=par}
   return p.join('>').replace(/^([^#])/,'body>$1')}
+ function ownKey(el){
+  if(el.id&&uniq('#'+CSS.escape(el.id)))return '#'+CSS.escape(el.id);
+  let anc=el.parentElement;while(anc&&anc!==document.body&&!(anc.id&&uniq('#'+CSS.escape(anc.id))))anc=anc.parentElement;
+  const base=anc&&anc!==document.body?'#'+CSS.escape(anc.id)+' ':'body ',tag=el.tagName.toLowerCase();
+  for(const at of el.attributes){const n=at.name;if(!(n.startsWith('data-')||n==='name'||n==='for'||n==='href'&&!/^javascript/.test(at.value))||SKIPA.test(n)||!at.value||at.value.length>60)continue;
+   const s=base+tag+'['+n+'="'+CSS.escape(at.value)+'"]';if(uniq(s))return s}
+  for(const c of el.classList){if(STATE.test(c))continue;const s=base+tag+'.'+CSS.escape(c);if(uniq(s))return s;break}
+  return null}
+ function keyOf(el){const k=ownKey(el);if(k)return k;
+  /* element bez własnego klucza: szukamy przodka ze stałym kluczem (np. przycisk z data-*) i idziemy od niego */
+  let a=el.parentElement,rel=[],c=el;
+  for(let i=0;i<5&&a&&a!==document.body;i++){
+   rel.unshift(c.tagName.toLowerCase()+':nth-child('+(Array.prototype.indexOf.call(a.children,c)+1)+')');
+   const ak=ownKey(a);if(ak){const t=el.tagName.toLowerCase(),cl=[...el.classList].find(x=>!STATE.test(x));
+    for(const s of [ak+' '+t+(cl?'.'+CSS.escape(cl):''),ak+' '+t,ak+'>'+rel.join('>')])if(uniq(s)&&document.querySelector(s)===el)return s}
+   c=a;a=a.parentElement}
+  return pathKey(el)}
+ function migrate(){let ch=0;for(const k of Object.keys(L)){if(!/nth-child/.test(k))continue;let el=null;try{el=document.querySelector(k)}catch(e){}if(!el)continue;const nk=keyOf(el);if(nk!==k&&!L[nk]){L[nk]=L[k];delete L[k];ch++}}if(ch)save();return ch}
+ const found=k=>{try{return !!document.querySelector(k)}catch(e){return false}};
  const screenOf=el=>{const o=el.closest(OV);return o?(o.id||'inne'):'gra'};
  function pick(el){ /* pomiń elementy liniowe i malutkie */
   while(el&&el.parentElement&&el!==document.body){
@@ -393,13 +445,16 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
    if(cs.display!=='inline'&&r.width>14&&r.height>10)break;el=el.parentElement}
   return (el&&el!==document.body&&el!==document.documentElement)?el:null}
  const get=k=>L[k]||[0,0,1,''];
- function save(){try{localStorage.setItem(LSK,JSON.stringify(L))}catch(e){}css();info()}
- function push(){hist.push(JSON.stringify(L));if(hist.length>80)hist.shift()}
- function setSel(el){sel=el;info();draw()}
- function curKey(){return sel?keyOf(sel):null}
+ let saveT=0;
+ function save(){try{localStorage.setItem(LSK,JSON.stringify(L));localStorage.setItem('nbLayoutPing',String(Date.now()))}catch(e){}css();info();clearTimeout(saveT);saveT=setTimeout(list,120)}
+ function push(){hist.push(JSON.stringify(L));if(hist.length>120)hist.shift();fut=[]}
+ function undo(){if(!hist.length)return;fut.push(JSON.stringify(L));L=JSON.parse(hist.pop());save()}
+ function redo(){if(!fut.length)return;hist.push(JSON.stringify(L));L=JSON.parse(fut.pop());save()}
+ function setSel(el){if(padOn&&sel)sel.classList.remove('pf');sel=el;info();draw()}
  function put(k,a){push();const sc=screenOf(sel);L[k]=[r2(a[0]),r2(a[1]),Math.max(.2,Math.min(4,a[2])),sc].concat(a[4]?[a[4]]:[]);save()}
  /* ---- UI ---- */
- ui=$('div');ui.id='nbed';
+ ui=mkE('div');ui.id='nbed';
+ const tiles=Object.keys(PRE).map(k=>'<button class="pv" data-pre="'+k+'" title="'+esc(PRE[k].n)+'"><i style="'+esc(preCss(PRE[k])+(PRE[k].fg?'color:'+PRE[k].fg+'!important;':''))+'">Aa</i><span>'+esc(PRE[k].n)+'</span></button>').join('');
  ui.innerHTML=`<style>
  #nbed{position:fixed;inset:0;z-index:2147483000;pointer-events:none;font:12px/1.35 system-ui,Segoe UI,sans-serif;color:#f3e3b8}
  #nbed *{cursor:default!important;box-sizing:border-box}
@@ -408,29 +463,46 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
  #nbed .hd{position:absolute;width:16px;height:16px;background:#e8c16f;border:2px solid #000;border-radius:3px;pointer-events:auto;cursor:nwse-resize!important}
  #nbed .hd.a{left:-9px;top:-9px}#nbed .hd.b{right:-9px;top:-9px}#nbed .hd.c{left:-9px;bottom:-9px}#nbed .hd.d{right:-9px;bottom:-9px}
  #nbed .g{position:fixed;background:#4fd1ff;display:none}
- #nbed .pn{position:fixed;top:8px;right:8px;width:290px;max-height:calc(100vh - 16px);overflow:auto;background:#150d0cee;border:1px solid #e8c16f;border-radius:8px;padding:8px;pointer-events:auto}
- #nbed .pn.l{right:auto;left:8px}
- #nbed .pn b.t{display:block;margin-bottom:4px;color:#e8c16f;cursor:pointer!important}
+ #nbed .pn{position:fixed;top:8px;right:8px;width:310px;max-height:calc(100vh - 16px);overflow:auto;background:#150d0cf2;border:1px solid #e8c16f;border-radius:8px;padding:8px;pointer-events:auto}
+ #nbed .pn.l{right:auto;left:8px}#nbed .pn.min>:not(.top){display:none}
+ #nbed .top b.t{display:inline-block;margin:0 6px 4px 0;color:#e8c16f;cursor:pointer!important}
  #nbed button{background:#3a2420;color:#f3e3b8;border:1px solid #8a6a3a;border-radius:5px;padding:4px 7px;margin:2px 2px 0 0;font:inherit;pointer-events:auto}
- #nbed button:hover{background:#5a3a2e}#nbed button.on{background:#e8c16f;color:#1a0e0c}
+ #nbed button:hover{background:#5a3a2e}#nbed button.on{background:#e8c16f;color:#1a0e0c}#nbed button:disabled{opacity:.4}
+ #nbed details{border-top:1px solid #6a4a2a;margin-top:6px;padding-top:4px}#nbed summary{color:#e8c16f;font-weight:600;cursor:pointer!important;padding:2px 0}
  #nbed .inf{margin:4px 0;color:#cdb98a;word-break:break-all;min-height:2.7em}
+ #nbed .ok{color:#9ad08a}#nbed .warn{color:#ffb35a}
  #nbed textarea{width:100%;height:46px;background:#0b0605;color:#f3e3b8;border:1px solid #6a4a2a;border-radius:4px;font:10px monospace;pointer-events:auto}
- #nbed .st{border-top:1px solid #6a4a2a;margin-top:4px;padding-top:4px}#nbed .st label{display:flex;align-items:center;gap:6px;margin:3px 0}#nbed .st label span{width:92px;flex:none}#nbed .st input[type=range]{flex:1;pointer-events:auto;min-width:0}#nbed .st select{flex:1;background:#0b0605;color:#f3e3b8;border:1px solid #6a4a2a;pointer-events:auto;min-width:0}#nbed .st input[type=color]{width:36px;height:22px;padding:0;border:1px solid #6a4a2a;background:none;pointer-events:auto}
+ #nbed .st label{display:flex;align-items:center;gap:6px;margin:3px 0}#nbed .st label span{width:92px;flex:none}#nbed .st input[type=range]{flex:1;pointer-events:auto;min-width:0}#nbed select{flex:1;background:#0b0605;color:#f3e3b8;border:1px solid #6a4a2a;pointer-events:auto;min-width:0;padding:3px}#nbed .st input[type=color]{width:36px;height:22px;pointer-events:auto;padding:0;border:1px solid #6a4a2a;background:none}
+ #nbed .gal{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:4px 0}
+ #nbed .gal .pv{margin:0;padding:3px;display:flex;flex-direction:column;align-items:center;gap:2px;background:#0b0605}
+ #nbed .gal .pv.on{outline:2px solid #e8c16f}
+ #nbed .gal .pv i{display:flex;align-items:center;justify-content:center;width:100%;height:30px;font:600 13px Cinzel,Georgia,serif;font-style:normal;color:#f3e3b8;border-radius:2px}
+ #nbed .gal .pv span{font-size:9.5px;line-height:1.1;text-align:center;color:#cdb98a}
+ #nbed .lst{max-height:190px;overflow:auto;margin-top:4px}
+ #nbed .lst div{display:flex;align-items:center;gap:4px;padding:2px 3px;border-radius:4px;pointer-events:auto}
+ #nbed .lst div:hover{background:#3a2420}#nbed .lst div.cur{background:#5a3a2e}
+ #nbed .lst div span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer!important}
+ #nbed .lst div button{padding:0 5px;margin:0}
+ #nbed .lst h4{margin:5px 0 1px;font-size:11px;color:#e8c16f}
+ #nbed .row{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
  #nbed .hp{color:#a89870;font-size:11px;margin-top:4px}
+ #nbed .pvw{position:fixed;inset:0;z-index:2;background:#000d;display:none;align-items:center;justify-content:center;pointer-events:auto;flex-direction:column;gap:6px}
+ #nbed .pvw.on{display:flex}#nbed .pvw .fr{position:relative;border:2px solid #e8c16f;box-shadow:0 0 30px #000;overflow:hidden;background:#000}
+ #nbed .pvw iframe{border:0;transform-origin:0 0;position:absolute;left:0;top:0;pointer-events:auto}
+ #nbed .pvw .bar{display:flex;gap:6px;align-items:center;color:#f3e3b8}
  </style>
  <div class="box"><i class="hd a" data-h="a"></i><i class="hd b" data-h="b"></i><i class="hd c" data-h="c"></i><i class="hd d" data-h="d"></i></div>
  <div class="g gx" style="width:1px;top:0;bottom:0"></div><div class="g gy" style="height:1px;left:0;right:0"></div>
- <div class="pn"><b class="t" data-a="side">EDYTOR MENU ⇄</b>
-  <button data-a="mode" class="on">✎ Edycja (F2)</button><button data-a="undo">↶ Cofnij</button><br>
-  <button data-a="up">▲ Rodzic</button><button data-a="down">▼ Dziecko</button><button data-a="s-">Mniejszy −</button><button data-a="s+">Większy +</button><br>
-  <button data-a="r1">Reset elementu</button><button data-a="r2">Reset ekranu</button><button data-a="r3">Reset wszystkiego</button>
-<div class="st" data-st>
-   <label><span>Własny obraz</span><input type="file" accept="image/*" data-file style="flex:1;min-width:0;pointer-events:auto"></label>
-   <label><span>Sposób</span><select data-p="fit"><option value="">Rozciągnij na cały baner</option><option value="slice">Ramka 9-pól (rogi stałe)</option></select></label>
-   <label><span>Grubość rogów %</span><input type="range" data-p="sl" min="5" max="45" value="30"></label>
-   <button data-x="img">✕ Usuń obraz</button>
-  
-   <label><span>Rodzaj baneru</span><select data-p="pre">${Object.keys(PREN).map(k=>'<option value="'+k+'">'+PREN[k]+'</option>').join('')}</select></label>
+ <div class="pvw"><div class="bar"><b data-pvt></b><button data-a="pvrel">⟳ Odśwież</button><button data-a="pvx">✕ Zamknij podgląd</button></div><div class="fr"><iframe title="Podgląd"></iframe></div><div class="hp">W podglądzie klikasz normalnie. Zmiany z edytora pojawiają się tu same.</div></div>
+ <div class="pn">
+  <div class="top"><b class="t" data-a="side" title="Przenieś panel na drugą stronę">EDYTOR MENU ⇄</b><button data-a="min" title="Zwiń / rozwiń panel">▁</button><br>
+  <button data-a="mode" class="on">✎ Edycja (F2)</button><button data-a="undo" title="Ctrl+Z">↶ Cofnij</button><button data-a="redo" title="Ctrl+Y">↷ Ponów</button></div>
+  <div class="inf" data-i>Kliknij element na ekranie.</div>
+  <div class="row"><button data-a="up">▲ Rodzic</button><button data-a="down">▼ Dziecko</button><button data-a="s-">Mniejszy −</button><button data-a="s+">Większy +</button></div>
+  <div class="row"><button data-a="r1">Reset elementu</button><button data-a="r2">Reset ekranu</button><button data-a="r3">Reset wszystkiego</button></div>
+  <details open><summary>Baner i wygląd</summary><div class="st" data-st>
+   <div class="hp">Kliknij baner, żeby nałożyć go na zaznaczony element. „Domyślny” wraca do wyglądu z gry.</div>
+   <div class="gal"><button class="pv" data-pre="" title="Domyślny (z gry)"><i style="border:1px dashed #8a6a3a">—</i><span>Domyślny (z gry)</span></button>${tiles}</div>
    <label><span>Kolor tła</span><input type="color" data-p="bg" value="#2a1410"><button data-x="bg">✕</button></label>
    <label><span>Kolor ramki</span><input type="color" data-p="bd" value="#e8c16f"><button data-x="bd">✕</button></label>
    <label><span>Kolor tekstu</span><input type="color" data-p="fg" value="#f3e3b8"><button data-x="fg">✕</button></label>
@@ -440,30 +512,63 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
    <label><span>Zaokrąglenie</span><input type="range" data-p="r" min="0" max="40" value="0"></label>
    <label><span>Obrót</span><input type="range" data-p="rot" min="-30" max="30" step="0.5" value="0"></label>
    <label><span>Ukryj element</span><input type="checkbox" data-p="hide"></label>
-   <button data-a="rstyle">Reset wyglądu elementu</button>
-  </div>
-  <div class="inf" data-i>Kliknij element na ekranie.</div>
-  <button data-a="copy">📋 Kopiuj układ</button><button data-a="load">⬇ Wczytaj z pola</button>
-  <textarea data-t placeholder="Tu pojawi się układ do wklejenia Claude'owi. Można też wkleić układ i kliknąć Wczytaj."></textarea>
-  <div class="hp">Przeciągnij = ruch · róg = rozmiar · strzałki = ruch (Shift ×10) · +/− = rozmiar · Del = reset elementu · Alt = bez przyciągania · F2 = przełącz Edycja/Gra (w trybie Gra klikasz po grze normalnie, żeby zmienić ekran).</div>
+   <label><span>Własny obraz</span><input type="file" accept="image/*" data-file style="flex:1;min-width:0;pointer-events:auto"></label>
+   <label><span>Sposób</span><select data-p="fit"><option value="">Rozciągnij na cały baner</option><option value="slice">Ramka 9-pól (rogi stałe)</option></select></label>
+   <label><span>Grubość rogów %</span><input type="range" data-p="sl" min="5" max="45" value="30"></label>
+   <button data-x="img">✕ Usuń obraz</button><button data-a="rstyle">Reset wyglądu elementu</button><button data-a="cpst" title="Skopiuj wygląd zaznaczonego elementu">⧉ Kopiuj wygląd</button><button data-a="pst" title="Wklej skopiowany wygląd na zaznaczony element">⎘ Wklej wygląd</button>
+  </div></details>
+  <details open><summary data-lh>Zmiany</summary><div class="lst" data-l></div></details>
+  <details><summary>Podgląd</summary>
+   <div class="row"><select data-scr>${Object.keys(OVN).filter(k=>k!=='gra'&&k!=='inne').map(k=>'<option value="'+k+'">'+OVN[k]+'</option>').join('')}</select><button data-a="scr">Pokaż</button><button data-a="scrx">✕</button></div>
+   <div class="hp">Awans, sklep i pauza pokażą prawdziwą zawartość w trakcie nocy (przełącz F2 na Grę, rozpocznij noc, wróć F2 i kliknij Pokaż). Inaczej widać sam ekran bez danych.</div>
+   <div class="row" style="margin-top:4px"><button data-a="lang"></button><button data-a="pad">🎮 Podświetlenie pada</button></div>
+   <div class="hp">Inne ekrany (otwiera grę w okienku o tej wielkości):</div>
+   <div class="row"><button data-res="1280x720">1280×720</button><button data-res="1920x1080">1920×1080</button><button data-res="1280x800">16:10 / Deck</button><button data-res="2560x1080">21:9</button><button data-res="1024x768">4:3</button></div>
+  </details>
+  <details open><summary>Zapis</summary>
+   <div class="hp" data-sv>Każda zmiana zapisuje się sama w tej przeglądarce. Plik układu to kopia bezpieczeństwa i paczka dla Claude'a.</div>
+   <div class="row"><button data-a="file" title="Ctrl+S">💾 Zapisz plik układu</button><button data-a="open">📂 Wczytaj plik</button><input type="file" accept=".json,.txt,application/json" data-lf hidden></div>
+   <div class="row"><button data-a="copy">📋 Kopiuj jako tekst</button><button data-a="load">⬇ Wczytaj z pola</button></div>
+   <textarea data-t placeholder="Tu pojawi się układ jako tekst. Można też wkleić układ i kliknąć Wczytaj z pola."></textarea>
+  </details>
+  <div class="hp">Przeciągnij = ruch · róg = rozmiar · strzałki = ruch (Shift ×10) · +/− = rozmiar · Del = reset elementu · Alt = bez przyciągania · Ctrl+Z / Ctrl+Y = cofnij / ponów · Ctrl+S = plik · F2 = Edycja/Gra (w trybie Gra klikasz po grze normalnie).</div>
  </div>`;
  document.body.append(ui);
  box=ui.querySelector('.box');gx=ui.querySelector('.gx');gy=ui.querySelector('.gy');panel=ui.querySelector('.pn');
- const ta=ui.querySelector('[data-t]'),inf=ui.querySelector('[data-i]');
+ const ta=ui.querySelector('[data-t]'),inf=ui.querySelector('[data-i]'),lst=ui.querySelector('[data-l]'),lh=ui.querySelector('[data-lh]'),pvw=ui.querySelector('.pvw'),ifr=pvw.querySelector('iframe');
+ ui.querySelector('[data-a=lang]').textContent=EN?'Język: EN → przełącz na PL':'Język: PL → przełącz na EN';
  function syncSt(){const e=sel?(get(keyOf(sel))[4]||{}):{};
   ui.querySelectorAll('[data-p]').forEach(c=>{const n=c.dataset.p,v=e[n];
    if(c.type==='checkbox')c.checked=!!v;else if(c.tagName==='SELECT')c.value=v||'';
    else if(c.type==='color')c.value=v||c.defaultValue;
-   else c.value=v!=null?v:(n==='r'||n==='rot'?0:n==='sl'?30:100)})}
- function info(){syncSt();if(!sel){inf.textContent='Kliknij element na ekranie.';return}
-  const k=keyOf(sel),a=get(k);inf.innerHTML='<b>'+screenOf(sel)+'</b> · '+k.replace(/^body>/,'').slice(-70)+'<br>x '+a[0]+' · y '+a[1]+' · skala '+a[2]}
+   else c.value=v!=null?v:(n==='r'||n==='rot'?0:n==='sl'?30:100)});
+  ui.querySelectorAll('.gal .pv').forEach(b=>b.classList.toggle('on',!!sel&&(e.pre||'')===b.dataset.pre))}
+ function info(){syncSt();ui.querySelector('[data-a=undo]').disabled=!hist.length;ui.querySelector('[data-a=redo]').disabled=!fut.length;
+  if(!sel){inf.textContent='Kliknij element na ekranie.';return}
+  const k=keyOf(sel),a=get(k),stab=/nth-child/.test(k)?'<span class="warn">klucz z kolejności – może się zgubić po zmianie menu</span>':'<span class="ok">klucz stały</span>';
+  inf.innerHTML='<b>'+esc(OVN[screenOf(sel)]||screenOf(sel))+'</b> · '+esc(k.replace(/^body[ >]/,'').slice(-70))+'<br>x '+a[0]+' · y '+a[1]+' · skala '+a[2]+' · '+stab}
+ /* ---- lista zmian ---- */
+ function desc(a){const e=a[4]||{},t=[];if(a[0]||a[1])t.push('ruch');if(a[2]!==1)t.push('rozmiar');if(e.pre)t.push(PRE[e.pre]?PRE[e.pre].n:e.pre);if(e.img)t.push('obraz');if(e.hide)t.push('ukryty');
+  if(['bg','bd','fg','o','br','fs','r','rot'].some(n=>e[n]!=null&&e[n]!==''))t.push('wygląd');return t.join(', ')||'—'}
+ function list(){const ks=Object.keys(L).filter(k=>L[k]);let miss=0;const g={};
+  for(const k of ks){(g[L[k][3]||'inne']=g[L[k][3]||'inne']||[]).push(k);if(!found(k))miss++}
+  lh.innerHTML='Zmiany ('+ks.length+')'+(miss?' · <span class="warn">⚠ '+miss+' nie znaleziono</span>':'');
+  const ck=sel?keyOf(sel):null;let h='';
+  for(const sc of Object.keys(g).sort()){h+='<h4>'+esc(OVN[sc]||sc)+'</h4>';
+   for(const k of g[sc]){const f=found(k),nm=k.replace(/^body[ >]/,'').split(/[ >]/).pop();
+    h+='<div class="'+(k===ck?'cur':'')+'" data-k="'+esc(k)+'" title="'+esc(k)+'"><span>'+(f?'':'⚠ ')+esc(nm)+' <small style="color:#a89870">'+esc(desc(L[k]))+'</small></span><button data-del title="Usuń tę zmianę">✕</button></div>'}}
+  lst.innerHTML=h||'<div class="hp">Brak zmian.</div>';
+  if(miss)lst.insertAdjacentHTML('beforeend','<div class="hp">⚠ = elementu nie ma teraz na stronie. Jeśli pojawia się dopiero w grze (np. karty awansu), wszystko w porządku. Jeśli nie, zmiana trafiła w element, którego już nie ma: usuń ją.</div>')}
+ lst.addEventListener('click',e=>{const row=e.target.closest('[data-k]');if(!row)return;const k=row.dataset.k;
+  if(e.target.closest('[data-del]')){push();delete L[k];save();return}
+  let el=null;try{el=document.querySelector(k)}catch(x){}if(el){setSel(el);el.scrollIntoView&&el.scrollIntoView({block:'nearest'})}else inf.innerHTML='<span class="warn">Tego elementu nie ma teraz na ekranie.</span> Otwórz ekran „'+esc(OVN[L[k][3]]||L[k][3])+'” (Podgląd → Pokaż).';list()});
  function draw(){if(!sel||!document.contains(sel)||mode!=='edit'){box.style.display='none';return}
   const r=sel.getBoundingClientRect();if(r.width<1){box.style.display='none';return}
   Object.assign(box.style,{display:'block',left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'})}
- (function lp(){draw();requestAnimationFrame(lp)})();
+ (function lp(){draw();if(padOn){document.documentElement.classList.add('padprio');document.body.classList.add('padnav');if(sel&&!sel.classList.contains('pf'))sel.classList.add('pf')}requestAnimationFrame(lp)})();
  function setMode(m){mode=m;EDM=m==='edit';css();document.body.classList.toggle('nbed-edit',m==='edit');
   const b=ui.querySelector('[data-a=mode]');b.classList.toggle('on',m==='edit');b.textContent=m==='edit'?'✎ Edycja (F2)':'▶ Gra (F2)';draw()}
- setMode('edit');
+ setMode('edit');migrate();list();
  /* ---- blokada gry w trybie edycji ---- */
  const stop=e=>{if(mode!=='edit'||inUi(e.target))return;e.preventDefault();e.stopImmediatePropagation()};
  ['click','dblclick','contextmenu','mouseup','mousedown','touchstart','wheel','auxclick'].forEach(t=>window.addEventListener(t,stop,true));
@@ -472,7 +577,7 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
   e.preventDefault();e.stopImmediatePropagation();
   const raw=document.elementFromPoint(e.clientX,e.clientY);if(!raw)return;last=raw;
   let el=pick(raw);if(!el)return;
-  if(!(sel&&(el===sel||sel.contains(el)))){setSel(el)}
+  if(!(sel&&(el===sel||sel.contains(el)))){setSel(el);list()}
   startDrag(e,'move')},true);
  window.addEventListener('pointerup',e=>{if(mode!=='edit')return;stop(e);endDrag()},true);
  ui.querySelectorAll('.hd').forEach(h=>h.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();startDrag(e,'size')}));
@@ -494,7 +599,7 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
   if(d.kind==='move'){
    let dx=e.clientX-d.x0,dy=e.clientY-d.y0;
    if(!e.altKey){if(!d.T)d.T=targets();
-    const sn=(vals,T)=>{let best=null;for(const v of vals)for(const t of T){const df=t-v;if(Math.abs(df)<8&&(best===null||Math.abs(df)<Math.abs(best.d))||false)best={d:df,t}}return best};
+    const sn=(vals,T)=>{let best=null;for(const v of vals)for(const t of T){const df=t-v;if(Math.abs(df)<8&&(best===null||Math.abs(df)<Math.abs(best.d)))best={d:df,t}}return best};
     const bx=sn([d.r.left+dx,d.r.left+d.r.width/2+dx,d.r.right+dx],d.T.x),by=sn([d.r.top+dy,d.r.top+d.r.height/2+dy,d.r.bottom+dy],d.T.y);
     if(bx){dx+=bx.d;gx.style.display='block';gx.style.left=bx.t+'px'}else gx.style.display='none';
     if(by){dy+=by.d;gy.style.display='block';gy.style.top=by.t+'px'}else gy.style.display='none'}
@@ -507,58 +612,107 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
  /* ---- klawisze ---- */
  window.addEventListener('keydown',e=>{
   if(e.key==='F2'){e.preventDefault();setMode(mode==='edit'?'play':'edit');return}
-  if(mode!=='edit'||inUi(e.target)&&/TEXTAREA/.test(e.target.tagName))return;
+  const ctrl=e.ctrlKey||e.metaKey;
+  if(ctrl&&(e.key==='s'||e.key==='S')){e.preventDefault();e.stopImmediatePropagation();saveFile();return}
+  if(mode!=='edit'||inUi(e.target)&&/TEXTAREA|INPUT|SELECT/.test(e.target.tagName))return;
   const k=sel&&keyOf(sel);let used=true;
-  if(sel&&/^Arrow/.test(e.key)){const s=(e.shiftKey?1:.1),a=get(k).slice();
+  if(ctrl&&(e.key==='z'||e.key==='Z')){e.shiftKey?redo():undo()}
+  else if(ctrl&&(e.key==='y'||e.key==='Y')){redo()}
+  else if(sel&&/^Arrow/.test(e.key)){const s=(e.shiftKey?1:.1),a=get(k).slice();
    if(e.key==='ArrowLeft')a[0]-=s;if(e.key==='ArrowRight')a[0]+=s;if(e.key==='ArrowUp')a[1]-=s;if(e.key==='ArrowDown')a[1]+=s;put(k,a)}
   else if(sel&&(e.key==='+'||e.key==='=')){const a=get(k).slice();a[2]*=e.shiftKey?1.1:1.02;put(k,a)}
   else if(sel&&(e.key==='-'||e.key==='_')){const a=get(k).slice();a[2]/=e.shiftKey?1.1:1.02;put(k,a)}
   else if(sel&&(e.key==='Delete'||e.key==='Backspace')){push();delete L[k];save()}
-  else if(e.key==='z'&&(e.ctrlKey||e.metaKey)){undo()}
   else used=false;
   if(used||!inUi(e.target)){e.preventDefault();e.stopImmediatePropagation()}},true);
  window.addEventListener('keyup',e=>{if(mode==='edit'&&!inUi(e.target)){e.preventDefault();e.stopImmediatePropagation()}},true);
- function undo(){if(!hist.length)return;L=JSON.parse(hist.pop());save()}
- function dump(){const o={};for(const k in L)if(L[k]&&(L[k][0]||L[k][1]||L[k][2]!==1||L[k][4]))o[k]=L[k];
-  return 'NBLAYOUT '+innerWidth+'x'+innerHeight+' '+JSON.stringify(o)}
+ /* ---- zapis do pliku / wczytanie ---- */
+ function dump(){const o={};for(const k in L)if(L[k]&&(L[k][0]||L[k][1]||L[k][2]!==1||L[k][4]))o[k]=L[k];return o}
+ const usedImg=o=>{const r={};for(const k in o){const n=o[k][4]&&o[k][4].img;if(n&&IMG[n])r[n]=IMG[n]}return r};
+ function saveFile(){const o=dump(),d=new Date(),p=n=>String(n).padStart(2,'0');
+  const data={typ:'NBLAYOUT',wersja:2,okno:[innerWidth,innerHeight],data:d.toISOString(),uklad:o,obrazy:usedImg(o)};
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,1)],{type:'application/json'}));
+  a.download='uklad-menu-'+d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'_'+p(d.getHours())+p(d.getMinutes())+'.json';
+  ui.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
+  const sv=ui.querySelector('[data-sv]');sv.innerHTML='<span class="ok">✓ Plik zapisany w Pobranych ('+esc(a.download)+'). Wyślij go Claude\'owi, żeby wbudował układ do gry.</span>'}
+ function loadData(txt){let o=null;try{o=JSON.parse(txt)}catch(x){const m=String(txt).match(/\{[\s\S]*\}/);if(m)try{o=JSON.parse(m[0])}catch(y){}}
+  if(!o||typeof o!=='object'){inf.innerHTML='<span class="warn">Błędny układ – nie wczytano.</span>';return}
+  const u=o.typ==='NBLAYOUT'?o.uklad||{}:o;push();L=u;
+  if(o.obrazy)for(const n in o.obrazy){IMG[n]=o.obrazy[n];idbPut(n,o.obrazy[n]).catch(()=>{})}
+  migrate();save();inf.innerHTML='<span class="ok">✓ Wczytano '+Object.keys(L).length+' zmian.</span>'}
+ const lf=ui.querySelector('[data-lf]');
+ lf.addEventListener('change',()=>{const f=lf.files[0];if(!f)return;const fr=new FileReader();fr.onload=()=>loadData(fr.result);fr.readAsText(f);lf.value=''});
+ /* ---- własny obraz ---- */
  ui.addEventListener('change',e=>{const f=e.target.closest('[data-file]');if(!f||!f.files[0]||!sel)return;
   const file=f.files[0],name=file.name.replace(/[^\w.\-]/g,'_'),fr=new FileReader();
   fr.onload=()=>{const im=new Image();im.onload=()=>{
-   const sc=Math.min(1,1200/im.width),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);
-   c.getContext('2d').drawImage(im,0,0,c.width,c.height);IMG[name]=c.toDataURL('image/webp',.88);
-   try{localStorage.setItem('nbLayoutImg',JSON.stringify(IMG))}catch(x){inf.textContent='Obraz za duży do zapamiętania w przeglądarce – działa do odświeżenia.'}
+   const sc=Math.min(1,1600/im.width),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);
+   c.getContext('2d').drawImage(im,0,0,c.width,c.height);IMG[name]=c.toDataURL('image/webp',.9);
+   idbPut(name,IMG[name]).catch(()=>{inf.textContent='Nie udało się zapamiętać obrazu – działa do odświeżenia. Zapisz plik układu.'});
    stPush=true;setX('img',name);save();f.value=''};im.src=fr.result};fr.readAsDataURL(file)});
- let stPush=false;
+ let stPush=false,clip=null;
  ui.addEventListener('pointerdown',e=>{if(e.target.closest('[data-st]'))stPush=true});
  function setX(n,v){if(!sel)return;const k=keyOf(sel),a=get(k).slice();const x=Object.assign({},a[4]||{});
   if(stPush){push();stPush=false}
   if(v===null||v===''||v===false)delete x[n];else x[n]=v;
   if(n==='r'&&v===0)delete x.r;if(n==='rot'&&v===0)delete x.rot;
   a[4]=Object.keys(x).length?x:undefined;if(!a[4])a.length=4;
-  a[3]=screenOf(sel);L[k]=a;css();inf.innerHTML=inf.innerHTML}
+  a[3]=screenOf(sel);L[k]=a;css();syncSt()}
  ui.addEventListener('input',e=>{const c=e.target.closest('[data-p]');if(!c)return;const n=c.dataset.p;
   setX(n,c.type==='checkbox'?c.checked:(c.tagName==='SELECT'||c.type==='color')?c.value:+c.value)});
  ui.addEventListener('change',e=>{const c=e.target.closest('[data-p]');if(c)save()});
+ /* ---- podgląd ekranów ---- */
+ function showScreen(id){const el=document.getElementById(id);if(!el)return;
+  const live=typeof S!=='undefined'&&S&&S.phase==='play';
+  try{if(live&&id==='lvl'&&!S.choosing){openLevelUpNow();return}
+   if(live&&id==='shop'&&!S.shop){openShop();return}
+   if(live&&id==='pause'&&!S.paused){togglePause(true);return}}catch(x){quietErr('menuEditorScr',x)}
+  if(!dry){dry=[];for(const o of document.querySelectorAll(OV))dry.push([o,o.hidden])}
+  for(const o of document.querySelectorAll(OV))o.hidden=o!==el;el.hidden=false;
+  inf.innerHTML='Podgląd: <b>'+esc(OVN[id])+'</b>'+(['lvl','shop','end'].includes(id)&&!live?'<br><span class="warn">Bez nocy ekran jest pusty – dane pojawią się w trakcie gry.</span>':'')}
+ function closeScreen(){if(dry){for(const [o,h] of dry)o.hidden=h;dry=null}inf.textContent='Kliknij element na ekranie.'}
+ function preview(w,h){const fr=pvw.querySelector('.fr'),s=Math.min((innerWidth-40)/w,(innerHeight-90)/h,1);
+  fr.style.width=Math.round(w*s)+'px';fr.style.height=Math.round(h*s)+'px';Object.assign(ifr.style,{width:w+'px',height:h+'px',transform:'scale('+s+')'});
+  const q=new URLSearchParams(location.search);q.delete('edytor');q.set('podglad','1');const src=location.pathname+'?'+q.toString();
+  if(ifr.dataset.src!==src||!ifr.src){ifr.dataset.src=src;ifr.src=src}else{try{ifr.contentWindow.dispatchEvent(new Event('resize'))}catch(x){}}
+  pvw.querySelector('[data-pvt]').textContent='Podgląd '+w+'×'+h+(s<1?' (pomniejszony do '+Math.round(s*100)+'%)':'');pvw.classList.add('on')}
  ui.addEventListener('click',e=>{
+  const pv=e.target.closest('.gal .pv');if(pv){if(!sel){inf.innerHTML='<span class="warn">Najpierw kliknij element na ekranie.</span>';return}push();setX('pre',pv.dataset.pre||null);save();return}
+  const rs=e.target.closest('[data-res]');if(rs){const [w,h]=rs.dataset.res.split('x').map(Number);preview(w,h);return}
   const xb=e.target.closest('[data-x]');if(xb){push();setX(xb.dataset.x,null);save();return}
   const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,k=sel&&keyOf(sel);
   if(a==='side')panel.classList.toggle('l');
+  else if(a==='min'){panel.classList.toggle('min');b.textContent=panel.classList.contains('min')?'▢':'▁'}
   else if(a==='mode')setMode(mode==='edit'?'play':'edit');
   else if(a==='undo')undo();
+  else if(a==='redo')redo();
   else if(a==='up'&&sel&&sel.parentElement&&sel.parentElement!==document.body)setSel(sel.parentElement);
   else if(a==='down'&&sel){let c=last;while(c&&c.parentElement&&c.parentElement!==sel)c=c.parentElement;if(c&&c.parentElement===sel)setSel(c);else if(sel.firstElementChild)setSel(sel.firstElementChild)}
   else if(a==='s-'&&sel){const v=get(k).slice();v[2]/=1.05;put(k,v)}
   else if(a==='s+'&&sel){const v=get(k).slice();v[2]*=1.05;put(k,v)}
   else if(a==='rstyle'&&sel){push();const v=get(k).slice();v.length=4;if(!v[0]&&!v[1]&&v[2]===1)delete L[k];else L[k]=v;save()}
+  else if(a==='cpst'&&sel){clip=JSON.stringify(get(k)[4]||{});inf.innerHTML='<span class="ok">✓ Skopiowano wygląd.</span> Zaznacz inny element i kliknij „Wklej wygląd”.'}
+  else if(a==='pst'&&sel&&clip){push();const v=get(k).slice();v.length=4;const x=JSON.parse(clip);if(Object.keys(x).length)v[4]=x;v[3]=screenOf(sel);L[k]=v;save()}
   else if(a==='r1'&&sel){push();delete L[k];save()}
   else if(a==='r2'&&sel){const sc=screenOf(sel);push();for(const q in L)if(L[q][3]===sc)delete L[q];save()}
-  else if(a==='r3'){push();L={};save()}
-  else if(a==='copy'){const t=dump();ta.value=t;ta.select();
+  else if(a==='r3'){if(!confirmReset())return;push();L={};save()}
+  else if(a==='file')saveFile();
+  else if(a==='open')lf.click();
+  else if(a==='copy'){const t='NBLAYOUT '+innerWidth+'x'+innerHeight+' '+JSON.stringify(dump());ta.value=t;ta.select();
    let ok=false;try{navigator.clipboard.writeText(t).then(()=>{b.textContent='✓ Skopiowano'},()=>{b.textContent='Zaznacz i Ctrl+C'});ok=true}catch(x){}
    if(!ok){try{document.execCommand('copy');b.textContent='✓ Skopiowano'}catch(x){b.textContent='Zaznacz i Ctrl+C'}}
-   setTimeout(()=>{b.textContent='📋 Kopiuj układ'},2000)}
-  else if(a==='load'){const m=ta.value.match(/\{[\s\S]*\}/);if(m){try{push();L=JSON.parse(m[0]);save()}catch(x){inf.textContent='Błędny układ w polu.'}}}
+   setTimeout(()=>{b.textContent='📋 Kopiuj jako tekst'},2000)}
+  else if(a==='load')loadData(ta.value);
+  else if(a==='scr')showScreen(ui.querySelector('[data-scr]').value);
+  else if(a==='scrx')closeScreen();
+  else if(a==='lang'){try{localStorage.setItem('pn_lang',EN?'pl':'en')}catch(x){}location.reload()}
+  else if(a==='pad'){padOn=!padOn;b.classList.toggle('on',padOn);if(!padOn){document.documentElement.classList.remove('padprio');document.body.classList.remove('padnav');for(const q of document.querySelectorAll('.pf'))q.classList.remove('pf')}}
+  else if(a==='pvx'){pvw.classList.remove('on')}
+  else if(a==='pvrel'){try{ifr.contentWindow.location.reload()}catch(x){ifr.src=ifr.dataset.src}}
  });
+ /* „Reset wszystkiego” pytamy dwa razy kliknięciem, bez okienek przeglądarki (blokują grę) */
+ let rAsk=0;function confirmReset(){const b=ui.querySelector('[data-a=r3]');if(performance.now()-rAsk<3000){b.textContent='Reset wszystkiego';rAsk=0;return true}
+  rAsk=performance.now();b.textContent='Na pewno? Kliknij jeszcze raz';setTimeout(()=>{if(rAsk&&performance.now()-rAsk>=2900){b.textContent='Reset wszystkiego';rAsk=0}},3000);return false}
 }catch(e){quietErr('menuEditor',e)}})();
 requestAnimationFrame(frame);
 })();
