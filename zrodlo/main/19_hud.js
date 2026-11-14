@@ -40,10 +40,20 @@ function applyTouchMode(){$('opts').classList.add('sl');$('figKb').hidden=false;
 
 function applyStory(){$('storyTgl').checked=!STORYMODE;$('sFab').classList.toggle('on',STORYMODE);$('sArc').classList.toggle('on',!STORYMODE);$('sFab').setAttribute('aria-pressed',String(STORYMODE));$('sArc').setAttribute('aria-pressed',String(!STORYMODE));$('storyModeHint').textContent=STORYMODE?(EN?'You unlock acts one by one.':'Rozdziały odblokowujesz po kolei.'):(EN?'All acts available right away.':'Wszystkie rozdziały dostępne od razu.');}
 $('sFab').addEventListener('click',()=>{$('storyTgl').checked=false;$('storyTgl').dispatchEvent(new Event('change'))});$('sArc').addEventListener('click',()=>{$('storyTgl').checked=true;$('storyTgl').dispatchEvent(new Event('change'))});
-const DIFFCAP={e:(EN?'Fewer, weaker enemies. Rewards: −20% experience, −50% gold.':'Mniej, słabsi wrogowie. Nagrody: −20% doświadczenia, −50% złota.'),n:(EN?'Balanced play, as designed. Rewards unchanged.':'Zrównoważona rozgrywka, tak jak ją zaprojektowano. Nagrody bez zmian.'),h:(EN?'More, stronger enemies. Rewards: +20% experience, +10% gold.':'Więcej, silniejszych wrogów. Nagrody: +20% doświadczenia, +10% złota.')};
+// 14.11.2026: opis poziomów zgodny z liczbami w DF (10_stan_gry.js) i Popiołami (22_postac_zapis_ustawienia.js, mnożnik .8/1/1.3)
+const DIFFCAP=EN?{e:['A calm start.',[['Enemies','−20% count, −25% health, −30% damage'],['Rewards','experience unchanged, coins −10%, Ashes −20%'],['Cauldrons','heal more (+33%)']],'Act I starts more gently.'],
+ n:['Balanced play, as designed.',[['Enemies','standard'],['Rewards','standard'],['Cauldrons','standard']]],
+ h:['For the battle-hardened.',[['Enemies','+12% count, +25% health, +20% damage'],['Rewards','experience +15%, coins +15%, Ashes +30%'],['Cauldrons','heal less (−33%)']]]}
+:{e:['Spokojny początek.',[['Wrogowie','−20% liczby, −25% życia, −30% obrażeń'],['Nagrody','doświadczenie bez zmian, monety −10%, Popioły −20%'],['Kociołki','leczą więcej (+33%)']],'Rozdział I zaczyna się łagodniej.'],
+ n:['Zrównoważona rozgrywka, tak jak ją zaprojektowano.',[['Wrogowie','bez zmian'],['Nagrody','bez zmian'],['Kociołki','bez zmian']]],
+ h:['Dla zaprawionych w boju.',[['Wrogowie','+12% liczby, +25% życia, +20% obrażeń'],['Nagrody','doświadczenie +15%, monety +15%, Popioły +30%'],['Kociołki','leczą mniej (−33%)']]]};
 // 14.11.2026: nienachalna podpowiedź o poziomach trudności na ekranie przygotowania (prośba autora)
 const DIFFHINT=EN?'Every difficulty gives you a fair chance to see the whole game through. Normal is already a real challenge, and there is no shame in starting on Easy. You can change it before every night.':'Każdy poziom trudności daje uczciwą szansę przejścia całej gry. Normalny to już prawdziwe wyzwanie, a start na Łatwym to żaden wstyd. Trudność zmienisz przed każdą nocą.';
-function applyDiff(){for(const b of document.querySelectorAll('#diffSw [data-d]'))b.classList.toggle('on',b.dataset.d===DIFFK);{const c=$('diffCap');c.textContent=DIFFCAP[DIFFK];const h=document.createElement('span');h.className='diffHint';h.textContent=DIFFHINT;h.style.cssText='display:block;margin-top:.6em;font-size:.82em;font-style:italic;opacity:.72;line-height:1.35';c.appendChild(h)}ENEMY_DMG=.8*DF[DIFFK].dmg}
+function applyDiff(){for(const b of document.querySelectorAll('#diffSw [data-d]'))b.classList.toggle('on',b.dataset.d===DIFFK);{const c=$('diffCap'),d=DIFFCAP[DIFFK],el=(t,css,x)=>{const e=document.createElement('span');e.style.cssText='display:block;'+css;if(x!=null)e.textContent=x;t.appendChild(e);return e};c.textContent='';
+  el(c,'margin-bottom:.45em',d[0]);
+  for(const [k,v] of d[1]){const r=el(c,'font-size:.9em;line-height:1.35;opacity:.92');const kk=document.createElement('span');kk.style.color='#c9a45a';kk.textContent=k+': ';r.append(kk,v)}
+  if(d[2])el(c,'font-size:.9em;line-height:1.35;margin-top:.25em;color:#e8d3a8',d[2]);
+  el(c,'margin-top:.7em;padding-top:.55em;border-top:1px solid rgba(201,164,90,.28);font-size:.82em;font-style:italic;opacity:.72;line-height:1.35',DIFFHINT)}ENEMY_DMG=.8*DF[DIFFK].dmg}
 for(const b of document.querySelectorAll('#diffSw [data-d]'))b.addEventListener('click',()=>{DIFFK=b.dataset.d;try{localStorage.setItem('pn_diff',DIFFK)}catch(x){}applyDiff()});applyDiff();
 $('storyTgl').addEventListener('change',e=>{STORYMODE=!e.target.checked;try{localStorage.setItem('pn_story',STORYMODE?'1':'0')}catch(x){}applyStory();renderRecords()});
 applyStory();
