@@ -119,7 +119,7 @@ function dressSettlementsHD(w){
   for(const [k,r]of Object.entries(specs)){frames[k]=IMGS['p4_'+k]?procFrame(IMGS['p4_'+k],0,0,r[2],r[3],'prop'):procFrame(IMGS.cz_trees,...r,'prop');cutCircle(frames[k].n)}
   // Replace selected existing trunks, preserving their blocking position and ground contact.
   const treeGeo=new THREE.PlaneGeometry(4,4).translate(0,1.875,0);
-  for(const p of w.PROPS){if(p.k!=='dead_tree'||!p.obj)continue;const h=groundHash(Math.floor(p.x),Math.floor(p.y)),k=p.variant||['dead_oak','birch','spruce'][h%3],m=p.obj.mesh,vs=p.vscale||({spruce:1.08,birch:1}[k]||.82);m.geometry=treeGeo;m.material=frames[k].n;m.customDistanceMaterial=frames[k].d;m.scale.set(vs,vs*SQ,vs);p.obj.frames=[frames[k]];m.castShadow=true;}
+  for(const p of w.PROPS){if(p.k!=='dead_tree'||!p.obj)continue;const h=groundHash(Math.floor(p.x),Math.floor(p.y)),k=p.variant||['dead_oak','dead_spruce','dead_oak'][h%3],m=p.obj.mesh,vs=p.vscale||({spruce:1.08,birch:1}[k]||.82);m.geometry=treeGeo;m.material=frames[k].n;m.customDistanceMaterial=frames[k].d;m.scale.set(vs,vs*SQ,vs);p.obj.frames=[frames[k]];m.castShadow=true;}
   // Low garden/ruin clusters leave the plaza, doors and interaction approaches clear.
   const sites=MAP1_PLANTS?[]:[[25,23],[35,23],[25,32],[37,32],[43,18],[58,19],[45,24],[57,24],[18,28],[42,34],[8,34],[53,39]];
   const geo=new THREE.PlaneGeometry(4,4).translate(0,1.875,0);const used=[];

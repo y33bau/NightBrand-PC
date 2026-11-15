@@ -171,7 +171,7 @@ function enrich(w,ch){
     // more slum shacks and townhouses, plague carts, gibbets, lanterns, beggars, rot blooms that burst when you pass
     for(let i=0;i<2;i++)building(3+((r()*2)|0),2+((r()*2)|0),59,53,false,(x,y)=>y>MH*.6);
     for(let i=0;i<1;i++)building(6+((r()*3)|0),5+((r()*2)|0),58,50,false,(x,y)=>y<MH*.55);
-    scatter('beggar_bodies',5,false,2);scatter('plague_cart',2);scatter('gibbet',2);scatter('street_lantern',4,true,4);scatter('barrel',3);scatter('royal_banner',2);scatter('dead_tree',2,true,2.5,(x,y)=>T(x,y)===57||y<MH*.6);
+    scatter('beggar_bodies',5,false,2);scatter('plague_cart',2);scatter('gibbet',2);scatter('barrel',3);scatter('royal_banner',2);scatter('dead_tree',2,true,2.5,(x,y)=>T(x,y)===57||y<MH*.6);
     scatter('rot_bloom',6,false,2.5,null,{anim:'bloom'});
     for(let i=0;i<4;i++){const s=spot(quad(i),4);if(s)add('offering_bowl',s[0],s[1],true,{stone:i})}
     w.altar={col:0xffcf70,pc:'#ffd27a',hint:(EN?'Empty golden offering bowls stand in four districts. Enemy blood spilled nearby will fill them. Beware the rot flowers: they burst when you walk past.':'W czterech dzielnicach stoją puste złote misy ofiarne. Krew wrogów przelana obok je napełni. Uważaj na kwiaty zgnilizny: pękają, gdy przechodzisz.'),

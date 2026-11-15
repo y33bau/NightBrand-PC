@@ -762,6 +762,8 @@ function mapKit(fillWith,skip){const map=new Uint8Array(GW*GH).fill(fillWith),un
 // FT(i) is the first big-map tile of source tile i, MP(u) maps a continuous source coordinate, GTX/GTY give the source tile of a big-map tile.
 let MK=1.625,GW=64,GH=56,GTX=[],GTY=[];
 const FT=i=>Math.ceil(i*MK-1e-9),MP=u=>{const i=Math.floor(u);return FT(i)+(u-i)*(FT(i+1)-FT(i))};
+// 16.11.2026: odwrotnosc MP (wspolrzedna zrodlowa dla punktu wielkiej mapy); potrzebna, zeby odbicie lustrzane powstalo na wielkiej mapie, a nie w siatce zrodlowej
+const mpInv=v=>{let lo=0,hi=GW;for(let k=0;k<40;k++){const m=(lo+hi)/2;if(MP(m)<v)lo=m;else hi=m}return lo};
 const GRID={1:[64,56],2:[64,56],3:[64,56],4:[80,70],5:[80,70],6:[64,56],9:[64,56]};
 function setGrid(ch){[GW,GH]=GRID[ch];MK=MW/GW;GTX=[];GTY=[];for(let X=0;X<MW;X++){let i=0;while(FT(i+1)<=X)i++;GTX[X]=i}for(let Y=0;Y<MH;Y++){let i=0;while(FT(i+1)<=Y)i++;GTY[Y]=i}}
 const SR=B=>({x:FT(B.x),y:FT(B.y),w:FT(B.x+B.w)-FT(B.x),h:FT(B.y+B.h)-FT(B.y)});
@@ -799,7 +801,8 @@ function genDolne(){
   fill(35,1,5,GH-2,23);fill(35,22,5,4,25);
   fill(40,6,22,36,20);fill(41,13,20,2,24);fill(41,33,20,2,24);fill(48,13,5,2,20);fill(48,33,5,2,20);
   fill(53,42,6,3,32);fill(42,45,19,7,32);
-  [[7,21],[7,26],[14,21],[14,26],[22,21],[22,26],[30,21],[30,26],[8,5],[29,5],[8,43],[29,43],[16,46],[21,46],[46,50],[58,46],[42,21],[42,26],[60,21],[60,26],[44,9],[58,9],[44,38],[58,38]].forEach(([x,y])=>set(x,y,27));
+  // 16.11.2026: koksowniki przy moscie (osi 37, kafel x <-> 74-x): 30 i 44 zamiast 30 i 42, ta sama odleglosc od przepraw
+  [[7,21],[7,26],[14,21],[14,26],[22,21],[22,26],[30,21],[30,26],[8,5],[29,5],[8,43],[29,43],[16,46],[21,46],[46,50],[58,46],[44,21],[44,26],[60,21],[60,26],[44,9],[58,9],[44,38],[58,38]].forEach(([x,y])=>set(x,y,27));
   prop('healing_shrine',4.5,38.92,[[4,38]],{shrine:0});prop('healing_shrine',60.5,40.92,[[60,40]],{shrine:1});
   for(const x of [12,18,24]){prop('sarcophagus',x+.5,4.92,[[x,4]],{flip:x>18});prop('sarcophagus',x+.5,45.92,[[x,45]],{flip:x>18})}
   // runda 296: dzielnice jak w SimCity, duze rekwizyty przy scianach, srodek sal wolny
@@ -861,10 +864,10 @@ function genSolneNabrzeze(){
  const port=(k,x,y,solid,extra)=>prop(k,x+.5,y+.92,solid?[[x,y]]:[],Object.assign({port:true},extra||{}));
  port('winch',12,14,true);port('winch',53,14,true,{flip:true});port('crane',57,17,true);port('crane',18,11,true,{flip:true});
  // cargo waiting for a crossing that never came
- for(const [x,y,f] of [[8,16],[17,26,1],[6,28],[49,28,1],[52,22],[35,3,1],[59,15],[60,28,1],[24,13],[40,16,1],[13,17,1],[26,36],[42,33,1],[50,17],[12,45,1],[51,45]])port('cargo',x,y,true,{flip:!!f});
- for(const [x,y,f] of [[6,21],[13,25,1],[18,17],[14,30],[6,14,1],[11,21],[17,29,1],[5,25],[12,27,1],[59,24],[29,3]])port('salt',x,y,true,{flip:!!f});
+ for(const [x,y,f] of [[8,16],[17,26,1],[6,28],[52,22],[35,3,1],[59,15],[60,28,1],[24,13],[40,16,1],[11,19,1],[50,17],[12,45,1],[51,45],[22,31],[37,28,1],[43,28,1]])port('cargo',x,y,true,{flip:!!f});
+ for(const [x,y,f] of [[6,21],[13,25,1],[14,30],[6,14,1],[11,21],[11,20],[5,25],[12,27,1],[19,28,1],[53,23],[29,3]])port('salt',x,y,true,{flip:!!f});
  for(const [x,y] of [[24,18],[40,18],[23,10],[41,10],[48,12],[19,12],[28,44],[35,44],[26,49],[37,49],[11,33],[15,43],[52,33],[48,43],[23,37],[40,37],[10,10],[54,10]])port('bollard',x,y,false);
- for(const [x,y,f] of [[9,26],[16,15,1],[19,22],[48,19],[53,26,1],[58,13],[25,31],[38,31,1],[36,15],[26,17,1],[22,36],[47,30],[5,18,1],[10,31],[44,12,1],[13,12],[33,48,1],[60,19]])port('barrel',x,y,true,{flip:!!f});
+ for(const [x,y,f] of [[9,26],[16,15,1],[53,26,1],[58,13],[26,17,1],[22,36],[5,18,1],[10,31],[44,12,1],[13,12],[33,48,1],[60,19],[12,19],[21,31],[37,27],[37,29,1],[53,21],[43,29]])port('barrel',x,y,true,{flip:!!f});
  // 15.11.2026: zbutwiale rekwizyty opuszczonego portu (atlas port_rekwizyty): lodzie, pale i skaly z malzami w wodzie przy pomostach,
  // sieci, deski i wiecierze na pomostach, ikra na pochylniach, skrzynie, kotwica i wrak na placach skladowych. Przejscia sprawdzone (BFS od startu).
  for(const [k,x,y,solid,f] of [['lodz',8,38,0,0],['lodz',54,36,0,1],['lodz',38,5,0,1],['pale',10,44,0,0],['pale',54,43,0,1],['pale',22,8,0,0],['malze',20,39,0,0],['malze',45,39,0,1],['malze',42,8,0,1],['skrzynia',8,23,1,0],['skrzynia',54,23,1,1],['kotwica',55,28,1,0],['beczka_ryby',9,19,1,0],['beczka_ryby',45,14,1,1],['wiecierz',56,14,1,0],['wiecierz',11,40,1,1],['wrak',6,31,1,0],['wrak',59,21,1,1],['pacholek',15,35,1,0],['pacholek',48,35,1,1],['siec',13,38,0,0],['siec',50,39,0,1],['siec',17,12,0,0],['ikra',44,31,0,0],['ikra',19,32,0,1],['deski',13,46,0,0],['deski',50,46,0,1]])port(k,x,y,!!solid,{flip:!!f});
@@ -983,7 +986,8 @@ function genStolica(){
   for(const [x,y] of [[29,36],[34,36],[29,43],[34,43],[29,50],[34,50],[24,24],[39,24],[22,6],[41,6]])set(x,y,27);
   // gates, statues, fountain, the poor dying on the golden steps
   prop('cathedral_gate',32,24.08,[]);prop('cathedral_gate',32,6.08,[]);
-  prop('queen_fountain',36,30.92,[[35,30],[36,30]]);
+  // 16.11.2026: fontanna na osi placu (x 25..38, srodek 32), a nie przy prawej parze posagow. Pas procesji jest zarezerwowany (clearways), wiec wstawiamy ja wprost: zostaja wolne kafle x=30 i x=33
+  PROPS.push({k:'queen_fountain',x:32,y:30.92});for(const [sx,sy] of [[31,30],[32,30]]){under[sy*GW+sx]=map[sy*GW+sx];set(sx,sy,31)}
   for(const [x,y] of [[27,28],[36,28],[27,32],[36,32],[25,9],[38,9]])prop('saint_king',x+.5,y+.92,[[x,y]]);
   for(const [x,y] of [[27,25],[36,25],[29,25],[35,26],[26,26],[30,7],[34,7]])place('beggar_bodies',x,y);
   for(const [x,y] of [[25,24],[38,24],[20,6],[43,6]])place('royal_banner',x,y);
@@ -998,7 +1002,8 @@ function genStolica(){
   for(const [k,x,y] of [['beggar_bodies',13,40],['beggar_bodies',9,46],['beggar_bodies',44,41],['beggar_bodies',36,47],['beggar_bodies',20,51],['barrel',9,39],['barrel',27,37],['barrel',51,44],['wheel',18,36],['wheel',45,49],
     ['crow_post',4,44],['crow_post',59,46],['dead_horse',37,51],['burnt_hay',55,40],['barrel',22,44],['beggar_bodies',58,40],['crow_post',23,35],['dead_horse',8,35],['impaled_head',28,52],['impaled_head',35,52],['beggar_bodies',11,46],['doorway_bones',7,46]].filter((_,i)=>i%2===0))place(k,x,y);
   // street lamps with blue runes, dead trees in the gardens
-  for(const [x,y] of [[21,10],[42,10],[11,10],[11,21],[42,35],[22,34],[2+9,31]])place('street_lantern',x,y);
+  // 16.11.2026: latarnie parami wzdluz osi x=32 (kafel x <-> 63-x). Para powstaje tylko, gdy oba kafle sa wolne; lewa lampa odbita lustrzanie
+  {const picked=[];for(let y=8;y<=52&&picked.length<6;y++)for(let x=6;x<=30&&picked.length<6;x++){const a=y*GW+x,b=y*GW+63-x;if(!free(x,y)||!free(63-x,y)||clearways.has(a)||clearways.has(b))continue;if(picked.some(([px,py])=>Math.max(Math.abs(px-x),Math.abs(py-y))<8))continue;picked.push([x,y]);place('street_lantern',x,y,{flip:true});prop('street_lantern',mpInv(MW-MP(x+.5)),y+.92,[[63-x,y]])}}
   for(const [x,y] of [[17,10],[4,20],[8,20],[13,29],[17,29],[4,30],[11,19]])place('dead_tree',x,y);
   // doors of the nobles' townhouses, plague carts, carriages, gibbets, rot blooms by the pools
   prop('noble_door',6.5,18.1,[]);prop('noble_door',50,9.1,[]);prop('noble_door',16.5,27.1,[]);
@@ -1151,7 +1156,7 @@ function genCytadela(seed){
   P('bookcase_a',6,50,true);P('bookcase_b',73,50,true);P('desk',6,53,true);
   P('statue_a',28,66,true);P('statue_b',51,66,true);
   P('bench_a',29,35,[[28,35],[29,35]]);P('bench_a',51,35,[[50,35],[51,35]]);P('statue_a',8,37,true);P('statue_b',71,37,true);P('candelabra',36,35,true);P('candelabra',44,35,true);P('statue_a',26,35,true);P('statue_b',53,35,true);
-  P('scale',40,24,true);P('vault',72,26,true);P('chest',6,26,true);P('chest_open',72,30,true);P('goldheap',7,30,true);P('chest',31,24,true);P('chest',48,24,true);
+  P('scale',40,24,true);P('vault',72,26,true);prop('vault',mpInv(MW-MP(72.5)),26.92,[[7,26]],{flip:true});// 16.11.2026: drugie drzwi pancerne lustrzane na wielkiej mapie (oś 52); na miejscu dawnej skrzyniP('chest_open',72,30,true);P('goldheap',7,30,true);P('chest',31,24,true);P('chest',48,24,true);
   P('cage',7,17,true);P('rack',72,17,true);P('statue_a',28,13,true);P('statue_b',51,13,true);P('candelabra',35,13,true);P('candelabra',45,13,true);
   P('throne',40,4,[[37,4],[38,4],[39,4],[40,4],[41,4],[42,4],[43,4]]);P('statue_a',30,4,true);P('statue_b',50,4,true);P('candelabra',33,4,true);P('candelabra',47,4,true);P('statue_a',25,6,true);P('statue_b',55,6,true);
   for(const y of [58,47,35,24,13,3])for(const x of [8,71]){if(y===13&&x===71)P('chains',x,y,[],{anim:'chains'});else P('order_bonfire',x,y,[],{fire:true})}
@@ -1789,7 +1794,7 @@ function dressSettlementsHD(w){
   for(const [k,r]of Object.entries(specs)){frames[k]=IMGS['p4_'+k]?procFrame(IMGS['p4_'+k],0,0,r[2],r[3],'prop'):procFrame(IMGS.cz_trees,...r,'prop');cutCircle(frames[k].n)}
   // Replace selected existing trunks, preserving their blocking position and ground contact.
   const treeGeo=new THREE.PlaneGeometry(4,4).translate(0,1.875,0);
-  for(const p of w.PROPS){if(p.k!=='dead_tree'||!p.obj)continue;const h=groundHash(Math.floor(p.x),Math.floor(p.y)),k=p.variant||['dead_oak','birch','spruce'][h%3],m=p.obj.mesh,vs=p.vscale||({spruce:1.08,birch:1}[k]||.82);m.geometry=treeGeo;m.material=frames[k].n;m.customDistanceMaterial=frames[k].d;m.scale.set(vs,vs*SQ,vs);p.obj.frames=[frames[k]];m.castShadow=true;}
+  for(const p of w.PROPS){if(p.k!=='dead_tree'||!p.obj)continue;const h=groundHash(Math.floor(p.x),Math.floor(p.y)),k=p.variant||['dead_oak','dead_spruce','dead_oak'][h%3],m=p.obj.mesh,vs=p.vscale||({spruce:1.08,birch:1}[k]||.82);m.geometry=treeGeo;m.material=frames[k].n;m.customDistanceMaterial=frames[k].d;m.scale.set(vs,vs*SQ,vs);p.obj.frames=[frames[k]];m.castShadow=true;}
   // Low garden/ruin clusters leave the plaza, doors and interaction approaches clear.
   const sites=MAP1_PLANTS?[]:[[25,23],[35,23],[25,32],[37,32],[43,18],[58,19],[45,24],[57,24],[18,28],[42,34],[8,34],[53,39]];
   const geo=new THREE.PlaneGeometry(4,4).translate(0,1.875,0);const used=[];
@@ -2827,7 +2832,7 @@ function enrich(w,ch){
     // more slum shacks and townhouses, plague carts, gibbets, lanterns, beggars, rot blooms that burst when you pass
     for(let i=0;i<2;i++)building(3+((r()*2)|0),2+((r()*2)|0),59,53,false,(x,y)=>y>MH*.6);
     for(let i=0;i<1;i++)building(6+((r()*3)|0),5+((r()*2)|0),58,50,false,(x,y)=>y<MH*.55);
-    scatter('beggar_bodies',5,false,2);scatter('plague_cart',2);scatter('gibbet',2);scatter('street_lantern',4,true,4);scatter('barrel',3);scatter('royal_banner',2);scatter('dead_tree',2,true,2.5,(x,y)=>T(x,y)===57||y<MH*.6);
+    scatter('beggar_bodies',5,false,2);scatter('plague_cart',2);scatter('gibbet',2);scatter('barrel',3);scatter('royal_banner',2);scatter('dead_tree',2,true,2.5,(x,y)=>T(x,y)===57||y<MH*.6);
     scatter('rot_bloom',6,false,2.5,null,{anim:'bloom'});
     for(let i=0;i<4;i++){const s=spot(quad(i),4);if(s)add('offering_bowl',s[0],s[1],true,{stone:i})}
     w.altar={col:0xffcf70,pc:'#ffd27a',hint:(EN?'Empty golden offering bowls stand in four districts. Enemy blood spilled nearby will fill them. Beware the rot flowers: they burst when you walk past.':'W czterech dzielnicach stoją puste złote misy ofiarne. Krew wrogów przelana obok je napełni. Uważaj na kwiaty zgnilizny: pękają, gdy przechodzisz.'),
@@ -5629,7 +5634,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
   amb.intensity=AT.ai+fl*1.4+dawn*.9;hemi.intensity=AT.hi+fl*.8+dawn*.5;if(dawn>0){TMPC.setHex(AT.amb);amb.color.copy(TMPC.lerp(DAWN,dawn))}else amb.color.setHex(AT.amb);
   postMat.uniforms.flash.value=fl*.3;postMat.uniforms.haze.value=CH===2&&S&&S.phase==='play'&&!S.dg&&SETT.quality!=='low'?1:0;postMat.uniforms.tm.value=clock%600;postMat.uniforms.grain.value=SETT.quality==='low'?0:chapterArt()?.015:.03;postMat.uniforms.gtm.value=SETT.flash?clock%600:0;postMat.uniforms.sharp.value=S&&S.shakeT>0?1:Math.max(0,postMat.uniforms.sharp.value-dt*4);
   rain.visible=CH===1||CH===PORT;if(rain.visible){rain.material.opacity=(CH===PORT?.13:CH1_ART_ON?.20:.32)*(1-dawn*.7);for(let i=0;i<RAIN_N;i++){const d=DROPS[i];d.y-=d.s*dt;d.x-=d.s*.12*dt;if(d.y<0){d.y+=12;d.x=rnd(-15,15);d.z=rnd(-10,10);if(S&&dt>0&&i%9===0)S.parts.push({k:'d',x:(camTarget.x+d.x)*16,y:(camTarget.z+d.z)*16,z:1,vx:rnd(-6,6),vy:rnd(-3,3),vz:rnd(8,14),c:'#6a7a96',life:.25})}
-    const x=camTarget.x+d.x,z=camTarget.z+d.z,o=i*6;rainPos[o]=x;rainPos[o+1]=d.y;rainPos[o+2]=z;rainPos[o+3]=x+.07;rainPos[o+4]=d.y-.55;rainPos[o+5]=z}rainGeo.attributes.position.needsUpdate=true}
+    const x=camTarget.x+d.x,z=camTarget.z+d.z,o=i*6,hid=CH===PORT&&portCovered(x,z);rainPos[o]=x;rainPos[o+1]=hid?-99:d.y;rainPos[o+2]=z;rainPos[o+3]=x+.07;rainPos[o+4]=hid?-99:d.y-.55;rainPos[o+5]=z}rainGeo.attributes.position.needsUpdate=true}
   for(const o of propObjs){let f;
     if(o.kind==='gate')f=o.frames[!S||!S.opening?0:S.opening>2.4?1:2];
     else if(o.kind==='shrine')f=at(o.frames,clock+o.ph,6);
@@ -5774,6 +5779,8 @@ function puddleBuild(){for(const m of PUD.list){scene.remove(m.m);if(m.g)scene.r
   if(f){gm=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:PUD.tex,color:0xff7a2a,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.0,fog:false}));gm.rotation.x=-Math.PI/2;gm.position.set(x,.065,y);gm.renderOrder=2;gm.scale.copy(m.scale);gm.userData.k=1-f[1]/5;scene.add(gm)}
   PUD.list.push({m,g:gm,x,y,s});n++}
  for(let i=0;i<34;i++){const m=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:PUD.ringTex,transparent:true,depthWrite:false,opacity:0,fog:false}));m.rotation.x=-Math.PI/2;m.visible=false;scene.add(m);PUD.rings.push({m,t:9})}}
+// 16.11.2026: kropla deszczu pod dachem portu (xz w obrysie budynku z PORT_BUILDINGS, wspolrzedne wielkiej mapy); deszcz nie pada w srodku skladu
+function portCovered(x,z){return PORT_BUILDINGS.some(([bx,by,w,h])=>x>MP(bx)&&x<MP(bx+w)&&z>MP(by)&&z<MP(by+h))}
 function puddleTick(dt){const wet=(CH===1||CH===PORT)&&!S.dg;if(PUD.w!==W||wet!==(PUD.list.length>0)&&!(wet&&PUD.w===W))puddleBuild();const raining=rain.visible&&!S.dg,vis=wet;
  for(const p of PUD.list){p.m.visible=vis;if(p.g){p.g.visible=vis;p.g.material.opacity=p.g.userData.k*(.38+.1*Math.sin(clock*9+p.x)+.06*Math.sin(clock*23+p.y))}}
  if(!vis||!raining||!PUD.list.length){for(const r of PUD.rings)r.m.visible=false;return}
