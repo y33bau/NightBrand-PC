@@ -10450,6 +10450,13 @@ ${NAV}${ON}{color:#ffe2b8!important;text-shadow:0 0 10px rgba(255,140,60,.75)!im
 ${NAV}::before{left:4%!important;top:4%!important;bottom:4%!important;width:9%!important}
 ${Z} .nb2-daily{background:${A('assets/ui/6679e28f0d4528a14db5abaeb1f51f96eefc35d966cdec24f48246011b086585.webp')} 5% 50%/auto 64% no-repeat,${RAMKA} center/100% 100% no-repeat!important;padding-top:1.4vh!important;padding-bottom:1.4vh!important}
 ${Z} .nb2-daily${ON}{background:${A('assets/ui/6679e28f0d4528a14db5abaeb1f51f96eefc35d966cdec24f48246011b086585.webp')} 5% 50%/auto 64% no-repeat,radial-gradient(ellipse 44% 40% at 50% 58%,rgba(255,118,36,.42),rgba(255,90,30,0) 100%) center/86% 74% no-repeat,${RAMKA} center/100% 100% no-repeat!important;animation:nbZarG 1.8s ease-in-out infinite!important}
+/* 15.11.2026: menu glowne w lewej kolumnie (logo nad deskami), scena z ogniskiem odslonieta (wariant B autora) */
+@media (min-width:900px){
+${Z} .premium-body .premium-rail{translate:calc(-427 * var(--pc-u,1px)) 0!important}
+${Z} .premium-mast{translate:calc(-427 * var(--pc-u,1px)) calc(12 * var(--pc-u,1px))!important;scale:.74!important}
+${Z} .premium-mast:before{left:50%!important;top:52%!important;inset:auto!important;width:calc(958 * var(--pc-u,1px))!important;height:calc(453 * var(--pc-u,1px))!important;translate:-50% -50%!important;background:radial-gradient(ellipse closest-side,rgba(8,6,8,.82),rgba(8,6,8,.5) 55%,rgba(8,6,8,0))!important;z-index:-1!important;pointer-events:none!important}
+${Z} .premium-mast .m2-logo{filter:drop-shadow(0 0 18px rgba(255,110,40,.28)) drop-shadow(0 6px 10px rgba(0,0,0,.9))!important}
+}
 ${PR} .pc-profile{border:none!important;border-image:none!important;background:${A('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp')} center/100% 100% no-repeat!important;box-shadow:none!important;padding-left:2.2%!important;padding-right:2.2%!important}
 ${PR} .pc-profile>.pcg-edge{display:none!important}
 ${PR} img.pc-profile-ash{content:${A('assets/ui/bec1edb981cde86153bfc1f97330a541237d7963c2926133284dbc3f9ef457bf.webp')}!important;filter:none!important;object-fit:contain!important}
