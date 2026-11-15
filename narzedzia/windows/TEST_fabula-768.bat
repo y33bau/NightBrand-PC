@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 >nul
 setlocal
-title Nightbrand PC - test: fabula 767
+title Nightbrand PC - test: fabula 768
 echo.
 echo  Nightbrand - wersja PC (repo NightBrand-PC) lokalnie
 echo  =====================================
