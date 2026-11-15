@@ -819,3 +819,4 @@ cache741 · Punkty centralne: Wielka Waga nad przepascia lawy (Dolne Miasto), ba
 cache742 · Swiety dab Czarnoboru jako punkt centralny: wotywne swiatlo u pnia i poswiata korony (nie sprawdzono: FPS u autora, telefon, pad)
 cache743 · Cytadela: godlo Zakonu = pieczec Pietna z logo gry, odchylona ku kamerze (nie sprawdzono: FPS u autora, telefon, pad)
 cache744 · Punkty centralne z malowanych obrazow: Wielka Waga (Dolne Miasto), Waga Sadu (Cytadela), nowy Swiety Dab (Czarnobor) (nie sprawdzono: FPS u autora, telefon, pad)
+cache745 · Port w standardzie map: dachowka (karczma), lupek (kantor), latane deski (szopy, sklad), tynk i deski scian, malowane latarnie (nie sprawdzono: FPS u autora, telefon, pad)

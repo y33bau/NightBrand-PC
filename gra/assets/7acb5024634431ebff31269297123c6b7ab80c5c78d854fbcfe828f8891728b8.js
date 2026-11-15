@@ -701,7 +701,7 @@ const SPRITE_GROUPS={
  add('npcp_wieslawa','assets/npc/1fbd07cb44e343db2b4a085e6797eb3f92fa5cf6c51deb22bfac206785b4bea9.webp');
  SPRITE_RES.npc_ambrozy=4;SPRITE_RES.npc_wieslawa=4;
  // koksowniki i mur oporowy korzystaja z grafik innych rozdzialow
- for(const k of ['p2_brazier_0','p2_brazier_1','p2_brazier_2','p2_brazier_3','wl_fort','wl_cap'])if(SPRITE_GROUPS[k]&&!SPRITE_GROUPS[k].includes('r6'))SPRITE_GROUPS[k].push('r6');
+ for(const k of ['p2_brazier_0','p2_brazier_1','p2_brazier_2','p2_brazier_3','wl_fort','wl_cap','wl_town','wl_plank','p3_roof_tile','p3_roof_shack','p3_street_lantern'])if(SPRITE_GROUPS[k]&&!SPRITE_GROUPS[k].includes('r6'))SPRITE_GROUPS[k].push('r6');
 }
 
 // Rycerz, nowy styl (15.11.2026): arkusz Wypadu (4 klatki: bok, dol, gora; rzad 4 = powrot: bok, dol, gora)
@@ -2110,6 +2110,15 @@ function buildSolneNabrzeze(I){
  const aoGeo=new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2);
  const ao=(x,z,w,d)=>{const m=new THREE.Mesh(aoGeo,groundShadowMat);m.scale.set(w,1,d);m.position.set(x,.035,z);m.renderOrder=2;ROOT.add(m)};
  const glow=cutaway(new THREE.MeshBasicMaterial({color:0xd98a3c}));
+ // 15.11.2026 (port w standardzie map): tynk kamienic i deski szop jak w Zlotogrodzie, prawdziwe polacie dachu z dachowka (karczma), lupkiem (kantor) i latanymi deskami (szopy, sklad)
+ const plasterW=I.wl_town?worldSurf(cutaway(phong({color:0x968e80})),I.wl_town,3.2,'portPlaster'):plaster,plankW=I.wl_plank?worldSurf(cutaway(phong({color:0x8a7e70})),I.wl_plank,2.6,'portPlank'):siding;
+ const roofTex=k=>{if(!I[k])return null;const t=wallTex(I[k]).clone();t.needsUpdate=true;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(1,1);return t};
+ const roofOf=(k,col,shin)=>I[k]?cutaway(phong({map:roofTex(k),color:col,shininess:shin,specular:0x161a1e,side:THREE.DoubleSide})):slate;
+ const roofM={inn:roofOf('p3_roof_tile',0xa89890,4),office:roofOf('rf_lupek',0xb8c2c8,10),shed:roofOf('p3_roof_shack',0xa49a90,3)};
+ const shackW=I.p3_roof_shack?worldSurf(cutaway(phong({color:0xa49a90})),I.p3_roof_shack,3,'portShack'):slate;
+ const roofSlope=(mat,cx,eave,half,pitch,z0,z1,side)=>{const t=Math.tan(pitch),ov=.28,x0=cx+side*(half+ov),y0=eave-t*ov,y1=eave+t*half,L=Math.hypot(half+ov,y1-y0),S=2.4,g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.Float32BufferAttribute([x0,y0,z0,x0,y0,z1,cx,y1,z1,cx,y1,z0],3));g.setAttribute('uv',new THREE.Float32BufferAttribute([z0/S,0,z1/S,0,z1/S,L/S,z0/S,L/S],2));
+  g.setIndex(side>0?[0,2,1,0,3,2]:[0,1,2,0,2,3]);g.computeVertexNormals();const m=new THREE.Mesh(g,mat);m.castShadow=true;m.receiveShadow=true;ROOT.add(m)};
  const unit=new THREE.BoxGeometry(1,1,1),parts=new Map();
  const part=(mat,x,h,z,w,height,depth,angle=0)=>{if(!parts.has(mat))parts.set(mat,[]);parts.get(mat).push([x,h,z,w,height,depth,angle])};
  const inBuilding=new Set();
@@ -2125,16 +2134,16 @@ function buildSolneNabrzeze(I){
    for(const [outer,inner] of [[bx,left],[bx+bw,right]]){
     const side=outer<inner?-1:1,center=(outer+inner)/2,width=Math.abs(outer-inner);
     box(room,foot,center,.22,cz,width,.44,bd);
-    box(room,siding,outer-side*.10,1.22,cz,.20,2.44,bd);
+    box(room,plankW,outer-side*.10,1.22,cz,.20,2.44,bd);
     for(const z of [bz,front]){
-     box(cover,siding,center,1.25,z,width,2.5,.18);
+     box(cover,plankW,center,1.25,z,width,2.5,.18);
      box(cover,timbers,inner+side*.08,1.26,z,.18,2.52,.26);
      box(room,timbers,inner+side*.20,1.12,z-side*.03,.30,2.24,.23);
     }
     for(const f of [.29,.63]){box(room,wood,center,.83,bz+f*bd,width*.76,.76,1.18);box(room,timbers,center,1.13,bz+f*bd,width*.8,.12,1.22)}
    }
    for(const z of [bz,front]){box(cover,timbers,cx,2.64,z,bw+.1,.24,.28);box(room,foot,(left+right)/2,.04,z,right-left,.08,.33)}
-   for(const side of [-1,1])box(cover,slate,cx+side*half/2,eave+Math.tan(pitch)*half/2,cz,half/Math.cos(pitch)+.05,.16,bd+.5,-side*pitch);
+   for(const side of [-1,1])box(cover,shackW,cx+side*half/2,eave+Math.tan(pitch)*half/2,cz,half/Math.cos(pitch)+.05,.16,bd+.5,-side*pitch);
    box(cover,timbers,cx,eave+Math.tan(pitch)*half,cz,.18,.16,bd+.5);
    for(const [outer,inner] of [[bx,left],[bx+bw,right]]){const center=(outer+inner)/2,width=Math.abs(outer-inner);box(room,grime,center,.42,cz,width+.04,.84,bd+.04)}
    ao(cx,cz,bw*1.4+1,bd*1.4+1);
@@ -2142,14 +2151,14 @@ function buildSolneNabrzeze(I){
    W.LSRC.push({col:0xffcaaa,base:.7,dist:5,x:left+.1,y:1.5,z:cz,kind:'fire',ph:0});
    continue;
   }
-  const wall=kind==='shed'?siding:plaster;
+  const wall=kind==='shed'?plankW:plasterW;
   part(foot,cx,.25,cz,bw+.1,.5,bd+.1);
   part(grime,cx,.42,cz,bw+.03,.84,bd+.03);part(grime2,cx,.8,cz,bw+.05,1.6,bd+.05);
   part(grime2,cx,eave-.28,cz,bw+.04,.56,bd+.04);// zaciek pod okapem
   ao(cx,cz,bw*1.45+1,bd*1.45+1);
   part(wall,cx,(eave+.46)/2,cz,bw,eave-.46,bd);
   for(const side of [-1,1]){
-   part(slate,cx+side*half/2,eave+Math.tan(pitch)*half/2,cz,half/Math.cos(pitch)+.04,.13,bd+.48,-side*pitch);
+   roofSlope(roofM[kind]||slate,cx,eave,half,pitch,bz-.24,front+.24,side);
    for(const end of [bz,front])part(timbers,cx+side*(bw/2-.1),eave/2,end,.17,eave,.16);
    part(timbers,cx+side*bw/2,eave-.1,cz,.16,.17,bd+.25);
   }
@@ -2178,6 +2187,7 @@ function buildSolneNabrzeze(I){
    if(lit)W.LSRC.push({col:0xffb866,base:.75,dist:4.6,x:wx,y:1.5,z:front+.7,kind:'fire',ph:wx});
   }
   part(timbers,cx,eave-.08,front+.09,bw,.13,.16);
+  part(timbers,cx,eave+Math.tan(pitch)*half+.05,cz,.2,.12,bd+.5);// kalenica
  }
  // --- mur oporowy pod szybem windy Dolnego Miasta
  {const list=walls.filter(([x,y,t])=>t===48&&!inBuilding.has(y*MW+x)).map(([x,y])=>[x,y]);
@@ -2204,8 +2214,12 @@ function buildSolneNabrzeze(I){
  instanced(new THREE.CylinderGeometry(.026,.026,1,5),ropeMat,strands,([a,b])=>{V.subVectors(b,a);SC.set(1,V.length(),1);Q.setFromUnitVectors(UP,V.normalize());V.addVectors(a,b).multiplyScalar(.5);M4.compose(V,Q,SC)});
  // --- slupy z latarniami: swiatlo wychodzi ze srodka oprawy
  const ironwork=phong({color:0x22211e,shininess:10}),lanternGlass=new THREE.MeshBasicMaterial({color:0xe0913f}),lanterns=[];// 15.11.2026: szklo przygaszone (bylo prawie biale), zelazo jak kute
+ // 15.11.2026: malowana latarnia (rekwizyt Zlotogrodu) z przygaszonym zloceniem, jak kute zelazo portu; stara latarnia z klockow tylko bez tego obrazu
+ const lampImg=I.p3_street_lantern,lampW=2.05;let lampMat=null,lampGeo=null;
+ if(lampImg){const t=new THREE.Texture(lampImg);t.needsUpdate=true;t.anisotropy=4;lampMat=phong({map:t,alphaTest:.4,color:0x9c9ca4,side:THREE.DoubleSide});lampGeo=new THREE.PlaneGeometry(lampW,lampW).translate(0,lampW/2,0);const n=lampGeo.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6)}
  for(const [sx,sy] of PORT_LAMPS){
   const x=MP(sx),z=MP(sy);if(!land(ground(Math.floor(x),Math.floor(z))))continue;
+  if(lampMat){const m=new THREE.Mesh(lampGeo,lampMat);m.scale.y=SQ;m.position.set(x,0,z);ROOT.add(m);ao(x,z,.8,.8);W.LSRC.push({col:0xffbb79,base:.9,dist:5.3,x:x+lampW*.17,y:lampW*.62*SQ,z:z+.1,kind:'fire',ph:sx*.71});continue}
   part(timbers,x,1.08,z,.17,2.16,.17);part(ironwork,x,.29,z,.205,.11,.205);part(grime,x,.45,z,.2,.9,.2);ao(x,z,.9,.9);
   part(ironwork,x+.19,2.05,z,.53,.095,.12);part(ironwork,x+.36,1.94,z,.043,.20,.043);
   part(ironwork,x+.36,1.80,z,.31,.10,.28);part(ironwork,x+.36,1.45,z,.28,.065,.26);

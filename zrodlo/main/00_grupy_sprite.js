@@ -701,7 +701,7 @@ const SPRITE_GROUPS={
  add('npcp_wieslawa','assets/npc/1fbd07cb44e343db2b4a085e6797eb3f92fa5cf6c51deb22bfac206785b4bea9.webp');
  SPRITE_RES.npc_ambrozy=4;SPRITE_RES.npc_wieslawa=4;
  // koksowniki i mur oporowy korzystaja z grafik innych rozdzialow
- for(const k of ['p2_brazier_0','p2_brazier_1','p2_brazier_2','p2_brazier_3','wl_fort','wl_cap'])if(SPRITE_GROUPS[k]&&!SPRITE_GROUPS[k].includes('r6'))SPRITE_GROUPS[k].push('r6');
+ for(const k of ['p2_brazier_0','p2_brazier_1','p2_brazier_2','p2_brazier_3','wl_fort','wl_cap','wl_town','wl_plank','p3_roof_tile','p3_roof_shack','p3_street_lantern'])if(SPRITE_GROUPS[k]&&!SPRITE_GROUPS[k].includes('r6'))SPRITE_GROUPS[k].push('r6');
 }
 
 // Rycerz, nowy styl (15.11.2026): arkusz Wypadu (4 klatki: bok, dol, gora; rzad 4 = powrot: bok, dol, gora)
