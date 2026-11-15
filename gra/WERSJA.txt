@@ -802,3 +802,4 @@ cache724 · Wybor rozdzialu: Menu glowne, Kaplica, Kronika i Tryb gry w spalonej
 cache725 · Menu glowne: Graj, Kaplica, Kronika, Instrukcja, Opcje i Wyzwanie dnia w spalonej desce, zaznaczenie zarem (nie sprawdzono: pad, monitor autora, itch.io)
 cache726 · Menu glowne: logo i deski w lewej kolumnie, logo nad deskami z winieta, scena z ogniskiem odslonieta (nie sprawdzono: pad, monitor autora, itch.io)
 cache727 · Menu glowne: licznik Popiolow i poziomu na dole lewej kolumny pod trybem gry, z paskiem postepu poziomu (nie sprawdzono: pad, monitor autora, itch.io)
+cache728 · Menu glowne: deski Graj-Opcje bez ikon (nie sprawdzono: pad, monitor autora, itch.io)
