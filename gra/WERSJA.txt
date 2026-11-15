@@ -827,3 +827,4 @@ cache749 · Noc 16 min (2x8, polnoc 8:00), Napor w 4:00 i 12:00 zakonczony elita
 cache750 · Uderzenia duzych wrogow: pyl HD zamiast wielkiego pikselowego pierscienia krysztalow
 cache751 · Stamina: regeneracja +15%, techniki aktywne ok. 5% tansze
 cache752 · Stamina: tylko regeneracja +15%, koszty technik z powrotem bez zmian
+cache753 · Leczenie: serce po elicie i po naporze, kociolki odnawiaja sie w polowie nocy

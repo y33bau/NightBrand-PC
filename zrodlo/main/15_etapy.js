@@ -8,7 +8,7 @@ const SHOP=[
   {id:'magnet',name:(EN?'Lodestone':'Kamień przyciągania'),d:(EN?'+40% pickup range for coins and hearts.':'+40% zasięgu zbierania monet i serc.'),cost:25}];
 const price=it=>Math.round(it.cost*Math.pow(it.g||1.35,S.bought[it.id]||0)*(1-(S.disc||0))*(S.pk&&S.pk.shopMul||1));
 function dissolveAll(msg){for(const e of S.enemies){scene.remove(e.mesh);for(let i=0;i<8;i++)S.parts.push({k:'d',x:e.x,y:e.y,z:rnd(0,14),vx:rnd(-7,7),vy:0,vz:rnd(12,30),c:P.bone2,life:2})}S.enemies=[];if(msg)say(msg)}
-function startBreak(){if(S.pk&&S.pk.noShop&&!S.dg){S.stage='p2';dissolveAll(null);say(EN?'Curse of the Empty Stall: Marga does not come tonight. The night goes on.':'Klątwa Pustego kramu: Marga tej nocy nie przychodzi. Noc trwa dalej.');if(S.pendLv>0)openLevelUp();return}S.stage='break';dissolveAll(null);let spot=CH===1?[1427,549]:null;for(let i=0;i<30&&!spot;i++){const a=Math.random()*Math.PI*2,x=pl.x+Math.cos(a)*44,y=pl.y+Math.sin(a)*30;if(!boxSolid(x,y,6,3))spot=[x,y]}
+function startBreak(){/* 15.11.2026: kociolki odnawiaja zapas na druga polowe nocy */if(!S.dg&&!S.endless&&S.pot&&Object.keys(S.pot).length){S.pot={};ftInfo(EN?'The cauldrons are full again.':'Kociołki napełniły się na nowo.')}if(S.pk&&S.pk.noShop&&!S.dg){S.stage='p2';dissolveAll(null);say(EN?'Curse of the Empty Stall: Marga does not come tonight. The night goes on.':'Klątwa Pustego kramu: Marga tej nocy nie przychodzi. Noc trwa dalej.');if(S.pendLv>0)openLevelUp();return}S.stage='break';dissolveAll(null);let spot=CH===1?[1427,549]:null;for(let i=0;i<30&&!spot;i++){const a=Math.random()*Math.PI*2,x=pl.x+Math.cos(a)*44,y=pl.y+Math.sin(a)*30;if(!boxSolid(x,y,6,3))spot=[x,y]}
     spot=spot||[pl.x+20,pl.y];S.merchant={x:spot[0],y:spot[1],state:'in',t:1,wait:120};play('bless',0);
     for(let i=0;i<26;i++)S.parts.push({k:'a',x:spot[0]+rnd(-8,8),y:spot[1],z:rnd(0,20),vx:rnd(-8,8),vy:0,vz:rnd(8,20),c:'#3d4a3a',life:rnd(1,2)});
     setTimeout(()=>{if(S&&S.merchant&&S.merchant.state==='here'||S&&S.merchant&&S.merchant.state==='in')say((EN?'Marga sets up her stall. You have two minutes to trade.':'Marga rozkłada kram. Masz dwie minuty na handel.'))},2500)}
@@ -34,6 +34,8 @@ function solneTick(){
 }
 
 function stageTick(dt){if(CH===PORT)solneTick();
+  /* 15.11.2026: po kazdym naporze zostaje jedno serce (+10% HP) obok gracza */
+  if(!S.dg&&!S.endless&&!S.train&&!pl.dead)for(let i=0;i<SURGE.length;i++)if(S.t>=SURGE[i]+SURGE_LEN&&!((S.surgeEnd||0)&1<<i)){S.surgeEnd=(S.surgeEnd||0)|1<<i;let hx=pl.x+rnd(-24,24),hy=pl.y+rnd(-14,14);if(boxSolid(hx,hy,3,2)){hx=pl.x;hy=pl.y}dropPick('h',hx,hy);ftInfo(EN?'The surge ebbs. Something is left behind.':'Napór opada. Coś zostało po nim na ziemi.')}
   if(S.stage==='p1'&&S.t>=BREAK_AT&&!S.dg&&!S.endless){S.stage='collector';S.collT=2.5;dissolveAll((EN?'Midnight. The dead retreat into the darkness.':'Północ. Martwi cofają się w ciemność.'))}
   const m=S.merchant;
   if(m){if(m.state==='in'){m.t-=dt*1.5;if(m.t<=0)m.state='here'}
