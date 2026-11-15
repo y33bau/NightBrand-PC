@@ -719,8 +719,8 @@ const NB_KAMIEN={r:'assets/ui/5603fdc363945b6e1f72befd731652697b1d181fec06a9fd79
 #nbOboz .luna{left:62%;top:42%;width:34%;height:46%;background:radial-gradient(ellipse at 50% 55%,rgba(255,140,60,.28),rgba(255,110,40,0) 65%);mix-blend-mode:screen;animation:nbLuna 2.3s ease-in-out infinite}
 #nbOboz .ogA,#nbOboz .ogB{left:74.9%;top:42%;width:8.4%;height:20%;background:url('assets/ui/69da6ff24de1c6408c4b15f672aea07db6bb74453ed8ea4625dc930ff290c17f.webp') 0 0/400% 200% no-repeat;mix-blend-mode:screen;opacity:.95}
 #nbOboz canvas.isk{position:absolute;inset:0;width:100%;height:100%}
-#nbOboz .bohater{left:65.5%;bottom:17%;height:31%;aspect-ratio:var(--ar,.9);background:center bottom/contain no-repeat;transform-origin:50% 100%;filter:brightness(.94);animation:nbOddech 4.2s ease-in-out infinite,nbBlask 2.3s ease-in-out infinite}
-#nbOboz .kontakt{left:64.5%;bottom:15.4%;width:15%;height:4.5%;background:radial-gradient(closest-side,rgba(6,3,2,.85),rgba(6,3,2,.45) 55%,rgba(6,3,2,0));filter:blur(2px)}
+#nbOboz .bohater{left:68.3%;bottom:17%;height:31%;aspect-ratio:var(--ar,.9);background:center bottom/contain no-repeat;transform-origin:50% 100%;filter:brightness(.94);animation:nbOddech 4.2s ease-in-out infinite,nbBlask 2.3s ease-in-out infinite}
+#nbOboz .kontakt{left:67.3%;bottom:15.4%;width:15%;height:4.5%;background:radial-gradient(closest-side,rgba(6,3,2,.85),rgba(6,3,2,.45) 55%,rgba(6,3,2,0));filter:blur(2px)}
 #nbOboz .mgla{left:61%;bottom:11.5%;width:27%;height:12%;background:url('assets/ui/b5aa0b5f36f083311f26a7dd935871b17ce548e28b3915092de5be30df5207be.webp') center/100% 100% no-repeat;opacity:.6;filter:sepia(.4) brightness(.85);animation:nbMgla 14s ease-in-out infinite alternate}
 #nbOboz .ziarno{inset:0;background:url('assets/ui/7c8deda4dcbd2ff1b4e8381167626c58a6e734b1cd9bdc331a3399749f2b8595.webp') 0 0/256px 256px repeat;mix-blend-mode:overlay;opacity:.13;animation:nbZiarno .5s steps(1) infinite}
 #nbOboz .bohater.lustro{transform:scaleX(-1)}
@@ -743,8 +743,8 @@ const NB_KAMIEN={r:'assets/ui/5603fdc363945b6e1f72befd731652697b1d181fec06a9fd79
   const kl=now=>{if(!widoczne()){anim=0;return}const t=(now-t0)/100,f=Math.floor(t)%8,m=t%1;oA.style.backgroundPosition=poz(f);oB.style.backgroundPosition=poz((f+1)%8);oA.style.opacity=String(.95*(1-m));oB.style.opacity=String(.95*m);
    if(Math.random()<.08)flT=.93+Math.random()*.14;fl+=(flT-fl)*.12;luna.style.opacity=String(Math.min(1,.8*fl));
    const w=CVs.width=box.clientWidth,h=CVs.height=box.clientHeight;CXs.clearRect(0,0,w,h);
-   if(isk.length<50&&Math.random()<.45)isk.push({x:w*(.792+(Math.random()-.5)*.02),y:h*.56,vx:(Math.random()-.5)*w*.0005,vy:-h*(.0012+Math.random()*.002),l:1,r:w*(.0006+Math.random()*.001)});
-   isk=isk.filter(q=>(q.l-=.006+Math.random()*.004)>0);for(const q of isk){q.vx+=(Math.random()-.5)*w*.00006;q.x+=q.vx;q.y+=q.vy;CXs.fillStyle=`rgba(255,${150+60*q.l|0},70,${q.l*q.l})`;CXs.shadowColor='rgba(255,110,30,.9)';CXs.shadowBlur=q.r*5;CXs.beginPath();CXs.arc(q.x,q.y,q.r,0,7);CXs.fill()}
+   if(isk.length<40&&Math.random()<.2)isk.push({x:w*(.792+(Math.random()-.5)*.02),y:h*.56,vx:(Math.random()-.5)*w*.00022,vy:-h*(.0004+Math.random()*.0007),l:1,r:w*(.0006+Math.random()*.001)});
+   isk=isk.filter(q=>(q.l-=.0028+Math.random()*.002)>0);for(const q of isk){q.vx+=(Math.random()-.5)*w*.00003;q.x+=q.vx;q.y+=q.vy;CXs.fillStyle=`rgba(255,${150+60*q.l|0},70,${q.l*q.l})`;CXs.shadowColor='rgba(255,110,30,.9)';CXs.shadowBlur=q.r*5;CXs.beginPath();CXs.arc(q.x,q.y,q.r,0,7);CXs.fill()}
    anim=requestAnimationFrame(kl)};
   const start=()=>{if(RM){oA.style.backgroundPosition=poz(0);oA.style.opacity='.95';oB.style.opacity='0';return}if(!anim&&widoczne()){t0=performance.now();anim=requestAnimationFrame(kl)}};
   start();new MutationObserver(start).observe(T,{attributes:true,attributeFilter:['hidden','class']})}
@@ -778,7 +778,8 @@ ${O} #nbW .nst,${O} #nbP .nst{position:absolute!important;left:50%!important;top
 ${O} #nbW i,${O} #nbP i{font-style:normal!important}
 ${O} #nbW .nw,${O} #nbP .nw{position:absolute!important;pointer-events:none!important;display:block!important}
 ${O} #nbW button,${O} #nbP button{font:inherit!important;color:inherit!important;background:none!important;border:none!important;padding:0!important;margin:0!important;cursor:pointer!important;text-align:left!important;outline:none!important}
-${O} #nbW button:focus-visible,${O} #nbP button:focus-visible{outline:calc(2*var(--u)) solid rgba(240,190,120,.85)!important;outline-offset:calc(3*var(--u))!important}
+${O} #nbW button:focus-visible{outline:none!important}/* 15.11.2026: wybor postaci bez zlotej ramki, wystarcza podswietlenie sylwetki */
+${O} #nbP button:focus-visible{outline:calc(2*var(--u)) solid rgba(240,190,120,.85)!important;outline-offset:calc(3*var(--u))!important}
 ${O} .nbd{background:url('${IMG.deska}') center/100% 100% no-repeat!important;font:700 calc(18.5*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.12em!important;color:#e6d6b8!important;text-shadow:0 2px 3px #000!important;text-align:center!important;filter:brightness(.86)!important}
 ${O} .nbd:hover,${O} .nbd:focus-visible{filter:brightness(1.08)!important}
 ${O} .nbd.zn{filter:brightness(1.14) drop-shadow(0 0 calc(6*var(--u)) rgba(255,120,40,.45))!important;color:#ffe2b8!important;text-shadow:0 0 calc(10*var(--u)) rgba(255,140,60,.75)!important;background:radial-gradient(ellipse 46% 42% at 50% 58%,rgba(255,118,36,.48),rgba(255,90,30,.14) 60%,rgba(255,90,30,0) 100%) center/86% 74% no-repeat,url('${IMG.deska}') center/100% 100% no-repeat!important}
