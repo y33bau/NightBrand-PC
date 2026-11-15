@@ -354,12 +354,12 @@ function pool(x,y,w,h){if(stampBloodHD(x,y,w,h))return;if(DEC.pool){decalAt(DEC.
 function heal(n){if(pl.dead||pl.hp>=pl.max)return 0;const h=Math.min(n,pl.max-pl.hp);pl.hp+=h;return h}
 const might=()=>(1+.1*(S.whet||0))*(S.fury>0?1.2:1)*(S.pk?S.pk.dmg:1);
 function spriteMesh(geo){const m=new THREE.Mesh(geo,A.fx.slash[0].n);scene.add(m);return m}
-function addVfx(anim,dur,x,y,h,size,mode,rot=0,flip=1){const m=spriteMesh(geoC);m.renderOrder=6;setFrame(m,anim[0]);const f={mesh:m,anim,t:0,dur,x,y,h,size,mode,rot,flip};polishMagic(f,anim._magicKind);S.vfx.push(f);return m}
+function addVfx(anim,dur,x,y,h,size,mode,rot=0,flip=1){const m=spriteMesh(geoC);m.renderOrder=6;setFrame(m,anim[0]);const f={mesh:m,anim,t:0,dur,x,y,h,size,mode,rot,flip};polishMagic(f,anim._magicKind);if(anim._sc)f.size*=anim._sc;S.vfx.push(f);return m}
 // Combat presentation only: never changes AI, hitboxes, rewards or gameplay RNG.
 const COMBAT_POLISH_ON=new URLSearchParams(location.search).get('combatfx')!=='0';
 let combatVisualSeed=0x63b09a17;
 function combatVisualBuild(fn){const original=Math.random;Math.random=()=>{combatVisualSeed=(Math.imul(combatVisualSeed,1664525)+1013904223)>>>0;return combatVisualSeed/4294967296};try{return fn()}finally{Math.random=original}}
-const MAGIC_KINDS=new Set(['frostf','firef','frosti','firei','freeze','burn','poison','bleed','knock','stone','bolt','boss','boltHit','earth']);
+const MAGIC_KINDS=new Set(['knock_ring','frostf','firef','frosti','firei','freeze','burn','poison','bleed','knock','stone','bolt','boss','boltHit','earth']);
 function polishMagic(f,kind){
   if(!COMBAT_POLISH_ON||!kind)return f;f.magicKind=kind;
   if(f.mode==='ground')return f;
@@ -370,7 +370,7 @@ function polishMagic(f,kind){
   }else if(['freeze','burn','poison','bleed'].includes(kind)){f.size*=.72;f.h=1.3}
   else if(kind==='firei'||kind==='frosti'){f.size*=.82;f.h=1.45}
   else if(kind==='boltHit'){f.size*=.8;f.h=1.35}
-  else if(kind==='knock'){f.mode='ground';f.h=.09;f.sy=1/Math.sin(PITCH);f.weaponAspect=null}
+  else if(kind==='knock'||kind==='knock_ring'){f.mode='ground';f.h=.09;f.sy=1/Math.sin(PITCH);f.weaponAspect=null}
   else{f.size*=.85;f.h=Math.max(1.4,f.h)}
   return f;
 }
@@ -405,25 +405,28 @@ function weaponFloorLift(f,fr){
 function emitWeaponSlash(a,c,s,R,owner=pl,trail=COMBAT_TRAIL[encLevel()[0]]||embTrail()){
   const heavy=a.kind==='h',size=Math.min(heavy?1.25:1.05,R/16*(heavy?.48:.44)),x=owner.x+c*R*.50,y=owner.y+s*R*.50,h=heavy?1.7:1.55,rot=-screenAng(c,s);
   let f;
-  if(false&&S.zab){
-    if(heavy)f=zfx('fx_zab',2,.34,owner.x,owner.y,.72,R/16*.94,'ground',0);
-    else f=zfx('fx_zab',a.combo===4?1:0,a.combo===4?.24:.22,x,y,h,size,'bill',rot);
+  if(S.zab&&!trail&&skFrames('z_lekki')){// Zabójczyni: własne cięcia HD (bez zaklęcia ostrza; z zaklęciem zostaje kolorowe cięcie wspólne)
+    if(heavy)f=skAdd('z_ciezki',.34,owner.x,owner.y,.72,R/16*.94,'ground',0);
+    else f=skAdd(a.combo===4?'z_fin':'z_lekki',a.combo===4?.24:.22,x,y,h,size,'bill',a.combo===4?0:rot);
   }else if(S.dzw){
     if(heavy){f=skAdd('ham_v',.3,x,y,.9,size*1.15,'bill',0);skAdd('ham_r',.3,owner.x+c*R*.62,owner.y+s*R*.62,.15,size*1.1,'ground',0)}
     else f=skAdd(a.combo%2?'ham_d':'ham_h',.26,x,y,h,size*1.05,'bill',rot)
   }else if(S.mil){
     f=skAdd('sp_h',heavy?.3:.24,x+c*R*.1,y+s*R*.1,h,size*(heavy?1.6:1.3),'bill',rot);if(heavy)skAdd('sp_s',.26,owner.x+c*R*.9,owner.y+s*R*.9,.9,size*.9,'bill',0)
-  }else f=skAdd('slash',.26,x,y,h,size,'bill',rot,trail);
+  }else f=(heavy&&!trail&&skAdd('slash_h',.26,x,y,h,size,'bill',rot))||skAdd('slash',.26,x,y,h,size,'bill',rot,trail);
   if(!f){addVfx(A.fx.slash,.26,x,y,h,size,'bill',rot);f=S.vfx[S.vfx.length-1]}
   return bindWeaponFx(f,owner);
 }
 // ---- nowe animacje skilli i pocisków (Gemini, 30.10.2026): arkusz skill_fx, 192 px na klatkę ----
-const SKM={"knock": [0, 6], "earth": [1, 6], "stone": [2, 6], "frostf": [3, 4], "frosti": [4, 6], "firef": [5, 4], "firei": [6, 6], "casc": [7, 6], "whirl": [8, 4], "wave1": [9, 4], "wave2": [10, 4], "rush": [11, 4], "slash": [12, 4], "bolt": [13, 3], "boltHit": [14, 6], "boss": [15, 4], "freeze": [16, 4], "burn": [17, 4], "poison": [18, 4], "bleed": [19, 4], "slash_fire": [20, 4], "slash_ice": [21, 4], "slash_poison": [22, 4], "slash_blood": [23, 4], "whirl_blood": [24, 4], "whirl_ice": [25, 4], "whirl_poison": [26, 4], "whirl_fire": [27, 4], "ham_h": [28, 4], "ham_v": [29, 4], "ham_d": [30, 4], "ham_r": [31, 4], "sp_h": [32, 4], "sp_d1": [33, 4], "sp_d2": [34, 4], "sp_s": [35, 4], "parry_d": [36, 4], "kat_cut": [0, 4, "kat_fx"], "kat_heavy": [1, 4, "kat_fx"], "kat_land": [2, 4, "kat_fx"], "kat_parry": [3, 4, "kat_fx"]},SKFX={};
+const SKM={"knock": [0, 6], "earth": [1, 6], "stone": [2, 6], "frostf": [3, 4], "frosti": [4, 6], "firef": [5, 4], "firei": [6, 6], "casc": [7, 6], "whirl": [8, 4], "wave1": [9, 4], "wave2": [10, 4], "rush": [11, 4], "slash": [12, 4], "bolt": [13, 3], "boltHit": [14, 6], "boss": [15, 4], "freeze": [16, 4], "burn": [17, 4], "poison": [18, 4], "bleed": [19, 4], "slash_fire": [20, 4], "slash_ice": [21, 4], "slash_poison": [22, 4], "slash_blood": [23, 4], "whirl_blood": [24, 4], "whirl_ice": [25, 4], "whirl_poison": [26, 4], "whirl_fire": [27, 4], "ham_h": [28, 4], "ham_v": [29, 4], "ham_d": [30, 4], "ham_r": [31, 4], "sp_h": [32, 4], "sp_d1": [33, 4], "sp_d2": [34, 4], "sp_s": [35, 4], "parry_d": [36, 4], "kat_cut": [0, 4, "kat_fx"], "kat_heavy": [1, 4, "kat_fx"], "kat_land": [2, 4, "kat_fx"], "kat_parry": [3, 4, "kat_fx"], "knock_ring": [0, 6]},SKFX={};
+// Efekty HD (15.11.2026, nowe grafiki): klucz -> [atlas, pierwsza klatka, liczba klatek, skala]. Skala wyrównuje wielkość na ekranie do starych efektów (kadr HD jest ciaśniejszy). Brak atlasu = stare klatki z SKM.
+const SKM_HD={"wave1":["fxhd_0",0,4,0.549],"wave2":["fxhd_0",4,4,0.526],"rush":["fxhd_0",8,4,0.392],"frostf":["fxhd_0",12,4,1.024],"frosti":["fxhd_0",16,6,1.026],"firef":["fxhd_0",22,4,1.023],"firei":["fxhd_0",26,6,1.026],"slash":["fxhd_0",32,4,0.815],"slash_h":["fxhd_0",36,4,0.817],"slash_fire":["fxhd_0",40,4,0.815],"slash_ice":["fxhd_0",44,4,0.815],"slash_poison":["fxhd_0",48,4,0.816],"slash_blood":["fxhd_0",52,4,0.815],"whirl":["fxhd_0",56,4,0.849],"whirl_fire":["fxhd_0",60,4,0.86],"whirl_ice":["fxhd_0",64,4,0.861],"whirl_poison":["fxhd_0",68,4,0.862],"whirl_blood":["fxhd_1",0,4,0.862],"knock":["fxhd_1",4,6,1],"earth":["fxhd_1",10,6,1.026],"stone":["fxhd_1",16,6,1.027],"ham_h":["fxhd_1",22,4,0.636],"ham_d":["fxhd_1",26,4,0.575],"ham_v":["fxhd_1",30,4,0.631],"ham_r":["fxhd_1",34,6,0.51],"d_echo":["fxhd_1",40,6,1],"d_zastaw":["fxhd_1",46,4,1],"sp_h":["fxhd_1",50,4,0.844],"sp_s":["fxhd_1",54,4,0.515],"parry_d":["fxhd_1",58,4,0.481],"kat_cut":["fxhd_1",62,4,1.046],"kat_heavy":["fxhd_1",66,4,1.017],"kat_land":["fxhd_1",70,6,1.036],"kat_parry":["fxhd_2",4,4,1.054],"k_hak":["fxhd_2",8,2,0.9],"k_lancuch":["fxhd_2",10,1,1],"k_chwyt":["fxhd_2",11,1,1],"z_lekki":["fxhd_2",12,4,1.016],"z_fin":["fxhd_2",16,4,1.041],"z_ciezki":["fxhd_2",20,6,1.012],"z_sierp":["fxhd_2",26,4,0.905],"z_rend":["fxhd_2",30,4,1],"r_wypad":["fxhd_2",34,4,1],"m_odlew":["fxhd_2",38,4,0.926],"m_odlew_wyb":["fxhd_2",42,6,1],"m_fala":["fxhd_2",48,6,0.953],"m_pas":["fxhd_2",54,4,0.959]},FXHD_C=320,FXHD_COLS=8;
 // runda 245: statusy ostrza (ogień, lód, trucizna, krew) = te same animacje co stal, tylko przebarwione (mapa gradientu po jasności)
 const SK_TINTS={fire:[[110,14,0],[255,104,18],[255,236,150]],ice:[[16,52,130],[84,184,255],[236,251,255]],poison:[[14,62,16],[108,220,58],[232,255,172]],blood:[[84,0,8],[188,18,30],[255,128,116]]};
 function skTint(c,tint){const T=SK_TINTS[tint];if(!T)return;const g=c.getContext('2d'),d=g.getImageData(0,0,c.width,c.height),p=d.data;for(let i=0;i<p.length;i+=4){if(!p[i+3])continue;let l=Math.pow((p[i]*.299+p[i+1]*.587+p[i+2]*.114)/255,.8);l=Math.min(1,l*1.15);const a=l<.5?T[0]:T[1],b=l<.5?T[1]:T[2],q=l<.5?l*2:(l-.5)*2;p[i]=a[0]+(b[0]-a[0])*q;p[i+1]=a[1]+(b[1]-a[1])*q;p[i+2]=a[2]+(b[2]-a[2])*q}g.putImageData(d,0,0)}
-function skFrames(k,tint){if(tint&&SKM[k+'_'+tint]){k+='_'+tint;tint=null}const key=tint?k+':'+tint:k;if(SKFX[key])return SKFX[key];const m=SKM[k],im=typeof IMGS!=='undefined'&&IMGS&&IMGS[m&&m[2]||'skill_fx'];if(!im||!m)return null;const out=[];for(let i=0;i<m[1];i++){const c=document.createElement('canvas');c.width=c.height=192;c.getContext('2d').drawImage(im,i*192,m[0]*192,192,192,0,0,192,192);if(tint)skTint(c,tint);const t=new THREE.CanvasTexture(c);t.magFilter=t.minFilter=THREE.LinearFilter;t.generateMipmaps=false;out.push({n:new THREE.MeshBasicMaterial({map:t,transparent:true,alphaTest:.04,depthWrite:false,depthTest:false,side:THREE.DoubleSide,fog:false})})}if(MAGIC_KINDS.has(k))out._magicKind=k;return SKFX[key]=out}
-function skLoop(fr,dur,fps){const n=Math.max(fr.length,Math.round(dur*fps/fr.length)*fr.length),o=[];for(let i=0;i<n;i++)o.push(fr[i%fr.length]);o._magicKind=fr._magicKind;return o}
+function skFramesHD(k,tint){const h=SKM_HD[k],im=h&&typeof IMGS!=='undefined'&&IMGS&&IMGS[h[0]];if(!im)return null;const out=[];for(let i=0;i<h[2];i++){const j=h[1]+i,c=document.createElement('canvas');c.width=c.height=FXHD_C;c.getContext('2d').drawImage(im,(j%FXHD_COLS)*FXHD_C,Math.floor(j/FXHD_COLS)*FXHD_C,FXHD_C,FXHD_C,0,0,FXHD_C,FXHD_C);if(tint)skTint(c,tint);const t=new THREE.CanvasTexture(c);t.magFilter=THREE.LinearFilter;t.minFilter=THREE.LinearMipmapLinearFilter;t.generateMipmaps=true;out.push({n:new THREE.MeshBasicMaterial({map:t,transparent:true,alphaTest:.04,depthWrite:false,depthTest:false,side:THREE.DoubleSide,fog:false})})}out._sc=h[3];return out}
+function skFrames(k,tint){if(tint&&(SKM_HD[k+'_'+tint]||SKM[k+'_'+tint])){k+='_'+tint;tint=null}const key=tint?k+':'+tint:k;if(SKFX[key])return SKFX[key];{const hd=skFramesHD(k,tint);if(hd){if(MAGIC_KINDS.has(k))hd._magicKind=k;return SKFX[key]=hd}}const m=SKM[k],im=typeof IMGS!=='undefined'&&IMGS&&IMGS[m&&m[2]||'skill_fx'];if(!im||!m)return null;const out=[];for(let i=0;i<m[1];i++){const c=document.createElement('canvas');c.width=c.height=192;c.getContext('2d').drawImage(im,i*192,m[0]*192,192,192,0,0,192,192);if(tint)skTint(c,tint);const t=new THREE.CanvasTexture(c);t.magFilter=t.minFilter=THREE.LinearFilter;t.generateMipmaps=false;out.push({n:new THREE.MeshBasicMaterial({map:t,transparent:true,alphaTest:.04,depthWrite:false,depthTest:false,side:THREE.DoubleSide,fog:false})})}if(MAGIC_KINDS.has(k))out._magicKind=k;return SKFX[key]=out}
+function skLoop(fr,dur,fps){const n=Math.max(fr.length,Math.round(dur*fps/fr.length)*fr.length),o=[];for(let i=0;i<n;i++)o.push(fr[i%fr.length]);o._magicKind=fr._magicKind;o._sc=fr._sc;return o}
 function skAdd(k,dur,x,y,h,size,mode,rot=0,tint){const fr=skFrames(k,tint);if(!fr)return null;addVfx(fr,dur,x,y,h,size,mode||'bill',rot);return S.vfx[S.vfx.length-1]}
 
 

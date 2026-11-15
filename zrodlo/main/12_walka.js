@@ -271,9 +271,9 @@ function fxFrames(name,row,n=4){const key=name+row;if(FXC[key])return FXC[key];c
  for(let i=0;i<n;i++){const c=document.createElement('canvas');c.width=c.height=s2;c.getContext('2d').drawImage(im,i*cw,row*ch,cw,ch,(s2-cw)/2,(s2-ch)/2,cw,ch);const t=new THREE.CanvasTexture(c);t.magFilter=t.minFilter=THREE.LinearFilter;t.generateMipmaps=false;out.push({n:new THREE.MeshBasicMaterial({map:t,transparent:true,alphaTest:.04,depthWrite:false,depthTest:false,side:THREE.DoubleSide,fog:false})})}return FXC[key]=out}
 function zfx(name,row,dur,x,y,h,size,mode,rot){const fr=fxFrames(name,row);if(!fr)return null;addVfx(fr,dur,x,y,h,size,mode||'bill',rot||0);return S.vfx[S.vfx.length-1]}
 function zabSlashFx(a,c,s,R,vs,ox=pl.x,oy=pl.y){
- if(a.kind==='h')return !!zfx('fx_zab',2,.34,ox,oy,.13,R/16*1.1,'ground',0);
- if(a.combo===4)return !!zfx('fx_zab',1,.24,ox+c*R*.6,oy+s*R*.6,.6,vs*1.3,'bill',0);
- return !!zfx('fx_zab',0,.22,ox+c*R*.55,oy+s*R*.55,.6,vs*1.15,'bill',-screenAng(c,s))}
+ if(a.kind==='h')return !!(skAdd('z_ciezki',.34,ox,oy,.13,R/16*1.1,'ground',0)||zfx('fx_zab',2,.34,ox,oy,.13,R/16*1.1,'ground',0));
+ if(a.combo===4)return !!(skAdd('z_fin',.24,ox+c*R*.6,oy+s*R*.6,.6,vs*1.3,'bill',0)||zfx('fx_zab',1,.24,ox+c*R*.6,oy+s*R*.6,.6,vs*1.3,'bill',0));
+ return !!(skAdd('z_lekki',.22,ox+c*R*.55,oy+s*R*.55,.6,vs*1.15,'bill',-screenAng(c,s))||zfx('fx_zab',0,.22,ox+c*R*.55,oy+s*R*.55,.6,vs*1.15,'bill',-screenAng(c,s)))}
 function skTickCommon(dt){pl.block=false;pl.parryT=0;pl.atkHeld=false;pl.charging=false;pl.queue=false;heavyPress=false;pl.staDelay=Math.max(0,pl.staDelay-dt);for(const k of ['parryHealCd','parryCd','riposte','dance'])if(pl[k]>0)pl[k]=Math.max(0,pl[k]-dt);waveTick(dt)}
 function skPrep(){pl.block=false;pl.blockT=0;pl.parryT=0;pl.atkHeld=false;pl.charging=false;pl.queue=false;pl.comboT=0}
 function endSk(kind){const a=pl?.atk;if(!a||a.kind!==kind)return;if(kind==='hook')hookClear(a);pl.atk=null;pl.swingT=0;pl.queue=false;pl.atkHeld=false;pl.charging=false}
@@ -289,7 +289,7 @@ function lungeHits(a){const dmg=skDmg(SL.light.dmg[0])*LUNGE.mul[a.L-1],tx=pl.x+
   if(!e.dead){if(big)breakPoise(e,8);else slashStagger(e,.45,true)}swordSparks(e.x,e.y,'#ffd2a0',10);blood(e.x,e.y,6,a.dx,a.dy)}}finally{ftMelee=oldM;ftHeavy=oldH;ftCrit=oldC}
  if(n){play('bladeHeavy',.05);shake(.1,.12);if(!a.hitStop){a.hitStop=1;S.hitstop=Math.max(S.hitstop||0,.045)}}}
 function lungeTick(dt){const a=pl.atk;if(pl.dead||pl.broken>0){endSk('wypad');return}skTickCommon(dt);
- if(a.stage==='wind'){a.t-=dt;if(a.t<=0){a.stage='dash';a.at=0;play('swing',0);for(let i=0;i<10;i++)S.parts.push({k:'d',x:pl.x-a.dx*4+rnd(-4,4),y:pl.y-a.dy*4+rnd(-2,2),z:rnd(0,3),vx:-a.dx*rnd(20,60)+rnd(-12,12),vy:0,vz:rnd(4,14),c:'#8a7a66',life:rnd(.3,.6)})}return}
+ if(a.stage==='wind'){a.t-=dt;if(a.t<=0){a.stage='dash';a.at=0;play('swing',0);skAdd('r_wypad',.32,pl.x+a.dx*LUNGE.dist*.5,pl.y+a.dy*LUNGE.dist*.5,.7,LUNGE.dist/29.4,'bill',-screenAng(a.dx,a.dy));for(let i=0;i<10;i++)S.parts.push({k:'d',x:pl.x-a.dx*4+rnd(-4,4),y:pl.y-a.dy*4+rnd(-2,2),z:rnd(0,3),vx:-a.dx*rnd(20,60)+rnd(-12,12),vy:0,vz:rnd(4,14),c:'#8a7a66',life:rnd(.3,.6)})}return}
  if(a.stage==='dash'){a.at+=dt;moveBox(pl,a.dx*LUNGE.dist/LUNGE.dur*dt,a.dy*LUNGE.dist/LUNGE.dur*dt,4,3,true);lungeHits(a);
   if(Math.random()<dt*60)S.parts.push({k:'d',x:pl.x-a.dx*6+rnd(-3,3),y:pl.y-a.dy*6,z:rnd(0,2),vx:-a.dx*rnd(10,30),vy:0,vz:rnd(2,8),c:'#7d6e5c',life:rnd(.25,.45)});
   if(a.at>=LUNGE.dur){a.stage='rec';a.t=LUNGE.rec;lungeHits(a)}return}
@@ -301,7 +301,7 @@ function rendCut(a){const cx=pl.x+a.dx*12,cy=pl.y+a.dy*12,dmg=skDmg(REND.dmg[a.L
  for(const e of S.enemies){if(e.dead||e.rise>0)continue;const d=Math.hypot(e.x-cx,e.y-cy);if(d<=REND.hitR+e.r)list.push([d,e])}
  list.sort((p,q)=>p[0]-q[0]);ftMelee=true;ftHeavy=false;ftCrit=false;
  try{for(const [d,e] of list.slice(0,REND.maxT)){const big=BIG.has(e.type)||e.type==='collector';if(!damageEnemy(e,dmg*finMul(e),a.dx,a.dy,.25,'sk:rend'))continue;if(!a.st.has(e)){a.st.add(e);supportEnchant(e,a,false);applyEnchants(e,a,false)}if(!e.dead){if(big)breakPoise(e,4);else slashStagger(e,.25)}}}finally{ftMelee=oldM;ftHeavy=oldH;ftCrit=oldC}
- {const vr=a.n%2?0:Math.random()*6.28;if(WEAPON_FX_ON)bindWeaponFx(zfx('fx_zab',a.n%2?1:0,.18,cx+a.dx*8,cy+a.dy*8,1.6,1.0,'bill',-screenAng(a.dx,a.dy)));else zfx('fx_zab',a.n%2?1:0,.18,cx+a.dx*8,cy+a.dy*8,.6,1.5,'bill',vr);}if(a.n%2===0)play('bladeLight',.03);shake(.05,.05)}
+ {const vr=a.n%2?0:Math.random()*6.28;const zk=a.n%2?'z_fin':'z_lekki',zr=a.n%2?1:0;if(WEAPON_FX_ON)bindWeaponFx(skAdd(zk,.18,cx+a.dx*8,cy+a.dy*8,1.6,1.0,'bill',-screenAng(a.dx,a.dy))||zfx('fx_zab',zr,.18,cx+a.dx*8,cy+a.dy*8,1.6,1.0,'bill',-screenAng(a.dx,a.dy)));else skAdd(zk,.18,cx+a.dx*8,cy+a.dy*8,.6,1.5,'bill',vr)||zfx('fx_zab',zr,.18,cx+a.dx*8,cy+a.dy*8,.6,1.5,'bill',vr);}if(a.n%2===0)play('bladeLight',.03);shake(.05,.05)}
 function rendTick(dt){const a=pl.atk;if(pl.dead||pl.broken>0){endSk('rend');return}skTickCommon(dt);
  if(a.stage==='wind'){a.t-=dt;if(a.t<=0){a.stage='cut';a.at=0;a.n=0}return}
  if(a.stage==='cut'){a.at+=dt;moveBox(pl,a.dx*REND.dist/REND.dur*dt,a.dy*REND.dist/REND.dur*dt,4,3,true);const done=a.at>=REND.dur;
@@ -312,7 +312,7 @@ function rendTick(dt){const a=pl.atk;if(pl.dead||pl.broken>0){endSk('rend');retu
 function beginFan(L){const level=Math.min(3,Math.max(1,L)),[dx,dy]=skDir();pl.fx=dx;pl.fy=dy;payActive('fan');S.fanCd=ACTIVE_CFG.fan.wait(level);S.actions.skill=(S.actions.skill||0)+1;skPrep();
  pl.atk={kind:'fan',stage:'wind',L:level,t:FAN.wind,dx,dy};play('swing',0)}
 function fanLaunch(a){const ang=Math.atan2(a.dy,a.dx),base=skDmg(SL.light.dmg[0])*FAN.dmgPct[a.L-1],life=.5;
- for(const off of [-FAN.cone,0,FAN.cone]){const t=ang+off,c=Math.cos(t),s=Math.sin(t),fr=fxFrames('fx_zab',3);let f=null;
+ for(const off of [-FAN.cone,0,FAN.cone]){const t=ang+off,c=Math.cos(t),s=Math.sin(t),fr=skFrames('z_sierp')||fxFrames('fx_zab',3);let f=null;
   if(fr){addVfx(skLoop(fr,life,14),life,pl.x+c*14,pl.y+s*14,.6,1.15,'bill',-screenAng(c,s));f=S.vfx[S.vfx.length-1]}
   (S.waves=S.waves||[]).push({f,x:pl.x+c*14,y:pl.y+s*14,vx:c*210,vy:s*210,t:life,r:9,dmg:base,hit:new Set(),cap:3,sk:'fan'})}
  play('katana',0);shake(.08,.08)}
@@ -323,15 +323,17 @@ function fanTick(dt){const a=pl.atk;if(pl.dead||pl.broken>0){endSk('fan');return
 function beginLDance(L){const level=Math.min(3,Math.max(1,L));payActive('ldance');S.ldCd=ACTIVE_CFG.ldance.wait(level);S.actions.skill=(S.actions.skill||0)+1;S.zDance=LDANCE.dur;S.zDanceL=level;play('swing',0);ftInfo(EN?'Last Dance!':'Ostatni Taniec!');for(let i=0;i<24;i++){const an=Math.random()*Math.PI*2;S.parts.push({k:'e',x:pl.x+Math.cos(an)*6,y:pl.y+Math.sin(an)*4,z:rnd(2,16),vx:Math.cos(an)*30,vy:Math.sin(an)*18,vz:rnd(6,20),c:Math.random()<.5?'#e0182c':'#ffb347',life:rnd(.3,.6)})}}
 // --- Hak Kata: hak leci na 5 pól, przyciąga pierwszego wroga pod nogi ---
 function hookVis(a,init){
- if(init){const hf=fxFrames('fx_kat',0),cf=fxFrames('fx_kat',1);if(hf){addVfx([hf[1]],99,pl.x,pl.y,.6,.8,'bill',-screenAng(a.dx,a.dy));a.vh=S.vfx[S.vfx.length-1]}if(cf){addVfx([cf[1]],99,pl.x,pl.y,.15,1,'ground',0);a.vc=S.vfx[S.vfx.length-1]}}
+ if(init){const hh=skFrames('k_hak'),ch=skFrames('k_lancuch'),hf=hh||fxFrames('fx_kat',0),cf=ch||fxFrames('fx_kat',1);
+  if(hf){const ar=[hh?hf[0]:hf[1]];ar._sc=hf._sc;addVfx(ar,99,pl.x,pl.y,.6,.8,'bill',-screenAng(a.dx,a.dy));a.vh=S.vfx[S.vfx.length-1]}
+  if(cf){addVfx([ch?cf[0]:cf[1]],99,pl.x,pl.y,.15,1,'ground',0);a.vc=S.vfx[S.vfx.length-1];if(ch){const tx=cf[0].n.map;if(tx.wrapS!==THREE.RepeatWrapping){tx.wrapS=THREE.RepeatWrapping;tx.needsUpdate=true}a.vc.chainTex=tx}}}
  if(a.vh){a.vh.x=a.hx;a.vh.y=a.hy;a.vh.t=0;if(WEAPON_FX_ON){a.vh.h=1.4;a.vh.weaponAspect=.74}}
- if(a.vc){if(WEAPON_FX_ON)a.vc.h=.7;const L=Math.hypot(a.hx-pl.x,a.hy-pl.y);a.vc.x=(pl.x+a.hx)/2;a.vc.y=(pl.y+a.hy)/2;a.vc.rot=-Math.atan2(a.hy-pl.y,a.hx-pl.x);a.vc.sx=Math.max(.05,L/32);a.vc.sy=.3;a.vc.t=0}}
+ if(a.vc){if(WEAPON_FX_ON)a.vc.h=.7;const L=Math.hypot(a.hx-pl.x,a.hy-pl.y);a.vc.x=(pl.x+a.hx)/2;a.vc.y=(pl.y+a.hy)/2;a.vc.rot=-Math.atan2(a.hy-pl.y,a.hx-pl.x);a.vc.sx=Math.max(.05,L/32);a.vc.sy=a.vc.chainTex?.22:.3;if(a.vc.chainTex)a.vc.chainTex.repeat.x=Math.max(.25,L/46);a.vc.t=0}}
 function hookClear(a){for(const v of [a.vh,a.vc])if(v)v.t=v.dur;a.vh=a.vc=null}
 function beginHook(L){const level=Math.min(3,Math.max(1,L)),[dx,dy]=skDir();pl.fx=dx;pl.fy=dy;payActive('hook');S.hookCd=ACTIVE_CFG.hook.wait(level);S.actions.skill=(S.actions.skill||0)+1;skPrep();
  pl.atk={kind:'hook',stage:'wind',L:level,t:HOOK.wind,dx,dy,len:0,hx:pl.x,hy:pl.y,tgt:null};play('swing',0)}
 function hookHit(a,e){const big=BIG.has(e.type)||e.type==='collector'||e.type==='glizzard',oldM=ftMelee,oldH=ftHeavy,oldC=ftCrit;ftMelee=true;ftHeavy=false;ftCrit=false;
  try{damageEnemy(e,skDmg(HOOK.dmg[a.L-1]),a.dx,a.dy,0,'sk:hook')}finally{ftMelee=oldM;ftHeavy=oldH;ftCrit=oldC}
- e.hookMark=HOOK.mark;play('hitH',.05);shake(.12,.1);swordSparks(e.x,e.y,'#c4202a',8);
+ e.hookMark=HOOK.mark;skAdd('k_chwyt',.3,e.x,e.y,.9,1,'bill',-screenAng(a.dx,a.dy));play('hitH',.05);shake(.12,.1);swordSparks(e.x,e.y,'#c4202a',8);
  if(e.dead||big){a.stage='ret';a.t=HOOK.rec;return}a.stage='pull';a.t=HOOK.pull;a.tgt=e}
 function hookTick(dt){const a=pl.atk;if(pl.dead||pl.broken>0){endSk('hook');return}skTickCommon(dt);
  if(a.stage==='wind'){a.t-=dt;if(a.t<=0){a.stage='fly';a.len=0;a.hx=pl.x;a.hy=pl.y;hookVis(a,true);play('swing',0)}return}
@@ -362,7 +364,7 @@ function syncWhirlVisual(dt=0){const a=pl?.atk;for(let i=0;i<whirlVisualPool.len
  const low=SETT.quality==='low',raw=ring?Math.floor(f.elapsed/(WHIRL.duration/8))%4:Math.min(3,Math.floor(f.elapsed/.055)),frame=low?raw<2?0:2:raw;
  setWhirlVisualFrame(f,frame);let warning=false;for(const e of S.enemies)if(!e.dead&&attackCue(e)&&Math.hypot(e.x-f.x,e.y-f.y)<f.radius+e.r+12){warning=true;break}
  const m=f.mesh;m.visible=!warning;m.position.set(f.x/16,WEAPON_FX_ON?(ring?.72:.07):.13,f.y/16);m.rotation.set(-Math.PI/2,0,0);const size=f.radius*2/16*(low?.94:1);m.scale.set(size,size/Math.sin(PITCH),1);m.material.opacity=(ring?.66:.45)*(SETT.flash?1:.38)*(ring?1:1-f.elapsed/.22);
- if(ring){const wf=skFrames('whirl',f.kind==='steel'?null:f.kind),sm=skWhirl();if(wf){m.visible=false;sm.visible=!warning;sm.material=wf[frame%wf.length].n;sm.position.copy(m.position);sm.rotation.set(-Math.PI/2,0,0);const q=f.radius*2/16*(WEAPON_FX_ON?1:1.25);sm.scale.set(q,q/Math.sin(PITCH),1)}else sm.visible=false}
+ if(ring){const wf=skFrames('whirl',f.kind==='steel'?null:f.kind),sm=skWhirl();if(wf){m.visible=false;sm.visible=!warning;sm.material=wf[frame%wf.length].n;sm.position.copy(m.position);sm.rotation.set(-Math.PI/2,0,0);const q=f.radius*2/16*(WEAPON_FX_ON?1:1.25)*(wf._sc||1);sm.scale.set(q,q/Math.sin(PITCH),1)}else sm.visible=false}
 }}
 
 function activeSlotsTick(dt){S.combatLock=Math.max(0,(S.combatLock||0)-dt);S.aardCd=Math.max(0,(S.aardCd||0)-dt);if(!S.activeWind)return;
@@ -406,13 +408,13 @@ function dzwEcho(a,base,ang){const L=a.echo,mesh=new THREE.Mesh(geo32,heroIdleMa
 function echoStrike(E){const P=SL.heavy,R=P.range,arc=P.arc;let hits=0;const oldM=ftMelee,oldH=ftHeavy,oldC=ftCrit;ftMelee=true;ftHeavy=true;ftCrit=false;
   try{for(const e of [...S.enemies]){if(e.dead||e.rise>0)continue;const dx=e.x-E.x,dy=e.y-E.y,d=Math.hypot(dx,dy);if(d>R+e.r||!sightSword(E.x,E.y,e.x,e.y))continue;let df=Math.atan2(dy,dx)-E.ang;while(df>Math.PI)df-=2*Math.PI;while(df<-Math.PI)df+=2*Math.PI;if(d>10&&Math.abs(df)>arc)continue;
     if(damageEnemy(e,E.dmg,dx/(d||1),dy/(d||1),1.2,'sk:zalecho')){hits++;if(e.dead)S.dEchoK=(S.dEchoK||0)+1;if(!e.dead){if(BIG.has(e.type)||e.type==='collector')breakPoise(e,30);else slashStagger(e,.6,true)}}}}finally{ftMelee=oldM;ftHeavy=oldH;ftCrit=oldC}
-  const c=Math.cos(E.ang),s=Math.sin(E.ang);addVfx(A.fx.slash,.26,E.x+c*R*.55,E.y+s*R*.55,.6,swordVisualSize('h'),'bill',-screenAng(c,s));swordSparks(E.x+c*R*.5,E.y+s*R*.5,'#a8d8cf',hits?14:6);play('bladeHeavy',.05);if(hits)shake(.18,.1)}
+  const c=Math.cos(E.ang),s=Math.sin(E.ang);if(!skAdd('d_echo',.6,E.x+c*R*.45,E.y+s*R*.45,1.4,1.5,'bill',0))addVfx(A.fx.slash,.26,E.x+c*R*.55,E.y+s*R*.55,.6,swordVisualSize('h'),'bill',-screenAng(c,s));swordSparks(E.x+c*R*.5,E.y+s*R*.5,'#a8d8cf',hits?14:6);play('bladeHeavy',.05);if(hits)shake(.18,.1)}
 function dzwPledgeHit(){let b=0;if(S.pledgeT>0&&S.pledge>0){b=S.pledge;S.pledge=0;S.pledgeT=0}else if(S.pledgeHv>0){b=S.pledgeHv;S.pledgeHv=0;S.pledgeHvT=0}if(b>0){ftInfo(EN?'Pledge released!':'Zastaw uwolniony!');swordSparks(pl.x,pl.y,'#e8c878',12)}return b*DZW.pledge.hv}
-function beginPledge(L){const level=Math.min(3,Math.max(1,L));payActive('zastaw');S.pledgeCd=ACTIVE_CFG.zastaw.wait(level)*(S.pk.dPledgeCd||1);S.actions.skill=(S.actions.skill||0)+1;S.pledge=Math.round(pl.max*DZW.pledge.sh[level-1]*(S.pk.dPledge||1));S.pledgeT=DZW.pledge.dur;S.pledgeHv=0;S.pledgeHvT=0;pl.castT=.45;play('bless',0);ftInfo(EN?'Life Pledge':'Zastaw Życia');for(let i=0;i<22;i++){const an=i/22*Math.PI*2;S.parts.push({k:'e',x:pl.x+Math.cos(an)*14,y:pl.y+Math.sin(an)*9,z:rnd(2,20),vx:0,vy:0,vz:rnd(8,18),c:i%2?'#a8d8cf':'#e8c878',life:rnd(.35,.7)})}return true}
+function beginPledge(L){const level=Math.min(3,Math.max(1,L));payActive('zastaw');S.pledgeCd=ACTIVE_CFG.zastaw.wait(level)*(S.pk.dPledgeCd||1);S.actions.skill=(S.actions.skill||0)+1;S.pledge=Math.round(pl.max*DZW.pledge.sh[level-1]*(S.pk.dPledge||1));S.pledgeT=DZW.pledge.dur;S.pledgeHv=0;S.pledgeHvT=0;pl.castT=.45;play('bless',0);ftInfo(EN?'Life Pledge':'Zastaw Życia');{if(S.pledgeFx)S.pledgeFx.t=S.pledgeFx.dur;S.pledgeFx=null;const zf=skFrames('d_zastaw');if(zf){addVfx(skLoop(zf,DZW.pledge.dur,6),DZW.pledge.dur,pl.x,pl.y,1,1.25,'bill');S.pledgeFx=S.vfx[S.vfx.length-1];S.pledgeFx.owner=pl}}for(let i=0;i<22;i++){const an=i/22*Math.PI*2;S.parts.push({k:'e',x:pl.x+Math.cos(an)*14,y:pl.y+Math.sin(an)*9,z:rnd(2,20),vx:0,vy:0,vz:rnd(8,18),c:i%2?'#a8d8cf':'#e8c878',life:rnd(.35,.7)})}return true}
 function dzwParry(){S.tonN=(S.tonN||0)+1;if(S.tonN<(S.pk.dTonN||DZW.ton.n))return;S.tonN=0;pl.tonT=.5;S.dTon=(S.dTon||0)+1;const T={r:DZW.ton.r*(S.pk.dTonR||1),stun:DZW.ton.stun+(S.pk.dTonStun||0),dmg:DZW.ton.dmg},dm=skDmg(T.dmg);let n=0;for(const e of [...S.enemies]){if(e.dead||e.rise>0)continue;const dx=e.x-pl.x,dy=e.y-pl.y,d=Math.hypot(dx,dy);if(d>T.r+e.r)continue;n++;damageEnemy(e,dm,dx/(d||1),dy/(d||1),1.1,'sk:ton');if(e.dead)continue;if(BIG.has(e.type)||bossBar(e))breakPoise(e,60);else{S.dTonHit=(S.dTonHit||0)+1;e.stun=Math.max(e.stun||0,T.stun);e.sw=0;e.ghoulWind=0}}
   for(let i=0;i<48;i++){const an=i/48*Math.PI*2;S.parts.push({k:'e',x:pl.x+Math.cos(an)*10,y:pl.y+Math.sin(an)*7,z:rnd(4,10),vx:Math.cos(an)*150,vy:Math.sin(an)*100,vz:rnd(0,4),c:i%3?'#e8c878':'#a8d8cf',life:rnd(.35,.55)})}
   shake(.3,.25);S.flash=Math.max(S.flash||0,.18);play('bell',0);play('poiseBreak',.04);padRumble(.9,.6,260);ftInfo(EN?'Last Toll!':'Ostatni Ton!')}
-function dzwTick(dt){for(const k of ['echoCd','pledgeCd'])S[k]=Math.max(0,(S[k]||0)-dt);if(pl.tonT>0)pl.tonT-=dt;if(pl.castT>0)pl.castT-=dt;
+function dzwTick(dt){for(const k of ['echoCd','pledgeCd'])S[k]=Math.max(0,(S[k]||0)-dt);{const z=S.pledgeFx;if(z){if(!(S.pledgeT>0&&S.pledge>0)||z.owner.dead){z.t=z.dur;S.pledgeFx=null}else{z.x=z.owner.x;z.y=z.owner.y}}}if(pl.tonT>0)pl.tonT-=dt;if(pl.castT>0)pl.castT-=dt;
   if(S.pledgeT>0){S.pledgeT-=dt;if(S.pledge>0&&Math.random()<dt*14)S.parts.push({k:'i',x:pl.x+rnd(-9,9),y:pl.y+rnd(-5,5),z:rnd(2,22),vx:0,vy:0,vz:rnd(4,10),c:'#a8d8cf',life:.3});if(S.pledgeT<=0){if(S.pledge>0){S.pledgeHv=S.pledge;S.pledgeHvT=DZW.pledge.keep;ftInfo(EN?'Pledge: next heavy blow empowered':'Zastaw: następny silny atak wzmocniony')}S.pledge=0}}
   if(S.pledgeHvT>0){S.pledgeHvT-=dt;if(S.pledgeHvT<=0)S.pledgeHv=0}
   const L=S.echoes;if(L)for(let i=L.length-1;i>=0;i--){const E=L[i];E.age+=dt;if(!E.done&&E.age>=DZW.echo.delay){E.done=true;if(!pl.dead)echoStrike(E);if(S.pk.dEcho2&&!E.second){E.second=true;E.done=false;E.age=DZW.echo.delay-.5;E.dmg*=.5}}if(E.age>=DZW.echo.delay+.4||pl.dead){scene.remove(E.mesh);const j=DZW_MESH.indexOf(E.mesh);if(j>=0)DZW_MESH.splice(j,1);L.splice(i,1)}}}
@@ -496,7 +498,7 @@ function castAard(prepaid=false){const L=S.sk.aard||0;if(!L||pl.dead||pl.roll>0|
     if(big){breakPoise(e,60+15*L)}else{e.vx+=dx/d*(220+20*L);e.vy+=dy/d*(220+20*L);e.stun=Math.max(e.stun||0,stun);e.sw=0;e.ghoulWind=0;e.leap=0}}
   for(let i=S.eproj.length-1;i>=0;i--){const f=S.eproj[i],dx=f.x-pl.x,dy=f.y-pl.y,d=Math.hypot(dx,dy);if(d>R+20)continue;if(f.mesh)scene.remove(f.mesh);if(f.vfe)f.vfe.t=f.vfe.dur;S.eproj.splice(i,1)}
   for(let i=0;i<60;i++){const an=full?Math.random()*Math.PI*2:ang+rnd(-.95,.95),sp=rnd(80,240);S.parts.push({k:'i',x:pl.x+Math.cos(an)*6,y:pl.y+Math.sin(an)*4,z:rnd(4,16),vx:Math.cos(an)*sp,vy:Math.sin(an)*sp*.6,vz:rnd(0,10),c:Math.random()<.5?'#d8f0ff':'#9fb4d0',life:rnd(.25,.45)})}
-  if(!skAdd('knock',.6,pl.x+(full?0:Math.cos(ang)*R*.4),pl.y+(full?0:Math.sin(ang)*R*.4),.3,R/14.6*(full?1.15:.85),'bill'))addVfx(A.fx.nova,.3,pl.x+Math.cos(ang)*R*.35,pl.y+Math.sin(ang)*R*.35,.06,R/16*(full?1.2:.8),'ground');shake(.2,.2);play('quake',0);play('frost',.1);
+  if(!(full?skAdd('knock_ring',.6,pl.x,pl.y,.3,R/14.6*1.15,'bill'):skAdd('knock',.5,pl.x+Math.cos(ang)*R*.5,pl.y+Math.sin(ang)*R*.5,.3,R/29.4,'bill',-ang)))addVfx(A.fx.nova,.3,pl.x+Math.cos(ang)*R*.35,pl.y+Math.sin(ang)*R*.35,.06,R/16*(full?1.2:.8),'ground');shake(.2,.2);play('quake',0);play('frost',.1);
   pl.swingT=pl.swingDur=.25;if(Math.abs(a[0])>Math.abs(a[1])){pl.swingDir=2;pl.swingS=a[0]>0?1:-1}else{pl.swingDir=a[1]>0?0:1;pl.swingS=1}}
 // enemy side: wind up, strike, then stand open for a moment
 function slashEnemy(e,dx,dy,d,dt){
@@ -518,17 +520,17 @@ function milParry(){const e=S.attacker;if(e){if(e.milPar!==undefined&&S.t-e.milP
   if((S.wick||0)>=MIL.wick.max){ftInfo(EN?'Living Wick: full':'Żywy Knot: pełny');return}
   S.wick=Math.min(MIL.wick.max,(S.wick||0)+(S.pk.mKnot||1));ftInfo((EN?'Living Wick ':'Żywy Knot ')+S.wick+'/'+MIL.wick.max);for(let i=0;i<8;i++)S.parts.push({k:'e',x:pl.x+rnd(-6,6),y:pl.y+rnd(-3,3),z:rnd(14,28),vx:0,vy:0,vz:rnd(8,16),c:i%2?'#ffb347':'#ffe9a0',life:.4})}
 function milStrip(n,ang){if(n>=MIL.wick.max)S.mFull=(S.mFull||0)+1;const M=MIL.strip,c=Math.cos(ang),s=Math.sin(ang),len=M.len+M.lenN*n,dur=M.dur+M.durN*n,z={x:pl.x,y:pl.y,c,s,len,w:M.w+M.wN*n,t:dur,tk:0,n,ch:CH};
-  const fr=fxFrames('mil_fx',3);if(fr){addVfx(skLoop(fr,dur,10),dur,pl.x+c*len*.5,pl.y+s*len*.5,.06,len/29,'ground',-Math.atan2(s,c));z.f=S.vfx[S.vfx.length-1];z.f.sy=1.25}
+  const fr=skFrames('m_pas')||fxFrames('mil_fx',3);if(fr){addVfx(skLoop(fr,dur,10),dur,pl.x+c*len*.5,pl.y+s*len*.5,.06,len/29,'ground',-Math.atan2(s,c));z.f=S.vfx[S.vfx.length-1];z.f.sy=1.25}
   (S.milStrips=S.milStrips||[]).push(z);ftInfo(EN?`Wax strip ×${n}`:`Pas wosku ×${n}`);swordSparks(pl.x+c*len*.5,pl.y+s*len*.5,'#ffb347',10)}
 function milStripTick(dt){const L=S.milStrips;if(!L)return;for(let i=L.length-1;i>=0;i--){const z=L[i];z.t-=dt;z.tk-=dt;if(z.t<=0||pl.dead||z.ch!==CH){if(z.f)z.f.t=z.f.dur;L.splice(i,1);continue}
   if(z.tk<=0){z.tk=MIL.strip.tick;const dm=skDmg((MIL.strip.dmg+MIL.strip.dmgN*z.n)*(z.n>=MIL.wick.max?(S.pk.mFive||1):1));for(const e of [...S.enemies]){if(e.dead||e.rise>0)continue;const dx=e.x-z.x,dy=e.y-z.y,t=dx*z.c+dy*z.s,p=-dx*z.s+dy*z.c;if(t<-e.r||t>z.len+e.r||Math.abs(p)>z.w+e.r)continue;damageEnemy(e,dm,z.c,z.s,0,'sk:knot');if(e.dead)S.mWaxK=(S.mWaxK||0)+1;else milWaxSlow(e,MIL.strip.slowT,MIL.strip.slow,MIL.strip.bossSlow,.6)}}}}
 function beginEffigy(L){const lv=Math.min(3,Math.max(1,L));if(pl.atk||pl.block||pl.broken>0||pl.roll>0){play('empty',.2);return false}
   payActive('odlew');S.effCd=ACTIVE_CFG.odlew.wait(lv)*(S.pk.mEffCd||1);S.actions.skill=(S.actions.skill||0)+1;if(S.effigy&&S.effigy.f)S.effigy.f.t=S.effigy.f.dur;
-  const d=aimDir()||[pl.fx,pl.fy],life=MIL.effigy.life[lv-1],fr=fxFrames('mil_fx',0);let f=null;
-  if(fr){const a=[fr[0],fr[1],fr[2],fr[3]];for(let i=0;i<Math.round(life*10)-4;i++)a.push(fr[3]);addVfx(a,life,pl.x,pl.y,.5,1.7,'bill');f=S.vfx[S.vfx.length-1]}
+  const d=aimDir()||[pl.fx,pl.fy],life=MIL.effigy.life[lv-1],hd=skFrames('m_odlew'),fr=hd||fxFrames('mil_fx',0);let f=null;
+  if(fr){let a;if(hd){a=[];const n=Math.max(4,Math.round(life*10));for(let i=0;i<n;i++)a.push(i>=n-6?fr[i>=n-3?3:2]:fr[(i>>1)%2]);a._sc=hd._sc}else{a=[fr[0],fr[1],fr[2],fr[3]];for(let i=0;i<Math.round(life*10)-4;i++)a.push(fr[3])}addVfx(a,life,pl.x,pl.y,.5,1.7,'bill');f=S.vfx[S.vfx.length-1]}
   S.effigy={x:pl.x,y:pl.y,t:life,L:lv,f,ch:CH};pl.fx=d[0];pl.fy=d[1];pl.s=d[0]>=0?1:-1;pl.roll=.3;pl.rollT=0;pl.rvx=d[0]*190;pl.rvy=d[1]*190;pl.inv=Math.max(pl.inv,.3);pl.rollCd=.28;pl.swingT=0;pl.milEffT=.3;play('roll',0);ftInfo(EN?'Condemned Effigy':'Odlew Skazańca');swordSparks(pl.x,pl.y,'#ffb347',12);return true}
 function effigyBurst(E){S.mEffB=(S.mEffB||0)+1;const lv=E.L,R=MIL.effigy.r[lv-1],dm=skDmg(MIL.effigy.dmg);let n=0;for(const e of [...S.enemies]){if(e.dead||e.rise>0)continue;const dx=e.x-E.x,dy=e.y-E.y,d=Math.hypot(dx,dy);if(d>R+e.r)continue;n++;damageEnemy(e,dm,dx/(d||1),dy/(d||1),.5,'sk:odlew');if(!e.dead)milWaxSlow(e,MIL.effigy.slowT[lv-1],MIL.effigy.slow,.9,MIL.effigy.bossSlowT)}
-  zfx('mil_fx',1,.4,E.x,E.y,.4,R/16*1.2,'bill');for(let i=0;i<24;i++){const an=i/24*Math.PI*2;S.parts.push({k:'e',x:E.x+Math.cos(an)*8,y:E.y+Math.sin(an)*5,z:rnd(4,14),vx:Math.cos(an)*90,vy:Math.sin(an)*60,vz:rnd(0,6),c:i%2?'#ffb347':'#e8d6a8',life:rnd(.3,.5)})}
+  {const v=skAdd('m_odlew_wyb',.5,E.x,E.y,.05,R/14.7,'ground',0);if(v)v.sy=1/Math.sin(PITCH);else zfx('mil_fx',1,.4,E.x,E.y,.4,R/16*1.2,'bill')}for(let i=0;i<24;i++){const an=i/24*Math.PI*2;S.parts.push({k:'e',x:E.x+Math.cos(an)*8,y:E.y+Math.sin(an)*5,z:rnd(4,14),vx:Math.cos(an)*90,vy:Math.sin(an)*60,vz:rnd(0,6),c:i%2?'#ffb347':'#e8d6a8',life:rnd(.3,.5)})}
   shake(.12,.1);play('hitSteel',0);if(E.f)E.f.t=E.f.dur;S.effigy=null;if(n)ftInfo(EN?'Effigy shattered':'Odlew rozpadł się')}
 function beginGut(L){const lv=Math.min(3,Math.max(1,L));if(pl.atk||pl.block||pl.broken>0||pl.roll>0){play('empty',.2);return false}
   payActive('dogasanie');S.gutCd=ACTIVE_CFG.dogasanie.wait(lv);S.actions.skill=(S.actions.skill||0)+1;const d=aimDir()||[pl.fx,pl.fy];pl.fx=d[0];pl.fy=d[1];
@@ -537,7 +539,7 @@ function gutTick(dt){const g=S.gut,a=pl.atk;if(!g||!a||a.kind!=='gut'){if(a&&a.k
   if(pl.hp<g.hp-.01){ftInfo(EN?'Guttering interrupted':'Dogasanie przerwane');S.gut=null;pl.atk=null;return}g.hp=pl.hp;g.t-=dt;a.t-=dt;
   if(g.t<=0&&g.n<MIL.gut.waves){const R=(MIL.gut.r0+MIL.gut.dr*g.n)*(S.pk.mGutR||1),dm=skDmg(MIL.gut.dmg[g.L-1]),hit=new Set();g.n++;g.t=MIL.gut.gap;if(g.n===MIL.gut.waves)S.mFifth=(S.mFifth||0)+1;
     for(const e of [...S.enemies]){if(e.dead||e.rise>0||hit.has(e))continue;const dx=e.x-pl.x,dy=e.y-pl.y,d=Math.hypot(dx,dy);if(d>R+e.r)continue;hit.add(e);damageEnemy(e,dm,dx/(d||1),dy/(d||1),.4,'sk:dogasanie');if(!e.dead)milWaxSlow(e,MIL.gut.slowT,MIL.gut.slow,MIL.gut.bossSlow,.6)}
-    if(hit.size>=5)S.mMourn=1;zfx('mil_fx',2,.3,pl.x,pl.y,.1,R/16*1.1,'ground',0);for(let i=0;i<10;i++){const an=Math.random()*Math.PI*2;S.parts.push({k:'e',x:pl.x+Math.cos(an)*R,y:pl.y+Math.sin(an)*R*.7,z:rnd(2,10),vx:0,vy:0,vz:rnd(6,14),c:'#ffb347',life:.3})}shake(.08,.08);play('hitSteel',0)}
+    if(hit.size>=5)S.mMourn=1;skAdd('m_fala',.3,pl.x,pl.y,.1,R/16*1.1,'ground',0)||zfx('mil_fx',2,.3,pl.x,pl.y,.1,R/16*1.1,'ground',0);for(let i=0;i<10;i++){const an=Math.random()*Math.PI*2;S.parts.push({k:'e',x:pl.x+Math.cos(an)*R,y:pl.y+Math.sin(an)*R*.7,z:rnd(2,10),vx:0,vy:0,vz:rnd(6,14),c:'#ffb347',life:.3})}shake(.08,.08);play('hitSteel',0)}
   if(g.n>=MIL.gut.waves&&g.t<=-.15||a.t<=-.4){S.gut=null;pl.atk=null}}
 function milTick(dt){for(const k of ['effCd','gutCd'])S[k]=Math.max(0,(S[k]||0)-dt);if(pl.milEffT>0)pl.milEffT-=dt;milStripTick(dt);
   const E=S.effigy;if(E){E.t-=dt;if(E.ch!==CH||pl.dead){milClear();return}if(E.t<=0){if(E.f)E.f.t=E.f.dur;S.effigy=null}else for(const e of S.enemies){if(e.dead||e.rise>0)continue;if(Math.hypot(e.x-E.x,e.y-E.y)<=e.r+MIL.effigy.touch){effigyBurst(E);break}}}}
