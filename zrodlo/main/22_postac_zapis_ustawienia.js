@@ -49,7 +49,7 @@ const zabOn=()=>charId()==='z';
 const dzwOn=()=>charId()==='d';
 const milOn=()=>charId()==='m';
 // Wspólne dane bohaterów (12.11.2026): jedno źródło imienia, przydomka i klasy dla całego interfejsu. ID techniczne (r,k,z,d,m) bez zmian.
-const HEROES={r:{n:'Radan',ep:EN?'the Crestless':'Bez Herbu',cls:EN?'Knight':'Rycerz',art:'rycerz'},k:{n:'Goran',ep:EN?'the Neckbreaker':'Łamacz Karków',cls:EN?'Executioner':'Kat',art:'kat'},z:{n:'Mira',ep:EN?'the Ash Dancer':'Tancerka Popiołów',cls:EN?'Assassin':'Zabójczyni',art:'zabojczyni'},d:{n:'Iwo',ep:EN?'the Herald of Silence':'Zwiastun Ciszy',cls:EN?'Bellringer':'Dzwonnik',art:'dzwonnik'},m:{n:'Milena',ep:EN?'the Unquenched':'Niedogasła',cls:EN?'Candlebound':'Woskownica',art:'woskownica'}};
+const HEROES={r:{n:'Hadræn',ep:EN?'the Crestless':'Bez Herbu',cls:EN?'Knight':'Rycerz',art:'rycerz'},k:{n:'Goran',ep:EN?'the Neckbreaker':'Łamacz Karków',cls:EN?'Executioner':'Kat',art:'kat'},z:{n:'Mira',ep:EN?'the Ash Dancer':'Tancerka Popiołów',cls:EN?'Assassin':'Zabójczyni',art:'zabojczyni'},d:{n:'Iwo',ep:EN?'the Herald of Silence':'Zwiastun Ciszy',cls:EN?'Bellringer':'Dzwonnik',art:'dzwonnik'},m:{n:'Milena',ep:EN?'the Unquenched':'Niedogasła',cls:EN?'Candlebound':'Woskownica',art:'woskownica'}};
 const heroName=(c,full)=>{const h=HEROES[c]||HEROES.r;return full?h.n+', '+h.ep:h.n};
 // Dzwonnik (12.11.2026): do czasu wlasnych perkow i wyzwan korzysta z zestawu Rycerza
 const perkCls=()=>charId();

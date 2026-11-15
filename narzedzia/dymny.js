@@ -17,11 +17,12 @@ const dir=process.argv[2]||'.',chs=(process.argv[3]||'1').split(',').map(Number)
    await p.waitForSelector('#start1:not([disabled])',{state:'attached',timeout:240000});
    await p.locator('#sArc').click();
    if(await p.locator('#title.pc-home').count())await p.locator('.premium-journey').click();
+   if(await p.locator('#nbW:not([hidden])').count()){await p.click('#nbW .wyb2',{force:true});await p.waitForSelector('#nbW',{state:'hidden',timeout:20000})}  // 15.11.2026: ekran wyboru postaci przy ognisku
    await p.waitForTimeout(2500);
    await p.click('#start'+n,{force:true});
    await p.click('#premiumPrepare',{force:true});
-   await p.waitForSelector('#prepGo',{state:'visible',timeout:300000});
-   await p.click('#prepGo',{force:true});await p.waitForTimeout(8000);
+   await p.waitForSelector('#prep:not([hidden])',{state:'attached',timeout:300000});await p.waitForTimeout(800);
+   if(await p.locator('#nbP:not([hidden])').count())await p.click('#nbP .ngot',{force:true});else await p.click('#prepGo',{force:true});await p.waitForTimeout(8000);
    for(const q of ['ultra','min','auto'])await p.evaluate(q=>document.querySelector('#qualityRow [data-q='+q+']').click(),q).then(()=>p.waitForTimeout(3000));
    for(const sel of ['#gDynRow [data-v=on]','#gDprRow [data-v="1"]','#gShadowRow [data-v="2"]','#gFxRow [data-v="2"]','#fpsRow [data-fps="120"]','#gDynRow [data-v=auto]','#gDprRow [data-v=auto]','#gShadowRow [data-v=auto]','#gFxRow [data-v=auto]','#fpsRow [data-fps="0"]'])await p.evaluate(s=>document.querySelector(s).click(),sel).then(()=>p.waitForTimeout(1500));
   }catch(e){st='BLAD: '+String(e).slice(0,140)}

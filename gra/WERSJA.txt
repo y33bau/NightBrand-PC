@@ -805,3 +805,4 @@ cache727 · Menu glowne: licznik Popiolow i poziomu na dole lewej kolumny pod tr
 cache728 · Menu glowne: deski Graj-Opcje bez ikon (nie sprawdzono: pad, monitor autora, itch.io)
 cache729 · Nowy standard pozostalych sekcji menu (zakladki na spalonej desce, panele w spopielonej ramie, karty w spalonej ramie, komunikaty na desce) + nowy siedzacy Dzwonnik przy ognisku (nie sprawdzono: pad, monitor autora, sklep Margi, wybor u Wita, itch.io)
 cache730 · Dzwonnik i Woskownica w nowym stylu (16 atlasow, rozplywanie Echa); nie sprawdzono: wszystkie animacje w ruchu, pad, dzwiek, FPS u autora, kooperacja, itch.io
+cache731 · Wybor postaci przy ognisku (Graj -> Ognisko -> Rozdzial), nowe Przygotowanie (perk, wyzwanie, klatwy, trudnosc), Hadraen zamiast Radana, nowe postacie przy ognisku w menu glownym. Nie sprawdzono: pad fizyczny, dzwiek, FPS u autora, 2 graczy, itch.io
