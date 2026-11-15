@@ -968,7 +968,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
  <section class="nbr kol nk2"><div class="nhd"><i class="nr"><i>II</i></i><div class="tt"><b>${T('WYZWANIE','CHALLENGE')}</b><span>${T('Jedno na noc. Wykonaj, a dostaniesz nagrodę.','One per night. Complete it to earn a reward.')}</span></div><span class="licz l2"></span></div><div class="nbk gn g2"></div><div class="ls nlw"></div></section>
  <section class="nbr kol nk3"><div class="nhd"><i class="nr"><i>III</i></i><div class="tt"><b>${T('KLĄTWY','CURSES')}</b><span>${T('Do trzech. Każda utrudnia noc i daje premię Popiołów: im cięższa, tym większa.','Up to three. Each makes the night harder and adds an Ashes bonus: the harsher, the bigger.')}</span></div><span class="licz l3"></span></div><div class="trzy g3"></div><div class="nmn"></div><div class="ls nlk"></div></section>
  <section class="nbr ntr"><div class="rw"><div class="nhd"><i class="nr"><i>IV</i></i><div class="tt"><b>${T('TRUDNOŚĆ','DIFFICULTY')}</b></div></div><div class="rw dd" style="flex:1"><button type="button" class="nbd" data-d="e">${T('Łatwy','Easy')}</button><button type="button" class="nbd" data-d="n">${T('Normalny','Normal')}</button><button type="button" class="nbd" data-d="h">${T('Trudny','Hard')}</button></div></div><div class="ntd"></div></section>
- <section class="nbr ng"><div class="h2">${T('TEJ NOCY','TONIGHT')}</div><div class="nrr"><span>${T('Perk','Perk')}</span><em class="n0"></em></div><div class="nrr"><span>${T('Za wyzwanie','Challenge reward')}</span><em class="n1"></em></div><div class="nrr"><span>${T('Popioły (klątwy × trudność)','Ashes (curses × difficulty)')}</span><em class="n2"></em></div></section>
+ <section class="nbr ng"><div class="h2">${T('TEJ NOCY','TONIGHT')}</div><div class="nrr"><span>${T('Perk','Perk')}</span><em class="n0"></em></div><div class="nrr"><span>${T('Za wyzwanie','Challenge reward')}</span><em class="n1"></em></div><div class="nrr"><span>${T('Popioły (klątwy × trudność)','Ashes (curses × difficulty)')}</span><em class="n2"></em></div><div class="nrr"><span>${T('Ofiara (Popioły)','Offering (Ashes)')}</span><em class="n3"></em></div></section>
  <div class="pr"><div class="op2"><button type="button" class="nbd o1">${T('Samouczek','Tutorial')}</button><button type="button" class="nbd o2">${T('2 graczy','2 players')}</button></div><button type="button" class="nbd gl ngot">${T('Gotowy','Ready')}<small></small></button></div>
  <i class="nw nbzi"></i></div>`;
  prep.append(P);
@@ -1005,6 +1005,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
   q$('.ntd').innerHTML=TDV[dk].map((v,j)=>`<div><b>${v}</b><span>${TDN[j]}</span></div>`).join('');
   const pks=PREP.perks.map(id=>PERKS.find(d=>d.id===id)).filter(Boolean),pk=pks[0],ch=CL.find(x=>x.id===PREP.chal);
   q$('.n0').textContent=pks.length?pks.map(d=>d.n).join(' · '):'—';q$('.n1').innerHTML=ch?`<i class="nbur"></i>+${ch.ash} &nbsp;<i class="nbmo"></i>+${ch.coins}`:'—';q$('.n2').innerHTML=`<i class="nbur"></i>×${liczba(km*TDM[dk])}`;
+   q$('.n3').innerHTML=OFIARY.map(o=>{const on=PREP.ofiara===o.id,ok=ofiaraOk(o);return `<button type="button" data-k="o:${o.id}" title="${esc(o.d)}"${ok||on?'':' disabled'} style="margin-left:.35em!important;padding:.15em .5em!important;font:700 calc(13*var(--u))/1.2 Cinzel,Georgia,serif!important;color:${on?'#1a0f08':'#f0c27a'}!important;background:${on?'#f0c27a':'rgba(20,12,8,.7)'}!important;border:1px solid #8a6a3a!important;border-radius:3px!important;opacity:${ok||on?1:.45}!important;cursor:pointer!important">${esc(o.n)} ${o.c}</button>`}).join('');
   {const hi=$('hintsTgl'),mp=$('mpTgl'),ml=$('mpTglL');q$('.o1').classList.toggle('zn',!!(hi&&hi.checked));q$('.o2').classList.toggle('zn',!!(mp&&mp.checked));q$('.o2').hidden=!mp||!!(ml&&ml.style.display==='none')}
   q$('.ngot small').textContent=H.n.toUpperCase()+' · '+[T('Łatwy','Easy'),T('Normalny','Normal'),T('Trudny','Hard')][['e','n','h'].indexOf(dk)].toUpperCase();
   gnP();gnW();
@@ -1012,7 +1013,8 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
  const odswiez=()=>{if(plan)return;plan=requestAnimationFrame(()=>{plan=0;render()})};
  function klik(k){const [t,id]=k.split(':'),q=prog();
   if(t==='p'){const d=PERKS.find(x=>x.id===id);if(!d||d.lv>q.lv)return;perkToggle(q,id);saveProg()}
-  else if(t==='w'){if(id==='z_pogarda'&&PREP.perks.includes('z_widmo'))return;PREP.chal=PREP.chal===id?null:id;q.ch=PREP.chal;saveProg()}
+  else if(t==='o'){const o=OFIARY.find(x=>x.id===id);if(!o)return;PREP.ofiara=PREP.ofiara===id?null:(ofiaraOk(o)?id:null)}
+   else if(t==='w'){if(id==='z_pogarda'&&PREP.perks.includes('z_widmo'))return;PREP.chal=PREP.chal===id?null:id;q.ch=PREP.chal;saveProg()}
   else if(t==='k'){const i=PREP.curses.indexOf(id);if(i>=0)PREP.curses.splice(i,1);else if(PREP.curses.length<3)PREP.curses.push(id);else return}
   try{uiSnd('equip')}catch(e){}renderPrep();render()}
  P.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('button');if(!b||!P.contains(b))return;

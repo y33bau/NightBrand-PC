@@ -139,6 +139,25 @@ function armorRecolor(img,cls,v){const P=ARM_PAL[v],C=ARM_CFG[cls];if(!P||!C)ret
   for(let i=0;i<N;i++){if(!M[i])continue;const j=i*4;let t=((.3*p[j]+.59*p[j+1]+.11*p[j+2])/255-.04)/.72;t=t<0?0:t>1?1:Math.pow(t,.9);
     const A=t<.5?P[0]:P[1],B=t<.5?P[1]:P[2],u=t<.5?t/.5:(t-.5)/.5;p[j]=A[0]+(B[0]-A[0])*u;p[j+1]=A[1]+(B[1]-A[1])*u;p[j+2]=A[2]+(B[2]-A[2])*u}
   g.putImageData(id,0,0);c.nbDensity=img.nbDensity;c.nbKey=img.nbKey;return c}
+// kolor tkaniny (Kaplica, 15.11.2026): mocno czerwone płaty (peleryna, przepaska, chusta, szarfa) bez głowy, drobiny pominięte
+const CAPE_PAL={nocna:[[6,8,24],[40,60,140],[170,200,255]],popielna:[[20,20,22],[110,108,104],[230,226,218]],zlota:[[40,24,4],[180,130,40],[255,236,160]],zielona:[[6,20,10],[40,110,50],[170,230,150]]};
+const CAPE_CFG={r:{top:.06},k:{top:.3},z:{top:.08},m:{top:.3},d:{top:.3}};
+function capeRecolor(img,cls,v){const P=CAPE_PAL[v],C=CAPE_CFG[cls];if(!P||!C)return img;
+  const W=img.width,H=img.height,c=canvas(W,H),g=c.getContext('2d');g.drawImage(img,0,0);const id=g.getImageData(0,0,W,H),p=id.data,N=W*H,M=new Uint8Array(N);
+  const cell=Math.round(64*(img.nbDensity||4)),sc=cell/256,minA=40*sc*sc;
+  for(let i=0;i<N;i++){const j=i*4;if(p[j+3]<128)continue;const r=p[j];if(r>p[j+1]*1.9&&r>p[j+2]*1.7&&r>55)M[i]=1}
+  const q=new Int32Array(cell*cell),seen=new Uint8Array(N);
+  for(let y0=0;y0<H;y0+=cell)for(let x0=0;x0<W;x0+=cell){const x1=Math.min(W,x0+cell),y1=Math.min(H,y0+cell);let top=-1,bot=-1;
+    for(let y=y0;y<y1&&top<0;y++)for(let x=x0;x<x1;x++)if(p[(y*W+x)*4+3]>=128){top=y;break}
+    if(top<0)continue;for(let y=y1-1;y>=y0&&bot<0;y--)for(let x=x0;x<x1;x++)if(p[(y*W+x)*4+3]>=128){bot=y;break}
+    const cut=Math.floor(top+(bot-top)*C.top);for(let y=y0;y<cut;y++)for(let x=x0;x<x1;x++)M[y*W+x]=0;
+    for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++){const s0=y*W+x;if(!M[s0]||seen[s0])continue;let qh=0,qt=0;q[qt++]=s0;seen[s0]=1;
+      while(qh<qt){const k=q[qh++],kx=k%W,ky=(k-kx)/W;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const nx=kx+dx,ny=ky+dy;if(nx<x0||nx>=x1||ny<y0||ny>=y1)continue;const n=ny*W+nx;if(seen[n]||!M[n])continue;seen[n]=1;if(qt<q.length)q[qt++]=n}}
+      if(qt<minA)for(let t=0;t<qt;t++)M[q[t]]=0}}
+  for(let i=0;i<N;i++){if(!M[i])continue;const j=i*4;let t=((.3*p[j]+.59*p[j+1]+.11*p[j+2])/255-.04)/.72;t=t<0?0:t>1?1:Math.pow(t,.9);
+    const A=t<.5?P[0]:P[1],B=t<.5?P[1]:P[2],u=t<.5?t/.5:(t-.5)/.5;p[j]=A[0]+(B[0]-A[0])*u;p[j+1]=A[1]+(B[1]-A[1])*u;p[j+2]=A[2]+(B[2]-A[2])*u}
+  g.putImageData(id,0,0);c.nbDensity=img.nbDensity;c.nbKey=img.nbKey;return c}
+function skinRecolor(img,cls,arm,cape){let o=img;if(arm)o=armorRecolor(o,cls,arm);if(cape)o=capeRecolor(o,cls,cape);return o}
 const MOB_GROUPS={'core':['possessed','ghoul','bat','dwarf','knight','warden','shieldman'],'r3':['madman','hound','rotknight','militia','marauder','gravedigger'],'r4':['goat','wolf','bandit','xbow','drowner','strzygon','zmora','wisp','bies','wight'],'r5':['guard','scribe','executioner','debtor','wraith','courtraven','paperrat','bookgolem','condemned','judge','arbiter','cursed'],'r2':['glizzard','glz_fx']};
 function buildAnims(imgs,group="all"){
   const has=g=>group==="all"||group===g;
