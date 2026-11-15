@@ -1,39 +1,69 @@
 @echo off
+chcp 65001 >nul
 setlocal
-cd /d "%~dp0"
-title NightBrand PC - test galezi oboz-i-przygotowanie
-set "BR=oboz-i-przygotowanie"
-set "DIR=test-oboz-i-przygotowanie"
-set "PORT=8031"
-set "URL=https://github.com/y33bau/NightBrand-PC/archive/refs/heads/%BR%.zip"
-
-echo Pobieram wersje testowa %BR% (ok. 140 MB, chwile potrwa)...
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$ErrorActionPreference='Stop'; $ProgressPreference='SilentlyContinue'; [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12; if(Test-Path 'tmp-%BR%'){Remove-Item 'tmp-%BR%' -Recurse -Force}; Invoke-WebRequest '%URL%' -OutFile '%BR%.zip'; Expand-Archive '%BR%.zip' -DestinationPath 'tmp-%BR%' -Force; if(Test-Path '%DIR%'){Remove-Item '%DIR%' -Recurse -Force}; $src=(Get-ChildItem 'tmp-%BR%' -Directory | Select-Object -First 1).FullName; Move-Item (Join-Path $src 'gra') '%DIR%'; Remove-Item 'tmp-%BR%','%BR%.zip' -Recurse -Force"
+title Nightbrand PC - test: ognisko i przygotowanie
+echo.
+echo  Nightbrand - wersja PC (repo NightBrand-PC) lokalnie
+echo  =====================================
+echo.
+where git >nul 2>nul
 if errorlevel 1 (
-  echo.
-  echo Nie udalo sie pobrac gry. Sprawdz polaczenie z internetem.
+  echo Nie znaleziono programu git. Zainstaluj Git for Windows i sprobuj jeszcze raz.
   pause
   exit /b 1
 )
-
+set "BRANCH=oboz-i-przygotowanie"
+set "NB_BASE=%~dp0"
+set "NB_DIR=%NB_BASE%NightBrand-PC-test"
 echo.
-echo Gra:  http://127.0.0.1:%PORT%
-echo Zamknij to okno, aby zakonczyc serwer.
+echo Pobieram galaz %BRANCH% z prywatnego repo y33bau/NightBrand-PC...
+echo (Za pierwszym razem Git moze poprosic o zalogowanie do GitHuba w przegladarce.)
+echo Ten folder jest tylko do testow i jest kasowany przy kazdym uruchomieniu:
+echo %NB_DIR%
 echo.
-
-start "" cmd /c "timeout /t 3 >nul & start http://127.0.0.1:%PORT%"
-
-python -c "" >nul 2>&1
-if not errorlevel 1 (
-  python -m http.server %PORT% --bind 127.0.0.1 --directory "%DIR%"
-  goto :koniec
+if exist "%NB_DIR%" rmdir /s /q "%NB_DIR%"
+git clone --depth 1 --branch "%BRANCH%" https://github.com/y33bau/NightBrand-PC.git "%NB_DIR%"
+if errorlevel 1 (
+  echo.
+  echo NIE UDALO SIE POBRAC. Sprawdz internet, logowanie do GitHuba i nazwe galezi.
+  pause
+  exit /b 1
 )
-py -3 -c "" >nul 2>&1
-if not errorlevel 1 (
-  py -3 -m http.server %PORT% --bind 127.0.0.1 --directory "%DIR%"
-  goto :koniec
-)
-echo Brak Pythona - uruchamiam prosty serwer PowerShell.
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0serwer-test.ps1" -Root "%~dp0%DIR%" -Port %PORT%
-:koniec
+set "NB_ROOT=%NB_DIR%\gra"
+echo.
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$m=[regex]::Match((Get-Content -Raw -LiteralPath ($env:NB_ROOT+'\sw.js')),'nightbrand-codex-[0-9-]+'); Write-Host ('Wersja (cache): '+$m.Value)"
+echo.
+echo Gotowe. Uruchamiam serwer na http://localhost:8766/
+echo Przegladarka otworzy sie sama. Zeby zakonczyc, zamknij to okno.
+echo Uwaga: zapis gry tej wersji jest osobny od wersji online i od testow na porcie 8765.
+echo.
+start "" "http://localhost:8766/index.html"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((Get-Content -LiteralPath '%~f0' -Raw -Encoding UTF8) -split '(?m)^#PS#\r?$')[1]"
 pause
+exit /b
+#PS#
+$root = $env:NB_ROOT
+$mime = @{'.html'='text/html; charset=utf-8';'.js'='application/javascript; charset=utf-8';'.json'='application/json';'.webmanifest'='application/manifest+json';'.css'='text/css';'.webp'='image/webp';'.png'='image/png';'.jpg'='image/jpeg';'.mp3'='audio/mpeg';'.ogg'='audio/ogg';'.wav'='audio/wav';'.txt'='text/plain; charset=utf-8';'.svg'='image/svg+xml';'.woff2'='font/woff2';'.woff'='font/woff';'.ttf'='font/ttf'}
+$l = New-Object System.Net.HttpListener
+$l.Prefixes.Add('http://localhost:8766/')
+$l.Start()
+Write-Host ('Serwuje: ' + $root)
+while ($l.IsListening) {
+  $c = $l.GetContext()
+  try {
+    $p = [System.Uri]::UnescapeDataString($c.Request.Url.AbsolutePath)
+    if ($p -eq '/') { $p = '/index.html' }
+    $f = Join-Path $root ($p.TrimStart('/') -replace '/', '\')
+    if ((Test-Path -LiteralPath $f -PathType Leaf) -and $f.StartsWith($root)) {
+      $b = [System.IO.File]::ReadAllBytes($f)
+      $e = [System.IO.Path]::GetExtension($f).ToLower()
+      if ($mime.ContainsKey($e)) { $c.Response.ContentType = $mime[$e] } else { $c.Response.ContentType = 'application/octet-stream' }
+      $c.Response.AddHeader('Cache-Control', 'no-cache')
+      $c.Response.ContentLength64 = $b.Length
+      $c.Response.OutputStream.Write($b, 0, $b.Length)
+    } else {
+      $c.Response.StatusCode = 404
+    }
+  } catch { }
+  try { $c.Response.OutputStream.Close() } catch { }
+}
