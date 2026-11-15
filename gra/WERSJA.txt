@@ -822,3 +822,4 @@ cache744 · Punkty centralne z malowanych obrazow: Wielka Waga (Dolne Miasto), W
 cache745 · Port w standardzie map: dachowka (karczma), lupek (kantor), latane deski (szopy, sklad), tynk i deski scian, malowane latarnie (nie sprawdzono: FPS u autora, telefon, pad)
 cache746 · Deski we wszystkich chatach (I), Cytadela: sama Waga Sadu z poswiata u podstawy (bez pieczeci), poswiata NPC o polowe slabsza (nie sprawdzono: FPS u autora, telefon, pad)
 cache747 · HUD drewno i kute zelazo (grafiki autora): kule z wypelnieniem i miekka powierzchnia, luk staminy, dok z 10 okienkami i medalionem, zegar, minimapa, ramki monet i statusow; stare grafiki HUD usuniete (-6,4 MB) (nie sprawdzono: pad, telefon, 2 graczy, FPS u autora)
+cache748 · Nowy HUD takze przy ekranie dotykowym na PC

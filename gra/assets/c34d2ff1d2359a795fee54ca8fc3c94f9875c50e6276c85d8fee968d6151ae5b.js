@@ -9561,7 +9561,7 @@ ${menus} :is(.tab,.stab,.nbp-tab,.pc-prep-tab):hover:not(.on):not([aria-pressed=
   text(coRevive,mpTotTxt());
  }
  const oldHud=hud;let key='',buffKey='',scaleKey='';
- hud=function(){oldHud();const on=enabled&&!coarse&&innerWidth>=innerHeight*1.3,coop=!!(S&&pl2&&S.phase==='play');scr.classList.toggle('pc-hud',on);scr.classList.toggle('pc-coop',on&&coop);const gainHome=on?(coop?coWallet:wallet):night;if(gain&&gain.parentElement!==gainHome)gainHome.append(gain);const show=on&&!!S&&S.phase==='play'&&!S.paused&&!S.choosing&&!S.shop&&!S.dialog&&!S.intro&&!S.notice&&(coop||!pl.dead);root.hidden=!show||coop;co.hidden=!show||!coop;scr.classList.toggle('pc-hud-visible',show);if(!show)return;
+ hud=function(){oldHud();const on=enabled&&innerWidth>=innerHeight*1.3,/* 15.11.2026: gra tylko na PC, nowy HUD takze przy ekranie dotykowym (laptop, Steam Deck) */coop=!!(S&&pl2&&S.phase==='play');scr.classList.toggle('pc-hud',on);scr.classList.toggle('pc-coop',on&&coop);const gainHome=on?(coop?coWallet:wallet):night;if(gain&&gain.parentElement!==gainHome)gainHome.append(gain);const show=on&&!!S&&S.phase==='play'&&!S.paused&&!S.choosing&&!S.shop&&!S.dialog&&!S.intro&&!S.notice&&(coop||!pl.dead);root.hidden=!show||coop;co.hidden=!show||!coop;scr.classList.toggle('pc-hud-visible',show);if(!show)return;
   const sk=innerWidth+'x'+innerHeight;if(sk!==scaleKey){scaleKey=sk;const r=scr.getBoundingClientRect();scr.style.setProperty('--hu',Math.min(r.width/1040,r.height/577)+'px')}
   if(coop){coopHud();return}
   text(health.querySelector('strong'),meter(health,pl.hp,pl.max||1));text(mana.querySelector('strong'),meter(mana,pl.mana||0,pl.manaMax||SL.mana.max));
