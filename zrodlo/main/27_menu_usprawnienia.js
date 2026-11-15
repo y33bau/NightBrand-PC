@@ -994,7 +994,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
   {const tw=q$('.ntw'),s=tw.clientWidth||76,k=4.4,[fx,fy]=FACE[c]||[.5,.12],h=s*k,w=h*(NB_KAMIEN_AR[c]||.7);tw.style.backgroundImage=`url('${NB_KAMIEN[c]}')`;tw.style.backgroundSize=`${w}px ${h}px`;tw.style.backgroundPosition=`${s/2-fx*w}px ${s/2-fy*h}px`}
   q$('.nbn').textContent=H.n.toUpperCase();q$('.nbl').textContent=H.cls+T(' · poziom ',' · level ')+q.lv;
   const L=perki();q$('.npg').innerHTML=L.map(({d,za})=>{const ic=PREMIUM_ICONS['perki-'+d.id]||'';return `<button type="button" class="nbk npk${za?' za':''}${PREP.perks.includes(d.id)?' zn':''}" data-k="p:${d.id}"${za?' aria-disabled="true"':''}>${ic?`<img src="${ic}" alt="">`:''}<div><b>${esc(d.n)}</b>${za?`<small>🔒 ${T('poziom ','level ')}${d.lv}</small>`:''}</div></button>`}).join('');
-  q$('.l1').textContent=`${PREP.perks.length} / 1`;q$('.l1').classList.toggle('ok',PREP.perks.length>0);
+  q$('.l1').textContent=`${PREP.perks.length} / ${perkSlots(prog())}`;q$('.l1').classList.toggle('ok',PREP.perks.length>0);
   const CL=chalList();q$('.nlw').innerHTML=CL.map(x=>{const dis=x.id==='z_pogarda'&&PREP.perks.includes('z_widmo');return `<button type="button" class="nbk wz${PREP.chal===x.id?' zn':''}${dis?' npe':''}" data-k="w:${x.id}"${dis?' aria-disabled="true"':''}><b>${esc(x.n)}</b><span><span class="nb"><i class="nbur"></i>+${x.ash}</span><span class="nb"><i class="nbmo"></i>+${x.coins}</span></span><span class="nop">${esc(x.d)}</span></button>`}).join('');
   q$('.l2').textContent=`${PREP.chal?1:0} / 1`;q$('.l2').classList.toggle('ok',!!PREP.chal);
   const pel=PREP.curses.length>=3;q$('.nlk').innerHTML=CURSES.map(x=>{const on=PREP.curses.includes(x.id);return `<button type="button" class="nbk wz${on?' zn':''}${pel&&!on?' npe':''}" data-k="k:${x.id}"><b>${esc(x.n)}</b><span class="nb"><i class="nbur"></i>+${x.w}%</span><span class="ef">${esc(x.d)}</span></button>`}).join('');
@@ -1003,15 +1003,15 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
   const km=curseMul(PREP.curses);q$('.nmn').innerHTML=`<i class="nbur"></i>${T('Popioły z klątw','Ashes from curses')}: <em>×${liczba(km)}</em>`;
   const dk=(typeof DIFFK==='string'&&TDV[DIFFK])?DIFFK:'n';for(const b of P.querySelectorAll('.dd button'))b.classList.toggle('zn',b.dataset.d===dk);
   q$('.ntd').innerHTML=TDV[dk].map((v,j)=>`<div><b>${v}</b><span>${TDN[j]}</span></div>`).join('');
-  const pk=PREP.perks[0]&&PERKS.find(d=>d.id===PREP.perks[0]),ch=CL.find(x=>x.id===PREP.chal);
-  q$('.n0').textContent=pk?pk.n:'—';q$('.n1').innerHTML=ch?`<i class="nbur"></i>+${ch.ash} &nbsp;<i class="nbmo"></i>+${ch.coins}`:'—';q$('.n2').innerHTML=`<i class="nbur"></i>×${liczba(km*TDM[dk])}`;
+  const pks=PREP.perks.map(id=>PERKS.find(d=>d.id===id)).filter(Boolean),pk=pks[0],ch=CL.find(x=>x.id===PREP.chal);
+  q$('.n0').textContent=pks.length?pks.map(d=>d.n).join(' · '):'—';q$('.n1').innerHTML=ch?`<i class="nbur"></i>+${ch.ash} &nbsp;<i class="nbmo"></i>+${ch.coins}`:'—';q$('.n2').innerHTML=`<i class="nbur"></i>×${liczba(km*TDM[dk])}`;
   {const hi=$('hintsTgl'),mp=$('mpTgl'),ml=$('mpTglL');q$('.o1').classList.toggle('zn',!!(hi&&hi.checked));q$('.o2').classList.toggle('zn',!!(mp&&mp.checked));q$('.o2').hidden=!mp||!!(ml&&ml.style.display==='none')}
   q$('.ngot small').textContent=H.n.toUpperCase()+' · '+[T('Łatwy','Easy'),T('Normalny','Normal'),T('Trudny','Hard')][['e','n','h'].indexOf(dk)].toUpperCase();
   gnP();gnW();
   if(fk){const e=P.querySelector(`[data-k="${fk}"]`);if(e)e.focus({preventScroll:true})}}
  const odswiez=()=>{if(plan)return;plan=requestAnimationFrame(()=>{plan=0;render()})};
  function klik(k){const [t,id]=k.split(':'),q=prog();
-  if(t==='p'){const d=PERKS.find(x=>x.id===id);if(!d||d.lv>q.lv)return;const i=PREP.perks.indexOf(id);if(i>=0)PREP.perks.splice(i,1);else PREP.perks=[id];q.sel=PREP.perks.slice();saveProg()}
+  if(t==='p'){const d=PERKS.find(x=>x.id===id);if(!d||d.lv>q.lv)return;perkToggle(q,id);saveProg()}
   else if(t==='w'){if(id==='z_pogarda'&&PREP.perks.includes('z_widmo'))return;PREP.chal=PREP.chal===id?null:id;q.ch=PREP.chal;saveProg()}
   else if(t==='k'){const i=PREP.curses.indexOf(id);if(i>=0)PREP.curses.splice(i,1);else if(PREP.curses.length<3)PREP.curses.push(id);else return}
   try{uiSnd('equip')}catch(e){}renderPrep();render()}
