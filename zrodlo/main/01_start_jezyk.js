@@ -16,7 +16,7 @@ trDom(document.body);
   if(!box)return;box.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){const bs=[...box.querySelectorAll('button')],i=bs.indexOf(document.activeElement);bs[(i+1+bs.length)%bs.length].focus();e.preventDefault()}});
   if(!saved){box.hidden=false;const fo=()=>{if(box.hidden)return;const f=box.querySelector('button.on');if(f&&!box.contains(document.activeElement))f.focus()};for(const t of [60,400,1500,4000,8000,14000])setTimeout(fo,t);addEventListener('keydown',e=>{if(!box.hidden&&!box.contains(document.activeElement)&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Enter',' '].includes(e.key)){e.preventDefault();e.stopImmediatePropagation();fo()}},true)}})();
 if(!window.THREE){$('screen').insertAdjacentHTML('beforeend',(EN?'<div id="err">Failed to load the 3D library. Please refresh the page.</div>':'<div id="err">Nie udało się wczytać biblioteki 3D. Odśwież stronę.</div>'));return}
-const TS=16,MW=104,MH=91,WW=MW*TS,WH=MH*TS,NIGHT=720,BREAK_AT=360,PITCH=55*Math.PI/180,DIST=30,
+const TS=16,MW=104,MH=91,WW=MW*TS,WH=MH*TS,NIGHT=960,BREAK_AT=480,PITCH=55*Math.PI/180,DIST=30,
   // the 3D scene is drawn at this height and scaled up: higher = sharper sprites; phones get a lighter setting
   RT_H=(typeof matchMedia==='function'&&matchMedia('(pointer:coarse)').matches)?540:720;
 const P={ink:'#08070a',bone:'#d8cfb8',bone2:'#9d9584',blood:'#951518',blood2:'#560a0d',ember:'#ff6a1a',ember2:'#ffb347',st0:'#0d0c10',st1:'#1b1a1f',st2:'#24232a',st3:'#34323b',st4:'#46434e',inlay:'#5a4a22',

@@ -1,4 +1,4 @@
-/* ============ LEVEL STAGES: 6 min fight, Marga's stall, the Collector, fight until 12 min, then Zrost ============ */
+/* ============ LEVEL STAGES: 8 min fight, Marga's stall, the Collector, fight until 16 min, then the act boss (15.11.2026: night 16 min) ============ */
 const SHOP=[
   {id:'brew',name:(EN?'Bitter Brew':'Gorzki wywar'),d:(EN?'Restores all health.':'Leczy całe życie.'),cost:20},
   {id:'heart',name:(EN?'Ashen Heart':'Serce z popiołu'),d:(EN?'+20 maximum health.':'+20 do maksymalnego życia.'),cost:45,g:1.6,lim:3},

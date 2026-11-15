@@ -37,7 +37,7 @@ function portEnemyArt(key){
  portSkins.set(key,skin);return skin;
 }
 function spawnEnemy(type,x,y,extra){if((type==='xbow'||type==='monk')&&S.enemies.reduce((n,o)=>n+(!o.dead&&(o.type==='xbow'||o.type==='monk')?1:0),0)>=2)type=type==='monk'?'madman':'bandit';// max 2 strzelców naraz; reszta walczy w zwarciu
-  const T=ET[type],mul=(BIG.has(type)||type==='collector'?1:1+Math.min(S.t,NIGHT)/ENEMY_HP_T)*S.pk.ehp*DF[DIFFK].hp*chapterHp(type);
+  const T=ET[type],mul=(BIG.has(type)||type==='collector'?1:(1+Math.min(S.t,NIGHT)/NIGHT*720/ENEMY_HP_T)*.8*(surgeOn()?.45:1))/* 15.11.2026: wzrost zycia liczony od ulamka nocy (koniec nocy = jak dawniej), mobki -20%, w Naporze slabsze */*S.pk.ehp*DF[DIFFK].hp*chapterHp(type);
   const e=Object.assign({type,x,y,hp:T.hp*mul,max:T.hp*mul,spd:T.spd*rnd(.9,1.1),r:T.r,dmg:T.dmg,xp:T.xp,vx:0,vy:0,flash:0,walk:Math.random()*5,s:1,ph:Math.random()*9,leap:0,lcd:2,side:Math.random()<.5?1:-1,
     frozen:0,bleed:0,bleedT:0,rise:type==='bat'?0:.5,atkA:0,slamT:4,atkT:0,dead:false},extra||{});
   if(CH===PORT){
@@ -98,7 +98,7 @@ const HEART_MAT=(()=>{const c=document.createElement('canvas');c.width=c.height=
 // runda 293: nowa moneta (sprite od autora) wypadajaca z wrogow
 const COIN_MAT=(()=>{const c=document.createElement('canvas');c.width=c.height=32;const x=c.getContext('2d'),tex=new THREE.CanvasTexture(c);tex.magFilter=tex.minFilter=THREE.NearestFilter;tex.generateMipmaps=false;const im=new Image();im.onload=()=>{x.drawImage(im,0,0,32,32);tex.needsUpdate=true};im.src='data:image/png;base64,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';return new THREE.MeshBasicMaterial({map:tex,transparent:true,alphaTest:.1,fog:false})})();
 wispGlow.h=new THREE.MeshBasicMaterial({map:glowC('#ff3a4a'),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,fog:false,opacity:.3});
-function awardXp(v){if(!S||!(v>0))return;S.xp+=v*S.pk.xp*DF[DIFFK].xp*1.2;S.actions.collect++;while(S.xp>=S.need){S.xp-=S.need;S.lvl++;S.need=xpNeed(S.lvl);S.pendLv++}}
+function awardXp(v){if(!S||!(v>0))return;S.xp+=v*S.pk.xp*DF[DIFFK].xp*1.02;/* 15.11.2026: noc 16 min i wiecej wrogow: doswiadczenie -15% (bylo 1.2) */S.actions.collect++;while(S.xp>=S.need){S.xp-=S.need;S.lvl++;S.need=xpNeed(S.lvl);S.pendLv++}}
 function dropPick(k,x,y,v=1){if(k==='w'){awardXp(v);return}const fr=k==='c'?{n:COIN_MAT}:k==='h'?{n:HEART_MAT}:A.pick[v>=5?5:v>=2?2:1];const m=new THREE.Mesh(geoC,fr.n);scene.add(m);const g=new THREE.Mesh(glowGeo,k==='c'||k==='h'?wispGlow[k]:wispGlow[v>=5?5:v>=2?2:1]);scene.add(g);
   S.picks.push({k,x,y,v,mag:false,sp:0,visualAge:0,ph:Math.random()*6,mesh:m,glow:g})}
 // 8.11.2026 boss second phase: at half health the boss enrages (faster, harder hits) and calls two of the night's creatures
@@ -335,7 +335,7 @@ const CZAI={
       if(e.pull<=0||d<e.r+8){e.pull=0;e.chCd=rnd(6,8);if(d<e.r+14)hurtPlayer(enemyDamage(8),dx/d,dy/d,e)}return true}
     if(!golemTgt(e)&&d>46&&d<125&&e.chCd<=0&&pl.inv<=0&&sight(e.x,e.y,pl.x,pl.y)){e.chainAim=[dx/d,dy/d];e.chT=.7;e.chCd=6;telegraph(e);return true}return false},
   wraith(e,dx,dy,d,dt){e.dcd=(e.dcd||0)-dt;
-    if(e.drainWind>0){e.drainWind-=dt;if(e.drainWind<=0&&d<e.r+14){S.attacker=e;const hit=hitT(e,enemyDamage(e.dmg,SL.dmgDiv),dx/d,dy/d);S.attacker=null;if(hit&&S.coins>0){const n=Math.min(S.coins,3+Math.floor(Math.min(S.t,NIGHT)/180));S.coins-=n;e.stolen=(e.stolen||0)+n;ftInfo('−'+n+(EN?' coins — you will get them back after the fight':' monet — odzyskasz je po walce'))}}return true}
+    if(e.drainWind>0){e.drainWind-=dt;if(e.drainWind<=0&&d<e.r+14){S.attacker=e;const hit=hitT(e,enemyDamage(e.dmg,SL.dmgDiv),dx/d,dy/d);S.attacker=null;if(hit&&S.coins>0){const n=Math.min(S.coins,3+Math.floor(Math.min(S.t,NIGHT)/NIGHT*4));S.coins-=n;e.stolen=(e.stolen||0)+n;ftInfo('−'+n+(EN?' coins — you will get them back after the fight':' monet — odzyskasz je po walce'))}}return true}
     if(d<e.r+9&&e.dcd<=0&&(golemTgt(e)||pl.inv<=0)){e.drainWind=.6;e.dcd=2.5;telegraph(e);return true}return false},
 
   // drowned corpse grabs and holds the hero for a moment
@@ -456,7 +456,9 @@ function navDir(e){const D=NAV.d;if(!D)return null;const ex=Math.floor(e.x/TS),e
   if(!bx&&!by)return null;const cx=(ex+bx+.5)*TS-e.x,cy=(ey+by+.5)*TS-e.y,l=Math.hypot(cx,cy)||1;return [cx/l,cy/l]}
 function sight(x0,y0,x1,y1){const n=Math.ceil(Math.hypot(x1-x0,y1-y0)/8);for(let i=1;i<n;i++)if(solidAt(x0+(x1-x0)*i/n,y0+(y1-y0)*i/n))return false;return true}
 function spawnTick(dt){
-  if(pl.dead||S.phase!=='play'||S.opening||S.stage==='break'||S.dg||S.train)return;S.spawnT-=dt;if(S.spawnT>0)return;S.spawnT=.5;
+  if(pl.dead||S.phase!=='play'||S.opening||S.stage==='break'||S.dg||S.train)return;
+  if(!S.endless)for(let i=0;i<SURGE.length;i++)if(S.t>=SURGE[i]&&S.t<SURGE[i]+SURGE_LEN&&!((S.surgeMask||0)&1<<i)){S.surgeMask=(S.surgeMask||0)|1<<i;S.spawnT=0;shake(.12,.5);say(EN?'Onslaught! The dead pour in from every side.':'Napór! Martwi napierają ze wszystkich stron.')}
+  S.spawnT-=dt;if(S.spawnT>0)return;S.spawnT=.5;
   const target=spawnTarget();// will-o'-wisps sit far away on the marsh and must not take up places in the cap
   let n=Math.min(5,Math.floor(target-S.enemies.filter(e=>e.type!=='wisp').length));
   while(n-->0){const p=ringSpot()||ringSpot(170,260);if(!p)continue;const r=Math.random(),t=S.t;
@@ -486,7 +488,7 @@ function spawnTick(dt){
     if(CH===1)spawnEnemy(t>110&&r<.25?'knight':t>50&&r<.5?'ghoul':'possessed',p[0],p[1]);else spawnEnemy(t>70&&r<.25?'warden':t>35&&r<.5?'ghoul':'dwarf',p[0],p[1])}
 }
 // ---- elity: 3 na noc (3., 7. i 10. minuta; w pierwszej nocy nieco później), zwykły wróg z rozdziału, bordowa poświata ----
-const ELITE={times:[180,420,600],timesFirst:[210,440,610],t:180,hp:3.5,dmg:1.65,type:{1:'knight',2:'warden',3:'rotknight',4:'bandit',5:'executioner',6:'knight'}};
+const ELITE={times:[255,600,735],timesFirst:[270,620,750],/* 15.11.2026: noc 16 min; pierwszy i ostatni konczy Napor */t:180,hp:3.5,dmg:1.65,type:{1:'knight',2:'warden',3:'rotknight',4:'bandit',5:'executioner',6:'knight'}};
 // 9.11.2026: elity z imieniem: czasem (30%, najwyżej jedna na noc) elita ma imię, własną kartę w Bestiariuszu i jednorazową nagrodę; statystyki jak zwykła elita
 const NAMED={1:[['bogumil','Sir Bogumił Wiarołomny','Sir Bogumil the Oathbreaker','Przysięgał bronić osady, a otworzył bramę Zakonowi. Do dziś nosi herb, którego się wyparł.','He swore to hold the settlement, then opened its gate to the Holy Order. He still wears the crest he renounced.'],['dobieslaw','Dobiesław Spopielały','Dobieslaw the Ashen','Spłonął razem z kaplicą, ale zbroja nie pozwoliła mu upaść. Przy każdym kroku sypie się z niej popiół.','He burned with the chapel, but his armour would not let him fall. Ash sifts out of it with every step.'],['wojmir','Wojmir Krwawa Ostroga','Wojmir Bloodspur','Najmłodszy z rycerzy osady. Noc obiecała mu chwałę i dotrzymała słowa po swojemu.','The youngest of the settlement\'s knights. The Night promised him glory, and kept its word in its own fashion.']],
  2:[['gromislaw','Gromisław Żelazna Brama','Gromislaw Irongate','Pilnował krasnoludzkiej bramy przez sto zim. Nikt mu nie powiedział, że może już odejść.','He guarded the dwarven gate for a hundred winters. No one has told him he may stand down.'],['bolko','Bolko Kamiennoręki','Bolko Stonehand','Stracił dłonie w zawale i wykuł sobie nowe z granitu. Teraz bije nimi wszystko, co się rusza.','He lost his hands in a cave-in and cut new ones from granite. Now he uses them on anything that moves.'],['mszczuj','Mszczuj, ostatni klucznik','Mszczuj, the Last Keykeeper','Nosi na szyi klucze do każdych drzwi Dolnego Miasta. Żadne z nich już się nie otwierają.','Round his neck hang the keys to every door in the Lower City. None of them opens now.']],
@@ -557,7 +559,7 @@ function events(){
       for(const b of W.barrows)if(Math.hypot(b.x-pl.x,b.y-pl.y)<420)for(let i=0;i<2;i++)spawnEnemy('wight',b.x+rnd(-12,12),b.y+rnd(2,10),{rise:1.2})});
     // false will-o'-wisps wait over the marsh
     const wisps=()=>{for(const q of W.wisps)if(Math.hypot(q.x*16-pl.x,q.z*16-pl.y)>90)spawnEnemy('wisp',q.x*16+rnd(-20,20),q.z*16+rnd(-10,10),{rise:0})};
-    ev('ws',S.t>.2,wisps);ev('ws2',S.t>300,wisps);
+    ev('ws',S.t>.2,wisps);ev('ws2',S.t>BREAK_AT-60,wisps);
     ev('np',S.t>12,()=>0);
     ev('wo',S.t>44,()=>0);
     const N=S.npc,bt=W.npcs.find(n=>n.id==='bartosz');
@@ -577,7 +579,7 @@ function events(){
     ev('k',S.t>70,()=>0);
     ev('m',S.t>110,()=>0);
     ev('ot',S.t>210&&N.ottokar.state!=='dead',()=>{N.ottokar.state='dead';const n=W.npcs[1];pool(n.x,n.y+2,22,8);for(let i=0;i<4;i++)spawnEnemy('madman',n.x+rnd(-14,14),n.y+rnd(4,12),{rise:.6});say((EN?'Madmen have broken down Count Ottokar\'s door. Gold did not save him.':'Szaleńcy wyważyli drzwi hrabiego Ottokara. Złoto go nie uratowało.'))});
-    ev('roar',S.t>600,()=>{play('bossGrowl',0);shake(.15,1.2);say((EN?'Something enormous beats its wings above the domes. The basilica bells begin to ring by themselves.':'Nad kopułami coś ogromnego łopocze skrzydłami. Dzwony bazyliki zaczynają bić same.'))});
+    ev('roar',S.t>NIGHT-120,()=>{play('bossGrowl',0);shake(.15,1.2);say((EN?'Something enormous beats its wings above the domes. The basilica bells begin to ring by themselves.':'Nad kopułami coś ogromnego łopocze skrzydłami. Dzwony bazyliki zaczynają bić same.'))});
     return}
   ev('a',S.t>.5,()=>say((EN?'You descend into the Lower City. The sun has never reached here.':'Schodzisz do Dolnego Miasta. Tu nigdy nie było słońca.')));
   ev('b',S.t>5,()=>0);

@@ -15,9 +15,11 @@ const SK={
 // difficulty knobs: skill cooldown multiplier, how many enemies the night ramps up to and how fast, how fast enemy health grows, enemy hit strength
 const BOSS_MOB=0;// walka z bossem finałowym to pojedynek: zwykli wrogowie znikają i nie wracają
 const BOSS_HP_MUL=1.5,BOSS_SPD_MUL=1.1;// bossowie finałowi: życie x1,5, szybkość +10%
-const MOB_MUL=1.1;// +10% wrogów (runda: pojedynki bossów)
+const MOB_MUL=1.232;// +10% wrogów (runda: pojedynki bossów), 15.11.2026: dodatkowo +12% (noc 16 min, zgoda autora)
+// 15.11.2026: Napór: 15 s z 1,5x wiecej wrogow o 45% zycia, w 4:00 i 12:00 (w polowie kazdej czesci nocy); konczy go elitarny wrog
+const SURGE=[240,720],SURGE_LEN=15;function surgeOn(){return !!S&&!S.dg&&!S.endless&&!S.train&&SURGE.some(a=>S.t>=a&&S.t<a+SURGE_LEN)}
 const DF={e:{hp:.75,dmg:.7,en:.8,xp:1,coin:.9,pot:200,n:(EN?'Easy':'Łatwy')},n:{hp:1,dmg:1,en:1,xp:1,coin:1,pot:150,n:(EN?'Normal':'Normalny')},h:{hp:1.25,dmg:1.2,en:1.12,xp:1.15,coin:1.15,pot:100,n:(EN?'Hard':'Trudny')}};let DIFFK='n';try{const q=localStorage.getItem('pn_diff');if(DF[q])DIFFK=q}catch(e){}
-const ENEMY_CAP=80,ENEMY_RAMP=.32,ENEMY_HP_T=300;let ENEMY_DMG=.8*DF[DIFFK].dmg;
+const ENEMY_CAP=100,ENEMY_RAMP=.32,ENEMY_HP_T=300;let ENEMY_DMG=.8*DF[DIFFK].dmg;
 // from hero level 20 the night gets 10% more enemies at once (limit raised too)
 const LATE_LVL=20,LATE_MUL=1.1;
 const THARM_LINES=[(EN?'Alive… here? The last time I saw a living soul, our forges were still burning.':'Żywy… tutaj? Ostatni raz widziałem żywego człowieka, kiedy nasze kuźnie jeszcze pracowały.'),(EN?'We dug deeper than the runes allowed. Something slept beneath the lava. We woke it with our picks.':'Kopaliśmy głębiej, niż pozwalały runy. Pod lawą coś spało. Obudziliśmy to kilofami.'),(EN?'My brothers are still digging, though they have no eyes left. Do not pity them.':'Moi bracia wciąż kopią, choć nie mają już oczu. Nie żałuj ich.'),(EN?'My hammer is lost, but the blessing of the forge still smoulders in me. Take it.':'Mój młot przepadł, ale błogosławieństwo kuźni jeszcze się we mnie tli. Weź je.')];
@@ -47,12 +49,12 @@ const BIG=new Set(['boss','beast','leszy','strzyga','cumlin']);
 // experience curve: 5 wisps per level as before, and on top of that every level costs 5% more (compounding)
 // ground that slows the hero: rot (III), river ford and marsh water (IV)
 const SLOWT={54:.6,64:.7,65:.55};
-function awardCoins(value){const amount=Math.max(0,value)*(S.nev&&S.nev.k==='krew'&&S.nev.t>0?NEV.krew.coin:1)*S.pk.coin*DF[DIFFK].coin+(S.coinFrac||0),whole=Math.floor(amount+1e-8);S.coinFrac=amount-whole;S.coins+=whole;S.cEarn=(S.cEarn||0)+whole;return whole}
+function awardCoins(value){const amount=Math.max(0,value)*.9/*15.11.2026: noc 16 min, monety -10%*/*(S.nev&&S.nev.k==='krew'&&S.nev.t>0?NEV.krew.coin:1)*S.pk.coin*DF[DIFFK].coin+(S.coinFrac||0),whole=Math.floor(amount+1e-8);S.coinFrac=amount-whole;S.coins+=whole;S.cEarn=(S.cEarn||0)+whole;return whole}
 // Map I is a repeatable warm-up; difficulty and time growth remain independent.
 const CHAPTER_BALANCE={1:{hp:.90,boss:.92,dmg:.85,pop:.78},2:{hp:.94,boss:.96,dmg:.88,pop:.84},3:{hp:.98,boss:1,dmg:.92,pop:.90},6:{hp:.96,boss:.98,dmg:.90,pop:.87},4:{hp:1.02,boss:1.03,dmg:.96,pop:.95},5:{hp:1.06,boss:1.06,dmg:1,pop:1},9:{hp:1,boss:1,dmg:1,pop:1}};
 const chapterTuning=(ch=CH)=>CHAPTER_BALANCE[ch]||CHAPTER_BALANCE[9];
 const chapterHp=type=>chapterTuning()[BIG.has(type)||['collector','boginka','glizzard'].includes(type)?'boss':'hp'];
-function spawnTarget(){return (S.endless?Math.min(2.2,1+Math.max(0,S.t-300)/400):1)*(S.nev&&S.nev.k==='krew'&&S.nev.t>0?NEV.krew.mob:1)*MOB_MUL*Math.min(SL.cap,4+S.t*SL.ramp)*(S.lvl>=LATE_LVL?LATE_MUL:1)*S.pk.en*DF[DIFFK].en*(DIFFK==='e'&&S.t<180?.9:1)/*14.11.2026: Łatwy, pierwsze 3 min nocy −10% wrogów (zgoda autora)*/*(S.stage==='final'?BOSS_MOB:1)*chapterTuning().pop*(CH===1?(DIFFK==='e'?.45+.55*Math.min(1,S.t/120):.65+.35*Math.min(1,S.t/90)):1)/*14.11.2026: Łatwy, rozdz. I: łagodniejszy start (45%→100% w 120 s), zgoda autora*/}
+function spawnTarget(){return (surgeOn()?1.5:1)*(S.endless?Math.min(2.2,1+Math.max(0,S.t-300)/400):1)*(S.nev&&S.nev.k==='krew'&&S.nev.t>0?NEV.krew.mob:1)*MOB_MUL*Math.min(SL.cap,4+S.t*SL.ramp)*(S.lvl>=LATE_LVL?LATE_MUL:1)*S.pk.en*DF[DIFFK].en*(DIFFK==='e'&&S.t<180?.9:1)/*14.11.2026: Łatwy, pierwsze 3 min nocy −10% wrogów (zgoda autora)*/*(S.stage==='final'?BOSS_MOB:1)*chapterTuning().pop*(CH===1?(DIFFK==='e'?.45+.55*Math.min(1,S.t/120):.65+.35*Math.min(1,S.t/90)):1)/*14.11.2026: Łatwy, rozdz. I: łagodniejszy start (45%→100% w 120 s), zgoda autora*/}
 function enemyDamage(base,divisor=900){return base*ENEMY_DMG*chapterTuning().dmg*(divisor?1+Math.min(S.t,NIGHT)/divisor:1)}
 function bossHealth(type,factor=1){const base=type==='boss'?(CH===5?2600:CH===2?1650:CH===PORT?1800:ET.boss.hp):ET[type].hp;return base*factor*(1+Math.min(S.t,NIGHT)/360)}
 function breakPoise(e,amount){if(e.dead||e.inv>0||e.trans>0)return;e.poise=(e.poise||0)+amount;if(e.poise<140)return;e.poise=0;e.stun=1.1;play('poiseBreak',0);e.mode=null;e.inv=0;e.atkT=0;e.ctw=0;e.hamT=0;e.fanWind=0;e.castWind=0;e.pull=0;e.chT=0;ftx((EN?'Poise broken':'Postawa przełamana'),e.x,e.y,ftEntH(e)+.5,'i')}
