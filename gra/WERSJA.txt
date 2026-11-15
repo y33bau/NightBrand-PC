@@ -843,3 +843,4 @@ cache767 · Fabula 759: instrukcja kampanii, komunikaty po rozmowie. Nie sprawdz
 cache768 · Fabula 759: motywy bohaterow na ekranie wyboru postaci. Nie sprawdzono: wyglad ekranu, pad, dzwiek, FPS, itch.io
 cache769 · Scalenie testowe: fabula 759 + WSAD w menu + balans atak/unik. Nie sprawdzono: wyglad ekranow, pad, dzwiek, FPS, itch.io
 cache770 · HUD PC o 30% mniejszy (zoom .7, dotyk bez zmian). Nie sprawdzono: wyglad na ekranie, pad, dzwiek, FPS, itch.io
+cache771 · Poprawka HUD: skala przez --hu (nowy HUD), cofniete zoom starego. Nie sprawdzono: wyglad, pad, dzwiek, FPS, itch.io
