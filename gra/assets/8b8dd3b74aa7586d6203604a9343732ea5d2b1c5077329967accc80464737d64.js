@@ -2542,13 +2542,9 @@ function buildCytadela(I){planGround(5);
   addWalls(bars,2.2,3,0xffffff,true);
   // 15.11.2026 (punkt centralny): mur zamykajacy os czerwonego dywanu Sali Sadowej niesie godlo Zakonu i zlota Wage Sadu; tylko na polach muru, srodek sali wolny
   {const zc=(MP(33)+MP(35))/2,face=MP(35)+.04,cx=MP(40);
-   const c=canvas(256,256),q=c.getContext('2d');q.translate(128,128);
-   const disc=q.createRadialGradient(0,0,10,0,0,120);disc.addColorStop(0,'#6e1418');disc.addColorStop(1,'#2e0608');q.fillStyle=disc;q.beginPath();q.arc(0,0,118,0,Math.PI*2);q.fill();
-   const gold=q.createLinearGradient(-100,-100,100,100);gold.addColorStop(0,'#f4d27a');gold.addColorStop(.5,'#b8862e');gold.addColorStop(1,'#f0c866');q.strokeStyle=gold;q.fillStyle=gold;
-   q.lineWidth=9;q.beginPath();q.arc(0,0,118,0,Math.PI*2);q.stroke();q.lineWidth=4;q.beginPath();q.arc(0,0,104,0,Math.PI*2);q.stroke();
-   q.lineWidth=14;q.beginPath();q.arc(0,0,52,0,Math.PI*2);q.stroke();q.fillRect(-7,-92,14,184);q.beginPath();q.moveTo(-18,-92);q.lineTo(18,-92);q.lineTo(0,-110);q.closePath();q.fill();q.fillRect(-26,64,52,10);
-   const emblemTex=new THREE.CanvasTexture(c);emblemTex.anisotropy=4;
-   const emblem=new THREE.Mesh(new THREE.CircleGeometry(1.35,40),cutaway(phong({map:emblemTex,emissive:0x1c0a04,shininess:30,specular:0x806030})));emblem.position.set(cx,1.78,face);ROOT.add(emblem);
+   // 15.11.2026: godlo = pieczec Pietna z logo gry (plik UI juz w grze, w pamieci offline); swieci wlasnym blaskiem
+   const sealTex=new THREE.TextureLoader().load('assets/ui/2766d2339f544ba95d3347832bcc91280a0c7673f25d01acf375b12a2524acf5.webp');sealTex.anisotropy=4;
+   const emblem=new THREE.Mesh(new THREE.PlaneGeometry(4.3,4.3*325/480),cutaway(phong({map:sealTex,emissiveMap:sealTex,emissive:0x9a8070,transparent:true,alphaTest:.04,depthWrite:false,shininess:20})));emblem.position.set(cx,2.05,face+.42);emblem.rotation.x=-.58;emblem.renderOrder=3;/* odchylona ku kamerze, zeby nie byla splaszczona */ROOT.add(emblem);
    const goldM=cutaway(phong({color:0xc8a050,specular:0xffe0a0,shininess:70,emissive:0x221404})),darkM=cutaway(phong({color:0x2a2226,specular:0x504040,shininess:30}));
    nbScales({x:cx,z:zc,base:3.4,foot:.42,top:5.9,col:.17,arm:1.95,tilt:-.11,axis:'x',pan:.55,drop:1.15,stone:darkM,iron:goldM,metal:goldM,chain:goldM,
     load:s=>cutaway(phong({color:s>0?0x3a2a18:0x8a7040,shininess:20,emissive:s>0?0:0x2a1c06}))});

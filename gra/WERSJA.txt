@@ -817,3 +817,4 @@ cache739 · Mapy: miekkie przenikanie posadzek (wysokosc tekstury, falujaca gran
 cache740 · Mapy cz.2: belka i kraweznik na styku pomostu z nabrzezem, przyciemniony plac solny, glazy u podnoza obrzeza Czarnoboru, jasniejsza posadzka sali Cytadeli (nie sprawdzono: FPS u autora, telefon, pad)
 cache741 · Punkty centralne: Wielka Waga nad przepascia lawy (Dolne Miasto), bazylika jedynym jasnym zlotem i z oswietlonym bebnem (Zlotogrod), godlo Zakonu i Waga Sadu na osi Sali Sadowej (Cytadela); bez zmian kolizji (nie sprawdzono: FPS u autora, telefon, pad)
 cache742 · Swiety dab Czarnoboru jako punkt centralny: wotywne swiatlo u pnia i poswiata korony (nie sprawdzono: FPS u autora, telefon, pad)
+cache743 · Cytadela: godlo Zakonu = pieczec Pietna z logo gry, odchylona ku kamerze (nie sprawdzono: FPS u autora, telefon, pad)
