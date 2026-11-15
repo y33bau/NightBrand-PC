@@ -3,12 +3,28 @@
   python3 wydaj.py rehash KATALOG ROZSZERZENIE STARY_HASH PLIK_EDYCJI   # podmiana tresci pliku js/css z hashem (PLIK_EDYCJI definiuje EDITS=[(stare,nowe),...], kazde 'stare' musi wystapic dokladnie raz)
   python3 wydaj.py dodaj KATALOG PLIK KATEGORIA [leniwy]                # nowy zasob (hash w nazwie) do assets/KATEGORIA/, manifestu i sw.js; leniwy = pobierany przy pierwszym uzyciu
                                                                         # KATEGORIA: bohaterowie wrogowie npc rekwizyty tekstury efekty ikony ui tla muzyka dzwieki czcionki (js/css: bez kategorii)
-  python3 wydaj.py wersja KATALOG "opis rundy"                          # nowy numer cache w sw.js + linijka w WERSJA.txt + kontrola sprawdz.py
+  python3 wydaj.py wersja KATALOG "opis rundy"                          # nowy numer cache w sw.js + linijka w WERSJA.txt + kontrola limitu plikow itch.io + kontrola sprawdz.py
+  python3 wydaj.py itch KATALOG [PLIK.zip]                              # zip dla itch.io: bez edytor-map/ i bez wpisow katalogow (zip -D), kontrola limitu; domyslnie ../NightBrand_itch_<cache>.zip
 rehash: podmienia plik pod nowa nazwa (SHA-256 tresci), usuwa stary, poprawia manifest.json i sw.js."""
 import sys,os,re,json,hashlib,datetime,subprocess
 def die(m):print('BLAD:',m);sys.exit(1)
 if len(sys.argv)<3:die(__doc__)
 cmd,R=sys.argv[1],sys.argv[2]
+# itch.io: gra w przegladarce moze miec w zipie najwyzej 1000 plikow (liczone razem z katalogami); wyzej na stronie gry pojawia sie blad zamiast gry
+ITCH_LIMIT,ITCH_MAX=1000,990
+def pliki_itch():
+    """pliki, ktore trafia do zipa dla itch.io (bez edytor-map/: narzedzia autora nie wchodza do wersji dla graczy)"""
+    out=[]
+    for d,ds,fs in os.walk(R):
+        rel=os.path.relpath(d,R)
+        if rel=='edytor-map' or rel.startswith('edytor-map'+os.sep):continue
+        out+=[os.path.join(rel,f) if rel!='.' else f for f in fs]
+    return out
+def kontrola_itch():
+    n=len(pliki_itch());print('pliki w zipie dla itch.io: %d / %d (strazni od %d)'%(n,ITCH_LIMIT,ITCH_MAX+1))
+    if n>ITCH_MAX:print('BLAD: za duzo plikow dla itch.io (zip bez wpisow katalogow). Zlacz drobne zasoby (atlas/paczka) albo usun nieuzywane, potem ponow.');return 1
+    if n>ITCH_MAX-40:print('UWAGA: malo zapasu (%d wolnych miejsc), nastepne nowe zasoby przekrocza limit.'%(ITCH_MAX-n))
+    return 0
 if cmd=='rehash':
     ext,old,ed=sys.argv[3:6];A=R+'/assets/'
     t=open(A+old+'.'+ext,encoding='utf8').read();EDITS=[];exec(open(ed,encoding='utf8').read())
@@ -33,7 +49,19 @@ elif cmd=='wersja':
     open(R+'/WERSJA.txt','a',encoding='utf8',newline='').write('cache%d · %s\n'%(int(m.group(2))+1,opis))
     print('cache:',new)
     sp=os.path.join(os.path.dirname(os.path.abspath(__file__)),'sprawdz.py')
-    sys.exit(subprocess.run([sys.executable,sp,R]).returncode)
+    kod=subprocess.run([sys.executable,sp,R]).returncode
+    sys.exit(kod or kontrola_itch())
+elif cmd=='itch':
+    import zipfile
+    m=re.search(r"nightbrand-codex-\d{8}-(\d+)",open(R+'/sw.js',encoding='utf8').read())
+    out=os.path.abspath(sys.argv[3] if len(sys.argv)>3 else os.path.join(R,'..','NightBrand_itch_%s.zip'%(m.group(1) if m else 'x')))
+    if kontrola_itch():sys.exit(1)
+    if os.path.exists(out):os.remove(out)
+    r=subprocess.run(['zip','-qr','-9','-D',out,'.','-x','edytor-map/*'],cwd=R)
+    if r.returncode:die('zip nie powiodl sie')
+    z=zipfile.ZipFile(out);n=len(z.namelist());kat=sum(1 for x in z.namelist() if x.endswith('/'))
+    print('zip: %s, wpisow %d (katalogow %d), %.1f MB'%(out,n,kat,os.path.getsize(out)/1e6))
+    if n>ITCH_MAX or any(x.startswith('edytor-map') for x in z.namelist()):os.remove(out);die('zip niezgodny z regulami (limit lub edytor-map), usuniety')
 elif cmd=='dodaj':
     # dodaj KATALOG PLIK [leniwy]: nowy zasob pod nazwa = SHA-256 tresci, wpis w manifest.json i w sw.js
     # (F = pobierane od razu przy instalacji; L = "leniwe": pobierane dopiero przy pierwszym uzyciu, ale trzymane w cache)
