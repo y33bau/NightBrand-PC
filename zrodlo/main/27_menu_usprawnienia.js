@@ -883,6 +883,7 @@ ${O} #nbW .pan .nin{transition:opacity .25s,translate .25s!important}
 ${O} #nbW .pan.zm .nin{opacity:0!important;translate:0 calc(6*var(--u))!important}
 ${O} #nbW .kl{font:700 calc(36*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.08em!important;color:#dcb877!important;text-shadow:0 0 calc(14*var(--u)) rgba(255,120,40,.3),0 2px 4px #000!important}
 ${O} #nbW .imi{font:italic calc(20*var(--u))/1.3 Georgia,serif!important;color:#d0bc94!important;margin:calc(6*var(--u)) 0 calc(10*var(--u))!important}
+${O} #nbW .mot{font:italic calc(16.5*var(--u))/1.4 Georgia,serif!important;color:#c9b88f!important;margin:calc(-2*var(--u)) 0 calc(10*var(--u))!important;padding-left:calc(10*var(--u))!important;border-left:calc(2*var(--u)) solid rgba(201,164,90,.45)!important;min-height:2.8em!important}
 ${O} #nbW .nop{font-size:calc(17.5*var(--u))!important;line-height:1.45!important;color:#ecdcbc!important;min-height:2.9em!important}
 ${O} #nbW .sty{margin-top:calc(8*var(--u))!important;font:600 calc(13.5*var(--u))/1.4 Cinzel,Georgia,serif!important;letter-spacing:.14em!important;color:#b9a789!important}
 ${O} #nbW .nte{display:flex!important;gap:calc(10*var(--u))!important;margin-top:calc(12*var(--u))!important}
@@ -992,7 +993,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
  W.innerHTML=`<div class="nst"><i class="nw ntlo"></i><i class="nw bla"></i><div class="rz"></div><i class="nw mg"></i><i class="nw npal"></i><i class="nw npl pa"></i><i class="nw npl pb"></i><canvas></canvas><i class="nw nie"></i>
  <div class="nbt"><b>${T('WYBÓR POSTACI','CHOOSE YOUR HERO')}</b><i class="sep"></i><span class="it">${T('Kto wyjdzie dziś w noc?','Who walks into the night tonight?')}</span></div>
  <button type="button" class="nbd wroc">${T('← Wróć','← Back')}</button><div class="nwz"></div>
- <div class="nbr pan"><div class="nin"><div class="kl"></div><div class="imi"></div><div class="nop"></div><div class="nte"></div><div class="sty"></div></div></div>
+ <div class="nbr pan"><div class="nin"><div class="kl"></div><div class="imi"></div><div class="mot"></div><div class="nop"></div><div class="nte"></div><div class="sty"></div></div></div>
  <button type="button" class="nbd gl wyb2">${T('Wybierz','Choose')}<small></small></button><i class="nw nwin"></i><i class="nw nbzi"></i></div>`;
  title.append(W);
  const ST=W.querySelector('.nst'),RZ=W.querySelector('.rz'),TABS=W.querySelector('.nwz'),PAN=W.querySelector('.pan'),pa=W.querySelector('.pa'),pb=W.querySelector('.pb'),CV=W.querySelector('canvas'),CX=CV.getContext('2d');
@@ -1006,7 +1007,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
   const d=(2-ORDER.indexOf(c));W.querySelector('.ntlo').style.setProperty('transform',`translateX(${d*.7}%)`,'important');RZ.style.setProperty('transform',`translateX(${d*.25}%)`,'important');
   if(fokus&&document.activeElement!==TB[c])TB[c].focus({preventScroll:true});
   if(!zm)return;PAN.classList.add('zm');clearTimeout(ustaw.t);ustaw.t=setTimeout(()=>{const H=hero(c);
-   PAN.querySelector('.kl').textContent=H.cls.toUpperCase();PAN.querySelector('.imi').textContent=H.n+', '+H.ep;PAN.querySelector('.nop').textContent=OPIS[c];PAN.querySelector('.sty').textContent=STYL[c].toUpperCase();
+   PAN.querySelector('.kl').textContent=H.cls.toUpperCase();PAN.querySelector('.imi').textContent=H.n+', '+H.ep;PAN.querySelector('.mot').textContent=H.mot||'';PAN.querySelector('.nop').textContent=OPIS[c];PAN.querySelector('.sty').textContent=STYL[c].toUpperCase();
    PAN.querySelector('.nte').innerHTML=TECH[c].map(k=>{const n=(SK[k]&&SK[k].name)||k,ic=PREMIUM_ICONS['skille-'+k]||'';return `<div class="nbk">${ic?`<img src="${ic}" alt="">`:''}<b>${esc(n)}</b></div>`}).join('');
    W.querySelector('.wyb2 small').textContent=H.n.toUpperCase();PAN.classList.remove('zm')},140)}
  function potwierdz(){if(blok)return;blok=true;W.classList.add('potw');B[wyb].classList.add('potw');try{uiSnd('card')}catch(e){}

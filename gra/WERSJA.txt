@@ -845,3 +845,4 @@ cache769 · Scalenie testowe: fabula 759 + WSAD w menu + balans atak/unik. Nie s
 cache770 · HUD PC o 30% mniejszy (zoom .7, dotyk bez zmian). Nie sprawdzono: wyglad na ekranie, pad, dzwiek, FPS, itch.io
 cache771 · Poprawka HUD: skala przez --hu (nowy HUD), cofniete zoom starego. Nie sprawdzono: wyglad, pad, dzwiek, FPS, itch.io
 cache772 · Motyw bohatera w karcie wybranej postaci (27_menu). Nie sprawdzono: wyglad, pad, dzwiek, FPS, itch.io
+cache773 · Motyw bohatera na ekranie wyboru postaci przy ognisku. Nie sprawdzono: wyglad, pad, dzwiek, FPS, itch.io
