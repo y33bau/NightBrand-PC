@@ -792,3 +792,4 @@ cache714 · Bohaterowie nowy styl: Rycerz (12 arkuszy + Wypad) i Zabojczyni (czy
 cache715 · Bohaterowie: ciemniejsze, nasycone kolory (Rycerz i Zabojczyni). Nie sprawdzono: pad, FPS u autora, itch.io.
 cache716 · Port: 3 nowe moby (pijawczarz, muszlowy rozbitek, dzwonnik glebin), nasycone kolory zalogi, wieksza skala zalogi, 27 zbutwialych rekwizytow. Nie sprawdzono: pad, FPS u autora, itch.io.
 cache717 · Port: slup z krukiem przeniesiony z wody na nabrzeze (czarna ramka w wodzie).
+cache718 · Port: budynki i latarnie blizej malowanej oprawy (ciemniejsze materialy, brud u podstawy, cienie kontaktowe, przygaszone szklo latarni).

@@ -213,12 +213,17 @@ function buildSolneNabrzeze(I){
  edges(rim,stone,edgeStone);edges(beam,wood,edgeWood);
  instanced(new THREE.CylinderGeometry(.1,.14,1.3,6),wood,piles,([x,y])=>M4.makeTranslation(x,-.15,y));
  // --- budynki: sklady, kantor i karczma. Sciany znikaja przed bohaterem (cutaway), wiec nie zaslaniaja walki.
- const siding=worldSurf(cutaway(phong({color:0xb9b1a8})),I.port_deski,3,'portSiding');
- const plaster=worldSurf(cutaway(phong({color:0xa9a59c})),I.wl_chata||I.port_deski,3,'portLogs');
- const foot=worldSurf(cutaway(phong({color:0xb4bcbc})),I.port_plyty,3.2,'portFoot');
- const slate=worldSurf(cutaway(phong({color:0x9aa1a8})),I.rf_lupek,2.5,'portSlate');slate.color.setHex(0x8f8479);
- const timbers=cutaway(phong({color:0x554b40})),shadow=cutaway(phong({color:0x1c1f1f}));
- const glow=cutaway(new THREE.MeshBasicMaterial({color:0xf2b25c}));
+ // 15.11.2026 (oprawa): materialy budynkow ciemniejsze i cieplejsze, blizej malowanej palety mapy
+ const siding=worldSurf(cutaway(phong({color:0x8e7f6e})),I.port_deski,3,'portSiding');
+ const plaster=worldSurf(cutaway(phong({color:0x8f8370})),I.wl_chata||I.port_deski,3,'portLogs');
+ const foot=worldSurf(cutaway(phong({color:0x7c807b})),I.port_plyty,3.2,'portFoot');
+ const slate=worldSurf(cutaway(phong({color:0x9aa1a8})),I.rf_lupek,2.5,'portSlate');slate.color.setHex(0x5f5650);
+ const timbers=cutaway(phong({color:0x3b3027})),shadow=cutaway(phong({color:0x15140f}));
+ // brud i wilgoc: polprzezroczyste ciemne powloki u podstawy scian i pod okapem (dwie warstwy = miekkie przejscie)
+ const grime=cutaway(phong({color:0x0e110c,transparent:true,opacity:.34,depthWrite:false})),grime2=cutaway(phong({color:0x10140e,transparent:true,opacity:.22,depthWrite:false}));
+ const aoGeo=new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2);
+ const ao=(x,z,w,d)=>{const m=new THREE.Mesh(aoGeo,groundShadowMat);m.scale.set(w,1,d);m.position.set(x,.035,z);m.renderOrder=2;ROOT.add(m)};
+ const glow=cutaway(new THREE.MeshBasicMaterial({color:0xd98a3c}));
  const unit=new THREE.BoxGeometry(1,1,1),parts=new Map();
  const part=(mat,x,h,z,w,height,depth,angle=0)=>{if(!parts.has(mat))parts.set(mat,[]);parts.get(mat).push([x,h,z,w,height,depth,angle])};
  const inBuilding=new Set();
@@ -245,12 +250,17 @@ function buildSolneNabrzeze(I){
    for(const z of [bz,front]){box(cover,timbers,cx,2.64,z,bw+.1,.24,.28);box(room,foot,(left+right)/2,.04,z,right-left,.08,.33)}
    for(const side of [-1,1])box(cover,slate,cx+side*half/2,eave+Math.tan(pitch)*half/2,cz,half/Math.cos(pitch)+.05,.16,bd+.5,-side*pitch);
    box(cover,timbers,cx,eave+Math.tan(pitch)*half,cz,.18,.16,bd+.5);
+   for(const [outer,inner] of [[bx,left],[bx+bw,right]]){const center=(outer+inner)/2,width=Math.abs(outer-inner);box(room,grime,center,.42,cz,width+.04,.84,bd+.04)}
+   ao(cx,cz,bw*1.4+1,bd*1.4+1);
    W.portRoom={cover,left:bx,right:bx+bw,north:bz,south:front};
    W.LSRC.push({col:0xffcaaa,base:.7,dist:5,x:left+.1,y:1.5,z:cz,kind:'fire',ph:0});
    continue;
   }
   const wall=kind==='shed'?siding:plaster;
   part(foot,cx,.25,cz,bw+.1,.5,bd+.1);
+  part(grime,cx,.42,cz,bw+.03,.84,bd+.03);part(grime2,cx,.8,cz,bw+.05,1.6,bd+.05);
+  part(grime2,cx,eave-.28,cz,bw+.04,.56,bd+.04);// zaciek pod okapem
+  ao(cx,cz,bw*1.45+1,bd*1.45+1);
   part(wall,cx,(eave+.46)/2,cz,bw,eave-.46,bd);
   for(const side of [-1,1]){
    part(slate,cx+side*half/2,eave+Math.tan(pitch)*half/2,cz,half/Math.cos(pitch)+.04,.13,bd+.48,-side*pitch);
@@ -307,17 +317,17 @@ function buildSolneNabrzeze(I){
  rail(10.2,10.25,24.6,10.25);rail(40.4,10.25,54.8,10.25);
  instanced(new THREE.CylinderGeometry(.026,.026,1,5),ropeMat,strands,([a,b])=>{V.subVectors(b,a);SC.set(1,V.length(),1);Q.setFromUnitVectors(UP,V.normalize());V.addVectors(a,b).multiplyScalar(.5);M4.compose(V,Q,SC)});
  // --- slupy z latarniami: swiatlo wychodzi ze srodka oprawy
- const ironwork=phong({color:0x373d3d,shininess:16}),lanternGlass=new THREE.MeshBasicMaterial({color:0xf6c88a}),lanterns=[];
+ const ironwork=phong({color:0x22211e,shininess:10}),lanternGlass=new THREE.MeshBasicMaterial({color:0xe0913f}),lanterns=[];// 15.11.2026: szklo przygaszone (bylo prawie biale), zelazo jak kute
  for(const [sx,sy] of PORT_LAMPS){
   const x=MP(sx),z=MP(sy);if(!land(ground(Math.floor(x),Math.floor(z))))continue;
-  part(timbers,x,1.08,z,.17,2.16,.17);part(ironwork,x,.29,z,.205,.11,.205);
+  part(timbers,x,1.08,z,.17,2.16,.17);part(ironwork,x,.29,z,.205,.11,.205);part(grime,x,.45,z,.2,.9,.2);ao(x,z,.9,.9);
   part(ironwork,x+.19,2.05,z,.53,.095,.12);part(ironwork,x+.36,1.94,z,.043,.20,.043);
   part(ironwork,x+.36,1.80,z,.31,.10,.28);part(ironwork,x+.36,1.45,z,.28,.065,.26);
   for(const dx of [-.105,.105])part(ironwork,x+.36+dx,1.62,z+.10,.026,.31,.035);
   lanterns.push([x+.36,1.62,z]);
   W.LSRC.push({col:0xffbb79,base:.90,dist:5.3,x:x+.36,y:1.62,z,kind:'fire',ph:sx*.71});
  }
- instanced(new THREE.BoxGeometry(.20,.27,.18),lanternGlass,lanterns,([x,y,z])=>M4.makeTranslation(x,y,z),false,false);
+ instanced(new THREE.BoxGeometry(.17,.24,.15),lanternGlass,lanterns,([x,y,z])=>M4.makeTranslation(x,y,z),false,false);
  for(const [mat,list] of parts)instanced(unit,mat,list,([x,h,z,w,height,depth,angle])=>{M4.makeRotationZ(angle);SC.set(w,height,depth);M4.scale(SC);M4.setPosition(x,h,z)});
  // --- rekwizyty portu (atlas HD) i wspolne rekwizyty gry
  const atlas=I.port_atlas;atlas.nbDensity=atlas.width/192;
