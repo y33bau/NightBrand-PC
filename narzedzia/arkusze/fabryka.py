@@ -4,7 +4,7 @@ Czysci przezroczystosc (szum alfa z ChatGPT), skaluje postac do wzrostu klasy, s
 sklada atlasy gry 1024x1536 (4 kolumny x 6 rzedow po 256 px, gestosc 4) i robi arkusz kontrolny.
 Uzycie: python3 fabryka.py PLAN.json KATALOG_WYJSCIA
 PLAN: {"wzrost":200,"stopy":244,"wzor":["plik",kol,rz,komorka_kol,komorka_rz],
-       "zrodla":{"nazwa":["plik",kol,rz,(mnoznik skali)]}, "kolor":{"kontrast":1.1,"nasycenie":1.2,"jasnosc":1.05} (opcja), "atlasy":{"klucz":[[ ["nazwa",rz,kl], ...4 ], ...6 ]}}
+       "zrodla":{"nazwa":["plik",kol,rz,(mnoznik skali)]}, "kolor":{"kontrast":1.1,"nasycenie":1.2,"jasnosc":1.05,"gamma":1.15} (opcja), "atlasy":{"klucz":[[ ["nazwa",rz,kl], ...4 ], ...6 ]}}
 Klatka = [nazwa zrodla, rzad, kolumna] (od 0) albo null (pusta)."""
 import sys, json, os
 import numpy as np
@@ -67,6 +67,8 @@ def koloruj(im, k):
     lum2 = (rgb @ np.array([.299, .587, .114], np.float32))[..., None]
     rgb = lum2 + (rgb - lum2) * k.get('nasycenie', 1)
     rgb = rgb * k.get('jasnosc', 1)
+    if k.get('gamma', 1) != 1:  # >1 przyciemnia polcienie, swiatla zostaja
+        rgb = 255 * np.power(np.clip(rgb, 0, 255) / 255, k['gamma'])
     a[..., :3] = np.where(m[..., None], np.clip(rgb, 0, 255), 0)
     return Image.fromarray(a.astype(np.uint8), 'RGBA')
 

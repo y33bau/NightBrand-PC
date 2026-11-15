@@ -703,7 +703,7 @@ const SPRITE_GROUPS={
 }
 
 // Rycerz, nowy styl (15.11.2026): arkusz Wypadu (4 klatki: bok, dol, gora; rzad 4 = powrot: bok, dol, gora)
-SPRITE_DATA.knight_lunge='assets/bohaterowie/0ea995147f7f64c077746bd794a08fe5cf7a7c9d21fea2b747f9a1dad3f6f35f.webp';SPRITE_RES.knight_lunge=4;SPRITE_GROUPS.knight_lunge=['core'];
+SPRITE_DATA.knight_lunge='assets/bohaterowie/9aa3ddbd56d5fd9161b2345f6feabdbcd9920dceaa84824871ce908d4a5466ad.webp';SPRITE_RES.knight_lunge=4;SPRITE_GROUPS.knight_lunge=['core'];
 (()=>{
 const $=id=>document.getElementById(id);
 // ---- język: EN/PL (pn_lang); bez zapisu domyślnie według przeglądarki. Zmiana języka przeładowuje grę ----
