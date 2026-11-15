@@ -121,6 +121,12 @@ def main():
                 if not bb:
                     continue
                 ox = round(CELL / 2 - ax)
+                # 15.11.2026: klatka szersza niz miejsce po stronie kotwicy (lezacy, przewrot) przesuwa sie do srodka zamiast obcinac
+                if bb[2] - bb[0] <= CELL:
+                    if ox + bb[0] < 0:
+                        ox = -bb[0]
+                    elif ox + bb[2] > CELL:
+                        ox = CELL - bb[2]
                 oy = round(feet - bb[3])
                 cell = Image.new('RGBA', (CELL, CELL), (0, 0, 0, 0))
                 cell.paste(g, (ox, oy), g)
