@@ -655,6 +655,9 @@ const style=mk('style','nbh-style');style.textContent=icoCss+`
 ${OR} #hud #xpbar,${OR} #hud #miniF,${OR} #hud .hud-row .right,${OR} #hud:not(.mp2) #lvlTag,${OR} #hud:not(.mp2) #hpbar,${OR} #hud:not(.mp2) #stam,${OR} #hud:not(.mp2) #mana,${OR} #hud #chal,${OR} #boss{display:none!important}
 ${NB}{position:absolute;inset:0;pointer-events:none;color:#ecdec5;font-family:Grenze,Georgia,serif;font-size:16px}
 ${NB}[hidden],${NB} [hidden]{display:none!important}
+/* 16.11.2026: caly HUD PC o 30% mniejszy (zaslanial ekran); dotyk bez zmian. Zmiana jedna liczba: --hk */
+${NB}:not(.touch){zoom:var(--hk,.7)}
+${AS}:not(.nbh-touch){--hk:.7}
 ${NB}.mp2 .nbh-vitals{display:none}
 ${NB} .nbh-vitals{position:absolute;left:17px;top:17px;width:248px;padding:5px 8px 7px;background:linear-gradient(90deg,#08090ba6,transparent);text-shadow:0 1px 3px #000;transform:scale(var(--hs,1));transform-origin:0 0}
 ${NB} .nbh-id{display:flex;align-items:center;gap:7px;height:28px;margin-bottom:5px}
@@ -733,6 +736,7 @@ ${AS} .active-slot.empty>span{color:#8d7f6b}
 ${AS}.lt-held .active-slot{border-color:#e2a258!important;box-shadow:inset 0 0 0 2px #101115ad,0 0 8px #e2a25877!important}
 ${AS}.nbh-touch:not([hidden]){left:0!important;top:0!important;right:0!important;bottom:0!important;transform:none!important;padding:0!important;background:none!important;display:block!important;pointer-events:none!important}
 ${AS}.nbh-touch:after{content:none}
+${AS}:not(.nbh-touch){transform:scale(calc(var(--hs,1)*var(--hk,.7)))!important}
 ${AS}.nbh-touch .active-slot{position:absolute!important;pointer-events:auto;width:56px!important;height:56px!important;transform:scale(var(--hs,1));box-shadow:inset 0 0 0 3px #1011158c,0 3px 8px #0006!important}
 ${AS}.nbh-touch .active-slot .ic{width:40px!important;height:40px!important}
 ${AS}.nbh-touch .active-slot:nth-child(1){left:${SC}24px);bottom:${SC}132px)}
