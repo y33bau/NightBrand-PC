@@ -790,3 +790,4 @@ cache712 · publikacja: menu AAA (699-711) + szlif portu (runda-port-szlif); usu
 cache713 · Port: fabula rozdz. III, nowi NPC Ambrozy i Wieslawa (bez bialych obwodek), Chojrak w porcie, smierc Bosmana, zakonczenia. Nie sprawdzono: NPC w grze, mieszczenie sie tekstow, EN, pad, FPS.
 cache714 · Bohaterowie nowy styl: Rycerz (12 arkuszy + Wypad) i Zabojczyni (czysta przezroczystosc, ciezki atak dol/gora), nowa technika Rycerza Wypad z ikona. Nie sprawdzono: pad, dzwiek, FPS u autora, kooperacja, itch.io.
 cache715 · Bohaterowie: ciemniejsze, nasycone kolory (Rycerz i Zabojczyni). Nie sprawdzono: pad, FPS u autora, itch.io.
+cache716 · Port: 3 nowe moby (pijawczarz, muszlowy rozbitek, dzwonnik glebin), nasycone kolory zalogi, wieksza skala zalogi, 27 zbutwialych rekwizytow. Nie sprawdzono: pad, FPS u autora, itch.io.

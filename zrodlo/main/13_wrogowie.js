@@ -18,8 +18,9 @@ function slowTick(dt,frozen){if(BOSS_CARD_UNTIL&&performance.now()>BOSS_CARD_UNT
 function bossIntro(e){if(S.dg&&!e.dgBoss)return;const[n,t]=bossTitle(e);let c=$('bossCard');if(!c){c=document.createElement('div');c.id='bossCard';c.setAttribute('aria-live','polite');c.innerHTML='<b></b><i></i>';($('msg')&&$('msg').parentNode||document.body).appendChild(c);const st=document.createElement('style');st.textContent='#bossCard{position:absolute;left:50%;top:26%;transform:translate(-50%,-50%);z-index:40;pointer-events:none;text-align:center;opacity:0;transition:opacity .45s ease;min-width:60vw;padding:1.1em 2em;background:radial-gradient(ellipse at center,rgba(8,4,6,.82) 0%,rgba(8,4,6,.55) 45%,rgba(8,4,6,0) 72%)}#bossCard.nbbc-show{opacity:1}#bossCard b{display:block;font:700 clamp(28px,4.4vw,64px)/1.05 Georgia,serif;letter-spacing:.14em;text-transform:uppercase;color:#f0d79a;text-shadow:0 0 18px rgba(170,30,30,.75),0 3px 0 #2a0c0c}#bossCard i{display:block;margin-top:.45em;font:italic 400 clamp(15px,1.7vw,26px)/1.2 Georgia,serif;color:#d9c3a0;letter-spacing:.04em}#bossCard b:after{content:"";display:block;width:46%;height:2px;margin:.32em auto 0;background:linear-gradient(90deg,transparent,#a8322a,transparent)}';document.head.appendChild(st)}
  c.querySelector('b').textContent=n;c.querySelector('i').textContent=t;c.querySelector('i').hidden=!t;c.style.transition='none';c.style.opacity='1';BOSS_CARD_UNTIL=performance.now()+2600;slowMo(1.2,.35);padRumble(.6,.6,500)}
 // Relative to the knight's standing silhouette. Keep one size throughout the animation.
-const portSkinScale={tragarz:.79,sieciarka:.74,latarnik:.82,kalafater:.89,krab:.53,nurek:.86,cumownik:.78,bosman:.64};// Bosman rysowany na duzej siatce bossa (64): .64 = ok. 1,3 wzrostu Rycerza
-const PORT_NAMES={tragarz:(EN?'Salt Porter':'Tragarz soli'),sieciarka:(EN?'Net-Wife':'Sieciarka'),latarnik:(EN?'Lamplighter':'Latarnik'),kalafater:(EN?'Caulker':'Kalafater'),krab:(EN?'Strongbox Crab':'Krab skrzyniowy'),nurek:(EN?'Drowned Diver':'Topielec w skafandrze'),cumownik:(EN?'Mooring Hand':'Cumownik'),bosman:(EN?'The Harbour Master':'Bosman')};
+// 15.11.2026: wieksza zaloga, bo nowy Rycerz jest wyzszy (200 px zamiast 168 w klatce): zwykli ok. 0,95 Rycerza, ciezcy ok. 1,1, Bosman ok. 1,35
+const portSkinScale={tragarz:.93,sieciarka:.86,latarnik:.95,kalafater:1.05,krab:.62,nurek:1.02,cumownik:.92,pijawczarz:.94,muszlowy:1.06,dzwonnik:1.0,bosman:.76};// Bosman rysowany na duzej siatce bossa (64)
+const PORT_NAMES={tragarz:(EN?'Salt Porter':'Tragarz soli'),sieciarka:(EN?'Net-Wife':'Sieciarka'),latarnik:(EN?'Lamplighter':'Latarnik'),kalafater:(EN?'Caulker':'Kalafater'),krab:(EN?'Strongbox Crab':'Krab skrzyniowy'),nurek:(EN?'Drowned Diver':'Topielec w skafandrze'),cumownik:(EN?'Mooring Hand':'Cumownik'),pijawczarz:(EN?'Leech-Monger':'Pijawczarz'),muszlowy:(EN?'Barnacled Castaway':'Muszlowy rozbitek'),dzwonnik:(EN?'Bellringer of the Deep':'Dzwonnik głębin'),bosman:(EN?'The Harbour Master':'Bosman')};
 const portSkins=new Map();
 function portEnemyArt(key){
  if(!key)return null;
@@ -42,8 +43,9 @@ function spawnEnemy(type,x,y,extra){if((type==='xbow'||type==='monk')&&S.enemies
   if(CH===PORT){
    if(type==='boss')e.portBoss=true;
    let key=e.portBoss?'bosman':({knight:'latarnik',ghoul:'krab'})[type];
-   if(type==='possessed'){S.portCrew=(S.portCrew||0)+1;key=['tragarz','sieciarka','cumownik'][S.portCrew%3]}
-   if(type==='shieldman'){S.portDeep=(S.portDeep||0)+1;key=S.portDeep%2?'kalafater':'nurek'}// ciezcy: mlot kalafatera i topielec w skafandrze
+   if(type==='possessed'){S.portCrew=(S.portCrew||0)+1;key=['tragarz','sieciarka','cumownik','pijawczarz'][S.portCrew%4]}
+   if(type==='shieldman'){S.portDeep=(S.portDeep||0)+1;key=['kalafater','nurek','muszlowy'][S.portDeep%3]}
+   if(type==='knight'){S.portKn=(S.portKn||0)+1;key=S.portKn%2?'latarnik':'dzwonnik'}// elita: latarnik albo dzwonnik glebin z mlotem// ciezcy: mlot kalafatera i topielec w skafandrze
    e.portArt=portEnemyArt(key);e.portKey=key;
   }
   e.spd*=S.pk.espd||1;

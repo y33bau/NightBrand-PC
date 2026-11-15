@@ -683,15 +683,17 @@ const SPRITE_GROUPS={
  add('port_nalot','assets/tekstury/4e76e1d91b2d570539cfc8432932a77a15478bb3eecc030f0484889d60a6a33f.webp');
  add('port_deski','assets/tekstury/23136565c5788d197ac9283c4a84c215f0a55380fc7808305435fd441077e4a5.webp');
  // zaloga portu (8 klatek 4x2) i Bosman (16 klatek 4x4)
- add('port_bosman','assets/wrogowie/9fd97da68af597d33274217703940fa8e6277a88331c949002db0dff34ea1dcd.webp');
- add('port_tragarz','assets/wrogowie/f6badec3520606a7f3f243ec35d1491e298d31f79d70b75ee0919c26d3ac3e6c.png');
- add('port_sieciarka','assets/wrogowie/d7493a58f1437c92023c676c36d80f9184f8dbdeb1356aa3e8ff0b2effe5a45b.png');
- add('port_kalafater','assets/wrogowie/067530c0285c6e6a6d1097e1957aa50720354f1363168868ada923351153ab7f.png');
- add('port_krab','assets/wrogowie/fe0db64037d50a3c27ae4dd025951bc3b0c9174e733663ee1733bb91b5e353a9.png');
- add('port_latarnik','assets/wrogowie/fe9117ee9dd5d0fb998b34308bd90d348558c4cf6ff2ec57fca77a17ab157a0d.png');
- add('port_nurek','assets/wrogowie/ceabd7f50f97183a098da5904e45b189cab27ad05f3f9d46f3e1f339c90630da.webp');
- add('port_cumownik','assets/wrogowie/46ebef6a2ee63decbfe6368e784b1e752233b120ec56d7b326bc20a1f1563bb2.webp');
+ add('port_bosman','assets/wrogowie/377bbf229b70ac00cf00611949f8e2e98d05b3f00f7d4c3c28ad7d5dd3041611.webp');
+ add('port_tragarz','assets/wrogowie/a6c15dfbdbb07987e7d0f397995885042928908d733f4c5fd36943f328c36f38.webp');
+ add('port_sieciarka','assets/wrogowie/80c8765a01ea2a8b603d5bc4991ca62729b76179b6d27a35562ac1df43802902.webp');
+ add('port_kalafater','assets/wrogowie/5d9af078d6aca19d63010f101ad8d7f6030d4f78fd6b31a99e29f658a054f770.webp');
+ add('port_krab','assets/wrogowie/987ec9cd54cef2bc641c269ea87ff062c08df0cba59931f62f9b8eb66c035762.webp');
+ add('port_latarnik','assets/wrogowie/73259f5be8c4cd08f5784232633c7e5b0a7b879e87972602d46ef5811e2f2a42.webp');
+ add('port_nurek','assets/wrogowie/67c971100e3f00d7277f01e584a92f48affecd53c97bd2404f8090665c2a7458.webp');
+ add('port_cumownik','assets/wrogowie/e8f00308a92193e885200e8dd414d06a424e0193c7cc8f4712ff7116f1e27853.webp');
  add('intro1','assets/tla/c8c3968edb367c7be327106c1fafd57e5edf67ba28a6181eda3bb585e73f84ef.webp');add('intro2','assets/tla/7c2d199370c18c4f9538807b7ed4ea2710679c89c412cdfb964d73c229e04c11.webp');add('intro3','assets/tla/3dc098a98d1294fe0047673365fdfb738239db093f7bdb89d526acf2c8d4f7ad.webp');add('intro4','assets/tla/b5acdd84a065fd7fbd3dc0d51dda1175fd3a0551641b5bf02964dafd288473a7.webp');add('intro5','assets/tla/76c4abede7b11dab955422e0b91d11d6a38a1feecdd13c62d91f37a0813a6057.webp');add('intro6','assets/tla/d1fa360949a93c4762b2578a14cf8957aaeb8e64bbf3a69445d984fc7aaa7c93.webp');
+ // nowi z 15.11.2026: pijawczarz (zwykly), muszlowy rozbitek (ciezki), dzwonnik glebin (elita); atlas zbutwialych rekwizytow 4x3
+ add('port_pijawczarz','assets/wrogowie/e7f35047a826d9869a7203e79760e423208cebe2f92ef3dd009c1a21aae8fc88.webp');add('port_muszlowy','assets/wrogowie/e17131ea32fcc99570c1a6f6a91602a627c001e461be571c8a8074f32332b536.webp');add('port_dzwonnik','assets/wrogowie/9b1c48e9e625b11c4e64d20bf504465baccbbfcc414a0b0f88c0d0b62dbe7953.webp');add('port_rekwizyty','assets/rekwizyty/9fce90821fc60ff3aaa76d78f7712cdc1819d4b2431b67e0252fb3b386939ae1.webp');
  // NPC portu (14.11.2026): Ambrozy (celnik) i Wieslawa (karczmarka); arkusz 4 klatki 256 px (gestosc 4) i portret
  add('npc_ambrozy','assets/npc/81a5fb580d7f0a1a390e467469ebc2904c26209d111626e0c0db1e4dd92c4d7c.webp');
  add('npc_wieslawa','assets/npc/20125bc556763b19c895c2be1c978cc264a38532b0fc627c4bdb81d3a5fb0772.webp');
@@ -859,6 +861,9 @@ function genSolneNabrzeze(){
  for(const [x,y,f] of [[6,21],[13,25,1],[18,17],[14,30],[6,14,1],[11,21],[17,29,1],[5,25],[12,27,1],[59,24],[29,3]])port('salt',x,y,true,{flip:!!f});
  for(const [x,y] of [[24,18],[40,18],[23,10],[41,10],[48,12],[19,12],[28,44],[35,44],[26,49],[37,49],[11,33],[15,43],[52,33],[48,43],[23,37],[40,37],[10,10],[54,10]])port('bollard',x,y,false);
  for(const [x,y,f] of [[9,26],[16,15,1],[19,22],[48,19],[53,26,1],[58,13],[25,31],[38,31,1],[36,15],[26,17,1],[22,36],[47,30],[5,18,1],[10,31],[44,12,1],[13,12],[33,48,1],[60,19]])port('barrel',x,y,true,{flip:!!f});
+ // 15.11.2026: zbutwiale rekwizyty opuszczonego portu (atlas port_rekwizyty): lodzie, pale i skaly z malzami w wodzie przy pomostach,
+ // sieci, deski i wiecierze na pomostach, ikra na pochylniach, skrzynie, kotwica i wrak na placach skladowych. Przejscia sprawdzone (BFS od startu).
+ for(const [k,x,y,solid,f] of [['lodz',8,38,0,0],['lodz',54,36,0,1],['lodz',38,5,0,1],['pale',10,44,0,0],['pale',54,43,0,1],['pale',22,8,0,0],['malze',20,39,0,0],['malze',45,39,0,1],['malze',42,8,0,1],['skrzynia',8,23,1,0],['skrzynia',54,23,1,1],['kotwica',55,28,1,0],['beczka_ryby',9,19,1,0],['beczka_ryby',45,14,1,1],['wiecierz',56,14,1,0],['wiecierz',11,40,1,1],['wrak',6,31,1,0],['wrak',59,21,1,1],['pacholek',15,35,1,0],['pacholek',48,35,1,1],['siec',13,38,0,0],['siec',50,39,0,1],['siec',17,12,0,0],['ikra',44,31,0,0],['ikra',19,32,0,1],['deski',13,46,0,0],['deski',50,46,0,1]])port(k,x,y,!!solid,{flip:!!f});
  // the Order's blockade on the salt square
  port('order_banner',28,26,true);port('order_banner',35,26,true);port('order_banner',26,10,true);port('order_banner',38,10,true);
  port('gallows',24,34,true);port('marga_cart',40,34,true);port('covered_corpses',38,35,false);port('covered_corpses',26,33,false,{flip:true});
@@ -1942,7 +1947,10 @@ function buildDungeon(I){planGround(9);
 
 // Chapter III (technical number 6): Solne Nabrzeze, the river harbour between the Lower City lift and the ferry to Goldheim.
 const PORT_LAMPS=[[12,47.6],[51.8,47.6],[11.4,15.6],[54.6,15.6],[26,19],[40,19],[30,40],[28.3,46],[35.6,46],[22,25.6],[45,25.6],[9,24.4],[57.4,30.2],[30.6,10.6],[35.4,10.6]];// slupy z latarniami [x,y] w siatce mapy
-const PORT_PROP_SIZE={winch:[2.25,1.85],crane:[4.8,5.2],cargo:[1.8,1.65],salt:[1.65,1.45],bollard:[1.05,1.05]};// szerokosc i wysokosc w jednostkach swiata (1 j. = ok. 125 cm)
+const PORT_PROP_SIZE={winch:[2.25,1.85],crane:[4.8,5.2],cargo:[1.8,1.65],salt:[1.65,1.45],bollard:[1.05,1.05],
+ lodz:[3.0,3.0],pale:[1.75,1.75],skrzynia:[1.4,1.4],siec:[1.6,1.6],kotwica:[1.75,1.75],beczka_ryby:[1.5,1.5],malze:[1.8,1.8],ikra:[1.6,1.6],deski:[1.7,1.7],pacholek:[1.35,1.35],wiecierz:[1.45,1.45],wrak:[1.9,1.9]};// nowe: klatki kwadratowe
+// atlas zbutwialych rekwizytow (15.11.2026): 4x3 klatki po 256 px, rzedami jak w PORT_REK
+const PORT_REK=[['lodz','pale','skrzynia','siec'],['kotwica','beczka_ryby','malze','ikra'],['deski','pacholek','wiecierz','wrak']];// szerokosc i wysokosc w jednostkach swiata (1 j. = ok. 125 cm)
 const PORT_SHIP=[52,8.7,14.4],PORT_FERRY_ART=[32.5,7.9,8.6,6.4];
 function buildSolneNabrzeze(I){
  const random=rng(60139);
@@ -2156,6 +2164,7 @@ function buildSolneNabrzeze(I){
  const atlas=I.port_atlas;atlas.nbDensity=atlas.width/192;
  const frames={};
  for(const [key,col,row] of [['ferry',0,0],['winch',1,0],['crane',2,0],['salt',0,1],['bollard',1,1],['cargo',2,1]])frames[key]=procFrame(atlas,col*64,row*64,64,64,'prop');
+ if(I.port_rekwizyty){const rk=I.port_rekwizyty;rk.nbDensity=rk.width/256;PORT_REK.forEach((row,r)=>row.forEach((key,c)=>{frames[key]=procFrame(rk,c*64,r*64,64,64,'prop')}))}
  const sprite=(frame,x,y,w,h,flip)=>{const geo=new THREE.PlaneGeometry(w,h).translate(0,h/2,0),m=new THREE.Mesh(geo,frame.n);
   m.position.set(x,0,y);m.scale.set(flip?-1:1,SQ,1);m.castShadow=true;m.customDistanceMaterial=frame.d;ROOT.add(m);return m};
  // prom: poklad, po ktorym sie chodzi, lezy plasko pod stopami postaci
@@ -4354,8 +4363,9 @@ function slowTick(dt,frozen){if(BOSS_CARD_UNTIL&&performance.now()>BOSS_CARD_UNT
 function bossIntro(e){if(S.dg&&!e.dgBoss)return;const[n,t]=bossTitle(e);let c=$('bossCard');if(!c){c=document.createElement('div');c.id='bossCard';c.setAttribute('aria-live','polite');c.innerHTML='<b></b><i></i>';($('msg')&&$('msg').parentNode||document.body).appendChild(c);const st=document.createElement('style');st.textContent='#bossCard{position:absolute;left:50%;top:26%;transform:translate(-50%,-50%);z-index:40;pointer-events:none;text-align:center;opacity:0;transition:opacity .45s ease;min-width:60vw;padding:1.1em 2em;background:radial-gradient(ellipse at center,rgba(8,4,6,.82) 0%,rgba(8,4,6,.55) 45%,rgba(8,4,6,0) 72%)}#bossCard.nbbc-show{opacity:1}#bossCard b{display:block;font:700 clamp(28px,4.4vw,64px)/1.05 Georgia,serif;letter-spacing:.14em;text-transform:uppercase;color:#f0d79a;text-shadow:0 0 18px rgba(170,30,30,.75),0 3px 0 #2a0c0c}#bossCard i{display:block;margin-top:.45em;font:italic 400 clamp(15px,1.7vw,26px)/1.2 Georgia,serif;color:#d9c3a0;letter-spacing:.04em}#bossCard b:after{content:"";display:block;width:46%;height:2px;margin:.32em auto 0;background:linear-gradient(90deg,transparent,#a8322a,transparent)}';document.head.appendChild(st)}
  c.querySelector('b').textContent=n;c.querySelector('i').textContent=t;c.querySelector('i').hidden=!t;c.style.transition='none';c.style.opacity='1';BOSS_CARD_UNTIL=performance.now()+2600;slowMo(1.2,.35);padRumble(.6,.6,500)}
 // Relative to the knight's standing silhouette. Keep one size throughout the animation.
-const portSkinScale={tragarz:.79,sieciarka:.74,latarnik:.82,kalafater:.89,krab:.53,nurek:.86,cumownik:.78,bosman:.64};// Bosman rysowany na duzej siatce bossa (64): .64 = ok. 1,3 wzrostu Rycerza
-const PORT_NAMES={tragarz:(EN?'Salt Porter':'Tragarz soli'),sieciarka:(EN?'Net-Wife':'Sieciarka'),latarnik:(EN?'Lamplighter':'Latarnik'),kalafater:(EN?'Caulker':'Kalafater'),krab:(EN?'Strongbox Crab':'Krab skrzyniowy'),nurek:(EN?'Drowned Diver':'Topielec w skafandrze'),cumownik:(EN?'Mooring Hand':'Cumownik'),bosman:(EN?'The Harbour Master':'Bosman')};
+// 15.11.2026: wieksza zaloga, bo nowy Rycerz jest wyzszy (200 px zamiast 168 w klatce): zwykli ok. 0,95 Rycerza, ciezcy ok. 1,1, Bosman ok. 1,35
+const portSkinScale={tragarz:.93,sieciarka:.86,latarnik:.95,kalafater:1.05,krab:.62,nurek:1.02,cumownik:.92,pijawczarz:.94,muszlowy:1.06,dzwonnik:1.0,bosman:.76};// Bosman rysowany na duzej siatce bossa (64)
+const PORT_NAMES={tragarz:(EN?'Salt Porter':'Tragarz soli'),sieciarka:(EN?'Net-Wife':'Sieciarka'),latarnik:(EN?'Lamplighter':'Latarnik'),kalafater:(EN?'Caulker':'Kalafater'),krab:(EN?'Strongbox Crab':'Krab skrzyniowy'),nurek:(EN?'Drowned Diver':'Topielec w skafandrze'),cumownik:(EN?'Mooring Hand':'Cumownik'),pijawczarz:(EN?'Leech-Monger':'Pijawczarz'),muszlowy:(EN?'Barnacled Castaway':'Muszlowy rozbitek'),dzwonnik:(EN?'Bellringer of the Deep':'Dzwonnik głębin'),bosman:(EN?'The Harbour Master':'Bosman')};
 const portSkins=new Map();
 function portEnemyArt(key){
  if(!key)return null;
@@ -4378,8 +4388,9 @@ function spawnEnemy(type,x,y,extra){if((type==='xbow'||type==='monk')&&S.enemies
   if(CH===PORT){
    if(type==='boss')e.portBoss=true;
    let key=e.portBoss?'bosman':({knight:'latarnik',ghoul:'krab'})[type];
-   if(type==='possessed'){S.portCrew=(S.portCrew||0)+1;key=['tragarz','sieciarka','cumownik'][S.portCrew%3]}
-   if(type==='shieldman'){S.portDeep=(S.portDeep||0)+1;key=S.portDeep%2?'kalafater':'nurek'}// ciezcy: mlot kalafatera i topielec w skafandrze
+   if(type==='possessed'){S.portCrew=(S.portCrew||0)+1;key=['tragarz','sieciarka','cumownik','pijawczarz'][S.portCrew%4]}
+   if(type==='shieldman'){S.portDeep=(S.portDeep||0)+1;key=['kalafater','nurek','muszlowy'][S.portDeep%3]}
+   if(type==='knight'){S.portKn=(S.portKn||0)+1;key=S.portKn%2?'latarnik':'dzwonnik'}// elita: latarnik albo dzwonnik glebin z mlotem// ciezcy: mlot kalafatera i topielec w skafandrze
    e.portArt=portEnemyArt(key);e.portKey=key;
   }
   e.spd*=S.pk.espd||1;

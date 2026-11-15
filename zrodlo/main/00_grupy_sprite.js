@@ -683,15 +683,17 @@ const SPRITE_GROUPS={
  add('port_nalot','assets/tekstury/4e76e1d91b2d570539cfc8432932a77a15478bb3eecc030f0484889d60a6a33f.webp');
  add('port_deski','assets/tekstury/23136565c5788d197ac9283c4a84c215f0a55380fc7808305435fd441077e4a5.webp');
  // zaloga portu (8 klatek 4x2) i Bosman (16 klatek 4x4)
- add('port_bosman','assets/wrogowie/9fd97da68af597d33274217703940fa8e6277a88331c949002db0dff34ea1dcd.webp');
- add('port_tragarz','assets/wrogowie/f6badec3520606a7f3f243ec35d1491e298d31f79d70b75ee0919c26d3ac3e6c.png');
- add('port_sieciarka','assets/wrogowie/d7493a58f1437c92023c676c36d80f9184f8dbdeb1356aa3e8ff0b2effe5a45b.png');
- add('port_kalafater','assets/wrogowie/067530c0285c6e6a6d1097e1957aa50720354f1363168868ada923351153ab7f.png');
- add('port_krab','assets/wrogowie/fe0db64037d50a3c27ae4dd025951bc3b0c9174e733663ee1733bb91b5e353a9.png');
- add('port_latarnik','assets/wrogowie/fe9117ee9dd5d0fb998b34308bd90d348558c4cf6ff2ec57fca77a17ab157a0d.png');
- add('port_nurek','assets/wrogowie/ceabd7f50f97183a098da5904e45b189cab27ad05f3f9d46f3e1f339c90630da.webp');
- add('port_cumownik','assets/wrogowie/46ebef6a2ee63decbfe6368e784b1e752233b120ec56d7b326bc20a1f1563bb2.webp');
+ add('port_bosman','assets/wrogowie/377bbf229b70ac00cf00611949f8e2e98d05b3f00f7d4c3c28ad7d5dd3041611.webp');
+ add('port_tragarz','assets/wrogowie/a6c15dfbdbb07987e7d0f397995885042928908d733f4c5fd36943f328c36f38.webp');
+ add('port_sieciarka','assets/wrogowie/80c8765a01ea2a8b603d5bc4991ca62729b76179b6d27a35562ac1df43802902.webp');
+ add('port_kalafater','assets/wrogowie/5d9af078d6aca19d63010f101ad8d7f6030d4f78fd6b31a99e29f658a054f770.webp');
+ add('port_krab','assets/wrogowie/987ec9cd54cef2bc641c269ea87ff062c08df0cba59931f62f9b8eb66c035762.webp');
+ add('port_latarnik','assets/wrogowie/73259f5be8c4cd08f5784232633c7e5b0a7b879e87972602d46ef5811e2f2a42.webp');
+ add('port_nurek','assets/wrogowie/67c971100e3f00d7277f01e584a92f48affecd53c97bd2404f8090665c2a7458.webp');
+ add('port_cumownik','assets/wrogowie/e8f00308a92193e885200e8dd414d06a424e0193c7cc8f4712ff7116f1e27853.webp');
  add('intro1','assets/tla/c8c3968edb367c7be327106c1fafd57e5edf67ba28a6181eda3bb585e73f84ef.webp');add('intro2','assets/tla/7c2d199370c18c4f9538807b7ed4ea2710679c89c412cdfb964d73c229e04c11.webp');add('intro3','assets/tla/3dc098a98d1294fe0047673365fdfb738239db093f7bdb89d526acf2c8d4f7ad.webp');add('intro4','assets/tla/b5acdd84a065fd7fbd3dc0d51dda1175fd3a0551641b5bf02964dafd288473a7.webp');add('intro5','assets/tla/76c4abede7b11dab955422e0b91d11d6a38a1feecdd13c62d91f37a0813a6057.webp');add('intro6','assets/tla/d1fa360949a93c4762b2578a14cf8957aaeb8e64bbf3a69445d984fc7aaa7c93.webp');
+ // nowi z 15.11.2026: pijawczarz (zwykly), muszlowy rozbitek (ciezki), dzwonnik glebin (elita); atlas zbutwialych rekwizytow 4x3
+ add('port_pijawczarz','assets/wrogowie/e7f35047a826d9869a7203e79760e423208cebe2f92ef3dd009c1a21aae8fc88.webp');add('port_muszlowy','assets/wrogowie/e17131ea32fcc99570c1a6f6a91602a627c001e461be571c8a8074f32332b536.webp');add('port_dzwonnik','assets/wrogowie/9b1c48e9e625b11c4e64d20bf504465baccbbfcc414a0b0f88c0d0b62dbe7953.webp');add('port_rekwizyty','assets/rekwizyty/9fce90821fc60ff3aaa76d78f7712cdc1819d4b2431b67e0252fb3b386939ae1.webp');
  // NPC portu (14.11.2026): Ambrozy (celnik) i Wieslawa (karczmarka); arkusz 4 klatki 256 px (gestosc 4) i portret
  add('npc_ambrozy','assets/npc/81a5fb580d7f0a1a390e467469ebc2904c26209d111626e0c0db1e4dd92c4d7c.webp');
  add('npc_wieslawa','assets/npc/20125bc556763b19c895c2be1c978cc264a38532b0fc627c4bdb81d3a5fb0772.webp');

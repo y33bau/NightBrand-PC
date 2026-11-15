@@ -127,6 +127,9 @@ function genSolneNabrzeze(){
  for(const [x,y,f] of [[6,21],[13,25,1],[18,17],[14,30],[6,14,1],[11,21],[17,29,1],[5,25],[12,27,1],[59,24],[29,3]])port('salt',x,y,true,{flip:!!f});
  for(const [x,y] of [[24,18],[40,18],[23,10],[41,10],[48,12],[19,12],[28,44],[35,44],[26,49],[37,49],[11,33],[15,43],[52,33],[48,43],[23,37],[40,37],[10,10],[54,10]])port('bollard',x,y,false);
  for(const [x,y,f] of [[9,26],[16,15,1],[19,22],[48,19],[53,26,1],[58,13],[25,31],[38,31,1],[36,15],[26,17,1],[22,36],[47,30],[5,18,1],[10,31],[44,12,1],[13,12],[33,48,1],[60,19]])port('barrel',x,y,true,{flip:!!f});
+ // 15.11.2026: zbutwiale rekwizyty opuszczonego portu (atlas port_rekwizyty): lodzie, pale i skaly z malzami w wodzie przy pomostach,
+ // sieci, deski i wiecierze na pomostach, ikra na pochylniach, skrzynie, kotwica i wrak na placach skladowych. Przejscia sprawdzone (BFS od startu).
+ for(const [k,x,y,solid,f] of [['lodz',8,38,0,0],['lodz',54,36,0,1],['lodz',38,5,0,1],['pale',10,44,0,0],['pale',54,43,0,1],['pale',22,8,0,0],['malze',20,39,0,0],['malze',45,39,0,1],['malze',42,8,0,1],['skrzynia',8,23,1,0],['skrzynia',54,23,1,1],['kotwica',55,28,1,0],['beczka_ryby',9,19,1,0],['beczka_ryby',45,14,1,1],['wiecierz',56,14,1,0],['wiecierz',11,40,1,1],['wrak',6,31,1,0],['wrak',59,21,1,1],['pacholek',15,35,1,0],['pacholek',48,35,1,1],['siec',13,38,0,0],['siec',50,39,0,1],['siec',17,12,0,0],['ikra',44,31,0,0],['ikra',19,32,0,1],['deski',13,46,0,0],['deski',50,46,0,1]])port(k,x,y,!!solid,{flip:!!f});
  // the Order's blockade on the salt square
  port('order_banner',28,26,true);port('order_banner',35,26,true);port('order_banner',26,10,true);port('order_banner',38,10,true);
  port('gallows',24,34,true);port('marga_cart',40,34,true);port('covered_corpses',38,35,false);port('covered_corpses',26,33,false,{flip:true});
