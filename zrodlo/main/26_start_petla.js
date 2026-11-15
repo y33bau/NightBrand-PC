@@ -1,7 +1,7 @@
 // Accessible title presentation; existing checkbox change handler owns mode/save logic.
 function syncTitleMode(){for(const [id,selected] of [['sFab',!$('storyTgl').checked],['sArc',$('storyTgl').checked]]){const b=$(id);b.setAttribute('aria-checked',String(selected));b.removeAttribute('aria-pressed');b.tabIndex=selected?0:-1}$('storyModeHint').textContent=$('storyTgl').checked?(EN?'All acts right away.':'Wszystkie rozdziały od razu.'):(EN?'You unlock acts one by one.':'Rozdziały odblokowujesz po kolei.')}
 $('storyTgl').addEventListener('change',syncTitleMode);new MutationObserver(syncTitleMode).observe($('sFab'),{attributes:true,attributeFilter:['class']});syncTitleMode();
-$('sFab').parentElement.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Enter',' '].includes(e.key))return;e.preventDefault();e.stopPropagation();if(e.repeat)return;const b=e.key==='ArrowLeft'?$('sFab'):e.key==='ArrowRight'?$('sArc'):e.target.closest('[role=radio]');if(b){b.click();b.focus()}});
+$('sFab').parentElement.addEventListener('keydown',e=>{const key={a:'ArrowLeft',d:'ArrowRight'}[e.key.toLowerCase()]||e.key;if(!['ArrowLeft','ArrowRight','Enter',' '].includes(key))return;e.preventDefault();e.stopPropagation();if(e.repeat)return;const b=key==='ArrowLeft'?$('sFab'):key==='ArrowRight'?$('sArc'):e.target.closest('[role=radio]');if(b){b.click();b.focus()}});
 
 
 // UI stage 1: shared palette, frame weights and states; no gameplay or HUD changes.
