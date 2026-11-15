@@ -809,3 +809,4 @@ cache731 · Wybor postaci przy ognisku (Graj -> Ognisko -> Rozdzial), nowe Przyg
 cache732 · Separator ze standardu menu pod naglowkami ogniska i Przygotowania
 cache733 · Balans: Serce +20 HP (45, x1,6, maks. 3), Osełka (35, x1,5, maks. 3), Zwój 40, Hart ciała 5/10/15%, poprawka komunikatu o nowym perku. Nie sprawdzono w grze: pad, dźwięk, FPS, itch.io
 cache734 · Balans: Poborca zwraca 60% monet, klątwy z premią wg ciężaru (po porażce połowa), wyzwania w 3 progach nagród i monety na następną noc, poprawiony opis kramu w Instrukcji. Nie sprawdzono w grze: pad, dźwięk, FPS, itch.io
+cache735 · Zip itch.io: paczkowanie drobnych plikow (ok. 400 w jednej paczce, modul startowy obsluguje paczki), usuniete 14 nieuzywanych grafik menu. Test: start menu i rozdzialy I i III z rozpakowanego zipa itch. Nie sprawdzono: itch.io na zywo, pad, dzwiek w odsluchu, FPS u autora
