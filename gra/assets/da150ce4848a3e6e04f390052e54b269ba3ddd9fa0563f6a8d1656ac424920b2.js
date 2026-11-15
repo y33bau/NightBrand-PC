@@ -5364,8 +5364,6 @@ function solneTick(){
 }
 
 function stageTick(dt){if(CH===PORT)solneTick();
-  /* 15.11.2026: po kazdym naporze zostaje jedno serce (+10% HP) obok gracza */
-  if(!S.dg&&!S.endless&&!S.train&&!pl.dead)for(let i=0;i<SURGE.length;i++)if(S.t>=SURGE[i]+SURGE_LEN&&!((S.surgeEnd||0)&1<<i)){S.surgeEnd=(S.surgeEnd||0)|1<<i;let hx=pl.x+rnd(-24,24),hy=pl.y+rnd(-14,14);if(boxSolid(hx,hy,3,2)){hx=pl.x;hy=pl.y}dropPick('h',hx,hy);ftInfo(EN?'The surge ebbs. Something is left behind.':'Napór opada. Coś zostało po nim na ziemi.')}
   if(S.stage==='p1'&&S.t>=BREAK_AT&&!S.dg&&!S.endless){S.stage='collector';S.collT=2.5;dissolveAll((EN?'Midnight. The dead retreat into the darkness.':'Północ. Martwi cofają się w ciemność.'))}
   const m=S.merchant;
   if(m){if(m.state==='in'){m.t-=dt*1.5;if(m.t<=0)m.state='here'}
