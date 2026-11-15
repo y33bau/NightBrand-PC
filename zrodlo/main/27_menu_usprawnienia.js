@@ -957,8 +957,8 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
  const poz=f=>`${(f%4)*100/3}% ${f<4?0:100}%`;
  function klatka(now){if(W.hidden){anim=0;return}const t=(now-t0)/100,f=Math.floor(t)%8,m=t%1;pa.style.setProperty('background-position',poz(f),'important');pb.style.setProperty('background-position',poz((f+1)%8),'important');pa.style.setProperty('opacity',String(1-m),'important');pb.style.setProperty('opacity',String(m),'important');
   if(Math.random()<.08)flT=.93+Math.random()*.14;fl+=(flT-fl)*.12;ST.style.setProperty('--fl',fl.toFixed(3),'important');
-  const w=CV.width,h=CV.height;CX.clearRect(0,0,w,h);if(isk.length<70&&Math.random()<.5)isk.push({x:w*(.5+(Math.random()-.5)*.06),y:h*.79,vx:(Math.random()-.5)*w*.0006,vy:-h*(.0018+Math.random()*.0026),l:1,r:w*(.0009+Math.random()*.0014)});
-  isk=isk.filter(s=>(s.l-=.006+Math.random()*.004)>0);for(const s of isk){s.vx+=(Math.random()-.5)*w*.00008;s.x+=s.vx;s.y+=s.vy;CX.fillStyle=`rgba(255,${150+60*s.l|0},70,${s.l*s.l})`;CX.shadowColor='rgba(255,110,30,.9)';CX.shadowBlur=s.r*5;CX.beginPath();CX.arc(s.x,s.y,s.r,0,7);CX.fill()}
+  const w=CV.width,h=CV.height;CX.clearRect(0,0,w,h);if(isk.length<50&&Math.random()<.25)isk.push({x:w*(.5+(Math.random()-.5)*.06),y:h*.79,vx:(Math.random()-.5)*w*.00025,vy:-h*(.0007+Math.random()*.001),l:1,r:w*(.0009+Math.random()*.0014)});
+  isk=isk.filter(s=>(s.l-=.0028+Math.random()*.002)>0);for(const s of isk){s.vx+=(Math.random()-.5)*w*.00003;s.x+=s.vx;s.y+=s.vy;CX.fillStyle=`rgba(255,${150+60*s.l|0},70,${s.l*s.l})`;CX.shadowColor='rgba(255,110,30,.9)';CX.shadowBlur=s.r*5;CX.beginPath();CX.arc(s.x,s.y,s.r,0,7);CX.fill()}
   anim=requestAnimationFrame(klatka)}
  function otworz(t){tryb=t;W.hidden=false;if(!title.classList.contains('nbw-on'))title.classList.add('nbw-on');rozmiar();isk=[];t0=performance.now();
   for(const c of ORDER){B[c].classList.remove('wyb');TB[c].classList.remove('zn');TB[c].textContent=hero(c).cls.toUpperCase()}
