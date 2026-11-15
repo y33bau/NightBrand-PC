@@ -838,3 +838,4 @@ cache760 · Porzadki map: Cytadela bez drobiazgow, bez kosci krasnoluda, schodko
 cache761 · Port: nowy prom widziany z gory spasowany z pomostem, lancuchy do pierscieni; nie sprawdzono u autora (FPS, pad, dzwiek)
 cache762 · Portrety z postaci przy ognisku; Ustawienia, Dzwiek i Dane zapisu w standardzie Grafiki; nie sprawdzono u autora (pad, FPS)
 cache763 · Porzadki map (cache 763): fontanna Zlotogrodu na osi placu, latarnie Zlotogrodu parami, koksowniki przy moscie w Dolnym Miescie na lustrzanych miejscach, drugie drzwi pancerne w skarbcu Cytadeli, stosy towarow w porcie, deszcz nie pada pod dachem skladu, martwe drzewa w Spalonej Osadzie (nie sprawdzono: FPS, pad, dzwiek, wyglad u autora, Zlotogrod i Czarnobor po zmianach w grafice)
+cache766 · Fabula 759 scalona (Argon): intro, rozmowy NPC, bossowie, epilog, zakonczenia, zapiski, bestiariusz, wydarzenia, krypta (PL+EN, EN tlumaczone przez Claude). Nie sprawdzono: ekran, pad, dzwiek, FPS, itch.io

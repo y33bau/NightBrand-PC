@@ -158,14 +158,14 @@ function enrich(w,ch){
     // trap: some of the shrouded dead are not dead
     scatter('covered_corpses',3,false,3,null,{ambush:1});
     for(let i=0;i<4;i++){const s=spot(quad(i),4);if(s)add('tombstone',s[0],s[1],true,{stone:i})}
-    w.altar={col:0x9ad0ff,pc:'#bfe8ff',hint:(EN?'The graves of the burned stand at the four corners of the village. Spill their killers\' blood beside them, and the souls will go in peace.':'W czterech krańcach wsi stoją groby spalonych. Przelej przy nich krew ich oprawców, a dusze odejdą w spokoju.'),
-      one:n=>(EN?`The grave flares with a pale light. Souls at rest: ${n} of 4.`:`Grób rozbłyska bladym światłem. Dusze w spokoju: ${n} z 4.`),all:(EN?'The souls of the burned depart. They heal your wounds and leave 30 coins behind.':'Dusze spalonych odchodzą. Leczą twoje rany i zostawiają 30 monet.')};
+    w.altar={col:0x9ad0ff,pc:'#bfe8ff',hint:(EN?'The burned lie at the four corners of the settlement. Defeat enemies at their graves so the dead can leave.':'W czterech krańcach osady leżą spaleni. Pokonuj wrogów przy ich grobach, żeby zmarli mogli odejść.'),
+      one:n=>(EN?`The grave flares with a pale light. Souls at rest: ${n} of 4.`:`Grób rozbłyska bladym światłem. Dusze w spokoju: ${n} z 4.`),all:(EN?'The graves fall quiet. Your wounds close. 30 coins are left in the ash.':'Groby cichną. Rany się goją. W popiele zostało 30 monet.')};
     w.wave={msg:(EN?'A crusade of the Holy Order marches in from the southern road. Fanatics advance in column.':'Od południowej drogi nadciąga krucjata Zakonu. Fanatycy maszerują kolumną.'),list:[['knight',7],['possessed',6]]}}
   if(ch===2){
     // more of the dead dwarven city: bones, sarcophagi, carts, banners, braziers, and barrels of black powder that blow up
     // runda 296: rekwizyty sali rozstawione recznie w genDolne (przy scianach), bez losowego rozsiewania
-    w.altar={col:0x5fb0ff,pc:'#7fd0ff',hint:(EN?'Four dead rune lanterns stand in the corners of the hall. Blood spilled nearby will wake the runes. Powder kegs go off when someone dies beside them.':'W rogach sali stoją cztery wygasłe latarnie runiczne. Krew przelana obok obudzi runy. Beczki prochu wybuchają, gdy ktoś przy nich zginie.'),
-      one:n=>(EN?`A rune lantern awakens. Lit: ${n} of 4.`:`Latarnia runiczna budzi się. Zapalone: ${n} z 4.`),all:(EN?'The smiths\' runes sing. Your wounds close, and 30 coins spill from the stone.':'Runy kowali śpiewają. Rany się zamykają, a z kamienia sypie się 30 monet.')};
+    w.altar={col:0x5fb0ff,pc:'#7fd0ff',hint:(EN?'Four rune lanterns have gone dark. Defeat enemies at the lanterns. A death beside a powder keg sets off an explosion.':'Cztery runiczne latarnie zgasły. Pokonuj wrogów przy latarniach. Śmierć przy beczce prochu wywoła wybuch.'),
+      one:n=>(EN?`A rune lantern awakens. Lit: ${n} of 4.`:`Latarnia runiczna budzi się. Zapalone: ${n} z 4.`),all:(EN?'The smiths\' runes answer. Your wounds close. 30 coins fall from the stone.':'Odzywają się runy kowali. Rany się goją. Z kamienia wypada 30 monet.')};
     w.wave={msg:(EN?'The mine shaft collapses. Dead miners pour out of the darkness.':'Sztolnia się zawala. Z ciemności wysypują się martwi górnicy.'),list:[['dwarf',12],['warden',2]]}}
   if(ch===3){
     // more slum shacks and townhouses, plague carts, gibbets, lanterns, beggars, rot blooms that burst when you pass
@@ -174,7 +174,7 @@ function enrich(w,ch){
     scatter('beggar_bodies',5,false,2);scatter('plague_cart',2);scatter('gibbet',2);scatter('barrel',3);scatter('royal_banner',2);scatter('dead_tree',2,true,2.5,(x,y)=>T(x,y)===57||y<MH*.6);
     scatter('rot_bloom',6,false,2.5,null,{anim:'bloom'});
     for(let i=0;i<4;i++){const s=spot(quad(i),4);if(s)add('offering_bowl',s[0],s[1],true,{stone:i})}
-    w.altar={col:0xffcf70,pc:'#ffd27a',hint:(EN?'Empty golden offering bowls stand in four districts. Enemy blood spilled nearby will fill them. Beware the rot flowers: they burst when you walk past.':'W czterech dzielnicach stoją puste złote misy ofiarne. Krew wrogów przelana obok je napełni. Uważaj na kwiaty zgnilizny: pękają, gdy przechodzisz.'),
+    w.altar={col:0xffcf70,pc:'#ffd27a',hint:(EN?'Bowls stand in four districts. Defeat enemies beside them. Avoid the rot flowers; they burst underfoot.':'W czterech dzielnicach stoją misy. Pokonuj przy nich wrogów. Omijaj kwiaty zgnilizny, pękają pod stopami.'),
       one:n=>(EN?`An offering bowl fills with golden light. Full: ${n} of 4.`:`Misa ofiarna napełnia się złotym światłem. Pełne: ${n} z 4.`),all:(EN?'The golden bowls overflow. Your wounds heal, and you gather 30 coins.':'Złote misy przelewają się. Rany się goją, a ty zbierasz 30 monet.')};
     w.wave={msg:(EN?'A procession of fire leaves the monastery. Monks lead a mob of madmen.':'Z klasztoru wychodzi procesja ognia. Mnisi prowadzą tłum szaleńców.'),list:[['monk',5],['madman',8]]}}
 }
