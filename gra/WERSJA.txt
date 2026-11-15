@@ -797,3 +797,4 @@ cache719 · Mocniejsze kolory wrogow i NPC (nasycenie 1,6 przy wczytaniu klatek)
 cache720 · Mocniejsze kolory takze Kata, Dzwonnika i Woskownicy.
 cache721 · Kat (Goran) w nowym stylu: 9 atlasow kat_*, czysta przezroczystosc, wzrost 206 px, nasycone kolory. Nie sprawdzono: pad, FPS u autora, wszystkie animacje w ruchu, warianty zbroi, itch.io.
 cache722 · Kat: nowe efekty ciecia, ciezkiego uderzenia, ladowania i parowania (arkusz 9 Gorana).
+cache723 · Wybor rozdzialu: banery w spalonej ramie z okuciami jak deska Przygotuj sie (nie sprawdzono: pad, monitor autora, itch.io)

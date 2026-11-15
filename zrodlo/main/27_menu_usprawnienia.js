@@ -618,6 +618,12 @@ ${K} #recovery p{font:400 calc(16 * var(--pc-u,1px)) Georgia,serif!important;col
 ${S} :is(${CARD}){border-image:none!important}
 ${S} :is(${CARD}):is(.on,.chosen,[aria-pressed=true],[aria-selected=true],.premium-selected){border-color:rgba(255,140,70,.65)!important;box-shadow:inset 0 -3px 0 -1px rgba(255,150,70,.9),inset 0 -22px 26px -18px rgba(255,110,40,.55)!important}
 ${S} :is(${CARD})${ON}{outline:none!important;border-color:rgba(255,150,80,.85)!important;box-shadow:inset 0 -3px 0 -1px rgba(255,170,90,1),inset 0 -26px 30px -18px rgba(255,120,40,.7),0 0 14px 1px rgba(255,110,40,.35)!important}
+/* 15.11.2026: banery wyboru rozdzialu w spalonej ramie z okuciami (ten sam standard co deska Przygotuj sie i licznik Popiolow); srodek pusty, ilustracja zostaje */
+${S} .m2-ch>.pcg-edge{border:calc(24 * var(--pc-u,1px)) solid transparent!important;border-image:url('assets/ui/5a6a99a0140440ac5856623aed2e2ea738c3d6c97dba954373663177fc20f69f.webp') 48 / calc(24 * var(--pc-u,1px)) stretch!important;opacity:1!important;filter:brightness(.92)!important}
+${S} .m2-ch.premium-selected>.pcg-edge{filter:brightness(1.12) saturate(1.15)!important}
+${S} .m2-ch:not(:disabled)${ON}>.pcg-edge{filter:brightness(1.3) saturate(1.25) drop-shadow(0 0 5px rgba(255,120,40,.5))!important}
+${S} .m2-ch:before{left:calc(22 * var(--pc-u,1px))!important;top:calc(19 * var(--pc-u,1px))!important}
+${S} .m2-ch .nb2-meds{right:calc(24 * var(--pc-u,1px))!important;bottom:calc(19 * var(--pc-u,1px))!important}
 ${S} .nb2-seg>i{border:none!important;box-shadow:none!important;background:none!important;color:rgba(230,214,184,.55)!important}
 ${S} .nb2-seg>i.is-on{background:${PAS_ON} center/100% 100% no-repeat!important;color:#f3e2c2!important}
 ${S} .pc-fantasy-title{border-image:none!important;border-color:transparent!important;background:none!important;box-shadow:none!important;position:relative!important;overflow:visible!important}
