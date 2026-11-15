@@ -867,7 +867,7 @@ function genSolneNabrzeze(){
  // the Order's blockade on the salt square
  port('order_banner',28,26,true);port('order_banner',35,26,true);port('order_banner',26,10,true);port('order_banner',38,10,true);
  port('gallows',24,34,true);port('marga_cart',40,34,true);port('covered_corpses',38,35,false);port('covered_corpses',26,33,false,{flip:true});
- port('marga_cart',50,30,true,{flip:true});port('well',27,30,true);port('crow_post',44,36,true);port('crow_post',21,12,true);port('stocks',35,33,true);port('burnt_hay',57,28,false);port('dead_horse',46,33,false);
+ port('marga_cart',50,30,true,{flip:true});port('well',27,30,true);port('crow_post',43,36,true);/* 15.11.2026: z wody (44,36) na nabrzeze, w wodzie gra rysowala wokol pola czarna krawedz nabrzeza */port('crow_post',21,12,true);port('stocks',35,33,true);port('burnt_hay',57,28,false);port('dead_horse',46,33,false);
  port('shop_sign',24,30,false);port('wheel',37,30,false);port('wheel',9,30,false,{flip:true});
  prop('shrine',16.5,28.92,[[16,28]],{port:true,shrine:0});prop('shrine',50.5,25.92,[[50,25]],{port:true,shrine:1});
  return {map,under,PROPS,clearways,roofs:[],start:{x:32*TS,y:49*TS+8},

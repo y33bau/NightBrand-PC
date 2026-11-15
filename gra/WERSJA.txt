@@ -791,3 +791,4 @@ cache713 · Port: fabula rozdz. III, nowi NPC Ambrozy i Wieslawa (bez bialych ob
 cache714 · Bohaterowie nowy styl: Rycerz (12 arkuszy + Wypad) i Zabojczyni (czysta przezroczystosc, ciezki atak dol/gora), nowa technika Rycerza Wypad z ikona. Nie sprawdzono: pad, dzwiek, FPS u autora, kooperacja, itch.io.
 cache715 · Bohaterowie: ciemniejsze, nasycone kolory (Rycerz i Zabojczyni). Nie sprawdzono: pad, FPS u autora, itch.io.
 cache716 · Port: 3 nowe moby (pijawczarz, muszlowy rozbitek, dzwonnik glebin), nasycone kolory zalogi, wieksza skala zalogi, 27 zbutwialych rekwizytow. Nie sprawdzono: pad, FPS u autora, itch.io.
+cache717 · Port: slup z krukiem przeniesiony z wody na nabrzeze (czarna ramka w wodzie).
