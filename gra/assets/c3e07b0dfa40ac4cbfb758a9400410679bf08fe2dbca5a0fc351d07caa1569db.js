@@ -1460,7 +1460,7 @@ function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan
   if(ch===4&&![4,5,7].includes(row)){const r=W.region(x,y);id=r==='camp'?0:row===1?1:(r==='hill'||r==='stones')?3:r==='forest'?2:0;if(id===2&&nz(x,y)>.6)id=4;}
   if(ch===5)id=IMGS.cc0_c5_dziedziniec?(()=>{let t=tileAt(x,y);if(t===31||t===27||t===22)t=W.under[i];return t===73?7:t===76?5:t===77?6:({dziedziniec:0,kancelaria:2,sala:1,skarbiec:3,krypta:4,tron:1})[W.region(x,y)]??0})():(![3,4,6,7].includes(row)?(row===2||row===1?2:row===5?1:0):-1); // 13.11.2026: siedziba zakonu, osobna podloga dla kazdej sali (70 dziedziniec,71 marmur,72 archiwum,73 dywan,74 skarbiec,75 loch,76 pieczec,77 atrament)
   if(ch===9&&![1,5,7].includes(row))id=row===2?1:0;
-  if(ch===1){let X=x,Y=y;if(map[i]===45||map[i]===90){let b=99;for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const u=x+dx,v=y+dy,k=v*MW+u;if(u<0||v<0||u>=MW||v>=MH||map[k]===45||map[k]===90)continue;const d=dx*dx+dy*dy;if(d<b){b=d;X=u;Y=v}}}const v=MAP1_FLOOR[Y].charCodeAt(X)-48;if(v!==0||id>=0)id=v} // 12.11.2026: pod woda ta sama posadzka co na najblizszym brzegu
+  if(ch===1){let X=x,Y=y;if(map[i]===45||map[i]===90){let b=99;for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const u=x+dx,v=y+dy,k=v*MW+u;if(u<0||v<0||u>=MW||v>=MH||map[k]===45||map[k]===90)continue;const d=dx*dx+dy*dy;if(d<b){b=d;X=u;Y=v}}}const v=MAP1_FLOOR[Y].charCodeAt(X)-48;if(v!==0||id>=0)id=v;if(row===3&&IMGS.cc0_deski)id=7} // 15.11.2026: we wszystkich chatach podloga z desek (wnetrze = wiersz 3 planu) // 12.11.2026: pod woda ta sama posadzka co na najblizszym brzegu
   if(id>capId)id=ch===4?2:0;
   if(id>=0)cells[a+2]=(cells[a+2]%8)+128+id*8;
  }return cells;
@@ -2535,10 +2535,11 @@ function buildCytadela(I){planGround(5);
   addWalls(bars,2.2,3,0xffffff,true);
   // 15.11.2026 (punkt centralny): mur zamykajacy os czerwonego dywanu Sali Sadowej niesie godlo Zakonu i zlota Wage Sadu; tylko na polach muru, srodek sali wolny
   {const zc=(MP(33)+MP(35))/2,face=MP(35)+.04,cx=MP(40);
-   // 15.11.2026: godlo = pieczec Pietna z logo gry (plik UI juz w grze, w pamieci offline); swieci wlasnym blaskiem
-   const sealTex=new THREE.TextureLoader().load('assets/ui/2766d2339f544ba95d3347832bcc91280a0c7673f25d01acf375b12a2524acf5.webp');sealTex.anisotropy=4;
-   const emblem=new THREE.Mesh(new THREE.PlaneGeometry(4.3,4.3*325/480),cutaway(phong({map:sealTex,emissiveMap:sealTex,emissive:0x9a8070,transparent:true,alphaTest:.04,depthWrite:false,shininess:20})));emblem.position.set(cx,2.05,face+.42);emblem.rotation.x=-.58;emblem.renderOrder=3;/* odchylona ku kamerze, zeby nie byla splaszczona */ROOT.add(emblem);
-   nbLandmark('assets/rekwizyty/bcd46c57ccc12edcbce7230137800744233eda3b28b7302321ef34ac4e7cee70.webp',{x:cx,z:face-.55,w:3.7,aspect:900/698,base:3.38,wrap:cutaway});// obraz: cy_waga_sadu (ChatGPT 15.11.2026)
+   nbLandmark('assets/rekwizyty/bcd46c57ccc12edcbce7230137800744233eda3b28b7302321ef34ac4e7cee70.webp',{x:cx,z:face-.55,w:3.7,aspect:900/698,base:3.38,wrap:cutaway});
+   {// 15.11.2026: zlota poswiata u podstawy Wagi (miekka plama swiatla, dodawana); pieczec z muru usunieta na prosbe autora
+    const c=canvas(128,64),q=c.getContext('2d'),gr=q.createRadialGradient(64,40,2,64,40,62);gr.addColorStop(0,'rgba(255,214,140,.95)');gr.addColorStop(.35,'rgba(255,170,70,.45)');gr.addColorStop(1,'rgba(255,140,40,0)');q.fillStyle=gr;q.fillRect(0,0,128,64);
+    const halo=new THREE.Mesh(new THREE.PlaneGeometry(3.4,1.5).translate(0,.75,0),cutaway(new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.75})));halo.scale.y=SQ;halo.position.set(cx,3.1,face-.35);halo.renderOrder=4;ROOT.add(halo);
+    W.LSRC.push({col:0xffc86a,base:1.15,dist:5.5,x:cx,y:3.9,z:face-.1,kind:'fire',ph:.7})}// obraz: cy_waga_sadu (ChatGPT 15.11.2026)
    W.LSRC.push({col:0xffc27a,base:.9,dist:5.5,x:cx,y:2.4,z:face+1.4,kind:'fire',ph:2.2})} // 12.11.2026: kraty z wlasna tekstura krat (wczesniej kamienny slup)
   const R={brazier_0:[0,0,32,32],brazier_1:[32,0,32,32],brazier_2:[64,0,32,32],brazier_3:[96,0,32,32],king_statue:[0,32,32,64],healing_shrine:[32,64,32,32],depleted_shrine:[64,64,32,32],chains:[96,64,32,32],
     fallen_pillar:[0,96,64,32],dwarf_bones:[64,96,32,32],sarcophagus:[0,160,32,32],rune_lantern:[32,160,32,32],clan_banner:[96,160,32,32]};
@@ -2861,7 +2862,7 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
     if(t===48||t===58||t===59||t===68||t===69||t===78||t===80)w.walls.push([x,y,t]);if(t===54)w.rots.push([x,y]);
     if(!VOID.has(t)&&[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>VOID.has(ta(x+dx,y+dy))))w.cliffs.push([x,y]);
     if(t===22)w.pillars.push([x,y]);if(t===24)w.lavas.push([x,y]);if(t===27)w.braziers.push([x,y]);if(t===45)w.waters.push([x,y]);if(t===90)w.shallow.push([x,y])}
-  const lsrc=(col,int,dist,x,y,z,kind,extra)=>{if(kind==='npc'){int*=.176;dist*=.6}/* 15.11.2026: poswiata NPC -20% (bylo .22) */const o=Object.assign({col,base:int,dist,x,y,z,kind,ph:Math.random()*9},extra||{});w.LSRC.push(o);return o};
+  const lsrc=(col,int,dist,x,y,z,kind,extra)=>{if(kind==='npc'){int*=.088;dist*=.6}/* 15.11.2026: poswiata NPC o polowe slabsza (autor: bije jak latarka) *//* 15.11.2026: poswiata NPC -20% (bylo .22) */const o=Object.assign({col,base:int,dist,x,y,z,kind,ph:Math.random()*9},extra||{});w.LSRC.push(o);return o};
   if(ch===2){
     w.braziers.forEach(([x,y])=>lsrc(0xff6a1a,1.35,7,x+.5,1.6,y+.6,'fire'));
     for(let x=43;x<60;x+=4){lsrc(0xff4a10,1.6,7,MP(x),.6,MP(13.5),'lava');lsrc(0xff4a10,1.6,7,MP(x),.6,MP(33.5),'lava')}

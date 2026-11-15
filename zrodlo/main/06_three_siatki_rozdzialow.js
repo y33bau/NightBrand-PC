@@ -664,10 +664,11 @@ function buildCytadela(I){planGround(5);
   addWalls(bars,2.2,3,0xffffff,true);
   // 15.11.2026 (punkt centralny): mur zamykajacy os czerwonego dywanu Sali Sadowej niesie godlo Zakonu i zlota Wage Sadu; tylko na polach muru, srodek sali wolny
   {const zc=(MP(33)+MP(35))/2,face=MP(35)+.04,cx=MP(40);
-   // 15.11.2026: godlo = pieczec Pietna z logo gry (plik UI juz w grze, w pamieci offline); swieci wlasnym blaskiem
-   const sealTex=new THREE.TextureLoader().load('assets/ui/2766d2339f544ba95d3347832bcc91280a0c7673f25d01acf375b12a2524acf5.webp');sealTex.anisotropy=4;
-   const emblem=new THREE.Mesh(new THREE.PlaneGeometry(4.3,4.3*325/480),cutaway(phong({map:sealTex,emissiveMap:sealTex,emissive:0x9a8070,transparent:true,alphaTest:.04,depthWrite:false,shininess:20})));emblem.position.set(cx,2.05,face+.42);emblem.rotation.x=-.58;emblem.renderOrder=3;/* odchylona ku kamerze, zeby nie byla splaszczona */ROOT.add(emblem);
-   nbLandmark('assets/rekwizyty/bcd46c57ccc12edcbce7230137800744233eda3b28b7302321ef34ac4e7cee70.webp',{x:cx,z:face-.55,w:3.7,aspect:900/698,base:3.38,wrap:cutaway});// obraz: cy_waga_sadu (ChatGPT 15.11.2026)
+   nbLandmark('assets/rekwizyty/bcd46c57ccc12edcbce7230137800744233eda3b28b7302321ef34ac4e7cee70.webp',{x:cx,z:face-.55,w:3.7,aspect:900/698,base:3.38,wrap:cutaway});
+   {// 15.11.2026: zlota poswiata u podstawy Wagi (miekka plama swiatla, dodawana); pieczec z muru usunieta na prosbe autora
+    const c=canvas(128,64),q=c.getContext('2d'),gr=q.createRadialGradient(64,40,2,64,40,62);gr.addColorStop(0,'rgba(255,214,140,.95)');gr.addColorStop(.35,'rgba(255,170,70,.45)');gr.addColorStop(1,'rgba(255,140,40,0)');q.fillStyle=gr;q.fillRect(0,0,128,64);
+    const halo=new THREE.Mesh(new THREE.PlaneGeometry(3.4,1.5).translate(0,.75,0),cutaway(new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.75})));halo.scale.y=SQ;halo.position.set(cx,3.1,face-.35);halo.renderOrder=4;ROOT.add(halo);
+    W.LSRC.push({col:0xffc86a,base:1.15,dist:5.5,x:cx,y:3.9,z:face-.1,kind:'fire',ph:.7})}// obraz: cy_waga_sadu (ChatGPT 15.11.2026)
    W.LSRC.push({col:0xffc27a,base:.9,dist:5.5,x:cx,y:2.4,z:face+1.4,kind:'fire',ph:2.2})} // 12.11.2026: kraty z wlasna tekstura krat (wczesniej kamienny slup)
   const R={brazier_0:[0,0,32,32],brazier_1:[32,0,32,32],brazier_2:[64,0,32,32],brazier_3:[96,0,32,32],king_statue:[0,32,32,64],healing_shrine:[32,64,32,32],depleted_shrine:[64,64,32,32],chains:[96,64,32,32],
     fallen_pillar:[0,96,64,32],dwarf_bones:[64,96,32,32],sarcophagus:[0,160,32,32],rune_lantern:[32,160,32,32],clan_banner:[96,160,32,32]};

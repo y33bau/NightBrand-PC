@@ -214,7 +214,7 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
     if(t===48||t===58||t===59||t===68||t===69||t===78||t===80)w.walls.push([x,y,t]);if(t===54)w.rots.push([x,y]);
     if(!VOID.has(t)&&[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>VOID.has(ta(x+dx,y+dy))))w.cliffs.push([x,y]);
     if(t===22)w.pillars.push([x,y]);if(t===24)w.lavas.push([x,y]);if(t===27)w.braziers.push([x,y]);if(t===45)w.waters.push([x,y]);if(t===90)w.shallow.push([x,y])}
-  const lsrc=(col,int,dist,x,y,z,kind,extra)=>{if(kind==='npc'){int*=.176;dist*=.6}/* 15.11.2026: poswiata NPC -20% (bylo .22) */const o=Object.assign({col,base:int,dist,x,y,z,kind,ph:Math.random()*9},extra||{});w.LSRC.push(o);return o};
+  const lsrc=(col,int,dist,x,y,z,kind,extra)=>{if(kind==='npc'){int*=.088;dist*=.6}/* 15.11.2026: poswiata NPC o polowe slabsza (autor: bije jak latarka) *//* 15.11.2026: poswiata NPC -20% (bylo .22) */const o=Object.assign({col,base:int,dist,x,y,z,kind,ph:Math.random()*9},extra||{});w.LSRC.push(o);return o};
   if(ch===2){
     w.braziers.forEach(([x,y])=>lsrc(0xff6a1a,1.35,7,x+.5,1.6,y+.6,'fire'));
     for(let x=43;x<60;x+=4){lsrc(0xff4a10,1.6,7,MP(x),.6,MP(13.5),'lava');lsrc(0xff4a10,1.6,7,MP(x),.6,MP(33.5),'lava')}
