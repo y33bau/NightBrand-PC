@@ -838,3 +838,4 @@ cache760 · Porzadki map: Cytadela bez drobiazgow, bez kosci krasnoluda, schodko
 cache761 · Port: nowy prom widziany z gory spasowany z pomostem, lancuchy do pierscieni; nie sprawdzono u autora (FPS, pad, dzwiek)
 cache762 · Portrety z postaci przy ognisku; Ustawienia, Dzwiek i Dane zapisu w standardzie Grafiki; nie sprawdzono u autora (pad, FPS)
 cache763 · Porzadki map (cache 763): fontanna Zlotogrodu na osi placu, latarnie Zlotogrodu parami, koksowniki przy moscie w Dolnym Miescie na lustrzanych miejscach, drugie drzwi pancerne w skarbcu Cytadeli, stosy towarow w porcie, deszcz nie pada pod dachem skladu, martwe drzewa w Spalonej Osadzie (nie sprawdzono: FPS, pad, dzwiek, wyglad u autora, Zlotogrod i Czarnobor po zmianach w grafice)
+cache764 · Balans walki (cache 765): lekki atak szybszy o 10% (zamach/akcja/powrot), unik kosztuje 20 staminy zamiast 24; nie sprawdzono: gra w nawalnicy, pad, wyglad u autora, perk Pospiech po zmianie
