@@ -807,3 +807,4 @@ cache729 · Nowy standard pozostalych sekcji menu (zakladki na spalonej desce, p
 cache730 · Dzwonnik i Woskownica w nowym stylu (16 atlasow, rozplywanie Echa); nie sprawdzono: wszystkie animacje w ruchu, pad, dzwiek, FPS u autora, kooperacja, itch.io
 cache731 · Wybor postaci przy ognisku (Graj -> Ognisko -> Rozdzial), nowe Przygotowanie (perk, wyzwanie, klatwy, trudnosc), Hadraen zamiast Radana, nowe postacie przy ognisku w menu glownym. Nie sprawdzono: pad fizyczny, dzwiek, FPS u autora, 2 graczy, itch.io
 cache732 · Separator ze standardu menu pod naglowkami ogniska i Przygotowania
+cache733 · Balans: Serce +20 HP (45, x1,6, maks. 3), Osełka (35, x1,5, maks. 3), Zwój 40, Hart ciała 5/10/15%, poprawka komunikatu o nowym perku. Nie sprawdzono w grze: pad, dźwięk, FPS, itch.io
