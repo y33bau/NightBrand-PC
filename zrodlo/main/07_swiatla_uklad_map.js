@@ -236,7 +236,7 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
     for(const p of w.PROPS)if(p.fire)lsrc(0xff7a2a,p.big?2.4:1.6,p.big?10:7,p.x,1.3,p.y-.2,'fire');
     w.shrines.forEach((s,i)=>lsrc(0xffc070,1.1,5,s.x/16,1.2,s.y/16+.6,'shrine',{si:i}));
     for(const p of w.PROPS)if(p.stone!==undefined)lsrc(0x7fd0ff,1.6,6,p.x,1.4,p.y-.3,'stone',{si:p.stone});
-    for(const p of w.PROPS)if(p.k==='sacred_oak'){lsrc(0xffb862,1.05,6,p.x,.9,p.y+.6,'fire');lsrc(0xa8e888,1.3,11,p.x,4.2,p.y-1.2,'rune')} // 15.11.2026: swiety dab jako punkt centralny Czarnoboru: wotywne swiatlo u pnia i poswiata korony
+    for(const p of w.PROPS)if(p.k==='sacred_oak'){lsrc(0xffb862,1.05,6,p.x,.9,p.y+.6,'fire');lsrc(0xa8e888,.8,10,p.x,4.2,p.y-1.2,'rune')} // 15.11.2026: swiety dab jako punkt centralny Czarnoboru: wotywne swiatlo u pnia i poswiata korony
     // will-o'-wisps flicker over the marsh
     w.wisps=w.PROPS.filter(p=>p.k==='cz_wisp').map(p=>lsrc(0x7fffd0,.8,3.5,p.x,.8,p.y-.4,'rune'));
     for(const n of w.npcs)if(!n.lure)lsrc(0xffc070,n.id==='chojrak'?.3:.65,4.5,n.x/16,1.3,n.y/16-.4,'npc',{npc:n.id});

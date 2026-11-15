@@ -1870,30 +1870,9 @@ function decals(I){const dec=row=>[0,1,2,3].map(i=>{const cv=canvas(32,32);cv.ge
 
 
 // Chapter II meshes: M4 floor, M5 walls, M6 props, M8 transitions
-// 15.11.2026 (punkty centralne map): monumentalna waga z belka, lancuchami i szalami; ramiona wzdluz osi 'axis' ('x' albo 'z'), belka przechylona o 'tilt' (dlug zawsze przewaza)
-function nbScales(o){const g=new THREE.Group(),T=o.top,arm=o.arm,t=o.tilt||0,ax=o.axis==='x';
- const add=(geo,mat,x,y,z,ry=0)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.rotation.y=ry;m.castShadow=true;m.receiveShadow=true;g.add(m);return m};
- const between=(a,b,r,mat)=>{const d=new THREE.Vector3().subVectors(b,a),L=d.length(),m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,L,5),mat);m.position.copy(a).addScaledVector(d,.5);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());m.castShadow=true;g.add(m);return m};
- const P=(along,y)=>ax?new THREE.Vector3(along,y,0):new THREE.Vector3(0,y,along);
- // trzon: podstawa, kolumna z pierscieniami, glowica
- add(new THREE.CylinderGeometry(o.col*1.9,o.col*2.3,o.foot,8),o.stone,0,o.base+o.foot/2,0);
- add(new THREE.CylinderGeometry(o.col,o.col*1.25,T-o.base-o.foot,10),o.iron,0,(T+o.base+o.foot)/2,0);
- for(const f of [.35,.7,.97])add(new THREE.CylinderGeometry(o.col*1.45,o.col*1.45,.16,10),o.metal,0,o.base+o.foot+(T-o.base-o.foot)*f,0);
- add(new THREE.SphereGeometry(o.col*1.6,10,6),o.metal,0,T,0);
- add(new THREE.ConeGeometry(o.col*.9,o.col*4,8),o.metal,0,T+o.col*3.2,0);
- // belka: przechylona, z grotami na koncach
- const beam=new THREE.Group();beam.position.set(0,T,0);if(ax)beam.rotation.z=t;else beam.rotation.x=-t;g.add(beam);
- const bl=new THREE.Mesh(ax?new THREE.BoxGeometry(arm*2,.28,.3):new THREE.BoxGeometry(.3,.28,arm*2),o.metal);bl.castShadow=true;beam.add(bl);
- for(const s of [-1,1]){const c=new THREE.Mesh(new THREE.SphereGeometry(.24,8,6),o.metal);c.position.copy(P(s*arm,0));beam.add(c)}
- // szale wisza pionowo pod koncami belki (niezaleznie od przechylu)
- for(const s of [-1,1]){const lift=-s*arm*Math.sin(t),along=s*arm*Math.cos(t),hook=P(along,T+lift-.12),panY=T+lift-o.drop;
-  const pan=add(new THREE.CylinderGeometry(o.pan,o.pan*.62,o.pan*.32,14,1,true),o.metal,hook.x,panY,hook.z);pan.material.side=THREE.DoubleSide;
-  add(new THREE.CylinderGeometry(o.pan*.62,o.pan*.62,.05,14),o.metal,hook.x,panY-o.pan*.16,hook.z);
-  add(new THREE.TorusGeometry(o.pan,.05,5,18),o.metal,hook.x,panY+o.pan*.16,hook.z).rotation.x=Math.PI/2;
-  for(let k=0;k<3;k++){const a=k*Math.PI*2/3+.4;between(hook,new THREE.Vector3(hook.x+Math.cos(a)*o.pan*.96,panY+o.pan*.16,hook.z+Math.sin(a)*o.pan*.96),.035,o.chain)}
-  if(o.load){const l=add(new THREE.SphereGeometry(o.pan*.78,10,6,0,Math.PI*2,0,Math.PI/2),o.load(s),hook.x,panY-o.pan*.02,hook.z);l.scale.y=s>0?.55:.28}
-  g.userData['pan'+(s>0?'B':'A')]=[hook.x,panY,hook.z]}
- g.position.set(o.x,0,o.z);ROOT.add(g);return g}
+// 15.11.2026: malowany punkt centralny mapy (obraz z przezroczystoscia) jako stojacy rekwizyt: pionowa plaszczyzna rozciagnieta o SQ jak inne rekwizyty, normalne jak w rekwizytach rozdz. IV
+function nbLandmark(url,o){const tex=new THREE.TextureLoader().load(url);tex.anisotropy=4;const h=o.w*o.aspect,g=new THREE.PlaneGeometry(o.w,h).translate(0,h/2,0),n=g.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6);
+ const mat=(o.wrap||(m=>m))(phong({map:tex,alphaTest:.42,side:THREE.DoubleSide,emissive:o.em||0x000000,emissiveMap:o.em?tex:null}));const m=new THREE.Mesh(g,mat);m.scale.y=SQ;m.position.set(o.x,o.base,o.z);m.renderOrder=2;ROOT.add(m);return m}
 function buildDolne(I){planGround(2);
   const F=I.dm_floor,Wl=I.dm_walls,r=rng(99);
   const fc=canvas(WW,WH),fg=fc.getContext('2d');
@@ -1942,10 +1921,10 @@ function buildDolne(I){planGround(2);
   instanced(lavaGeo,liquidMat({map:lavaTex,emissiveMap:lavaTex,emissive:0xff8a46,emissiveIntensity:.65},1),lavas,([x,y])=>M4.makeTranslation(x+.5,-.32,y+.5),false,false)}}
   if(I.cc0_lava){const ac=[];for(let x=FT(35);x<FT(40);x++)for(let y=0;y<MH;y++)ac.push([x,y]);lavaHD(I.cc0_lava,ac,-9.4,5,{keep:true,h:[0,0,0],spd:.6})}
   // 15.11.2026: Wielka Waga (kanon: przy niej Poborca wazy urobek) wyrasta z przepasci lawy miedzy halami, na polnoc od mostu; stoi wylacznie nad lawa, sale i most bez zmian
-  {const lt=I.cc0_lava?wallTex(I.cc0_lava):null,ore=s=>phong({color:0x5a3424,map:lt,emissiveMap:lt,emissive:s>0?0xc04a18:0x8a3410,shininess:30,specular:0x5a2a10});
-   const sc=nbScales({x:MP(37.5),z:MP(14.5),base:-9.4,foot:1.2,top:7.8,col:.46,arm:2.95,tilt:.14,axis:'x',pan:1.0,drop:2.7,
-    stone:phong({color:0x4a4446,shininess:4}),iron:phong({color:0x262426,specular:0x6a5a4a,shininess:38}),metal:phong({color:0x86602e,specular:0xd8a85a,shininess:60,emissive:0x140a02}),chain:phong({color:0x3a3634,specular:0x7a6a5a,shininess:40}),load:ore});
-   for(const k of ['panA','panB']){const [x,y,z]=sc.userData[k];W.LSRC.push({col:0xff8a3a,base:k==='panB'?1.25:.8,dist:7,x,y:y+.9,z,kind:'fire',ph:k==='panB'?1.3:3.1})}}
+  {const x=MP(37.5),z=MP(14.5),w=7.2,base=-3.9;// obraz: dm_wielka_waga (ChatGPT 15.11.2026); kolumna ucieta dolem, dalej ciemny trzon do lawy
+   nbLandmark('assets/rekwizyty/0635cccc967fe045f642756e28989e1c2985e5df565060c54e5e0799454bef6f.webp',{x,z,w,aspect:1536/1022,base,em:0x2a1608});
+   const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.62,.7,base+9.4+.3,10),phong({color:0x221e1e,specular:0x3a2a20,shininess:20}));shaft.position.set(x-.12,(base-9.4)/2+.15,z-.25);ROOT.add(shaft);
+   const H=w*1536/1022*SQ;W.LSRC.push({col:0xff8a3a,base:1.25,dist:7,x:x+w*.31,y:base+H*.4,z:z+.6,kind:'fire',ph:1.3});W.LSRC.push({col:0xffa060,base:.5,dist:5,x,y:base+H*.75,z:z+.6,kind:'fire',ph:3.1})}
   let abT;{const ai=I.cc0_abyss||(IMGS&&IMGS.cc0_abyss);if(ai){abT=new THREE.Texture(ai);abT.wrapS=abT.wrapT=THREE.RepeatWrapping;abT.generateMipmaps=true;abT.minFilter=THREE.LinearMipmapLinearFilter;abT.magFilter=THREE.LinearFilter;abT.needsUpdate=true;abT.repeat.set((FT(40)-FT(35))/4,MH/4)}else{abT=texFrom(tcut(F,3,6),true);abT.repeat.set(5*MK,MH)}}
   const abyss=new THREE.Mesh(new THREE.PlaneGeometry(FT(40)-FT(35),MH),new THREE.MeshBasicMaterial({map:abT,color:0x8a6a6a}));abyss.rotation.x=-Math.PI/2;abyss.position.set((FT(35)+FT(40))/2,-10,MH/2);ROOT.add(abyss);
   const brT=texFrom(tcut(F,2,4),true);brT.repeat.set(5,2);
@@ -2545,9 +2524,7 @@ function buildCytadela(I){planGround(5);
    // 15.11.2026: godlo = pieczec Pietna z logo gry (plik UI juz w grze, w pamieci offline); swieci wlasnym blaskiem
    const sealTex=new THREE.TextureLoader().load('assets/ui/2766d2339f544ba95d3347832bcc91280a0c7673f25d01acf375b12a2524acf5.webp');sealTex.anisotropy=4;
    const emblem=new THREE.Mesh(new THREE.PlaneGeometry(4.3,4.3*325/480),cutaway(phong({map:sealTex,emissiveMap:sealTex,emissive:0x9a8070,transparent:true,alphaTest:.04,depthWrite:false,shininess:20})));emblem.position.set(cx,2.05,face+.42);emblem.rotation.x=-.58;emblem.renderOrder=3;/* odchylona ku kamerze, zeby nie byla splaszczona */ROOT.add(emblem);
-   const goldM=cutaway(phong({color:0xc8a050,specular:0xffe0a0,shininess:70,emissive:0x221404})),darkM=cutaway(phong({color:0x2a2226,specular:0x504040,shininess:30}));
-   nbScales({x:cx,z:zc,base:3.4,foot:.42,top:5.9,col:.17,arm:1.95,tilt:-.11,axis:'x',pan:.55,drop:1.15,stone:darkM,iron:goldM,metal:goldM,chain:goldM,
-    load:s=>cutaway(phong({color:s>0?0x3a2a18:0x8a7040,shininess:20,emissive:s>0?0:0x2a1c06}))});
+   nbLandmark('assets/rekwizyty/bcd46c57ccc12edcbce7230137800744233eda3b28b7302321ef34ac4e7cee70.webp',{x:cx,z:face-.55,w:3.7,aspect:900/698,base:3.38,wrap:cutaway});// obraz: cy_waga_sadu (ChatGPT 15.11.2026)
    W.LSRC.push({col:0xffc27a,base:.9,dist:5.5,x:cx,y:2.4,z:face+1.4,kind:'fire',ph:2.2})} // 12.11.2026: kraty z wlasna tekstura krat (wczesniej kamienny slup)
   const R={brazier_0:[0,0,32,32],brazier_1:[32,0,32,32],brazier_2:[64,0,32,32],brazier_3:[96,0,32,32],king_statue:[0,32,32,64],healing_shrine:[32,64,32,32],depleted_shrine:[64,64,32,32],chains:[96,64,32,32],
     fallen_pillar:[0,96,64,32],dwarf_bones:[64,96,32,32],sarcophagus:[0,160,32,32],rune_lantern:[32,160,32,32],clan_banner:[96,160,32,32]};
@@ -2892,7 +2869,7 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
     for(const p of w.PROPS)if(p.fire)lsrc(0xff7a2a,p.big?2.4:1.6,p.big?10:7,p.x,1.3,p.y-.2,'fire');
     w.shrines.forEach((s,i)=>lsrc(0xffc070,1.1,5,s.x/16,1.2,s.y/16+.6,'shrine',{si:i}));
     for(const p of w.PROPS)if(p.stone!==undefined)lsrc(0x7fd0ff,1.6,6,p.x,1.4,p.y-.3,'stone',{si:p.stone});
-    for(const p of w.PROPS)if(p.k==='sacred_oak'){lsrc(0xffb862,1.05,6,p.x,.9,p.y+.6,'fire');lsrc(0xa8e888,1.3,11,p.x,4.2,p.y-1.2,'rune')} // 15.11.2026: swiety dab jako punkt centralny Czarnoboru: wotywne swiatlo u pnia i poswiata korony
+    for(const p of w.PROPS)if(p.k==='sacred_oak'){lsrc(0xffb862,1.05,6,p.x,.9,p.y+.6,'fire');lsrc(0xa8e888,.8,10,p.x,4.2,p.y-1.2,'rune')} // 15.11.2026: swiety dab jako punkt centralny Czarnoboru: wotywne swiatlo u pnia i poswiata korony
     // will-o'-wisps flicker over the marsh
     w.wisps=w.PROPS.filter(p=>p.k==='cz_wisp').map(p=>lsrc(0x7fffd0,.8,3.5,p.x,.8,p.y-.4,'rune'));
     for(const n of w.npcs)if(!n.lure)lsrc(0xffc070,n.id==='chojrak'?.3:.65,4.5,n.x/16,1.3,n.y/16-.4,'npc',{npc:n.id});
