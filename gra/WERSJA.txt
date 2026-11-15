@@ -830,3 +830,4 @@ cache752 · Stamina: tylko regeneracja +15%, koszty technik z powrotem bez zmian
 cache753 · Leczenie: serce po elicie i po naporze, kociolki odnawiaja sie w polowie nocy
 cache754 · Leczenie: bez serca po naporze
 cache755 · Kociolek: 10% HP/s na Normalnym
+cache756 · Menu glowne: ten sam ogien co na wyborze postaci

@@ -10725,13 +10725,13 @@ const NB_KAMIEN={r:'assets/ui/5603fdc363945b6e1f72befd731652697b1d181fec06a9fd79
 #nbOboz .tlo{inset:0;background:url('assets/ui/3bd17f48aa2077bfee3633ea875fb4407ca63c0374c52d2fd8e34176d9728747.webp') center/100% 100% no-repeat}
 #nbOboz .cien{inset:0;background:linear-gradient(90deg,rgba(8,7,10,.82) 0%,rgba(8,7,10,.7) 38%,rgba(8,7,10,.38) 62%,rgba(8,7,10,.08) 80%,rgba(8,7,10,0) 100%),linear-gradient(0deg,rgba(8,7,10,.55),rgba(8,7,10,0) 30%)}
 #nbOboz .luna{left:62%;top:42%;width:34%;height:46%;background:radial-gradient(ellipse at 50% 55%,rgba(255,140,60,.28),rgba(255,110,40,0) 65%);mix-blend-mode:screen;animation:nbLuna 2.3s ease-in-out infinite}
-#nbOboz .ogien{left:76.2%;top:44%;width:6%;height:18%;background:url('assets/ui/ab3c5151e7493800881f61cad7db0eb404cda287d4e7684c8d5a67af41b24971.webp') 0 0/800% 100% no-repeat;mix-blend-mode:screen;opacity:.92;animation:nbOgien .85s steps(8) infinite}
+#nbOboz .ogA,#nbOboz .ogB{left:74.9%;top:42%;width:8.4%;height:20%;background:url('assets/ui/69da6ff24de1c6408c4b15f672aea07db6bb74453ed8ea4625dc930ff290c17f.webp') 0 0/400% 200% no-repeat;mix-blend-mode:screen;opacity:.95}
+#nbOboz canvas.isk{position:absolute;inset:0;width:100%;height:100%}
 #nbOboz .bohater{left:65.5%;bottom:17%;height:31%;aspect-ratio:var(--ar,.9);background:center bottom/contain no-repeat;transform-origin:50% 100%;filter:brightness(.94);animation:nbOddech 4.2s ease-in-out infinite,nbBlask 2.3s ease-in-out infinite}
 #nbOboz .kontakt{left:64.5%;bottom:15.4%;width:15%;height:4.5%;background:radial-gradient(closest-side,rgba(6,3,2,.85),rgba(6,3,2,.45) 55%,rgba(6,3,2,0));filter:blur(2px)}
 #nbOboz .mgla{left:61%;bottom:11.5%;width:27%;height:12%;background:url('assets/ui/b5aa0b5f36f083311f26a7dd935871b17ce548e28b3915092de5be30df5207be.webp') center/100% 100% no-repeat;opacity:.6;filter:sepia(.4) brightness(.85);animation:nbMgla 14s ease-in-out infinite alternate}
 #nbOboz .ziarno{inset:0;background:url('assets/ui/7c8deda4dcbd2ff1b4e8381167626c58a6e734b1cd9bdc331a3399749f2b8595.webp') 0 0/256px 256px repeat;mix-blend-mode:overlay;opacity:.13;animation:nbZiarno .5s steps(1) infinite}
 #nbOboz .bohater.lustro{transform:scaleX(-1)}
-@keyframes nbOgien{to{background-position:100% 0}}
 @keyframes nbLuna{0%,100%{opacity:.85}45%{opacity:1}70%{opacity:.75}}
 @keyframes nbOddech{0%,100%{scale:1 1}50%{scale:1 1.012}}
 @keyframes nbBlask{0%,100%{filter:brightness(.9)}50%{filter:brightness(1.02)}}
@@ -10739,11 +10739,23 @@ const NB_KAMIEN={r:'assets/ui/5603fdc363945b6e1f72befd731652697b1d181fec06a9fd79
 @keyframes nbZiarno{0%{background-position:0 0}20%{background-position:-61px 37px}40%{background-position:83px -29px}60%{background-position:-17px -91px}80%{background-position:45px 70px}}`;
  document.head.append(st);
  const box=document.createElement('div');box.id='nbOboz';box.setAttribute('aria-hidden','true');
- box.innerHTML='<i class="tlo"></i><i class="cien"></i><i class="luna"></i><i class="ogien"></i><i class="kontakt"></i><i class="bohater"></i><i class="mgla"></i><i class="ziarno"></i>';T.prepend(box);
+ box.innerHTML='<i class="tlo"></i><i class="cien"></i><i class="luna"></i><i class="ogA"></i><i class="ogB"></i><i class="kontakt"></i><i class="bohater"></i><i class="mgla"></i><i class="ziarno"></i><canvas class="isk"></canvas>';T.prepend(box);
  const AR=NB_KAMIEN_AR,LUSTRO={z:1,d:1};
  const hero=box.querySelector('.bohater');
  const pokaz=()=>{let c='r';try{const q=prog();if(q&&H[q.char])c=q.char}catch(e){}if(hero.dataset.c===c)return;hero.dataset.c=c;hero.style.backgroundImage=`url('${H[c]}')`;hero.style.setProperty('--ar',AR[c]);hero.classList.toggle('lustro',!!LUSTRO[c])};
  pokaz();new MutationObserver(pokaz).observe(T,{attributes:true,attributeFilter:['hidden','class']});
+// 15.11.2026: ten sam ogien co na ekranie wyboru postaci (plynne przejscie klatek, iskry, migotanie swiatla), zamiast starego 8-klatkowego
+ {const oA=box.querySelector('.ogA'),oB=box.querySelector('.ogB'),luna=box.querySelector('.luna'),CVs=box.querySelector('canvas.isk'),CXs=CVs.getContext('2d'),RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let isk=[],t0=performance.now(),flT=1,fl=1,anim=0;const poz=f=>`${(f%4)*100/3}% ${f<4?0:100}%`;
+  const widoczne=()=>!T.hidden&&T.classList.contains('pc-home');
+  const kl=now=>{if(!widoczne()){anim=0;return}const t=(now-t0)/100,f=Math.floor(t)%8,m=t%1;oA.style.backgroundPosition=poz(f);oB.style.backgroundPosition=poz((f+1)%8);oA.style.opacity=String(.95*(1-m));oB.style.opacity=String(.95*m);
+   if(Math.random()<.08)flT=.93+Math.random()*.14;fl+=(flT-fl)*.12;luna.style.opacity=String(Math.min(1,.8*fl));
+   const w=CVs.width=box.clientWidth,h=CVs.height=box.clientHeight;CXs.clearRect(0,0,w,h);
+   if(isk.length<50&&Math.random()<.45)isk.push({x:w*(.792+(Math.random()-.5)*.02),y:h*.56,vx:(Math.random()-.5)*w*.0005,vy:-h*(.0012+Math.random()*.002),l:1,r:w*(.0006+Math.random()*.001)});
+   isk=isk.filter(q=>(q.l-=.006+Math.random()*.004)>0);for(const q of isk){q.vx+=(Math.random()-.5)*w*.00006;q.x+=q.vx;q.y+=q.vy;CXs.fillStyle=`rgba(255,${150+60*q.l|0},70,${q.l*q.l})`;CXs.shadowColor='rgba(255,110,30,.9)';CXs.shadowBlur=q.r*5;CXs.beginPath();CXs.arc(q.x,q.y,q.r,0,7);CXs.fill()}
+   anim=requestAnimationFrame(kl)};
+  const start=()=>{if(RM){oA.style.backgroundPosition=poz(0);oA.style.opacity='.95';oB.style.opacity='0';return}if(!anim&&widoczne()){t0=performance.now();anim=requestAnimationFrame(kl)}};
+  start();new MutationObserver(start).observe(T,{attributes:true,attributeFilter:['hidden','class']})}
 }catch(e){quietErr('menuOboz',e)}})();
 // 15.11.2026: ekran wyboru postaci przy ognisku (Graj -> Ognisko -> Wybor rozdzialu) oraz nowe Przygotowanie (perk, wyzwanie, klatwy, trudnosc).
 // Warstwy rysowane w #title i #prep; stan i zapis przez te same zmienne co dotad (PREP, prog(), saveProg, renderPrep). Noc dnia i tygodnia: dawny ekran.
