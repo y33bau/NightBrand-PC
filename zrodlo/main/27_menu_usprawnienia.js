@@ -624,6 +624,16 @@ ${S} .m2-ch.premium-selected>.pcg-edge{filter:brightness(1.12) saturate(1.15)!im
 ${S} .m2-ch:not(:disabled)${ON}>.pcg-edge{filter:brightness(1.3) saturate(1.25) drop-shadow(0 0 5px rgba(255,120,40,.5))!important}
 ${S} .m2-ch:before{left:calc(22 * var(--pc-u,1px))!important;top:calc(19 * var(--pc-u,1px))!important}
 ${S} .m2-ch .nb2-meds{right:calc(24 * var(--pc-u,1px))!important;bottom:calc(19 * var(--pc-u,1px))!important}
+/* 15.11.2026: napisy rozdzialu przy numerze (lewa strona), ilustracja odslonieta z prawej */
+${S} .premium-map .m2-ch{padding-left:calc(58 * var(--pc-u,1px))!important}
+${S} .premium-map .m2-ch:after{left:calc(58 * var(--pc-u,1px))!important}
+${CAMPAIGN.map(i=>`${S} .premium-map #start${i}{background-image:linear-gradient(90deg,#0d0b10f2 0%,#0d0b10d6 34%,#0d0b1080 62%,#0d0b1026 100%),url('${PREMIUM_ASSETS['rozdzial-'+i+'-mini']}')!important}`).join('\n')}
+/* 15.11.2026: dolny pasek wyboru rozdzialu (Kaplica, Kronika, Tryb gry) w spalonej desce jak Przygotuj sie */
+${S} :is(#title #kapBtn,#title #kronBtn,#title .pc-journey-mode,#title #pcMainMenuBack){border-color:transparent!important;border-image:none!important;background:${RAMKA} center/100% 100% no-repeat border-box!important;box-shadow:none!important;outline:none!important;animation:none!important}
+${S} :is(#title #kapBtn,#title #kronBtn,#title .pc-journey-mode,#title #pcMainMenuBack)${ON}{color:#ffe2b8!important;text-shadow:0 0 10px rgba(255,140,60,.75)!important;background:radial-gradient(ellipse 44% 40% at 50% 58%,rgba(255,118,36,.5),rgba(255,90,30,.16) 60%,rgba(255,90,30,0) 100%) center/86% 74% no-repeat border-box,${RAMKA} center/100% 100% no-repeat border-box!important;animation:nbZarG 1.8s ease-in-out infinite!important}
+${S} :is(#title .pc-journey-mode)>small{translate:0 calc(8 * var(--pc-u,1px))!important;font-size:calc(13 * var(--pc-u,1px))!important}
+${S} :is(#title .pc-journey-mode)>.nb2-seg{translate:0 calc(2 * var(--pc-u,1px))!important}
+${S} .pc-journey-mode .nb2-seg>i.is-on{background:radial-gradient(ellipse 50% 48% at 50% 62%,rgba(255,120,40,.38),rgba(255,120,40,0) 100%)!important;color:#ffe2b8!important;text-shadow:0 0 8px rgba(255,140,60,.7)!important}
 ${S} .nb2-seg>i{border:none!important;box-shadow:none!important;background:none!important;color:rgba(230,214,184,.55)!important}
 ${S} .nb2-seg>i.is-on{background:${PAS_ON} center/100% 100% no-repeat!important;color:#f3e2c2!important}
 ${S} .pc-fantasy-title{border-image:none!important;border-color:transparent!important;background:none!important;box-shadow:none!important;position:relative!important;overflow:visible!important}
