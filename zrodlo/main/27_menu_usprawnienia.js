@@ -878,17 +878,17 @@ ${O} #nbW .npl{left:50%!important;bottom:12.9%!important;width:14.5%!important;a
 ${O} #nbW canvas{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:42!important;mix-blend-mode:screen!important;pointer-events:none!important}
 ${O} #nbW .wroc{position:absolute!important;left:2.2%!important;top:3.4%!important;width:calc(200*var(--u))!important;height:calc(60*var(--u))!important;z-index:60!important}
 ${O} #nbW .wyb2{position:absolute!important;right:3%!important;bottom:7%!important;width:calc(400*var(--u))!important;height:calc(104*var(--u))!important;font-size:calc(28*var(--u))!important;z-index:60!important}
-${O} #nbW .pan{position:absolute!important;left:2.2%!important;bottom:2.6%!important;width:calc(640*var(--u))!important;z-index:60!important;padding:calc(10*var(--u)) calc(22*var(--u)) calc(12*var(--u))!important}
+${O} #nbW .pan{position:absolute!important;left:2.2%!important;bottom:2.6%!important;width:calc(640*var(--u))!important;z-index:60!important;padding:calc(8*var(--u)) calc(22*var(--u)) calc(8*var(--u))!important}
 ${O} #nbW .pan .nin{transition:opacity .25s,translate .25s!important}
 ${O} #nbW .pan.zm .nin{opacity:0!important;translate:0 calc(6*var(--u))!important}
-${O} #nbW .kl{font:700 calc(36*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.08em!important;color:#dcb877!important;text-shadow:0 0 calc(14*var(--u)) rgba(255,120,40,.3),0 2px 4px #000!important}
-${O} #nbW .imi{font:italic calc(20*var(--u))/1.3 Georgia,serif!important;color:#d0bc94!important;margin:calc(6*var(--u)) 0 calc(10*var(--u))!important}
-${O} #nbW .mot{font:italic calc(16.5*var(--u))/1.4 Georgia,serif!important;color:#c9b88f!important;margin:calc(-2*var(--u)) 0 calc(10*var(--u))!important;padding-left:calc(10*var(--u))!important;border-left:calc(2*var(--u)) solid rgba(201,164,90,.45)!important;min-height:2.8em!important}
-${O} #nbW .nop{font-size:calc(17.5*var(--u))!important;line-height:1.45!important;color:#ecdcbc!important;min-height:2.9em!important}
-${O} #nbW .sty{margin-top:calc(8*var(--u))!important;font:600 calc(13.5*var(--u))/1.4 Cinzel,Georgia,serif!important;letter-spacing:.14em!important;color:#b9a789!important}
-${O} #nbW .nte{display:flex!important;gap:calc(10*var(--u))!important;margin-top:calc(12*var(--u))!important}
+${O} #nbW .kl{font:700 calc(32*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.08em!important;color:#dcb877!important;text-shadow:0 0 calc(14*var(--u)) rgba(255,120,40,.3),0 2px 4px #000!important}
+${O} #nbW .imi{font:italic calc(19*var(--u))/1.3 Georgia,serif!important;color:#d0bc94!important;margin:calc(4*var(--u)) 0 calc(8*var(--u))!important}
+${O} #nbW .mot{font:italic calc(15*var(--u))/1.35 Georgia,serif!important;color:#c9b88f!important;margin:calc(-2*var(--u)) 0 calc(7*var(--u))!important;padding-left:calc(10*var(--u))!important;border-left:calc(2*var(--u)) solid rgba(201,164,90,.45)!important;min-height:2.7em!important}
+${O} #nbW .nop{font-size:calc(16.5*var(--u))!important;line-height:1.4!important;color:#ecdcbc!important;min-height:2.8em!important}
+${O} #nbW .sty{margin-top:calc(5*var(--u))!important;font:600 calc(13*var(--u))/1.4 Cinzel,Georgia,serif!important;letter-spacing:.14em!important;color:#b9a789!important}
+${O} #nbW .nte{display:flex!important;gap:calc(10*var(--u))!important;margin-top:calc(8*var(--u))!important}
 ${O} #nbW .nte>div{flex:1!important;display:flex!important;align-items:center!important;gap:calc(10*var(--u))!important;padding:calc(2*var(--u)) calc(6*var(--u))!important;min-width:0!important}
-${O} #nbW .nte img{width:calc(44*var(--u))!important;height:calc(44*var(--u))!important;object-fit:contain!important;flex:none!important}
+${O} #nbW .nte img{width:calc(38*var(--u))!important;height:calc(38*var(--u))!important;object-fit:contain!important;flex:none!important}
 ${O} #nbW .nte b{font:700 calc(15.5*var(--u))/1.15 Cinzel,Georgia,serif!important;color:#f2dfba!important}
 /* ---- przygotowanie ---- */
 ${O} #nbP .ntlo{inset:-2%!important;background:url('${IMG.tlo}') center 60%/cover no-repeat!important;filter:blur(calc(7*var(--u))) brightness(.34) saturate(.9)!important}
