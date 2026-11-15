@@ -312,6 +312,65 @@ ${Z} .pcs-row.pcs-tgl>span:last-child{order:-1;flex:1 1 auto;text-align:left!imp
 ${Z} .pcs-help{margin:calc(8 * var(--pc-u,1px)) calc(22 * var(--pc-u,1px)) 0!important;max-width:none!important;text-align:left!important;font:italic 400 calc(14.5 * var(--pc-u,1px))/1.5 Georgia,serif!important;color:#a8977acc!important}`;
  document.head.append(st);
 }catch(e){quietErr('gfxPcLayout',e)}})();
+// 15.11.2026 (decyzja autora): Ustawienia, Dzwiek i Dane zapisu w tym samym standardzie co Grafika: sekcje z paskiem naglowka,
+// w wierszu nazwa po lewej i przelacznik po prawej, objasnienia drobna kursywa pod sekcja. Przyciski i ich obsluga bez zmian.
+(()=>{try{const L=(p,e)=>EN?e:p,mk=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+ const sec=(title,cls)=>{const s=mk('section','pc-option-section pcg-panel'+(cls?' '+cls:''));s.append(mk('h3','sth',title));return s};
+ const row=(label,ctl)=>{const r=mk('div','pcs-row');ctl.before(r);ctl.classList.add('pcs-ctl');r.append(mk('p','figcap pcs-lab',label),ctl);return r};
+ const tidy=sec=>{for(const l of sec.querySelectorAll(':scope>label.musrow,:scope>label.tgl'))l.classList.add('pcs-row',l.classList.contains('tgl')?'pcs-tgl':'pcs-sl');
+  for(const p of [...sec.querySelectorAll(':scope>p.figcap')])p.classList.add('pcs-help');for(const h of [...sec.querySelectorAll(':scope>.pcs-help')])sec.append(h)};
+ // Ustawienia
+ const set=$('pane-set');if(set&&!set.classList.contains('pcs')){set.classList.add('pcs');
+  const lr=set.querySelector('.langrow');if(lr){lr.classList.add('qrow');for(const b of lr.children)b.classList.add('alt');row(L('Język gry','Game language'),lr)}
+  const ts=$('tsRow');if(ts){ts.classList.add('qrow');for(const b of ts.children)b.classList.add('go','alt');row(L('Rozmiar tekstu','Text size'),ts)}
+  for(const s of set.querySelectorAll('.pc-option-section'))tidy(s);
+  const rt=$('repeatTut');if(rt)for(const h of [...rt.parentElement.querySelectorAll(':scope>.pcs-help')])rt.before(h)}// Tryb testera wstawia sie za #repeatTut (trnOpts), wiec przycisk zostaje na miejscu
+ // Dzwiek
+ const aud=$('pane-aud'),na=aud&&aud.querySelector('.nbo-aud');if(na&&!aud.classList.contains('pcs')){aud.classList.add('pcs');const s=sec(L('Głośność','Volume'));na.before(s);s.append(na);
+  for(const r of na.querySelectorAll('.nbo-row'))r.classList.add('pcs-row','pcs-vol')}
+ // Dane zapisu
+ const dat=$('pane-dat');if(dat&&!dat.classList.contains('pcs')){dat.classList.add('pcs');
+  const s1=sec(L('Postęp','Progress')),info=$('datInfo'),br=$('expSave')?.parentElement,msg=$('saveMsg'),cp=$('copyErrors'),zone=dat.querySelector('.nb2-danger'),clr=$('clearSave');
+  dat.prepend(s1);if(info)s1.append(info);if(br){s1.append(br);br.classList.add('qrow');row(L('Kopia w pliku','Backup file'),br)}if(msg){msg.classList.add('pcs-help');s1.append(msg)}
+  if(cp){const s2=sec(L('Diagnostyka','Diagnostics')),w=mk('div','qrow');s1.after(s2);s2.append(w);w.append(cp);row(L('Raport błędów dla autora','Error report for the developer'),w)}
+  if(zone&&clr){zone.className='pc-option-section pcg-panel pcs-danger';const h=zone.querySelector('h3');if(h)h.className='sth';const w=mk('div','qrow');zone.append(w);w.append(clr);row(L('Usuń cały postęp','Delete all progress'),w);tidy(zone)}}
+ const Z='#orient'.repeat(40)+' #opts .pane.pcs:is(#pane-set,#pane-aud,#pane-dat)',st=document.createElement('style');st.id='pcs-all';st.textContent=`
+${Z}:not([hidden]){display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:calc(22 * var(--pc-u,1px))!important;max-width:1180px!important;margin:0 auto!important;width:100%!important;grid-template-columns:none!important}
+${Z} .pc-section-separator,${Z} .opsep,${Z} .nbo-sep{display:none!important}
+${Z} .pc-option-section{width:100%!important;max-width:none!important;box-sizing:border-box!important;display:block!important;margin:0!important;padding:0 0 calc(10 * var(--pc-u,1px))!important;border:0!important;border-image:none!important;background:linear-gradient(#120d10cc,#0c090bb3)!important;box-shadow:inset 0 0 0 1px #6d5a3e40!important;grid-column:auto!important}
+${Z} .pc-option-section>h3.sth,${Z} #trnOpt>h3.sth{margin:0 0 calc(4 * var(--pc-u,1px))!important;padding:calc(10 * var(--pc-u,1px)) calc(22 * var(--pc-u,1px))!important;text-align:left!important;font:600 calc(22 * var(--pc-u,1px))/1.2 Cinzel,Georgia,serif!important;letter-spacing:.08em!important;color:#e8c995!important;background:linear-gradient(90deg,#3a1c25cc,#1a1015 70%,#0000)!important;border:0!important;border-bottom:1px solid #b08a4a66!important}
+${Z} .pc-option-section>h3.sth:before,${Z} .pc-option-section>h3.sth:after,${Z} #trnOpt>h3.sth:before,${Z} #trnOpt>h3.sth:after{display:none!important}
+${Z} .pcg-edge{display:none!important}
+${Z} .pcs-row{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:calc(24 * var(--pc-u,1px))!important;min-height:calc(54 * var(--pc-u,1px))!important;margin:0!important;padding:calc(4 * var(--pc-u,1px)) calc(22 * var(--pc-u,1px))!important;width:auto!important;max-width:none!important;box-sizing:border-box!important;border-bottom:1px solid #6d5a3e26!important;font-size:inherit!important}
+${Z} .pcs-row:nth-child(odd of .pcs-row){background:#ffffff05!important}
+${Z} .pcs-row:focus-within,${Z} .pcs-row:has(.pf){background:linear-gradient(90deg,#c9a45a1f,#0000)!important}
+${Z} .pcs-row>.pcs-lab,${Z} .pcs-row.pcs-sl>span:first-child,${Z} .pcs-row.pcs-vol label.musrow>span:first-child{margin:0!important;padding:0!important;text-align:left!important;font:400 calc(19 * var(--pc-u,1px))/1.3 Georgia,serif!important;color:#e6d7bc!important;letter-spacing:.01em!important;text-transform:none!important}
+${Z} .pcs-row>.qrow{display:flex!important;flex-wrap:nowrap!important;justify-content:flex-end!important;gap:0!important;margin:0!important;width:auto!important;padding:0!important;background:none!important;border:0!important}
+${Z} .pcs-row>.qrow>button{width:auto!important;min-width:calc(84 * var(--pc-u,1px))!important;min-height:calc(40 * var(--pc-u,1px))!important;height:auto!important;margin:0 0 0 -1px!important;padding:calc(6 * var(--pc-u,1px)) calc(14 * var(--pc-u,1px))!important;border-radius:0!important;font-size:calc(16 * var(--pc-u,1px))!important;white-space:nowrap!important;flex:0 0 auto!important}
+${Z} .pcs-row>.qrow>button:first-child{border-radius:calc(3 * var(--pc-u,1px)) 0 0 calc(3 * var(--pc-u,1px))!important}
+${Z} .pcs-row>.qrow>button:last-child{border-radius:0 calc(3 * var(--pc-u,1px)) calc(3 * var(--pc-u,1px)) 0!important}
+${Z} .pcs-row.pcs-sl .rng{width:calc(420 * var(--pc-u,1px))!important;max-width:45vw!important}
+${Z} .pcs-row.pcs-vol{grid-template-columns:minmax(0,1fr) calc(420 * var(--pc-u,1px)) calc(56 * var(--pc-u,1px))!important;font-size:inherit!important}
+${Z} .pcs-row.pcs-vol label.musrow{display:contents!important}
+${Z} .pcs-row.pcs-vol .rng{width:100%!important;max-width:none!important}
+${Z} .pcs-row.pcs-vol>output{font:400 calc(18 * var(--pc-u,1px))/1 Georgia,serif!important;color:#c9b48c!important;text-align:right!important}
+${Z} .nbo-aud{display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important;gap:0!important}
+${Z} .pcs-row.pcs-tgl{display:flex!important;align-items:center!important;justify-content:space-between!important;cursor:pointer}
+${Z} .pcs-row.pcs-tgl>span:last-child{order:-1;flex:1 1 auto;text-align:left!important;margin:0!important;font:400 calc(19 * var(--pc-u,1px))/1.3 Georgia,serif!important;color:#e6d7bc!important}
+${Z} .pcs-help{margin:calc(8 * var(--pc-u,1px)) calc(22 * var(--pc-u,1px)) 0!important;max-width:none!important;text-align:left!important;font:italic 400 calc(14.5 * var(--pc-u,1px))/1.5 Georgia,serif!important;color:#a8977acc!important}
+${Z} #trnOpt{margin-top:calc(14 * var(--pc-u,1px))!important}
+${Z} #repeatTut{display:block!important;width:auto!important;margin:calc(12 * var(--pc-u,1px)) calc(22 * var(--pc-u,1px)) 0 auto!important;font-size:calc(16 * var(--pc-u,1px))!important;min-height:calc(40 * var(--pc-u,1px))!important;padding:calc(6 * var(--pc-u,1px)) calc(14 * var(--pc-u,1px))!important}
+${Z} #trnOpt>.btnrow{display:flex!important;justify-content:flex-end!important;gap:calc(8 * var(--pc-u,1px))!important;padding:calc(6 * var(--pc-u,1px)) calc(22 * var(--pc-u,1px))!important;margin:0!important}
+${Z} #trnOpt>.figcap{margin:calc(8 * var(--pc-u,1px)) calc(22 * var(--pc-u,1px)) 0!important;text-align:left!important;font:italic 400 calc(14.5 * var(--pc-u,1px))/1.5 Georgia,serif!important;color:#a8977acc!important}
+${Z} #datInfo{margin:0!important;padding:0!important;max-width:none!important;width:auto!important}
+${Z} #datInfo .ban{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;width:100%!important;min-height:calc(54 * var(--pc-u,1px))!important;margin:0!important;padding:calc(4 * var(--pc-u,1px)) calc(22 * var(--pc-u,1px))!important;background:#ffffff05!important;border:0!important;border-image:none!important;border-bottom:1px solid #6d5a3e26!important;box-shadow:none!important;text-align:left!important}
+${Z} #datInfo .ban>b{font:400 calc(19 * var(--pc-u,1px))/1.3 Georgia,serif!important;color:#e6d7bc!important;text-transform:none!important;letter-spacing:.01em!important}
+${Z} #datInfo .ban>span{font:400 calc(17 * var(--pc-u,1px))/1.3 Georgia,serif!important;color:#c9b48c!important;text-align:right!important}
+${Z} .pcs-danger{box-shadow:inset 0 0 0 1px #c4484859!important;background:linear-gradient(#1c0b0ecc,#0c090bb3)!important}
+${Z} .pcs-danger>h3.sth{color:#e9a39a!important;background:linear-gradient(90deg,#5a1a20cc,#1a1015 70%,#0000)!important;border-bottom-color:#c4484866!important}
+${Z} .pcs-danger #clearSave{border:1px solid rgba(214,92,92,.8)!important;border-image:none!important;background:rgba(92,22,28,.6)!important;color:#ffd9d2!important}`;
+ document.head.append(st);
+}catch(e){quietErr('pcsAll',e)}})();
 // 13.11.2026: wybór trybu w menu głównym jako delikatny przełącznik tekstowy (Fabularny | Arcade) zamiast dwóch dużych banerów.
 // Te same przyciski #sFab/#sArc i ich obsługa; zmienia się tylko wygląd. Opis widoczny tylko pod wybranym trybem.
 (()=>{try{const S='#orient'.repeat(50)+' #title.pc-home .nb-mode-select',st=document.createElement('style');st.textContent=`
