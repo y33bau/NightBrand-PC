@@ -141,7 +141,7 @@ function killEnemy(e,nx,ny){if(e.mini||BIG.has(e.type)){S.hitstop=Math.max(S.hit
   if(e.dgBoss)dungeonCleared(e);
 }
 function powderBlast(p){const x=p.x*16,y=p.y*16;shockAt(x,y,1);if(p.obj)p.obj.mesh.visible=false;shake(.45,.4);play('quake',0);play('fire',0);S.flash=Math.max(S.flash,.35);
-  if(DEC.scorch)decalAt(DEC.scorch[(Math.random()*4)|0],x,y);addVfx(A.fx.nova,.35,x,y,.08,70/8,'ground');
+  if(DEC.scorch)decalAt(DEC.scorch[(Math.random()*4)|0],x,y);slamFx(.35,x,y,.08,70/8);
   for(let i=0;i<40;i++){const a=Math.random()*Math.PI*2,sp=rnd(40,140);S.parts.push({k:'e',x,y,z:rnd(2,10),vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.6,vz:rnd(10,50),c:Math.random()<.5?'#ff6a1a':'#ffb347',life:rnd(.3,.8)})}
   for(const e of [...S.enemies])if(!e.dead&&Math.hypot(e.x-x,e.y-y)<48)damageEnemy(e,BIG.has(e.type)?60:90,(e.x-x)/48,(e.y-y)/48,2);
   const d=Math.hypot(pl.x-x,pl.y-y);if(d<34)hurtPlayer(12,(pl.x-x)/(d||1),(pl.y-y)/(d||1),'powder');
@@ -194,7 +194,7 @@ function stepEnemyAI(e,dt){
 
   if(e.type==='collector'&&CH===5&&A.collectorC5){// Arcysędzia Rachmistrz: wyrok młotem, strony nakazu, wezwanie ławników
     e.hamCd=(e.hamCd===undefined?4:e.hamCd)-dt;e.sumCd=(e.sumCd===undefined?15:e.sumCd)-dt;e.fanCd=(e.fanCd===undefined?3:e.fanCd)-dt;
-    if(e.hamT>0){e.hamT-=dt;e.tauntA=.2;if(e.hamT<=0){shake(.5,.4);play('slam',0);shockAt(e.x,e.y,.75);addVfx(A.fx.nova,.35,e.x,e.y,.08,60/8,'ground');if(pl.inv<=0)aoeP(e,56,enemyDamage(20));e.atkA=.4;
+    if(e.hamT>0){e.hamT-=dt;e.tauntA=.2;if(e.hamT<=0){shake(.5,.4);play('slam',0);shockAt(e.x,e.y,.75);slamFx(.35,e.x,e.y,.08,60/8);if(pl.inv<=0)aoeP(e,56,enemyDamage(20));e.atkA=.4;
         for(let i=0;i<20;i++){const a=i/20*Math.PI*2;S.parts.push({k:'d',x:e.x+Math.cos(a)*12,y:e.y+Math.sin(a)*6,z:1,vx:Math.cos(a)*90,vy:Math.sin(a)*45,vz:18,c:'#e0b84a',life:.6})}}return}
     if(d<64&&e.hamCd<=0&&!(e.stealWind>0)){e.hamT=.7;e.hamCd=5.5;telegraph(e);for(let k=0;k<3;k++)telegraph(e);play('bossGrowl',0);return}
     if(e.sumCd<=0&&S.enemies.length<ENEMY_CAP-6){e.sumCd=22;e.tauntA=.8;say((EN?'The Arch-Judge summons the jurors: "The sentence is already written."':'Arcysędzia wzywa ławników: „Wyrok jest już spisany”.'));for(let k=0;k<2;k++){const a=Math.random()*6.28,q=spawnEnemy('scribe',e.x+Math.cos(a)*26,e.y+Math.sin(a)*16);q.rise=.8}}
@@ -215,7 +215,7 @@ function stepEnemyAI(e,dt){
   if(BIG.has(e.type)){if(e.ccd>0)e.ccd-=dt;if(e.ctw>0){e.ctw-=dt;if(e.ctw<=0){e.ccd=1.4;if(d<e.r+10){hitT(e,enemyDamage(e.dmg,480),dx/d,dy/d,true);e.atkA=.35}}}}
   if(e.type==='boss'&&CH===5&&A.bossC5){// Wierzyciel: faza I (strony), faza II (po połowie życia: monety, wyrok, szybszy)
     for(const k of ['lashF','castF','callF','slamF'])if(e[k]>0)e[k]-=dt;
-    if(!e.ph2&&e.hp<e.max*.5){e.ph2=1;bossSay('creditor','phase2');e.trans=1.6;e.ctw=0;e.ccd=2;e.atkT=0;e.castWind=0;e.cast=2;e.spd*=1.35;shake(.7,.8);play('bossGrowl',0);addVfx(A.fx.nova,.6,e.x,e.y,.08,80/8,'ground');say((EN?'The Creditor rises from the throne. The chains snap, and a new ledger opens in his hands.':'Wierzyciel wstaje z tronu. Łańcuchy pękają, a w jego dłoniach otwiera się nowa księga.'));
+    if(!e.ph2&&e.hp<e.max*.5){e.ph2=1;bossSay('creditor','phase2');e.trans=1.6;e.ctw=0;e.ccd=2;e.atkT=0;e.castWind=0;e.cast=2;e.spd*=1.35;shake(.7,.8);play('bossGrowl',0);slamFx(.6,e.x,e.y,.08,80/8);say((EN?'The Creditor rises from the throne. The chains snap, and a new ledger opens in his hands.':'Wierzyciel wstaje z tronu. Łańcuchy pękają, a w jego dłoniach otwiera się nowa księga.'));
       for(let i=0;i<20;i++){const a=i/20*Math.PI*2;S.parts.push({k:'d',x:e.x,y:e.y,z:6,vx:Math.cos(a)*70,vy:Math.sin(a)*35,vz:22,c:'#e0b84a',life:.7})}}
     if(e.trans>0){e.trans-=dt;return}
     e.cast=(e.cast===undefined?3:e.cast)-dt;
@@ -232,7 +232,7 @@ function stepEnemyAI(e,dt){
     if(e.hook<=0&&e.atkT<=0&&d>46&&d<230&&sight(e.x,e.y,T.x,T.y)){e.hook=e.ph2?3.6:5;e.hookWind=.7;e.hookAim=Math.atan2(dy,dx);telegraph(e);return}
   }
   if(BIG.has(e.type)){
-    if(e.atkT>0){e.atkT-=dt;if(e.atkT<=0){e.atkA=.4;shake(.5,.35);play('slam',0);shockAt(e.x,e.y,.75);addVfx(A.fx.nova,.35,e.x,e.y,.08,54/8,'ground');aoeP(e,54,enemyDamage(e.type==='beast'?24:20));
+    if(e.atkT>0){e.atkT-=dt;if(e.atkT<=0){e.atkA=.4;shake(.5,.35);play('slam',0);shockAt(e.x,e.y,.75);slamFx(.35,e.x,e.y,.08,54/8);aoeP(e,54,enemyDamage(e.type==='beast'?24:20));
       for(let i=0;i<24;i++){const a=i/24*Math.PI*2;S.parts.push({k:'d',x:e.x+Math.cos(a)*12,y:e.y+Math.sin(a)*6,z:1,vx:Math.cos(a)*90,vy:Math.sin(a)*45,vz:18,c:P.st3,life:.6})}}return}
     e.slamT-=dt;if(e.slamT<=0&&d<80){e.slamT=e.ph2?2.4:3.4;e.slamF=.8;e.atkT=.8;play('bossGrowl',0);return}
   }
@@ -247,6 +247,8 @@ function stepEnemyAI(e,dt){
   e.walk+=dt;
 }
 // Cumlin, the Possessed Dwarf King (chapter II boss): slow, heavy hammer. Overhead slam and wide sweep can be parried; the red smash cannot - dodge it, and a miss leaves him exposed.
+// 15.11.2026: stary pierscien kryształów (A.fx.nova, maly arkusz 32 px) powiekszony do 7-10 jednostek wygladal jak wielka pikselowa gwiazda. Uderzenia wrogow uzywaja teraz HD efektu 'earth' (pyl i odlamki); stary pierscien zostaje tylko jako zapas.
+function slamFx(dur,x,y,h,size){const v=skAdd('earth',dur,x,y,h,Math.min(size*.42,3.6),'ground',0);if(v){v.sy=1/Math.sin(PITCH);return v}return addVfx(A.fx.nova,dur,x,y,h,size,'ground')}
 function cumlinFx(k,dur,x,y,h,size,mode){const f=A.cumlinFx&&A.cumlinFx[k];if(f)addVfx(f,dur,x,y,h,size,mode)}
 function cumlinAI(e,dx,dy,d,dt,hw){
   if(Math.random()<dt*16)S.parts.push({k:'b',x:e.x+rnd(-12,12),y:e.y+rnd(-3,3),z:rnd(10,34),vx:rnd(-5,5),vy:rnd(-3,3),vz:rnd(-8,4),c:Math.random()<.7?P.blood:P.blood2});
@@ -312,7 +314,7 @@ function beastAI(e,dx,dy,d,dt){
     if(Math.random()<dt*40){const a=Math.random()*Math.PI*2;S.parts.push({k:'d',x:e.tx+Math.cos(a)*34,y:e.ty+Math.sin(a)*20,z:1,vx:0,vy:0,vz:3,c:warningColor(),life:.4})}
     if(e.mt<=0){e.mode='down';e.mt=.3;e.x=e.tx;e.y=e.ty}return true}
   if(e.mode==='down'){e.mt-=dt;e.lh=Math.max(0,e.lh-dt*14);if(e.mt<=0){e.lh=0;e.mode=null;e.lT=rnd(6,8);e.atkA=.5;shake(.7,.5);play('slam',0);shockAt(e.x,e.y,.75);
-    addVfx(A.fx.nova,.4,e.x,e.y,.08,70/8,'ground');if(DEC.crack)decalAt(DEC.crack[2],e.x,e.y);pool(e.x,e.y,30,10);if(Math.hypot(pl.x-e.x,pl.y-e.y)<70)hit(26);
+    slamFx(.4,e.x,e.y,.08,70/8);if(DEC.crack)decalAt(DEC.crack[2],e.x,e.y);pool(e.x,e.y,30,10);if(Math.hypot(pl.x-e.x,pl.y-e.y)<70)hit(26);
     for(let i=0;i<30;i++){const a=i/30*Math.PI*2;S.parts.push({k:'d',x:e.x+Math.cos(a)*14,y:e.y+Math.sin(a)*7,z:1,vx:Math.cos(a)*110,vy:Math.sin(a)*55,vz:20,c:Math.random()<.5?P.blood:P.st3,life:.6})}}return true}
   if(e.atkT>0)return false;
   e.cT-=dt;if(e.enraged)e.lT-=dt;
@@ -408,7 +410,7 @@ function strzygaAI(e,dx,dy,d,dt){
   e.lT-=dt;e.wT-=dt;
   if(e.mode==='up'){e.mt-=dt;e.lh=Math.min(4,(e.lh||0)+dt*9);if(Math.random()<dt*40){const a=Math.random()*Math.PI*2;S.parts.push({k:'d',x:e.tx+Math.cos(a)*34,y:e.ty+Math.sin(a)*20,z:1,vx:0,vy:0,vz:3,c:warningColor(),life:.4})}
     if(e.mt<=0){e.mode='down';e.mt=.3;e.x=e.tx;e.y=e.ty}return true}
-  if(e.mode==='down'){e.mt-=dt;e.lh=Math.max(0,e.lh-dt*14);if(e.mt<=0){e.lh=0;e.mode=null;e.atkA=.5;shake(.6,.5);play('slam',0);shockAt(e.x,e.y,.75);addVfx(A.fx.nova,.4,e.x,e.y,.08,64/8,'ground');if(Math.hypot(pl.x-e.x,pl.y-e.y)<62)hurtPlayer(enemyDamage(24),0,1,e);pool(e.x,e.y,24,8)}return true}
+  if(e.mode==='down'){e.mt-=dt;e.lh=Math.max(0,e.lh-dt*14);if(e.mt<=0){e.lh=0;e.mode=null;e.atkA=.5;shake(.6,.5);play('slam',0);shockAt(e.x,e.y,.75);slamFx(.4,e.x,e.y,.08,64/8);if(Math.hypot(pl.x-e.x,pl.y-e.y)<62)hurtPlayer(enemyDamage(24),0,1,e);pool(e.x,e.y,24,8)}return true}
   if(e.mode==='raise'){e.mt-=dt;if(Math.random()<dt*30)S.parts.push({k:'m',x:e.x+rnd(-40,40),y:e.y+rnd(-20,20),z:0,vx:0,vy:0,vz:rnd(6,14),c:'#4a7a5a',life:rnd(.6,1.2)});if(e.mt<=0){e.mode=null;for(let i=0;i<3;i++){const a=Math.random()*Math.PI*2;spawnEnemy('wight',e.x+Math.cos(a)*44,e.y+Math.sin(a)*26,{rise:1})}play('rise',0)}return true}
   if(e.atkT>0)return false;
   if(e.lT<=0&&d<240){e.mode='up';e.mt=.8;e.tx=e.x+dx;e.ty=e.y+dy;e.lT=rnd(4.5,6);play('bossGrowl',0);return true}
