@@ -1443,7 +1443,7 @@ const MAP1_SHALLOW=[[27,4],[27,5],[27,6],[27,7],[27,8],[27,9],[27,10],[27,11],[2
 const MAP1_HOUSE=[[56,58],[57,58],[58,58],[59,58],[60,58],[61,58],[62,58],[56,59],[62,59],[56,60],[62,60],[56,61],[62,61],[56,62],[62,62],[56,63],[57,63],[61,63],[62,63]];
 const MAP1_CROSS=[[70,31],[70,32],[70,33],[71,31],[71,32],[71,33],[72,31],[72,32],[72,33],[73,31],[73,32],[74,31],[74,32],[74,33],[75,31],[75,32],[75,33],[76,31],[76,32],[76,33]],MAP1_TOMB=[[73,33]],MAP1_FERNS=[[69,30],[69,31],[69,32],[69,33],[70,30],[71,30],[72,30],[73,30],[74,30],[75,30],[76,30],[77,30],[77,31],[77,32],[77,33]];
 // 15.11.2026 (runda mapy-wygladzenie): org = bitmaska tekstur bez regularnego wzoru (anty-powtarzanie obrotem), crisp = posadzki o ostrej krawedzi (deski, sale zakonu), warp = zasieg falowania granic w kaflach
-const CC0_FLOORS={1:{names:['dirt2','cracks','charcoal','ground1','ash','moss1','lava','deski'],tint:[1,.97,.92],org:119,crisp:128,warp:.9},2:{names:['ground1','blackrock','charcoal'],tint:[.84,.88,.96],org:6,crisp:0,warp:.45},3:{names:['zl_place','zl_street','zl_moss'],tint:[1,.96,.88],org:0,crisp:0,warp:.45},4:{names:['mud','dirt3','leaves','darkrock','forestmoss'],tint:[.9,.96,.88],org:31,crisp:0,warp:1.1},5:{names:['c5_dziedziniec','c5_marmur','c5_archiwum','c5_skarbiec','c5_loch','c5_pieczec','c5_atrament','c5_dywan'],scale:[2,4,4,2.5,2,4,8,8],tint:[.86,.84,.83],org:2,crisp:255,warp:0},9:{names:['ground2','ground1'],tint:[.73,.75,.81],org:1,crisp:0,warp:.6}};
+const CC0_FLOORS={1:{names:['dirt2','cracks','charcoal','ground1','ash','moss1','lava','deski'],tint:[1,.97,.92],org:119,crisp:128,warp:.9},2:{names:['ground1','blackrock','charcoal'],tint:[.84,.88,.96],org:6,crisp:0,warp:.45},3:{names:['zl_place','zl_street','zl_moss'],tint:[1,.96,.88],org:0,crisp:0,warp:.45},4:{names:['mud','dirt3','leaves','darkrock','forestmoss'],tint:[.9,.96,.88],org:31,crisp:0,warp:1.1},5:{names:['c5_dziedziniec','c5_marmur','c5_archiwum','c5_skarbiec','c5_loch','c5_pieczec','c5_atrament','c5_dywan'],scale:[2,4,4,2.5,2,4,8,8],gain:[1,1.38,1,1.12,1,1.1,1,1],tint:[.86,.84,.83],org:2,crisp:255,warp:0},9:{names:['ground2','ground1'],tint:[.73,.75,.81],org:1,crisp:0,warp:.6}};
 function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan;if(!plan)return cells;
  const burns=W.PROPS.filter(p=>p.fire||/debris_fire|burnt_hay|furnace|brazier/.test(p.k||''));
  // extra CC0 floors (folder 'skille claude'): ash around the burned houses, moss patches, mossy cobbles in the slums, moss in the forest
@@ -1494,7 +1494,7 @@ function groundMaterial(m){const info=m.map&&m.map.userData&&m.map.userData.grou
   const groundGrad=renderer.capabilities.isWebGL2||renderer.extensions.has('EXT_shader_texture_lod');
   m.extensions={...(m.extensions||{}),derivatives:true,shaderTextureLOD:groundGrad};
   if(!groundGrad)for(const tex of [m.groundAtlas,m.groundCoarse]){tex.generateMipmaps=false;tex.minFilter=THREE.LinearFilter;tex.anisotropy=1;tex.needsUpdate=true;}m.groundLayout=new THREE.DataTexture(cc0Cells,MW,MH,THREE.RGBAFormat);m.groundLayout.magFilter=m.groundLayout.minFilter=THREE.NearestFilter;m.groundLayout.needsUpdate=true;
-  m.groundTones=Array.from({length:8},(_,row)=>{const c=groundCoarse(info.image),d=c.getContext('2d').getImageData(0,row*16,128,16).data,v=new THREE.Vector3();for(let i=0;i<d.length;i+=4){v.x+=d[i];v.y+=d[i+1];v.z+=d[i+2]}return v.multiplyScalar(1/(2048*255))});m.groundLite={value:coarse||SETT.quality==='low'?1:0};m.onBeforeCompile=sh=>{for(let i=0;i<cc0Count;i++)sh.uniforms['nbCC'+i]={value:m['cc0Texture'+i]};sh.uniforms.nbCCTint={value:new THREE.Vector3(...(cc0?cc0.tint:[1,1,1]))};sh.uniforms.nbOrgMask={value:cc0?cc0.org||0:0};sh.uniforms.nbCrispMask={value:cc0?cc0.crisp||0:255};sh.uniforms.nbWarpAmp={value:cc0?cc0.warp||0:0};sh.uniforms.nbArchitecture={value:[2,3,5].includes(groundChapter)?1:0};sh.uniforms.nbLite=m.groundLite;sh.uniforms.nbTones={value:m.groundTones};sh.uniforms.nbAtlas={value:m.groundAtlas};sh.uniforms.nbCoarse={value:m.groundCoarse};sh.uniforms.nbLayout={value:m.groundLayout};sh.uniforms.nbGrid={value:new THREE.Vector2(MW,MH)};
+  m.groundTones=Array.from({length:8},(_,row)=>{const c=groundCoarse(info.image),d=c.getContext('2d').getImageData(0,row*16,128,16).data,v=new THREE.Vector3();for(let i=0;i<d.length;i+=4){v.x+=d[i];v.y+=d[i+1];v.z+=d[i+2]}return v.multiplyScalar(1/(2048*255))});m.groundLite={value:coarse||SETT.quality==='low'?1:0};m.onBeforeCompile=sh=>{for(let i=0;i<cc0Count;i++)sh.uniforms['nbCC'+i]={value:m['cc0Texture'+i]};sh.uniforms.nbCCTint={value:new THREE.Vector3(...(cc0?cc0.tint:[1,1,1]))};sh.uniforms.nbOrgMask={value:cc0?cc0.org||0:0};sh.uniforms.nbCrispMask={value:cc0?cc0.crisp||0:255};sh.uniforms.nbWarpAmp={value:cc0?cc0.warp||0:0};sh.uniforms.nbGain={value:Array.from({length:8},(_,i)=>cc0&&cc0.gain?cc0.gain[i]??1:1)};sh.uniforms.nbArchitecture={value:[2,3,5].includes(groundChapter)?1:0};sh.uniforms.nbLite=m.groundLite;sh.uniforms.nbTones={value:m.groundTones};sh.uniforms.nbAtlas={value:m.groundAtlas};sh.uniforms.nbCoarse={value:m.groundCoarse};sh.uniforms.nbLayout={value:m.groundLayout};sh.uniforms.nbGrid={value:new THREE.Vector2(MW,MH)};
     sh.fragmentShader=sh.fragmentShader.replace('#include <common>',`#include <common>
 ${groundGrad?'#define NB_STABLE_GRAD 1':''}
 uniform vec3 nbTones[8];uniform float nbLite;uniform float nbArchitecture;
@@ -1505,15 +1505,16 @@ vec2 nbReference(vec4 cell,vec2 uv){uv=clamp(uv,vec2(.03125),vec2(.96875));vec2 
 ${cc0Uniforms}
 uniform vec3 nbCCTint;
 vec2 nbWorld,nbDx,nbDy,nbPos0;
-uniform float nbOrgMask;uniform float nbCrispMask;uniform float nbWarpAmp;
+uniform float nbOrgMask;uniform float nbCrispMask;uniform float nbWarpAmp;uniform float nbGain[8];
+float nbGainOf(float id){float g=1.;for(int i=0;i<8;i++)if(abs(id-float(i))<.5)g=nbGain[i];return g;}
 float nbBit(float mask,float id){return mod(floor(mask/exp2(id)+.001),2.);}
 float nbHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float nbNoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(nbHash(i),nbHash(i+vec2(1.,0.)),f.x),mix(nbHash(i+vec2(0.,1.)),nbHash(i+vec2(1.,1.)),f.x),f.y);}
 vec3 nbCCTex(float id,vec2 p,vec2 dx,vec2 dy){${cc0Sample}return vec3(1.);}
 // 15.11.2026: anty-powtarzanie: tekstury organiczne mieszane z obrocona kopia wg szumu niskiej czestotliwosci, do tego lagodna zmiennosc jasnosci w duzej skali (zadnej siatki powtorzen z daleka)
-vec3 nbCCRead(float id,vec2 world){vec3 a=nbCCTex(id,world,nbDx,nbDy);if(nbLite>.5)return a;float org=nbBit(nbOrgMask,id),macro=1.+(nbNoise(world*.055+id*3.1)-.5)*(org>.5?.2:.1);
+vec3 nbCCRead(float id,vec2 world){vec3 a=nbCCTex(id,world,nbDx,nbDy);if(nbLite>.5)return a*nbGainOf(id);float org=nbBit(nbOrgMask,id),macro=1.+(nbNoise(world*.055+id*3.1)-.5)*(org>.5?.2:.1);
 if(org>.5){float m=smoothstep(.32,.68,nbNoise(world*.12+vec2(id*5.7,11.3)));if(m>.004){mat2 R=mat2(.6,.8,-.8,.6);vec3 b=nbCCTex(id,R*world+vec2(41.3,17.9),R*nbDx,R*nbDy);vec3 mx=mix(a,b,m);float k=inversesqrt(m*m+(1.-m)*(1.-m));vec3 mean=(a+b)*.5;a=clamp(mean+(mx-mean)*mix(1.,k,.6),0.,1.);}}
-return a*macro;}
+return a*macro*nbGainOf(id);}
 float nbLum(vec3 c){return dot(c,vec3(.3,.55,.15));}
 float nbBlendId(vec4 c,float self){if(c.r<.5||c.b<128.||mod(floor(c.a/64.),2.)<.5)return self;float id=floor((c.b-128.)/8.);return nbBit(nbCrispMask,id)>.5?self:id;}
 // 15.11.2026: przejscia miedzy posadzkami: granica faluje (szum w skali kilku kafli), materialy przenikaja sie wg wysokosci tekstury (kamienie wystaja z ziemi, ziemia wchodzi w szczeliny), bez prostych linii na krawedziach kafli
@@ -1553,7 +1554,7 @@ vec3 base=nbCCRead(0.,nbWorld)*nbCCTint*ratio;float band=1.-smoothstep(.19,.23,d
 if(nbLite<.5){float gn=fract(sin(dot(floor(nbWorld*24.),vec2(12.9898,78.233)))*43758.5453);float gp=max(length(nbDx),length(nbDy))*24.;result*=1.+(gn-.5)*.12*clamp(1.3-gp,0.,1.);}
 sampledDiffuseColor.rgb=result;}
 sampledDiffuseColor=mapTexelToLinear(sampledDiffuseColor);diffuseColor*=sampledDiffuseColor;
-#endif`)};m.customProgramCacheKey=()=> 'nightbrand-ground-cc0-v4-'+groundChapter+'-'+compactSamplers+'-'+ccS;return m}
+#endif`)};m.customProgramCacheKey=()=> 'nightbrand-ground-cc0-v5-'+groundChapter+'-'+compactSamplers+'-'+ccS;return m}
 function groundDetails(g){const plan=W.groundPlan;if(!plan)return;for(const p of W.PROPS){const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;if(plan.road[i])continue;const fire=p.fire||/furnace|brazier/.test(p.k),blood=/gallows|covered_corpses|beggar_bodies/.test(p.k),bones=/bones|sarcophagus/.test(p.k);if(!fire&&!blood&&!bones)continue;const key=fire?'scorch':blood?'pool':'bones',stamp=canvas(40,40),q=stamp.getContext('2d');q.drawImage((blood&&bloodHD.ready?bloodHD.stamps:DEC[key])[groundHash(x,y)%4],0,0,40,40);q.globalCompositeOperation='destination-in';const mask=q.createRadialGradient(20,20,4,20,20,20);mask.addColorStop(0,'#fff');mask.addColorStop(1,'transparent');q.fillStyle=mask;q.fillRect(0,0,40,40);g.save();g.globalAlpha=blood?.28:.18;g.drawImage(stamp,p.x*16-20,p.y*16-20);g.restore()}
   for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++){const i=y*MW+x;if(plan.road[i]||plan.rows[i]===255||groundHash(x,y)%67)continue;const wall=[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>SOLID.has(map[(y+dy)*MW+x+dx]));if(!wall)continue;g.save();g.globalAlpha=.12;g.drawImage(DEC.crack[groundHash(y,x)%4],x*16-4,y*16-4,24,24);g.restore()}}
 
@@ -1991,7 +1992,7 @@ function buildSolneNabrzeze(I){
  surface('quay',I.port_bruk,5.2,0xe9ecee);
  const laneA=FT(30),laneB=FT(35);// trakt wozow z sola: jeden pas od windy do trapu promu, szeroki na jeden kafel tekstury
  surface('cartway',I.port_trakt,laneB-laneA,0xe6e6e2);
- surface('salt',I.port_sol,5.2,0xf2f3f1);
+ surface('salt',I.port_sol,5.2,0xcfd2d0);// 15.11.2026: plac solny przyciemniony (byl najjasniejszym miejscem mapy)
  surface('slip',I.port_mech,5.6,0xe2e8e0);
  surface('deck',I.port_deski,5.4,0xf0ece6);
  surface('crossdeck',I.port_deski,5.4,0xf0ece6,true);
@@ -2050,7 +2051,7 @@ function buildSolneNabrzeze(I){
    const mesh=new THREE.Mesh(geo,mat);mesh.receiveShadow=true;mesh.renderOrder=1;ROOT.add(mesh);
   };
   overlay('slip',I.port_mech,5.6,0xe2e8e0,2.6);
-  overlay('salt',I.port_nalot,3.4,0xdfe3e3,1.8,n=>Math.max(.14,Math.min(.86,(n-.3)*2.4)),true);
+  overlay('salt',I.port_nalot,3.4,0xc4c9c9,2.6,n=>Math.max(.14,Math.min(.86,(n-.3)*2.4)),true);
   // zaspy soli przy scianach skladow i pod skrzyniami: niskie, plaskie, nie zaslaniaja walki
   const drift=[];
   for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++){if(ground(x,y)!==47)continue;
@@ -2082,6 +2083,13 @@ function buildSolneNabrzeze(I){
  const edges=(geo,mat,list)=>instanced(geo,mat,list,([x,y,dx])=>{M4.makeRotationY(dx?Math.PI/2:0);M4.setPosition(x,-.3,y);return M4});
  edges(rim,stone,edgeStone);edges(beam,wood,edgeWood);
  instanced(new THREE.CylinderGeometry(.1,.14,1.3,6),wood,piles,([x,y])=>M4.makeTranslation(x,-.15,y));
+ // 15.11.2026 (mapy-wygladzenie): styk pomostu z kamiennym nabrzezem ma belke progowa i kamienny kraweznik, zamiast golej prostej linii miedzy teksturami
+ {const sill=[],kerb=[];for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++){if(ground(x,y)!==43)continue;
+   for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const n=ground(x+dx,y+dy);if(!land(n)||n===43||n===48)continue;sill.push([x+.5+dx*.44,y+.5+dy*.44,dx]);kerb.push([x+.5+dx*.56,y+.5+dy*.56,dx])}}
+  const sillMat=worldSurf(phong({color:0x6e5e4e,shininess:18,specular:0x1c2226}),I.port_deski,3,'portSill');
+  const kerbMat=worldSurf(phong({color:0x9ba2a4,shininess:8}),I.port_plyty,3.2,'portKerb');
+  const lay=(geo,mat,list,h)=>instanced(geo,mat,list,([x,y,dx])=>{M4.makeRotationY(dx?Math.PI/2:0);M4.setPosition(x,h,y);return M4});
+  lay(new THREE.BoxGeometry(1.02,.09,.16),sillMat,sill,.045);lay(new THREE.BoxGeometry(1.02,.06,.14),kerbMat,kerb,.03);}
  // --- budynki: sklady, kantor i karczma. Sciany znikaja przed bohaterem (cutaway), wiec nie zaslaniaja walki.
  // 15.11.2026 (oprawa): materialy budynkow ciemniejsze i cieplejsze, blizej malowanej palety mapy
  const siding=worldSurf(cutaway(phong({color:0x8e7f6e})),I.port_deski,3,'portSiding');
@@ -2427,6 +2435,16 @@ function buildCzarnobor(I){planGround(4);
   for(const [x,y,t] of walls){if(t===69)gP[(x+y)&1].push([x,y]);else if(t===68)gT.push([x,y]);else gR[(x*5+y*3)%3].push([x,y])}
   gR.forEach(l=>addWalls(l,3.4,I.wl_dolina?{w:[I.wl_dolina,5]}:stackTex(WL,[[rc(),1],[rc(),1],[rc(),1]]),I.wl_lasu?{w:[I.wl_lasu,3]}:texFrom(tcut(WL,rc(),7),true),I.wl_dolina?0xc4ccc8:0x9aa096));
   gP.forEach(l=>addWalls(l,2.3,I.wl_obozpal?{w:[I.wl_obozpal,3]}:stackTex(WL,[[rc(),0],[rc(),0],[rc(),0]]),I.wl_obozpal?{w:[I.wl_obozpal,3]}:texFrom(tcut(WL,rc(),0),true),I.wl_obozpal?0xd0c8c0:0xffffff));
+  // 15.11.2026 (mapy-wygladzenie): u podnoza skalnego obrzeza doliny nieregularne glazy; w wewnetrznych rogach schodkow wiekszy glaz, wiec brzeg nie czyta sie jak schody z kafli (tylko oprawa, kolizja bez zmian)
+  {const rock=new Set(),open=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&!SOLID.has(tileAt(x,y));for(const [x,y,t] of walls)if(t!==69&&t!==68)rock.add(y*MW+x);
+   const isRock=(x,y)=>rock.has(y*MW+x),list=[];
+   for(const [x,y,t] of walls){if(t===69||t===68)continue;
+    for(const [dx,dy] of D4)if(open(x+dx,y+dy))for(let n=r()<.55?2:1;n>0;n--)list.push([x+.5+dx*(.42+r()*.14)+(dy?(r()-.5)*.8:0),y+.5+dy*(.42+r()*.14)+(dx?(r()-.5)*.8:0),.3+r()*.28,r()*6.28,.55+r()*.4])}
+   for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++){if(!open(x,y))continue;
+    for(const [dx,dy] of [[1,1],[1,-1],[-1,1],[-1,-1]])if(isRock(x+dx,y)&&isRock(x,y+dy))list.push([x+.5+dx*.38,y+.5+dy*.38,.42+r()*.2,r()*6.28,.7+r()*.3])}
+   if(list.length){const g=new THREE.IcosahedronGeometry(1,1),ps=g.attributes.position;for(let i=0;i<ps.count;i++){const k=.82+.36*groundHash(Math.round(ps.getX(i)*9)+40,Math.round(ps.getZ(i)*9)+Math.round(ps.getY(i)*5)+40)/4294967296;ps.setXYZ(i,ps.getX(i)*k,ps.getY(i)*k,ps.getZ(i)*k)}g.computeVertexNormals();
+    const mat=I.wl_dolina?worldSurf(cutCircle(phong({color:0x7b847e,shininess:6})),I.wl_dolina,5,'czRimRock'):phong({color:0x5d625c,shininess:6});
+    instanced(g,mat,list,([x,y,sz,a,h])=>{M4.makeRotationY(a);SC.set(sz,sz*h,sz*(.8+.4*((a*7)%1)));M4.scale(SC);M4.setPosition(x,sz*h*.25,y);return M4}).frustumCulled=false}}
   addWalls(gT,4.4,I.wl_wieza?{w:[I.wl_wieza,4]}:stackTex(WL,[[rc(),5],[rc(),5],[rc(),5]]),I.wl_wieza?{w:[I.wl_wieza,4]}:texFrom(tcut(WL,rc(),5),true),I.wl_wieza?0xd0d0d4:0xb0b0b4);
   // K3 objects: [x, y, w, h, scale]; trees at full size, undergrowth smaller
   const OBJ={spruce:[0,0,64,64,1.2],dead_spruce:[64,0,64,64,1.15],dead_oak:[128,0,64,64,1],birch:[192,0,64,64,1.15],sacred_oak:[0,64,128,128,1],tall_pine:[128,64,64,128,1],hanging_tree:[192,64,64,128,1],
