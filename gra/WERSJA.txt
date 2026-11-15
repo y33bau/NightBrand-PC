@@ -848,3 +848,4 @@ cache772 · Motyw bohatera w karcie wybranej postaci (27_menu). Nie sprawdzono: 
 cache773 · Motyw bohatera na ekranie wyboru postaci przy ognisku. Nie sprawdzono: wyglad, pad, dzwiek, FPS, itch.io
 cache774 · Panel postaci przy ognisku mniejszy; rozmiar tekstu: tylko Normalny i Duzy. Nie sprawdzono: pad, dzwiek, FPS, itch.io
 cache775 · Banery: Rozszarpanie, Nieukonczony wyzej, perki/wyzwania/klatwy bez migania. Nie sprawdzono: Wroc w przygotowaniu (u agentow), wyglad, pad, dzwiek, FPS, itch.io
+cache776 · Wroc w przygotowaniu dziala bezposrednio. Nie sprawdzono: dzialanie na ekranie, pad, dzwiek, FPS, itch.io

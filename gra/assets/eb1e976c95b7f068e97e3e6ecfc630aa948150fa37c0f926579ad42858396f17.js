@@ -11144,7 +11144,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
   if(b.classList.contains('o1')){$('hintsTgl')?.click();return odswiez()}
   if(b.classList.contains('o2')){$('mpTgl')?.click();return odswiez()}
   if(b.classList.contains('ngot')){const g=$('prepGo');if(g&&!g.disabled)g.click();return}
-  if(b.classList.contains('wroc')){$('prepBack')?.click();return}
+  if(b.classList.contains('wroc')){/* 16.11.2026: Wroc dziala bezposrednio (kliknieta przez stary przycisk nie zamykala ekranu) */prep.hidden=true;toMenu();title.hidden=false;title.classList.remove('pc-home');setTimeout(()=>{const c=$('start'+(PREP.ch||1));c&&c.focus({preventScroll:true})},80);return}
   if(b.classList.contains('zmien')){prep.hidden=true;title.hidden=false;otworz('prep')}});
  const pod=(e,on)=>{const b=e.target.closest&&e.target.closest('[data-k]');if(!b)return;const [t,id]=b.dataset.k.split(':');if(t==='p'){podP=on?id:null;gnP()}else if(t==='w'){podW=on?id:null;gnW()}};
  P.addEventListener('mouseover',e=>pod(e,true));P.addEventListener('mouseout',e=>pod(e,false));P.addEventListener('focusin',e=>pod(e,true));P.addEventListener('focusout',e=>pod(e,false));
