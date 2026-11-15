@@ -214,7 +214,8 @@ const MAP1_FLOOR=["0000000000000000000000000000000000000000000000000000000000000
 const MAP1_SHALLOW=[[27,4],[27,5],[27,6],[27,7],[27,8],[27,9],[27,10],[27,11],[27,12],[27,13],[27,14],[27,15],[27,16],[27,17],[27,18],[27,19],[27,20],[27,21],[27,22],[27,23],[27,24],[27,25],[28,25],[27,26],[28,26],[29,26],[30,26],[31,26],[32,26],[28,27],[29,27],[30,27],[31,27],[32,27],[41,27],[42,27],[29,28],[30,28],[31,31],[32,31]];
 const MAP1_HOUSE=[[56,58],[57,58],[58,58],[59,58],[60,58],[61,58],[62,58],[56,59],[62,59],[56,60],[62,60],[56,61],[62,61],[56,62],[62,62],[56,63],[57,63],[61,63],[62,63]];
 const MAP1_CROSS=[[70,31],[70,32],[70,33],[71,31],[71,32],[71,33],[72,31],[72,32],[72,33],[73,31],[73,32],[74,31],[74,32],[74,33],[75,31],[75,32],[75,33],[76,31],[76,32],[76,33]],MAP1_TOMB=[[73,33]],MAP1_FERNS=[[69,30],[69,31],[69,32],[69,33],[70,30],[71,30],[72,30],[73,30],[74,30],[75,30],[76,30],[77,30],[77,31],[77,32],[77,33]];
-const CC0_FLOORS={1:{names:['dirt2','cracks','charcoal','ground1','ash','moss1','lava','deski'],tint:[1,.97,.92]},2:{names:['ground1','blackrock','charcoal'],tint:[.84,.88,.96]},3:{names:['zl_place','zl_street','zl_moss'],tint:[1,.96,.88]},4:{names:['mud','dirt3','leaves','darkrock','forestmoss'],tint:[.9,.96,.88]},5:{names:['c5_dziedziniec','c5_marmur','c5_archiwum','c5_skarbiec','c5_loch','c5_pieczec','c5_atrament','c5_dywan'],scale:[2,4,4,2.5,2,4,8,8],tint:[.86,.84,.83]},9:{names:['ground2','ground1'],tint:[.73,.75,.81]}};
+// 15.11.2026 (runda mapy-wygladzenie): org = bitmaska tekstur bez regularnego wzoru (anty-powtarzanie obrotem), crisp = posadzki o ostrej krawedzi (deski, sale zakonu), warp = zasieg falowania granic w kaflach
+const CC0_FLOORS={1:{names:['dirt2','cracks','charcoal','ground1','ash','moss1','lava','deski'],tint:[1,.97,.92],org:119,crisp:128,warp:.9},2:{names:['ground1','blackrock','charcoal'],tint:[.84,.88,.96],org:6,crisp:0,warp:.45},3:{names:['zl_place','zl_street','zl_moss'],tint:[1,.96,.88],org:0,crisp:0,warp:.45},4:{names:['mud','dirt3','leaves','darkrock','forestmoss'],tint:[.9,.96,.88],org:31,crisp:0,warp:1.1},5:{names:['c5_dziedziniec','c5_marmur','c5_archiwum','c5_skarbiec','c5_loch','c5_pieczec','c5_atrament','c5_dywan'],scale:[2,4,4,2.5,2,4,8,8],tint:[.86,.84,.83],org:2,crisp:255,warp:0},9:{names:['ground2','ground1'],tint:[.73,.75,.81],org:1,crisp:0,warp:.6}};
 function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan;if(!plan)return cells;
  const burns=W.PROPS.filter(p=>p.fire||/debris_fire|burnt_hay|furnace|brazier/.test(p.k||''));
  // extra CC0 floors (folder 'skille claude'): ash around the burned houses, moss patches, mossy cobbles in the slums, moss in the forest
@@ -240,7 +241,15 @@ function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan
 function cc0FloorOverlay(tex,info,cells){const c=tex.image,g=c.getContext('2d'),d=g.getImageData(0,0,c.width,c.height),ref=canvas(16,16),r=ref.getContext('2d'),coarseImg=groundCoarse(info.image);
  for(let i=0;i<MW*MH;i++){const a=i*4;if(cells[a+2]<128)continue;const tx=i%MW,ty=i/MW|0,v=info.cells[a+2]%8;r.clearRect(0,0,16,16);r.save();r.translate(8,8);r.rotate((v&3)*Math.PI/2);if(v&4)r.scale(-1,1);r.drawImage(coarseImg,(info.cells[a]-1)*16,info.cells[a+1]*16,16,16,-8,-8,16,16);r.restore();const base=r.getImageData(0,0,16,16).data;
   for(let y=0;y<16;y++)for(let x=0;x<16;x++){const j=((ty*16+y)*c.width+tx*16+x)*4,k=(y*16+x)*4;for(let q=0;q<3;q++)d.data[j+q]=Math.round(Math.min(2,d.data[j+q]/Math.max(8,base[k+q]))*127.5);}
- }g.putImageData(d,0,0);tex.needsUpdate=true;
+ }
+ // 15.11.2026: bez schodkow jasnosci co kafel: srednia kazdego kafla zastapiona plynna interpolacja miedzy srodkami sasiednich kafli CC0 (szczegoly: cienie, plamy, slady zostaja)
+ {const W2=c.width,mean=new Float32Array(MW*MH*3),on=i=>cells[i*4+2]>=128;
+  for(let i=0;i<MW*MH;i++){if(!on(i))continue;const tx=i%MW,ty=i/MW|0;let r0=0,g0=0,b0=0;for(let y=0;y<16;y++)for(let x=0;x<16;x++){const j=((ty*16+y)*W2+tx*16+x)*4;r0+=d.data[j];g0+=d.data[j+1];b0+=d.data[j+2]}mean[i*3]=r0/256;mean[i*3+1]=g0/256;mean[i*3+2]=b0/256}
+  const M=(X,Y,i,q)=>{if(X<0||Y<0||X>=MW||Y>=MH)return mean[i*3+q];const k=Y*MW+X;return on(k)?mean[k*3+q]:mean[i*3+q]};
+  for(let i=0;i<MW*MH;i++){if(!on(i))continue;const tx=i%MW,ty=i/MW|0;
+   for(let y=0;y<16;y++)for(let x=0;x<16;x++){const fx=(x+.5)/16-.5,fy=(y+.5)/16-.5,X0=fx<0?tx-1:tx,Y0=fy<0?ty-1:ty,u=fx<0?fx+1:fx,v=fy<0?fy+1:fy,j=((ty*16+y)*W2+tx*16+x)*4;
+    for(let q=0;q<3;q++){const sm=(M(X0,Y0,i,q)*(1-u)+M(X0+1,Y0,i,q)*u)*(1-v)+(M(X0,Y0+1,i,q)*(1-u)+M(X0+1,Y0+1,i,q)*u)*v;d.data[j+q]=Math.max(0,Math.min(255,Math.round(d.data[j+q]-mean[i*3+q]+sm)))}}}}
+ g.putImageData(d,0,0);tex.needsUpdate=true;
 }
 function groundMaterial(m){const info=m.map&&m.map.userData&&m.map.userData.ground;if(!info)return m;
   const groundChapter=CH,cc0=CC0_FLOORS[groundChapter],cc0Count=cc0?Math.min(cc0.names.length,renderer.capabilities.maxTextures-4):0,compactSamplers=renderer.capabilities.maxTextures<cc0Count+5;
@@ -248,8 +257,8 @@ function groundMaterial(m){const info=m.map&&m.map.userData&&m.map.userData.grou
   const cc0Cells=cc0?cc0FloorCells(info,groundChapter):info.cells;if(cc0)cc0FloorOverlay(m.map,info,cc0Cells);
   const cc0Uniforms=cc0?cc0.names.slice(0,cc0Count).map((_,i)=>'uniform sampler2D nbCC'+i+';').join('\n'):'';
   // glebia: w Dolnym Miescie wzor posadzki 2x gestszy, zeby plyty pasowaly do skali postaci (?depth=0 = stara skala)
-  const ccS=groundChapter===2&&DEPTH_ON?'6.':groundChapter===5?'8.':'12.'; // 13.11.2026: mniejsze plyty w siedzibie zakonu
-  const cc0Sample=cc0?cc0.names.slice(0,cc0Count).map((_,i)=>{const S=cc0.scale?cc0.scale[i].toFixed(2):ccS;return 'if(id<'+(i+.5).toFixed(1)+'){\n#ifdef NB_STABLE_GRAD\nreturn texture2DGradEXT(nbCC'+i+',world/'+S+',nbDx/'+S+',nbDy/'+S+').rgb;\n#else\nreturn texture2D(nbCC'+i+',world/'+S+').rgb;\n#endif\n}'}).join('\n'):'';
+  const ccS=groundChapter===2&&DEPTH_ON?'3.5':groundChapter===3?'5.':groundChapter===5?'8.':'12.'; // 15.11.2026: plyty II i bruk III w skali postaci (wczesniej kamien wielkosci bohatera) // 13.11.2026: mniejsze plyty w siedzibie zakonu
+  const cc0Sample=cc0?cc0.names.slice(0,cc0Count).map((_,i)=>{const S=cc0.scale?cc0.scale[i].toFixed(2):ccS;return 'if(id<'+(i+.5).toFixed(1)+'){\n#ifdef NB_STABLE_GRAD\nreturn texture2DGradEXT(nbCC'+i+',p/'+S+',dx/'+S+',dy/'+S+').rgb;\n#else\nreturn texture2D(nbCC'+i+',p/'+S+').rgb;\n#endif\n}'}).join('\n'):'';
   m.bumpMap=null;m.bumpScale=0;delete m.userData.surfaceDetail;
   m.groundAtlas=surfaceTex(groundPadded(info.image));m.groundCoarse=surfaceTex(groundCoarse(info.image));
   // Stable derivatives across tile-index jumps; retain minification without neighbouring-cell bleed.
@@ -257,7 +266,7 @@ function groundMaterial(m){const info=m.map&&m.map.userData&&m.map.userData.grou
   const groundGrad=renderer.capabilities.isWebGL2||renderer.extensions.has('EXT_shader_texture_lod');
   m.extensions={...(m.extensions||{}),derivatives:true,shaderTextureLOD:groundGrad};
   if(!groundGrad)for(const tex of [m.groundAtlas,m.groundCoarse]){tex.generateMipmaps=false;tex.minFilter=THREE.LinearFilter;tex.anisotropy=1;tex.needsUpdate=true;}m.groundLayout=new THREE.DataTexture(cc0Cells,MW,MH,THREE.RGBAFormat);m.groundLayout.magFilter=m.groundLayout.minFilter=THREE.NearestFilter;m.groundLayout.needsUpdate=true;
-  m.groundTones=Array.from({length:8},(_,row)=>{const c=groundCoarse(info.image),d=c.getContext('2d').getImageData(0,row*16,128,16).data,v=new THREE.Vector3();for(let i=0;i<d.length;i+=4){v.x+=d[i];v.y+=d[i+1];v.z+=d[i+2]}return v.multiplyScalar(1/(2048*255))});m.groundLite={value:coarse||SETT.quality==='low'?1:0};m.onBeforeCompile=sh=>{for(let i=0;i<cc0Count;i++)sh.uniforms['nbCC'+i]={value:m['cc0Texture'+i]};sh.uniforms.nbCCTint={value:new THREE.Vector3(...(cc0?cc0.tint:[1,1,1]))};sh.uniforms.nbArchitecture={value:[2,3,5].includes(groundChapter)?1:0};sh.uniforms.nbLite=m.groundLite;sh.uniforms.nbTones={value:m.groundTones};sh.uniforms.nbAtlas={value:m.groundAtlas};sh.uniforms.nbCoarse={value:m.groundCoarse};sh.uniforms.nbLayout={value:m.groundLayout};sh.uniforms.nbGrid={value:new THREE.Vector2(MW,MH)};
+  m.groundTones=Array.from({length:8},(_,row)=>{const c=groundCoarse(info.image),d=c.getContext('2d').getImageData(0,row*16,128,16).data,v=new THREE.Vector3();for(let i=0;i<d.length;i+=4){v.x+=d[i];v.y+=d[i+1];v.z+=d[i+2]}return v.multiplyScalar(1/(2048*255))});m.groundLite={value:coarse||SETT.quality==='low'?1:0};m.onBeforeCompile=sh=>{for(let i=0;i<cc0Count;i++)sh.uniforms['nbCC'+i]={value:m['cc0Texture'+i]};sh.uniforms.nbCCTint={value:new THREE.Vector3(...(cc0?cc0.tint:[1,1,1]))};sh.uniforms.nbOrgMask={value:cc0?cc0.org||0:0};sh.uniforms.nbCrispMask={value:cc0?cc0.crisp||0:255};sh.uniforms.nbWarpAmp={value:cc0?cc0.warp||0:0};sh.uniforms.nbArchitecture={value:[2,3,5].includes(groundChapter)?1:0};sh.uniforms.nbLite=m.groundLite;sh.uniforms.nbTones={value:m.groundTones};sh.uniforms.nbAtlas={value:m.groundAtlas};sh.uniforms.nbCoarse={value:m.groundCoarse};sh.uniforms.nbLayout={value:m.groundLayout};sh.uniforms.nbGrid={value:new THREE.Vector2(MW,MH)};
     sh.fragmentShader=sh.fragmentShader.replace('#include <common>',`#include <common>
 ${groundGrad?'#define NB_STABLE_GRAD 1':''}
 uniform vec3 nbTones[8];uniform float nbLite;uniform float nbArchitecture;
@@ -267,8 +276,25 @@ vec2 nbUV(vec4 cell,vec2 uv){float v=mod(cell.b,8.); float rot=mod(v,4.);if(rot<
 vec2 nbReference(vec4 cell,vec2 uv){uv=clamp(uv,vec2(.03125),vec2(.96875));vec2 p=nbUV(cell,uv);return vec2((cell.r-1.+(64.*(p.x*8.-cell.r+1.)-4.)/56.)/8.,1.-(cell.g+(64.*((1.-p.y)*8.-cell.g)-4.)/56.)/8.);}
 ${cc0Uniforms}
 uniform vec3 nbCCTint;
-vec2 nbWorld,nbDx,nbDy;
-vec3 nbCCRead(float id,vec2 world){${cc0Sample}return vec3(1.);}
+vec2 nbWorld,nbDx,nbDy,nbPos0;
+uniform float nbOrgMask;uniform float nbCrispMask;uniform float nbWarpAmp;
+float nbBit(float mask,float id){return mod(floor(mask/exp2(id)+.001),2.);}
+float nbHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float nbNoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(nbHash(i),nbHash(i+vec2(1.,0.)),f.x),mix(nbHash(i+vec2(0.,1.)),nbHash(i+vec2(1.,1.)),f.x),f.y);}
+vec3 nbCCTex(float id,vec2 p,vec2 dx,vec2 dy){${cc0Sample}return vec3(1.);}
+// 15.11.2026: anty-powtarzanie: tekstury organiczne mieszane z obrocona kopia wg szumu niskiej czestotliwosci, do tego lagodna zmiennosc jasnosci w duzej skali (zadnej siatki powtorzen z daleka)
+vec3 nbCCRead(float id,vec2 world){vec3 a=nbCCTex(id,world,nbDx,nbDy);if(nbLite>.5)return a;float org=nbBit(nbOrgMask,id),macro=1.+(nbNoise(world*.055+id*3.1)-.5)*(org>.5?.2:.1);
+if(org>.5){float m=smoothstep(.32,.68,nbNoise(world*.12+vec2(id*5.7,11.3)));if(m>.004){mat2 R=mat2(.6,.8,-.8,.6);vec3 b=nbCCTex(id,R*world+vec2(41.3,17.9),R*nbDx,R*nbDy);vec3 mx=mix(a,b,m);float k=inversesqrt(m*m+(1.-m)*(1.-m));vec3 mean=(a+b)*.5;a=clamp(mean+(mx-mean)*mix(1.,k,.6),0.,1.);}}
+return a*macro;}
+float nbLum(vec3 c){return dot(c,vec3(.3,.55,.15));}
+float nbBlendId(vec4 c,float self){if(c.r<.5||c.b<128.||mod(floor(c.a/64.),2.)<.5)return self;float id=floor((c.b-128.)/8.);return nbBit(nbCrispMask,id)>.5?self:id;}
+// 15.11.2026: przejscia miedzy posadzkami: granica faluje (szum w skali kilku kafli), materialy przenikaja sie wg wysokosci tekstury (kamienie wystaja z ziemi, ziemia wchodzi w szczeliny), bez prostych linii na krawedziach kafli
+vec3 nbCCBlend(float self){vec2 p=nbPos0+nbWarpAmp*vec2(nbNoise(nbPos0*.16)-.5,nbNoise(nbPos0*.16+vec2(17.3,5.1))-.5)*3.2+nbWarpAmp*vec2(nbNoise(nbPos0*.61+3.1)-.5,nbNoise(nbPos0*.61+9.7)-.5)*1.4;
+vec2 g=p-.5,b=floor(g),f=fract(g);float i0=nbBlendId(nbCell(b),self),i1=nbBlendId(nbCell(b+vec2(1.,0.)),self),i2=nbBlendId(nbCell(b+vec2(0.,1.)),self),i3=nbBlendId(nbCell(b+vec2(1.,1.)),self);
+if(i0==self&&i1==self&&i2==self&&i3==self)return nbCCRead(self,nbWorld);
+vec3 c0=nbCCRead(i0,nbWorld),c1=i1==i0?c0:nbCCRead(i1,nbWorld),c2=i2==i0?c0:i2==i1?c1:nbCCRead(i2,nbWorld),c3=i3==i0?c0:i3==i1?c1:i3==i2?c2:nbCCRead(i3,nbWorld);
+float h0=(1.-f.x)*(1.-f.y)+nbLum(c0)*.7,h1=f.x*(1.-f.y)+nbLum(c1)*.7,h2=(1.-f.x)*f.y+nbLum(c2)*.7,h3=f.x*f.y+nbLum(c3)*.7;
+float ma=max(max(h0,h1),max(h2,h3))-.42,b0=max(h0-ma,0.),b1=max(h1-ma,0.),b2=max(h2-ma,0.),b3=max(h3-ma,0.);return (c0*b0+c1*b1+c2*b2+c3*b3)/max(b0+b1+b2+b3,1e-4);}
 vec3 nbRead(sampler2D atlas,vec4 cell,vec2 local){if(cell.b>=128.)return nbCCRead(floor((cell.b-128.)/8.),nbWorld)*nbCCTint;vec2 uv=nbUV(cell,local);
 #ifdef NB_STABLE_GRAD
 vec2 gx=nbUV(cell,vec2(.5)+nbDx)-nbUV(cell,vec2(.5)),gy=nbUV(cell,vec2(.5)+nbDy)-nbUV(cell,vec2(.5));float cap=min(1.,4./max(1024.*max(length(gx),length(gy)),.001));return texture2DGradEXT(atlas,uv,gx*cap,gy*cap).rgb;
@@ -277,16 +303,16 @@ return texture2D(atlas,uv).rgb;
 #endif
 }
 float nbFlag(float flags,float bit){return mod(floor(flags/bit),2.);}
-vec3 nbNeighbor(vec3 color,vec2 pos,vec2 local,vec2 dir,float distanceToEdge,vec4 cell){if(distanceToEdge>(nbFlag(cell.a,64.)>.5?.48:.19)||nbFlag(cell.a,1.)<.5)return color;vec4 other=nbCell(pos+dir);if(other.r<.5||nbFlag(other.a,1.)<.5)return color;if(cell.b>=128.&&other.b>=128.&&floor((cell.b-128.)/8.)==floor((other.b-128.)/8.))return color;float irregular=nbFlag(cell.a,64.)>.5?.30+.12*sin((pos.x+local.x)*3.1+(pos.y+local.y)*2.7)*sin((pos.y+local.y)*4.3):(other.g==cell.g?.10:.16)+.025*sin((pos.x+local.x)*8.3+(pos.y+local.y)*5.7);float amount=(1.-smoothstep(0.,irregular,distanceToEdge))*.5;return mix(color,nbRead(nbAtlas,other,local-dir),amount);}
+vec3 nbNeighbor(vec3 color,vec2 pos,vec2 local,vec2 dir,float distanceToEdge,vec4 cell){if(distanceToEdge>(nbFlag(cell.a,64.)>.5?.48:.19)||nbFlag(cell.a,1.)<.5)return color;vec4 other=nbCell(pos+dir);if(other.r<.5||nbFlag(other.a,1.)<.5)return color;if(cell.b>=128.&&other.b>=128.&&(floor((cell.b-128.)/8.)==floor((other.b-128.)/8.)||nbLite<.5))return color;float irregular=nbFlag(cell.a,64.)>.5?.30+.12*sin((pos.x+local.x)*3.1+(pos.y+local.y)*2.7)*sin((pos.y+local.y)*4.3):(other.g==cell.g?.10:.16)+.025*sin((pos.x+local.x)*8.3+(pos.y+local.y)*5.7);float amount=(1.-smoothstep(0.,irregular,distanceToEdge))*.5;return mix(color,nbRead(nbAtlas,other,local-dir),amount);}
 `);
     sh.fragmentShader=sh.fragmentShader.replace('#include <map_fragment>',`#ifdef USE_MAP
-vec4 sampledDiffuseColor=texture2D(map,vUv);vec2 nbPos=vec2(vUv.x,1.-vUv.y)*nbGrid,nbTile=floor(nbPos),nbLocal=fract(nbPos);vec4 cell=nbCell(nbTile);nbDx=dFdx(nbPos);nbDy=dFdy(nbPos);nbWorld=nbPos;
+vec4 sampledDiffuseColor=texture2D(map,vUv);vec2 nbPos=vec2(vUv.x,1.-vUv.y)*nbGrid,nbTile=floor(nbPos),nbLocal=fract(nbPos);vec4 cell=nbCell(nbTile);nbDx=dFdx(nbPos);nbDy=dFdy(nbPos);nbWorld=nbPos;nbPos0=nbPos;
 if(cell.r>.5){
 if(cell.b<128.&&nbLite<.5&&nbFlag(cell.a,64.)>.5&&cell.g!=3.&&cell.g!=1.){vec2 warp=nbPos+.64*vec2(sin(nbPos.y*1.7+sin(nbPos.x*.8)),sin(nbPos.x*1.5+sin(nbPos.y*.9)));vec4 next=nbCell(floor(warp));if(next.r>.5&&nbFlag(next.a,64.)>.5&&next.g!=cell.g&&next.g!=3.&&next.g!=1.){cell=next;nbTile=floor(warp);nbLocal=fract(warp);}}
-// 12.11.2026: the same wavy boundary for CC0 floors outdoors (I, IV): painted patches no longer end on straight tile edges; plank floors (id 7) stay straight
-if(cell.b>=128.&&nbLite<.5&&nbArchitecture<.5&&nbFlag(cell.a,64.)>.5&&floor((cell.b-128.)/8.)!=7.){vec2 warp=nbPos+.42*vec2(sin(nbPos.y*1.7+sin(nbPos.x*.8))+.45*sin(nbPos.y*4.1+nbPos.x*1.3),sin(nbPos.x*1.5+sin(nbPos.y*.9))+.45*sin(nbPos.x*3.7-nbPos.y*1.1));vec4 next=nbCell(floor(warp));if(next.r>.5&&next.b>=128.&&nbFlag(next.a,64.)>.5&&floor((next.b-128.)/8.)!=7.&&floor((next.b-128.)/8.)!=floor((cell.b-128.)/8.)){cell=next;nbTile=floor(warp);nbLocal=fract(warp);}}
+// 15.11.2026: granice posadzek CC0 liczy nbCCBlend (miekkie przenikanie zamiast przeskoku kafla)
 vec2 uv=nbUV(cell,nbLocal);vec3 detail=nbRead(nbAtlas,cell,nbLocal),coarse=${compactSamplers?'nbTone(cell.g)':'texture2D(nbCoarse,nbReference(cell,nbLocal)).rgb'};
 if(nbLite<.5){
+if(cell.b>=128.&&nbFlag(cell.a,64.)>.5){float sid=floor((cell.b-128.)/8.);if(nbBit(nbCrispMask,sid)<.5)detail=nbCCBlend(sid)*nbCCTint;}
 detail=nbNeighbor(detail,nbTile,nbLocal,vec2(-1.,0.),nbLocal.x,cell);detail=nbNeighbor(detail,nbTile,nbLocal,vec2(1.,0.),1.-nbLocal.x,cell);detail=nbNeighbor(detail,nbTile,nbLocal,vec2(0.,-1.),nbLocal.y,cell);detail=nbNeighbor(detail,nbTile,nbLocal,vec2(0.,1.),1.-nbLocal.y,cell);
 }
 if(nbLite>=.5&&cell.b>=128.){vec2 ed=min(nbLocal,1.-nbLocal);vec2 dir=ed.x<ed.y?vec2(nbLocal.x<.5?-1.:1.,0.):vec2(0.,nbLocal.y<.5?-1.:1.);detail=nbNeighbor(detail,nbTile,nbLocal,dir,min(ed.x,ed.y),cell);}
@@ -299,7 +325,7 @@ vec3 base=nbCCRead(0.,nbWorld)*nbCCTint*ratio;float band=1.-smoothstep(.19,.23,d
 if(nbLite<.5){float gn=fract(sin(dot(floor(nbWorld*24.),vec2(12.9898,78.233)))*43758.5453);float gp=max(length(nbDx),length(nbDy))*24.;result*=1.+(gn-.5)*.12*clamp(1.3-gp,0.,1.);}
 sampledDiffuseColor.rgb=result;}
 sampledDiffuseColor=mapTexelToLinear(sampledDiffuseColor);diffuseColor*=sampledDiffuseColor;
-#endif`)};m.customProgramCacheKey=()=> 'nightbrand-ground-cc0-v3-'+groundChapter+'-'+compactSamplers+'-'+ccS;return m}
+#endif`)};m.customProgramCacheKey=()=> 'nightbrand-ground-cc0-v4-'+groundChapter+'-'+compactSamplers+'-'+ccS;return m}
 function groundDetails(g){const plan=W.groundPlan;if(!plan)return;for(const p of W.PROPS){const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;if(plan.road[i])continue;const fire=p.fire||/furnace|brazier/.test(p.k),blood=/gallows|covered_corpses|beggar_bodies/.test(p.k),bones=/bones|sarcophagus/.test(p.k);if(!fire&&!blood&&!bones)continue;const key=fire?'scorch':blood?'pool':'bones',stamp=canvas(40,40),q=stamp.getContext('2d');q.drawImage((blood&&bloodHD.ready?bloodHD.stamps:DEC[key])[groundHash(x,y)%4],0,0,40,40);q.globalCompositeOperation='destination-in';const mask=q.createRadialGradient(20,20,4,20,20,20);mask.addColorStop(0,'#fff');mask.addColorStop(1,'transparent');q.fillStyle=mask;q.fillRect(0,0,40,40);g.save();g.globalAlpha=blood?.28:.18;g.drawImage(stamp,p.x*16-20,p.y*16-20);g.restore()}
   for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++){const i=y*MW+x;if(plan.road[i]||plan.rows[i]===255||groundHash(x,y)%67)continue;const wall=[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>SOLID.has(map[(y+dy)*MW+x+dx]));if(!wall)continue;g.save();g.globalAlpha=.12;g.drawImage(DEC.crack[groundHash(y,x)%4],x*16-4,y*16-4,24,24);g.restore()}}
 
