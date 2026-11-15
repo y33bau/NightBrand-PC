@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 >nul
 setlocal
-title Nightbrand PC - test: calosc 771
+title Nightbrand PC - test: calosc 772
 echo.
 echo  Nightbrand - wersja PC (repo NightBrand-PC) lokalnie
 echo  =====================================
