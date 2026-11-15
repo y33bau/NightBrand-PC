@@ -231,7 +231,7 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
     for(const [x,y] of w.rots)if((x*13+y*7)%11===0)lsrc(0xc01838,.8,3.5,x+.5,.4,y+.5,'rot');
     w.shrines.forEach((s,i)=>lsrc(0x5fb0ff,1.2,5,s.x/16,1.2,s.y/16+.6,'shrine',{si:i}));
     for(const n of w.npcs)lsrc(0xffc070,n.id==='chojrak'?.3:.7,4.5,n.x/16,1.3,n.y/16-.4,'npc',{npc:n.id});
-    lsrc(0xffcf70,1.8,12,MP(32),7,MP(19),'dome');
+    lsrc(0xffcf70,2.4,16,MP(32),7,MP(19),'dome');lsrc(0xffb860,1.1,9,MP(32),2.2,MP(24.6),'dome'); // 15.11.2026: bazylika jako punkt centralny: mocniejsza poswiata kopuly i cieple swiatlo na fasadzie
   }else if(ch===4){
     for(const p of w.PROPS)if(p.fire)lsrc(0xff7a2a,p.big?2.4:1.6,p.big?10:7,p.x,1.3,p.y-.2,'fire');
     w.shrines.forEach((s,i)=>lsrc(0xffc070,1.1,5,s.x/16,1.2,s.y/16+.6,'shrine',{si:i}));

@@ -1870,6 +1870,30 @@ function decals(I){const dec=row=>[0,1,2,3].map(i=>{const cv=canvas(32,32);cv.ge
 
 
 // Chapter II meshes: M4 floor, M5 walls, M6 props, M8 transitions
+// 15.11.2026 (punkty centralne map): monumentalna waga z belka, lancuchami i szalami; ramiona wzdluz osi 'axis' ('x' albo 'z'), belka przechylona o 'tilt' (dlug zawsze przewaza)
+function nbScales(o){const g=new THREE.Group(),T=o.top,arm=o.arm,t=o.tilt||0,ax=o.axis==='x';
+ const add=(geo,mat,x,y,z,ry=0)=>{const m=new THREE.Mesh(geo,mat);m.position.set(x,y,z);m.rotation.y=ry;m.castShadow=true;m.receiveShadow=true;g.add(m);return m};
+ const between=(a,b,r,mat)=>{const d=new THREE.Vector3().subVectors(b,a),L=d.length(),m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,L,5),mat);m.position.copy(a).addScaledVector(d,.5);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());m.castShadow=true;g.add(m);return m};
+ const P=(along,y)=>ax?new THREE.Vector3(along,y,0):new THREE.Vector3(0,y,along);
+ // trzon: podstawa, kolumna z pierscieniami, glowica
+ add(new THREE.CylinderGeometry(o.col*1.9,o.col*2.3,o.foot,8),o.stone,0,o.base+o.foot/2,0);
+ add(new THREE.CylinderGeometry(o.col,o.col*1.25,T-o.base-o.foot,10),o.iron,0,(T+o.base+o.foot)/2,0);
+ for(const f of [.35,.7,.97])add(new THREE.CylinderGeometry(o.col*1.45,o.col*1.45,.16,10),o.metal,0,o.base+o.foot+(T-o.base-o.foot)*f,0);
+ add(new THREE.SphereGeometry(o.col*1.6,10,6),o.metal,0,T,0);
+ add(new THREE.ConeGeometry(o.col*.9,o.col*4,8),o.metal,0,T+o.col*3.2,0);
+ // belka: przechylona, z grotami na koncach
+ const beam=new THREE.Group();beam.position.set(0,T,0);if(ax)beam.rotation.z=t;else beam.rotation.x=-t;g.add(beam);
+ const bl=new THREE.Mesh(ax?new THREE.BoxGeometry(arm*2,.28,.3):new THREE.BoxGeometry(.3,.28,arm*2),o.metal);bl.castShadow=true;beam.add(bl);
+ for(const s of [-1,1]){const c=new THREE.Mesh(new THREE.SphereGeometry(.24,8,6),o.metal);c.position.copy(P(s*arm,0));beam.add(c)}
+ // szale wisza pionowo pod koncami belki (niezaleznie od przechylu)
+ for(const s of [-1,1]){const lift=-s*arm*Math.sin(t),along=s*arm*Math.cos(t),hook=P(along,T+lift-.12),panY=T+lift-o.drop;
+  const pan=add(new THREE.CylinderGeometry(o.pan,o.pan*.62,o.pan*.32,14,1,true),o.metal,hook.x,panY,hook.z);pan.material.side=THREE.DoubleSide;
+  add(new THREE.CylinderGeometry(o.pan*.62,o.pan*.62,.05,14),o.metal,hook.x,panY-o.pan*.16,hook.z);
+  add(new THREE.TorusGeometry(o.pan,.05,5,18),o.metal,hook.x,panY+o.pan*.16,hook.z).rotation.x=Math.PI/2;
+  for(let k=0;k<3;k++){const a=k*Math.PI*2/3+.4;between(hook,new THREE.Vector3(hook.x+Math.cos(a)*o.pan*.96,panY+o.pan*.16,hook.z+Math.sin(a)*o.pan*.96),.035,o.chain)}
+  if(o.load){const l=add(new THREE.SphereGeometry(o.pan*.78,10,6,0,Math.PI*2,0,Math.PI/2),o.load(s),hook.x,panY-o.pan*.02,hook.z);l.scale.y=s>0?.55:.28}
+  g.userData['pan'+(s>0?'B':'A')]=[hook.x,panY,hook.z]}
+ g.position.set(o.x,0,o.z);ROOT.add(g);return g}
 function buildDolne(I){planGround(2);
   const F=I.dm_floor,Wl=I.dm_walls,r=rng(99);
   const fc=canvas(WW,WH),fg=fc.getContext('2d');
@@ -1917,6 +1941,11 @@ function buildDolne(I){planGround(2);
   else{const lavaGeo=new THREE.PlaneGeometry(1,1);lavaGeo.rotateX(-Math.PI/2);
   instanced(lavaGeo,liquidMat({map:lavaTex,emissiveMap:lavaTex,emissive:0xff8a46,emissiveIntensity:.65},1),lavas,([x,y])=>M4.makeTranslation(x+.5,-.32,y+.5),false,false)}}
   if(I.cc0_lava){const ac=[];for(let x=FT(35);x<FT(40);x++)for(let y=0;y<MH;y++)ac.push([x,y]);lavaHD(I.cc0_lava,ac,-9.4,5,{keep:true,h:[0,0,0],spd:.6})}
+  // 15.11.2026: Wielka Waga (kanon: przy niej Poborca wazy urobek) wyrasta z przepasci lawy miedzy halami, na polnoc od mostu; stoi wylacznie nad lawa, sale i most bez zmian
+  {const lt=I.cc0_lava?wallTex(I.cc0_lava):null,ore=s=>phong({color:0x5a3424,map:lt,emissiveMap:lt,emissive:s>0?0xc04a18:0x8a3410,shininess:30,specular:0x5a2a10});
+   const sc=nbScales({x:MP(37.5),z:MP(14.5),base:-9.4,foot:1.2,top:7.8,col:.46,arm:2.95,tilt:.14,axis:'x',pan:1.0,drop:2.7,
+    stone:phong({color:0x4a4446,shininess:4}),iron:phong({color:0x262426,specular:0x6a5a4a,shininess:38}),metal:phong({color:0x86602e,specular:0xd8a85a,shininess:60,emissive:0x140a02}),chain:phong({color:0x3a3634,specular:0x7a6a5a,shininess:40}),load:ore});
+   for(const k of ['panA','panB']){const [x,y,z]=sc.userData[k];W.LSRC.push({col:0xff8a3a,base:k==='panB'?1.25:.8,dist:7,x,y:y+.9,z,kind:'fire',ph:k==='panB'?1.3:3.1})}}
   let abT;{const ai=I.cc0_abyss||(IMGS&&IMGS.cc0_abyss);if(ai){abT=new THREE.Texture(ai);abT.wrapS=abT.wrapT=THREE.RepeatWrapping;abT.generateMipmaps=true;abT.minFilter=THREE.LinearMipmapLinearFilter;abT.magFilter=THREE.LinearFilter;abT.needsUpdate=true;abT.repeat.set((FT(40)-FT(35))/4,MH/4)}else{abT=texFrom(tcut(F,3,6),true);abT.repeat.set(5*MK,MH)}}
   const abyss=new THREE.Mesh(new THREE.PlaneGeometry(FT(40)-FT(35),MH),new THREE.MeshBasicMaterial({map:abT,color:0x8a6a6a}));abyss.rotation.x=-Math.PI/2;abyss.position.set((FT(35)+FT(40))/2,-10,MH/2);ROOT.add(abyss);
   const brT=texFrom(tcut(F,2,4),true);brT.repeat.set(5,2);
@@ -2354,14 +2383,22 @@ function buildStolica(I){planGround(3);
   let goldT=texFrom(tcut(ZW,2,3),true);goldT.repeat.set(8,2);if(I.rf_goldm){goldT=wallTex(I.rf_goldm).clone();goldT.needsUpdate=true;goldT.repeat.set(5,2)}
   const goldM=cutCircle(phong({map:goldT,specular:0xb08a40,shininess:22,emissive:0x1a1004}));
   const drumT=texFrom(tcut(ZW,3,2),true);drumT.repeat.set(8,1);const drumM=cutCircle(phong({map:drumT}));
-  const dome=(x,z,rad,base)=>{
+  // 15.11.2026 (punkt centralny): tylko bazylika lsni czystym zlotem; kopuly kamienic, palacu i kaplicy sa zasniedziale, wiec glowna kopula jest jedynym jasnym akcentem mapy
+  const agedM=cutCircle(phong({map:goldT,color:0x857a68,specular:0x3a3020,shininess:9}));
+  const winM=cutCircle(phong({color:0x000000,emissive:0xffaa52}));
+  const dome=(x,z,rad,base,k)=>{const main=k==='c'&&rad>3,gm=k==='c'?goldM:agedM;
     const drum=new THREE.Mesh(new THREE.CylinderGeometry(rad*.98,rad,rad*.55,16),drumM);drum.position.set(x,base+rad*.275,z);
-    const cup=new THREE.Mesh(new THREE.SphereGeometry(rad,16,7,0,Math.PI*2,0,Math.PI/2),goldM);cup.position.set(x,base+rad*.55,z);
-    const ring=new THREE.Mesh(new THREE.CylinderGeometry(rad*1.04,rad*1.04,.14,16),goldM);ring.position.set(x,base+rad*.55,z);
+    const cup=new THREE.Mesh(new THREE.SphereGeometry(rad,16,7,0,Math.PI*2,0,Math.PI/2),gm);cup.position.set(x,base+rad*.55,z);
+    const ring=new THREE.Mesh(new THREE.CylinderGeometry(rad*1.04,rad*1.04,.14,16),gm);ring.position.set(x,base+rad*.55,z);
     const lan=new THREE.Mesh(new THREE.CylinderGeometry(rad*.16,rad*.18,rad*.35,8),drumM);lan.position.set(x,base+rad*1.55+rad*.17,z);
-    const spire=new THREE.Mesh(new THREE.ConeGeometry(rad*.2,rad*.55,8),goldM);spire.position.set(x,base+rad*1.9+rad*.27,z);
-    for(const m of [drum,cup,ring,lan,spire]){m.castShadow=true;m.receiveShadow=true;ROOT.add(m)}};
-  for(const [x,z,rad,k] of DOMES)dome(MP(x),MP(z),rad*MK,{c:4,h:3.2,s:3,p:4.5}[k]);
+    const spire=new THREE.Mesh(new THREE.ConeGeometry(rad*.2,rad*(main?.9:.55),8),gm);spire.position.set(x,base+rad*1.9+rad*(main?.45:.27),z);
+    const parts=[drum,cup,ring,lan,spire];
+    if(main){// okna bebna swieca, nad latarnia zlote slonce z promieniami
+     for(let i=0;i<12;i++){const a=i*Math.PI/6,w=new THREE.Mesh(new THREE.PlaneGeometry(rad*.13,rad*.3),winM);w.position.set(x+Math.sin(a)*rad*.985,base+rad*.27,z+Math.cos(a)*rad*.985);w.rotation.y=a;parts.push(w)}
+     const sun=new THREE.Mesh(new THREE.TorusGeometry(rad*.17,rad*.03,6,20),goldM);sun.position.set(x,base+rad*2.95,z);parts.push(sun);
+     for(let i=0;i<8;i++){const ray=new THREE.Mesh(new THREE.BoxGeometry(rad*.025,rad*.12,rad*.025),goldM);const a=i*Math.PI/4;ray.position.set(x+Math.sin(a)*rad*.25,base+rad*2.95+Math.cos(a)*rad*.25,z);ray.rotation.z=-a;parts.push(ray)}}
+    for(const m of parts){m.castShadow=true;m.receiveShadow=true;ROOT.add(m)}};
+  for(const [x,z,rad,k] of DOMES)dome(MP(x),MP(z),rad*MK,{c:4,h:3.2,s:3,p:4.5}[k],k);
   // slate pyramid roofs and thatched shacks
   const slT=texFrom(tcut(ZW,1,4),true);slT.repeat.set(3,2);
   const slate=I.rf_gold?(()=>{const t=wallTex(I.rf_gold).clone();t.needsUpdate=true;t.repeat.set(3,2);return cutCircle(phong({map:t,flatShading:true}))})():cutCircle(phong({map:slT,flatShading:true})),thatch=cutCircle(phong({map:I.rf_goldm?(()=>{const t=wallTex(I.rf_goldm).clone();t.needsUpdate=true;t.repeat.set(2,2);return t})():texFrom(tcut(I.br_walls,1,5),true),color:I.rf_goldm?0xd8cdb8:0xb8a080,flatShading:true})),pyr=new THREE.ConeGeometry(Math.SQRT1_2,1,4);pyr.rotateY(Math.PI/4);
@@ -2502,7 +2539,20 @@ function buildCytadela(I){planGround(5);
   for(const [x,y,t] of walls){if(t===80)bars.push([x,y]);else if(t===21)rim[(x+y)&1].push([x,y]);else{const k=W.region(x,y);(inner[k]=inner[k]||[[],[]])[(x+y)&1].push([x,y])}}
   rim.forEach(l=>addWalls(l,4.4,0,I.wl_c5_mur?0xd8d6d4:0x8a8890,false,I.wl_c5_mur)); // 13.11.2026: granitowy mur zakonu
   for(const k in inner)inner[k].forEach(l=>addWalls(l,3.4,WROW[k],0xffffff,false,I.wl_c5_wew));
-  addWalls(bars,2.2,3,0xffffff,true); // 12.11.2026: kraty z wlasna tekstura krat (wczesniej kamienny slup)
+  addWalls(bars,2.2,3,0xffffff,true);
+  // 15.11.2026 (punkt centralny): mur zamykajacy os czerwonego dywanu Sali Sadowej niesie godlo Zakonu i zlota Wage Sadu; tylko na polach muru, srodek sali wolny
+  {const zc=(MP(33)+MP(35))/2,face=MP(35)+.04,cx=MP(40);
+   const c=canvas(256,256),q=c.getContext('2d');q.translate(128,128);
+   const disc=q.createRadialGradient(0,0,10,0,0,120);disc.addColorStop(0,'#6e1418');disc.addColorStop(1,'#2e0608');q.fillStyle=disc;q.beginPath();q.arc(0,0,118,0,Math.PI*2);q.fill();
+   const gold=q.createLinearGradient(-100,-100,100,100);gold.addColorStop(0,'#f4d27a');gold.addColorStop(.5,'#b8862e');gold.addColorStop(1,'#f0c866');q.strokeStyle=gold;q.fillStyle=gold;
+   q.lineWidth=9;q.beginPath();q.arc(0,0,118,0,Math.PI*2);q.stroke();q.lineWidth=4;q.beginPath();q.arc(0,0,104,0,Math.PI*2);q.stroke();
+   q.lineWidth=14;q.beginPath();q.arc(0,0,52,0,Math.PI*2);q.stroke();q.fillRect(-7,-92,14,184);q.beginPath();q.moveTo(-18,-92);q.lineTo(18,-92);q.lineTo(0,-110);q.closePath();q.fill();q.fillRect(-26,64,52,10);
+   const emblemTex=new THREE.CanvasTexture(c);emblemTex.anisotropy=4;
+   const emblem=new THREE.Mesh(new THREE.CircleGeometry(1.35,40),cutaway(phong({map:emblemTex,emissive:0x1c0a04,shininess:30,specular:0x806030})));emblem.position.set(cx,1.78,face);ROOT.add(emblem);
+   const goldM=cutaway(phong({color:0xc8a050,specular:0xffe0a0,shininess:70,emissive:0x221404})),darkM=cutaway(phong({color:0x2a2226,specular:0x504040,shininess:30}));
+   nbScales({x:cx,z:zc,base:3.4,foot:.42,top:5.9,col:.17,arm:1.95,tilt:-.11,axis:'x',pan:.55,drop:1.15,stone:darkM,iron:goldM,metal:goldM,chain:goldM,
+    load:s=>cutaway(phong({color:s>0?0x3a2a18:0x8a7040,shininess:20,emissive:s>0?0:0x2a1c06}))});
+   W.LSRC.push({col:0xffc27a,base:.9,dist:5.5,x:cx,y:2.4,z:face+1.4,kind:'fire',ph:2.2})} // 12.11.2026: kraty z wlasna tekstura krat (wczesniej kamienny slup)
   const R={brazier_0:[0,0,32,32],brazier_1:[32,0,32,32],brazier_2:[64,0,32,32],brazier_3:[96,0,32,32],king_statue:[0,32,32,64],healing_shrine:[32,64,32,32],depleted_shrine:[64,64,32,32],chains:[96,64,32,32],
     fallen_pillar:[0,96,64,32],dwarf_bones:[64,96,32,32],sarcophagus:[0,160,32,32],rune_lantern:[32,160,32,32],clan_banner:[96,160,32,32]};
   const PF={};for(const k in R)PF[k]=procFrame(I.dm_props,...R[k],'prop');
@@ -2841,7 +2891,7 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
     for(const [x,y] of w.rots)if((x*13+y*7)%11===0)lsrc(0xc01838,.8,3.5,x+.5,.4,y+.5,'rot');
     w.shrines.forEach((s,i)=>lsrc(0x5fb0ff,1.2,5,s.x/16,1.2,s.y/16+.6,'shrine',{si:i}));
     for(const n of w.npcs)lsrc(0xffc070,n.id==='chojrak'?.3:.7,4.5,n.x/16,1.3,n.y/16-.4,'npc',{npc:n.id});
-    lsrc(0xffcf70,1.8,12,MP(32),7,MP(19),'dome');
+    lsrc(0xffcf70,2.4,16,MP(32),7,MP(19),'dome');lsrc(0xffb860,1.1,9,MP(32),2.2,MP(24.6),'dome'); // 15.11.2026: bazylika jako punkt centralny: mocniejsza poswiata kopuly i cieple swiatlo na fasadzie
   }else if(ch===4){
     for(const p of w.PROPS)if(p.fire)lsrc(0xff7a2a,p.big?2.4:1.6,p.big?10:7,p.x,1.3,p.y-.2,'fire');
     w.shrines.forEach((s,i)=>lsrc(0xffc070,1.1,5,s.x/16,1.2,s.y/16+.6,'shrine',{si:i}));
