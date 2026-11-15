@@ -55,7 +55,7 @@ function genDolne(){
   fill(3,8,32,32,20);fill(1,23,2,2,20);
   fill(6,3,26,4,20);fill(10,7,5,1,20);fill(23,7,5,1,20);
   fill(6,41,26,7,20);fill(10,40,5,1,20);fill(23,40,5,1,20);
-  for(const x of [9,15,21,27]){set(x,2,20);prop('king_statue',x+.5,2.92,[[x,2]]);set(x,48,20);prop('king_statue',x+.5,48.92,[[x,48]])}
+  for(const x of [9,15,21,27]){set(x,2,20);prop('king_statue',x+.5,2.92,[[x,2]],{flip:x>18});set(x,48,20);prop('king_statue',x+.5,48.92,[[x,48]],{flip:x>18})}// 15.11.2026: posagi po obu stronach osi patrza ku srodkowi
   for(const y of [11,15,19,28,32,36])for(const x of [10,26])set(x,y,22);
   for(let x=3;x<35;x++){set(x,23,29);set(x,24,29)}
   fill(35,1,5,GH-2,23);fill(35,22,5,4,25);
@@ -63,11 +63,11 @@ function genDolne(){
   fill(53,42,6,3,32);fill(42,45,19,7,32);
   [[7,21],[7,26],[14,21],[14,26],[22,21],[22,26],[30,21],[30,26],[8,5],[29,5],[8,43],[29,43],[16,46],[21,46],[46,50],[58,46],[42,21],[42,26],[60,21],[60,26],[44,9],[58,9],[44,38],[58,38]].forEach(([x,y])=>set(x,y,27));
   prop('healing_shrine',4.5,38.92,[[4,38]],{shrine:0});prop('healing_shrine',60.5,40.92,[[60,40]],{shrine:1});
-  for(const x of [12,18,24]){prop('sarcophagus',x+.5,4.92,[[x,4]]);prop('sarcophagus',x+.5,45.92,[[x,45]])}
+  for(const x of [12,18,24]){prop('sarcophagus',x+.5,4.92,[[x,4]],{flip:x>18});prop('sarcophagus',x+.5,45.92,[[x,45]],{flip:x>18})}
   // runda 296: dzielnice jak w SimCity, duze rekwizyty przy scianach, srodek sal wolny
   const W1=(k,x,y,ex)=>prop(k,x+.5,y+.92,[[x,y]],ex);
   // sala: sztandary i zbrojownia przy polnocnej i poludniowej scianie, zwalony filar w rogu
-  for(const y of [8,39]){for(const x of [6,15,21,33])W1('clan_banner',x,y);for(const x of [8,31])W1('pickaxe_rack',x,y);prop('fallen_pillar',29,y+.92,[[28,y],[29,y]])}
+  for(const y of [8,39]){for(const x of [6,15,21,33])W1('clan_banner',x,y,{flip:x>18});for(const x of [8,31])W1('pickaxe_rack',x,y);prop('fallen_pillar',29,y+.92,[[28,y],[29,y]])}
   W1('rune_lantern',4,9,{stone:0});W1('rune_lantern',9,38,{stone:2});W1('chains',3,12);W1('chains',33,34);
   for(const [x,y] of [[34,21],[34,26],[40,21],[40,26]])W1('rune_lantern',x,y);
   // kuznia: piece z miechami przy polnocnej scianie, kowadla na brzegach lawy, wozki i stojaki przy wschodniej scianie
@@ -121,7 +121,7 @@ function genSolneNabrzeze(){
  for(const [x,y] of [[29,11],[35,11],[27,47],[36,47],[24,27],[37,36]])brazier(x,y);
 
  const port=(k,x,y,solid,extra)=>prop(k,x+.5,y+.92,solid?[[x,y]]:[],Object.assign({port:true},extra||{}));
- port('winch',12,14,true);port('winch',53,14,true);port('crane',57,17,true);port('crane',18,11,true,{flip:true});
+ port('winch',12,14,true);port('winch',53,14,true,{flip:true});port('crane',57,17,true);port('crane',18,11,true,{flip:true});
  // cargo waiting for a crossing that never came
  for(const [x,y,f] of [[8,16],[17,26,1],[6,28],[49,28,1],[52,22],[35,3,1],[59,15],[60,28,1],[24,13],[40,16,1],[13,17,1],[26,36],[42,33,1],[50,17],[12,45,1],[51,45]])port('cargo',x,y,true,{flip:!!f});
  for(const [x,y,f] of [[6,21],[13,25,1],[18,17],[14,30],[6,14,1],[11,21],[17,29,1],[5,25],[12,27,1],[59,24],[29,3]])port('salt',x,y,true,{flip:!!f});
@@ -422,7 +422,7 @@ function genCytadela(seed){
   // 12.11.2026: dziedziniec ubrany po bokach (wozy, stojaki, sztandary przy bramach, paleniska), krypta z sarkofagami i kośćmi; pasy x16..23 i x56..63 oraz środek wolne
   for(const [x,y] of [[13,59],[26,59],[53,59],[66,59],[31,61],[49,61],[26,15],[53,15],[5,20],[74,20]])set(x,y,27);
   for(const x of [14,25,54,65])P('order_banner',x,58);
-  P('cart',12,65,true);P('cart',67,65,true);P('armour',5,62);P('armour',74,62);P('rack',5,65,true);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
+  P('cart',12,65,true);P('cart',67,65,true,{flip:true});P('armour',5,62);P('armour',74,62);P('rack',5,65,true);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
   for(const [x,y] of [[27,19],[32,19],[47,19],[52,19]])P('sarcophagus',x,y,true);
   for(const [x,y] of [[29,18],[50,18],[35,15],[45,15]])P('candelabra',x,y,true); // 12.11.2026: swiatlo w krypcie
   for(const [k,x,y] of [['dwarf_bones',5,15],['skull',74,15],['skull',30,17],['dwarf_bones',50,17],['chains',6,13]])P(k,x,y,[],{floorDetail:true});

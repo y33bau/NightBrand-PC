@@ -76,6 +76,7 @@ function buildDolne(I){planGround(2);
     else{frames=[PF[p.k]];rc=R[p.k]||TR[p.k]}
     const o={mesh:mkProp(frames,p.x,p.y,rc),frames,fps:p.anim?6:0,ph:Math.random()*3,kind:p.gate?'gate':p.shrine!==undefined?'shrine':p.anim?'anim':'static',si:p.shrine};
     if(p.k==='dwarf_bones'){o.mesh.castShadow=false}
+    if(p.flip)o.mesh.scale.x*=-1;// 15.11.2026: odbicie lustrzane par (symetria)
     p.obj=o;propObjs.push(o);
   }
 }
@@ -113,7 +114,10 @@ function buildDungeon(I){planGround(9);
 }
 
 // Chapter III (technical number 6): Solne Nabrzeze, the river harbour between the Lower City lift and the ferry to Goldheim.
-const PORT_LAMPS=[[12,47.6],[51.8,47.6],[11.4,15.6],[54.6,15.6],[26,19],[40,19],[30,40],[28.3,46],[35.6,46],[22,25.6],[45,25.6],[9,24.4],[57.4,30.2],[30.6,10.6],[35.4,10.6]];// slupy z latarniami [x,y] w siatce mapy
+// 15.11.2026 (symetria): [x na DUZEJ mapie, y w siatce portu, kierunek ramienia]. x podany wprost na duzej mapie, bo rozciaganie siatki (MP) psulo rowne odstepy par.
+// Kazda para stoi rowno wzgledem swojego miejsca (szyja trapu, trakt, plac, kolowroty, pomosty), zachodnia latarnia jest odbiciem lustrzanym wschodniej (ramiona na zewnatrz).
+// Usuniete: latarnia uliczna ze srodka skladu i dwie, ktore wypadaly w wodzie (nigdy sie nie rysowaly). Pojedyncza przy trakcie zastapiona para.
+const PORT_LAMPS=[[49.8,10.6,-1],[57.2,10.6,1],[43,19,-1],[64,19,1],[18.8,15.6,-1],[89.7,15.6,1],[48.4,40,-1],[56.6,40,1],[46.5,46,-1],[58.5,46,1],[20.4,47.6,-1],[84.6,47.6,1],[20,30.2,-1],[93.8,30.2,1]];
 const PORT_PROP_SIZE={winch:[2.25,1.85],crane:[4.8,5.2],cargo:[1.8,1.65],salt:[1.65,1.45],bollard:[1.05,1.05],
  lodz:[3.0,3.0],pale:[1.75,1.75],skrzynia:[1.4,1.4],siec:[1.6,1.6],kotwica:[1.75,1.75],beczka_ryby:[1.5,1.5],malze:[1.8,1.8],ikra:[1.6,1.6],deski:[1.7,1.7],pacholek:[1.35,1.35],wiecierz:[1.45,1.45],wrak:[1.9,1.9]};// nowe: klatki kwadratowe
 // atlas zbutwialych rekwizytow (15.11.2026): 4x3 klatki po 256 px, rzedami jak w PORT_REK
@@ -346,15 +350,15 @@ function buildSolneNabrzeze(I){
  // 15.11.2026: malowana latarnia (rekwizyt Zlotogrodu) z przygaszonym zloceniem, jak kute zelazo portu; stara latarnia z klockow tylko bez tego obrazu
  const lampImg=I.p3_street_lantern,lampW=2.05;let lampMat=null,lampGeo=null;
  if(lampImg){const t=new THREE.Texture(lampImg);t.needsUpdate=true;t.anisotropy=4;lampMat=phong({map:t,alphaTest:.4,color:0x9c9ca4,side:THREE.DoubleSide});lampGeo=new THREE.PlaneGeometry(lampW,lampW).translate(0,lampW/2,0);const n=lampGeo.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6)}
- for(const [sx,sy] of PORT_LAMPS){
-  const x=MP(sx),z=MP(sy);if(!land(ground(Math.floor(x),Math.floor(z))))continue;
-  if(lampMat){const m=new THREE.Mesh(lampGeo,lampMat);m.scale.y=SQ;m.position.set(x,0,z);ROOT.add(m);ao(x,z,.8,.8);W.LSRC.push({col:0xffbb79,base:.9,dist:5.3,x:x+lampW*.17,y:lampW*.62*SQ,z:z+.1,kind:'fire',ph:sx*.71});continue}
+ for(const [sx,sy,dir] of PORT_LAMPS){
+  const x=sx,z=MP(sy),west=dir<0;if(!land(ground(Math.floor(x),Math.floor(z))))continue;
+  if(lampMat){const m=new THREE.Mesh(lampGeo,lampMat);m.scale.y=SQ;if(west)m.scale.x=-1;m.position.set(x,0,z);ROOT.add(m);ao(x,z,.8,.8);W.LSRC.push({col:0xffbb79,base:.9,dist:5.3,x:x+dir*lampW*.17,y:lampW*.62*SQ,z:z+.1,kind:'fire',ph:sx*.71});continue}
   part(timbers,x,1.08,z,.17,2.16,.17);part(ironwork,x,.29,z,.205,.11,.205);part(grime,x,.45,z,.2,.9,.2);ao(x,z,.9,.9);
-  part(ironwork,x+.19,2.05,z,.53,.095,.12);part(ironwork,x+.36,1.94,z,.043,.20,.043);
-  part(ironwork,x+.36,1.80,z,.31,.10,.28);part(ironwork,x+.36,1.45,z,.28,.065,.26);
-  for(const dx of [-.105,.105])part(ironwork,x+.36+dx,1.62,z+.10,.026,.31,.035);
-  lanterns.push([x+.36,1.62,z]);
-  W.LSRC.push({col:0xffbb79,base:.90,dist:5.3,x:x+.36,y:1.62,z,kind:'fire',ph:sx*.71});
+  part(ironwork,x+dir*.19,2.05,z,.53,.095,.12);part(ironwork,x+dir*.36,1.94,z,.043,.20,.043);
+  part(ironwork,x+dir*.36,1.80,z,.31,.10,.28);part(ironwork,x+dir*.36,1.45,z,.28,.065,.26);
+  for(const dx of [-.105,.105])part(ironwork,x+dir*.36+dx,1.62,z+.10,.026,.31,.035);
+  lanterns.push([x+dir*.36,1.62,z]);
+  W.LSRC.push({col:0xffbb79,base:.90,dist:5.3,x:x+dir*.36,y:1.62,z,kind:'fire',ph:sx*.71});
  }
  instanced(new THREE.BoxGeometry(.17,.24,.15),lanternGlass,lanterns,([x,y,z])=>M4.makeTranslation(x,y,z),false,false);
  for(const [mat,list] of parts)instanced(unit,mat,list,([x,h,z,w,height,depth,angle])=>{M4.makeRotationZ(angle);SC.set(w,height,depth);M4.scale(SC);M4.setPosition(x,h,z)});
@@ -442,7 +446,8 @@ function buildBrzeznica(I){
     if(p.anim==='fire'){frames=[0,1,2,3].map(i=>PF['debris_fire_'+i]);rc=R.debris_fire_0}else if(p.anim==='hfire'){frames=[0,1,2,3].map(i=>PF['house_fire_'+i]);rc=R.house_fire_0}
     else if(p.shrine!==undefined){frames=[PF.shrine,PF.shrine];rc=R.shrine}
     else{frames=[PF[p.k]];rc=R[p.k]}
-    propObjs.push({mesh:mkProp(frames,p.x,p.y,rc),frames,fps:p.anim?6:0,ph:Math.random()*3,kind:p.shrine!==undefined?'shrine':p.anim?'anim':'static',si:p.shrine});
+    const m=mkProp(frames,p.x,p.y,rc);if(p.flip)m.scale.x*=-1;
+    propObjs.push({mesh:m,frames,fps:p.anim?6:0,ph:Math.random()*3,kind:p.shrine!==undefined?'shrine':p.anim?'anim':'static',si:p.shrine});
   }
 }
 
@@ -561,7 +566,7 @@ function buildStolica(I){planGround(3);
     else if(p.shrine!==undefined){frames=[PF.healing_shrine,PF.depleted_shrine];rc=RC.healing_shrine}
     else{const k=p.still||p.k;frames=[PF[k]];rc=RC[k]}
     const o={mesh:mkProp(frames,p.x,p.y,rc),frames,fps:p.anim==='bloom'?4:p.anim?6:0,ph:Math.random()*3,kind:p.shrine!==undefined?'shrine':p.anim?'anim':'static',si:p.shrine};
-    if(p.k==='beggar_bodies'||p.k==='doorway_bones')o.mesh.castShadow=false;propObjs.push(o)}
+    if(p.k==='beggar_bodies'||p.k==='doorway_bones')o.mesh.castShadow=false;if(p.flip)o.mesh.scale.x*=-1;propObjs.push(o)}
 }
 
 // Chapter IV meshes: K1 ground, K2 walls (rock rim, palisade, watchtower), K3 trees and big nature props (64 px cells drawn at 16 px per tile)
@@ -693,7 +698,7 @@ function buildCytadela(I){planGround(5);
     const BZ=[0,1,2,3].map(i=>I['p2_brazier_'+i]?procFrame(I['p2_brazier_'+i],0,0,64,64,'prop'):null),BZok=BZ.every(Boolean);
     if(BZok){BZ.forEach(f=>cutCircle(f.n));OBJ.brazier_0[4]=.52}
     for(const [x,y] of braziers){const fr=BZok?BZ:[FR.brazier_0,FR.brazier_1],m=putObj('brazier_0',x+.5,y+.92,false);if(BZok){m.material=BZ[0].n;m.customDistanceMaterial=BZ[0].d}propObjs.push({mesh:m,frames:fr,fps:BZok?6:5,ph:Math.random()*3})}
-    for(const p of PROPS)if(OBJ[p.k]){const artKey=p.k==='bench_a'?'bench_b':p.k;const m=putObj(artKey,p.x,p.y,false);p.obj={mesh:m}}
+    for(const p of PROPS)if(OBJ[p.k]){const artKey=p.k==='bench_a'?'bench_b':p.k;const m=putObj(artKey,p.x,p.y,!!p.flip);p.obj={mesh:m}}
   }
   // K4 small props, 32 px cells; the healing shrine still comes from the Lower City sheet
   const RK={torch_0:[0,0],torch_1:[32,0],torch_2:[64,0],torch_3:[96,0],scroll:[0,32],book:[32,32],inkwell:[64,32],seal:[96,32],chains_0:[0,64],chains_1:[32,64],shackles:[64,64],skull:[96,64],
@@ -708,7 +713,7 @@ function buildCytadela(I){planGround(5);
     else frames=[PF[p.k]];
     if(!frames[0])continue;
     const o={mesh:mkProp(frames,p.x,p.y,[0,0,32,32]),frames,fps,ph:Math.random()*3,kind:sh?'shrine':fps?'anim':'static',si:p.shrine,prop:p};
-    {const SCL={scroll:.2,book:.17,inkwell:.16,seal:.14,pages:.18,purse:.2,goblet:.18,keys:.16,shackles:.24,skull:.24,swordbooks:.28,chair:.48,desk:.5,inkbarrel:.42,cart:.9,sarcophagus:.85,order_bonfire:.8,torch:.5,chains:.5,healing_shrine:.75},c=SCL[p.k]||SCL[p.anim]||1;if(c!==1)o.mesh.scale.set(c,SQ*c,c)}
+    {const SCL={scroll:.2,book:.17,inkwell:.16,seal:.14,pages:.18,purse:.2,goblet:.18,keys:.16,shackles:.24,skull:.24,swordbooks:.28,chair:.48,desk:.5,inkbarrel:.42,cart:.9,sarcophagus:.85,order_bonfire:.8,torch:.5,chains:.5,healing_shrine:.75},c=SCL[p.k]||SCL[p.anim]||1;if(c!==1)o.mesh.scale.set(c,SQ*c,c);if(p.flip)o.mesh.scale.x*=-1}
     if(!sh&&(p.k==='shackles'||p.k==='skull'||p.k==='scroll'||p.k==='pages'||p.k==='book'||p.k==='torch'||p.k==='chains'))o.mesh.castShadow=false;p.obj=o;propObjs.push(o)}
 }
 

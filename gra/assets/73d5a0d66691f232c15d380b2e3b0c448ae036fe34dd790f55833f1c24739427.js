@@ -792,7 +792,7 @@ function genDolne(){
   fill(3,8,32,32,20);fill(1,23,2,2,20);
   fill(6,3,26,4,20);fill(10,7,5,1,20);fill(23,7,5,1,20);
   fill(6,41,26,7,20);fill(10,40,5,1,20);fill(23,40,5,1,20);
-  for(const x of [9,15,21,27]){set(x,2,20);prop('king_statue',x+.5,2.92,[[x,2]]);set(x,48,20);prop('king_statue',x+.5,48.92,[[x,48]])}
+  for(const x of [9,15,21,27]){set(x,2,20);prop('king_statue',x+.5,2.92,[[x,2]],{flip:x>18});set(x,48,20);prop('king_statue',x+.5,48.92,[[x,48]],{flip:x>18})}// 15.11.2026: posagi po obu stronach osi patrza ku srodkowi
   for(const y of [11,15,19,28,32,36])for(const x of [10,26])set(x,y,22);
   for(let x=3;x<35;x++){set(x,23,29);set(x,24,29)}
   fill(35,1,5,GH-2,23);fill(35,22,5,4,25);
@@ -800,11 +800,11 @@ function genDolne(){
   fill(53,42,6,3,32);fill(42,45,19,7,32);
   [[7,21],[7,26],[14,21],[14,26],[22,21],[22,26],[30,21],[30,26],[8,5],[29,5],[8,43],[29,43],[16,46],[21,46],[46,50],[58,46],[42,21],[42,26],[60,21],[60,26],[44,9],[58,9],[44,38],[58,38]].forEach(([x,y])=>set(x,y,27));
   prop('healing_shrine',4.5,38.92,[[4,38]],{shrine:0});prop('healing_shrine',60.5,40.92,[[60,40]],{shrine:1});
-  for(const x of [12,18,24]){prop('sarcophagus',x+.5,4.92,[[x,4]]);prop('sarcophagus',x+.5,45.92,[[x,45]])}
+  for(const x of [12,18,24]){prop('sarcophagus',x+.5,4.92,[[x,4]],{flip:x>18});prop('sarcophagus',x+.5,45.92,[[x,45]],{flip:x>18})}
   // runda 296: dzielnice jak w SimCity, duze rekwizyty przy scianach, srodek sal wolny
   const W1=(k,x,y,ex)=>prop(k,x+.5,y+.92,[[x,y]],ex);
   // sala: sztandary i zbrojownia przy polnocnej i poludniowej scianie, zwalony filar w rogu
-  for(const y of [8,39]){for(const x of [6,15,21,33])W1('clan_banner',x,y);for(const x of [8,31])W1('pickaxe_rack',x,y);prop('fallen_pillar',29,y+.92,[[28,y],[29,y]])}
+  for(const y of [8,39]){for(const x of [6,15,21,33])W1('clan_banner',x,y,{flip:x>18});for(const x of [8,31])W1('pickaxe_rack',x,y);prop('fallen_pillar',29,y+.92,[[28,y],[29,y]])}
   W1('rune_lantern',4,9,{stone:0});W1('rune_lantern',9,38,{stone:2});W1('chains',3,12);W1('chains',33,34);
   for(const [x,y] of [[34,21],[34,26],[40,21],[40,26]])W1('rune_lantern',x,y);
   // kuznia: piece z miechami przy polnocnej scianie, kowadla na brzegach lawy, wozki i stojaki przy wschodniej scianie
@@ -858,7 +858,7 @@ function genSolneNabrzeze(){
  for(const [x,y] of [[29,11],[35,11],[27,47],[36,47],[24,27],[37,36]])brazier(x,y);
 
  const port=(k,x,y,solid,extra)=>prop(k,x+.5,y+.92,solid?[[x,y]]:[],Object.assign({port:true},extra||{}));
- port('winch',12,14,true);port('winch',53,14,true);port('crane',57,17,true);port('crane',18,11,true,{flip:true});
+ port('winch',12,14,true);port('winch',53,14,true,{flip:true});port('crane',57,17,true);port('crane',18,11,true,{flip:true});
  // cargo waiting for a crossing that never came
  for(const [x,y,f] of [[8,16],[17,26,1],[6,28],[49,28,1],[52,22],[35,3,1],[59,15],[60,28,1],[24,13],[40,16,1],[13,17,1],[26,36],[42,33,1],[50,17],[12,45,1],[51,45]])port('cargo',x,y,true,{flip:!!f});
  for(const [x,y,f] of [[6,21],[13,25,1],[18,17],[14,30],[6,14,1],[11,21],[17,29,1],[5,25],[12,27,1],[59,24],[29,3]])port('salt',x,y,true,{flip:!!f});
@@ -1159,7 +1159,7 @@ function genCytadela(seed){
   // 12.11.2026: dziedziniec ubrany po bokach (wozy, stojaki, sztandary przy bramach, paleniska), krypta z sarkofagami i kośćmi; pasy x16..23 i x56..63 oraz środek wolne
   for(const [x,y] of [[13,59],[26,59],[53,59],[66,59],[31,61],[49,61],[26,15],[53,15],[5,20],[74,20]])set(x,y,27);
   for(const x of [14,25,54,65])P('order_banner',x,58);
-  P('cart',12,65,true);P('cart',67,65,true);P('armour',5,62);P('armour',74,62);P('rack',5,65,true);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
+  P('cart',12,65,true);P('cart',67,65,true,{flip:true});P('armour',5,62);P('armour',74,62);P('rack',5,65,true);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
   for(const [x,y] of [[27,19],[32,19],[47,19],[52,19]])P('sarcophagus',x,y,true);
   for(const [x,y] of [[29,18],[50,18],[35,15],[45,15]])P('candelabra',x,y,true); // 12.11.2026: swiatlo w krypcie
   for(const [k,x,y] of [['dwarf_bones',5,15],['skull',74,15],['skull',30,17],['dwarf_bones',50,17],['chains',6,13]])P(k,x,y,[],{floorDetail:true});
@@ -1679,7 +1679,7 @@ const HUMAN_PROP_SCALE={chapel_stairs:1.5,dead_tree:1.02,impaled_head:.65,grave_
 const HUMAN_PROP_SCALE_1={house_fire:.5,shop_sign:.9,crypt_stairs:.75,dead_tree:1.6,impaled_head:1.1,grave_cross:.6,tombstone:.55,well:.8,stocks:.81,shrine:.8,gallows:1.67,wheel:.6,barrel:.5,marga_cart:1.15,crow_post:1.04,covered_corpses:.8,order_banner:1.4,burnt_hay:.8,dead_horse:1};
 function fitWorldProps(w,ch){if(ch===5)return;const assigned=new Set();
   for(const p of w.PROPS){const s=((ch===1||ch===PORT)&&HUMAN_PROP_SCALE_1[p.k]!==undefined)?HUMAN_PROP_SCALE_1[p.k]:HUMAN_PROP_SCALE[p.k];if(s===undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);if(!o)continue;
-    o.mesh.scale.set(s,s*SQ,s);p.obj=o;assigned.add(o);if(['wheel','burnt_hay','covered_corpses','dwarf_bones','beggar_bodies','doorway_bones','cz_pelts','cz_bones'].includes(p.k))o.mesh.castShadow=false}
+    o.mesh.scale.set(p.flip?-s:s,s*SQ,s);p.obj=o;assigned.add(o);/* 15.11.2026: skala nie kasuje odbicia lustrzanego (flip) */if(['wheel','burnt_hay','covered_corpses','dwarf_bones','beggar_bodies','doorway_bones','cz_pelts','cz_bones'].includes(p.k))o.mesh.castShadow=false}
   for(const o of w.propObjs)if(!assigned.has(o)&&o.fps===6&&!o.kind)o.mesh.scale.set(.55,.55*SQ,.55);
 }
 const SURFACE_TIME={value:0};
@@ -1947,6 +1947,7 @@ function buildDolne(I){planGround(2);
     else{frames=[PF[p.k]];rc=R[p.k]||TR[p.k]}
     const o={mesh:mkProp(frames,p.x,p.y,rc),frames,fps:p.anim?6:0,ph:Math.random()*3,kind:p.gate?'gate':p.shrine!==undefined?'shrine':p.anim?'anim':'static',si:p.shrine};
     if(p.k==='dwarf_bones'){o.mesh.castShadow=false}
+    if(p.flip)o.mesh.scale.x*=-1;// 15.11.2026: odbicie lustrzane par (symetria)
     p.obj=o;propObjs.push(o);
   }
 }
@@ -1984,7 +1985,10 @@ function buildDungeon(I){planGround(9);
 }
 
 // Chapter III (technical number 6): Solne Nabrzeze, the river harbour between the Lower City lift and the ferry to Goldheim.
-const PORT_LAMPS=[[12,47.6],[51.8,47.6],[11.4,15.6],[54.6,15.6],[26,19],[40,19],[30,40],[28.3,46],[35.6,46],[22,25.6],[45,25.6],[9,24.4],[57.4,30.2],[30.6,10.6],[35.4,10.6]];// slupy z latarniami [x,y] w siatce mapy
+// 15.11.2026 (symetria): [x na DUZEJ mapie, y w siatce portu, kierunek ramienia]. x podany wprost na duzej mapie, bo rozciaganie siatki (MP) psulo rowne odstepy par.
+// Kazda para stoi rowno wzgledem swojego miejsca (szyja trapu, trakt, plac, kolowroty, pomosty), zachodnia latarnia jest odbiciem lustrzanym wschodniej (ramiona na zewnatrz).
+// Usuniete: latarnia uliczna ze srodka skladu i dwie, ktore wypadaly w wodzie (nigdy sie nie rysowaly). Pojedyncza przy trakcie zastapiona para.
+const PORT_LAMPS=[[49.8,10.6,-1],[57.2,10.6,1],[43,19,-1],[64,19,1],[18.8,15.6,-1],[89.7,15.6,1],[48.4,40,-1],[56.6,40,1],[46.5,46,-1],[58.5,46,1],[20.4,47.6,-1],[84.6,47.6,1],[20,30.2,-1],[93.8,30.2,1]];
 const PORT_PROP_SIZE={winch:[2.25,1.85],crane:[4.8,5.2],cargo:[1.8,1.65],salt:[1.65,1.45],bollard:[1.05,1.05],
  lodz:[3.0,3.0],pale:[1.75,1.75],skrzynia:[1.4,1.4],siec:[1.6,1.6],kotwica:[1.75,1.75],beczka_ryby:[1.5,1.5],malze:[1.8,1.8],ikra:[1.6,1.6],deski:[1.7,1.7],pacholek:[1.35,1.35],wiecierz:[1.45,1.45],wrak:[1.9,1.9]};// nowe: klatki kwadratowe
 // atlas zbutwialych rekwizytow (15.11.2026): 4x3 klatki po 256 px, rzedami jak w PORT_REK
@@ -2217,15 +2221,15 @@ function buildSolneNabrzeze(I){
  // 15.11.2026: malowana latarnia (rekwizyt Zlotogrodu) z przygaszonym zloceniem, jak kute zelazo portu; stara latarnia z klockow tylko bez tego obrazu
  const lampImg=I.p3_street_lantern,lampW=2.05;let lampMat=null,lampGeo=null;
  if(lampImg){const t=new THREE.Texture(lampImg);t.needsUpdate=true;t.anisotropy=4;lampMat=phong({map:t,alphaTest:.4,color:0x9c9ca4,side:THREE.DoubleSide});lampGeo=new THREE.PlaneGeometry(lampW,lampW).translate(0,lampW/2,0);const n=lampGeo.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6)}
- for(const [sx,sy] of PORT_LAMPS){
-  const x=MP(sx),z=MP(sy);if(!land(ground(Math.floor(x),Math.floor(z))))continue;
-  if(lampMat){const m=new THREE.Mesh(lampGeo,lampMat);m.scale.y=SQ;m.position.set(x,0,z);ROOT.add(m);ao(x,z,.8,.8);W.LSRC.push({col:0xffbb79,base:.9,dist:5.3,x:x+lampW*.17,y:lampW*.62*SQ,z:z+.1,kind:'fire',ph:sx*.71});continue}
+ for(const [sx,sy,dir] of PORT_LAMPS){
+  const x=sx,z=MP(sy),west=dir<0;if(!land(ground(Math.floor(x),Math.floor(z))))continue;
+  if(lampMat){const m=new THREE.Mesh(lampGeo,lampMat);m.scale.y=SQ;if(west)m.scale.x=-1;m.position.set(x,0,z);ROOT.add(m);ao(x,z,.8,.8);W.LSRC.push({col:0xffbb79,base:.9,dist:5.3,x:x+dir*lampW*.17,y:lampW*.62*SQ,z:z+.1,kind:'fire',ph:sx*.71});continue}
   part(timbers,x,1.08,z,.17,2.16,.17);part(ironwork,x,.29,z,.205,.11,.205);part(grime,x,.45,z,.2,.9,.2);ao(x,z,.9,.9);
-  part(ironwork,x+.19,2.05,z,.53,.095,.12);part(ironwork,x+.36,1.94,z,.043,.20,.043);
-  part(ironwork,x+.36,1.80,z,.31,.10,.28);part(ironwork,x+.36,1.45,z,.28,.065,.26);
-  for(const dx of [-.105,.105])part(ironwork,x+.36+dx,1.62,z+.10,.026,.31,.035);
-  lanterns.push([x+.36,1.62,z]);
-  W.LSRC.push({col:0xffbb79,base:.90,dist:5.3,x:x+.36,y:1.62,z,kind:'fire',ph:sx*.71});
+  part(ironwork,x+dir*.19,2.05,z,.53,.095,.12);part(ironwork,x+dir*.36,1.94,z,.043,.20,.043);
+  part(ironwork,x+dir*.36,1.80,z,.31,.10,.28);part(ironwork,x+dir*.36,1.45,z,.28,.065,.26);
+  for(const dx of [-.105,.105])part(ironwork,x+dir*.36+dx,1.62,z+.10,.026,.31,.035);
+  lanterns.push([x+dir*.36,1.62,z]);
+  W.LSRC.push({col:0xffbb79,base:.90,dist:5.3,x:x+dir*.36,y:1.62,z,kind:'fire',ph:sx*.71});
  }
  instanced(new THREE.BoxGeometry(.17,.24,.15),lanternGlass,lanterns,([x,y,z])=>M4.makeTranslation(x,y,z),false,false);
  for(const [mat,list] of parts)instanced(unit,mat,list,([x,h,z,w,height,depth,angle])=>{M4.makeRotationZ(angle);SC.set(w,height,depth);M4.scale(SC);M4.setPosition(x,h,z)});
@@ -2313,7 +2317,8 @@ function buildBrzeznica(I){
     if(p.anim==='fire'){frames=[0,1,2,3].map(i=>PF['debris_fire_'+i]);rc=R.debris_fire_0}else if(p.anim==='hfire'){frames=[0,1,2,3].map(i=>PF['house_fire_'+i]);rc=R.house_fire_0}
     else if(p.shrine!==undefined){frames=[PF.shrine,PF.shrine];rc=R.shrine}
     else{frames=[PF[p.k]];rc=R[p.k]}
-    propObjs.push({mesh:mkProp(frames,p.x,p.y,rc),frames,fps:p.anim?6:0,ph:Math.random()*3,kind:p.shrine!==undefined?'shrine':p.anim?'anim':'static',si:p.shrine});
+    const m=mkProp(frames,p.x,p.y,rc);if(p.flip)m.scale.x*=-1;
+    propObjs.push({mesh:m,frames,fps:p.anim?6:0,ph:Math.random()*3,kind:p.shrine!==undefined?'shrine':p.anim?'anim':'static',si:p.shrine});
   }
 }
 
@@ -2432,7 +2437,7 @@ function buildStolica(I){planGround(3);
     else if(p.shrine!==undefined){frames=[PF.healing_shrine,PF.depleted_shrine];rc=RC.healing_shrine}
     else{const k=p.still||p.k;frames=[PF[k]];rc=RC[k]}
     const o={mesh:mkProp(frames,p.x,p.y,rc),frames,fps:p.anim==='bloom'?4:p.anim?6:0,ph:Math.random()*3,kind:p.shrine!==undefined?'shrine':p.anim?'anim':'static',si:p.shrine};
-    if(p.k==='beggar_bodies'||p.k==='doorway_bones')o.mesh.castShadow=false;propObjs.push(o)}
+    if(p.k==='beggar_bodies'||p.k==='doorway_bones')o.mesh.castShadow=false;if(p.flip)o.mesh.scale.x*=-1;propObjs.push(o)}
 }
 
 // Chapter IV meshes: K1 ground, K2 walls (rock rim, palisade, watchtower), K3 trees and big nature props (64 px cells drawn at 16 px per tile)
@@ -2564,7 +2569,7 @@ function buildCytadela(I){planGround(5);
     const BZ=[0,1,2,3].map(i=>I['p2_brazier_'+i]?procFrame(I['p2_brazier_'+i],0,0,64,64,'prop'):null),BZok=BZ.every(Boolean);
     if(BZok){BZ.forEach(f=>cutCircle(f.n));OBJ.brazier_0[4]=.52}
     for(const [x,y] of braziers){const fr=BZok?BZ:[FR.brazier_0,FR.brazier_1],m=putObj('brazier_0',x+.5,y+.92,false);if(BZok){m.material=BZ[0].n;m.customDistanceMaterial=BZ[0].d}propObjs.push({mesh:m,frames:fr,fps:BZok?6:5,ph:Math.random()*3})}
-    for(const p of PROPS)if(OBJ[p.k]){const artKey=p.k==='bench_a'?'bench_b':p.k;const m=putObj(artKey,p.x,p.y,false);p.obj={mesh:m}}
+    for(const p of PROPS)if(OBJ[p.k]){const artKey=p.k==='bench_a'?'bench_b':p.k;const m=putObj(artKey,p.x,p.y,!!p.flip);p.obj={mesh:m}}
   }
   // K4 small props, 32 px cells; the healing shrine still comes from the Lower City sheet
   const RK={torch_0:[0,0],torch_1:[32,0],torch_2:[64,0],torch_3:[96,0],scroll:[0,32],book:[32,32],inkwell:[64,32],seal:[96,32],chains_0:[0,64],chains_1:[32,64],shackles:[64,64],skull:[96,64],
@@ -2579,7 +2584,7 @@ function buildCytadela(I){planGround(5);
     else frames=[PF[p.k]];
     if(!frames[0])continue;
     const o={mesh:mkProp(frames,p.x,p.y,[0,0,32,32]),frames,fps,ph:Math.random()*3,kind:sh?'shrine':fps?'anim':'static',si:p.shrine,prop:p};
-    {const SCL={scroll:.2,book:.17,inkwell:.16,seal:.14,pages:.18,purse:.2,goblet:.18,keys:.16,shackles:.24,skull:.24,swordbooks:.28,chair:.48,desk:.5,inkbarrel:.42,cart:.9,sarcophagus:.85,order_bonfire:.8,torch:.5,chains:.5,healing_shrine:.75},c=SCL[p.k]||SCL[p.anim]||1;if(c!==1)o.mesh.scale.set(c,SQ*c,c)}
+    {const SCL={scroll:.2,book:.17,inkwell:.16,seal:.14,pages:.18,purse:.2,goblet:.18,keys:.16,shackles:.24,skull:.24,swordbooks:.28,chair:.48,desk:.5,inkbarrel:.42,cart:.9,sarcophagus:.85,order_bonfire:.8,torch:.5,chains:.5,healing_shrine:.75},c=SCL[p.k]||SCL[p.anim]||1;if(c!==1)o.mesh.scale.set(c,SQ*c,c);if(p.flip)o.mesh.scale.x*=-1}
     if(!sh&&(p.k==='shackles'||p.k==='skull'||p.k==='scroll'||p.k==='pages'||p.k==='book'||p.k==='torch'||p.k==='chains'))o.mesh.castShadow=false;p.obj=o;propObjs.push(o)}
 }
 

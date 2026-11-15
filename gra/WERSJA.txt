@@ -833,3 +833,4 @@ cache755 · Kociolek: 10% HP/s na Normalnym
 cache756 · Menu glowne: ten sam ogien co na wyborze postaci
 cache757 · Menu: postac blizej ognia, wolniejsze iskry, wybor postaci bez zlotej ramki
 cache758 · Ognisko wyboru postaci: wolniejsze iskry
+cache759 · Runda A symetria: odbicia lustrzane latarni portu, kolowrotu, posagow krola, sztandarow klanowych, sarkofagow, wozu Cytadeli; latarnie portu parami; nie sprawdzono u autora (FPS, pad, dzwiek)
