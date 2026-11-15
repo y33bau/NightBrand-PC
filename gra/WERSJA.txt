@@ -799,3 +799,4 @@ cache721 · Kat (Goran) w nowym stylu: 9 atlasow kat_*, czysta przezroczystosc, 
 cache722 · Kat: nowe efekty ciecia, ciezkiego uderzenia, ladowania i parowania (arkusz 9 Gorana).
 cache723 · Wybor rozdzialu: banery w spalonej ramie z okuciami jak deska Przygotuj sie (nie sprawdzono: pad, monitor autora, itch.io)
 cache724 · Wybor rozdzialu: Menu glowne, Kaplica, Kronika i Tryb gry w spalonej desce; napisy rozdzialow przy numerze, ilustracja z prawej (nie sprawdzono: pad, monitor autora, itch.io)
+cache725 · Menu glowne: Graj, Kaplica, Kronika, Instrukcja, Opcje i Wyzwanie dnia w spalonej desce, zaznaczenie zarem (nie sprawdzono: pad, monitor autora, itch.io)

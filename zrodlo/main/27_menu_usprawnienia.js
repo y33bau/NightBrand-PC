@@ -589,6 +589,14 @@ ${Z} .premium-nav::before{top:2px!important}
 ${Z} .premium-nav::after{bottom:2px!important}
 ${Z} .nb2-daily{border:none!important;background:${A('assets/ui/6679e28f0d4528a14db5abaeb1f51f96eefc35d966cdec24f48246011b086585.webp')} 4% 50%/auto 92% no-repeat,${PAS} center/100% 160% no-repeat!important;padding-left:13%!important}
 ${Z} .nb2-daily${ON}{background:${A('assets/ui/6679e28f0d4528a14db5abaeb1f51f96eefc35d966cdec24f48246011b086585.webp')} 4% 50%/auto 92% no-repeat,${PAS_ON} center/100% 160% no-repeat!important}
+/* 15.11.2026: menu glowne w spalonej desce (jak Przygotuj sie); zaznaczenie: zar w srodku deski */
+${NAV}::after{inset:-10% -4% -10% -4%!important;background:${RAMKA} center/100% 100% no-repeat!important;opacity:1!important}
+${Z} .premium-nav>:is(.premium-journey,#nbBrak)::after{inset:-12% -5% -12% -5%!important;opacity:1!important}
+${NAV}${ON}::after{background:radial-gradient(ellipse 44% 40% at 50% 58%,rgba(255,118,36,.5),rgba(255,90,30,.16) 60%,rgba(255,90,30,0) 100%) center/86% 74% no-repeat,${RAMKA} center/100% 100% no-repeat!important;animation:nbZarG 1.8s ease-in-out infinite!important}
+${NAV}${ON}{color:#ffe2b8!important;text-shadow:0 0 10px rgba(255,140,60,.75)!important}
+${NAV}::before{left:4%!important;top:4%!important;bottom:4%!important;width:9%!important}
+${Z} .nb2-daily{background:${A('assets/ui/6679e28f0d4528a14db5abaeb1f51f96eefc35d966cdec24f48246011b086585.webp')} 5% 50%/auto 64% no-repeat,${RAMKA} center/100% 100% no-repeat!important;padding-top:1.4vh!important;padding-bottom:1.4vh!important}
+${Z} .nb2-daily${ON}{background:${A('assets/ui/6679e28f0d4528a14db5abaeb1f51f96eefc35d966cdec24f48246011b086585.webp')} 5% 50%/auto 64% no-repeat,radial-gradient(ellipse 44% 40% at 50% 58%,rgba(255,118,36,.42),rgba(255,90,30,0) 100%) center/86% 74% no-repeat,${RAMKA} center/100% 100% no-repeat!important;animation:nbZarG 1.8s ease-in-out infinite!important}
 ${PR} .pc-profile{border:none!important;border-image:none!important;background:${A('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp')} center/100% 100% no-repeat!important;box-shadow:none!important;padding-left:2.2%!important;padding-right:2.2%!important}
 ${PR} .pc-profile>.pcg-edge{display:none!important}
 ${PR} img.pc-profile-ash{content:${A('assets/ui/bec1edb981cde86153bfc1f97330a541237d7963c2926133284dbc3f9ef457bf.webp')}!important;filter:none!important;object-fit:contain!important}
