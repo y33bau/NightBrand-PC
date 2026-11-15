@@ -826,3 +826,4 @@ cache748 · Nowy HUD takze przy ekranie dotykowym na PC
 cache749 · Noc 16 min (2x8, polnoc 8:00), Napor w 4:00 i 12:00 zakonczony elita, mobki -20% zycia (wzrost od ulamka nocy), +12% wrogow, doswiadczenie -15%, monety -10%; test-review dostosowany do kampanii z portem (nie sprawdzono: realny balans u autora, pad, FPS)
 cache750 · Uderzenia duzych wrogow: pyl HD zamiast wielkiego pikselowego pierscienia krysztalow
 cache751 · Stamina: regeneracja +15%, techniki aktywne ok. 5% tansze
+cache752 · Stamina: tylko regeneracja +15%, koszty technik z powrotem bez zmian
