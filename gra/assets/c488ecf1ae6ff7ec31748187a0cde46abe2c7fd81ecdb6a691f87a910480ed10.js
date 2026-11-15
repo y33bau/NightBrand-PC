@@ -1144,10 +1144,10 @@ function genCytadela(seed){
   for(const [x,y] of [[11,59],[68,59],[11,43],[68,43],[11,19],[68,19],[32,8],[47,8]])set(x,y,27);
   const P=(k,x,y,solid=false,extra)=>prop(k,x+.5,y+.92,solid===true?[[x,y]]:solid||[],extra);
   // Keep both north/south lanes (x16..23 and x56..63) and the middle of every hall open.
-  P('gallows',10,63,true);P('well',70,63,true);P('armour',8,59);P('armour',72,59);
+  P('armour',8,59);P('armour',72,59);// 15.11.2026: szubienica, studnia, wozy i stojak z dziedzinca usuniete (decyzja autora: tylko duze obiekty przy scianach)
   // Runda 286: meble i poswiecenia przy scianach (polnocna sciana kazdej sali, boki), srodek sal pusty; bez ksiazek na posadzce
   for(const x of [28,33])P('bookcase_a',x,47,true);for(const x of [46,51])P('bookcase_b',x,47,true);P('lectern',40,47,true);
-  P('bookcase_a',6,50,true);P('bookcase_b',73,50,true);P('desk',6,53,true);P('chair',7,54);P('inkbarrel',73,54,true);
+  P('bookcase_a',6,50,true);P('bookcase_b',73,50,true);P('desk',6,53,true);
   P('statue_a',28,66,true);P('statue_b',51,66,true);
   P('bench_a',29,35,[[28,35],[29,35]]);P('bench_a',51,35,[[50,35],[51,35]]);P('statue_a',8,37,true);P('statue_b',71,37,true);P('candelabra',36,35,true);P('candelabra',44,35,true);P('statue_a',26,35,true);P('statue_b',53,35,true);
   P('scale',40,24,true);P('vault',72,26,true);P('chest',6,26,true);P('chest_open',72,30,true);P('goldheap',7,30,true);P('chest',31,24,true);P('chest',48,24,true);
@@ -1155,14 +1155,12 @@ function genCytadela(seed){
   P('throne',40,4,[[37,4],[38,4],[39,4],[40,4],[41,4],[42,4],[43,4]]);P('statue_a',30,4,true);P('statue_b',50,4,true);P('candelabra',33,4,true);P('candelabra',47,4,true);P('statue_a',25,6,true);P('statue_b',55,6,true);
   for(const y of [58,47,35,24,13,3])for(const x of [8,71]){if(y===13&&x===71)P('chains',x,y,[],{anim:'chains'});else P('order_bonfire',x,y,[],{fire:true})}
   // Six deliberate, non-blocking details beside furniture, never scattered into passageways.
-  for(const [k,x,y] of [['shackles',7,19]])P(k,x,y,[],{floorDetail:true,...(k==='pages'?{anim:'pages'}:{})});
   // 12.11.2026: dziedziniec ubrany po bokach (wozy, stojaki, sztandary przy bramach, paleniska), krypta z sarkofagami i kośćmi; pasy x16..23 i x56..63 oraz środek wolne
   for(const [x,y] of [[13,59],[26,59],[53,59],[66,59],[31,61],[49,61],[26,15],[53,15],[5,20],[74,20]])set(x,y,27);
   for(const x of [14,25,54,65])P('order_banner',x,58);
-  P('cart',12,65,true);P('cart',67,65,true,{flip:true});P('armour',5,62);P('armour',74,62);P('rack',5,65,true);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
+  P('armour',5,62);P('armour',74,62);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
   for(const [x,y] of [[27,19],[32,19],[47,19],[52,19]])P('sarcophagus',x,y,true);
   for(const [x,y] of [[29,18],[50,18],[35,15],[45,15]])P('candelabra',x,y,true); // 12.11.2026: swiatlo w krypcie
-  for(const [k,x,y] of [['dwarf_bones',5,15],['skull',74,15],['skull',30,17],['dwarf_bones',50,17],['chains',6,13]])P(k,x,y,[],{floorDetail:true});
   const SH=[[69,60],[10,42],[40,19]];SH.forEach(([x,y],i)=>P('healing_shrine',x,y,true,{shrine:i}));
   return{map,under,PROPS,seed,start:{x:40*TS+8,y:63*TS+8},shrines:SH.map(([x,y])=>({x:x*TS+8,y:y*TS+12})),region:cyRegion,idle:[40,58,14,6],
     npcs:(()=>{const OK=[70,71,72,73,74,75],nn=(id,name,lines,x,y)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);return{id,art:id,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines}};
@@ -1460,7 +1458,7 @@ function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan
   if(ch===4&&![4,5,7].includes(row)){const r=W.region(x,y);id=r==='camp'?0:row===1?1:(r==='hill'||r==='stones')?3:r==='forest'?2:0;if(id===2&&nz(x,y)>.6)id=4;}
   if(ch===5)id=IMGS.cc0_c5_dziedziniec?(()=>{let t=tileAt(x,y);if(t===31||t===27||t===22)t=W.under[i];return t===73?7:t===76?5:t===77?6:({dziedziniec:0,kancelaria:2,sala:1,skarbiec:3,krypta:4,tron:1})[W.region(x,y)]??0})():(![3,4,6,7].includes(row)?(row===2||row===1?2:row===5?1:0):-1); // 13.11.2026: siedziba zakonu, osobna podloga dla kazdej sali (70 dziedziniec,71 marmur,72 archiwum,73 dywan,74 skarbiec,75 loch,76 pieczec,77 atrament)
   if(ch===9&&![1,5,7].includes(row))id=row===2?1:0;
-  if(ch===1){let X=x,Y=y;if(map[i]===45||map[i]===90){let b=99;for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const u=x+dx,v=y+dy,k=v*MW+u;if(u<0||v<0||u>=MW||v>=MH||map[k]===45||map[k]===90)continue;const d=dx*dx+dy*dy;if(d<b){b=d;X=u;Y=v}}}const v=MAP1_FLOOR[Y].charCodeAt(X)-48;if(v!==0||id>=0)id=v;if(row===3&&IMGS.cc0_deski)id=7} // 15.11.2026: we wszystkich chatach podloga z desek (wnetrze = wiersz 3 planu) // 12.11.2026: pod woda ta sama posadzka co na najblizszym brzegu
+  if(ch===1){let X=x,Y=y;if(map[i]===45||map[i]===90){let b=99;for(let dy=-4;dy<=4;dy++)for(let dx=-4;dx<=4;dx++){const u=x+dx,v=y+dy,k=v*MW+u;if(u<0||v<0||u>=MW||v>=MH||map[k]===45||map[k]===90)continue;const d=dx*dx+dy*dy;if(d<b){b=d;X=u;Y=v}}}const v=MAP1_FLOOR[Y].charCodeAt(X)-48;if(v!==0||id>=0)id=v;if(row===3&&IMGS.cc0_deski&&!(x>=56&&x<=62&&y>=58&&y<=63))id=7}/* 15.11.2026: plac studni (rozebrany dom) bez desek, podloze jak dookola */ // 15.11.2026: we wszystkich chatach podloga z desek (wnetrze = wiersz 3 planu) // 12.11.2026: pod woda ta sama posadzka co na najblizszym brzegu
   if(id>capId)id=ch===4?2:0;
   if(id>=0)cells[a+2]=(cells[a+2]%8)+128+id*8;
  }return cells;
@@ -2659,7 +2657,7 @@ const plLight=new THREE.PointLight(0xffd2a0,2.1,13,2);plLight.castShadow=true;pl
 // with extra buildings, props, four "altars" for the kill-next-to-it event, traps and the 9:00 wave (big-map coordinates)
 // Runda 216: dodatkowe dekoracje bez kolizji na każdej mapie. Stawiane tylko na wolnej posadzce (bez cieczy, z dala od ścian),
 // z dala od innych obiektów, NPC, kapliczek, startu i korytarzy (clearways); nie zmieniają mapy kolizji.
-const UND=['wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11'];const DECOR={1:[['covered_corpses',8],['burnt_hay',9],['wheel',7]],2:[],3:[['beggar_bodies',12],['doorway_bones',10],['rot_bloom',8,{anim:'bloom'}]],4:[['cz_bones',22],['wolf_skull_bush',14]],5:[['ledgers',8,null,['kancelaria','sala']],['chair',6,null,['kancelaria']],['rack',5,null,['skarbiec','krypta']],['armour',4,null,['sala','skarbiec']],['cage',3,null,['krypta']]]};
+const UND=['wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11'];const DECOR={1:[['covered_corpses',8],['burnt_hay',9],['wheel',7]],2:[],3:[['beggar_bodies',12],['doorway_bones',10],['rot_bloom',8,{anim:'bloom'}]],4:[['cz_bones',22],['wolf_skull_bush',14]],5:[]}/* 15.11.2026 (decyzja autora): Cytadela bez losowych drobiazgow na srodku sal; zostaja duze obiekty przy scianach */;
 // Runda 217: przerzedzenie zwykłych ognisk (ogniska z gruzu, obozowe, stosy): żadne dwa nie stoją bliżej niż 9 pól.
 // Nie dotyczy ognisk mocy (kapliczek odrodzenia), koksowników, pochodni i latarni ani kręgu ognisk wokół bożka w rozdz. IV.
 function thinFires(w){const P=w.PROPS,M=w.map,U=w.under,idol=P.find(p=>p.k==='cz_idol'),sh=w.shrines||[],R=9;
@@ -2846,6 +2844,8 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
   Object.assign(w,{ch,group:new THREE.Group(),propObjs:[],npcMeshes:{},walls:[],cliffs:[],pillars:[],lavas:[],braziers:[],waters:[],rots:[],shallow:[],LSRC:[]});
   if(ch>=2&&ch<=6){const sp=chojrakSpot(w);if(sp)w.npcs.push({id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:sp[0],y:sp[1],lines:[]})}
   for(const n of w.npcs)if(n.solid)w.map[n.solid[1]*MW+n.solid[0]]=31;if(ch===4){deepMarsh(w);clearNpcTrees(w)}if(ch===1)clearCryptSurrounds(w);if(ch>=1&&ch<=5){thinFires(w);decorFill(w,ch)}
+  // 15.11.2026 (decyzja autora): z calej gry znikaja lewitujace kosci krasnoluda, uciete schodki z koscmi (nachodzily na sarkofagi) i lewitujace deski w porcie; zaden nie mial kolizji
+  for(let k=w.PROPS.length-1;k>=0;k--){const q=w.PROPS[k].k;if(q==='dwarf_bones'||q==='doorway_bones'||(ch===PORT&&q==='deski'))w.PROPS.splice(k,1)}
   // runda 215: bez ognisk (koksowników) tuż przy lawie w rozdz. II
   if(ch===2)for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const i=y*MW+x;if(w.map[i]!==27)continue;let n=false;for(let dy=-3;dy<=3&&!n;dy++)for(let dx=-3;dx<=3;dx++){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<MW&&Y<MH&&w.map[Y*MW+X]===24){n=true;break}}if(n)w.map[i]=(w.under&&w.under[i]&&w.under[i]!==27)?w.under[i]:20}
   // runda 242: zasada świata: żadnych ognisk na lawie ani w promieniu 4 pól od niej (ogniska z gruzu, obozowe, stosy, koksowniki); ogniska mocy bez zmian
@@ -2859,6 +2859,8 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
    if(!sh3.some(s=>Math.hypot(s.x/16-p.x,s.y/16-p.y)<6))continue;P3.splice(k,1);const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;
    if(M3[i]===31&&!P3.some(q=>Math.floor(q.y)===y&&Math.abs(q.x-(x+.5))<1.2)){let v=U3&&U3[i];if(!v||v===31||v===27||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=M3[(y+b)*MW+x+a];if(!SOLID.has(t)&&t!==27&&t!==24&&t!==54){v=t;break}}}M3[i]=v||20}}}
   if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}
+  // 15.11.2026 (prosba autora): wejscie do krypty wysrodkowane w przeswicie miedzy chatami (o 1 pole w prawo), razem z kolizja
+  if(ch===1){const cs=w.PROPS.find(p=>p.k==='crypt_stairs');if(cs&&Math.abs(cs.x-76.4)<.3){const y=Math.floor(cs.y),L=y*MW+Math.floor(cs.x)-4,R=y*MW+Math.floor(cs.x)+2;if(w.map[L]===31){w.map[L]=(w.under&&w.under[L])||41}if(w.map[R]!==31&&!SOLID.has(w.map[R])){if(w.under)w.under[R]=w.map[R];w.map[R]=31}cs.x+=1}}
   if(ch===2)layoutPatch2(w);
   scene.add(w.group);
   const ta=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?21:w.map[y*MW+x];

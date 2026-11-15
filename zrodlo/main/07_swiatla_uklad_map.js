@@ -6,7 +6,7 @@ const plLight=new THREE.PointLight(0xffd2a0,2.1,13,2);plLight.castShadow=true;pl
 // with extra buildings, props, four "altars" for the kill-next-to-it event, traps and the 9:00 wave (big-map coordinates)
 // Runda 216: dodatkowe dekoracje bez kolizji na każdej mapie. Stawiane tylko na wolnej posadzce (bez cieczy, z dala od ścian),
 // z dala od innych obiektów, NPC, kapliczek, startu i korytarzy (clearways); nie zmieniają mapy kolizji.
-const UND=['wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11'];const DECOR={1:[['covered_corpses',8],['burnt_hay',9],['wheel',7]],2:[],3:[['beggar_bodies',12],['doorway_bones',10],['rot_bloom',8,{anim:'bloom'}]],4:[['cz_bones',22],['wolf_skull_bush',14]],5:[['ledgers',8,null,['kancelaria','sala']],['chair',6,null,['kancelaria']],['rack',5,null,['skarbiec','krypta']],['armour',4,null,['sala','skarbiec']],['cage',3,null,['krypta']]]};
+const UND=['wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11'];const DECOR={1:[['covered_corpses',8],['burnt_hay',9],['wheel',7]],2:[],3:[['beggar_bodies',12],['doorway_bones',10],['rot_bloom',8,{anim:'bloom'}]],4:[['cz_bones',22],['wolf_skull_bush',14]],5:[]}/* 15.11.2026 (decyzja autora): Cytadela bez losowych drobiazgow na srodku sal; zostaja duze obiekty przy scianach */;
 // Runda 217: przerzedzenie zwykłych ognisk (ogniska z gruzu, obozowe, stosy): żadne dwa nie stoją bliżej niż 9 pól.
 // Nie dotyczy ognisk mocy (kapliczek odrodzenia), koksowników, pochodni i latarni ani kręgu ognisk wokół bożka w rozdz. IV.
 function thinFires(w){const P=w.PROPS,M=w.map,U=w.under,idol=P.find(p=>p.k==='cz_idol'),sh=w.shrines||[],R=9;
@@ -193,6 +193,8 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
   Object.assign(w,{ch,group:new THREE.Group(),propObjs:[],npcMeshes:{},walls:[],cliffs:[],pillars:[],lavas:[],braziers:[],waters:[],rots:[],shallow:[],LSRC:[]});
   if(ch>=2&&ch<=6){const sp=chojrakSpot(w);if(sp)w.npcs.push({id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:sp[0],y:sp[1],lines:[]})}
   for(const n of w.npcs)if(n.solid)w.map[n.solid[1]*MW+n.solid[0]]=31;if(ch===4){deepMarsh(w);clearNpcTrees(w)}if(ch===1)clearCryptSurrounds(w);if(ch>=1&&ch<=5){thinFires(w);decorFill(w,ch)}
+  // 15.11.2026 (decyzja autora): z calej gry znikaja lewitujace kosci krasnoluda, uciete schodki z koscmi (nachodzily na sarkofagi) i lewitujace deski w porcie; zaden nie mial kolizji
+  for(let k=w.PROPS.length-1;k>=0;k--){const q=w.PROPS[k].k;if(q==='dwarf_bones'||q==='doorway_bones'||(ch===PORT&&q==='deski'))w.PROPS.splice(k,1)}
   // runda 215: bez ognisk (koksowników) tuż przy lawie w rozdz. II
   if(ch===2)for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const i=y*MW+x;if(w.map[i]!==27)continue;let n=false;for(let dy=-3;dy<=3&&!n;dy++)for(let dx=-3;dx<=3;dx++){const X=x+dx,Y=y+dy;if(X>=0&&Y>=0&&X<MW&&Y<MH&&w.map[Y*MW+X]===24){n=true;break}}if(n)w.map[i]=(w.under&&w.under[i]&&w.under[i]!==27)?w.under[i]:20}
   // runda 242: zasada świata: żadnych ognisk na lawie ani w promieniu 4 pól od niej (ogniska z gruzu, obozowe, stosy, koksowniki); ogniska mocy bez zmian
@@ -206,6 +208,8 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
    if(!sh3.some(s=>Math.hypot(s.x/16-p.x,s.y/16-p.y)<6))continue;P3.splice(k,1);const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;
    if(M3[i]===31&&!P3.some(q=>Math.floor(q.y)===y&&Math.abs(q.x-(x+.5))<1.2)){let v=U3&&U3[i];if(!v||v===31||v===27||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=M3[(y+b)*MW+x+a];if(!SOLID.has(t)&&t!==27&&t!==24&&t!==54){v=t;break}}}M3[i]=v||20}}}
   if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}
+  // 15.11.2026 (prosba autora): wejscie do krypty wysrodkowane w przeswicie miedzy chatami (o 1 pole w prawo), razem z kolizja
+  if(ch===1){const cs=w.PROPS.find(p=>p.k==='crypt_stairs');if(cs&&Math.abs(cs.x-76.4)<.3){const y=Math.floor(cs.y),L=y*MW+Math.floor(cs.x)-4,R=y*MW+Math.floor(cs.x)+2;if(w.map[L]===31){w.map[L]=(w.under&&w.under[L])||41}if(w.map[R]!==31&&!SOLID.has(w.map[R])){if(w.under)w.under[R]=w.map[R];w.map[R]=31}cs.x+=1}}
   if(ch===2)layoutPatch2(w);
   scene.add(w.group);
   const ta=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?21:w.map[y*MW+x];

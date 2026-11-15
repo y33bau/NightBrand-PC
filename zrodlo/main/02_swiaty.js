@@ -407,10 +407,10 @@ function genCytadela(seed){
   for(const [x,y] of [[11,59],[68,59],[11,43],[68,43],[11,19],[68,19],[32,8],[47,8]])set(x,y,27);
   const P=(k,x,y,solid=false,extra)=>prop(k,x+.5,y+.92,solid===true?[[x,y]]:solid||[],extra);
   // Keep both north/south lanes (x16..23 and x56..63) and the middle of every hall open.
-  P('gallows',10,63,true);P('well',70,63,true);P('armour',8,59);P('armour',72,59);
+  P('armour',8,59);P('armour',72,59);// 15.11.2026: szubienica, studnia, wozy i stojak z dziedzinca usuniete (decyzja autora: tylko duze obiekty przy scianach)
   // Runda 286: meble i poswiecenia przy scianach (polnocna sciana kazdej sali, boki), srodek sal pusty; bez ksiazek na posadzce
   for(const x of [28,33])P('bookcase_a',x,47,true);for(const x of [46,51])P('bookcase_b',x,47,true);P('lectern',40,47,true);
-  P('bookcase_a',6,50,true);P('bookcase_b',73,50,true);P('desk',6,53,true);P('chair',7,54);P('inkbarrel',73,54,true);
+  P('bookcase_a',6,50,true);P('bookcase_b',73,50,true);P('desk',6,53,true);
   P('statue_a',28,66,true);P('statue_b',51,66,true);
   P('bench_a',29,35,[[28,35],[29,35]]);P('bench_a',51,35,[[50,35],[51,35]]);P('statue_a',8,37,true);P('statue_b',71,37,true);P('candelabra',36,35,true);P('candelabra',44,35,true);P('statue_a',26,35,true);P('statue_b',53,35,true);
   P('scale',40,24,true);P('vault',72,26,true);P('chest',6,26,true);P('chest_open',72,30,true);P('goldheap',7,30,true);P('chest',31,24,true);P('chest',48,24,true);
@@ -418,14 +418,12 @@ function genCytadela(seed){
   P('throne',40,4,[[37,4],[38,4],[39,4],[40,4],[41,4],[42,4],[43,4]]);P('statue_a',30,4,true);P('statue_b',50,4,true);P('candelabra',33,4,true);P('candelabra',47,4,true);P('statue_a',25,6,true);P('statue_b',55,6,true);
   for(const y of [58,47,35,24,13,3])for(const x of [8,71]){if(y===13&&x===71)P('chains',x,y,[],{anim:'chains'});else P('order_bonfire',x,y,[],{fire:true})}
   // Six deliberate, non-blocking details beside furniture, never scattered into passageways.
-  for(const [k,x,y] of [['shackles',7,19]])P(k,x,y,[],{floorDetail:true,...(k==='pages'?{anim:'pages'}:{})});
   // 12.11.2026: dziedziniec ubrany po bokach (wozy, stojaki, sztandary przy bramach, paleniska), krypta z sarkofagami i kośćmi; pasy x16..23 i x56..63 oraz środek wolne
   for(const [x,y] of [[13,59],[26,59],[53,59],[66,59],[31,61],[49,61],[26,15],[53,15],[5,20],[74,20]])set(x,y,27);
   for(const x of [14,25,54,65])P('order_banner',x,58);
-  P('cart',12,65,true);P('cart',67,65,true,{flip:true});P('armour',5,62);P('armour',74,62);P('rack',5,65,true);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
+  P('armour',5,62);P('armour',74,62);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
   for(const [x,y] of [[27,19],[32,19],[47,19],[52,19]])P('sarcophagus',x,y,true);
   for(const [x,y] of [[29,18],[50,18],[35,15],[45,15]])P('candelabra',x,y,true); // 12.11.2026: swiatlo w krypcie
-  for(const [k,x,y] of [['dwarf_bones',5,15],['skull',74,15],['skull',30,17],['dwarf_bones',50,17],['chains',6,13]])P(k,x,y,[],{floorDetail:true});
   const SH=[[69,60],[10,42],[40,19]];SH.forEach(([x,y],i)=>P('healing_shrine',x,y,true,{shrine:i}));
   return{map,under,PROPS,seed,start:{x:40*TS+8,y:63*TS+8},shrines:SH.map(([x,y])=>({x:x*TS+8,y:y*TS+12})),region:cyRegion,idle:[40,58,14,6],
     npcs:(()=>{const OK=[70,71,72,73,74,75],nn=(id,name,lines,x,y)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);return{id,art:id,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines}};
