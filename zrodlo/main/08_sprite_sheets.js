@@ -32,8 +32,8 @@ function procFrame(img,x,y,size,h,kind,lift=0){
   const density=img.nbDensity||1,logicalW=size,w=size*density;x*=density;y*=density;h=(h||size)*density;lift*=density;
   const c=canvas(w,h),g=c.getContext('2d');g.drawImage(img,x,y,w,h-lift,0,0,w,h-lift);
   // 15.11.2026: mocniejsze kolory wszystkich wrogow i NPC (nasycenie i kontrast w polcieniach), raz przy wczytaniu klatki.
-  // Bez bohaterow (wlasne arkusze) i bez zalogi portu (juz nasycona w arkuszach).
-  if((kind===undefined||kind===null||kind==='boss'||kind==='npc'||kind==='thin'||kind==='propc'||kind==='ghost')&&!/^(hero_|kat_|zab_|knight_|dzw_|mil_)/.test(key||'')){const idc=g.getImageData(0,0,w,h),q=idc.data;
+  // Takze Kat, Dzwonnik i Woskownica (stare arkusze). Bez Rycerza i Zabojczyni (nowe arkusze, juz nasycone) i bez zalogi portu.
+  if((kind===undefined||kind===null||kind==='boss'||kind==='npc'||kind==='thin'||kind==='propc'||kind==='ghost')&&!/^(hero_|zab_|knight_)/.test(key||'')){const idc=g.getImageData(0,0,w,h),q=idc.data;
     for(let i=0;i<q.length;i+=4){if(!q[i+3])continue;const l=.299*q[i]+.587*q[i+1]+.114*q[i+2],k=Math.pow(Math.max(l,1)/255,.12);for(let j=0;j<3;j++)q[i+j]=Math.max(0,Math.min(255,(l+(q[i+j]-l)*1.6)*k))}
     g.putImageData(idc,0,0)}
   // nowy styl bohaterow (malowane HD, 15.11.2026): bez rozjasnianej krawedzi w teksturze i z cienszym konturem
