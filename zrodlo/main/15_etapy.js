@@ -1,12 +1,12 @@
 /* ============ LEVEL STAGES: 6 min fight, Marga's stall, the Collector, fight until 12 min, then Zrost ============ */
 const SHOP=[
   {id:'brew',name:(EN?'Bitter Brew':'Gorzki wywar'),d:(EN?'Restores all health.':'Leczy całe życie.'),cost:20},
-  {id:'heart',name:(EN?'Ashen Heart':'Serce z popiołu'),d:(EN?'+25 maximum health.':'+25 do maksymalnego życia.'),cost:35},
-  {id:'whet',name:(EN?'Bone Whetstone':'Osełka z kości'),d:(EN?'+10% damage for all skills.':'+10% obrażeń wszystkich umiejętności.'),cost:30},
+  {id:'heart',name:(EN?'Ashen Heart':'Serce z popiołu'),d:(EN?'+20 maximum health.':'+20 do maksymalnego życia.'),cost:45,g:1.6,lim:3},
+  {id:'whet',name:(EN?'Bone Whetstone':'Osełka z kości'),d:(EN?'+10% damage for all skills.':'+10% obrażeń wszystkich umiejętności.'),cost:35,g:1.5,lim:3},
   {id:'amulet',name:(EN?'Wind Amulet':'Amulet wiatru'),d:(EN?'+20 maximum stamina (up to 180; attributes can give more).':'+20 do maksymalnej staminy (do 180; cechy mogą dać więcej).'),cost:60},
-  {id:'scroll',name:(EN?'Scroll of Memory':'Zwój pamięci'),d:(EN?'Instantly gain one level.':'Natychmiastowy awans o jeden poziom.'),cost:45},
+  {id:'scroll',name:(EN?'Scroll of Memory':'Zwój pamięci'),d:(EN?'Instantly gain one level.':'Natychmiastowy awans o jeden poziom.'),cost:40},
   {id:'magnet',name:(EN?'Lodestone':'Kamień przyciągania'),d:(EN?'+40% pickup range for coins and hearts.':'+40% zasięgu zbierania monet i serc.'),cost:25}];
-const price=it=>Math.round(it.cost*Math.pow(1.35,S.bought[it.id]||0)*(1-(S.disc||0)));
+const price=it=>Math.round(it.cost*Math.pow(it.g||1.35,S.bought[it.id]||0)*(1-(S.disc||0)));
 function dissolveAll(msg){for(const e of S.enemies){scene.remove(e.mesh);for(let i=0;i<8;i++)S.parts.push({k:'d',x:e.x,y:e.y,z:rnd(0,14),vx:rnd(-7,7),vy:0,vz:rnd(12,30),c:P.bone2,life:2})}S.enemies=[];if(msg)say(msg)}
 function startBreak(){S.stage='break';dissolveAll(null);let spot=CH===1?[1427,549]:null;for(let i=0;i<30&&!spot;i++){const a=Math.random()*Math.PI*2,x=pl.x+Math.cos(a)*44,y=pl.y+Math.sin(a)*30;if(!boxSolid(x,y,6,3))spot=[x,y]}
     spot=spot||[pl.x+20,pl.y];S.merchant={x:spot[0],y:spot[1],state:'in',t:1,wait:120};play('bless',0);
@@ -51,15 +51,15 @@ function stageTick(dt){if(CH===PORT)solneTick();
 }
 function nearMerchant(){const m=S&&S.merchant;return m&&m.state==='here'&&!pl.dead&&Math.hypot(pl.x-m.x,pl.y-m.y)<34?m:null}
 function leaveMerchant(){const m=S.merchant;if(!m||m.state==='out')return;m.state='out';m.t=1;for(let i=0;i<26;i++)S.parts.push({k:'a',x:m.x+rnd(-8,8),y:m.y,z:rnd(0,20),vx:rnd(-8,8),vy:0,vz:rnd(8,20),c:'#3d4a3a',life:rnd(1,2)})}
-function shopMaxed(it){return it.id==='amulet'&&pl.staMax>=180}
-function shopDesc(it){return it.id==='amulet'?(EN?'+20 maximum stamina (up to 180; attributes can give more).':'+20 do maksymalnej staminy (do 180; cechy mogą dać więcej).'):it.d}
+function shopMaxed(it){return it.id==='amulet'&&pl.staMax>=180||!!it.lim&&(S.bought[it.id]||0)>=it.lim}
+function shopDesc(it){return it.id==='amulet'?(EN?'+20 maximum stamina (up to 180; attributes can give more).':'+20 do maksymalnej staminy (do 180; cechy mogą dać więcej).'):it.d+(it.lim?(EN?` (at most ${it.lim} per night)`:` (najwyżej ${it.lim} na noc)`):'')}
 function renderShop(){$('shopCoins').textContent=S.coins;const box=$('shopCards');box.innerHTML='';
   SHOP.forEach((it,i)=>{const pr=price(it),maxed=shopMaxed(it),b=document.createElement('button');b.type='button';b.className='card';b.id='shop'+i;b.disabled=maxed||S.coins<pr;
     b.innerHTML=(EN?`<span class="ck">Item ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Sold out':pr+' coins'}</span><span class="cd">${shopDesc(it)}</span>`:`<span class="ck">Towar ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Wyprzedane':pr+' monet'}</span><span class="cd">${shopDesc(it)}</span>`);b.addEventListener('click',()=>buy(i));box.appendChild(b)})}
 function openShop(){resetInput();S.shop=true;play('shopIn',0);pl.swingT=0;renderShop();$('shop').hidden=false;$('touch').hidden=true;setTimeout(()=>{const f=$('shopClose');f&&f.focus()},30)}
 function buy(i){const it=SHOP[i];if(!it||!S.shop)return;const pr=price(it);if(S.coins<pr||shopMaxed(it)){play('empty',0);return}
   S.coins-=pr;S.bought[it.id]=(S.bought[it.id]||0)+1;uiSnd('buy');
-  if(it.id==='brew')pl.hp=pl.max;else if(it.id==='heart'){pl.max+=25;heal(25)}else if(it.id==='whet')S.whet++;else if(it.id==='amulet'){pl.staMax=Math.min(180,pl.staMax+20);pl.sta=pl.staMax}
+  if(it.id==='brew')pl.hp=pl.max;else if(it.id==='heart'){pl.max+=20;heal(20)}else if(it.id==='whet')S.whet++;else if(it.id==='amulet'){pl.staMax=Math.min(180,pl.staMax+20);pl.sta=pl.staMax}
   else if(it.id==='scroll'){S.lvl++;S.need=xpNeed(S.lvl);S.pendLv++}else if(it.id==='magnet')S.magnet+=.4;
   renderShop()}
 function closeShop(){if(!S||!S.shop)return;S.shop=false;uiSnd('back');$('shop').hidden=true;$('touch').hidden=!coarse;const mdg=S.merchant&&S.merchant.dg;leaveMerchant();say(mdg?(EN?'Marga: "The stairs lead up. The night will wait for you."':'Marga: „Schody prowadzą na górę. Noc na ciebie poczeka”.'):(EN?'Marga: "Careful. The Order Collector has caught the scent of your gold."':'Marga: „Uważaj. Poborca Zakonu zwęszył twoje złoto”.'));if(S.pendLv>0)openLevelUp()}

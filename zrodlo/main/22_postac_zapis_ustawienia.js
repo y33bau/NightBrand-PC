@@ -131,7 +131,7 @@ const PROG=loadProg();function saveProg(){try{localStorage.setItem('pn_prog',JSO
 const prog=()=>PROG[PMODE()];
 // ---- Popioly (Embers): stala waluta i ulepszenia miedzy podejsciami (runda 312) ----
 const EMBU=[
- {id:'vigor',tab:0,tier:1,n:(EN?'Iron Vigor':'Hart ciała'),s:(EN?'Maximum health':'Maksymalne zdrowie'),d:(EN?'A slightly longer health bar. No new source of healing.':'Nieco dłuższy pasek zdrowia. Bez nowych źródeł leczenia.'),cost:[50,120,250],val:n=>`+${2*n}% `+(EN?'max health':'maks. zdrowia')},
+ {id:'vigor',tab:0,tier:1,n:(EN?'Iron Vigor':'Hart ciała'),s:(EN?'Maximum health':'Maksymalne zdrowie'),d:(EN?'A slightly longer health bar. No new source of healing.':'Nieco dłuższy pasek zdrowia. Bez nowych źródeł leczenia.'),cost:[50,120,250],val:n=>`+${5*n}% `+(EN?'max health':'maks. zdrowia')},
  {id:'breath',tab:0,tier:1,n:(EN?'Ash Breath':'Oddech pogorzeliska'),s:(EN?'Stamina regeneration':'Regeneracja staminy'),d:(EN?'Stamina comes back a little faster.':'Stamina wraca odrobinę szybciej.'),cost:[50,120,250],val:n=>`+${2*n}% `+(EN?'stamina regeneration':'regeneracji staminy')},
  {id:'bastion',tab:0,tier:1,n:(EN?'Bulwark Stance':'Żelazny bastion'),s:(EN?'Stamina when blocking':'Stamina w bloku'),d:(EN?'A blocked blow costs less stamina.':'Zablokowany cios kosztuje mniej staminy.'),cost:[50,120,250],val:n=>`−${3*n}% `+(EN?'block stamina cost':'kosztu staminy bloku')},
  {id:'nimble',tab:0,tier:2,n:(EN?'Nimble Step':'Zwinny unik'),s:(EN?'Dodge cost':'Koszt uniku'),d:(EN?'A dodge costs less stamina.':'Unik kosztuje mniej staminy.'),cost:[50,120,250],val:n=>`−${3*n}% `+(EN?'dodge stamina cost':'kosztu staminy uniku')},
@@ -186,7 +186,7 @@ saveEmb();
 const embU=id=>EMB.u[id]||0;
 const embSpent=(f=()=>true)=>EMBU.filter(f).reduce((a,d)=>{let s=0;for(let i=0;i<embU(d.id);i++)s+=d.cost[i];return a+s},0);
 const embTier=()=>{const s=embSpent();return s>=EMB_TIER[3]?3:s>=EMB_TIER[2]?2:1};
-function applyEmbers(k){pl.max=Math.round(pl.max*(1+.02*embU('vigor')));k.staRegen*=1+.02*embU('breath');k.blockSta*=1-.03*embU('bastion');k.rollCost*=1-.03*embU('nimble');k.heavyDmg*=1+.015*embU('exec');k.ripo*=1+.05*embU('venge');
+function applyEmbers(k){pl.max=Math.round(pl.max*(1+.05*embU('vigor')));k.staRegen*=1+.02*embU('breath');k.blockSta*=1-.03*embU('bastion');k.rollCost*=1-.03*embU('nimble');k.heavyDmg*=1+.015*embU('exec');k.ripo*=1+.05*embU('venge');
   S.magnet=(S.magnet||0)+.15*embU('magnet');S.coins+=[0,15,30,50][embU('purse')];S.rrBonus=embU('gaze');S.raven=embU('raven')>0;S.lastCh=embU('lastch')>0&&!pl2;S.eliteLoot=embU('elite')>0;if(!pl2&&embU('cos_seal')&&S.activeSlots&&S.activeSlots.length<6)S.activeSlots.push(null)}
 const embCos=id=>!!(embU(id)&&EMB.eq&&EMB.eq[id]);
 const embTrail=()=>{for(const p of [['cos_tr_fire','fire'],['cos_tr_blood','blood'],['cos_tr_rot','poison'],['cos_tr_ice','ice']])if(embCos(p[0]))return p[1];return null};
@@ -294,7 +294,7 @@ function grantXp(won,surv){const e=grantEmbers(won,surv),m=metaAfterNight(won,su
 function grantXp0(won,surv){const q=prog();if(S.finalDeathLoss)return (EN?'Character: +0 experience — second death. Earlier progress is kept.':'Postać: +0 doświadczenia — druga śmierć. Wcześniejszy rozwój pozostaje zachowany.');let b=0;const ch=S.chal;let chDone=false;
   if(ch){if(ch.c.end&&!ch.done&&won&&ch.c.v()){ch.done=true;if(ch.c.coins){q.bank=(q.bank||0)+ch.c.coins}}chDone=ch.done}
   const base=Math.floor(S.kills*.5+surv/6+(won?150:0)),rawGain=Math.round(base*(1+b)*DF[DIFFK].xp*.7),gain=S.rebirthUsed?Math.round(rawGain*.5):rawGain;q.xp+=gain;const lv0=q.lv,ups=[];
-  while(q.lv<PMAX&&q.xp>=PNEED(q.lv)){q.xp-=PNEED(q.lv);q.lv++;const np=PERKS.find(p=>p.lv===q.lv);if(np)ups.push(np.n)}if(q.lv>=PMAX)q.xp=0;saveProg();
+  while(q.lv<PMAX&&q.xp>=PNEED(q.lv)){q.xp-=PNEED(q.lv);q.lv++;const np=PERKS.find(p=>p.lv===q.lv&&(p.who||'r')===perkCls());if(np)ups.push(np.n)}if(q.lv>=PMAX)q.xp=0;saveProg();
   return (EN?`Character: +${gain} experience${S.rebirthUsed?' (revival: −50%)':''}${b?' (bonus +'+Math.round(b*100)+'%)':''} · level ${q.lv}${q.lv>lv0?' (level up!)':''}${ups.length?' · new perk: '+ups.join(', '):''}${ch?'\nChallenge '+ch.c.n+(chDone?': complete':': not complete'):''}`:`Postać: +${gain} doświadczenia${S.rebirthUsed?' (odrodzenie: −50%)':''}${b?' (bonus +'+Math.round(b*100)+'%)':''} · poziom ${q.lv}${q.lv>lv0?' (awans!)':''}${ups.length?' · nowy perk: '+ups.join(', '):''}${ch?'\nWyzwanie '+ch.c.n+(chDone?': ukończone':': nieukończone'):''}`)}
 // ---- zapis postępu (rekordy rozdziałów, osobno dla każdego trybu) ----
 const CHN=[(EN?'The Scorched Settlement':'Spalona Osada'),(EN?'The Lower City':'Dolne Miasto'),(EN?'Fallen Goldheim':'Upadły Złotogród'),(EN?'Blackwood':'Czarnobór'),(EN?'The Creditors\' Citadel':'Cytadela Wierzycieli'),(EN?'Salt Quay':'Solne Nabrzeże')],CHR=CAMPAIGN.map((_,k)=>chRoman(k+1));/* numer rzymski wg numeru technicznego: CHR[numer-1] */
