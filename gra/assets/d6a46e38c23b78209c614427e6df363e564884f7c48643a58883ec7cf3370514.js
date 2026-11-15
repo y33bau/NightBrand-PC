@@ -2777,7 +2777,7 @@ function initWorld(ch){setGrid(ch);if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefi
     if(t===48||t===58||t===59||t===68||t===69||t===78||t===80)w.walls.push([x,y,t]);if(t===54)w.rots.push([x,y]);
     if(!VOID.has(t)&&[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>VOID.has(ta(x+dx,y+dy))))w.cliffs.push([x,y]);
     if(t===22)w.pillars.push([x,y]);if(t===24)w.lavas.push([x,y]);if(t===27)w.braziers.push([x,y]);if(t===45)w.waters.push([x,y]);if(t===90)w.shallow.push([x,y])}
-  const lsrc=(col,int,dist,x,y,z,kind,extra)=>{if(kind==='npc'){int*=.22;dist*=.6}const o=Object.assign({col,base:int,dist,x,y,z,kind,ph:Math.random()*9},extra||{});w.LSRC.push(o);return o};
+  const lsrc=(col,int,dist,x,y,z,kind,extra)=>{if(kind==='npc'){int*=.176;dist*=.6}/* 15.11.2026: poswiata NPC -20% (bylo .22) */const o=Object.assign({col,base:int,dist,x,y,z,kind,ph:Math.random()*9},extra||{});w.LSRC.push(o);return o};
   if(ch===2){
     w.braziers.forEach(([x,y])=>lsrc(0xff6a1a,1.35,7,x+.5,1.6,y+.6,'fire'));
     for(let x=43;x<60;x+=4){lsrc(0xff4a10,1.6,7,MP(x),.6,MP(13.5),'lava');lsrc(0xff4a10,1.6,7,MP(x),.6,MP(33.5),'lava')}
@@ -2855,7 +2855,8 @@ const GLOW=[[255,42,42],[127,208,255],[127,255,208]],GLOW_PROP=GLOW.concat([[255
 const SELF_LIT=.16;
 // outline softening: share of neighbour colour (darkened) mixed into the edge, edge glow, edge width of 64 px frames (was 2)
 const OUTLINE_MIX=.7,OUTLINE_DARK=.42,OUTLINE_EM=.5,OUTLINE_W64=1.5,OUTLINE_OUTER=.5;
-const OUTLINE={char:[44,38,48,62,54,70],npc:[65,51,40,50,39,30],kat:[16,11,11,30,20,18]};
+// 15.11.2026: poswiata obwodki NPC -20% (bylo 50,39,30)
+const OUTLINE={char:[44,38,48,62,54,70],npc:[65,51,40,40,31,24],kat:[16,11,11,30,20,18]};
 // lift: move the picture up by n pixels (64 px sheets have their feet 2 px lower than the 32 px ones)
 // lagodna normalizacja jasnosci i nasycenia calego arkusza (liczona raz z miniatury), zeby modele z roznych zrodel stały obok siebie spojnie
 function sheetNorm(img){if(img.nbNorm)return img.nbNorm;let r={gl:1,gs:1};try{const cw=96,ch=Math.max(8,Math.round(96*img.height/img.width)),c=canvas(cw,ch),g=c.getContext('2d');g.drawImage(img,0,0,cw,ch);const d=g.getImageData(0,0,cw,ch).data;let n=0,L=0,S=0;for(let i=0;i<d.length;i+=4){if(d[i+3]<200)continue;const R=d[i],G=d[i+1],B=d[i+2],mx=Math.max(R,G,B),mn=Math.min(R,G,B);n++;L+=.299*R+.587*G+.114*B;S+=mx?(mx-mn)/mx:0}
@@ -2871,6 +2872,11 @@ function procFrame(img,x,y,size,h,kind,lift=0){
   const key=img.nbKey,hd=img.nbDensity>1,warm=hd&&(/^p[134]_(debris_fire|cz_fire|pyre|order_bonfire)|^p5_candelabra/.test(key||'')||(key==='br_props'&&((y===64&&x>=64)||(y===96&&x<64)||(y===160&&x===0)))||(key==='dm_props'&&(y===0||y===128))||(key==='zl_props'&&y===96)||(key==='cz_props'&&y===0)||(key==='cy_big'&&y===256&&x>=64)||(key==='cy_props'&&y===0)),cool=hd&&(key==='p4_standing_stone_lit'||(key==='dm_props'&&((x===32&&y===64)||(x===32&&y===160)))||(key==='zl_props'&&x===64&&y===128)||(key==='cz_props'&&((x===64&&y===32)||(y===128&&x<64))));
   const density=img.nbDensity||1,logicalW=size,w=size*density;x*=density;y*=density;h=(h||size)*density;lift*=density;
   const c=canvas(w,h),g=c.getContext('2d');g.drawImage(img,x,y,w,h-lift,0,0,w,h-lift);
+  // 15.11.2026: mocniejsze kolory wszystkich wrogow i NPC (nasycenie i kontrast w polcieniach), raz przy wczytaniu klatki.
+  // Bez bohaterow (wlasne arkusze) i bez zalogi portu (juz nasycona w arkuszach).
+  if((kind===undefined||kind===null||kind==='boss'||kind==='npc'||kind==='thin'||kind==='propc'||kind==='ghost')&&!/^(hero_|kat_|zab_|knight_|dzw_|mil_)/.test(key||'')){const idc=g.getImageData(0,0,w,h),q=idc.data;
+    for(let i=0;i<q.length;i+=4){if(!q[i+3])continue;const l=.299*q[i]+.587*q[i+1]+.114*q[i+2],k=Math.pow(Math.max(l,1)/255,.12);for(let j=0;j<3;j++)q[i+j]=Math.max(0,Math.min(255,(l+(q[i+j]-l)*1.6)*k))}
+    g.putImageData(idc,0,0)}
   // nowy styl bohaterow (malowane HD, 15.11.2026): bez rozjasnianej krawedzi w teksturze i z cienszym konturem
   const hdHero=/^(knight_|zab_)/.test(key||'');
   if(density>=2&&(kind===undefined||kind==='boss'||kind==='npc')&&!hdHero){const id0=g.getImageData(0,0,w,h),p=id0.data,w0=density,w1=Math.round(density*2.5),A=new Uint8Array(w*h);
