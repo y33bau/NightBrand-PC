@@ -795,3 +795,4 @@ cache717 · Port: slup z krukiem przeniesiony z wody na nabrzeze (czarna ramka w
 cache718 · Port: budynki i latarnie blizej malowanej oprawy (ciemniejsze materialy, brud u podstawy, cienie kontaktowe, przygaszone szklo latarni).
 cache719 · Mocniejsze kolory wrogow i NPC (nasycenie 1,6 przy wczytaniu klatek), poswiata NPC -20%.
 cache720 · Mocniejsze kolory takze Kata, Dzwonnika i Woskownicy.
+cache721 · Kat (Goran) w nowym stylu: 9 atlasow kat_*, czysta przezroczystosc, wzrost 206 px, nasycone kolory. Nie sprawdzono: pad, FPS u autora, wszystkie animacje w ruchu, warianty zbroi, itch.io.

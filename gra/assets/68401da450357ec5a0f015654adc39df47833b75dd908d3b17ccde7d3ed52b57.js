@@ -2873,12 +2873,12 @@ function procFrame(img,x,y,size,h,kind,lift=0){
   const density=img.nbDensity||1,logicalW=size,w=size*density;x*=density;y*=density;h=(h||size)*density;lift*=density;
   const c=canvas(w,h),g=c.getContext('2d');g.drawImage(img,x,y,w,h-lift,0,0,w,h-lift);
   // 15.11.2026: mocniejsze kolory wszystkich wrogow i NPC (nasycenie i kontrast w polcieniach), raz przy wczytaniu klatki.
-  // Takze Kat, Dzwonnik i Woskownica (stare arkusze). Bez Rycerza i Zabojczyni (nowe arkusze, juz nasycone) i bez zalogi portu.
-  if((kind===undefined||kind===null||kind==='boss'||kind==='npc'||kind==='thin'||kind==='propc'||kind==='ghost')&&!/^(hero_|zab_|knight_)/.test(key||'')){const idc=g.getImageData(0,0,w,h),q=idc.data;
+  // Takze Dzwonnik i Woskownica (stare arkusze). Bez Rycerza, Zabojczyni i Kata (nowe arkusze, juz nasycone) i bez zalogi portu.
+  if((kind===undefined||kind===null||kind==='boss'||kind==='npc'||kind==='thin'||kind==='propc'||kind==='ghost')&&!/^(hero_|zab_|knight_|kat_)/.test(key||'')){const idc=g.getImageData(0,0,w,h),q=idc.data;
     for(let i=0;i<q.length;i+=4){if(!q[i+3])continue;const l=.299*q[i]+.587*q[i+1]+.114*q[i+2],k=Math.pow(Math.max(l,1)/255,.12);for(let j=0;j<3;j++)q[i+j]=Math.max(0,Math.min(255,(l+(q[i+j]-l)*1.6)*k))}
     g.putImageData(idc,0,0)}
   // nowy styl bohaterow (malowane HD, 15.11.2026): bez rozjasnianej krawedzi w teksturze i z cienszym konturem
-  const hdHero=/^(knight_|zab_)/.test(key||'');
+  const hdHero=/^(knight_|zab_|kat_)/.test(key||'');
   if(density>=2&&(kind===undefined||kind==='boss'||kind==='npc')&&!hdHero){const id0=g.getImageData(0,0,w,h),p=id0.data,w0=density,w1=Math.round(density*2.5),A=new Uint8Array(w*h);
     if(!/^(hero_|kat_|zab_|knight_|dzw_|mil_)/.test(img.nbKey||'')){const nm=sheetNorm(img);if(Math.abs(nm.gl-1)>.01||Math.abs(nm.gs-1)>.01)for(let i=0;i<p.length;i+=4){if(!p[i+3])continue;const l=.299*p[i]+.587*p[i+1]+.114*p[i+2];p[i]=Math.max(0,Math.min(255,(l+(p[i]-l)*nm.gs)*nm.gl));p[i+1]=Math.max(0,Math.min(255,(l+(p[i+1]-l)*nm.gs)*nm.gl));p[i+2]=Math.max(0,Math.min(255,(l+(p[i+2]-l)*nm.gs)*nm.gl))}}for(let i=0;i<w*h;i++)A[i]=p[i*4+3]>127?1:0;
     for(let yy=w1;yy<h;yy++)for(let xx=w1;xx<w;xx++){const i=yy*w+xx;if(!A[i]||!A[i-w0*w-w0]||A[i-w1*w-w1])continue;const j=i*4;p[j]=Math.min(255,p[j]*1.3+19);p[j+1]=Math.min(255,p[j+1]*1.3+24);p[j+2]=Math.min(255,p[j+2]*1.3+38)}
