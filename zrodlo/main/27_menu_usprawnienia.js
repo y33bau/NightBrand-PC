@@ -710,7 +710,7 @@ ${S} .m2-ch:before{left:calc(22 * var(--pc-u,1px))!important;top:calc(19 * var(-
 ${S} .m2-ch .nb2-meds{right:calc(24 * var(--pc-u,1px))!important;bottom:calc(19 * var(--pc-u,1px))!important}
 /* 15.11.2026: napisy rozdzialu przy numerze (lewa strona), ilustracja odslonieta z prawej */
 ${S} .premium-map .m2-ch{padding-left:calc(58 * var(--pc-u,1px))!important}
-${S} .premium-map .m2-ch:after{left:calc(58 * var(--pc-u,1px))!important}
+${S} .premium-map .m2-ch:after{left:calc(58 * var(--pc-u,1px))!important;bottom:calc(19 * var(--pc-u,1px))!important}
 ${CAMPAIGN.map(i=>`${S} .premium-map #start${i}{background-image:linear-gradient(90deg,#0d0b10f2 0%,#0d0b10d6 34%,#0d0b1080 62%,#0d0b1026 100%),url('${PREMIUM_ASSETS['rozdzial-'+i+'-mini']}')!important}`).join('\n')}
 /* 15.11.2026: dolny pasek wyboru rozdzialu (Kaplica, Kronika, Tryb gry) w spalonej desce jak Przygotuj sie */
 ${S} :is(#title #kapBtn,#title #kronBtn,#title .pc-journey-mode,#title #pcMainMenuBack){border-color:transparent!important;border-image:none!important;background:${RAMKA} center/100% 100% no-repeat border-box!important;box-shadow:none!important;outline:none!important;animation:none!important}
@@ -890,6 +890,7 @@ ${O} #nbW .nte{display:flex!important;gap:calc(10*var(--u))!important;margin-top
 ${O} #nbW .nte>div{flex:1!important;display:flex!important;align-items:center!important;gap:calc(10*var(--u))!important;padding:calc(2*var(--u)) calc(6*var(--u))!important;min-width:0!important}
 ${O} #nbW .nte img{width:calc(38*var(--u))!important;height:calc(38*var(--u))!important;object-fit:contain!important;flex:none!important}
 ${O} #nbW .nte b{font:700 calc(15.5*var(--u))/1.15 Cinzel,Georgia,serif!important;color:#f2dfba!important}
+${O} #nbW .nte.tri b{font-size:calc(13*var(--u))!important;letter-spacing:0!important}${O} #nbW .nte.tri>div{gap:calc(7*var(--u))!important;padding:calc(2*var(--u)) calc(4*var(--u))!important}${O} #nbW .nte.tri img{width:calc(34*var(--u))!important;height:calc(34*var(--u))!important}
 /* ---- przygotowanie ---- */
 ${O} #nbP .ntlo{inset:-2%!important;background:url('${IMG.tlo}') center 60%/cover no-repeat!important;filter:blur(calc(7*var(--u))) brightness(.34) saturate(.9)!important}
 ${O} #nbP .cie{inset:0!important;background:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(5,4,6,.15),rgba(5,4,6,.75)),linear-gradient(0deg,rgba(5,4,6,.85),rgba(5,4,6,0) 28%)!important}
@@ -1008,7 +1009,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
   if(fokus&&document.activeElement!==TB[c])TB[c].focus({preventScroll:true});
   if(!zm)return;PAN.classList.add('zm');clearTimeout(ustaw.t);ustaw.t=setTimeout(()=>{const H=hero(c);
    PAN.querySelector('.kl').textContent=H.cls.toUpperCase();PAN.querySelector('.imi').textContent=H.n+', '+H.ep;PAN.querySelector('.mot').textContent=H.mot||'';PAN.querySelector('.nop').textContent=OPIS[c];PAN.querySelector('.sty').textContent=STYL[c].toUpperCase();
-   PAN.querySelector('.nte').innerHTML=TECH[c].map(k=>{const n=(SK[k]&&SK[k].name)||k,ic=PREMIUM_ICONS['skille-'+k]||'';return `<div class="nbk">${ic?`<img src="${ic}" alt="">`:''}<b>${esc(n)}</b></div>`}).join('');
+   PAN.querySelector('.nte').classList.toggle('tri',TECH[c].length>2);PAN.querySelector('.nte').innerHTML=TECH[c].map(k=>{const n=(SK[k]&&SK[k].name)||k,ic=PREMIUM_ICONS['skille-'+k]||'';return `<div class="nbk">${ic?`<img src="${ic}" alt="">`:''}<b>${esc(n)}</b></div>`}).join('');
    W.querySelector('.wyb2 small').textContent=H.n.toUpperCase();PAN.classList.remove('zm')},140)}
  function potwierdz(){if(blok)return;blok=true;W.classList.add('potw');B[wyb].classList.add('potw');try{uiSnd('card')}catch(e){}
   const q=prog();if(q.char!==wyb){q.char=wyb;q.sel=[];PREP.perks=[];saveProg()}
@@ -1061,9 +1062,15 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
   if(!c){g.classList.add('pu');g.innerHTML=`<div class="ntx"><b>${T('BEZ WYZWANIA','NO CHALLENGE')}</b><span>${T('Wybierz jedno z listy, żeby zdobyć dodatkowe Popioły i monety.','Pick one from the list to earn extra Ashes and coins.')}</span></div>`;return}
   const w=c.id===PREP.chal;if(w)g.classList.add('wy');
   g.innerHTML=`<span class="et">${w?T('WYBRANO','CHOSEN'):T('PODGLĄD','PREVIEW')}</span><div class="ntx"><b>${esc(c.n)}</b><span>${esc(c.d)}</span><span class="zl" style="margin-top:calc(10*var(--u));font:700 calc(18*var(--u))/1 Cinzel,Georgia,serif"><i class="nbur"></i>+${c.ash} ${T('Popiołów','Ashes')} &nbsp; <i class="nbmo"></i>+${c.coins} ${T('monet','coins')}${T(' · na start następnej nocy',' · at the start of the next night')}</span></div>`}
+ // 16.11.2026: listy w Przygotowaniu aktualizowane w miejscu (bez tworzenia na nowo przyciskow i obrazkow), zeby banery perkow, wyzwan i klatw nie migaly
+ const morphKids=(o,n)=>{const oc=[...o.childNodes],nc=[...n.childNodes];
+  if(oc.length!==nc.length||oc.some((x,i)=>x.nodeType!==nc[i].nodeType||(x.nodeType===1&&x.tagName!==nc[i].tagName))){o.replaceChildren(...nc);return}
+  nc.forEach((x,i)=>{const y=oc[i];if(x.nodeType===3){if(y.data!==x.data)y.data=x.data;return}if(x.nodeType!==1)return;
+   for(const a of [...x.attributes])if(y.getAttribute(a.name)!==a.value)y.setAttribute(a.name,a.value);for(const a of [...y.attributes])if(!x.hasAttribute(a.name))y.removeAttribute(a.name);morphKids(y,x)})};
+ const smartHtml=el=>{if(!el||el._sm)return;el._sm=1;const d=Object.getOwnPropertyDescriptor(Element.prototype,'innerHTML');Object.defineProperty(el,'innerHTML',{configurable:true,get(){return d.get.call(el)},set(h){if(el._h===h)return;el._h=h;const t=document.createElement(el.tagName.toLowerCase());d.set.call(t,h);morphKids(el,t)}})};
  function render(){if(!aktywny()){if(!P.hidden)P.hidden=true;if(prep.classList.contains('nbp-on'))prep.classList.remove('nbp-on');return}
   const fk=document.activeElement&&P.contains(document.activeElement)?document.activeElement.dataset.k:null,q=prog(),c=cur(),H=hero(c);
-  if(P.hidden)P.hidden=false;if(!prep.classList.contains('nbp-on'))prep.classList.add('nbp-on');PREP.curses=PREP.curses||[];
+  if(P.hidden)P.hidden=false;if(!prep.classList.contains('nbp-on'))prep.classList.add('nbp-on');PREP.curses=PREP.curses||[];for(const sl of ['.npg','.nlw','.nlk','.g3','.ntd','.nmn','.n1','.n2','.n3'])smartHtml(q$(sl));
   q$('.rd').textContent=(T('ROZDZIAŁ ','ACT ')+CHR[(PREP.ch||1)-1]+' · '+CHN[(PREP.ch||1)-1]).toUpperCase();
   {const tw=q$('.ntw'),s=tw.clientWidth||76,k=4.4,[fx,fy]=FACE[c]||[.5,.12],h=s*k,w=h*(NB_KAMIEN_AR[c]||.7);tw.style.backgroundImage=`url('${NB_KAMIEN[c]}')`;tw.style.backgroundSize=`${w}px ${h}px`;tw.style.backgroundPosition=`${s/2-fx*w}px ${s/2-fy*h}px`}
   q$('.nbn').textContent=H.n.toUpperCase();q$('.nbl').textContent=H.cls+T(' · poziom ',' · level ')+q.lv;

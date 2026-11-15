@@ -6597,15 +6597,21 @@ function renderCharPick(q){const g=$('prepPerks').closest('.prepgrid');let pc=$(
   mk('z',EN?'Twin sabres: lightning-fast combos, quick movement and dodges, −25% health, +10% damage taken, spinning heavy attack.':'Dwie szable: błyskawiczne serie, szybki ruch i uniki, −25% życia, +10% otrzymywanych obrażeń, silny atak obrotowy.');
   mk('d',EN?'Hammer: heavy, deliberate blows, +15% health, cheaper blocking, every third parry releases a stunning toll; slower movement and attacks.':'Młot: ciężkie, świadome ciosy, +15% życia, tańszy blok, co trzecie parowanie uwalnia ogłuszający ton; wolniejszy ruch i ataki.');
   mk('m',EN?'Candlestick spear: long reach and area control; Living Wick — each parry adds a charge (max 5), the next heavy blow spends them all and leaves a strip of hot wax; somersault dodge. A missed heavy blow leaves you open to a counter.':'Lichtarz-włócznia: duży zasięg i kontrola pola; Żywy Knot — każde parowanie dodaje ładunek (maks. 5), następny silny atak zużywa wszystkie i zostawia pas gorącego wosku; unik przewrotem. Chybiony silny atak naraża na kontrę.')}
+// 16.11.2026: lista opcji w Przygotowaniu aktualizowana w miejscu (bez ponownego tworzenia przyciskow i obrazkow), zeby banery nie migaly
+function patchKids(parent,kids){const old=[...parent.children];if(old.length!==kids.length||old.some((o,i)=>o.dataset.k!==kids[i].dataset.k)){parent.replaceChildren(...kids);return}
+  kids.forEach((n,i)=>{const o=old[i];o.classList.toggle('on',n.classList.contains('on'));if(o.disabled!==n.disabled)o.disabled=n.disabled;if(o.title!==n.title)o.title=n.title;
+    const a=[...n.children].filter(x=>x.tagName!=='IMG'),c=[...o.children].filter(x=>x.tagName!=='IMG');
+    if(a.length===c.length)a.forEach((x,j)=>{if(c[j].innerHTML!==x.innerHTML)c[j].innerHTML=x.innerHTML});else{const im=o.querySelector('img');o.replaceChildren(...(im?[im]:[]),...a)}
+    const oi=o.querySelector(':scope>img'),ni=n.querySelector(':scope>img');if(ni&&(!oi||oi.getAttribute('src')!==ni.getAttribute('src'))){oi?oi.replaceWith(ni):o.prepend(ni)}else if(!ni&&oi)oi.remove()})}
 function renderPrep(){const q=prog();$('prepK').textContent=CHN[PREP.ch-1];{const nm=$('prepNim');nm.className='nimh ch'+PREP.ch;nm.setAttribute('aria-label',CHN[PREP.ch-1])}{const pn=$('prepN');pn.classList.remove('nbt');delete pn.dataset.nbt;pn.textContent=q.lv}$('prepLv').textContent=q.lv>=PMAX?(EN?'Max level':'Poziom maksymalny'):q.xp+' / '+PNEED(q.lv)+(EN?' XP to level ':' XP do poziomu ')+(q.lv+1);$('prepBar').style.setProperty('--p',q.lv>=PMAX?1:q.xp/PNEED(q.lv));
   $('prepPH').textContent=(EN?`Perk (${PREP.perks.length}/${perkSlots(q)})`:`Perk (${PREP.perks.length}/${perkSlots(q)})`);
-  renderCharPick(q);const LST=PERKS.filter(d=>(d.who||'r')===perkCls());const P=$('prepPerks');P.innerHTML='';for(const d of LST){const lock=d.lv>q.lv,on=PREP.perks.includes(d.id),b=document.createElement('button');b.type='button';b.className='opt'+(on?' on':'');b.disabled=lock;
+  renderCharPick(q);const LST=PERKS.filter(d=>(d.who||'r')===perkCls());const P=$('prepPerks'),kidsP=[];for(const d of LST){const lock=d.lv>q.lv,on=PREP.perks.includes(d.id),b=document.createElement('button');b.type='button';b.dataset.k=d.id;b.className='opt'+(on?' on':'');b.disabled=lock;
     b.innerHTML=lock?(EN?`<b>${d.n}</b><small>Unlocks at character level ${d.lv}</small>`:`<b>${d.n}</b><small>Odblokowanie: poziom postaci ${d.lv}</small>`):`<b>${on?'✓ ':''}${d.n}</b><span class="pl">${d.pl}</span><span class="mi">${perkMinus(d)}</span>`;
     const art=document.createElement('img');art.className='premium-perk-art';art.alt='';art.src=PREMIUM_ICONS['perki-'+d.id]||PREMIUM_ICONS[/echo|braz|poglos/.test(d.id)?'skille-zalecho':'skille-zastaw'];b.prepend(art);
-    b.addEventListener('click',()=>{perkToggle(q,d.id);saveProg();renderPrep();const nb=[...$('prepPerks').children][LST.indexOf(d)];nb&&nb.focus()});P.appendChild(b)}
-  const C=$('prepCh');C.innerHTML='';for(const c of chalList()){const on=PREP.chal===c.id,b=document.createElement('button');b.type='button';b.className='opt'+(on?' on':'');b.disabled=c.id==='z_pogarda'&&PREP.perks.includes('z_widmo');
+    b.addEventListener('click',()=>{perkToggle(prog(),d.id);saveProg();renderPrep();const nb=[...$('prepPerks').children][LST.indexOf(d)];nb&&nb.focus()});kidsP.push(b)}patchKids(P,kidsP);
+  const C=$('prepCh'),kidsC=[];for(const c of chalList()){const on=PREP.chal===c.id,b=document.createElement('button');b.type='button';b.dataset.k=c.id;b.className='opt'+(on?' on':'');b.disabled=c.id==='z_pogarda'&&PREP.perks.includes('z_widmo');
     b.innerHTML=`<b>${on?'✓ ':''}${c.n}</b><span>${c.d}</span>`+rwdHtml(c.ash,c.coins,true);{const ic=PREMIUM_ICONS['wyzwania-'+c.id];if(ic){const art=document.createElement('img');art.className='premium-perk-art';art.alt='';art.src=ic;b.classList.add('nb-chal-art');b.prepend(art)}}b.title=(EN?`Reward: ${c.ash} Ashes and ${c.coins} coins at the start of the next night`:`Nagroda: ${c.ash} Popiołów i ${c.coins} monet na start następnej nocy`);
-    b.addEventListener('click',()=>{PREP.chal=on?null:c.id;q.ch=PREP.chal;saveProg();renderPrep();const nb=[...$('prepCh').children].find(x=>x.textContent.includes(c.n));nb&&nb.focus()});C.appendChild(b)}metaPrepUI()}
+    b.addEventListener('click',()=>{PREP.chal=PREP.chal===c.id?null:c.id;prog().ch=PREP.chal;saveProg();renderPrep();const nb=[...$('prepCh').children].find(x=>x.textContent.includes(c.n));nb&&nb.focus()});kidsC.push(b)}patchKids(C,kidsC);metaPrepUI()}
 // ---- Ofiara przed nocą (15.11.2026): opcjonalnie, płacona Popiołami przy starcie nocy, działa tylko tej nocy ----
 const OFIARY=[
  {id:'sakwa',c:40,n:EN?'Purse':'Sakwa',d:EN?'+60 coins at the start of the night.':'+60 monet na start nocy.',fx:k=>{S.coins+=60}},
@@ -6868,14 +6874,14 @@ function prepTriCss(){if($('nbTriCss'))return;const st=document.createElement('s
 function metaPrepUI(){const pp=$('prepPerks'),grid=pp&&pp.closest('.prepgrid');if(!grid)return;prepTriCss();let box=$('prepCurse');
   {const hc=$('prepCh').parentNode.querySelector('h3');if(hc)hc.textContent=EN?'Challenges':'Wyzwania';$('prepPH').textContent=(EN?'Perks':'Perki')+` (${PREP.perks.length}/1)`}
   if(!box){box=document.createElement('div');box.id='prepCurse';box.className='prepbox';grid.appendChild(box)}else if(box.parentNode!==grid)grid.appendChild(box);box.style.gridColumn='';
-  const W=weekNight(),wk=PREP.weekly&&PREP.weekly===W.key,mul=curseMul(PREP.curses).toFixed(2).replace(/\.?0+$/,'').replace('.',EN?'.':',');box.innerHTML='';
+  const W=weekNight(),wk=PREP.weekly&&PREP.weekly===W.key,mul=curseMul(PREP.curses).toFixed(2).replace(/\.?0+$/,'').replace('.',EN?'.':',');const oldL=$('prepCurseL');box.innerHTML='';
   const h=document.createElement('h3');h.textContent=(EN?'Curses':'Klątwy')+` (${PREP.curses.length}/3)`;{const m=document.createElement('small');m.style.cssText='margin-left:.6em;font-size:.55em;letter-spacing:0;opacity:.7;color:#9be38a;vertical-align:middle;white-space:nowrap';m.title=EN?'Optional. Each curse adds an Ashes bonus (harsher curse, bigger bonus); half of it after a lost night':'Dobrowolne. Każda klątwa dodaje premię Popiołów (cięższa klątwa, większa premia); po przegranej nocy połowę';m.innerHTML=`<i style="display:inline-block;width:1.4em;height:1.4em;vertical-align:-.35em;background:var(--ash-ic) center/contain no-repeat"></i>×${mul}`;h.appendChild(m)}box.appendChild(h);
   const p=document.createElement('p');p.style.cssText='margin:0 0 .6em;text-align:center;opacity:.8;font-size:15px';p.textContent=wk?(EN?`Night of the Week: keep “${W.curseN}”.`:`Noc tygodnia: zostaw „${W.curseN}”.`):'';if(wk)box.appendChild(p);
   const Dn=dayNight();if(PREP.daily&&PREP.daily===Dn.key){const q=document.createElement('p');q.style.cssText='margin:.8em 0 0;text-align:center;color:#e8c25a';q.textContent=(EN?'Daily challenge: ':'Wyzwanie dnia: ')+Dn.ruleN+'. '+Dn.ruleD;box.appendChild(q)}
-  const L=document.createElement('div');L.id='prepCurseL';L.className='prepbox';box.appendChild(L);
-  for(const c of CURSES){const on=PREP.curses.includes(c.id),b=document.createElement('button');b.type='button';b.className='opt'+(on?' on':'');b.disabled=!on&&PREP.curses.length>=3;
+  const L=oldL||document.createElement('div');L.id='prepCurseL';L.className='prepbox';box.appendChild(L);const kidsK=[];
+  for(const c of CURSES){const on=PREP.curses.includes(c.id),b=document.createElement('button');b.type='button';b.dataset.k=c.id;b.className='opt'+(on?' on':'');b.disabled=!on&&PREP.curses.length>=3;
     b.innerHTML=`<b>${on?'✓ ':''}${c.n}</b><span>${c.d}</span><span class="nb-rw"><i class="nb-ash"></i>+${c.w}%</span>`;b.title=EN?`Reward: +${c.w}% Ashes (half after a lost night)`:`Nagroda: +${c.w}% Popiołów (po przegranej połowa)`;
-    b.addEventListener('click',()=>{const i=PREP.curses.indexOf(c.id);if(i>=0)PREP.curses.splice(i,1);else if(PREP.curses.length<3)PREP.curses.push(c.id);renderPrep();const nb=[...$('prepCurseL').querySelectorAll('button')].find(x=>x.textContent.includes(c.n));nb&&nb.focus()});L.appendChild(b)}}
+    b.addEventListener('click',()=>{const i=PREP.curses.indexOf(c.id);if(i>=0)PREP.curses.splice(i,1);else if(PREP.curses.length<3)PREP.curses.push(c.id);renderPrep();const nb=[...$('prepCurseL').querySelectorAll('button')].find(x=>x.textContent.includes(c.n));nb&&nb.focus()});kidsK.push(b)}patchKids(L,kidsK)}
 function metaMenu(){const kap=$('kapBtn');if(!kap||!kap.parentNode)return;let b=$('kronBtn');
   if(!b){b=document.createElement('button');b.type='button';b.className='m2-b';b.id='kronBtn';const im=document.createElement('img');im.className='premium-nav-icon';im.alt='';im.width=im.height=28;im.src=PREMIUM_ICONS['nawigacja-kronika']||PREMIUM_ICONS['tryby-fabula']||'';b.appendChild(im);b.appendChild(document.createTextNode(EN?'Chronicle':'Kronika'));kap.parentNode.insertBefore(b,kap.nextSibling);b.addEventListener('click',openKron)}
   {kronNewCss();const nn=kronNew().length;let d=b.querySelector('.nbk-new');if(nn&&!d){d=document.createElement('em');d.className='nbk-new';b.appendChild(d)}if(d&&!nn)d.remove();else if(d)d.textContent=String(nn)}
@@ -10744,7 +10750,7 @@ ${S} .m2-ch:before{left:calc(22 * var(--pc-u,1px))!important;top:calc(19 * var(-
 ${S} .m2-ch .nb2-meds{right:calc(24 * var(--pc-u,1px))!important;bottom:calc(19 * var(--pc-u,1px))!important}
 /* 15.11.2026: napisy rozdzialu przy numerze (lewa strona), ilustracja odslonieta z prawej */
 ${S} .premium-map .m2-ch{padding-left:calc(58 * var(--pc-u,1px))!important}
-${S} .premium-map .m2-ch:after{left:calc(58 * var(--pc-u,1px))!important}
+${S} .premium-map .m2-ch:after{left:calc(58 * var(--pc-u,1px))!important;bottom:calc(19 * var(--pc-u,1px))!important}
 ${CAMPAIGN.map(i=>`${S} .premium-map #start${i}{background-image:linear-gradient(90deg,#0d0b10f2 0%,#0d0b10d6 34%,#0d0b1080 62%,#0d0b1026 100%),url('${PREMIUM_ASSETS['rozdzial-'+i+'-mini']}')!important}`).join('\n')}
 /* 15.11.2026: dolny pasek wyboru rozdzialu (Kaplica, Kronika, Tryb gry) w spalonej desce jak Przygotuj sie */
 ${S} :is(#title #kapBtn,#title #kronBtn,#title .pc-journey-mode,#title #pcMainMenuBack){border-color:transparent!important;border-image:none!important;background:${RAMKA} center/100% 100% no-repeat border-box!important;box-shadow:none!important;outline:none!important;animation:none!important}
@@ -10924,6 +10930,7 @@ ${O} #nbW .nte{display:flex!important;gap:calc(10*var(--u))!important;margin-top
 ${O} #nbW .nte>div{flex:1!important;display:flex!important;align-items:center!important;gap:calc(10*var(--u))!important;padding:calc(2*var(--u)) calc(6*var(--u))!important;min-width:0!important}
 ${O} #nbW .nte img{width:calc(38*var(--u))!important;height:calc(38*var(--u))!important;object-fit:contain!important;flex:none!important}
 ${O} #nbW .nte b{font:700 calc(15.5*var(--u))/1.15 Cinzel,Georgia,serif!important;color:#f2dfba!important}
+${O} #nbW .nte.tri b{font-size:calc(13*var(--u))!important;letter-spacing:0!important}${O} #nbW .nte.tri>div{gap:calc(7*var(--u))!important;padding:calc(2*var(--u)) calc(4*var(--u))!important}${O} #nbW .nte.tri img{width:calc(34*var(--u))!important;height:calc(34*var(--u))!important}
 /* ---- przygotowanie ---- */
 ${O} #nbP .ntlo{inset:-2%!important;background:url('${IMG.tlo}') center 60%/cover no-repeat!important;filter:blur(calc(7*var(--u))) brightness(.34) saturate(.9)!important}
 ${O} #nbP .cie{inset:0!important;background:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(5,4,6,.15),rgba(5,4,6,.75)),linear-gradient(0deg,rgba(5,4,6,.85),rgba(5,4,6,0) 28%)!important}
@@ -11042,7 +11049,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
   if(fokus&&document.activeElement!==TB[c])TB[c].focus({preventScroll:true});
   if(!zm)return;PAN.classList.add('zm');clearTimeout(ustaw.t);ustaw.t=setTimeout(()=>{const H=hero(c);
    PAN.querySelector('.kl').textContent=H.cls.toUpperCase();PAN.querySelector('.imi').textContent=H.n+', '+H.ep;PAN.querySelector('.mot').textContent=H.mot||'';PAN.querySelector('.nop').textContent=OPIS[c];PAN.querySelector('.sty').textContent=STYL[c].toUpperCase();
-   PAN.querySelector('.nte').innerHTML=TECH[c].map(k=>{const n=(SK[k]&&SK[k].name)||k,ic=PREMIUM_ICONS['skille-'+k]||'';return `<div class="nbk">${ic?`<img src="${ic}" alt="">`:''}<b>${esc(n)}</b></div>`}).join('');
+   PAN.querySelector('.nte').classList.toggle('tri',TECH[c].length>2);PAN.querySelector('.nte').innerHTML=TECH[c].map(k=>{const n=(SK[k]&&SK[k].name)||k,ic=PREMIUM_ICONS['skille-'+k]||'';return `<div class="nbk">${ic?`<img src="${ic}" alt="">`:''}<b>${esc(n)}</b></div>`}).join('');
    W.querySelector('.wyb2 small').textContent=H.n.toUpperCase();PAN.classList.remove('zm')},140)}
  function potwierdz(){if(blok)return;blok=true;W.classList.add('potw');B[wyb].classList.add('potw');try{uiSnd('card')}catch(e){}
   const q=prog();if(q.char!==wyb){q.char=wyb;q.sel=[];PREP.perks=[];saveProg()}
@@ -11095,9 +11102,15 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
   if(!c){g.classList.add('pu');g.innerHTML=`<div class="ntx"><b>${T('BEZ WYZWANIA','NO CHALLENGE')}</b><span>${T('Wybierz jedno z listy, żeby zdobyć dodatkowe Popioły i monety.','Pick one from the list to earn extra Ashes and coins.')}</span></div>`;return}
   const w=c.id===PREP.chal;if(w)g.classList.add('wy');
   g.innerHTML=`<span class="et">${w?T('WYBRANO','CHOSEN'):T('PODGLĄD','PREVIEW')}</span><div class="ntx"><b>${esc(c.n)}</b><span>${esc(c.d)}</span><span class="zl" style="margin-top:calc(10*var(--u));font:700 calc(18*var(--u))/1 Cinzel,Georgia,serif"><i class="nbur"></i>+${c.ash} ${T('Popiołów','Ashes')} &nbsp; <i class="nbmo"></i>+${c.coins} ${T('monet','coins')}${T(' · na start następnej nocy',' · at the start of the next night')}</span></div>`}
+ // 16.11.2026: listy w Przygotowaniu aktualizowane w miejscu (bez tworzenia na nowo przyciskow i obrazkow), zeby banery perkow, wyzwan i klatw nie migaly
+ const morphKids=(o,n)=>{const oc=[...o.childNodes],nc=[...n.childNodes];
+  if(oc.length!==nc.length||oc.some((x,i)=>x.nodeType!==nc[i].nodeType||(x.nodeType===1&&x.tagName!==nc[i].tagName))){o.replaceChildren(...nc);return}
+  nc.forEach((x,i)=>{const y=oc[i];if(x.nodeType===3){if(y.data!==x.data)y.data=x.data;return}if(x.nodeType!==1)return;
+   for(const a of [...x.attributes])if(y.getAttribute(a.name)!==a.value)y.setAttribute(a.name,a.value);for(const a of [...y.attributes])if(!x.hasAttribute(a.name))y.removeAttribute(a.name);morphKids(y,x)})};
+ const smartHtml=el=>{if(!el||el._sm)return;el._sm=1;const d=Object.getOwnPropertyDescriptor(Element.prototype,'innerHTML');Object.defineProperty(el,'innerHTML',{configurable:true,get(){return d.get.call(el)},set(h){if(el._h===h)return;el._h=h;const t=document.createElement(el.tagName.toLowerCase());d.set.call(t,h);morphKids(el,t)}})};
  function render(){if(!aktywny()){if(!P.hidden)P.hidden=true;if(prep.classList.contains('nbp-on'))prep.classList.remove('nbp-on');return}
   const fk=document.activeElement&&P.contains(document.activeElement)?document.activeElement.dataset.k:null,q=prog(),c=cur(),H=hero(c);
-  if(P.hidden)P.hidden=false;if(!prep.classList.contains('nbp-on'))prep.classList.add('nbp-on');PREP.curses=PREP.curses||[];
+  if(P.hidden)P.hidden=false;if(!prep.classList.contains('nbp-on'))prep.classList.add('nbp-on');PREP.curses=PREP.curses||[];for(const sl of ['.npg','.nlw','.nlk','.g3','.ntd','.nmn','.n1','.n2','.n3'])smartHtml(q$(sl));
   q$('.rd').textContent=(T('ROZDZIAŁ ','ACT ')+CHR[(PREP.ch||1)-1]+' · '+CHN[(PREP.ch||1)-1]).toUpperCase();
   {const tw=q$('.ntw'),s=tw.clientWidth||76,k=4.4,[fx,fy]=FACE[c]||[.5,.12],h=s*k,w=h*(NB_KAMIEN_AR[c]||.7);tw.style.backgroundImage=`url('${NB_KAMIEN[c]}')`;tw.style.backgroundSize=`${w}px ${h}px`;tw.style.backgroundPosition=`${s/2-fx*w}px ${s/2-fy*h}px`}
   q$('.nbn').textContent=H.n.toUpperCase();q$('.nbl').textContent=H.cls+T(' · poziom ',' · level ')+q.lv;
