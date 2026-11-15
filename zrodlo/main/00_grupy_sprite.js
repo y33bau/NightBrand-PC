@@ -674,6 +674,7 @@ const SPRITE_GROUPS={
  const add=(k,url)=>{SPRITE_DATA[k]=url;SPRITE_GROUPS[k]=['r6']};
  add('port_atlas','assets/rekwizyty/201e598e7e7a138e23dd51003cc170649947d446e51da7f4b2bdf698bf36a749.png');
  add('port_statek','assets/rekwizyty/ea7da3fa084717e705a0a0623c6ea968952c27be15984027ebc12257248bc1a6.webp');
+ add('port_prom','assets/rekwizyty/2aa15a3577af03437d7d929ab87e1a539e1f2f80685a30e56bf434f31b2ae5b6.webp');// 15.11.2026: prom widziany prosto z gory (obraz autora, ChatGPT)
  // nawierzchnie: malowane tekstury gry (bruk, plyty, deski) przetworzone na mokry, chlodny, przesolony port
  add('port_bruk','assets/tekstury/7660f4dd57a7fc0e2a8bbacfdb499d589938ca75409482b72d9882bf460f2206.webp');
  add('port_trakt','assets/tekstury/d87776dd8beda5559f9bdafe07a810e23e40b02077de14c38dfcf1794faf19f8.webp');

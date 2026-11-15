@@ -674,6 +674,7 @@ const SPRITE_GROUPS={
  const add=(k,url)=>{SPRITE_DATA[k]=url;SPRITE_GROUPS[k]=['r6']};
  add('port_atlas','assets/rekwizyty/201e598e7e7a138e23dd51003cc170649947d446e51da7f4b2bdf698bf36a749.png');
  add('port_statek','assets/rekwizyty/ea7da3fa084717e705a0a0623c6ea968952c27be15984027ebc12257248bc1a6.webp');
+ add('port_prom','assets/rekwizyty/2aa15a3577af03437d7d929ab87e1a539e1f2f80685a30e56bf434f31b2ae5b6.webp');// 15.11.2026: prom widziany prosto z gory (obraz autora, ChatGPT)
  // nawierzchnie: malowane tekstury gry (bruk, plyty, deski) przetworzone na mokry, chlodny, przesolony port
  add('port_bruk','assets/tekstury/7660f4dd57a7fc0e2a8bbacfdb499d589938ca75409482b72d9882bf460f2206.webp');
  add('port_trakt','assets/tekstury/d87776dd8beda5559f9bdafe07a810e23e40b02077de14c38dfcf1794faf19f8.webp');
@@ -2239,7 +2240,11 @@ function buildSolneNabrzeze(I){
  const sprite=(frame,x,y,w,h,flip)=>{const geo=new THREE.PlaneGeometry(w,h).translate(0,h/2,0),m=new THREE.Mesh(geo,frame.n);
   m.position.set(x,0,y);m.scale.set(flip?-1:1,SQ,1);m.castShadow=true;m.customDistanceMaterial=frame.d;ROOT.add(m);return m};
  // prom: poklad, po ktorym sie chodzi, lezy plasko pod stopami postaci
- {const [fx,fy,fw,fh]=PORT_FERRY_ART,m=sprite(frames.ferry,MP(fx),MP(fy),fw,fh);m.rotation.x=-Math.PI/2;m.scale.y=1.38;m.position.y=.052;m.castShadow=false;m.receiveShadow=true}
+ // 15.11.2026: nowy prom rysowany prosto z gory, spasowany z polem pokladu (PORT_FERRY_DECK): kadlub = pole pokladu, trap schodzi na szyje pomostu
+ let ferryRings=null,ferryBox=null;const offFerry=(x,y)=>!ferryBox||x<ferryBox[0]||x>ferryBox[2]||y<ferryBox[1]||y>ferryBox[3];// trzciny nie zaslaniaja burt i pierscieni promu
+ if(I.port_prom){const img=I.port_prom;img.nbDensity=img.width/96;const fr=procFrame(img,0,0,96,48,'prop'),[dx,dy,dw,dh]=PORT_FERRY_DECK,x0=FT(dx),x1=FT(dx+dw),z0=FT(dy),z1=FT(dy+dh),w=x1-x0+.2,d=(z1-z0)/.78,m=sprite(fr,(x0+x1)/2,z0+d,w,d);
+  m.rotation.x=-Math.PI/2;m.scale.y=1;m.position.y=.052;m.castShadow=false;m.receiveShadow=true;ferryRings=[[(x0+x1)/2-w/2+w*.027,z0+d*.412],[(x0+x1)/2+w/2-w*.027,z0+d*.412]];ferryBox=[x0-1.6,z0-1.6,x1+1.6,z0+d+.6]}
+ else{const [fx,fy,fw,fh]=PORT_FERRY_ART,m=sprite(frames.ferry,MP(fx),MP(fy),fw,fh);m.rotation.x=-Math.PI/2;m.scale.y=1.38;m.position.y=.052;m.castShadow=false;m.receiveShadow=true}
  // koga Zakonu na kotwicy przy wschodnim pomoscie: sama dekoracja, stoi na wodzie poza polem gry
  if(I.port_statek){const img=I.port_statek;img.nbDensity=img.width/96;const fr=procFrame(img,0,0,96,64,'prop'),[sx,sy,sw]=PORT_SHIP,m=sprite(fr,MP(sx),MP(sy),sw,sw*2/3);m.position.y=-.55;m.castShadow=false;W.portShip=m;
   W.LSRC.push({col:0xffb46a,base:.8,dist:6,x:MP(sx)+sw*.29,y:3.9,z:MP(sy)-.4,kind:'fire',ph:2.2})}
@@ -2256,20 +2261,20 @@ function buildSolneNabrzeze(I){
  // --- lancuchy od kolowrotow do promu
  W.solneChains=[];
  const iron=phong({color:0x4a4f52,shininess:22,specular:0x39424a}),linkGeo=new THREE.CylinderGeometry(.034,.034,1,5);
- for(const [x,y,tx] of [[12.5,14.8,30.8],[53.5,14.8,34.2]]){
+ for(const [x,y,tx,ri] of [[12.5,14.8,30.8,0],[53.5,14.8,34.2,1]]){
   // lancuch zwisa lukiem od bebna kolowrotu do burty promu i w polowie drogi dotyka wody
-  const from=new THREE.Vector3(MP(x),.72,MP(y)),to=new THREE.Vector3(MP(tx),.3,MP(5.2)),chain=new THREE.Group(),steps=14;
+  const from=new THREE.Vector3(MP(x),.72,MP(y)),to=ferryRings?new THREE.Vector3(ferryRings[ri][0],.14,ferryRings[ri][1]):new THREE.Vector3(MP(tx),.3,MP(5.2)),chain=new THREE.Group(),steps=14;
   for(let j=0;j<steps;j++){const [a,b]=[j/steps,(j+1)/steps].map(t=>from.clone().lerp(to,t).setY(from.y+(to.y-from.y)*t-1.0*4*t*(1-t)));
    const link=new THREE.Mesh(linkGeo,iron),d=b.clone().sub(a);link.scale.y=d.length();link.position.copy(a).add(b).multiplyScalar(.5);link.quaternion.setFromUnitVectors(UP,d.normalize());link.castShadow=false;chain.add(link)}
   ROOT.add(chain);W.solneChains.push(chain);
  }
  // --- trzciny przy palach i brzegu (ta sama grafika co w Czarnoborze)
  const reeds=procFrame(I.p4_reeds,0,0,I.p4_reeds.width/(I.p4_reeds.nbDensity||1),I.p4_reeds.height/(I.p4_reeds.nbDensity||1),'prop');
- for(const [x,y] of piles)if(random()<.6)sprite(reeds,x+.35,y+.8,1.2,1.2);
+ for(const [x,y] of piles)if(random()<.6&&offFerry(x,y))sprite(reeds,x+.35,y+.8,1.2,1.2);
  for(let n=0;n<85;n++){
   const x=2+(random()*(MW-4)|0),y=2+(random()*(MH-4)|0);if(ground(x,y)!==45)continue;
   if(![[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>land(ground(x+a,y+b))))continue;
-  sprite(reeds,x+.5,y+.7,1.3,1.15);
+  if(offFerry(x,y))sprite(reeds,x+.5,y+.7,1.3,1.15);
  }
 }
 
