@@ -677,9 +677,36 @@ ${S} .m2-emb>.m2-ico-emb{background:${URNA} center/contain no-repeat!important;w
 ${S} .pc-fantasy-title::before{display:none!important}
 `;document.head.append(st);
 }catch(e){quietErr('menuOdswiezenie',e)}})();
+
+// 15.11.2026: nowy standard pozostalych sekcji menu (Kaplica, Kronika, Opcje, Instrukcja, Przygotowanie, Pauza, Awans, Koniec nocy, rozmowy, komunikaty): zakladki i przyciski na spalonej desce, panele w spopielonej ramie z okuciami, karty w spalonej ramie banerow rozdzialow
+(()=>{try{const P='#orient'.repeat(300)+' ';const st=document.createElement('style');st.id='nb-menu-standard';st.textContent=`
+${P}:is(.tab,.stab,.nbp-tab,.pc-prep-tab,.backar,#kapBack,.premium-back,.go.alt,#dialog button.next,.premium-difficulty,.pc-quick){border-color:transparent!important;border-image:none!important;background:url('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp') center/100% 100% no-repeat border-box!important;box-shadow:none!important;outline:none!important;animation:none!important;color:#e6d6b8!important}
+${P}:is(.tab,.stab,.nbp-tab,.pc-prep-tab,.backar,#kapBack,.premium-back,.go.alt,#dialog button.next,.premium-difficulty,.pc-quick)::before,${P}:is(.tab,.stab,.nbp-tab,.pc-prep-tab,.backar,#kapBack,.premium-back,.go.alt,#dialog button.next,.premium-difficulty,.pc-quick)::after{background:none!important;border:none!important;box-shadow:none!important}
+${P}:is(.tab,.stab,.nbp-tab,.pc-prep-tab,.backar,#kapBack,.premium-back,.go.alt,#dialog button.next,.premium-difficulty,.pc-quick)>.pcg-edge{display:none!important}
+${P}:is(.tab,.stab,.nbp-tab,.pc-prep-tab,.backar,#kapBack,.premium-back,.go.alt,#dialog button.next,.premium-difficulty,.pc-quick):is(.on,.chosen,[aria-selected=true],[aria-pressed=true]){background:radial-gradient(ellipse 46% 42% at 50% 58%,rgba(255,118,36,.48),rgba(255,90,30,.14) 60%,rgba(255,90,30,0) 100%) center/86% 74% no-repeat,url('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp') center/100% 100% no-repeat border-box!important;color:#ffe2b8!important;text-shadow:0 0 10px rgba(255,140,60,.75)!important;filter:brightness(1.12) drop-shadow(0 0 6px rgba(255,120,40,.45))!important}
+/* panele: spopielona rama z okuciami (jak ilustracja rozdzialu) */
+${P}:is(.prepbox,.pc-perk-detail,.pc-option-section,.nb2-diff,#dialog,.premium-prep-controls){border-style:solid!important;border-color:transparent!important;border-image:url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp') 48 / 18px stretch!important;box-shadow:none!important}
+${P}#dialog{background:linear-gradient(140deg,rgba(22,16,16,.96),rgba(12,9,10,.96)) padding-box!important}
+${P}.pc-option-section>.sth{background:linear-gradient(90deg,rgba(90,40,20,.55),rgba(40,20,14,0))!important;border:none!important}
+/* karty: spalona rama jak banery rozdzialow */
+${P}:is(.m2k-row,#lvl .card,#prep .opt,.pc-run-status){border-style:solid!important;border-color:transparent!important;border-image:url('assets/ui/5a6a99a0140440ac5856623aed2e2ea738c3d6c97dba954373663177fc20f69f.webp') 48 / 16px stretch!important;box-shadow:none!important}
+${P}:is(.m2k-row,#lvl .card,#prep .opt,.pc-run-status)>.pcg-edge{display:none!important}
+${P}:is(.m2k-row,#lvl .card,#prep .opt):is(.on,.chosen,:focus-visible,.pf){filter:brightness(1.2) saturate(1.15) drop-shadow(0 0 8px rgba(255,120,40,.5))!important}
+${P}#lvl .card{border-image-width:22px!important}
+/* komunikat: spalona deska */
+${P}#msg{background:url('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp') center/100% 100% no-repeat!important;padding:16px 48px!important;border:none!important;box-shadow:none!important;color:#f0dcb6!important}
+
+${P}:is(.prepbox,.pc-perk-detail,.pc-option-section,.nb2-diff,.premium-prep-controls,.m2k-row,#prep .opt,.pc-run-status){border-width:1px!important}
+${P}:is(.m2k-row,#lvl .card,#prep .opt,.nb2-hero):is(.on,.chosen,[aria-pressed=true]),${P}#lvl .card:is(:focus,:focus-visible,.pf){background:radial-gradient(ellipse 70% 40% at 50% 100%,rgba(255,110,40,.28),rgba(255,110,40,0) 70%),linear-gradient(rgba(34,20,14,.94),rgba(13,9,9,.96))!important}
+${P}.nb2-hero{border-style:solid!important;border-color:transparent!important;border-image:url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp') 48 / 16px stretch!important;box-shadow:none!important}
+${P}.nb2-hero{background:radial-gradient(ellipse 70% 40% at 50% 100%,rgba(255,110,40,.22),rgba(255,110,40,0) 70%),linear-gradient(rgba(34,20,14,.94),rgba(13,9,9,.96))!important}
+
+${P}:is(.tab,.stab,.nbp-tab,.pc-prep-tab,.backar,#kapBack,.premium-back,.go.alt,#dialog button.next,.premium-difficulty,.pc-quick):is(:hover,:focus-visible,.pf){background:radial-gradient(ellipse 46% 42% at 50% 58%,rgba(255,118,36,.48),rgba(255,90,30,.14) 60%,rgba(255,90,30,0) 100%) center/86% 74% no-repeat,url('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp') center/100% 100% no-repeat border-box!important;color:#ffe2b8!important;text-shadow:0 0 10px rgba(255,140,60,.75)!important;animation:nbZarG 1.8s ease-in-out infinite!important}
+${P}:is(.m2k-row,#prep .opt):is(:hover,:focus-visible,.pf){filter:brightness(1.2) saturate(1.15) drop-shadow(0 0 8px rgba(255,120,40,.5))!important}
+`;document.head.append(st)}catch(e){quietErr('menuStandard',e)}})();
 // 14.11.2026: menu glowne - oboz przy ognisku; przy ogniu siedzi ostatnio wybrana postac (prog().char). Tylko wyglad, bez wplywu na nawigacje.
 (()=>{try{
- const H={r:'assets/ui/ab094563c70beb21edbc52b0950ae6877c4427f01de1e8504b7a58b202770b31.webp',k:'assets/ui/d2dede7350c7ec6c21d0244c572766b677e2792c18b529282a49b28279f1f263.webp',z:'assets/ui/a6c3862e2bcd435f81ee2e0130a0772bd6166094bafd1936696775823fc1bd7b.webp',d:'assets/ui/f26a5d308bb8c63ae7b955c0da08ca4d7b43988b3e33a4a6e2fe8e0521390fd7.webp',m:'assets/ui/faa53ea5bdb0a3da4d6f1be6c451222d1b2940547ead703a061937fae637c54d.webp'},T=document.getElementById('title');if(!T)return;
+ const H={r:'assets/ui/ab094563c70beb21edbc52b0950ae6877c4427f01de1e8504b7a58b202770b31.webp',k:'assets/ui/d2dede7350c7ec6c21d0244c572766b677e2792c18b529282a49b28279f1f263.webp',z:'assets/ui/a6c3862e2bcd435f81ee2e0130a0772bd6166094bafd1936696775823fc1bd7b.webp',d:'assets/ui/c6cfafbed5ad6cbf623cb80070d9624d7537000e820ad1ef1774d60232f40ab4.webp',m:'assets/ui/faa53ea5bdb0a3da4d6f1be6c451222d1b2940547ead703a061937fae637c54d.webp'},T=document.getElementById('title');if(!T)return;
  const st=document.createElement('style');st.id='nb-oboz';const Z='#orient'.repeat(150)+' #title.pc-home';
  st.textContent=`${Z}{background-image:none!important;background-color:#08070a!important;isolation:isolate!important}
 #title:not(.pc-home)>#nbOboz{display:none}
@@ -703,7 +730,7 @@ ${S} .pc-fantasy-title::before{display:none!important}
  document.head.append(st);
  const box=document.createElement('div');box.id='nbOboz';box.setAttribute('aria-hidden','true');
  box.innerHTML='<i class="tlo"></i><i class="cien"></i><i class="luna"></i><i class="ogien"></i><i class="kontakt"></i><i class="bohater"></i><i class="mgla"></i><i class="ziarno"></i>';T.prepend(box);
- const AR={r:.877,k:.973,z:.675,d:.68,m:.908},LUSTRO={r:1,m:1};
+ const AR={r:.877,k:.973,z:.675,d:.701,m:.908},LUSTRO={r:1,m:1};
  const hero=box.querySelector('.bohater');
  const pokaz=()=>{let c='r';try{const q=prog();if(q&&H[q.char])c=q.char}catch(e){}if(hero.dataset.c===c)return;hero.dataset.c=c;hero.style.backgroundImage=`url('${H[c]}')`;hero.style.setProperty('--ar',AR[c]);hero.classList.toggle('lustro',!!LUSTRO[c])};
  pokaz();new MutationObserver(pokaz).observe(T,{attributes:true,attributeFilter:['hidden','class']});

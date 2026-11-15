@@ -803,3 +803,4 @@ cache725 · Menu glowne: Graj, Kaplica, Kronika, Instrukcja, Opcje i Wyzwanie dn
 cache726 · Menu glowne: logo i deski w lewej kolumnie, logo nad deskami z winieta, scena z ogniskiem odslonieta (nie sprawdzono: pad, monitor autora, itch.io)
 cache727 · Menu glowne: licznik Popiolow i poziomu na dole lewej kolumny pod trybem gry, z paskiem postepu poziomu (nie sprawdzono: pad, monitor autora, itch.io)
 cache728 · Menu glowne: deski Graj-Opcje bez ikon (nie sprawdzono: pad, monitor autora, itch.io)
+cache729 · Nowy standard pozostalych sekcji menu (zakladki na spalonej desce, panele w spopielonej ramie, karty w spalonej ramie, komunikaty na desce) + nowy siedzacy Dzwonnik przy ognisku (nie sprawdzono: pad, monitor autora, sklep Margi, wybor u Wita, itch.io)
