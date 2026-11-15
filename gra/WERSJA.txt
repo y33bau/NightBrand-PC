@@ -841,3 +841,4 @@ cache763 · Porzadki map (cache 763): fontanna Zlotogrodu na osi placu, latarnie
 cache766 · Fabula 759 scalona (Argon): intro, rozmowy NPC, bossowie, epilog, zakonczenia, zapiski, bestiariusz, wydarzenia, krypta (PL+EN, EN tlumaczone przez Claude). Nie sprawdzono: ekran, pad, dzwiek, FPS, itch.io
 cache767 · Fabula 759: instrukcja kampanii, komunikaty po rozmowie. Nie sprawdzono: ekran, pad, dzwiek, FPS, itch.io
 cache768 · Fabula 759: motywy bohaterow na ekranie wyboru postaci. Nie sprawdzono: wyglad ekranu, pad, dzwiek, FPS, itch.io
+cache769 · Scalenie testowe: fabula 759 + WSAD w menu + balans atak/unik. Nie sprawdzono: wyglad ekranow, pad, dzwiek, FPS, itch.io

@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 >nul
 setlocal
-title Nightbrand PC - test: fabula 768
+title Nightbrand PC - test: calosc 769
 echo.
 echo  Nightbrand - wersja PC (repo NightBrand-PC) lokalnie
 echo  =====================================
@@ -12,7 +12,7 @@ if errorlevel 1 (
   pause
   exit /b 1
 )
-set "BRANCH=fabula-scalona-759"
+set "BRANCH=test-calosc"
 set "NB_BASE=%~dp0"
 set "NB_DIR=%NB_BASE%NightBrand-PC-test"
 echo.

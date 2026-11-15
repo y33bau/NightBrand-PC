@@ -725,7 +725,7 @@ trDom(document.body);
 (()=>{const box=$('lang');let saved=null;try{saved=localStorage.getItem('pn_lang')}catch(e){}
   const pick=l=>{try{localStorage.setItem('pn_lang',l)}catch(e){}if(l!==LANG){location.reload();return}if(box&&!box.hidden){box.hidden=true;const t=document.querySelector('#title button:not([disabled])');t&&t.focus()}};
   for(const b of document.querySelectorAll('[data-lang],[data-setlang]')){const l=b.dataset.lang||b.dataset.setlang;b.classList.toggle('on',l===LANG);b.setAttribute('aria-pressed',String(l===LANG));b.addEventListener('click',()=>pick(l))}
-  if(!box)return;box.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){const bs=[...box.querySelectorAll('button')],i=bs.indexOf(document.activeElement);bs[(i+1+bs.length)%bs.length].focus();e.preventDefault()}});
+  if(!box)return;box.addEventListener('keydown',e=>{const k=({a:'ArrowLeft',d:'ArrowRight'})[e.key.toLowerCase()]||e.key;if(k==='ArrowLeft'||k==='ArrowRight'){const bs=[...box.querySelectorAll('button')],i=bs.indexOf(document.activeElement);bs[(i+1+bs.length)%bs.length].focus();e.preventDefault()}});
   if(!saved){box.hidden=false;const fo=()=>{if(box.hidden)return;const f=box.querySelector('button.on');if(f&&!box.contains(document.activeElement))f.focus()};for(const t of [60,400,1500,4000,8000,14000])setTimeout(fo,t);addEventListener('keydown',e=>{if(!box.hidden&&!box.contains(document.activeElement)&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Enter',' '].includes(e.key)){e.preventDefault();e.stopImmediatePropagation();fo()}},true)}})();
 if(!window.THREE){$('screen').insertAdjacentHTML('beforeend',(EN?'<div id="err">Failed to load the 3D library. Please refresh the page.</div>':'<div id="err">Nie udało się wczytać biblioteki 3D. Odśwież stronę.</div>'));return}
 const TS=16,MW=104,MH=91,WW=MW*TS,WH=MH*TS,NIGHT=960,BREAK_AT=480,PITCH=55*Math.PI/180,DIST=30,
@@ -3951,12 +3951,12 @@ const chWon=c=>!!((SETT.save['s'+c]&&SETT.save['s'+c].win)||(SETT.save['a'+c]&&S
 // kampania: 1,2,6(port),3,4,5. Rozdzial jest otwarty po wygraniu poprzedniego; kto gral Zlotogrod przed dodaniem portu, zachowuje do niego dostep.
 const chLocked=c=>{if(!STORYMODE||c===1)return false;if(chWon(chPrev(c))||chWon(c))return false;return !(c===3&&(SETT.save.s3||SETT.save.a3||chWon(2)&&[4,5].some(chWon)))};
 let heavyPress=false,signPress=false,mouseL=false,mouseR=false,mouseX=0,mouseY=0,mouseT=-99,tAtk=false,tBlock=false;
-const SL={regen:32,delay:.55,roll:24,blockRegen:.25,stepCost:8,
+const SL={regen:32,delay:.55,roll:20,blockRegen:.25,stepCost:8,
   mana:{max:60,regen:2.5,delay:.75,onHit:1,onParry:0,onKill:0,hitGap:.5},
   shot:{iceDmg:16,perL:2,targets:[3,4,6],iceR:8,fireDmg:[30,36,42],fireR:[34,38,42],fireHit:9,splash:.5},
   guard:{dmg:[15,17,20,22,29],hits:[2,3,4,5,5],gap:2,hitR:90,dur:10,hp:[.8,.9,1,1.1,1.2],taunt:[96,104,112,120,128],bossTaunt:5,spd:42,r:7,leash:140,inv:.3},parry:.18,blockMul:1.2,guardBreak:.8,riposte:1.5,cap:28,ramp:.12,bossHp:.45,enemyWind:.5,enemyRec:.5,enemyHit:1.6,staggerGap:.9,coinDrop:.45,coinStrong:2,coinSurvive:15,projDiv:900,dmgDiv:800,shotGap:1.3,aim:.55,
   wave:{l:{dmg:.6,speed:230,life:.62,r:13,size:1.25},h:{dmg:.7,speed:250,life:.75,r:19,size:1.8},stun:.4},
-  light:{cost:14,dmg:[17,19,28],wind:.12,act:.1,rec:.27,range:30,arc:1.05,stun:[.18,.18,.3],lunge:[30,30,55]},
+  light:{cost:14,dmg:[17,19,28],wind:.108,act:.09,rec:.243,range:30,arc:1.05,stun:[.18,.18,.3],lunge:[30,30,55]},
   heavy:{cost:36,dmg:48,charge:.42,wind:.52,act:.12,rec:.3,range:37,arc:1.5,stun:.7,lunge:70}};
 // level-up cards in slasher mode raise the hero's attributes instead of giving skills
 const SLASH_UP=['_vit','_dex','_str','_int'];
@@ -7190,7 +7190,8 @@ function navMove(id,d,pad){const root=$(id);if(!root)return false;const items=pa
   for(const e of items){if(e===cur)continue;const r=lrect(e),dx=r.left+r.width/2-cx,dy=r.top+r.height/2-cy;const main=d==='d'?dy:d==='u'?-dy:d==='r'?dx:-dx,side=d==='d'||d==='u'?dx:dy;if(main<=2)continue;const sc=main+Math.abs(side)*2.2;if(sc<bs){bs=sc;best=e}}
   if(!best){const i=items.indexOf(cur),step=d==='d'||d==='r'?1:-1;best=items[(i+step+items.length)%items.length]}
   best.focus({preventScroll:true});try{best.scrollIntoView({block:'nearest'})}catch(e){}return true}
-addEventListener('keydown',e=>{const m={arrowdown:'d',arrowup:'u',arrowleft:'l',arrowright:'r'}[e.key.toLowerCase()];if(!m||recoveryActive||e.target.closest?.('[role=radiogroup]')&&['l','r'].includes(m))return;const id=padMenuId();if(!id||id==='notice')return;const ae=document.activeElement;if(ae&&ae.type==='range'&&(m==='l'||m==='r'))return;if(ae&&(ae.tagName==='SELECT'||ae.tagName==='TEXTAREA'||ae.type==='text'))return;if(navMove(id,m)){e.preventDefault();e.stopImmediatePropagation()}},true);
+// 16.11.2026: WSAD w menu dziala jak strzalki (W gora, S dol, A lewo, D prawo); w suwakach A/D przesuwa wartosc o jeden krok
+addEventListener('keydown',e=>{const kk=e.key.toLowerCase(),m={arrowdown:'d',arrowup:'u',arrowleft:'l',arrowright:'r',s:'d',w:'u',a:'l',d:'r'}[kk];if(!m||recoveryActive||e.target.closest?.('[role=radiogroup]')&&['l','r'].includes(m))return;const id=padMenuId();if(!id||id==='notice')return;const ae=document.activeElement;if(ae&&ae.type==='range'&&(m==='l'||m==='r')){if(!kk.startsWith('arrow')&&!e.ctrlKey&&!e.altKey&&!e.metaKey){e.preventDefault();e.stopImmediatePropagation();ae.value=String(+ae.value+(m==='r'?1:-1)*(+ae.step||1));ae.dispatchEvent(new Event('input',{bubbles:true}));ae.dispatchEvent(new Event('change',{bubbles:true}))}return}if(ae&&(ae.tagName==='SELECT'||ae.tagName==='TEXTAREA'||ae.type==='text'))return;if(navMove(id,m)){e.preventDefault();e.stopImmediatePropagation()}},true);
 // 13.11.2026 (runda pad-menu-2): nawigacja padem wg Xbox Accessibility Guideline 112.
 // Fokus nie gubi się: gdy menu przerysuje przyciski albo mysz zdejmie fokus, wraca na ten sam
 // element (lub jego odpowiednik po id/zakładce/tekście, albo najbliższy na ekranie), a nie na pierwszy.
@@ -7498,7 +7499,7 @@ const skip=document.createElement('button');skip.id='tutSkip';skip.type='button'
 // Accessible title presentation; existing checkbox change handler owns mode/save logic.
 function syncTitleMode(){for(const [id,selected] of [['sFab',!$('storyTgl').checked],['sArc',$('storyTgl').checked]]){const b=$(id);b.setAttribute('aria-checked',String(selected));b.removeAttribute('aria-pressed');b.tabIndex=selected?0:-1}$('storyModeHint').textContent=$('storyTgl').checked?(EN?'All acts right away.':'Wszystkie rozdziały od razu.'):(EN?'You unlock acts one by one.':'Rozdziały odblokowujesz po kolei.')}
 $('storyTgl').addEventListener('change',syncTitleMode);new MutationObserver(syncTitleMode).observe($('sFab'),{attributes:true,attributeFilter:['class']});syncTitleMode();
-$('sFab').parentElement.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','Enter',' '].includes(e.key))return;e.preventDefault();e.stopPropagation();if(e.repeat)return;const b=e.key==='ArrowLeft'?$('sFab'):e.key==='ArrowRight'?$('sArc'):e.target.closest('[role=radio]');if(b){b.click();b.focus()}});
+$('sFab').parentElement.addEventListener('keydown',e=>{const key={a:'ArrowLeft',d:'ArrowRight'}[e.key.toLowerCase()]||e.key;if(!['ArrowLeft','ArrowRight','Enter',' '].includes(key))return;e.preventDefault();e.stopPropagation();if(e.repeat)return;const b=key==='ArrowLeft'?$('sFab'):key==='ArrowRight'?$('sArc'):e.target.closest('[role=radio]');if(b){b.click();b.focus()}});
 
 
 // UI stage 1: shared palette, frame weights and states; no gameplay or HUD changes.
