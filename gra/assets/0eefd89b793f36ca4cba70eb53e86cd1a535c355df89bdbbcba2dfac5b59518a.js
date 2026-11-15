@@ -8482,6 +8482,9 @@ ${Z} .nbo-sep{height:1px;background:linear-gradient(90deg,#0000,#b08a4a55,#0000)
  const profile=make('aside','pc-profile'),ashIcon=make('img','pc-profile-ash'),ashBlock=make('div','pc-profile-stat'),ashValue=make('strong','',String(EMB.e)),levelBlock=make('div','pc-profile-stat'),levelValue=make('strong','',String(prog().lv));
  ashIcon.src='assets/efekty/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp';ashIcon.alt='';
  ashBlock.append(make('small','',T('Popioły','Ashes')),ashValue);levelBlock.append(make('small','',T('Poziom','Level')),levelValue);profile.append(ashIcon,ashBlock,levelBlock);title.append(profile);
+ /* 15.11.2026: w menu glownym licznik Popiolow i poziomu stoi na dole lewej kolumny, pod trybem gry; na wyborze rozdzialu wraca w prawy gorny rog */
+ const placeProfile=()=>{const nav=title.querySelector('.premium-rail>.premium-nav');if(title.classList.contains('pc-home')&&nav&&innerWidth>=900){if(profile.parentNode!==nav.parentNode||profile.nextElementSibling)nav.parentNode.append(profile)}else if(profile.parentNode!==title)title.append(profile)};
+ new MutationObserver(placeProfile).observe(title,{attributes:true,attributeFilter:['class']});addEventListener('resize',placeProfile);
  const facts=make('div','pc-destination-facts'),factValues=[];
  for(const label of [T('Dostępność','Availability'),T('Najdłuższa noc','Longest night'),T('Rekord zabójstw','Most kills')]){const cell=make('div',''),value=make('strong','','—');cell.append(make('small','',label),value);facts.append(cell);factValues.push(value)}banner.append(facts);
  const journeyFooter=make('footer','pc-journey-footer'),modeInfo=make('div','pc-journey-mode'),modeName=make('strong','','');modeInfo.append(make('small','',T('Tryb gry','Game mode')),modeName);
@@ -8493,7 +8496,7 @@ ${Z} .nbo-sep{height:1px;background:linear-gradient(90deg,#0000,#b08a4a55,#0000)
  const put=(el,text)=>{if(el.textContent!==text)el.textContent=text};
  function refreshJourney(){
   if(title.hidden)return;
-  put(ashValue,String(EMB.e));put(levelValue,String(prog().lv));levelBlock.title=prog().lv>=PMAX?T('Poziom maksymalny','Max level'):prog().xp+' / '+PNEED(prog().lv)+' XP';
+  placeProfile();put(ashValue,String(EMB.e));put(levelValue,String(prog().lv));levelBlock.title=prog().lv>=PMAX?T('Poziom maksymalny','Max level'):prog().xp+' / '+PNEED(prog().lv)+' XP';levelBlock.style.setProperty('--nb-xp',prog().lv>=PMAX?1:Math.max(0,Math.min(1,prog().xp/PNEED(prog().lv)))); /* 15.11.2026: pasek postepu poziomu w menu glownym */
   put(modeName,STORYMODE?T('Fabularny','Story'):'Arcade');
   for(const i of CAMPAIGN){
    const b=$('start'+i);let label=b.querySelector('.pc-chapter-label');
@@ -10456,6 +10459,15 @@ ${Z} .premium-body .premium-rail{translate:calc(-427 * var(--pc-u,1px)) 0!import
 ${Z} .premium-mast{translate:calc(-427 * var(--pc-u,1px)) calc(12 * var(--pc-u,1px))!important;scale:.74!important}
 ${Z} .premium-mast:before{left:50%!important;top:52%!important;inset:auto!important;width:calc(958 * var(--pc-u,1px))!important;height:calc(453 * var(--pc-u,1px))!important;translate:-50% -50%!important;background:radial-gradient(ellipse closest-side,rgba(8,6,8,.82),rgba(8,6,8,.5) 55%,rgba(8,6,8,0))!important;z-index:-1!important;pointer-events:none!important}
 ${Z} .premium-mast .m2-logo{filter:drop-shadow(0 0 18px rgba(255,110,40,.28)) drop-shadow(0 6px 10px rgba(0,0,0,.9))!important}
+/* licznik Popiolow i poziomu w lewej kolumnie, pod deskami; pod nim wyzwanie dnia i tryb */
+${Z} .pc-profile{position:relative!important;right:auto!important;left:auto!important;top:auto!important;flex:none!important;width:100%!important;height:calc(50 * var(--pc-u,1px))!important;margin:calc(14 * var(--pc-u,1px)) 0 0!important;box-sizing:border-box!important;padding:0 calc(30 * var(--pc-u,1px))!important;gap:calc(14 * var(--pc-u,1px))!important;justify-content:center!important;align-items:center!important}
+${Z} .pc-profile-ash{width:calc(30 * var(--pc-u,1px))!important;height:calc(30 * var(--pc-u,1px))!important}
+${Z} .pc-profile-stat{flex-direction:row!important;align-items:baseline!important;gap:calc(8 * var(--pc-u,1px))!important;min-width:0!important}
+${Z} .pc-profile-stat small{font:400 calc(14 * var(--pc-u,1px))/1 Georgia,serif!important;color:#bca177!important}
+${Z} .pc-profile-stat strong{font:400 calc(23 * var(--pc-u,1px))/1 Georgia,serif!important}
+${Z} .pc-profile-stat+.pc-profile-stat{padding-left:calc(18 * var(--pc-u,1px))!important;margin-left:calc(6 * var(--pc-u,1px))!important;align-items:center!important}
+${Z} .pc-profile-stat+.pc-profile-stat::before{content:none!important;display:none!important}
+${Z} .pc-profile-stat+.pc-profile-stat::after{content:''!important;display:block!important;width:calc(84 * var(--pc-u,1px))!important;height:calc(5 * var(--pc-u,1px))!important;margin-left:calc(4 * var(--pc-u,1px))!important;background:linear-gradient(90deg,#e8873a calc(var(--nb-xp,0) * 100%),#1c1210 0)!important;border:1px solid #6a4426!important;box-shadow:0 0 6px rgba(255,120,40,.25)!important}
 }
 ${PR} .pc-profile{border:none!important;border-image:none!important;background:${A('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp')} center/100% 100% no-repeat!important;box-shadow:none!important;padding-left:2.2%!important;padding-right:2.2%!important}
 ${PR} .pc-profile>.pcg-edge{display:none!important}

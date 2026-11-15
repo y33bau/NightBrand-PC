@@ -1162,6 +1162,9 @@ ${Z} .nbo-sep{height:1px;background:linear-gradient(90deg,#0000,#b08a4a55,#0000)
  const profile=make('aside','pc-profile'),ashIcon=make('img','pc-profile-ash'),ashBlock=make('div','pc-profile-stat'),ashValue=make('strong','',String(EMB.e)),levelBlock=make('div','pc-profile-stat'),levelValue=make('strong','',String(prog().lv));
  ashIcon.src='assets/efekty/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp';ashIcon.alt='';
  ashBlock.append(make('small','',T('Popioły','Ashes')),ashValue);levelBlock.append(make('small','',T('Poziom','Level')),levelValue);profile.append(ashIcon,ashBlock,levelBlock);title.append(profile);
+ /* 15.11.2026: w menu glownym licznik Popiolow i poziomu stoi na dole lewej kolumny, pod trybem gry; na wyborze rozdzialu wraca w prawy gorny rog */
+ const placeProfile=()=>{const nav=title.querySelector('.premium-rail>.premium-nav');if(title.classList.contains('pc-home')&&nav&&innerWidth>=900){if(profile.parentNode!==nav.parentNode||profile.nextElementSibling)nav.parentNode.append(profile)}else if(profile.parentNode!==title)title.append(profile)};
+ new MutationObserver(placeProfile).observe(title,{attributes:true,attributeFilter:['class']});addEventListener('resize',placeProfile);
  const facts=make('div','pc-destination-facts'),factValues=[];
  for(const label of [T('Dostępność','Availability'),T('Najdłuższa noc','Longest night'),T('Rekord zabójstw','Most kills')]){const cell=make('div',''),value=make('strong','','—');cell.append(make('small','',label),value);facts.append(cell);factValues.push(value)}banner.append(facts);
  const journeyFooter=make('footer','pc-journey-footer'),modeInfo=make('div','pc-journey-mode'),modeName=make('strong','','');modeInfo.append(make('small','',T('Tryb gry','Game mode')),modeName);
@@ -1173,7 +1176,7 @@ ${Z} .nbo-sep{height:1px;background:linear-gradient(90deg,#0000,#b08a4a55,#0000)
  const put=(el,text)=>{if(el.textContent!==text)el.textContent=text};
  function refreshJourney(){
   if(title.hidden)return;
-  put(ashValue,String(EMB.e));put(levelValue,String(prog().lv));levelBlock.title=prog().lv>=PMAX?T('Poziom maksymalny','Max level'):prog().xp+' / '+PNEED(prog().lv)+' XP';
+  placeProfile();put(ashValue,String(EMB.e));put(levelValue,String(prog().lv));levelBlock.title=prog().lv>=PMAX?T('Poziom maksymalny','Max level'):prog().xp+' / '+PNEED(prog().lv)+' XP';levelBlock.style.setProperty('--nb-xp',prog().lv>=PMAX?1:Math.max(0,Math.min(1,prog().xp/PNEED(prog().lv)))); /* 15.11.2026: pasek postepu poziomu w menu glownym */
   put(modeName,STORYMODE?T('Fabularny','Story'):'Arcade');
   for(const i of CAMPAIGN){
    const b=$('start'+i);let label=b.querySelector('.pc-chapter-label');
