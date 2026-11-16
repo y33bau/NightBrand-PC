@@ -42,6 +42,7 @@ function heroBladeMat(fr,k){const key='E'+k;if(fr[key]!==undefined)return fr[key
 // 16.11.2026 (pilot): ruch z kodu na sprite'cie bohatera: oddech, kolysanie kroku, pochylenie w strone ruchu i ciosu, dopchniecie w chwili uderzenia,
 // rozciagniecie przy zrywie, przysiad po skoku i uniku. TYLKO wyglad: nie zmienia pl.x/pl.y, zasiegow, czasow ani trafien. Wylacza je opcja wstrzasow (SETT.shake); do porownania u autora ?ruch=0 (tylko lokalnie: ten sam warunek co LOKALNIE w czesci 27, tam jest w domknieciu).
 const HERO_MOTION_OFF=(location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname))&&new URLSearchParams(location.search).get('ruch')==='0',HERO_MOTION=new WeakMap();
+const NPC_STILL=new Set(['wolch','bartosz','wierz','dobromir','nawoj','rudna','straznik','pieczetnik','lucjan','marga','chojrak']),NPC_STILL_OFF=(location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname))&&new URLSearchParams(location.search).get('ruch')==='0';
 function heroMotion(p,mesh,hs,dt,rz0){let j=HERO_MOTION.get(p);if(!j){j={x:p.x,y:p.y,vx:0,vy:0,lean:0,px:0,py:0,sx:1,sy:1,lift:0,sq:0,st:''};HERO_MOTION.set(p,j)}
   if(HERO_MOTION_OFF||!SETT.shake||p.dead){j.x=p.x;j.y=p.y;j.vx=j.vy=j.lean=j.px=j.py=j.lift=j.sq=0;j.sx=j.sy=1;j.st='';mesh.rotation.z=rz0;return}
   if(dt>0){const dx=p.x-j.x,dy=p.y-j.y;j.x=p.x;j.y=p.y;if(Math.abs(dx)+Math.abs(dy)>48){j.vx=j.vy=0}else{const k=Math.min(1,dt*14);j.vx+=(dx/dt-j.vx)*k;j.vy+=(dy/dt-j.vy)*k}
@@ -152,8 +153,10 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
     m.visible=st.state!=='gone'&&st.state!=='risen';if(n.id==='marga'&&S&&S.merchant&&CH===1)m.visible=false;if(!m.visible)continue;const fr=A[n.art];
     if(n.art==='tharm'){setFrame(m,at(fr,clock,4));m.material.opacity=st.state==='fading'?.85*Math.max(0,st.t/1.5):.6+.25*Math.sin(clock*3)}
     else if(st.state==='dead')setFrame(m,fr[3]);
+    else if(NPC_STILL.has(n.art)&&!NPC_STILL_OFF)setFrame(m,fr[0]);// 16.11.2026: klatki tych NPC roznia sie szumem tekstury, wiec stoja na jednej klatce, a zycie daje oddech z kodu
     else setFrame(m,at(n.art==='marga'?fr:(fr._s3||(fr._s3=fr.slice(0,3))),clock+n.x,n.art==='wit'?5:n.art==='elder'?1.5:3));
-    m.castShadow=false;m.position.set(n.x/16,npcLift(m),n.y/16);m.scale.set(1,SQ,1);if(n.art!=='tharm')blob(n.x/16,n.y/16,1)}
+    const br=NPC_STILL.has(n.art)&&!NPC_STILL_OFF&&st.state!=='dead'?Math.sin(clock*1.7+n.x*.37)*.011:0;
+    m.castShadow=false;m.position.set(n.x/16,npcLift(m)*(1+br*2),n.y/16);m.scale.set(1-br*.5,SQ*(1+br*2),1);if(n.art!=='tharm')blob(n.x/16,n.y/16,1)}
   if(S){
     heroMesh.visible=!(SETT.flash&&clock<(pl.blinkUntil||0)&&pl.roll<=0&&!pl.dead&&Math.floor(clock*24)%2);
     {const hf=heroFrame();S.heroHF=hf;setFrame(heroMesh,hf)}// 14.11.2026 (decyzja autora): zaklęcie ostrza nie barwi już sprite'a bohatera (heroBladeMat); żywioł widać na cięciach, iskrach i statusach
