@@ -18,16 +18,27 @@ set "NB_DIR=%NB_BASE%NightBrand-PC-test"
 echo.
 echo Pobieram galaz %BRANCH% z prywatnego repo y33bau/NightBrand-PC...
 echo (Za pierwszym razem Git moze poprosic o zalogowanie do GitHuba w przegladarce.)
-echo Ten folder jest tylko do testow i jest kasowany przy kazdym uruchomieniu:
+echo Ten folder jest tylko do testow; przy kolejnym uruchomieniu pobierane sa tylko zmiany:
 echo %NB_DIR%
 echo.
-if exist "%NB_DIR%" rmdir /s /q "%NB_DIR%"
-git clone --depth 1 --branch "%BRANCH%" https://github.com/y33bau/NightBrand-PC.git "%NB_DIR%"
-if errorlevel 1 (
-  echo.
-  echo NIE UDALO SIE POBRAC. Sprawdz internet, logowanie do GitHuba i nazwe galezi.
-  pause
-  exit /b 1
+rem 16.11.2026: folder testowy jest aktualizowany (pobierane sa tylko zmienione pliki), a nie kasowany i pobierany od zera
+if exist "%NB_DIR%\.git" (
+  echo Aktualizuje folder testowy, pobieram tylko zmiany...
+  git -C "%NB_DIR%" fetch --depth 1 origin "%BRANCH%" && git -C "%NB_DIR%" checkout -q -f FETCH_HEAD && git -C "%NB_DIR%" clean -fdq
+  if errorlevel 1 (
+    echo Aktualizacja nie wyszla, pobieram calosc od nowa...
+    rmdir /s /q "%NB_DIR%"
+  )
+)
+if not exist "%NB_DIR%\.git" (
+  if exist "%NB_DIR%" rmdir /s /q "%NB_DIR%"
+  git clone --depth 1 --branch "%BRANCH%" https://github.com/y33bau/NightBrand-PC.git "%NB_DIR%"
+  if errorlevel 1 (
+    echo.
+    echo NIE UDALO SIE POBRAC. Sprawdz internet, logowanie do GitHuba i nazwe galezi.
+    pause
+    exit /b 1
+  )
 )
 set "NB_ROOT=%NB_DIR%\gra"
 echo.
