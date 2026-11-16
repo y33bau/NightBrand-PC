@@ -8593,7 +8593,7 @@ ${Z} .nbo-sep{height:1px;background:linear-gradient(90deg,#0000,#b08a4a55,#0000)
  if(loadout){new MutationObserver(polishLoadout).observe(loadout,{childList:true});polishLoadout()}
  // PC Journey is a chapter hub. Reuse the real chapter buttons and their existing handlers.
  const map=title.querySelector('.premium-map'),banner=title.querySelector('.premium-banner'),chapterList=map.querySelector('.m2-right'),caption=map.querySelector('.premium-caption'),oldAshes=title.querySelector('.premium-ashes');
- const journeyHead=make('header','pc-journey-head'),journeyTitle=make('h2','pc-fantasy-title',T('Wybór rozdziału','Act selection'));
+ const journeyHead=make('header','pc-journey-head'),journeyTitle=make('h2','pc-fantasy-title',T('Mapa podróży','Journey map'));
  journeyHead.append(home,journeyTitle);title.prepend(journeyHead);map.prepend(chapterList);
  const profile=make('aside','pc-profile'),ashIcon=make('img','pc-profile-ash'),ashBlock=make('div','pc-profile-stat'),ashValue=make('strong','',String(EMB.e)),levelBlock=make('div','pc-profile-stat'),levelValue=make('strong','',String(prog().lv));
  ashIcon.src='assets/efekty/006aadc624b9900d15e477957db3177be645ac45c9879d6ba467df69253c5c74.webp';ashIcon.alt='';
@@ -9124,7 +9124,7 @@ ${J} .premium-map .m2-ch:not(:disabled):is(:hover,:focus-visible,.pf) .pc-chapte
    [$('opts').querySelector('.premium-page-heading'),'menu',5,T('Opcje','Options')],
    [$('pause').querySelector('.premium-pause-title'),'heads',2,T('Pauza','Pause')],
    [$('shop').querySelector('.lvlhead h2'),'heads',3,T('Kram Margi',"Marga’s Stall")],
-   [journeyTitle,'play',1,T('Wybór rozdziału','Act selection')]
+   [journeyTitle,'play',1,T('Mapa podróży','Journey map')]
   ])glyph(el,a,n,text,'heading');
   glyph($('sFab'),'heads',6,T('Fabularny','Story'),'mode');glyph($('sArc'),'heads',7,'Arcade','mode');
   glyph(home,'flow',0,T('Menu główne','Main menu'),'action');
