@@ -23,7 +23,7 @@ function pad2Tick(g2){if(!g2){PAD2.g=null;PAD2.cur=[];PAD2.prev=[];PAD2.x=PAD2.y
   else{if(pr(0))PAD2.roll=true;if(pr(1)||pr(5))PAD2.heavy=true;if(pr(3))PAD2.talk=true}}
 function drawP2(dt=0){if(!pl2||!mesh2)return;asP2(()=>{syncWhirlVisual(dt);const hf=heroFrame();setFrame(mesh2,hf,'p2');
   const hs=pl.atk&&FACEK.includes(pl.atk.kind)?(pl.fx>=0?1:-1):pl.roll>0||pl.dead?pl.s:A.heroD&&A.heroD.v2&&!pl.atk&&(pl.parryT>0||pl.broken>0||(pl.hurtT>0&&!pl.block))?(pl.fx>=0?1:-1):pl.swingT>0?(pl.swingDir===2?pl.swingS:1):(pl.charging||pl.block)&&Math.abs(pl.fx)>Math.abs(pl.fy)?(pl.fx>0?1:-1):(pl.dir===2?pl.s:1);
-  mesh2.position.set(pl.x/16,0,pl.y/16);mesh2.scale.set(hs,SQ,1);mesh2.visible=!(SETT.flash&&pl.inv>0&&pl.roll<=0&&!pl.dead&&Math.floor(clock*24)%2);})}
+  mesh2.position.set(pl.x/16,0,pl.y/16);mesh2.scale.set(hs,SQ,1);heroMotion(pl,mesh2,hs,dt,0);mesh2.visible=!(SETT.flash&&pl.inv>0&&pl.roll<=0&&!pl.dead&&Math.floor(clock*24)%2);})}
 function allDead(){return pl1.dead&&(!pl2||pl2.dead)}
 function pickTarget(e){if(!pl2)return pl1;const a=pl1.dead,b=pl2.dead;if(a&&b)return pl1;if(a)return pl2;if(b)return pl1;return Math.hypot(e.x-pl2.x,e.y-pl2.y)<Math.hypot(e.x-pl1.x,e.y-pl1.y)?pl2:pl1}
 function withRb(p,fn){if(!pl2||p!==pl2)return fn();const a=S.rebirth,b=S.rebirthUsed;S.rebirth=p.rbF||null;S.rebirthUsed=!!p.rbU;try{return fn()}finally{p.rbF=S.rebirth;p.rbU=S.rebirthUsed;S.rebirth=a;S.rebirthUsed=b}}
