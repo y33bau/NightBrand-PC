@@ -2982,7 +2982,7 @@ function procFrame(img,x,y,size,h,kind,lift=0){
     g.putImageData(idc,0,0)}
   // nowy styl bohaterow (malowane HD, 15.11.2026): bez rozjasnianej krawedzi w teksturze i z cienszym konturem
   const hdHero=/^(knight_|zab_|kat_|dzw_|mil_)/.test(key||''); /* 15.11.2026: + Dzwonnik i Woskownica w nowym stylu */
-  if(density>=2&&(kind===undefined||kind==='boss'||kind==='npc')&&!hdHero){const id0=g.getImageData(0,0,w,h),p=id0.data,w0=density,w1=Math.round(density*2.5),A=new Uint8Array(w*h);
+  if(density>=2&&(kind===undefined||kind==='boss')&&!hdHero){const id0=g.getImageData(0,0,w,h),p=id0.data,w0=density,w1=Math.round(density*2.5),A=new Uint8Array(w*h);
     if(!/^(hero_|kat_|zab_|knight_|dzw_|mil_)/.test(img.nbKey||'')){const nm=sheetNorm(img);if(Math.abs(nm.gl-1)>.01||Math.abs(nm.gs-1)>.01)for(let i=0;i<p.length;i+=4){if(!p[i+3])continue;const l=.299*p[i]+.587*p[i+1]+.114*p[i+2];p[i]=Math.max(0,Math.min(255,(l+(p[i]-l)*nm.gs)*nm.gl));p[i+1]=Math.max(0,Math.min(255,(l+(p[i+1]-l)*nm.gs)*nm.gl));p[i+2]=Math.max(0,Math.min(255,(l+(p[i+2]-l)*nm.gs)*nm.gl))}}for(let i=0;i<w*h;i++)A[i]=p[i*4+3]>127?1:0;
     for(let yy=w1;yy<h;yy++)for(let xx=w1;xx<w;xx++){const i=yy*w+xx;if(!A[i]||!A[i-w0*w-w0]||A[i-w1*w-w1])continue;const j=i*4;p[j]=Math.min(255,p[j]*1.3+19);p[j+1]=Math.min(255,p[j+1]*1.3+24);p[j+2]=Math.min(255,p[j+2]*1.3+38)}
     g.putImageData(id0,0,0)}
@@ -3026,7 +3026,7 @@ function procFrame(img,x,y,size,h,kind,lift=0){
   if(kind==='ghost')return{n:new THREE.MeshBasicMaterial({map:tex,alphaTest:.5,side:THREE.DoubleSide,transparent:true,opacity:.85,fog:false})};
   let padB=0,vis=1;if(kind==='prop'){let r=h-1;for(;r>=0;r--){let o=false;for(let q=0;q<w;q++)if(d[(r*w+q)*4+3]>=128){o=true;break}if(o)break}padB=Math.min(.15,Math.max(0,(h-1-r)/h));if(padB<.01)padB=0;let u=0;for(;u<=r;u++){let o=false;for(let q=0;q<w;q++)if(d[(u*w+q)*4+3]>=128){o=true;break}if(o)break}vis=(r-u+1)/h}
   return{padB,vis,
-    n:(m=>{if(ol)moonRim(m,density/w);return m})(phong({map:tex,emissiveMap:em,emissive:0xffffff,alphaTest:.5,side:THREE.DoubleSide,color:hdHero?0xdadada:/^hero_/.test(key||'')?0xb4b4b4:0xffffff})) /* 16.11.2026: nowi bohaterowie 85% zamiast 70% */,
+    n:(m=>{if(ol)moonRim(m,density/w);return m})(phong({map:tex,emissiveMap:em,emissive:0xffffff,emissiveIntensity:kind==='npc'?.72:1,alphaTest:.5,side:THREE.DoubleSide,color:hdHero?0xdadada:/^hero_/.test(key||'')?0xb4b4b4:kind==='npc'?0xbcbcbc:0xffffff})) /* 16.11.2026: nowi bohaterowie 85% zamiast 70% */,
     // rarely used variants are made on first use (setFrame reads fr[mode]); 5.11.2026
     get f(){return lazyMat(this,'f',()=>flashMat(tex))},
     get i(){return lazyMat(this,'i',()=>phong({map:tex,emissiveMap:em,emissive:0xffffff,color:0x8fd0ff,alphaTest:.5,side:THREE.DoubleSide}))},
@@ -3254,8 +3254,8 @@ let heroMesh,margaMesh;
 // Znacznik pod stopami gracza: miekka ciepla plama swiatla bez krawedzi (16.11.2026: zamiast pierscienia z trzema widocznymi strefami), zeby bohater nie ginal w tlumie. ?heromark=0 wylacza.
 const HERO_MARK_ON=new URLSearchParams(location.search).get('heromark')!=='0';
 const heroMarks=(()=>{const c=canvas(128,128),g=c.getContext('2d'),gr=g.createRadialGradient(64,64,0,64,64,64);for(let i=0;i<=16;i++){const r=i/16;gr.addColorStop(r,'rgba(255,255,255,'+(.6*Math.exp(-r*r*4.2)*(1-r*r)).toFixed(3)+')')}g.fillStyle=gr;g.fillRect(0,0,128,128);const t=texFrom(c);t.magFilter=t.minFilter=THREE.LinearFilter;
- return [0xffc98c,0xf4b4d2].map(col=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:t,color:col,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.5,fog:false}));m.visible=false;m.renderOrder=-2;m.frustumCulled=false;scene.add(m);return m})})();
-function heroMark(i,p){const m=heroMarks[i];if(!HERO_MARK_ON||!p||p.dead||!S||S.phase!=='play'){m.visible=false;return}m.visible=true;m.position.set(p.x/16,.045,p.y/16);const s=2.15+(p.roll>0?.3:0);m.scale.set(s,1,s);m.material.opacity=(SETT.flash?.3:.22)*(p.inv>0&&p.roll<=0?.7:1)}
+ return [0xffbd72,0xf4b4d2].map(col=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:t,color:col,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.5,fog:false}));m.visible=false;m.renderOrder=-2;m.frustumCulled=false;scene.add(m);return m})})();
+function heroMark(i,p){const m=heroMarks[i];if(!HERO_MARK_ON||!p||p.dead||!S||S.phase!=='play'){m.visible=false;return}m.visible=true;m.position.set(p.x/16,.045,p.y/16);const s=2.35+(p.roll>0?.3:0);m.scale.set(s,1,s);m.material.opacity=(SETT.flash?.4:.3)*(p.inv>0&&p.roll<=0?.7:1)}
 const MAXB=420;const blobs=new THREE.InstancedMesh(new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:contactTex,transparent:true,depthWrite:false}),MAXB);scene.add(blobs);
 const wispGlow={1:'#7fd0ff',2:'#9ef0a0',5:'#ff6b6b',c:'#e0b84a'};for(const k in wispGlow)wispGlow[k]=new THREE.MeshBasicMaterial({map:glowC(wispGlow[k]),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,fog:false,opacity:.55});
 const glowGeo=new THREE.PlaneGeometry(.7,.7);
@@ -5790,7 +5790,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
   // talk prompt
   const pr=$('prompt'),free=S&&S.phase==='play'&&!S.notice&&!S.dialog&&!S.choosing&&!S.shop,nmc=free?nearMerchant():null,near=free?(nmc||nearNpc()):null;
   const nf=free&&!near?nearPowerFire():null,nex=free&&!near&&!nf?nearExit():null,lbl=nf?(EN?'Nourishing Cauldron · activate revival':'Sycący Kociołek · aktywuj odrodzenie'):nex?{enter:(EN?'Descend into the crypt':'Zejdź do krypty'),leave:(EN?'Go back up':'Wyjdź na górę'),sealed:(EN?'Crypt sealed':'Krypta zamknięta'),winch:(EN?'Release the chain':'Zwolnij łańcuch'),ferry:(EN?'Cast off':'Odbij od nabrzeża'),ferryLocked:(EN?'Ferry chained':'Prom przykuty')}[nex.kind]:nmc?(EN?'Trade':'Handluj'):(EN?'Talk':'Rozmawiaj'),tgt=near||nf||nex;
-  if(tgt){V.set(tgt.x/16,2.1,tgt.y/16).project(cam);pr.hidden=false;pr.textContent=(nex&&nex.kind==='sealed')?lbl:(PAD.g&&INPUT_LAST==='p'?'Y · ':PAD.g&&!INPUT_LAST?'Enter / Y · ':'Enter · ')+lbl;pr.style.left=((V.x+1)/2*100)+'%';pr.style.top=((1-V.y)/2*100)+'%'}else pr.hidden=true;
+  if(tgt){V.set(tgt.x/16,2.55,tgt.y/16).project(cam);pr.hidden=false;{const kp=PAD.g&&INPUT_LAST==='p'?'Y':PAD.g&&!INPUT_LAST?'Enter / Y':'Enter',h=(nex&&nex.kind==='sealed')?lbl:'<b class="pk">'+kp+'</b>'+lbl;if(pr._h!==h){pr._h=h;pr.innerHTML=h}}pr.style.left=((V.x+1)/2*100)+'%';pr.style.top=((1-V.y)/2*100)+'%'}else pr.hidden=true;
   // Marga at her stall during the break
   const mc=S&&S.merchant;margaMesh.visible=!!mc;if(mc){setFrame(margaMesh,at(A.marga,clock,3));margaMesh.position.set(mc.x/16,0,mc.y/16);const k=mc.state==='in'?1-mc.t:mc.state==='out'?mc.t:1;margaMesh.scale.set(1,SQ*Math.max(.05,k),1);blob(mc.x/16,mc.y/16,1);W.merchantLight.x=mc.x/16;W.merchantLight.z=mc.y/16+.3}
   if(S&&S.collector&&!S.collector.dead&&Math.random()<dt*10){const c=S.collector,a=Math.random()*Math.PI*2;S.parts.push({k:'e',x:c.x+Math.cos(a)*14,y:c.y+Math.sin(a)*8,z:rnd(6,26),vx:-Math.sin(a)*10,vy:Math.cos(a)*6,vz:rnd(2,8),c:Math.random()<.6?'#e0b84a':'#fff0b0',life:rnd(.6,1.2)})}
@@ -9896,6 +9896,10 @@ ${H}:has(.pch-health.pch-low)::after{content:'';position:absolute;inset:0;pointe
 @media(prefers-reduced-motion:reduce){${H}:has(.pch-health.pch-low)::after{animation:none}${O} .nbx-sta,${O} .nbx-sta i{transition:none}}
 `;document.head.append(st)})();
 // Pauza: dluzszy napis przycisku (np. Wybor rozdzialu) nie zawija sie i nie wychodzi poza ramke.
+{const O='#orient'.repeat(40),st=document.createElement('style');st.id='nbPromptFix';st.textContent=`/* 16.11.2026: mniejszy, ladniejszy baner "Rozmawiaj": klawisz w ramce, cienka zlota obwodka, nie zaslania glowy NPC */
+${O} #prompt{font-size:.66em!important;padding:.2em .7em .22em .26em!important;background:linear-gradient(180deg,rgba(34,26,21,.9),rgba(12,9,10,.9))!important;border:1px solid rgba(201,162,92,.55)!important;outline:none!important;border-radius:999px!important;box-shadow:0 2px 8px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,236,196,.12)!important;color:#e6d6b4!important;letter-spacing:.05em;line-height:1.35;display:flex;align-items:center;gap:.5em}
+${O} #prompt[hidden]{display:none!important}
+${O} #prompt .pk{display:inline-block;padding:.04em .5em;border:1px solid rgba(214,174,100,.75);border-radius:999px;background:rgba(201,162,92,.18);color:#f6dfa8;font-weight:700;font-size:.92em;letter-spacing:.04em}`;document.head.appendChild(st)}
 {const st=document.createElement('style');st.textContent='html body #pause#pause .btnrow button.go{white-space:nowrap!important;width:auto!important;max-width:none!important;min-width:max-content!important;height:auto!important;flex:0 0 auto!important}';document.head.append(st)}
 // Zywe menu: iskry unoszace sie znad pogorzeliska i migotanie luny pozarow na ilustracji tytulowej. Tylko rozjasnia obraz (screen), nie lapie klikniec. ?menufx=0 wylacza.
 {const ti=$('title');if(ti&&new URLSearchParams(location.search).get('menufx')!=='0'){const cv=document.createElement('canvas');cv.id='titleFx';cv.setAttribute('aria-hidden','true');cv.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;mix-blend-mode:screen';ti.prepend(cv);

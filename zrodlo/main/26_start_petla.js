@@ -2347,6 +2347,10 @@ ${H}:has(.pch-health.pch-low)::after{content:'';position:absolute;inset:0;pointe
 @media(prefers-reduced-motion:reduce){${H}:has(.pch-health.pch-low)::after{animation:none}${O} .nbx-sta,${O} .nbx-sta i{transition:none}}
 `;document.head.append(st)})();
 // Pauza: dluzszy napis przycisku (np. Wybor rozdzialu) nie zawija sie i nie wychodzi poza ramke.
+{const O='#orient'.repeat(40),st=document.createElement('style');st.id='nbPromptFix';st.textContent=`/* 16.11.2026: mniejszy, ladniejszy baner "Rozmawiaj": klawisz w ramce, cienka zlota obwodka, nie zaslania glowy NPC */
+${O} #prompt{font-size:.66em!important;padding:.2em .7em .22em .26em!important;background:linear-gradient(180deg,rgba(34,26,21,.9),rgba(12,9,10,.9))!important;border:1px solid rgba(201,162,92,.55)!important;outline:none!important;border-radius:999px!important;box-shadow:0 2px 8px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,236,196,.12)!important;color:#e6d6b4!important;letter-spacing:.05em;line-height:1.35;display:flex;align-items:center;gap:.5em}
+${O} #prompt[hidden]{display:none!important}
+${O} #prompt .pk{display:inline-block;padding:.04em .5em;border:1px solid rgba(214,174,100,.75);border-radius:999px;background:rgba(201,162,92,.18);color:#f6dfa8;font-weight:700;font-size:.92em;letter-spacing:.04em}`;document.head.appendChild(st)}
 {const st=document.createElement('style');st.textContent='html body #pause#pause .btnrow button.go{white-space:nowrap!important;width:auto!important;max-width:none!important;min-width:max-content!important;height:auto!important;flex:0 0 auto!important}';document.head.append(st)}
 // Zywe menu: iskry unoszace sie znad pogorzeliska i migotanie luny pozarow na ilustracji tytulowej. Tylko rozjasnia obraz (screen), nie lapie klikniec. ?menufx=0 wylacza.
 {const ti=$('title');if(ti&&new URLSearchParams(location.search).get('menufx')!=='0'){const cv=document.createElement('canvas');cv.id='titleFx';cv.setAttribute('aria-hidden','true');cv.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;mix-blend-mode:screen';ti.prepend(cv);
