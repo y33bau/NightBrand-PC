@@ -3026,7 +3026,7 @@ function procFrame(img,x,y,size,h,kind,lift=0){
   if(kind==='ghost')return{n:new THREE.MeshBasicMaterial({map:tex,alphaTest:.5,side:THREE.DoubleSide,transparent:true,opacity:.85,fog:false})};
   let padB=0,vis=1;if(kind==='prop'){let r=h-1;for(;r>=0;r--){let o=false;for(let q=0;q<w;q++)if(d[(r*w+q)*4+3]>=128){o=true;break}if(o)break}padB=Math.min(.15,Math.max(0,(h-1-r)/h));if(padB<.01)padB=0;let u=0;for(;u<=r;u++){let o=false;for(let q=0;q<w;q++)if(d[(u*w+q)*4+3]>=128){o=true;break}if(o)break}vis=(r-u+1)/h}
   return{padB,vis,
-    n:(m=>{if(ol)moonRim(m,density/w);return m})(phong({map:tex,emissiveMap:em,emissive:0xffffff,emissiveIntensity:kind==='npc'?.72:1,alphaTest:.5,side:THREE.DoubleSide,color:hdHero?0xdadada:/^hero_/.test(key||'')?0xb4b4b4:kind==='npc'?0xbcbcbc:0xffffff})) /* 16.11.2026: nowi bohaterowie 85% zamiast 70% */,
+    n:(m=>{if(ol&&kind!=='npc')moonRim(m,density/w);return m})(phong({map:tex,emissiveMap:em,emissive:0xffffff,emissiveIntensity:kind==='npc'?.5:1,alphaTest:.5,side:THREE.DoubleSide,color:hdHero?0xdadada:/^hero_/.test(key||'')?0xb4b4b4:kind==='npc'?0xa4a4a4:0xffffff})) /* 16.11.2026: nowi bohaterowie 85% zamiast 70% */,
     // rarely used variants are made on first use (setFrame reads fr[mode]); 5.11.2026
     get f(){return lazyMat(this,'f',()=>flashMat(tex))},
     get i(){return lazyMat(this,'i',()=>phong({map:tex,emissiveMap:em,emissive:0xffffff,color:0x8fd0ff,alphaTest:.5,side:THREE.DoubleSide}))},
@@ -9898,7 +9898,7 @@ ${H}:has(.pch-health.pch-low)::after{content:'';position:absolute;inset:0;pointe
 `;document.head.append(st)})();
 // Pauza: dluzszy napis przycisku (np. Wybor rozdzialu) nie zawija sie i nie wychodzi poza ramke.
 {const O='#orient'.repeat(40),st=document.createElement('style');st.id='nbPromptFix';st.textContent=`/* 16.11.2026: mniejszy, ladniejszy baner "Rozmawiaj": klawisz w ramce, cienka zlota obwodka, nie zaslania glowy NPC */
-${O} #prompt{font-size:.66em!important;padding:.2em .7em .22em .26em!important;background:linear-gradient(180deg,rgba(34,26,21,.9),rgba(12,9,10,.9))!important;border:1px solid rgba(201,162,92,.55)!important;outline:none!important;border-radius:999px!important;box-shadow:0 2px 8px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,236,196,.12)!important;color:#e6d6b4!important;letter-spacing:.05em;line-height:1.35;display:flex;align-items:center;gap:.5em}
+${O} #prompt{font-size:.54em!important;opacity:.78;padding:.16em .6em .18em .22em!important;background:linear-gradient(180deg,rgba(34,26,21,.6),rgba(12,9,10,.6))!important;border:1px solid rgba(201,162,92,.4)!important;outline:none!important;border-radius:999px!important;box-shadow:0 2px 8px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,236,196,.12)!important;color:#e6d6b4!important;letter-spacing:.05em;line-height:1.35;display:flex;align-items:center;gap:.5em}
 ${O} #prompt[hidden]{display:none!important}
 ${O} #prompt .pk{display:inline-block;padding:.04em .5em;border:1px solid rgba(214,174,100,.75);border-radius:999px;background:rgba(201,162,92,.18);color:#f6dfa8;font-weight:700;font-size:.92em;letter-spacing:.04em}`;document.head.appendChild(st)}
 {const st=document.createElement('style');st.textContent='html body #pause#pause .btnrow button.go{white-space:nowrap!important;width:auto!important;max-width:none!important;min-width:max-content!important;height:auto!important;flex:0 0 auto!important}';document.head.append(st)}

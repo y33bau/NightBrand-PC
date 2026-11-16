@@ -865,3 +865,4 @@ cache789 · NPC bez migotania tekstury: jedna klatka + oddech z kodu (Wolch, Bar
 cache790 · Nowe grafiki NPC: Aurel, Izolda, Ottokar, Chojrak (arkusze 4 klatki + portrety); NIE sprawdzono: wyglad w grze (skala, stopy), rozmowy, pad, itch.io
 cache791 · Mniej swiatla na NPC (kolor i emisja, bez jasnej krawedzi), mniejszy ladniejszy baner Rozmawiaj, mocniejsza bursztynowa plama pod bohaterem; NIE sprawdzono: wyglad w grze, pad, itch.io
 cache792 · Poprawka: blad PADTABS przy kliknieciu w trakcie ladowania (iPhone Safari); NIE sprawdzono na iPhonie
+cache793 · NPC: bez zlotej obwodki swietlnej i ciemniejsze; baner Rozmawiaj mniejszy i polprzezroczysty; NIE sprawdzono: wyglad w grze

@@ -82,7 +82,7 @@ function procFrame(img,x,y,size,h,kind,lift=0){
   if(kind==='ghost')return{n:new THREE.MeshBasicMaterial({map:tex,alphaTest:.5,side:THREE.DoubleSide,transparent:true,opacity:.85,fog:false})};
   let padB=0,vis=1;if(kind==='prop'){let r=h-1;for(;r>=0;r--){let o=false;for(let q=0;q<w;q++)if(d[(r*w+q)*4+3]>=128){o=true;break}if(o)break}padB=Math.min(.15,Math.max(0,(h-1-r)/h));if(padB<.01)padB=0;let u=0;for(;u<=r;u++){let o=false;for(let q=0;q<w;q++)if(d[(u*w+q)*4+3]>=128){o=true;break}if(o)break}vis=(r-u+1)/h}
   return{padB,vis,
-    n:(m=>{if(ol)moonRim(m,density/w);return m})(phong({map:tex,emissiveMap:em,emissive:0xffffff,emissiveIntensity:kind==='npc'?.72:1,alphaTest:.5,side:THREE.DoubleSide,color:hdHero?0xdadada:/^hero_/.test(key||'')?0xb4b4b4:kind==='npc'?0xbcbcbc:0xffffff})) /* 16.11.2026: nowi bohaterowie 85% zamiast 70% */,
+    n:(m=>{if(ol&&kind!=='npc')moonRim(m,density/w);return m})(phong({map:tex,emissiveMap:em,emissive:0xffffff,emissiveIntensity:kind==='npc'?.5:1,alphaTest:.5,side:THREE.DoubleSide,color:hdHero?0xdadada:/^hero_/.test(key||'')?0xb4b4b4:kind==='npc'?0xa4a4a4:0xffffff})) /* 16.11.2026: nowi bohaterowie 85% zamiast 70% */,
     // rarely used variants are made on first use (setFrame reads fr[mode]); 5.11.2026
     get f(){return lazyMat(this,'f',()=>flashMat(tex))},
     get i(){return lazyMat(this,'i',()=>phong({map:tex,emissiveMap:em,emissive:0xffffff,color:0x8fd0ff,alphaTest:.5,side:THREE.DoubleSide}))},
