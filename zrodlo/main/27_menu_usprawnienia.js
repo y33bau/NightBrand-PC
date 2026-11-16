@@ -1426,6 +1426,66 @@ ${O} #pause #skillLoadout.nbz>h2,${O} #pause #skillLoadout.nbz>p:not(.loadout-st
  el.addEventListener('mouseover',e=>pd(e,true));el.addEventListener('mouseout',e=>pd(e,false));el.addEventListener('focusin',e=>pd(e,true));el.addEventListener('focusout',e=>pd(e,false));
  new MutationObserver(hint).observe(pause,{attributes:true,subtree:true,attributeFilter:['hidden']});
 }catch(e){quietErr('pauzaMakieta',e)}})();
+// 16.11.2026: Instrukcja wg makiety GPT. Zakladki na gorze z LB/RB, po lewej przewijany artykul (dawna tresc manPage, naglowki w dlugich ramkach),
+// po prawej panel tematu (ilustracja, haslo, klawisze z gry dla Walki, przycisk Plac cwiczen z dawnej zakladki). Tresc instrukcji bez zmian.
+(()=>{try{
+ const man=$('manual');if(!man)return;const lay=man.querySelector('.premium-page-layout'),tabs=$('manTabs'),cont=man.querySelector('.premium-page-content');if(!lay||!tabs||!cont)return;
+ const T=(p,e)=>EN?e:p,O='#orient'.repeat(400),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),TL='assets/tla/';
+ const st=document.createElement('style');st.id='nb-instrukcja-makieta';st.textContent=`
+${O} #manual{--u:calc(min(100vw,177.78vh)/1920)}
+${O} #manual .premium-page-layout{display:grid!important;grid-template-columns:47% 1fr!important;grid-template-rows:auto minmax(0,1fr)!important;gap:calc(22*var(--u)) calc(24*var(--u))!important;max-width:none!important;width:100%!important;min-height:0!important;flex:1!important}
+${O} #manual #manTabs{grid-column:1/-1!important;grid-row:1!important;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;justify-content:center!important;align-items:center!important;gap:calc(16*var(--u))!important;padding:0 0 calc(16*var(--u))!important;border-bottom:1px solid rgba(201,160,100,.22)!important;overflow:visible!important}
+${O} #manual #manTabs>#trainBtn{display:none!important}
+${O} #manual #manTabs>.nbq-tb{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-radius:calc(4*var(--u))!important;padding:calc(6*var(--u)) calc(9*var(--u))!important;background:rgba(0,0,0,.5)!important;pointer-events:none!important}
+${O} #manual #manTabs>.nbq-tb.l{order:-1!important}${O} #manual #manTabs>.nbq-tb.r{order:99!important}
+${O} #manual .premium-page-content{grid-column:1!important;grid-row:2!important;min-height:0!important;max-width:none!important;overflow-y:auto!important;padding:calc(18*var(--u)) calc(22*var(--u))!important;border:calc(18*var(--u)) solid transparent!important;border-image:url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp') 48 stretch!important;background:linear-gradient(180deg,rgba(13,10,10,.92),rgba(8,6,7,.95)) padding-box!important;scrollbar-width:thin!important;scrollbar-color:#7a5530 rgba(255,255,255,.04)!important}
+${O} #manual #manBody .mbox{margin:0 0 calc(22*var(--u))!important;padding:0!important;border:0!important;border-image:none!important;background:none!important;box-shadow:none!important;font:400 calc(22*var(--u))/1.5 Georgia,serif!important;color:#ecdcbc!important}
+${O} #manual #manBody .mbox>h3,${O} #manual #manBody h2.mh{display:block!important;margin:0 0 calc(14*var(--u))!important;padding:calc(10*var(--u)) calc(18*var(--u))!important;text-align:left!important;font:700 calc(27*var(--u))/1.1 Cinzel,Georgia,serif!important;letter-spacing:.04em!important;color:#f0dcb6!important;text-shadow:0 2px 4px #000!important;background:linear-gradient(180deg,rgba(60,40,30,.55),rgba(26,18,14,.85))!important;border:1px solid rgba(160,120,70,.35)!important;border-image:none!important}
+${O} #manual #manBody .mbox>h3::after,${O} #manual #manBody h2.mh::after{content:none!important}
+${O} #manual #manBody :is(p,li,.mrow span,.mset){font-size:calc(22*var(--u))!important;line-height:1.5!important;color:#ecdcbc!important}
+${O} #manual #manBody ul{padding-left:calc(26*var(--u))!important}
+${O} #manual #manBody li{margin:0 0 calc(10*var(--u))!important}
+${O} #manual .nbm-p{grid-column:2!important;grid-row:2!important;position:relative!important;min-height:0!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;padding:calc(30*var(--u))!important;border:calc(18*var(--u)) solid transparent!important;border-image:url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp') 48 stretch!important;background:#0b0809 padding-box!important}
+${O} #manual .nbm-pi{position:absolute!important;inset:0!important;display:block!important;background-position:center 30%!important;background-size:cover!important;background-repeat:no-repeat!important;filter:brightness(.66) saturate(.9)!important}
+${O} #manual .nbm-pg{position:absolute!important;inset:0!important;display:block!important;background:linear-gradient(180deg,rgba(8,6,7,0) 30%,rgba(8,6,7,.85) 66%,rgba(8,6,7,.97))!important}
+${O} #manual .nbm-pt{position:relative!important;text-align:left!important}
+${O} #manual .nbm-pk{display:block!important;font:600 calc(16*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.2em!important;color:#c08a5a!important;margin-bottom:calc(12*var(--u))!important;text-transform:uppercase!important}
+${O} #manual .nbm-pn{display:block!important;font:700 calc(38*var(--u))/1.1 Cinzel,Georgia,serif!important;letter-spacing:.03em!important;color:#f6e6c8!important;text-shadow:0 2px 6px #000!important}
+${O} #manual .nbm-pd{display:block!important;margin-top:calc(14*var(--u))!important;font:400 calc(22*var(--u))/1.45 Georgia,serif!important;color:#e3d3b3!important}
+${O} #manual .nbm-ks{margin-top:calc(14*var(--u))!important}
+${O} #manual .nbm-ks>div{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:calc(12*var(--u))!important;padding:calc(8*var(--u)) 0!important;border-top:1px solid rgba(201,160,100,.2)!important;font:400 calc(21*var(--u))/1.2 Georgia,serif!important;color:#ecdcbc!important}
+${O} #manual .nbm-ks kbd{display:inline-block!important;min-width:calc(30*var(--u))!important;text-align:center!important;font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-radius:calc(4*var(--u))!important;padding:calc(6*var(--u)) calc(9*var(--u))!important;background:rgba(0,0,0,.55)!important}
+${O} #manual .nbm-ks i{font-style:normal!important;margin:0 calc(10*var(--u))!important;color:#9a8b72!important}
+${O} #manual .nbm-go{align-self:flex-start!important;margin-top:calc(18*var(--u))!important;min-width:calc(250*var(--u))!important;height:calc(58*var(--u))!important;padding:0 calc(26*var(--u))!important;font:700 calc(19*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.06em!important;color:#f0dcb6!important;background:url('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp') center/100% 100% no-repeat!important;border:0!important;border-image:none!important;box-shadow:none!important;text-shadow:0 2px 3px #000!important;cursor:pointer!important}
+${O} #manual .nbm-go:is(:hover,:focus-visible,.pf){filter:brightness(1.15) drop-shadow(0 0 calc(8*var(--u)) rgba(255,120,40,.45))!important;color:#fff0d8!important}
+${O} #manual .nbm-go:is(:focus-visible,.pf){outline:calc(2*var(--u)) solid rgba(240,190,120,.85)!important;outline-offset:calc(3*var(--u))!important}
+${O} #manual .nbq-f,${O} #opts .nbq-f{display:flex!important;justify-content:center!important;align-items:center!important;gap:calc(48*var(--u))!important;flex:none!important;padding:calc(12*var(--u)) 0 calc(4*var(--u))!important;border-top:1px solid rgba(201,160,100,.22)!important;font:400 calc(21*var(--u))/1 Georgia,serif!important;color:#ecdcbc!important;--u:calc(min(100vw,177.78vh)/1920)}
+${O} #manual .nbq-f>span{display:flex!important;align-items:center!important;gap:calc(14*var(--u))!important}
+${O} #manual .nbq-f kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-radius:calc(4*var(--u))!important;padding:calc(6*var(--u)) calc(9*var(--u))!important;background:rgba(0,0,0,.5)!important}
+`;document.head.append(st);
+ const odznaki=()=>{/* LB/RB dopiero po manInit: manInit nie buduje zakladek, gdy #manTabs ma juz dzieci */if(!tabs.querySelector('.tab')||tabs.querySelector('.nbq-tb'))return;for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb '+c;b.textContent=t;c==='l'?tabs.prepend(b):tabs.append(b)}};
+ const P=document.createElement('div');P.className='nbm-p';P.innerHTML='<div class="nbm-pi"></div><div class="nbm-pg"></div><div class="nbm-pt"><span class="nbm-pk"></span><span class="nbm-pn"></span><span class="nbm-pd"></span><div class="nbm-ks"></div><button type="button" class="nbm-go"></button></div>';lay.append(P);
+ const foot=document.createElement('div');foot.className='nbq-f';man.append(foot);
+ P.querySelector('.nbm-go').addEventListener('click',()=>{const b=$('trainBtn');if(b)b.click()});
+ const kapImg=TL+'7a06226b13595ae657baf802e50d3a3216056b366b61e3e4cf4db5b2e5142872.webp';
+ const DANE=()=>({start:{img:TL+'c8c3968edb367c7be327106c1fafd57e5edf67ba28a6181eda3bb585e73f84ef.webp',n:T('Przetrwaj do świtu','Survive until dawn'),d:T('Każdy rozdział to jedna noc. Zbieraj siłę, wybieraj ulepszenia i pokonaj bossa, który wstaje na końcu.','Each act is one night. Gather strength, choose upgrades and defeat the boss that rises at the end.')},
+  slasher:{hero:1,n:T('Blok tuż przed trafieniem','Block just before the hit'),d:T('Na placu ćwiczeń przećwicz parowanie i odpowiedź szybkim ciosem.','Practise parrying and the quick counter on the training ground.'),keys:1},
+  style:{img:TL+'76c4abede7b11dab955422e0b91d11d6a38a1feecdd13c62d91f37a0813a6057.webp',n:T('Zbuduj własny styl','Build your own style'),d:T('Style, pakty i zaklęcia ostrza zmieniają sposób walki. Umiejętności w slotach zmieniasz w pauzie.','Styles, pacts and blade spells change how you fight. You change slotted skills in the pause menu.')},
+  ash:{img:kapImg,n:T('Popioły zostają z tobą','Ashes stay with you'),d:T('Ulepszenia z Kaplicy działają od startu każdej nocy, także po przegranej.','Shrine upgrades work from the start of every night, even after a defeat.')},
+  world:{img:TL+'d1fa360949a93c4762b2578a14cf8957aaeb8e64bbf3a69445d984fc7aaa7c93.webp',n:T('Noc ma swoje zasady','The night has its rules'),d:T('Marga, kociołki, krypta i spotkani ludzie. Warto z nimi rozmawiać, ale czytaj, co oferują.','Marga, cauldrons, the crypt and the people you meet. Talk to them, but read what they offer.')}});
+ function panel(){odznaki();const on=tabs.querySelector('.tab.on'),id=on?on.dataset.t:'start',d=DANE()[id]||DANE().start;
+  const pi=P.querySelector('.nbm-pi');let img=d.img;if(d.hero){try{const c=charId();img=NB_KAMIEN[c]||NB_KAMIEN.r}catch(e){img=NB_KAMIEN&&NB_KAMIEN.r}pi.style.setProperty('background-position','center 12%','important');pi.style.setProperty('background-size','118% auto','important')}else{pi.style.removeProperty('background-position');pi.style.removeProperty('background-size')}
+  if(img)pi.style.setProperty('background-image',`url('${img}')`,'important');
+  P.querySelector('.nbm-pk').textContent=on?on.textContent:'';P.querySelector('.nbm-pn').textContent=d.n;P.querySelector('.nbm-pd').textContent=d.d;
+  const ks=P.querySelector('.nbm-ks');if(d.keys){const kn=k=>{try{return kbName(KB.map[k])}catch(e){return '?'}};const R=[[T('Szybki atak','Light attack'),kn('atk'),'X'],[T('Silny atak','Heavy attack'),kn('heavy'),'B'],[T('Blok i parowanie','Block and parry'),kn('blk'),'LB'],[T('Unik','Dodge'),kn('roll'),'A']];
+   ks.innerHTML=R.map(([n,k,p])=>`<div><span>${esc(n)}</span><span><kbd>${esc(k)}</kbd><i>/</i><kbd>${p}</kbd></span></div>`).join('')}else ks.innerHTML='';
+  const tb=$('trainBtn'),go=P.querySelector('.nbm-go');go.hidden=!tb;go.textContent=T('Plac ćwiczeń ›','Training ground ›');go.title=tb?tb.title:'';
+  const pad=document.body.classList.contains('padnav');foot.innerHTML=pad?`<span><kbd>LB / RB</kbd>${T('Zakładki','Tabs')}</span><span><kbd>A</kbd>${T('Wybierz','Select')}</span><span><kbd>B</kbd>${T('Wróć','Back')}</span>`:`<span><kbd>↑ ↓</kbd>${T('Przewijaj','Scroll')}</span><span><kbd>Enter</kbd>${T('Wybierz','Select')}</span><span><kbd>Esc</kbd>${T('Wróć','Back')}</span>`}
+ tabs.addEventListener('click',()=>setTimeout(panel,0));
+ new MutationObserver(()=>{if(!man.hidden)setTimeout(panel,0)}).observe(man,{attributes:true,attributeFilter:['hidden']});
+ new MutationObserver(()=>{if(!man.hidden)panel()}).observe(tabs,{childList:true});
+ new MutationObserver(()=>{if(!man.hidden)panel()}).observe(document.body,{attributes:true,attributeFilter:['class']});
+}catch(e){quietErr('instrukcjaMakieta',e)}})();
 requestAnimationFrame(frame);
 })();
 
