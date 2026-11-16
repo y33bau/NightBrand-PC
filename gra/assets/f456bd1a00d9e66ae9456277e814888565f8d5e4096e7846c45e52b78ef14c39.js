@@ -2773,8 +2773,8 @@ function layoutPatch1c(w){const P=w.PROPS,M=w.map,U=w.under,T=(x,y)=>M[y*MW+x];
  mv('marga_cart',85,42,1,[[83,42],[84,42],[85,42],[86,42]]);mv('marga_cart',95,42,-1,[[92,42],[93,42],[94,42],[95,42]]);free(91,42);free(92,42);occupy(95,42);/* 9.11.2026: kolizja prawego wozu pod jego skrzynią (lewe pola były niewidzialną ścianą) */
  drop('barrel',35,61);drop('burnt_hay',26,26);drop('dead_tree',34,57);drop('wheel',18,86);drop('wheel',22,55);drop('wheel',71,82);drop('wheel',81,61);
  drop('order_banner',28,66);drop('order_bonfire',26,67,[[26,67],[28,66]]);drop('order_bonfire',21,81,[[20,81],[21,81]]);drop('debris_fire',34,40,[[33,40],[34,40]]);drop('debris_fire',15,27);
- // domy w plomieniach (bez kolizji, jak dotychczasowe house_fire); 12.11.2026: ogien (89,26) spod szubienicy usuniety na prosbe autora
- for(const [x,y] of [[8,80],[15,27],[21,82],[26,66],[33,40],[57,19],[73,84],[83,61]])P.push({k:'house_fire',x:x+.5,y:y+.4,fire:true,big:true,anim:'hfire',keep:true});
+ // 16.11.2026: dawne "domy w plomieniach" (house_fire, zbyt male jak na dom, za duze jak na ognisko) zastapione ogniskami z gruzu debris_fire (decyzja autora); 12.11.2026: ogien (89,26) spod szubienicy usuniety na prosbe autora
+ for(const [x,y] of [[8,80],[15,27],[21,82],[26,66],[33,40],[57,19],[73,84],[83,61]])P.push({k:'debris_fire',x:x+.5,y:y+.4,fire:true,big:true,anim:'fire',keep:true});
  // nowe rekwizyty
  add('order_banner',20,58,[[20,58]]);add('dead_tree',27,55,[[27,55]]);add('dead_tree',66,39,[[66,39]],{variant:'dead_spruce',vscale:1});add('dead_tree',55,85,[[55,85]],{variant:'mossy_boulder',vscale:.375});
  // kapliczki: lecznicza (13,20) -> (24,27), druga (94,68) -> (91,60)
