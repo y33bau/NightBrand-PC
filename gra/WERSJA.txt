@@ -871,3 +871,4 @@ cache795 · Przygotowanie do nocy wg makiety GPT (na galezi ogniska-zamiast-domk
 cache796 · Przygotowanie: kolumny do dolnego marginesu, min. 3 kafle perkow
 cache797 · Przygotowanie: opis ofiar pod przyciskami
 cache798 · Przygotowanie: jasniejsze zablokowane kafle
+cache799 · Nowe intro muzyczne od autora (stare usuniete)
