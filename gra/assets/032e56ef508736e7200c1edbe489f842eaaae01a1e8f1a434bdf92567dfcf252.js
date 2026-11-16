@@ -10944,7 +10944,7 @@ ${O} #nbP .boh b{display:block!important;font:700 calc(22*var(--u))/1 Cinzel,Geo
 ${O} #nbP .boh span{display:block!important;margin-top:calc(5*var(--u))!important;font:italic calc(16*var(--u))/1 Georgia,serif!important;color:#d0bf9c!important}
 ${O} #nbP .zmien{width:calc(130*var(--u))!important;height:calc(44*var(--u))!important;font-size:calc(13.5*var(--u))!important}
 /* 16.11.2026: uklad wg makiety GPT (runda przygotowanie-makieta): nizsze kolumny, wyzszy dolny pas, kafle perkow, lista wyzwan bez podgladu, klatwy bez slotow */
-${O} #nbP .kol{position:absolute!important;top:calc(155*var(--u))!important;width:calc(588*var(--u))!important;height:calc(584*var(--u))!important;padding:calc(8*var(--u)) calc(14*var(--u)) calc(12*var(--u))!important;display:flex!important;flex-direction:column!important}
+${O} #nbP .kol{position:absolute!important;top:calc(155*var(--u))!important;width:calc(588*var(--u))!important;height:calc(650*var(--u))!important;padding:calc(8*var(--u)) calc(14*var(--u)) calc(12*var(--u))!important;display:flex!important;flex-direction:column!important}
 ${O} #nbP .nk1{left:calc(54*var(--u))!important}${O} #nbP .nk2{left:calc(670*var(--u))!important}${O} #nbP .nk3{left:calc(1286*var(--u))!important}
 ${O} #nbP .kol:focus-within{filter:drop-shadow(0 0 calc(14*var(--u)) rgba(255,120,40,.18))!important}
 ${O} #nbP .nhd{position:relative!important;display:flex!important;align-items:center!important;gap:calc(16*var(--u))!important;padding:calc(2*var(--u)) calc(4*var(--u)) calc(12*var(--u))!important;border-bottom:1px solid rgba(201,160,100,.22)!important;flex:none!important}
@@ -10983,7 +10983,7 @@ ${O} #nbP .npg.c2 .npk,${O} #nbP .npg.c3 .npk{flex-direction:row!important;justi
 ${O} #nbP .npg.c2 .npk b,${O} #nbP .npg.c3 .npk b{text-align:left!important;font-size:calc(15.5*var(--u))!important}
 ${O} #nbP .npg.c2 .npk.zn,${O} #nbP .npg.c3 .npk.zn{padding-right:calc(24*var(--u))!important}${O} #nbP .npg.c2 .npk.zn::before,${O} #nbP .npg.c3 .npk.zn::before{font-size:calc(17*var(--u))!important;right:calc(5*var(--u))!important}
 ${O} #nbP .npg.c2 .npk img{width:calc(48*var(--u))!important;height:calc(48*var(--u))!important}${O} #nbP .npg.c3 .npk img{width:calc(40*var(--u))!important;height:calc(40*var(--u))!important}
-${O} #nbP .npk.za{filter:grayscale(.9) brightness(.5)!important;cursor:default!important}
+${O} #nbP .npk.za{filter:grayscale(.85) brightness(.68)!important;cursor:default!important}
 ${O} #nbP .npk:not(.za):hover,${O} #nbP .npk:not(.za):focus-visible{filter:brightness(1.18)!important}
 ${O} #nbP .npk.zn{background:linear-gradient(180deg,rgba(196,92,30,.92),rgba(110,40,14,.95)) padding-box!important;filter:drop-shadow(0 0 calc(10*var(--u)) rgba(255,120,40,.5))!important}
 ${O} #nbP .npk.zn b{color:#fff0d8!important}
@@ -11012,7 +11012,7 @@ ${O} #nbP .nlk .wz b{font-size:calc(20.5*var(--u))!important}
 ${O} #nbP .nlk .wz .nb{grid-row:1/3!important;grid-column:2!important;font-size:calc(21*var(--u))!important}
 ${O} #nbP .nlk .wz .ef{grid-column:1!important;font-size:calc(17*var(--u))!important}
 /* dolny pas */
-${O} #nbP .ntr{position:absolute!important;left:calc(44*var(--u))!important;top:calc(772*var(--u))!important;width:calc(770*var(--u))!important;height:calc(214*var(--u))!important;padding:calc(6*var(--u)) calc(16*var(--u))!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:calc(14*var(--u))!important}
+${O} #nbP .ntr{position:absolute!important;left:calc(44*var(--u))!important;top:calc(830*var(--u))!important;width:calc(770*var(--u))!important;height:calc(214*var(--u))!important;padding:calc(6*var(--u)) calc(16*var(--u))!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:calc(14*var(--u))!important}
 ${O} #nbP .ntr .rw{display:flex!important;gap:calc(10*var(--u))!important;align-items:center!important}
 ${O} #nbP .ntr .nhd{border:none!important;padding:0!important;width:calc(232*var(--u))!important;flex:none!important;gap:calc(12*var(--u))!important}
 ${O} #nbP .ntr .nhd .tt b{font-size:calc(23*var(--u))!important;letter-spacing:.1em!important}
@@ -11021,13 +11021,13 @@ ${O} #nbP .ntd{display:grid!important;grid-template-columns:repeat(4,1fr)!import
 ${O} #nbP .ntd div{text-align:center!important;padding:calc(12*var(--u)) 0 calc(10*var(--u))!important;background:rgba(255,240,220,.04)!important;border-top:1px solid rgba(201,160,100,.25)!important}
 ${O} #nbP .ntd b{display:block!important;font:700 calc(28*var(--u))/1 Cinzel,Georgia,serif!important;color:#f0dcb6!important}
 ${O} #nbP .ntd span{display:block!important;margin-top:calc(8*var(--u))!important;font:600 calc(13.5*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.04em!important;color:#c8b694!important;text-transform:uppercase!important;white-space:nowrap!important}
-${O} #nbP .ng{position:absolute!important;left:calc(838*var(--u))!important;top:calc(772*var(--u))!important;width:calc(556*var(--u))!important;height:calc(214*var(--u))!important;padding:calc(4*var(--u)) calc(16*var(--u))!important;box-sizing:border-box!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;justify-content:space-evenly!important;gap:0!important}
-${O} #nbP .ng .h2{font:700 calc(17*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.26em!important;color:#d8c6a2!important;text-align:center!important;margin:0!important;padding:0 0 calc(6*var(--u))!important;border-bottom:1px solid rgba(201,160,100,.28)!important}
+${O} #nbP .ng{position:absolute!important;left:calc(838*var(--u))!important;top:calc(830*var(--u))!important;width:calc(556*var(--u))!important;height:calc(214*var(--u))!important;padding:calc(4*var(--u)) calc(16*var(--u))!important;box-sizing:border-box!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;justify-content:space-evenly!important;gap:0!important}
+${O} #nbP .ng .h2{font:700 calc(16*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.26em!important;color:#d8c6a2!important;text-align:center!important;margin:0!important;padding:0 0 calc(6*var(--u))!important;border-bottom:1px solid rgba(201,160,100,.28)!important}
 ${O} #nbP .ng .nrr{display:flex!important;justify-content:space-between!important;align-items:center!important;gap:calc(10*var(--u))!important;font-size:calc(18*var(--u))!important;line-height:1.1!important;margin:0!important;color:#ecdcbc!important}
 ${O} #nbP .ng .nrr em{font:700 calc(19.5*var(--u))/1 Georgia,serif!important;font-style:normal!important;color:#f0c27a!important;text-align:right!important;white-space:nowrap!important}
-${O} #nbP .ng .nrr>span{flex:none!important;width:calc(196*var(--u))!important;text-align:left!important}
+${O} #nbP .ng .nrr>span{flex:none!important;width:calc(182*var(--u))!important;text-align:left!important}
 ${O} #nbP .ng .nrr:last-child>span{width:auto!important}
-${O} #nbP .ng .nrr em.n1,${O} #nbP .ng .nrr em.n2{flex:1!important;text-align:left!important}
+${O} #nbP .ng .nrr em.n1,${O} #nbP .ng .nrr em.n2{flex:1!important;min-width:0!important;text-align:left!important}${O} #nbP .ng .nrr em.n2{font-size:calc(17.5*var(--u))!important}
 ${O} #nbP .ng .nrr em.n3{flex:1!important;justify-content:flex-end!important}
 ${O} #nbP .ng .nst2{text-align:center!important;font:italic calc(16.5*var(--u))/1.1 Georgia,serif!important;color:#ecdcbc!important;margin:0!important}
 ${O} #nbP .ng .nst2[hidden]{display:none!important}
@@ -11035,8 +11035,11 @@ ${O} #nbP .ng .n3{display:flex!important;gap:calc(8*var(--u))!important}
 ${O} #nbP .ng .n3 button{padding:calc(5*var(--u)) calc(9*var(--u))!important;font:700 calc(16*var(--u))/1.1 Cinzel,Georgia,serif!important;color:#f0dcb6!important;background:rgba(20,12,8,.75)!important;border:1px solid #8a6a3a!important;border-radius:calc(3*var(--u))!important;cursor:pointer!important;white-space:nowrap!important}
 ${O} #nbP .ng .n3 button:hover,${O} #nbP .ng .n3 button:focus-visible{border-color:#e0a860!important;color:#fff0d8!important}
 ${O} #nbP .ng .n3 button.zn,${O} #nbP .ng .n3 button.zn:hover,${O} #nbP .ng .n3 button.zn:focus-visible{color:#1a0f08!important;text-shadow:none!important;background:linear-gradient(180deg,#f6cf88,#d99a4a)!important;border-color:#ffd9a0!important}
+${O} #nbP .ng .nopf{margin:0!important;min-height:2.5em!important;font:italic calc(15.5*var(--u))/1.25 Georgia,serif!important;color:#d8c8a6!important;text-align:left!important}
+${O} #nbP .ng .nopf b{font:700 calc(15.5*var(--u))/1 Georgia,serif!important;font-style:normal!important;color:#f0c27a!important}
+${O} #nbP .ng .nopf .nza{color:#e39a7e!important}
 ${O} #nbP .ng .n3 button:disabled{opacity:.42!important;cursor:default!important}
-${O} #nbP .pr{position:absolute!important;left:calc(1418*var(--u))!important;top:calc(764*var(--u))!important;width:calc(462*var(--u))!important;height:calc(226*var(--u))!important;display:flex!important;flex-direction:column!important;gap:calc(10*var(--u))!important}
+${O} #nbP .pr{position:absolute!important;left:calc(1418*var(--u))!important;top:calc(822*var(--u))!important;width:calc(462*var(--u))!important;height:calc(226*var(--u))!important;display:flex!important;flex-direction:column!important;gap:calc(10*var(--u))!important}
 ${O} #nbP .op2{display:flex!important;gap:calc(12*var(--u))!important}
 ${O} #nbP .op2 button{flex:1!important;height:calc(58*var(--u))!important;font-size:calc(16*var(--u))!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:calc(10*var(--u))!important}
 ${O} #nbP .op2 button svg{width:calc(19*var(--u))!important;height:calc(19*var(--u))!important;fill:currentColor!important;flex:none!important}
@@ -11108,14 +11111,14 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
  <section class="nbr kol nk2"><div class="nhd"><i class="nr"><i>II</i></i><div class="tt"><b>${T('WYZWANIE','CHALLENGE')}</b><span>${T('Jedno na noc. Wykonaj, a dostaniesz nagrodę.','One per night. Complete it to earn a reward.')}</span></div><span class="licz l2"></span></div><div class="ls nlw"></div></section>
  <section class="nbr kol nk3"><div class="nhd"><i class="nr"><i>III</i></i><div class="tt"><b>${T('KLĄTWY','CURSES')}</b><span>${T('Do trzech. Każda utrudnia noc i daje premię Popiołów: im cięższa, tym większa.','Up to three. Each makes the night harder and adds an Ashes bonus: the harsher, the bigger.')}</span></div><span class="licz l3"></span></div><div class="ls nlk"></div></section>
  <section class="nbr ntr"><div class="rw"><div class="nhd"><i class="nr"><i>IV</i></i><div class="tt"><b>${T('TRUDNOŚĆ','DIFFICULTY')}</b></div></div><div class="rw dd" style="flex:1"><button type="button" class="nbd" data-d="e">${T('Łatwy','Easy')}</button><button type="button" class="nbd" data-d="n">${T('Normalny','Normal')}</button><button type="button" class="nbd" data-d="h">${T('Trudny','Hard')}</button></div></div><div class="ntd"></div></section>
- <section class="nbr ng"><div class="h2">${T('TEJ NOCY','TONIGHT')}</div><div class="nrr"><span>${T('Wyzwanie:','Challenge:')}</span><em class="n1"></em></div><div class="nrr"><span>${T('Nagroda za wyzwanie:','Challenge reward:')}</span><em class="n2"></em></div><div class="nst2">${T('Na start następnej nocy','At the start of the next night')}</div><div class="nrr"><span>${T('Ofiary (Popioły):','Offerings (Ashes):')}</span><em class="n3"></em></div></section>
+ <section class="nbr ng"><div class="h2">${T('TEJ NOCY','TONIGHT')}</div><div class="nrr"><span>${T('Wyzwanie:','Challenge:')}</span><em class="n1"></em></div><div class="nrr"><span>${T('Nagroda za wyzwanie:','Challenge reward:')}</span><em class="n2"></em></div><div class="nst2">${T('Na start następnej nocy','At the start of the next night')}</div><div class="nrr"><span>${T('Ofiary (Popioły):','Offerings (Ashes):')}</span><em class="n3"></em></div><div class="nopf"></div></section>
  <div class="pr"><div class="op2"><button type="button" class="nbd o1"><svg viewBox="0 0 20 16"><path d="M1 2c3-1.3 6-1 8.3.8V15C7 13.4 4 13.1 1 14.3zm18 0c-3-1.3-6-1-8.3.8V15c2.3-1.6 5.3-1.9 8.3-.7z"/></svg>${T('Samouczek','Tutorial')}</button><button type="button" class="nbd o2"><svg viewBox="0 0 20 16"><circle cx="7" cy="4.2" r="3.2"/><circle cx="14.5" cy="5" r="2.6"/><path d="M0.5 15.5c.4-4 3-6 6.5-6s6.1 2 6.5 6zm13.9 0c-.2-2.3-1-4.1-2.3-5.3 3.4-.9 6.6.6 7.4 5.3z"/></svg>${T('2 graczy','2 players')}</button></div><button type="button" class="nbd gl ngot">${T('Wyrusz w noc','Set out')}<small></small></button></div>
  <i class="nw nbzi"></i></div>`;
  prep.append(P);
  const q$=s=>P.querySelector(s),TDN=[T('Liczba wrogów','Enemy count'),T('Życie wrogów','Enemy health'),T('Obrażenia wrogów','Enemy damage'),T('Popioły','Ashes')],
   TDV={e:['−20%','−25%','−30%','×0'+(EN?'.':',')+'8'],n:['—','—','—','×1'],h:['+12%','+25%','+20%','×1'+(EN?'.':',')+'3']},TDM={e:.8,n:1,h:1.3},
   liczba=x=>String(Math.round(x*100)/100).replace('.',EN?'.':',');
- let podP=null,plan=0,zabOtw=false;
+ let podP=null,podO=null,plan=0,zabOtw=false;
  const aktywny=()=>!prep.hidden&&!PREP.daily&&!PREP.weekly;
  function perki(){const q=prog();let cls='r';try{cls=perkCls()}catch(e){}return PERKS.filter(d=>(d.who||'r')===cls).map(d=>({d,za:d.lv>q.lv}))}
  function minus(d){try{return perkMinus(d)}catch(e){return d.mi||''}}
@@ -11123,6 +11126,9 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
   if(!it){g.classList.add('pu');g.innerHTML=`<div class="ntx"><b>${T('NIE WYBRANO PERKU','NO PERK CHOSEN')}</b><span>${T('Wybierz jeden poniżej. Bez perku też można wyjść w noc.','Pick one below. You can also go without one.')}</span></div>`;return}
   const d=it.d,w=PREP.perks.includes(d.id);if(w)g.classList.add('wy');if((d.n+d.pl+minus(d)).length>105)g.classList.add('dl');/* 16.11.2026: dlugi opis (np. EN) mniejsza czcionka, zeby zmiescil sie w karcie */const ic=PREMIUM_ICONS['perki-'+d.id]||'';
   g.innerHTML=`<span class="et">${it.za?T('ZABLOKOWANY','LOCKED'):w?T('WYBRANO','CHOSEN'):T('PODGLĄD','PREVIEW')}</span>${ic?`<img src="${ic}" alt=""${it.za?' style="filter:grayscale(1) brightness(.6)"':''}>`:''}<div class="ntx"><b>${esc(d.n)}</b>${it.za?`<span>${T('Odblokujesz na poziomie postaci ','Unlocks at character level ')}${d.lv}.</span>`:''}<span class="plus">▲ ${esc(d.pl)}</span><span class="minus">▼ ${esc(minus(d))}</span></div>`}
+ function opO(){/* 16.11.2026: opis ofiary pod przyciskami (wskazana > wybrana > podpowiedz) */const o=OFIARY.find(x=>x.id===(podO||PREP.ofiara)),e=q$('.nopf');if(!e)return;
+  if(!o){e.innerHTML=T('Ofiara kosztuje Popioły i daje premię tylko na tę noc. Wskaż ofiarę, żeby zobaczyć, co daje.','An offering costs Ashes and gives a bonus for this night only. Point at one to see what it does.');return}
+  const ok=ofiaraOk(o)||PREP.ofiara===o.id;e.innerHTML=`<b>${esc(o.n)}:</b> ${esc(o.d)}${ok?'':' <i class="nza">'+(EMB.e<o.c?T('Za mało Popiołów.','Not enough Ashes.'):T('Niedostępna.','Unavailable.'))+'</i>'}`}
  // 16.11.2026: listy w Przygotowaniu aktualizowane w miejscu (bez tworzenia na nowo przyciskow i obrazkow), zeby banery perkow, wyzwan i klatw nie migaly
  const morphKids=(o,n)=>{const oc=[...o.childNodes],nc=[...n.childNodes];
   if(oc.length!==nc.length||oc.some((x,i)=>x.nodeType!==nc[i].nodeType||(x.nodeType===1&&x.tagName!==nc[i].tagName))){o.replaceChildren(...nc);return}
@@ -11135,8 +11141,8 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
   q$('.rd').textContent=(T('ROZDZIAŁ ','ACT ')+CHR[(PREP.ch||1)-1]+' · '+CHN[(PREP.ch||1)-1]).toUpperCase();
   {const tw=q$('.ntw'),s=tw.clientWidth||76,k=4.4,[fx,fy]=FACE[c]||[.5,.12],h=s*k,w=h*(NB_KAMIEN_AR[c]||.7);tw.style.backgroundImage=`url('${NB_KAMIEN[c]}')`;tw.style.backgroundSize=`${w}px ${h}px`;tw.style.backgroundPosition=`${s/2-fx*w}px ${s/2-fy*h}px`}
   q$('.nbn').textContent=H.n.toUpperCase();q$('.nbl').textContent=H.cls+T(' · poziom ',' · level ')+q.lv;
-  {/* 16.11.2026 (makieta): kafle tylko odblokowanych perkow; zablokowane pod przyciskiem ZABLOKOWANE (N). Uklad kafli wg liczby: 1-3 duze, 4-6 i 7+ ciasniejsze */
-   const L=perki(),za=L.filter(x=>x.za),wid=L.filter(x=>!x.za||zabOtw),n=wid.length,g=q$('.npg');
+  {/* 16.11.2026 (makieta): kafle tylko odblokowanych perkow; zablokowane pod przyciskiem ZABLOKOWANE (N). Uklad kafli wg liczby: 1-3 duze, 4-6 i 7+ ciasniejsze; 16.11.2026: zawsze min. 3 kafle, brakujace dopelniaja pierwsze zablokowane, licznik ZABLOKOWANE liczy reszte */
+   const L=perki(),zaW=L.filter(x=>x.za),dop=Math.max(0,3-(L.length-zaW.length)),za=zaW.slice(dop),wid=zabOtw?L:L.filter(x=>!x.za||zaW.indexOf(x)<dop),n=wid.length,g=q$('.npg');/* 16.11.2026: zawsze min. 3 kafle; brakujace dopelniaja pierwsze zablokowane */
    g.className='npg'+(n>6?' c3':n>3?' c2':'');q$('.nk1').classList.toggle('mal',n>6);
    g.innerHTML=wid.map(({d,za})=>{const ic=PREMIUM_ICONS['perki-'+d.id]||'';return `<button type="button" class="nbk npk${za?' za':''}${PREP.perks.includes(d.id)?' zn':''}" data-k="p:${d.id}"${za?' aria-disabled="true"':''}>${ic?`<img src="${ic}" alt="">`:''}<div><b>${esc(d.n)}</b>${za?`<small>🔒 ${T('poziom ','level ')}${d.lv}</small>`:''}</div></button>`}).join('');
    const zb=q$('.nzab');zb.hidden=!za.length;zb.classList.toggle('otw',zabOtw);q$('.nzt').textContent=(zabOtw?T('UKRYJ ZABLOKOWANE','HIDE LOCKED'):T('ZABLOKOWANE','LOCKED'))+` (${za.length})`}
@@ -11152,7 +11158,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
    q$('.n3').innerHTML=OFIARY.map(o=>{const on=PREP.ofiara===o.id,ok=ofiaraOk(o);return `<button type="button" data-k="o:${o.id}" title="${esc(o.d)}"${on?' class="zn"':''}${ok||on?'':' disabled'}>${esc(o.n)} ${o.c}</button>`}).join('');
   {const hi=$('hintsTgl'),mp=$('mpTgl'),ml=$('mpTglL');q$('.o1').classList.toggle('zn',!!(hi&&hi.checked));q$('.o2').classList.toggle('zn',!!(mp&&mp.checked));q$('.o2').hidden=!mp||!!(ml&&ml.style.display==='none')}
   q$('.ngot small').textContent=H.n.toUpperCase()+' · '+[T('Łatwy','Easy'),T('Normalny','Normal'),T('Trudny','Hard')][['e','n','h'].indexOf(dk)].toUpperCase();
-  gnP();
+  gnP();opO();
   if(fk){const e=P.querySelector(`[data-k="${fk}"]`);if(e)e.focus({preventScroll:true})}}
  const odswiez=()=>{if(plan)return;plan=requestAnimationFrame(()=>{plan=0;render()})};
  function klik(k){const [t,id]=k.split(':'),q=prog();
@@ -11170,7 +11176,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
   if(b.classList.contains('ngot')){const g=$('prepGo');if(g&&!g.disabled)g.click();return}
   if(b.classList.contains('wroc')){/* 16.11.2026: Wroc dziala bezposrednio (kliknieta przez stary przycisk nie zamykala ekranu) */prep.hidden=true;toMenu();title.hidden=false;title.classList.remove('pc-home');setTimeout(()=>{const c=$('start'+(PREP.ch||1));c&&c.focus({preventScroll:true})},80);return}
   if(b.classList.contains('zmien')){prep.hidden=true;title.hidden=false;otworz('prep')}});
- const pod=(e,on)=>{const b=e.target.closest&&e.target.closest('[data-k]');if(!b)return;const [t,id]=b.dataset.k.split(':');if(t==='p'){podP=on?id:null;gnP()}};
+ const pod=(e,on)=>{const b=e.target.closest&&e.target.closest('[data-k]');if(!b)return;const [t,id]=b.dataset.k.split(':');if(t==='p'){podP=on?id:null;gnP()}else if(t==='o'){podO=on?id:null;opO()}};
  P.addEventListener('mouseover',e=>pod(e,true));P.addEventListener('mouseout',e=>pod(e,false));P.addEventListener('focusin',e=>pod(e,true));P.addEventListener('focusout',e=>pod(e,false));
  new MutationObserver(ms=>{if(ms.some(m=>!P.contains(m.target)))odswiez()}).observe(prep,{attributes:true,attributeFilter:['hidden','class'],childList:true,subtree:true});
  for(const id of ['hintsTgl','mpTgl'])$(id)?.addEventListener('change',odswiez);

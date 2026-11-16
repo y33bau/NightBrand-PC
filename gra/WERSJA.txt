@@ -868,3 +868,6 @@ cache792 · Poprawka: blad PADTABS przy kliknieciu w trakcie ladowania (iPhone S
 cache793 · NPC: bez zlotej obwodki swietlnej i ciemniejsze; baner Rozmawiaj mniejszy i polprzezroczysty; NIE sprawdzono: wyglad w grze
 cache794 · Ogniska z gruzu zamiast malych domkow w plomieniach (rozdz. I); NIE sprawdzono: wyglad w grze
 cache795 · Przygotowanie do nocy wg makiety GPT (na galezi ogniska-zamiast-domkow)
+cache796 · Przygotowanie: kolumny do dolnego marginesu, min. 3 kafle perkow
+cache797 · Przygotowanie: opis ofiar pod przyciskami
+cache798 · Przygotowanie: jasniejsze zablokowane kafle
