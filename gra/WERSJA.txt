@@ -867,3 +867,4 @@ cache791 · Mniej swiatla na NPC (kolor i emisja, bez jasnej krawedzi), mniejszy
 cache792 · Poprawka: blad PADTABS przy kliknieciu w trakcie ladowania (iPhone Safari); NIE sprawdzono na iPhonie
 cache793 · NPC: bez zlotej obwodki swietlnej i ciemniejsze; baner Rozmawiaj mniejszy i polprzezroczysty; NIE sprawdzono: wyglad w grze
 cache794 · Ogniska z gruzu zamiast malych domkow w plomieniach (rozdz. I); NIE sprawdzono: wyglad w grze
+cache795 · Przygotowanie do nocy wg makiety GPT (na galezi ogniska-zamiast-domkow)
