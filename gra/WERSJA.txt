@@ -877,3 +877,4 @@ cache801 · Pauza, Instrukcja, Kronika, Kaplica wg makiet (prezentacja)
 cache802 · Instrukcja aktualna (nowa zakladka Postac i przygotowanie, klawisze z ustawien), Pauza: Audio/Grafika/Dziennik/Mapa w nowym stylu, Kronika: bestiariusz i osiagniecia
 cache803 · Ekran powitalny po wyborze jezyka
 cache804 · Podpis y33bau na ekranie powitalnym
+cache805 · Sterowanie w Pauzie i Opcjach w nowym ukladzie, naglowek pauzy

@@ -11786,7 +11786,7 @@ ${O} #nbPow kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;colo
  function zamknij(){if(P.hidden)return;P.hidden=true;title.classList.remove('nbpow-on');try{sessionStorage.setItem('nbPow','1');if(cb.getAttribute('aria-checked')==='true')localStorage.setItem('pn_powitanie','0')}catch(e){}try{uiSnd('back')}catch(e){}}
  P.querySelector('.go2').addEventListener('click',()=>{zamknij();setTimeout(()=>{const t=title.querySelector('button:not([disabled]):not(#nbPow button)');t&&t.focus({preventScroll:true})},40)});
  P.querySelector('.gfx').addEventListener('click',()=>{zamknij();const o=$('optsBtn');if(o){o.click();setTimeout(()=>{const g=document.querySelector('#opts .tabs>.tab[data-tab="gfx"]');g&&g.click()},60)}});
- addEventListener('keydown',e=>{if(P.hidden)return;if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();zamknij()}},true);
+ addEventListener('keydown',e=>{if(P.hidden||title.hidden)return;if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();zamknij()}},true);
  if(typeof pcMenuBack!=='undefined'){const prev=pcMenuBack;pcMenuBack=()=>{if(!P.hidden){zamknij();return true}return prev?prev():false}}
  function sprobuj(){if(pokazany)return;if(lang&&!lang.hidden)return;if(title.hidden)return;pokazany=true;P.hidden=false;title.classList.add('nbpow-on');stopka();for(const t of [60,400,1200])setTimeout(()=>{if(!P.hidden&&!P.contains(document.activeElement))P.querySelector('.go2').focus({preventScroll:true})},t)}
  if(lang)new MutationObserver(sprobuj).observe(lang,{attributes:true,attributeFilter:['hidden']});
@@ -11794,6 +11794,36 @@ ${O} #nbPow kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;colo
  new MutationObserver(stopka).observe(document.body,{attributes:true,attributeFilter:['class']});
  setTimeout(sprobuj,50);
 }catch(e){quietErr('powitanie',e)}})();
+// 16.11.2026: Sterowanie w Pauzie i Opcjach w nowym ukladzie (prosba autora): po lewej lista klawiszy w ramie (wlasne klawisze; dla pada lista przyciskow),
+// po prawej schemat (obraz klawiatury lub pada) w ramie. Te same elementy co dotad (przyciski zmiany klawiszy dzialaja jak wczesniej). Naglowek pauzy: nazwa rozdzialu pod ozdobnikiem.
+(()=>{try{
+ const O='#orient'.repeat(400),RAMA="url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp')",C=':is(#pauseKeys,#pane-ctl)';
+ const st=document.createElement('style');st.id='nb-sterowanie-makieta';st.textContent=`
+${O} ${C}{--u:calc(min(100vw,177.78vh)/1920)}
+${O} ${C}>div:not(.subtabs):not(.opsep):not([hidden]):has(>img.nb-ctl-img){display:grid!important;grid-template-columns:47% 1fr!important;grid-template-rows:minmax(0,1fr)!important;gap:calc(24*var(--u))!important;align-items:stretch!important;max-width:calc(1700*var(--u))!important;margin:calc(10*var(--u)) auto 0!important;height:calc(560*var(--u))!important}
+${O} ${C}>div:has(>img.nb-ctl-img)>img.nb-ctl-img{grid-column:2!important;grid-row:1!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;box-sizing:border-box!important;padding:calc(18*var(--u))!important;margin:0!important;border:calc(18*var(--u)) solid transparent!important;border-image:${RAMA} 48 stretch!important;background:#0b0809 padding-box!important}
+${O} ${C}>div:has(>img.nb-ctl-img)>:not(img):not(.keys):not([id^=kbBind]):not(:has(.kbgrid)){display:none!important}
+${O} ${C}>div:has(>img.nb-ctl-img)>:is([id^=kbBind],div:has(.kbgrid),.keys){grid-column:1!important;grid-row:1!important;position:static!important;width:auto!important;height:auto!important;clip:auto!important;overflow-y:auto!important;white-space:normal!important;margin:0!important;padding:calc(16*var(--u)) calc(22*var(--u))!important;border:calc(18*var(--u)) solid transparent!important;border-image:${RAMA} 48 stretch!important;background:linear-gradient(180deg,rgba(13,10,10,.92),rgba(8,6,7,.95)) padding-box!important;scrollbar-width:thin!important;scrollbar-color:#7a5530 rgba(255,255,255,.04)!important}
+${O} ${C}>div:has(>img.nb-ctl-img):has(.kbgrid)>.keys{display:none!important}
+${O} ${C} :is([id^=kbBind],div:has(>.kbgrid))>.opsep{display:none!important}
+${O} ${C} :is([id^=kbBind],div:has(>.kbgrid))>h3{display:block!important;margin:0 0 calc(8*var(--u))!important;padding:calc(10*var(--u)) calc(18*var(--u))!important;text-align:left!important;font:700 calc(28*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.05em!important;color:#f0dcb6!important;text-shadow:0 2px 4px #000!important;background:linear-gradient(180deg,rgba(60,40,30,.55),rgba(26,18,14,.85))!important;border:1px solid rgba(160,120,70,.35)!important}
+${O} ${C} :is([id^=kbBind],div:has(>.kbgrid))>p{margin:calc(6*var(--u)) 0 calc(10*var(--u))!important;font:italic calc(18*var(--u))/1.35 Georgia,serif!important;color:#c8b694!important;text-align:left!important}
+${O} ${C} .kbgrid{display:flex!important;flex-direction:column!important;gap:0!important}
+${O} ${C} .kbrow{display:flex!important;justify-content:space-between!important;align-items:center!important;min-height:calc(46*var(--u))!important;padding:0 calc(10*var(--u)) 0 calc(16*var(--u))!important;background:rgba(30,24,22,.5)!important;border-bottom:1px solid rgba(255,230,190,.07)!important}
+${O} ${C} .kbrow:hover,${O} ${C} .kbrow:focus-within{background:linear-gradient(90deg,rgba(150,92,46,.7),rgba(70,44,26,.5))!important}
+${O} ${C} .kbrow>span{font:400 calc(21*var(--u))/1.2 Georgia,serif!important;color:#ecdcbc!important;text-align:left!important}
+${O} ${C} .kbrow>button.kbb{min-width:calc(90*var(--u))!important;min-height:0!important;height:calc(34*var(--u))!important;padding:0 calc(12*var(--u))!important;font:700 calc(16*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-image:none!important;border-radius:calc(4*var(--u))!important;background:rgba(0,0,0,.55)!important;box-shadow:none!important;filter:none!important}
+${O} ${C} .kbrow>button.kbb:is(:hover,:focus-visible,.pf,.on){border-color:#e0a860!important;color:#fff0d8!important;background:rgba(120,70,30,.6)!important}
+${O} ${C} :is([id^=kbBind],div:has(>.kbgrid))>.btnrow{margin-top:calc(12*var(--u))!important;justify-content:flex-start!important}
+${O} ${C} .keys{display:grid!important;grid-template-columns:1fr auto!important;column-gap:calc(12*var(--u))!important;row-gap:0!important;align-content:start!important}
+${O} ${C} .keys>span{padding:calc(11*var(--u)) calc(6*var(--u)) calc(11*var(--u)) calc(14*var(--u))!important;border-bottom:1px solid rgba(255,230,190,.07)!important;font:400 calc(21*var(--u))/1.25 Georgia,serif!important;color:#ecdcbc!important;text-align:left!important}
+${O} ${C} .keys>b{display:flex!important;gap:calc(6*var(--u))!important;justify-content:flex-end!important;align-items:center!important;padding:calc(8*var(--u)) calc(8*var(--u))!important;border-bottom:1px solid rgba(255,230,190,.07)!important}
+${O} ${C} .keys kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-radius:calc(4*var(--u))!important;padding:calc(6*var(--u)) calc(9*var(--u))!important;background:rgba(0,0,0,.55)!important;white-space:nowrap!important}
+${O} #pause .nbp-head{display:flex!important;flex-direction:column!important;align-items:center!important}
+${O} #pause .nbp-head>.pc-heading-rule{order:2!important}
+${O} #pause .nbp-head>.nbp-sub{order:3!important;position:static!important;transform:none!important;margin:calc(10*var(--pc-u)) 0 0!important;font:600 calc(15*var(--pc-u))/1 Cinzel,Georgia,serif!important;letter-spacing:.22em!important;text-transform:uppercase!important;color:#c8b694!important}
+`;document.head.append(st);
+}catch(e){quietErr('sterowanieMakieta',e)}})();
 requestAnimationFrame(frame);
 })();
 
