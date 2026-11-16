@@ -10718,7 +10718,7 @@ ${PR} .pc-profile{border:none!important;border-image:none!important;background:$
 ${PR} .pc-profile>.pcg-edge{display:none!important}
 ${PR} img.pc-profile-ash{content:${A('assets/ui/bec1edb981cde86153bfc1f97330a541237d7963c2926133284dbc3f9ef457bf.webp')}!important;filter:none!important;object-fit:contain!important}
 ${PR} .pc-profile-stat+.pc-profile-stat{position:relative!important;padding-left:2.4em!important}
-${PR} .pc-profile-stat+.pc-profile-stat::before{content:''!important;position:absolute!important;left:0!important;top:50%!important;width:2.1em!important;height:2.1em!important;transform:translateY(-50%)!important;background:${A('assets/ui/516bd88256fbc226fa5570719b9fd6743b2086353a5a9e8c156f936324dc5a0a.webp')} center/contain no-repeat!important}
+${PR} .pc-profile-stat+.pc-profile-stat::before{content:''!important;position:absolute!important;left:0!important;top:50%!important;width:2.1em!important;height:2.1em!important;transform:translateY(-50%)!important;background:${A('assets/ikony/8f08bd944371bb357b2917aaa848ae7ecf7194a91030eeacdeb413f592fd653c.webp')} center/contain no-repeat!important}/* 16.11.2026: pieczec (ikona Daru pieczeci) zamiast pustego kola przy poziomie */
 ${'#orient'.repeat(150)} :is(#title,#kap,#opts,#manual,#prep,#conf,#end,#lang){cursor:${KURSOR},auto!important}
 ${'#orient'.repeat(150)} :is(#title,#kap,#opts,#manual,#prep,#conf,#end,#lang) :is(button,a,summary,label,input,[role=button],[role=tab],[role=radio]){cursor:${KURSOR_ON},pointer!important}
 
@@ -10859,7 +10859,7 @@ const NB_KAMIEN={r:'assets/ui/5603fdc363945b6e1f72befd731652697b1d181fec06a9fd79
    deska:U+'1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp',rama:U+'39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp',karta:U+'5a6a99a0140440ac5856623aed2e2ea738c3d6c97dba954373663177fc20f69f.webp',
    urna:U+'bec1edb981cde86153bfc1f97330a541237d7963c2926133284dbc3f9ef457bf.webp',moneta:U+'e2eeee3e0c4a316695cb8aa6c276d73706d760b3079f90021c7c443c9f68a5c0.png',ziarno:U+'7c8deda4dcbd2ff1b4e8381167626c58a6e734b1cd9bdc331a3399749f2b8595.webp',mgla:U+'b5aa0b5f36f083311f26a7dd935871b17ce548e28b3915092de5be30df5207be.webp'},
   ORDER=['k','m','r','z','d'],POS={k:[13.6,37],m:[31.8,41],r:[50,40.5],z:[68.2,38.5],d:[86.4,41]},
-  FACE={k:[.56,.12],m:[.55,.11],r:[.5,.11],z:[.46,.13],d:[.3,.16]},
+  FACE={k:[.56,.12],m:[.6,.175],r:[.5,.11],z:[.385,.215],d:[.255,.24]},/* 16.11.2026: Mira, Iwo i Milena: srodek kadru na twarzy (wczesniej wlosy i helm) */
   OPIS={r:T('Miecz: szybki i zwrotny, wyważony styl walki.','Sword: quick and agile, the balanced way to fight.'),
    k:T('Topór: wolny i ciężki. +25% życia, mocniejsze ciosy i dłuższe ogłuszenie po parowaniu.','Axe: slow and heavy. +25% health, harder hits and a longer stun after a parry.'),
    z:T('Dwie szable: błyskawiczne serie, szybki ruch i uniki. −25% życia.','Twin sabres: lightning-fast combos, quick movement and dodges. −25% health.'),

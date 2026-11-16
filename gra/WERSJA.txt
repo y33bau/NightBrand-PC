@@ -853,3 +853,4 @@ cache777 · Szlif bohaterow v2: wygladzone ziarno, mniej nasycenia, jasnosc 85%,
 cache778 · Szlif bohaterow v2 (numer 778, bo 777 byl juz na galezi testowej z wersja v1)
 cache779 · Szlif tekstur bohaterow v2 + balans fal i parowania (jedna fala na wroga z riposty, fale -10%, Odzysk Tchu 6 staminy za poziom). Nie sprawdzono: 4 klasy w grze po szlifie, warianty zbroi, walka po balansie, pad, dzwiek, FPS, itch.io
 cache780 · Mapa podrozy zamiast listy rozdzialow (nie sprawdzono: pad fizyczny, dzwiek, FPS u autora, itch.io)
+cache781 · Pieczec przy poziomie, kadr portretow Miry, Iwa i Mileny w przygotowaniu (nie sprawdzono: pad, dzwiek, FPS u autora, itch.io)
