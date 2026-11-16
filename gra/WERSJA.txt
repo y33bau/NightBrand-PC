@@ -881,3 +881,4 @@ cache805 · Sterowanie w Pauzie i Opcjach w nowym ukladzie, naglowek pauzy
 cache806 · Ognisko i Mapa: klik tylko zaznacza, LB/RB zmienia bohatera
 cache807 · Nowy tekst ekranu powitalnego (5 punktow, podpis y33bau)
 cache808 · Instrukcja: ramka Najważniejsze na start, czytelniejsze ramki (odstępy, złote wyróżnienia, klawisze), poprawki zgodności (Klinga w ruchu = Rycerz, perki Rycerza podpisane, kociołki odnawiane o północy, klawisz rozmowy z ustawień). Nie sprawdzono: pad, EN na żywo, ekrany inne niż 16:9, itch.io.
+cache809 · Nowe logo (menu, ekran języka, Przygotowanie) i nowe piętno: ozdobniki pod tytułami, ikony aplikacji. Nie sprawdzono: ekran autora, pad, itch.io, ikona .ico w Windows (czeka na Electron).
