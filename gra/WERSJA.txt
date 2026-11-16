@@ -849,4 +849,5 @@ cache773 · Motyw bohatera na ekranie wyboru postaci przy ognisku. Nie sprawdzon
 cache774 · Panel postaci przy ognisku mniejszy; rozmiar tekstu: tylko Normalny i Duzy. Nie sprawdzono: pad, dzwiek, FPS, itch.io
 cache775 · Banery: Rozszarpanie, Nieukonczony wyzej, perki/wyzwania/klatwy bez migania. Nie sprawdzono: Wroc w przygotowaniu (u agentow), wyglad, pad, dzwiek, FPS, itch.io
 cache776 · Wroc w przygotowaniu dziala bezposrednio. Nie sprawdzono: dzialanie na ekranie, pad, dzwiek, FPS, itch.io
-cache777 · Szlif tekstur bohaterow: jasnosc 85%, krawedz od swiatla, jasniejszy kontur, mipmapy, wyostrzone i rozjasnione atlasy 5 klas (nie sprawdzono w grze: warianty zbroi, animacje, pad, dzwiek, FPS, itch.io)
+cache777 · Szlif bohaterow v2: wygladzone ziarno, mniej nasycenia, jasnosc 85%, gladkie probkowanie; bez ostrzenia, bez zmian konturu (nie sprawdzono: 4 klasy w grze, warianty zbroi, animacje, pad, dzwiek, FPS, itch.io)
+cache778 · Szlif bohaterow v2 (numer 778, bo 777 byl juz na galezi testowej z wersja v1)

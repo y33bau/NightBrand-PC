@@ -1,20 +1,20 @@
 """NightBrand: szlif gotowych atlasow bohaterow (16.11.2026), bez nowych rysunkow.
 Uzycie: python3 szlif.py KATALOG_GRY KATALOG_WYJSCIA   -> pliki webp + lista.json dla narzedzia/podmien_obrazy.py + kontrola_szlif.png
 Co robi z kazdym atlasem klasy (alfa bez zmian, twarda 0/255):
- - wyrazistosc: kontrast detali w duzym promieniu + wyostrzenie drobne (rozmycie liczone tylko z pikseli postaci, bez ciemnej obwodki od tla),
+ - czystosc: wygladzenie ziarna wewnatrz plam barwnych z zachowaniem krawedzi + lagodny kontrast duzych form (bez ostrzenia: ostrzenie dawalo szum),
  - jasnosc: gamma dobrana tak, by srednia jasnosc arkusza spoczynku klasy trafila w CEL (moby maja ok. 60-80),
- - kolor: nasycenie klasy; Zabojczyni dodatkowo rozdzielenie czerwieni, metalu i skory.
-Ustawienia klas w KLASY. Uruchamiac RAZ na swiezych atlasach z fabryki (drugie uruchomienie przeostrzy)."""
+ - kolor: nasycenie klasy; Zabojczyni dodatkowo chlodniejsza stal.
+Ustawienia klas w KLASY. Uruchamiac na atlasach prosto z fabryki (nie na juz szlifowanych)."""
 import sys,os,re,json,glob
 import numpy as np
 from PIL import Image,ImageFilter
 
-KLASY={  # cel = srednia jasnosc, det = kontrast detali, ostr = wyostrzenie, nas = nasycenie
- 'knight':dict(cel=76,det=.62,ostr=.75,nas=1.08),
- 'zab':   dict(cel=80,det=.70,ostr=.80,nas=1.06,rozdziel=1),
- 'kat':   dict(cel=76,det=.55,ostr=.70,nas=1.10),
- 'dzw':   dict(cel=76,det=.55,ostr=.70,nas=1.05),
- 'mil':   dict(cel=78,det=.55,ostr=.70,nas=1.05),
+KLASY={  # cel = srednia jasnosc, gl = sila wygladzenia plam (0-1), det = kontrast duzych form, nas = nasycenie
+ 'knight':dict(cel=66,gl=.8,det=.30,nas=.96),
+ 'zab':   dict(cel=66,gl=1.,det=.35,nas=.88,rozdziel=1),
+ 'kat':   dict(cel=66,gl=1.,det=.30,nas=.88),
+ 'dzw':   dict(cel=66,gl=1.,det=.25,nas=.92),
+ 'mil':   dict(cel=66,gl=1.,det=.25,nas=.92),
 }
 POMIN={'kat_fx','mil_fx'}  # arkusze efektow, nie postaci
 LUM=np.array([.299,.587,.114])
@@ -26,8 +26,13 @@ def rozmycie(rgb,a,r):
     return np.clip(blur(rgb*a[...,None])/ba[...,None],0,1)
 
 def wyrazistosc(rgb,a,k):
-    out=rgb+k['det']*(rgb-rozmycie(rgb,a,6))
-    out=out+k['ostr']*(out-rozmycie(out,a,1.1))
+    """wersja 2 (16.11.2026, po uwadze autora o szumie): NIE ostrzymy. Wygladzamy ziarno wewnatrz plam barwnych
+    z zachowaniem krawedzi (filtr dwustronny), potem tylko lagodny kontrast duzych form."""
+    import cv2
+    u=(np.clip(rgb,0,1)*255).astype(np.uint8);g=u
+    for _ in range(2):g=cv2.bilateralFilter(g,7,34,3)
+    out=rgb+(g.astype(np.float32)/255-rgb)*k['gl']
+    out=out+k['det']*(out-rozmycie(out,a,8))
     return np.clip(out,0,1)
 
 def kolor(rgb,k,gamma):
@@ -38,13 +43,12 @@ def kolor(rgb,k,gamma):
         R,G,B=rgb[...,0:1],rgb[...,1:2],rgb[...,2:3]
         czerw=(R>G*1.55)&(R>B*1.55)&(R>.22)               # szal, wstazki
         metal=(sat<.30)&(l>.16)                           # ostrza, okucia
-        nas=np.where(czerw,k['nas']*1.25,nas)
-        rgb=np.where(czerw,rgb*1.12,rgb)
-        rgb=np.where(metal,(l+(rgb-l)*.6)*np.array([1.06,1.10,1.17]),rgb)   # chlodniejsza, jasniejsza stal
+        nas=np.where(czerw,1.0,nas)
+        rgb=np.where(metal,(l+(rgb-l)*.6)*np.array([1.0,1.04,1.10]),rgb)   # chlodniejsza, jasniejsza stal
         nas=np.where(metal,1.0,nas)
         l=(rgb@LUM)[...,None]
     rgb=l+(rgb-l)*nas
-    return np.clip((rgb-.015)*1.05,0,1)
+    return np.clip(rgb,0,1)
 
 def przerob(im,k,gamma):
     p=np.asarray(im.convert('RGBA'),dtype=np.float32)/255;a=(p[...,3]>.5).astype(np.float32)

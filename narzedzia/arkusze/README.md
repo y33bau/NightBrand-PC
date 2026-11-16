@@ -16,7 +16,8 @@ W `procFrame` klucze `knight_`/`zab_` (nowy styl) nie dostają rozjaśnionej kra
 
 Od 15.11.2026: klatka szersza niż miejsce po stronie kotwicy (leżący, przewrót) przesuwa się do środka komórki zamiast obcinania.
 
-## Szlif gotowych atlasów (16.11.2026)
-`szlif.py KATALOG_GRY KATALOG_WYJŚCIA` poprawia gotowe atlasy pięciu klas bez nowych rysunków: kontrast detali, wyostrzenie, jasność dobrana gammą do celu klasy (`KLASY`), u Zabójczyni rozdzielenie czerwieni i stali. Wynik: pliki webp, `lista.json` dla `podmien_obrazy.py`, `kontrola_szlif.png`.
-Uruchamiać RAZ na świeżych atlasach z fabryki (drugi raz przeostrzy). `knight_lunge` jest wskazany w źródle (`00_grupy_sprite.js`), więc podmienia się go ręcznie: plik, manifest, sw.js i wpis w źródle.
-W `procFrame` (od 16.11.2026) nowi bohaterowie: kolor materiału 85% (było 70%), łagodna krawędź od światła, jaśniejszy kontur `OUTLINE.kat`, mipmapy.
+## Szlif gotowych atlasów (16.11.2026, wersja 2)
+`szlif.py KATALOG_GRY KATALOG_WYJŚCIA` poprawia gotowe atlasy pięciu klas bez nowych rysunków: wygładza ziarno wewnątrz plam barwnych (filtr dwustronny, krawędzie zostają), daje łagodny kontrast dużych form, wyrównuje jasność klas gammą do celu (`KLASY`, cel 66) i lekko zdejmuje nasycenie. Wynik: pliki webp, `lista.json` dla `podmien_obrazy.py`, `kontrola_szlif.png`.
+NIE ostrzyć: wersja 1 (wyostrzenie + mocne rozjaśnienie + jasny kontur + krawędź od światła) dała szum i pomarańczowe postacie, autor odrzucił.
+Uruchamiać na atlasach prosto z fabryki. `knight_lunge` jest wskazany w źródle (`00_grupy_sprite.js`), więc podmienia się go ręcznie: plik, manifest, sw.js i wpis w źródle.
+W `procFrame` nowi bohaterowie: kolor materiału 85% (było 70%), próbkowanie gładkie (magFilter liniowy + mipmapy). Kontur i brak krawędzi od światła bez zmian.
