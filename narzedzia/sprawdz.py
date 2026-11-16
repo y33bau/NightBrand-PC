@@ -57,7 +57,7 @@ for n in sorted(disk):
     if not d and re.fullmatch(r'[0-9a-f]{64}',stem) and not n.endswith(KORZEN_EXT+('.txt',)):warn.append('plik zasobu luzem w assets/ (ma byc w podfolderze): '+n)
 # 5) rozmiar
 tot=sum(f['bytes'] for f in files.values())/1e6
-(err if tot>250 else warn if tot>200 else info).append('rozmiar zasobow: %.1f MB (limit 250, ostrzezenie od 200)'%tot)
+(err if tot>500 else warn if tot>450 else info).append('rozmiar zasobow: %.1f MB (limit 500, ostrzezenie od 450)'%tot)
 # 6) skladnia JS
 for n in sorted(disk):
     if n.endswith('.js'):

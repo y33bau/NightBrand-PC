@@ -1,7 +1,7 @@
-# NightBrand PC / konsole: linia rozwojowa
+# NightBrand PC: linia rozwojowa
 
-Start: 10.11.2026, kopia wersji 562 (gra online na y33bau.github.io/nightbrand zostaje jako wersja mobilna w repozytoriach y33bau/nightbrand i nightbrand-backup, bez zmian).
+Stan na 2026-11-16 (cache 781). Gra na komputer (Windows); publikacja na itch.io, przygotowanie wersji Windows w Electronie. Xbox jest tylko rozważany obok PC. Zasady: `AGENTS.md`.
 
-- `zrodlo/main/` źródło gry, `narzedzia/` build i testy, `gra/` snapshot zbudowanej gry 562, `teksty/` wyciągi tekstów.
-- Zasady pracy jak w projekcie Claude „Nightbrand - workspace” (publikacja tylko na „publikuj”, każda runda na nowej gałęzi, nie edytować zbudowanego pliku gry).
-- To repozytorium jest prywatne i służy do rozwoju; nie obsługuje GitHub Pages.
+- `zrodlo/main/` źródło gry, `narzedzia/` build i testy, `gra/` zbudowana gra, `teksty/` wyciągi tekstów.
+- Wersja mobilna (562) żyje w y33bau/nightbrand i nie jest rozwijana.
+- Repozytorium jest prywatne i nie obsługuje GitHub Pages.

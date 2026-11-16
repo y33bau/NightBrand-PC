@@ -1,8 +1,8 @@
-# NightBrand: kopia zapasowa
+# NightBrand PC
 
-Kopia gry po KAŻDEJ publikacji (decyzja autora, 2.11.2026).
-- `gra/`: pełny snapshot opublikowanej wersji (to samo, co y33bau/nightbrand, main).
-- `narzedzia/`: sprawdz.py, wydaj.py, dymny.js (opis w projekcie Claude: claude/PRZEKAZANIE_NOWY_CZAT.md) oraz indeks_assetow.py, przenies_assety.py, assety_wspolne.py (układ assets/).
-- `docs/`: ASSETY_UKLAD.md (podfoldery assets/ i jak z nich korzystać), INDEKS_ASSETOW.json (spis: plik, nazwa z kodu, kategoria).
-- Gałęzie `kopia/RRRR-MM-DD`: stan z danego dnia (znaczniki git nie przechodzą przez proxy sesji).
-- Źródło `demo-hd2d/zrodlo` jest nieaktualne od rundy 181; nie nadpisywać nim gry.
+Gra akcji dark fantasy na komputer (Windows). Repo robocze: źródła, narzędzia i zbudowana gra. Zasady dla agentów: `AGENTS.md`. Opis linii: `PC_I_KONSOLE.md`.
+
+- `gra/`: zbudowana gra (limit 500 MB), zip dla itch.io robi `python3 narzedzia/wydaj.py itch gra`.
+- `zrodlo/main/`: źródło (edytuj tylko je i `index.html`), build `narzedzia/zbuduj.py`.
+- `narzedzia/`: build, `wydaj.py`, `sprawdz.py`, testy. `docs/`: układ assetów.
+- Pliki `PC_MENU_*.md`, `PC_HUD_*.md`, `UI_*.md`: raporty dawnych rund (historia, nie reguły).
