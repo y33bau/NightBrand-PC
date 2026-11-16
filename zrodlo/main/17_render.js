@@ -15,7 +15,7 @@ function heroFrameV2(D){const MI=S&&S.mil&&D.mil?D.mil:null,fd=()=>Math.abs(pl.f
   if(K&&K.hook&&pl.atk&&pl.atk.kind==='hook'){const a=pl.atk,arr=K.hook[fd()];return ix(arr,a.stage==='wind'?(1-a.t/HOOK.wind)*1.99:a.stage==='fly'?2+Math.min(1.99,a.len/HOOK.dist*2):a.stage==='pull'?4+(1-a.t/HOOK.pull)*1.99:6+Math.min(1.99,(1-a.t/HOOK.rec)*2))}
   if(pl.atk){const a=pl.atk,P=a.kind==='h'?SL.heavy:SL.light,d=pl.swingDir===2?'side':pl.swingDir===0?'down':'up',zh=Z&&Z.hit&&a.kind!=='h'&&!a.visualRiposte&&a.combo>=3?Z.hit[Math.min(1,a.combo-3)][d]:null,asH=!zh&&(a.kind==='h'||(Z&&a.combo===4&&!a.visualRiposte)),arr=zh||(asH?(a.emp&&DZ&&DZ.emp?DZ.emp[d]:D.heavy[d]):D.light[d][a.visualRiposte?2:(Z?[0,1,2,1,0][a.combo]:a.combo)||0]);
     if(a.stage==='wind')return ix(arr,asH?(a.t>(a.visualWind||P.wind)*(Z&&a.kind==='h'?.55:.75)?0:1):0);if(a.stage==='act')return ix(arr,asH?2:1);
-    if(asH)return ix(arr,a.t>P.rec*.72?2:3);return ix(arr,a.t>P.rec*.5?2:3)}
+    if(asH)return ix(arr,a.t>P.rec*.58?2:3);return ix(arr,a.t>P.rec*.36?2:3)}
   if(pl.swingT>0&&!pl.block&&!(pl.parryT>0)&&!(pl.broken>0)&&!(pl.hurtT>0)&&!pl.charging){const d=pl.swingDir===2?'side':pl.swingDir===0?'down':'up',dur=pl.swingDur||.25;return ix(D.light[d][0],(dur-pl.swingT)/dur*4)}
   if(pl.broken>0)return ix(D.broken,(1-pl.broken/SL.guardBreak)*4);
   if(pl.parryT>0)return ix(D.parryDir?D.parryDir[fd()]:D.parry,(.45-pl.parryT)/.45*4);
@@ -39,6 +39,23 @@ function heroBladeMat(fr,k){const key='E'+k;if(fr[key]!==undefined)return fr[key
   const ec=canvas(w,h),eg=ec.getContext('2d');eg.drawImage(ei,0,0);const ed=eg.getImageData(0,0,w,h);for(const i of hit){ed.data[i]=T[0]*.6;ed.data[i+1]=T[1]*.6;ed.data[i+2]=T[2]*.6}eg.putImageData(ed,0,0);
   const m=n.clone(),t1=texFrom(cv),t2=texFrom(ec);for(const p of ['minFilter','magFilter','generateMipmaps'])if(n.map[p]!==undefined)t1[p]=n.map[p];for(const p of ['minFilter','magFilter','generateMipmaps'])if(n.emissiveMap[p]!==undefined)t2[p]=n.emissiveMap[p];
   m.map=t1;m.emissiveMap=t2;m.needsUpdate=true;fr[key]=m;return m}catch(e){return null}}
+// 16.11.2026 (pilot): ruch z kodu na sprite'cie bohatera: oddech, kolysanie kroku, pochylenie w strone ruchu i ciosu, dopchniecie w chwili uderzenia,
+// rozciagniecie przy zrywie, przysiad po skoku i uniku. TYLKO wyglad: nie zmienia pl.x/pl.y, zasiegow, czasow ani trafien. Wylacza je opcja wstrzasow (SETT.shake); do porownania u autora ?ruch=0 (tylko lokalnie: ten sam warunek co LOKALNIE w czesci 27, tam jest w domknieciu).
+const HERO_MOTION_OFF=(location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname))&&new URLSearchParams(location.search).get('ruch')==='0',HERO_MOTION=new WeakMap();
+function heroMotion(p,mesh,hs,dt,rz0){let j=HERO_MOTION.get(p);if(!j){j={x:p.x,y:p.y,vx:0,vy:0,lean:0,px:0,py:0,sx:1,sy:1,lift:0,sq:0,st:''};HERO_MOTION.set(p,j)}
+  if(HERO_MOTION_OFF||!SETT.shake||p.dead){j.x=p.x;j.y=p.y;j.vx=j.vy=j.lean=j.px=j.py=j.lift=j.sq=0;j.sx=j.sy=1;j.st='';mesh.rotation.z=rz0;return}
+  if(dt>0){const dx=p.x-j.x,dy=p.y-j.y;j.x=p.x;j.y=p.y;if(Math.abs(dx)+Math.abs(dy)>48){j.vx=j.vy=0}else{const k=Math.min(1,dt*14);j.vx+=(dx/dt-j.vx)*k;j.vy+=(dy/dt-j.vy)*k}
+    const a=p.atk,roll=p.roll>0,st=a?a.kind+':'+a.stage:roll?'roll':'';if(st!==j.st){if(j.st==='leap:air')j.sq=1;else if(j.st==='roll')j.sq=.55;j.st=st}j.sq=Math.max(0,j.sq-dt*5.5);
+    const sp=Math.hypot(j.vx,j.vy),nx=sp>1?Math.abs(j.vx)/sp:0,ny=sp>1?Math.abs(j.vy)/sp:0,e=Math.max(0,Math.min(1,(sp-110)/480));
+    let lean=-Math.max(-1,Math.min(1,j.vx/70))*.034*(1+e*1.3),push=0,tx=1+e*(.10*nx-.04*ny),ty=1+e*(.07*ny-.06*nx),lift=0,fast=12;
+    if(a&&a.kind!=='whirl'){const g=a.stage;if(g==='wind'||g==='hold'){lean+=p.fx*.04;push=-.035;ty*=.975;tx*=1.015}else if(g==='act'||g==='cut'||g==='dash'){lean-=p.fx*.06;push=.11;tx*=1.03;ty*=.99;fast=34}else if(g==='rec'){lean-=p.fx*.02;push=.035}}
+    else if(!a&&!roll){if(p.moving)lift=.028*(.5-.5*Math.cos(Math.PI*(p.walk*6.7-.5)));else if(!(p.hurtT>0)&&!(p.broken>0)){const b=Math.sin(clock*2.1+(p===pl2?1.3:0));ty*=1+.011*b;tx*=1-.005*b}}
+    if(p.hurtT>0&&!a){const h=Math.min(1,p.hurtT/.22);ty*=1-.06*h;tx*=1+.04*h;lean+=p.fx*.05*h}
+    ty*=1-.10*j.sq;tx*=1+.07*j.sq;
+    const k1=Math.min(1,dt*18),k2=Math.min(1,dt*fast);j.lean+=(lean-j.lean)*k1;j.sx+=(tx-j.sx)*k1;j.sy+=(ty-j.sy)*k1;j.lift+=(lift-j.lift)*k1;j.px+=(p.fx*push-j.px)*k2;j.py+=(p.fy*push-j.py)*k2}
+  mesh.scale.set(hs*j.sx,SQ*j.sy,1);mesh.rotation.z=rz0+j.lean;mesh.position.x+=j.px;mesh.position.z+=j.py;mesh.position.y+=j.lift}
+// spoczynek odtwarzany tam i z powrotem (0,1,2,3,2,1): bez przeskoku z ostatniej klatki na pierwsza
+const pong=(anim,t,fps)=>{const n=anim.length;if(n<3)return at(anim,t,fps);const i=Math.floor(t*fps)%(2*n-2);return anim[i<n?i:2*n-2-i]};
 function heroFrame(){
   const V2=A.heroD&&A.heroD.v2?A.heroD:null;
   if(V2&&!pl.dead){const r=heroFrameV2(V2);if(r)return r}
@@ -49,7 +66,7 @@ function heroFrame(){
   if(D&&pl.block){const side=Math.abs(pl.fx)>Math.abs(pl.fy);return (side?D.idle_side:pl.fy>0?D.idle_down:D.idle_up)[0]}
   if((pl.charging||pl.block||pl.broken>0)){const side=Math.abs(pl.fx)>Math.abs(pl.fy);return (side?A.hero.swing_side:pl.fy>0?A.hero.swing_down:A.hero.swing_up)[pl.broken>0?3:0]}
   if(pl.hurtT>0)return at(A.hero.hurt,.22-pl.hurtT,9,false);
-  if(D){if(pl.moving)return at(pl.dir===2?D.walk_side:pl.dir===0?D.walk_down:D.walk_up,pl.walk,6.7);return at(pl.dir===2?D.idle_side:pl.dir===0?D.idle_down:D.idle_up,clock,2.9)}
+  if(D){if(pl.moving)return at(pl.dir===2?D.walk_side:pl.dir===0?D.walk_down:D.walk_up,pl.walk,6.7);return pong(pl.dir===2?D.idle_side:pl.dir===0?D.idle_down:D.idle_up,clock,3.6)}
   if(pl.moving)return at(pl.dir===2?A.hero.walk_side:pl.dir===0?A.hero.walk_down:A.hero.walk_up,pl.walk,8);
   return at(pl.dir===2?A.hero.idle_side:pl.dir===0?A.hero.idle_down:A.hero.idle_up,clock,pl.dir===0?4:2.5);
 }
@@ -141,7 +158,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
     heroMesh.visible=!(SETT.flash&&clock<(pl.blinkUntil||0)&&pl.roll<=0&&!pl.dead&&Math.floor(clock*24)%2);
     {const hf=heroFrame();S.heroHF=hf;setFrame(heroMesh,hf)}// 14.11.2026 (decyzja autora): zaklęcie ostrza nie barwi już sprite'a bohatera (heroBladeMat); żywioł widać na cięciach, iskrach i statusach
     const hs=pl.atk&&FACEK.includes(pl.atk.kind)?(pl.fx>=0?1:-1):pl.roll>0||pl.dead?pl.s:A.heroD&&A.heroD.v2&&!pl.atk&&(pl.parryT>0||pl.broken>0||(pl.hurtT>0&&!pl.block))?(pl.fx>=0?1:-1):pl.swingT>0?(pl.swingDir===2?pl.swingS:1):(pl.charging||pl.block)&&Math.abs(pl.fx)>Math.abs(pl.fy)?(pl.fx>0?1:-1):(pl.dir===2?pl.s:1);
-    const guardRecoil=!pl.dead?recoilAmount(pl.visualGuard):0;heroMesh.position.set((pl.x+(pl.visualGuard?pl.visualGuard.dx:0)*guardRecoil*.7)/16,S.zab?.1:0,(pl.y+(pl.visualGuard?pl.visualGuard.dy:0)*guardRecoil*.7)/16);heroMesh.rotation.z=-(pl.visualGuard?pl.visualGuard.dx:0)*guardRecoil*.018;heroMesh.scale.set(hs,SQ,1);dzwDraw(hs);drawP2(dt);mpHudTick();
+    const guardRecoil=!pl.dead?recoilAmount(pl.visualGuard):0;heroMesh.position.set((pl.x+(pl.visualGuard?pl.visualGuard.dx:0)*guardRecoil*.7)/16,S.zab?.1:0,(pl.y+(pl.visualGuard?pl.visualGuard.dy:0)*guardRecoil*.7)/16);heroMesh.rotation.z=-(pl.visualGuard?pl.visualGuard.dx:0)*guardRecoil*.018;heroMesh.scale.set(hs,SQ,1);heroMotion(pl,heroMesh,hs,dt,heroMesh.rotation.z);dzwDraw(hs);drawP2(dt);mpHudTick();
     S.qBreak=Math.max(0,(S.qBreak||0)-dt);S.qPop=Math.max(0,(S.qPop||0)-dt);
     // charges orbit the hero as sparks; runes of time and reach leave their own orbiting motes
     const orbit=(n,r,sp,col,z)=>{if(dt<=0)return;for(let i=0;i<n;i++){const a=clock*sp+i*Math.PI*2/n;S.parts.push({k:'e',x:pl.x+Math.cos(a)*r,y:pl.y+Math.sin(a)*r*.6,z,vx:0,vy:0,vz:0,c:col,life:.05})}};

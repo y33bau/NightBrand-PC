@@ -859,3 +859,4 @@ cache783 · Publikacja: usuniete sterowanie dotykowe (782) + naglowek Mapa podro
 cache784 · Nowa muzyka: 7 utworow (c1-c6 rozdzialy, intro); NIE sprawdzono: sluchania w grze, petli, sciezki bossa (crypt bez zmian)
 cache785 · Baner Tej nocy ciasniejszy (miesci sie w ramce), przycisk Gotowy -> Wyrusz w noc; NIE sprawdzono: pad, EN, inne rozdzielczosci niz 1920x1080
 cache786 · Ekran porazki: linia Ostatnie ciosy (3 ostatnie ciosy: kto i ile); NIE sprawdzono: pad, EN, wspolna gra 2 graczy, nazwy konkretnych atakow
+cache787 · Pilot animacji bohatera (ruch z kodu: oddech, krok, pochylenie, dopchniecie ciosu, rozciagniecie, przysiad; spoczynek tam i z powrotem; dluzsza poza uderzenia) + miekka ciepla plama zamiast pierscienia pod bohaterem; ?ruch=0 tylko lokalnie. Bez zmian balansu. Nie sprawdzono: wyglad w ruchu, pad, kooperacja, FPS u autora, itch.io
