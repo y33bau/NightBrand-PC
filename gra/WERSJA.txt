@@ -879,3 +879,4 @@ cache803 · Ekran powitalny po wyborze jezyka
 cache804 · Podpis y33bau na ekranie powitalnym
 cache805 · Sterowanie w Pauzie i Opcjach w nowym ukladzie, naglowek pauzy
 cache806 · Ognisko i Mapa: klik tylko zaznacza, LB/RB zmienia bohatera
+cache807 · Nowy tekst ekranu powitalnego (5 punktow, podpis y33bau)
