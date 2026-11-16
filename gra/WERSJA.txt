@@ -875,3 +875,4 @@ cache799 · Nowe intro muzyczne od autora (stare usuniete)
 cache800 · Opcje wg makiety GPT: lista z podgladem, zakladki LB/RB, stopka
 cache801 · Pauza, Instrukcja, Kronika, Kaplica wg makiet (prezentacja)
 cache802 · Instrukcja aktualna (nowa zakladka Postac i przygotowanie, klawisze z ustawien), Pauza: Audio/Grafika/Dziennik/Mapa w nowym stylu, Kronika: bestiariusz i osiagniecia
+cache803 · Ekran powitalny po wyborze jezyka

@@ -11725,6 +11725,75 @@ ${O} #pause .nbq-m ul.nbp-leg li::before,${O} #pause .nbq-m ul.nbp-leg li i{tran
  new MutationObserver(()=>setTimeout(sync,0)).observe(pause,{attributes:true,subtree:true,attributeFilter:['hidden','class','aria-selected','aria-pressed']});
  pause.addEventListener('change',e=>{if(!box.contains(e.target))setTimeout(upd,30)},true);
 }catch(e){quietErr('pauzaZakladki',e)}})();
+// 16.11.2026: ekran powitalny po wyborze jezyka, przed menu (decyzja autora): podziekowanie, wskazowki (grafika, jasnosc, pelny ekran, sterowanie),
+// przyciski Dalej i Ustawienia grafiki, „Nie pokazuj ponownie” (pn_powitanie=0). Raz na uruchomienie; nie zmienia ustawien ani zapisu gry.
+(()=>{try{
+ const title=$('title'),lang=$('lang');if(!title)return;
+ const T=(p,e)=>EN?e:p,O='#orient'.repeat(400),U='assets/ui/';
+ let off=false,ss=false;try{off=localStorage.getItem('pn_powitanie')==='0';ss=sessionStorage.getItem('nbPow')==='1'}catch(e){}
+ if(off||ss)return;
+ const st=document.createElement('style');st.id='nb-powitanie';st.textContent=`
+${O} #title.nbpow-on>:not(#nbPow){visibility:hidden!important}
+${O} #nbPow{position:fixed!important;inset:0!important;z-index:70!important;background:#050406!important;color:#e6d6b8!important;font-family:Georgia,'Times New Roman',serif!important;overflow:hidden!important;visibility:visible!important}
+${O} #nbPow[hidden]{display:none!important}
+${O} #nbPow .nst{position:absolute!important;left:50%!important;top:50%!important;width:min(100vw,177.78vh)!important;height:min(100vh,56.25vw)!important;transform:translate(-50%,-50%)!important;--u:calc(min(100vw,177.78vh)/1920)!important}
+${O} #nbPow .bg{position:absolute!important;inset:-2%!important;background:url('${U}c36d0b47cc7bd406ab997737de97057d8ea274fd95f49b90117995447fd04c18.webp') center 62%/cover no-repeat!important;filter:brightness(.62)!important}
+${O} #nbPow .vg{position:absolute!important;inset:0!important;background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(5,4,6,.25),rgba(5,4,6,.88)),linear-gradient(0deg,rgba(5,4,6,.8),rgba(5,4,6,0) 30%)!important}
+${O} #nbPow .zar{position:absolute!important;left:25%!important;right:25%!important;bottom:-10%!important;height:35%!important;background:radial-gradient(ellipse at 50% 100%,rgba(255,110,36,.28),rgba(255,90,30,0) 70%)!important}
+${O} #nbPow .pan{position:absolute!important;left:50%!important;top:47%!important;translate:-50% -50%!important;width:calc(1080*var(--u))!important;box-sizing:border-box!important;padding:calc(40*var(--u)) calc(70*var(--u)) calc(34*var(--u))!important;border:calc(22*var(--u)) solid transparent!important;border-image:url('${U}39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp') 48 stretch!important;background:linear-gradient(180deg,rgba(14,11,11,.93),rgba(8,6,7,.96)) padding-box!important;text-align:center!important}
+${O} #nbPow .k{display:block!important;font:600 calc(17*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.32em!important;color:#c08a5a!important}
+${O} #nbPow h1{margin:calc(14*var(--u)) 0 0!important;padding:0!important;font:600 calc(58*var(--u))/1.05 Cinzel,Georgia,serif!important;letter-spacing:.12em!important;color:#ecd8b0!important;text-shadow:0 0 calc(24*var(--u)) rgba(255,120,40,.3),0 2px 6px #000!important;background:none!important;border:0!important}
+${O} #nbPow .sep{display:block!important;width:calc(620*var(--u))!important;height:calc(34*var(--u))!important;margin:calc(12*var(--u)) auto calc(6*var(--u))!important;background:url('${U}e87781cfaa14780d76e1373114c875c6decbcc7790153c52696e97dd6354f281.webp') center/auto 100% no-repeat,url('${U}6912c5b070f1130d9bcc48c7936b6fd3effa4128a0d462ce9145f932770cdce7.webp') left center/calc(50% - 9px) 100% no-repeat,url('${U}789a7c5e5aeb6b48e8a1ff01e6e8a985a2fa162fca2d479e8075b1cd2c5fc64f.webp') right center/calc(50% - 9px) 100% no-repeat!important;filter:brightness(1.15)!important}
+${O} #nbPow .lead{font:italic calc(27*var(--u))/1.45 Georgia,serif!important;color:#f0dfbf!important;margin:calc(10*var(--u)) auto 0!important;max-width:calc(860*var(--u))!important}
+${O} #nbPow .h2{margin:calc(30*var(--u)) 0 calc(12*var(--u))!important;padding:calc(10*var(--u)) calc(18*var(--u))!important;text-align:left!important;font:700 calc(25*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.06em!important;color:#f0dcb6!important;background:linear-gradient(180deg,rgba(60,40,30,.55),rgba(26,18,14,.85))!important;border:1px solid rgba(160,120,70,.35)!important}
+${O} #nbPow ul{list-style:none!important;margin:0!important;padding:0!important;text-align:left!important}
+${O} #nbPow li{display:grid!important;grid-template-columns:calc(46*var(--u)) 1fr!important;gap:calc(16*var(--u))!important;align-items:start!important;padding:calc(11*var(--u)) calc(8*var(--u))!important;border-bottom:1px solid rgba(255,230,190,.07)!important;font:400 calc(22*var(--u))/1.42 Georgia,serif!important;color:#e6d6b8!important}
+${O} #nbPow li>i{font-style:normal!important;display:grid!important;place-items:center!important;width:calc(34*var(--u))!important;height:calc(34*var(--u))!important;rotate:45deg!important;border:1px solid rgba(201,160,100,.6)!important;font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;color:#e8c690!important}
+${O} #nbPow li>i>span{rotate:-45deg!important}
+${O} #nbPow li>div,${O} #nbPow li>div *{font-family:Georgia,'Times New Roman',serif!important;font-size:calc(22*var(--u))!important;line-height:1.42!important}
+${O} #nbPow li b{color:#f6e2b8!important;font-weight:700!important}
+${O} #nbPow .end{margin:calc(22*var(--u)) 0 0!important;font:italic calc(22*var(--u))/1.4 Georgia,serif!important;color:#cdb48c!important}
+${O} #nbPow .sig{display:block!important;margin-top:calc(8*var(--u))!important;font:600 calc(20*var(--u))/1.2 Cinzel,Georgia,serif!important;letter-spacing:.12em!important;color:#e0b878!important}
+${O} #nbPow .btns{display:flex!important;justify-content:center!important;align-items:center!important;gap:calc(26*var(--u))!important;margin-top:calc(24*var(--u))!important}
+${O} #nbPow .btns button{display:grid!important;place-items:center!important;height:calc(70*var(--u))!important;min-width:0!important;padding:0 calc(44*var(--u))!important;margin:0!important;border:0!important;border-image:none!important;box-shadow:none!important;background:url('${U}1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp') center/100% 100% no-repeat!important;font:700 calc(21*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.1em!important;color:#e6d6b8!important;text-shadow:0 2px 3px #000!important;filter:brightness(.88)!important;cursor:pointer!important}
+${O} #nbPow .btns button.go2{height:calc(84*var(--u))!important;padding:0 calc(70*var(--u))!important;font-size:calc(28*var(--u))!important;color:#ffe2b8!important;filter:brightness(1.12) drop-shadow(0 0 calc(10*var(--u)) rgba(255,120,40,.5))!important;text-shadow:0 0 calc(12*var(--u)) rgba(255,140,60,.8)!important;background:radial-gradient(ellipse 46% 42% at 50% 58%,rgba(255,118,36,.5),rgba(255,90,30,0) 100%) center/86% 74% no-repeat,url('${U}1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp') center/100% 100% no-repeat!important}
+${O} #nbPow .btns button:is(:hover,:focus-visible,.pf){filter:brightness(1.18) drop-shadow(0 0 calc(10*var(--u)) rgba(255,120,40,.55))!important;outline:none!important}
+${O} #nbPow .cb{display:inline-flex!important;align-items:center!important;gap:calc(10*var(--u))!important;margin:calc(14*var(--u)) auto 0!important;padding:calc(6*var(--u)) calc(10*var(--u))!important;background:none!important;border:0!important;box-shadow:none!important;font:400 calc(18*var(--u))/1 Georgia,serif!important;color:#a99a80!important;cursor:pointer!important;min-height:0!important}
+${O} #nbPow .cb>i{display:inline-block!important;width:calc(16*var(--u))!important;height:calc(16*var(--u))!important;border:1px solid #a99a80!important;position:relative!important}
+${O} #nbPow .cb[aria-checked=true]>i::after{content:'✓'!important;position:absolute!important;left:calc(1*var(--u))!important;top:calc(-6*var(--u))!important;font:700 calc(19*var(--u))/1 Georgia,serif!important;color:#f0dcb6!important}
+${O} #nbPow .cb:is(:hover,:focus-visible,.pf){color:#f0dcb6!important;outline:none!important}
+${O} #nbPow .foot{position:absolute!important;left:0!important;right:0!important;bottom:calc(28*var(--u))!important;display:flex!important;justify-content:center!important;gap:calc(46*var(--u))!important;font:400 calc(20*var(--u))/1 Georgia,serif!important;color:#cdbf9f!important}
+${O} #nbPow .foot span{display:flex!important;align-items:center!important;gap:calc(12*var(--u))!important}
+${O} #nbPow kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-radius:calc(4*var(--u))!important;padding:calc(6*var(--u)) calc(9*var(--u))!important;background:rgba(0,0,0,.5)!important}
+`;document.head.append(st);
+ const P=document.createElement('div');P.id='nbPow';P.hidden=true;P.setAttribute('role','dialog');P.setAttribute('aria-modal','true');
+ P.innerHTML=`<div class="nst"><i class="bg"></i><i class="vg"></i><i class="zar"></i><div class="pan">
+  <span class="k">NIGHTBRAND</span><h1>${T('Witaj, wędrowcze','Welcome, wanderer')}</h1><i class="sep"></i>
+  <p class="lead">${T('Dziękujemy, że chcesz zmierzyć się z Nocą. Każda noc to próba sił, a każda porażka czegoś uczy. Cieszymy się, że tu jesteś.','Thank you for choosing to face the Night. Every night is a trial of strength, and every defeat teaches you something. We are glad you are here.')}</p>
+  <div class="h2">${T('Zanim wyruszysz','Before you set out')}</div><ul>
+  <li><i><span>I</span></i><div>${T('<b>Grafika.</b> W <b>Opcje → Grafika</b> dobierz jakość do swojego komputera. Jeśli gra klatkuje, wybierz niższy poziom.','<b>Graphics.</b> In <b>Options → Graphics</b> match the quality to your computer. If the game stutters, pick a lower level.')}</div></li>
+  <li><i><span>II</span></i><div>${T('<b>Jasność.</b> Ustaw ją tak, by w cieniach dało się dostrzec wrogów. Noc bywa bardzo ciemna.','<b>Brightness.</b> Set it so you can make out enemies in the shadows. The night can be very dark.')}</div></li>
+  <li><i><span>III</span></i><div>${T('<b>Pełny ekran i słuchawki.</b> Noc wygląda i brzmi najlepiej bez rozpraszaczy.','<b>Full screen and headphones.</b> The night looks and sounds best without distractions.')}</div></li>
+  <li><i><span>IV</span></i><div>${T('<b>Sterowanie.</b> Klawiatura z myszą albo pad Xbox. Klawisze zmienisz w Opcjach, a podstawy znajdziesz w Instrukcji.','<b>Controls.</b> Keyboard and mouse or an Xbox controller. Change keys in Options; the basics are in the Guide.')}</div></li></ul>
+  <p class="end">${T('Powodzenia. Niech Piętno prowadzi Twój miecz.','Good luck. May the Brand guide your blade.')}<span class="sig">${T('Dziękuję, Y3ebau','Thank you, Y3ebau')}</span></p>
+  <div class="btns"><button type="button" class="gfx">${T('Ustawienia grafiki','Graphics settings')}</button><button type="button" class="go2">${T('Dalej','Continue')}</button></div>
+  <button type="button" class="cb" role="checkbox" aria-checked="false"><i></i>${T('Nie pokazuj ponownie','Don\'t show again')}</button>
+ </div><div class="foot"></div></div>`;
+ title.append(P);
+ const foot=P.querySelector('.foot'),stopka=()=>{const pad=document.body.classList.contains('padnav');foot.innerHTML=pad?`<span><kbd>A</kbd>${T('Wybierz','Select')}</span><span><kbd>B</kbd>${T('Dalej','Continue')}</span>`:`<span><kbd>Enter</kbd>${T('Wybierz','Select')}</span><span><kbd>Esc</kbd>${T('Dalej','Continue')}</span>`};
+ const cb=P.querySelector('.cb');cb.addEventListener('click',()=>cb.setAttribute('aria-checked',String(cb.getAttribute('aria-checked')!=='true')));
+ let pokazany=false;
+ function zamknij(){if(P.hidden)return;P.hidden=true;title.classList.remove('nbpow-on');try{sessionStorage.setItem('nbPow','1');if(cb.getAttribute('aria-checked')==='true')localStorage.setItem('pn_powitanie','0')}catch(e){}try{uiSnd('back')}catch(e){}}
+ P.querySelector('.go2').addEventListener('click',()=>{zamknij();setTimeout(()=>{const t=title.querySelector('button:not([disabled]):not(#nbPow button)');t&&t.focus({preventScroll:true})},40)});
+ P.querySelector('.gfx').addEventListener('click',()=>{zamknij();const o=$('optsBtn');if(o){o.click();setTimeout(()=>{const g=document.querySelector('#opts .tabs>.tab[data-tab="gfx"]');g&&g.click()},60)}});
+ addEventListener('keydown',e=>{if(P.hidden)return;if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();zamknij()}},true);
+ if(typeof pcMenuBack!=='undefined'){const prev=pcMenuBack;pcMenuBack=()=>{if(!P.hidden){zamknij();return true}return prev?prev():false}}
+ function sprobuj(){if(pokazany)return;if(lang&&!lang.hidden)return;if(title.hidden)return;pokazany=true;P.hidden=false;title.classList.add('nbpow-on');stopka();for(const t of [60,400,1200])setTimeout(()=>{if(!P.hidden&&!P.contains(document.activeElement))P.querySelector('.go2').focus({preventScroll:true})},t)}
+ if(lang)new MutationObserver(sprobuj).observe(lang,{attributes:true,attributeFilter:['hidden']});
+ new MutationObserver(sprobuj).observe(title,{attributes:true,attributeFilter:['hidden']});
+ new MutationObserver(stopka).observe(document.body,{attributes:true,attributeFilter:['class']});
+ setTimeout(sprobuj,50);
+}catch(e){quietErr('powitanie',e)}})();
 requestAnimationFrame(frame);
 })();
 
