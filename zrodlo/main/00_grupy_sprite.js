@@ -706,7 +706,7 @@ const SPRITE_GROUPS={
 }
 
 // Rycerz, nowy styl (15.11.2026): arkusz Wypadu (4 klatki: bok, dol, gora; rzad 4 = powrot: bok, dol, gora)
-SPRITE_DATA.knight_lunge='assets/bohaterowie/9aa3ddbd56d5fd9161b2345f6feabdbcd9920dceaa84824871ce908d4a5466ad.webp';SPRITE_RES.knight_lunge=4;SPRITE_GROUPS.knight_lunge=['core'];
+SPRITE_DATA.knight_lunge='assets/bohaterowie/b92943c0fd165f2ebb7e3d87531f97cd0457a25387178e05a56c5d13919e4d59.webp';SPRITE_RES.knight_lunge=4;SPRITE_GROUPS.knight_lunge=['core'];
 
 // Efekty ataków HD (15.11.2026): 3 atlasy, komórki 320 px, 8 kolumn; spis klatek w SKM_HD (11_dwoch_graczy_gracz.js)
 SPRITE_DATA.fxhd_0='assets/efekty/f86141e6be400f946b0ac1228df014b642838f615a1553b7b82bce44520078ba.webp';SPRITE_GROUPS.fxhd_0=['core'];SPRITE_DATA.fxhd_1='assets/efekty/b3ff692e2e82fbcef6a4532e54adea9eda780565db1a2ae91590ab212a55a0cc.webp';SPRITE_GROUPS.fxhd_1=['core'];SPRITE_DATA.fxhd_2='assets/efekty/48da6a443c84a91ce4ce4bc62216de2e31b42478eefa64d7230c47379b6b7819.webp';SPRITE_GROUPS.fxhd_2=['core'];

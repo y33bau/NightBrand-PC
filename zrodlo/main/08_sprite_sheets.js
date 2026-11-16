@@ -15,7 +15,7 @@ const SELF_LIT=.16;
 // outline softening: share of neighbour colour (darkened) mixed into the edge, edge glow, edge width of 64 px frames (was 2)
 const OUTLINE_MIX=.7,OUTLINE_DARK=.42,OUTLINE_EM=.5,OUTLINE_W64=1.5,OUTLINE_OUTER=.5;
 // 15.11.2026: poswiata obwodki NPC -20% (bylo 50,39,30)
-const OUTLINE={char:[44,38,48,62,54,70],npc:[65,51,40,40,31,24],kat:[16,11,11,30,20,18]};
+const OUTLINE={char:[44,38,48,62,54,70],npc:[65,51,40,40,31,24],kat:[30,23,25,46,37,42]}; /* 16.11.2026: kontur bohaterow jasniejszy i lekko swiecacy (bylo 16,11,11,30,20,18) */
 // lift: move the picture up by n pixels (64 px sheets have their feet 2 px lower than the 32 px ones)
 // lagodna normalizacja jasnosci i nasycenia calego arkusza (liczona raz z miniatury), zeby modele z roznych zrodel stały obok siebie spojnie
 function sheetNorm(img){if(img.nbNorm)return img.nbNorm;let r={gl:1,gs:1};try{const cw=96,ch=Math.max(8,Math.round(96*img.height/img.width)),c=canvas(cw,ch),g=c.getContext('2d');g.drawImage(img,0,0,cw,ch);const d=g.getImageData(0,0,cw,ch).data;let n=0,L=0,S=0;for(let i=0;i<d.length;i+=4){if(d[i+3]<200)continue;const R=d[i],G=d[i+1],B=d[i+2],mx=Math.max(R,G,B),mn=Math.min(R,G,B);n++;L+=.299*R+.587*G+.114*B;S+=mx?(mx-mn)/mx:0}
@@ -38,9 +38,9 @@ function procFrame(img,x,y,size,h,kind,lift=0){
     g.putImageData(idc,0,0)}
   // nowy styl bohaterow (malowane HD, 15.11.2026): bez rozjasnianej krawedzi w teksturze i z cienszym konturem
   const hdHero=/^(knight_|zab_|kat_|dzw_|mil_)/.test(key||''); /* 15.11.2026: + Dzwonnik i Woskownica w nowym stylu */
-  if(density>=2&&(kind===undefined||kind==='boss'||kind==='npc')&&!hdHero){const id0=g.getImageData(0,0,w,h),p=id0.data,w0=density,w1=Math.round(density*2.5),A=new Uint8Array(w*h);
+  if(density>=2&&(kind===undefined||kind==='boss'||kind==='npc')){const id0=g.getImageData(0,0,w,h),p=id0.data,w0=hdHero?Math.round(density*.75):density,w1=hdHero?Math.round(density*2):Math.round(density*2.5),A=new Uint8Array(w*h),eg1=hdHero?1.2:1.3,ea=hdHero?.6:1; /* 16.11.2026: krawedz od swiatla takze u bohaterow nowego stylu, lagodniejsza */
     if(!/^(hero_|kat_|zab_|knight_|dzw_|mil_)/.test(img.nbKey||'')){const nm=sheetNorm(img);if(Math.abs(nm.gl-1)>.01||Math.abs(nm.gs-1)>.01)for(let i=0;i<p.length;i+=4){if(!p[i+3])continue;const l=.299*p[i]+.587*p[i+1]+.114*p[i+2];p[i]=Math.max(0,Math.min(255,(l+(p[i]-l)*nm.gs)*nm.gl));p[i+1]=Math.max(0,Math.min(255,(l+(p[i+1]-l)*nm.gs)*nm.gl));p[i+2]=Math.max(0,Math.min(255,(l+(p[i+2]-l)*nm.gs)*nm.gl))}}for(let i=0;i<w*h;i++)A[i]=p[i*4+3]>127?1:0;
-    for(let yy=w1;yy<h;yy++)for(let xx=w1;xx<w;xx++){const i=yy*w+xx;if(!A[i]||!A[i-w0*w-w0]||A[i-w1*w-w1])continue;const j=i*4;p[j]=Math.min(255,p[j]*1.3+19);p[j+1]=Math.min(255,p[j+1]*1.3+24);p[j+2]=Math.min(255,p[j+2]*1.3+38)}
+    for(let yy=w1;yy<h;yy++)for(let xx=w1;xx<w;xx++){const i=yy*w+xx;if(!A[i]||!A[i-w0*w-w0]||A[i-w1*w-w1])continue;const j=i*4;p[j]=Math.min(255,p[j]*eg1+19*ea);p[j+1]=Math.min(255,p[j+1]*eg1+24*ea);p[j+2]=Math.min(255,p[j+2]*eg1+38*ea)}
     g.putImageData(id0,0,0)}
   const tex=texFrom(c);
   if(density>1)tex.minFilter=THREE.LinearFilter;
@@ -70,6 +70,7 @@ function procFrame(img,x,y,size,h,kind,lift=0){
     g.putImageData(id,0,0)}
   eg.putImageData(ed,0,0);
   const em=texFrom(ec);
+  if(hdHero&&kind!=='fx'&&typeof renderer!=='undefined'&&renderer&&(renderer.capabilities.isWebGL2||((w&(w-1))===0&&(h&(h-1))===0))){for(const map of [tex,em]){map.minFilter=THREE.LinearMipmapLinearFilter;map.generateMipmaps=true}} /* 16.11.2026: plynne pomniejszanie malowanych bohaterow (bez migotania detali) */
   if(kind==='portCrew'){
     // The painted cutouts already contain a fine edge. Filter each isolated cell at camera distance.
     for(const map of [tex,em]){
@@ -81,7 +82,7 @@ function procFrame(img,x,y,size,h,kind,lift=0){
   if(kind==='ghost')return{n:new THREE.MeshBasicMaterial({map:tex,alphaTest:.5,side:THREE.DoubleSide,transparent:true,opacity:.85,fog:false})};
   let padB=0,vis=1;if(kind==='prop'){let r=h-1;for(;r>=0;r--){let o=false;for(let q=0;q<w;q++)if(d[(r*w+q)*4+3]>=128){o=true;break}if(o)break}padB=Math.min(.15,Math.max(0,(h-1-r)/h));if(padB<.01)padB=0;let u=0;for(;u<=r;u++){let o=false;for(let q=0;q<w;q++)if(d[(u*w+q)*4+3]>=128){o=true;break}if(o)break}vis=(r-u+1)/h}
   return{padB,vis,
-    n:(m=>{if(ol)moonRim(m,density/w);return m})(phong({map:tex,emissiveMap:em,emissive:0xffffff,alphaTest:.5,side:THREE.DoubleSide,color:/^(hero_|kat_|zab_|knight_|dzw_|mil_)/.test(key||'')?0xb4b4b4:0xffffff})),
+    n:(m=>{if(ol)moonRim(m,density/w);return m})(phong({map:tex,emissiveMap:em,emissive:0xffffff,alphaTest:.5,side:THREE.DoubleSide,color:hdHero?0xdadada:/^hero_/.test(key||'')?0xb4b4b4:0xffffff})) /* 16.11.2026: nowi bohaterowie 85% zamiast 70% */,
     // rarely used variants are made on first use (setFrame reads fr[mode]); 5.11.2026
     get f(){return lazyMat(this,'f',()=>flashMat(tex))},
     get i(){return lazyMat(this,'i',()=>phong({map:tex,emissiveMap:em,emissive:0xffffff,color:0x8fd0ff,alphaTest:.5,side:THREE.DoubleSide}))},

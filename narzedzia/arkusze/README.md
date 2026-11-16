@@ -15,3 +15,8 @@ Podmiana w grze: `narzedzia/podmien_obrazy.py` (stare pliki → nowe, poprawia m
 W `procFrame` klucze `knight_`/`zab_` (nowy styl) nie dostają rozjaśnionej krawędzi w teksturze i mają cieńszy kontur (0,75 px logicznego).
 
 Od 15.11.2026: klatka szersza niż miejsce po stronie kotwicy (leżący, przewrót) przesuwa się do środka komórki zamiast obcinania.
+
+## Szlif gotowych atlasów (16.11.2026)
+`szlif.py KATALOG_GRY KATALOG_WYJŚCIA` poprawia gotowe atlasy pięciu klas bez nowych rysunków: kontrast detali, wyostrzenie, jasność dobrana gammą do celu klasy (`KLASY`), u Zabójczyni rozdzielenie czerwieni i stali. Wynik: pliki webp, `lista.json` dla `podmien_obrazy.py`, `kontrola_szlif.png`.
+Uruchamiać RAZ na świeżych atlasach z fabryki (drugi raz przeostrzy). `knight_lunge` jest wskazany w źródle (`00_grupy_sprite.js`), więc podmienia się go ręcznie: plik, manifest, sw.js i wpis w źródle.
+W `procFrame` (od 16.11.2026) nowi bohaterowie: kolor materiału 85% (było 70%), łagodna krawędź od światła, jaśniejszy kontur `OUTLINE.kat`, mipmapy.
