@@ -276,7 +276,7 @@ function genStolica(){
   prop('healing_shrine',41.5,28.92,[[41,28]],{shrine:0});prop('healing_shrine',13.5,45.92,[[13,45]],{shrine:1});
   // the city gate we came up through from the Lower City
   prop('gate',32,54.92,[[30,54],[31,54],[32,54],[33,54]],{sheet:'trans',still:'gate_open'});
-  return{map,under,PROPS,clearways,start:{x:32*TS,y:51*TS+8},shrines:[{x:41*TS+8,y:29*TS+12},{x:13*TS+8,y:46*TS+12}],
+  return{map,under,PROPS,clearways,gates:[[32*TS,24.5*TS],[32*TS,6.5*TS]],start:{x:32*TS,y:51*TS+8},shrines:[{x:41*TS+8,y:29*TS+12},{x:13*TS+8,y:46*TS+12}],
     region:(x,y)=>y>=35?'slums':x>=43&&y>=14&&y<=32?'monastery':'city',
     npcs:[{id:'izolda',art:'izolda',name:(EN?'Countess Isolda of Vermar':'Hrabina Izolda z Vermarów'),x:6.5*TS,y:18.4*TS,lines:IZOLDA_LINES},
           {id:'ottokar',art:'ottokar',name:(EN?'Count Ottokar, King\'s Treasurer':'Hrabia Ottokar, skarbnik korony'),x:50*TS,y:9.4*TS,lines:OTTOKAR_LINES},

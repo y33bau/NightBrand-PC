@@ -133,7 +133,10 @@ function pick(i){if(!S||!S.choosing)return;const k=S.choices[i];if(!k)return;con
 const npcTalk=n=>{const s=S.npc[n.id]?.state;return s==='alive'||s==='offered'||(n.id==='chojrak'&&s==='talked')};
 function nearNpc(){if(!S||pl.dead)return null;for(const n of W.npcs){if(n.lure||!npcTalk(n))continue;if(Math.hypot(pl.x-n.x,pl.y-n.y)<30)return n}return null}
 const chojPages=mode=>FTX((STORYMODE?'chojrak.story.act'+CH:'chojrak.arcade')+'.'+(mode==='repeat'?'repeat':'first'));
-const NL=n=>n.id==='chojrak'?chojPages(S.chojMode||'first'):n.id==='mila'&&S.npc.mila.retry?MILA_RETRY:n.id==='wolch'&&S.npc.wolch.state==='offered'?WOLCH_ACCEPT:n.lines;
+const WIT_ECHO={elder:{spared:(EN?'Is Wit still sitting there? Good. Let him sit.':'Wit jeszcze siedzi? To dobrze. Niech siedzi.'),dead:(EN?'I saw what came for him. Pages in the air. Do not look me in the eye.':'Widziałem, co po niego przyszło. Kartki w powietrzu. Nie patrz mi w oczy.')},
+  nawoj:{spared:(EN?'From the hill you can hear somebody counting. It matches my list.':'Z wzgórza słychać, jak ktoś liczy. Zgadza się z moją listą.'),dead:(EN?'They added one more name to the list. Not mine, not yours. Not yet.':'Dopisali jedno imię do listy. Nie moje, nie twoje. Jeszcze.')}};
+const npcLines=n=>{const e=WIT_ECHO[n.id]?.[S.npc.wit?.state];return e?[...n.lines.slice(0,-1),e,n.lines[n.lines.length-1]]:n.lines};
+const NL=n=>n.id==='chojrak'?chojPages(S.chojMode||'first'):n.id==='mila'&&S.npc.mila.retry?MILA_RETRY:n.id==='wolch'&&S.npc.wolch.state==='offered'?WOLCH_ACCEPT:npcLines(n);
 function openDialog(n){S.witChoice=false;$('witChoices').hidden=true;document.querySelector('#dialog .next').hidden=false;resetInput();
   // pion: rozmowa jako pasek (imię + pierwsza kwestia), gra się nie zatrzymuje, nagroda naliczana od razu; Wit i Żerca (wybór/układ) zostają w oknie
   if(isPort()&&n.id!=='wit'&&n.id!=='wolch'&&n.id!=='chojrak'){const L=NL(n),line=n.name.split(',')[0]+': '+L[0];S.dialog=n;S.dlg=L.length-1;if(n.id==='mila'){advanceDialog();say(line,'story')}else{say(line,'story');advanceDialog()}return}
@@ -145,30 +148,25 @@ function dlgChojUi(){const on=!!(S&&S.dialog&&S.dialog.id==='chojrak'),last=on&&
 function chojEnd(){if(!S||!S.dialog||S.dialog.id!=='chojrak')return;S.dlg=NL(S.dialog).length-1;advanceDialog()}
 function chojReplay(){if(!S||!S.dialog||S.dialog.id!=='chojrak')return;S.chojMode='first';S.dlg=0;$('dlgTxt').textContent=NL(S.dialog)[0];dlgChojUi()}
 function advanceDialog(){if(S.witChoice)return;const n=S.dialog;S.dlg++;if(S.dlg<NL(n).length){$('dlgTxt').textContent=NL(n)[S.dlg];dlgChojUi();return}
-  if(n.id==='wit'){offerWitChoice();return}
+  if(NPC_CHOICE[n.id]&&!S.choiceMade){offerChoice(n);return}
   if(n.story){$('dialog').hidden=true;S.dialog=null;return}
   $('dialog').hidden=true;$('dlgBtns').hidden=true;S.dialog=null;const st=S.npc[n.id];
   const motes=c=>{for(let i=0;i<30;i++)S.parts.push({k:'i',x:n.x+rnd(-6,6),y:n.y,z:rnd(0,20),vx:rnd(-10,10),vy:0,vz:rnd(10,26),c,life:rnd(1,2)})};
   if(n.id==='tharm'){st.state='fading';st.t=1.5;if(!S.glizT)S.glizT=S.t+3;pl.max+=25;pl.hp=pl.max;play('bless',0);say((EN?'The warmth of the forge fills your veins. +25 max health.':'Ciepło kuźni wypełnia ci żyły. +25 do maks. życia.'));motes('#7fd0ff')}
   else if(n.id==='elder'){st.state='dead';st.deadAt=S.t;pool(n.x,n.y,14,6);S.ev.add('el');say((EN?'The old man lets out his breath. He does not take another.':'Starzec wypuszcza powietrze. Następnego oddechu już nie bierze.'))}
   else if(n.id==='marga'){st.state='gone';motes('#3d4a3a');0}
-  else if(n.id==='wit'){return}
-  else if(n.id==='izolda'){st.state='talked';pl.max+=15;pl.hp=pl.max;play('heal',0);say((EN?'The flask smells of roses and vinegar. Your wounds close. +15 max health.':'Flakon pachnie różami i octem. Rany się zamykają. +15 do maks. życia.'));motes('#ffb347')}
-  else if(n.id==='ottokar'){st.state='talked';S.coins+=40;play('purse',0);play('doorOut',0);say((EN?'The Count tosses you a purse through a gap in the door and slams the bolts shut.':'Hrabia rzuca ci sakiewkę przez szparę w drzwiach i zatrzaskuje rygle.'))}
+  else if(NPC_CHOICE[n.id]&&S.choiceMade){NPC_CHOICE[n.id].done(n,st,S.choiceMade,motes)}
   else if(n.id==='chojrak'){const first=st.state==='alive';st.state='talked';if(first&&CH===1){const amt=Math.round(pl.max*.3);pl.max+=amt;pl.hp+=amt;S.bless={t:180,amt};play('bless',0);motes('#fff0b0');say((EN?`Chojrak lays his hands on your shoulders. +${amt} max health for 3 minutes.`:`Chojrak kładzie ci ręce na ramionach. +${amt} do maks. życia na 3 minuty.`))}}
   else if(n.id==='mila'){st.state='trial';S.trial={t:15,k:0};play('bless',0);say((EN?'Mila\'s trial: kill 20 enemies in 15 seconds!':'Próba Mili: zabij 20 wrogów w 15 sekund!'))}
-  else if(n.id==='heri'){st.state='talked';S.heri=180;play('bless',0);motes('#b8c4dc');chipsDirty=true;say((EN?'Heri pins his sign on you. Stamina regeneration +15% for 3 minutes.':'Heri przypina ci swój znak. Regeneracja staminy +15% na 3 minuty.'))}
   else if(n.id==='wierz'){st.state='talked';S.herb=60;play('heal',0);motes('#9ac070');say((EN?'The brew burns your throat. For a minute, your wounds close on their own.':'Napar pali w gardle. Przez minutę rany same się zasklepiają.'))}
   else if(n.id==='bartosz'){st.state='talked';MINI.fog.getContext('2d').clearRect(0,0,MW,MH);play('bless',0);say((EN?'Bart sketches a map of the valley in the mud. You can see the whole area and the Nourishing Cauldrons.':'Bartosz kreśli w błocie mapę doliny. Widzisz całą okolicę i Sycące Kociołki.'))}
   else if(n.id==='wolch'){if(st.state==='alive'){st.state='offered';say((EN?'The priest is waiting. Speak to him again if you accept the bargain.':'Żerca czeka. Porozmawiaj z nim jeszcze raz, jeśli przyjmujesz układ.'))}
     else{st.state='talked';const own=SLASH_SK.filter(k=>S.sk[k]&&S.sk[k]<(SK[k].max||9)),k=own[(Math.random()*own.length)|0],cost=Math.round(pl.max*.2);pl.max-=cost;pl.hp=Math.min(pl.hp,pl.max);blood(pl.x,pl.y,20,0,1);play('bless',0);motes('#951518');chipsDirty=true;
       if(k){S.sk[k]=Math.min(SK[k].max||9,S.sk[k]+2);S.hl={k,t:clock};say((EN?`The priest cuts your palm above the oak\'s root. ${SK[k].name}: +2 levels. Max health −${cost}.`:`Żerca nacina ci dłoń nad korzeniem dębu. ${SK[k].name}: +2 poziomy. Maks. życia −${cost}.`))}else{S.lvl++;S.need=xpNeed(S.lvl);S.pendLv++;say((EN?`The blood soaks into the roots. Max health −${cost}.`:`Krew wsiąka w korzenie. Maks. życia −${cost}.`));openLevelUp()}}}
   else if(n.id==='nawoj'){st.state='talked';pl.max+=10;pl.hp=pl.max;play('bless',0);motes('#d9d2bd');say((EN?'Nawoj writes down your name. +10 max health and a full heal.':'Nawoj wpisuje twoje imię. +10 do maks. życia i pełne leczenie.'))}
-  else if(n.id==='rudna'){st.state='talked';MINI.fog.getContext('2d').clearRect(0,0,MW,MH);play('bless',0);motes('#b8a58a');say((EN?'Rudna lays her palm on the rock and tells you every tunnel. The whole map is revealed.':'Rudna kładzie dłoń na skale i opowiada ci każdy chodnik. Cała mapa zostaje odsłonięta.'))}
   else if(n.id==='seweryna'){st.state='talked';S.fury=90;play('bless',0);motes('#a46a8a');say((EN?'Seweryna ties the black thread around your wrist. +20% damage for 90 seconds.':'Seweryna wiąże ci czarną nić na nadgarstku. +20% obrażeń przez 90 sekund.'))}
   else if(n.id==='dobromir'){st.state='talked';pl.hp=Math.min(pl.max,pl.hp+Math.round(pl.max*.5));play('heal',0);motes('#e0b040');say((EN?'The old honey is bitter and warm. You recover half of your health.':'Stary miód jest gorzki i ciepły. Odzyskujesz połowę życia.'))}
   else if(n.id==='lucjan'){st.state='talked';S.coins+=60;play('purse',0);motes('#c9b98a');say((EN?'Lucjan presses a purse into your hand. +60 coins.':'Lucjan wciska ci w dłoń sakiewkę. +60 monet.'))}
-  else if(n.id==='skryba'){st.state='talked';S.rr=(S.rr||0)+3;play('bless',0);motes('#c9b98a');say((EN?'The scribe tears a page from the ledger. +3 free card rerolls.':'Skryba wyrywa kartkę z rejestru. +3 darmowe przerzuty kart.'))}
   else if(n.id==='straznik'){st.state='talked';S.disc=.35;play('coin',0);motes('#d8cfb8');say((EN?'The guard whispers something to the trader. Prices at Marga\'s stall: −35%.':'Strażnik szepcze coś handlarce. Ceny w kramie Margi: −35%.'))}
   else if(n.id==='pieczetnik'){st.state='talked';pl.inv=Math.max(pl.inv,10);play('bless',0);motes('#ffd27a');say((EN?'Seal of protection for 10 seconds: nothing can touch you.':'Pieczęć ochronna przez 10 sekund: nic cię nie tknie.'))}
   else if(n.id==='aurel'){st.state='talked';S.lvl++;S.need=xpNeed(S.lvl);S.pendLv++;play('bless',0);motes('#d8cfb8');say((EN?'The medallion is warm from a small hand. You feel strength growing in you.':'Medalion jest ciepły od małej dłoni. Czujesz, jak rośnie w tobie siła.'));openLevelUp()}}
@@ -226,7 +224,7 @@ function update(dt){if(S&&S.exec>0){S.exec-=dt;dt*=S.exec>.35?.2:.5}
   const nm=nearMerchant();if(talkPress&&nm){openShop();return}
   const nn=nearNpc();if(talkPress&&nn){openDialog(nn);return}
   const nf=!nn&&!nm?nearPowerFire():null;if(talkPress&&nf){activatePowerFire(nf);return}const nx=!nn&&!nm&&!nf?nearExit():null;if(talkPress&&nx){useExit(nx);return}
-  updPlayer(dt);recoverPurses();if(S.notice)return;events();if(S.notice)return;spawnTick(dt);miniTick();if(S.notice)return;chTick();
+  updPlayer(dt);recoverPurses();if(S.notice)return;events();questTick(dt);if(S.notice)return;spawnTick(dt);miniTick();if(S.notice)return;chTick();
   slashUpdate(dt);if(pl2){asP2(()=>{updPlayer(dt);slashUpdate(dt,true);if(PAD2.talk){PAD2.talk=false;if(!pl.dead)withRb(pl,()=>{const nf=nearPowerFire();if(nf&&activatePowerFire(nf))ftInfo(EN?'Revival ready':'Odrodzenie gotowe')})}});mpTotemTick(dt)}for(const d of S.delayed)d.t-=dt;const ready=S.delayed.filter(d=>d.t<=0);S.delayed=S.delayed.filter(d=>d.t>0);ready.forEach(d=>d.fn());
   updZones(dt);
   buildEnemyGrid();for(const e of S.enemies)if(!e.dead){const tg=pl2?pickTarget(e):pl;if(tg!==pl){const p1=pl;pl=tg;try{updEnemy(e,dt)}finally{pl=p1}}else updEnemy(e,dt)}
