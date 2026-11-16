@@ -10,7 +10,7 @@ const SL={regen:32,delay:.55,roll:20,blockRegen:.25,stepCost:8,
   mana:{max:60,regen:2.5,delay:.75,onHit:1,onParry:0,onKill:0,hitGap:.5},
   shot:{iceDmg:16,perL:2,targets:[3,4,6],iceR:8,fireDmg:[30,36,42],fireR:[34,38,42],fireHit:9,splash:.5},
   guard:{dmg:[15,17,20,22,29],hits:[2,3,4,5,5],gap:2,hitR:90,dur:10,hp:[.8,.9,1,1.1,1.2],taunt:[96,104,112,120,128],bossTaunt:5,spd:42,r:7,leash:140,inv:.3},parry:.18,blockMul:1.2,guardBreak:.8,riposte:1.5,cap:28,ramp:.12,bossHp:.45,enemyWind:.5,enemyRec:.5,enemyHit:1.6,staggerGap:.9,coinDrop:.45,coinStrong:2,coinSurvive:15,projDiv:900,dmgDiv:800,shotGap:1.3,aim:.55,
-  wave:{l:{dmg:.6,speed:230,life:.62,r:13,size:1.25},h:{dmg:.7,speed:250,life:.75,r:19,size:1.8},stun:.4},
+  wave:{l:{dmg:.54,speed:230,life:.62,r:13,size:1.25},h:{dmg:.63,speed:250,life:.75,r:19,size:1.8},stun:.4},
   light:{cost:14,dmg:[17,19,28],wind:.108,act:.09,rec:.243,range:30,arc:1.05,stun:[.18,.18,.3],lunge:[30,30,55]},
   heavy:{cost:36,dmg:48,charge:.42,wind:.52,act:.12,rec:.3,range:37,arc:1.5,stun:.7,lunge:70}};
 // level-up cards in slasher mode raise the hero's attributes instead of giving skills
@@ -26,13 +26,13 @@ const FALA_B=[0,.1,.2,.3,.4,.6],ZRYW_N=[0,6,4,3];// Fala Mocy: łączny bonus na
 const STY={
   garda:{br:'def',name:(EN?'Iron Guard':'Żelazna Garda'),ic:'quen',max:5,d:(EN?'Block −10% stamina per level (lvl 5: −50%).':'Blok −10% staminy za poziom (poz. 5: −50%).')},
   riposta:{br:'def',name:(EN?'Mortal Riposte':'Śmiertelna Riposta'),ic:'riposta',max:5,d:(EN?'Riposte multiplier: ×1.5 base, +0.3 per level (×3 at level 5); +0.25 s window per level.':'Mnożnik riposty: ×1,5 bazowo, +0,3 za poziom (×3 na poziomie 5); +0,25 s okna za poziom.')},
-  odzysk:{br:'def',name:(EN?'Second Wind':'Odzysk Tchu'),ic:'odzysk',max:3,d:(EN?'Parrying restores 10 stamina per level. Lvl 3: +2% health (once per 2.5 s).':'Parowanie zwraca 10 staminy za poziom. Poz. 3: +2% życia (raz na 2,5 s).')},
+  odzysk:{br:'def',name:(EN?'Second Wind':'Odzysk Tchu'),ic:'odzysk',max:3,d:(EN?'Parrying restores 6 stamina per level. Lvl 3: +2% health (once per 2.5 s).':'Parowanie zwraca 6 staminy za poziom. Poz. 3: +2% życia (raz na 2,5 s).')},
   ostrze:{br:'off',name:(EN?'Swift Blade':'Szybkie Ostrze'),ic:'whet',max:5,d:(EN?'Light attack: −8% stamina and −6% recovery time per level.':'Szybki atak: −8% staminy i −6% czasu powrotu za poziom.')},
   rytm:{br:'off',name:(EN?'Death Rhythm':'Rytm Śmierci'),ic:'rytm',max:5,d:(EN?'Last combo hit: +18% damage per level.':'Ostatni cios combo: +18% obrażeń za poziom.')},
   buty:{br:'off',name:(EN?'Winged Boots':'Skrzydlate Buty'),ic:'buty',max:3,d:(EN?'Per level: +10% movement speed.':'Za poziom: +10% prędkości ruchu.')},taniec:{br:'off',name:(EN?'Blade Dance':'Taniec Ostrzy'),ic:'haste',max:3,d:(EN?'Per level: dodge −12% stamina, first hit after a dodge +25% damage.':'Za poziom: unik −12% staminy, pierwszy cios po uniku +25% obrażeń.')},
   fala:{br:'wav',name:(EN?'Force Wave':'Fala Mocy'),ic:'fala',max:5,d:(EN?'Slash wave: +10% damage and +15% range per level (lvl 5: damage +20% instead of +10%).':'Fala cięcia: +10% obrażeń i +15% zasięgu za poziom (poz. 5: obrażenia +20% zamiast +10%).')},
   echo:{br:'wav',name:(EN?'Parry Echo':'Echo Parowania'),ic:'earth',max:3,d:(EN?'More waves after a parry: lvl 1 – two, lvl 2–3 – three (lvl 3: +20% damage).':'Po parowaniu więcej fal: poz. 1 – dwie, poz. 2–3 – trzy (poz. 3: +20% obrażeń).')},
-  zryw:{br:'wav',name:(EN?'Blade Rush':'Zryw Ostrza'),ic:'zryw',max:3,d:(EN?'Every 6th, 4th or 3rd light hit (lvl 1–3) releases a wave (60% damage).':'Co 6., 4. lub 3. trafienie szybkim atakiem (poz. 1–3) wypuszcza falę (60% obrażeń).')},
+  zryw:{br:'wav',name:(EN?'Blade Rush':'Zryw Ostrza'),ic:'zryw',max:3,d:(EN?'Every 6th, 4th or 3rd light hit (lvl 1–3) releases a wave (54% damage).':'Co 6., 4. lub 3. trafienie szybkim atakiem (poz. 1–3) wypuszcza falę (54% obrażeń).')},
   szklo:{pact:1,name:(EN?'Glass Sword':'Szklany Miecz'),ic:'wisp',max:1,d:(EN?'+50% damage, enemies hit you 30% harder.':'+50% obrażeń, wrogowie ranią cię o 30% mocniej.')},
   cisza:{pact:1,name:(EN?'Pact of Silence':'Pakt Ciszy'),ic:'cisza',max:1,d:(EN?'+50% stamina regeneration, −20% max health.':'+50% regeneracji staminy, −20% maks. życia.')}};
 for(const k in STY){const t=STY[k];t.kind=t.pact?(EN?'Pact':'Pakt'):(EN?'Style · ':'Styl · ')+BR[t.br].n;if(t.pact)t.sub=(EN?'An edge with a price':'Przewaga z ceną');Object.assign(SK[k]=SK[k]||{},t)}
@@ -42,7 +42,7 @@ const parryWin=()=>SL.parry*(S.pk.parryWin||1),RIPO_L=[1.5,1.8,2.1,2.4,2.7,3],ri
 // 10.11.2026 (decyzja autora): gdy riposta jest gotowa, ciężki cios Kata (ładowanie) i Zabójczyni (zamach) trafia po 0,66 s,
 // czyli w oknie 0,7 s nietykalności po parowaniu; poza ripostą czasy bez zmian (0,75 s)
 const RIPO_HV=.66;function hvCharge(){return (S.kat||S.dzw)&&pl.riposte>0?Math.min(SL.heavy.charge,RIPO_HV):SL.heavy.charge}
-function onParry(){if(S.mil&&pl===(typeof pl1!=='undefined'&&pl1||pl))milParry();if(S.dzw&&S.pk.dParrySta)pl.sta=Math.min(pl.staMax,pl.sta+S.pk.dParrySta);if(S.dzw&&pl===(typeof pl1!=='undefined'&&pl1||pl))dzwParry();S.combatLock=4;S.parries++;S.actions.parry++;pl.riposte=1.6+.25*sk('riposta');const o=sk('odzysk');if(o)pl.sta=Math.min(pl.staMax,pl.sta+10*o);
+function onParry(){if(S.mil&&pl===(typeof pl1!=='undefined'&&pl1||pl))milParry();if(S.dzw&&S.pk.dParrySta)pl.sta=Math.min(pl.staMax,pl.sta+S.pk.dParrySta);if(S.dzw&&pl===(typeof pl1!=='undefined'&&pl1||pl))dzwParry();S.combatLock=4;S.parries++;S.actions.parry++;pl.riposte=1.6+.25*sk('riposta');const o=sk('odzysk');if(o)pl.sta=Math.min(pl.staMax,pl.sta+6*o)/* 16.11.2026: 6 zamiast 10 za poziom (zgoda autora) */;
   const ready=!(pl.parryHealCd>0);if(ready){heal(pl.max*(.01+(o>=3?.02:0)+(brOn('def')?.02:0)));pl.parryHealCd=2.5}
   // 9.11.2026 (10.11: 0,7 s, decyzja autora): udane parowanie daje 0,7 s nietykalności (Mur obrońcy 0,9 s) i lekko odpycha najbliższych wrogów, żeby w tłumie nie karać za dobrą obronę
   pl.inv=Math.max(pl.inv,brOn('def')?.9:.7);if(brOn('def'))ftInfo((EN?'Defender\'s Wall':'Mur obrońcy'));
@@ -70,19 +70,19 @@ function attackHit(a){const P=a.kind==='h'?SL.heavy:SL.light,R=P.range*(S.zab&&a
   const c=Math.cos(ang),s=Math.sin(ang),trail=COMBAT_TRAIL[encLevel()[0]]||embTrail(),visualSize=swordVisualSize(a.kind);
   if(S.kat&&katSlashFx(a,c,s,R,visualSize)){}else if(WEAPON_FX_ON)emitWeaponSlash(a,c,s,R);else if(S.zab&&zabSlashFx(a,c,s,R,visualSize)){}else if(!skAdd('slash',.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize*1.1,'bill',-screenAng(c,s),trail)){if(!trail||!emitCombatEffect(trail,pl.x+c*R*.12,pl.y+s*R*.12,visualSize,-screenAng(c,s)))addVfx(A.fx.slash,.26,pl.x+c*R*.55,pl.y+s*R*.55,.6,visualSize,'bill',-screenAng(c,s))}
   {const en=ENCH.filter(k=>S.sk[k]);if(en.length)for(let i=0;i<16;i++){const t=ang+rnd(-arc,arc),rr=rnd(10,R),k=en[i%en.length];S.parts.push({k:'e',x:pl.x+Math.cos(t)*rr,y:pl.y+Math.sin(t)*rr,z:rnd(8,18),vx:0,vy:0,vz:rnd(4,12),c:Math.random()<.6?ENC[k].col:ENC[k].col2,life:rnd(.2,.45)})}}
-  if(crit){pl.riposte=0;const wdp=waveDmg*.8;launchWave(a,ang,wdp);const ec=sk('echo');if(ec>=1){launchWave(a,ang-.28,wdp*(ec>=3?1.2:1),1);if(ec>=2)launchWave(a,ang+.28,wdp*(ec>=3?1.2:1),1)}if(hits)ftInfo((EN?'Critical hit!':'Cios krytyczny!'))}
+  if(crit){pl.riposte=0;const wdp=waveDmg*.8,wg=new Set();launchWave(a,ang,wdp,0,wg);const ec=sk('echo');if(ec>=1){launchWave(a,ang-.28,wdp*(ec>=3?1.2:1),1,wg);if(ec>=2)launchWave(a,ang+.28,wdp*(ec>=3?1.2:1),1,wg)}if(hits)ftInfo((EN?'Critical hit!':'Cios krytyczny!'))}
   else if(hits&&a.kind==='l'&&sk('zryw')){S.hitN=(S.hitN||0)+1;if(S.hitN>=ZRYW_N[sk('zryw')]){S.hitN=0;launchWave(a,ang,waveDmg)}}
   if(hits){S.hitstop=a.kind==='h'?.09:crit?.12:.045;shake(a.kind==='h'?.25:.1,.1);if(crit)play('katana',0)}
   if(a.wick>0)milStrip(a.wick,ang);
   if(a.echo)dzwEcho(a,twinBase,ang)}
 // fala cięcia: nagroda za parowanie, leci przed siebie i przebija wszystkich wrogów na swojej drodze (raz każdego)
-function launchWave(a,ang,base,quiet){const W0=a.kind==='h'?SL.wave.h:SL.wave.l,zs=sk('fala'),W=Object.assign({},W0,{life:W0.life*(1+.15*zs),r:W0.r*(1+.15*zs),size:W0.size*(1+.08*zs),dmg:W0.dmg*(1+FALA_B[sk('fala')])*(brOn('wav')?1.3:1)}),c=Math.cos(ang),s=Math.sin(ang);{const wk=brOn('wav')?'rush':sk('fala')>=3?'wave2':'wave1',wf=skFrames(wk);if(wf)addVfx(wf,W.life,pl.x+c*14,pl.y+s*14,.6,W.size*1.05,'bill',-screenAng(c,s));else addVfx(A.fx.slash,W.life,pl.x+c*14,pl.y+s*14,.6,W.size,'bill',-screenAng(c,s))}
+function launchWave(a,ang,base,quiet,grp){ /* 16.11.2026 (zgoda autora): fale -10% obrazen; grp = wspolny zbior trafionych dla fal z jednej riposty */const W0=a.kind==='h'?SL.wave.h:SL.wave.l,zs=sk('fala'),W=Object.assign({},W0,{life:W0.life*(1+.15*zs),r:W0.r*(1+.15*zs),size:W0.size*(1+.08*zs),dmg:W0.dmg*(1+FALA_B[sk('fala')])*(brOn('wav')?1.3:1)}),c=Math.cos(ang),s=Math.sin(ang);{const wk=brOn('wav')?'rush':sk('fala')>=3?'wave2':'wave1',wf=skFrames(wk);if(wf)addVfx(wf,W.life,pl.x+c*14,pl.y+s*14,.6,W.size*1.05,'bill',-screenAng(c,s));else addVfx(A.fx.slash,W.life,pl.x+c*14,pl.y+s*14,.6,W.size,'bill',-screenAng(c,s))}
   if(WEAPON_FX_ON){const f=S.vfx[S.vfx.length-1];f.h=1.55;f.size=Math.min(1.2,f.size*.72);f.weaponAspect=.74}
-  (S.waves=S.waves||[]).push({f:S.vfx[S.vfx.length-1],x:pl.x+c*14,y:pl.y+s*14,vx:c*W.speed,vy:s*W.speed,t:W.life,r:W.r,dmg:base*W.dmg,hit:new Set()});play('katana',0);shake(.12,.1);padRumble(.4,.7,160);
+  (S.waves=S.waves||[]).push({f:S.vfx[S.vfx.length-1],x:pl.x+c*14,y:pl.y+s*14,vx:c*W.speed,vy:s*W.speed,t:W.life,r:W.r,dmg:base*W.dmg,hit:new Set(),grp});play('katana',0);shake(.12,.1);padRumble(.4,.7,160);
   if(!quiet)ftInfo((EN?'Slash wave':'Fala cięcia'))}
 function waveTick(dt){if(!S.waves||!S.waves.length)return;for(let i=S.waves.length-1;i>=0;i--){const w=S.waves[i];w.t-=dt;w.x+=w.vx*dt;w.y+=w.vy*dt;if(w.f){w.f.x=w.x;w.f.y=w.y}
     if(w.t<=0||boxSolid(w.x,w.y,2,2)){S.waves.splice(i,1);continue}
-    for(const e of [...S.enemies]){if(w.hit.size>=(w.cap||4))break;if(e.dead||e.rise>0||w.hit.has(e))continue;if(Math.hypot(e.x-w.x,e.y-w.y)>w.r+e.r)continue;w.hit.add(e);const d=Math.hypot(w.vx,w.vy)||1;
+    for(const e of [...S.enemies]){if(w.hit.size>=(w.cap||4))break;if(e.dead||e.rise>0||w.hit.has(e)||(w.grp&&w.grp.has(e)))continue;if(Math.hypot(e.x-w.x,e.y-w.y)>w.r+e.r)continue;w.hit.add(e);if(w.grp)w.grp.add(e);const d=Math.hypot(w.vx,w.vy)||1;
       if(damageEnemy(e,w.dmg,w.vx/d,w.vy/d,.9,'sk:'+(w.sk||'wave'))){if(brOn('wav'))applyEnchants(e,{kind:'l'},true);if(!e.dead){const big=BIG.has(e.type)||e.type==='collector';if(big){breakPoise(e,25)}else{slashStagger(e,SL.wave.stun)}}}
       for(let k=0;k<6;k++)S.parts.push({k:'e',x:e.x,y:e.y,z:rnd(6,18),vx:rnd(-40,40),vy:rnd(-20,20),vz:rnd(4,12),c:'#ffe9a0',life:rnd(.2,.4)})}
     if(w.hit.size>=(w.cap||4)){if(w.f)w.f.t=w.f.dur;S.waves.splice(i,1)}}} // runda 302: fala ciecia po parowaniu rani najwyzej 4 wrogow i znika
