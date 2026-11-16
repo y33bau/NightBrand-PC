@@ -1329,6 +1329,103 @@ ${O} #opts .nbq-f kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!importan
  new MutationObserver(stopka).observe(document.body,{attributes:true,attributeFilter:['class']});
  sync();
 }catch(e){quietErr('opcjeMakieta',e)}})();
+// 16.11.2026: Pauza wg makiety GPT (runda menu-pauza-instrukcja-kronika-kaplica). Zakladka Umiejetnosci: lewy panel = sloty (klawisz, nazwa, Slot N),
+// prawy = umiejetnosci do wybranego slotu (ikona, koszt, stan, ktory slot) + opis wskazanej. Te same przyciski co dotad (data-slot / data-equip),
+// tylko przestawione po renderLoadoutOne, wiec wyposazanie, blokada w walce i 2 graczy dzialaja jak wczesniej. Stopka: podpowiedz, Porzuc noc, Wroc do gry.
+(()=>{try{
+ const pause=$('pause'),el=$('skillLoadout');if(!pause||!el)return;
+ const T=(p,e)=>EN?e:p,O='#orient'.repeat(400),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ const st=document.createElement('style');st.id='nb-pauza-makieta';st.textContent=`
+${O} #pause{--u:calc(min(100vw,177.78vh)/1920)}
+${O} #pause .nbp-nav>.nbq-tb{align-self:center!important;font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-radius:calc(4*var(--u))!important;padding:calc(6*var(--u)) calc(9*var(--u))!important;background:rgba(0,0,0,.5)!important;pointer-events:none!important}
+${O} #pause .nbp-nav>.nbq-tb.l{order:-1!important}${O} #pause .nbp-nav>.nbq-tb.r{order:50!important}
+${O} #pause .nbp-nav>.btnrow{order:99!important;justify-content:space-between!important;align-items:center!important}
+${O} #pause .nbp-nav>.btnrow>.nbz-hint{flex:1!important;font:400 calc(21*var(--u))/1.3 Georgia,serif!important;color:#d8c8a6!important;text-align:left!important}
+${O} #pause .nbp-nav>.btnrow>#pauseMenuBtn{order:2!important;flex:none!important;background:none!important;border:0!important;border-image:none!important;box-shadow:none!important;min-width:0!important;padding:calc(8*var(--u)) calc(16*var(--u))!important;font:600 calc(19*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.06em!important;color:#b9a789!important;filter:none!important}
+${O} #pause .nbp-nav>.btnrow>#pauseMenuBtn:is(:hover,:focus-visible,.pf){color:#f0b09a!important;text-decoration:underline!important}
+${O} #pause .nbp-nav>.btnrow>#resumeBtn{order:3!important;flex:none!important}
+${O} #pause .nbp-nav>.btnrow>.nbz-hint{order:1!important}
+${O} #pause #skillLoadout.nbz{border:0!important;border-image:none!important;background:none!important;box-shadow:none!important;padding:0!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:calc(26*var(--u))!important;align-items:stretch!important;max-width:calc(1640*var(--u))!important;margin:0 auto!important}
+${O} #pause #skillLoadout.nbz>.pcmp-loadout-tabs{grid-column:1/-1!important}
+${O} #pause .nbz-c{position:relative!important;display:flex!important;flex-direction:column!important;min-height:calc(560*var(--u))!important;padding:calc(18*var(--u)) calc(22*var(--u))!important;border:calc(18*var(--u)) solid transparent!important;border-image:url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp') 48 stretch!important;background:linear-gradient(180deg,rgba(13,10,10,.92),rgba(8,6,7,.95)) padding-box!important}
+${O} #pause .nbz-h{display:block!important;margin:0!important;padding:calc(10*var(--u)) calc(18*var(--u))!important;text-align:left!important;font:700 calc(30*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.05em!important;color:#f0dcb6!important;text-shadow:0 2px 4px #000!important;background:linear-gradient(180deg,rgba(60,40,30,.55),rgba(26,18,14,.85))!important;border:1px solid rgba(160,120,70,.35)!important}
+${O} #pause .nbz-s{margin:calc(14*var(--u)) 0 calc(12*var(--u)) calc(4*var(--u))!important;text-align:left!important;font:400 calc(21*var(--u))/1.3 Georgia,serif!important;color:#e3d3b3!important}
+${O} #pause #skillLoadout.nbz .slot-pick{display:flex!important;flex-direction:column!important;gap:0!important;grid-template-columns:none!important}
+${O} #pause #skillLoadout.nbz .slot-tab{display:grid!important;grid-template-columns:calc(56*var(--u)) calc(40*var(--u)) minmax(0,1fr) auto!important;grid-template-rows:auto!important;grid-auto-flow:column!important;align-items:center!important;justify-items:start!important;gap:calc(14*var(--u))!important;min-height:calc(66*var(--u))!important;width:100%!important;margin:0!important;padding:calc(6*var(--u)) calc(16*var(--u))!important;text-align:left!important;background:rgba(30,24,22,.5)!important;background-image:none!important;border:0!important;border-bottom:1px solid rgba(255,230,190,.07)!important;border-image:none!important;box-shadow:none!important;filter:none!important}
+${O} #pause #skillLoadout.nbz .slot-tab .loadout-key{display:none!important}
+${O} #pause #skillLoadout.nbz .slot-tab .nbz-k{grid-column:1!important;grid-row:1!important;justify-self:center!important;font:700 calc(17*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-radius:calc(4*var(--u))!important;padding:calc(6*var(--u)) calc(9*var(--u))!important;background:rgba(0,0,0,.5)!important;white-space:nowrap!important}
+${O} #pause #skillLoadout.nbz .slot-tab .ic{grid-column:2!important;grid-row:1!important;width:calc(36*var(--u))!important;height:calc(36*var(--u))!important}
+${O} #pause #skillLoadout.nbz .slot-tab .loadout-name{grid-column:3!important;grid-row:1!important;text-align:left!important;font:700 calc(26*var(--u))/1.15 Georgia,serif!important;color:#f2dfba!important}
+${O} #pause #skillLoadout.nbz .slot-tab .loadout-name.empty-name{font:italic 400 calc(25*var(--u))/1.15 Georgia,serif!important;color:#9a8b72!important;grid-row:1!important}
+${O} #pause #skillLoadout.nbz .slot-tab .nbz-n{grid-column:4!important;grid-row:1!important;font:400 calc(18*var(--u))/1 Georgia,serif!important;color:#c8b694!important;text-align:right!important}
+${O} #pause #skillLoadout.nbz .slot-tab .nbz-n small{display:block!important;margin-top:calc(4*var(--u))!important;font-size:calc(14*var(--u))!important;color:#9a8b72!important}
+${O} #pause #skillLoadout.nbz .slot-tab:is(.chosen,:hover,:focus-visible,.pf){background:linear-gradient(90deg,rgba(150,92,46,.85),rgba(70,44,26,.6))!important;box-shadow:inset calc(4*var(--u)) 0 0 #e0a860!important}
+${O} #pause #skillLoadout.nbz .slot-tab:is(:focus-visible,.pf){outline:calc(2*var(--u)) solid rgba(240,190,120,.85)!important;outline-offset:calc(-2*var(--u))!important}
+${O} #pause #skillLoadout.nbz .slot-tab.chosen .loadout-key:after{content:none!important}
+${O} #pause #skillLoadout.nbz .slot-inventory{display:flex!important;flex-direction:column!important;gap:calc(8*var(--u))!important;grid-template-columns:none!important}
+${O} #pause #skillLoadout.nbz .slot-inventory button.go:not(.alt){display:grid!important;grid-template-columns:calc(52*var(--u)) minmax(0,1fr) auto!important;align-items:center!important;gap:calc(16*var(--u))!important;min-height:calc(86*var(--u))!important;width:100%!important;margin:0!important;padding:calc(8*var(--u)) calc(18*var(--u))!important;text-align:left!important;background:rgba(30,24,22,.55)!important;background-image:none!important;border:1px solid rgba(255,230,190,.07)!important;border-image:none!important;box-shadow:none!important;filter:none!important}
+${O} #pause #skillLoadout.nbz .slot-inventory button.go:not(.alt) .ic{width:calc(48*var(--u))!important;height:calc(48*var(--u))!important}
+${O} #pause #skillLoadout.nbz .slot-inventory .loadout-copy{padding:0!important;text-align:left!important;font:700 calc(26*var(--u))/1.15 Georgia,serif!important;color:#f2dfba!important}
+${O} #pause #skillLoadout.nbz .slot-inventory .loadout-copy small{display:block!important;margin-top:calc(6*var(--u))!important;font:400 calc(19*var(--u))/1.2 Georgia,serif!important;color:#d8c8a6!important}
+${O} #pause #skillLoadout.nbz .slot-inventory .nbz-ss{font:400 calc(18*var(--u))/1 Georgia,serif!important;color:#c8b694!important;white-space:nowrap!important}
+${O} #pause #skillLoadout.nbz .slot-inventory button.selected-skill{border:1px solid #e0b060!important;box-shadow:inset 0 0 0 1px rgba(255,200,120,.35)!important;background:rgba(60,40,24,.6)!important}
+${O} #pause #skillLoadout.nbz .slot-inventory button.selected-skill .nbz-ss{color:#ffe2a2!important}
+${O} #pause #skillLoadout.nbz .slot-inventory button.selected-skill:after{content:none!important}
+${O} #pause #skillLoadout.nbz .slot-inventory button.go:not(.alt):is(:hover,:focus-visible,.pf){background:linear-gradient(90deg,rgba(150,92,46,.7),rgba(70,44,26,.5))!important}
+${O} #pause #skillLoadout.nbz .slot-inventory button.go:not(.alt):is(:focus-visible,.pf){outline:calc(2*var(--u)) solid rgba(240,190,120,.85)!important;outline-offset:calc(-2*var(--u))!important}
+${O} #pause #skillLoadout.nbz .slot-inventory button:disabled{opacity:.55!important}
+${O} #pause .nbz-d{position:relative!important;margin-top:calc(14*var(--u))!important;padding:calc(20*var(--u)) calc(150*var(--u)) calc(20*var(--u)) calc(20*var(--u))!important;min-height:calc(120*var(--u))!important;background:rgba(30,24,22,.45)!important;border-top:1px solid rgba(201,160,100,.2)!important;text-align:left!important}
+${O} #pause .nbz-d[hidden]{display:none!important}
+${O} #pause .nbz-d b{display:block!important;font:600 calc(16*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.18em!important;color:#c08a5a!important;margin-bottom:calc(12*var(--u))!important;text-transform:uppercase!important}
+${O} #pause .nbz-d span{display:block!important;font:400 calc(21*var(--u))/1.4 Georgia,serif!important;color:#ecdcbc!important}
+${O} #pause .nbz-d .ic{position:absolute!important;right:calc(20*var(--u))!important;top:50%!important;translate:0 -50%!important;width:calc(100*var(--u))!important;height:calc(100*var(--u))!important;opacity:.28!important}
+${O} #pause .nbz-c .loadout-state{margin:calc(10*var(--u)) 0!important;padding:calc(10*var(--u)) calc(14*var(--u))!important;font:italic calc(19*var(--u))/1.35 Georgia,serif!important;color:#d8c8a6!important;border-left:calc(3*var(--u)) solid rgba(201,160,100,.5)!important;background:rgba(30,24,22,.4)!important;text-align:left!important}
+${O} #pause .nbz-c .loadout-state.nbz-ok{display:none!important}
+${O} #pause #skillLoadout.nbz>.pcg-edge{display:none!important}
+${O} #pause .nbz-e{display:flex!important;justify-content:flex-start!important;text-align:left!important;margin-top:auto!important;padding-top:calc(14*var(--u))!important;border-top:1px solid rgba(201,160,100,.22)!important}
+${O} #pause .nbz-e button.go.alt{background:none!important;border:0!important;border-image:none!important;box-shadow:none!important;min-height:0!important;padding:calc(6*var(--u)) calc(4*var(--u))!important;font:400 calc(21*var(--u))/1.2 Georgia,serif!important;color:#d8c8a6!important;text-align:left!important;filter:none!important}
+${O} #pause .nbz-e button.go.alt:is(:hover,:focus-visible,.pf):not(:disabled){color:#fff0d8!important;text-decoration:underline!important}
+${O} #pause .nbz-e button.go.alt:disabled{opacity:.45!important}
+${O} #pause .nbp-panel:has(#skillLoadout.nbz){border:0!important;border-image:none!important;background:none!important;box-shadow:none!important;padding:calc(6*var(--u)) calc(40*var(--u))!important}
+${O} #pause .nbp-panel:has(#skillLoadout.nbz)::before,${O} #pause .nbp-panel:has(#skillLoadout.nbz)::after{content:none!important;display:none!important}
+${O} #pause #skillLoadout.nbz .empty-name:before{content:none!important;display:none!important}
+${O} #pause #skillLoadout.nbz .pc-loadout-reserve{margin:0!important;padding:0!important;border:0!important;background:none!important}
+${O} #pause #skillLoadout.nbz .pc-reserve-title{display:none!important}
+${O} #pause .nbz-c{min-height:0!important}
+${O} #pause .nbz-d span{font-size:calc(19*var(--u))!important;line-height:1.35!important}
+${O} #pause #skillLoadout.nbz>h2,${O} #pause #skillLoadout.nbz>p:not(.loadout-state){display:none!important}
+`;document.head.append(st);
+ // LB/RB przy zakladkach i podpowiedz w stopce
+ const nav=pause.querySelector('.nbp-nav');
+ if(nav){for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb '+c;b.textContent=t;nav.append(b)}
+  const br=nav.querySelector(':scope>.btnrow');if(br){const h=document.createElement('span');h.className='nbz-hint';br.prepend(h)}}
+ const hint=()=>{const h=pause.querySelector('.nbz-hint');if(!h)return;const on=!el.closest('.nbp-pane')?.hidden&&!el.hidden;h.textContent=on?T('Techniki miecza i zaklęcia ostrza działają poza slotami.','Sword techniques and blade spells work outside slots.'):''};
+ let pod=null;
+ const desc=k=>{try{const d=SK[k];if(!d)return null;const L=Math.max(1,Math.min((d.lv||[]).length,sk(k)||1));const t=Array.isArray(d.lv)?d.lv[L-1]:'';return{kind:d.kind||'',txt:typeof t==='string'?t:'',ic:d.ic}}catch(e){return null}};
+ function opis(){const d=el.querySelector('.nbz-d');if(!d)return;const sel=(S&&S.loadoutSelected)||0;let k=pod||(S&&S.activeSlots?S.activeSlots[sel]:null);if(!k){const f=el.querySelector('.slot-inventory [data-equip]:not([data-equip=""])');k=f?f.dataset.equip:null}
+  const o=k&&desc(k);if(!o||!o.txt){d.hidden=true;return}d.hidden=false;d.innerHTML=`<b>${esc(o.kind)}</b><span>${esc(o.txt)}</span><i class="ic ic-${o.ic}" data-premium-skill="${k}"></i>`}
+ function przestaw(){if(!S||el.hidden)return;const ae=document.activeElement,fs=el.contains(ae)?(ae.dataset.slot!==undefined?'[data-slot="'+ae.dataset.slot+'"]':ae.dataset.equip!==undefined?'[data-equip="'+ae.dataset.equip+'"]':null):null;
+  const pick=el.querySelector(':scope>.slot-pick'),inv=el.querySelector(':scope>.slot-inventory');if(!pick||!inv)return;const states=[...el.querySelectorAll(':scope>.loadout-state')];
+  const sel=(S.loadoutSelected||0)+1;
+  const L=document.createElement('div');L.className='nbz-c nbz-l';L.innerHTML=`<div class="nbz-h">${T('Aktywne sloty','Active slots')}</div><p class="nbz-s">${T('Wybierz slot, którego obsadę chcesz zmienić.','Choose the slot you want to change.')}</p>`;L.append(pick);
+  pick.querySelectorAll('.slot-tab').forEach((b,i)=>{const key=(b.querySelector('.loadout-key')?.textContent||'').split(' · '),k=document.createElement('kbd');k.className='nbz-k';k.textContent=document.body.classList.contains('padnav')&&key[1]?key[1]:key[0];
+   const n=document.createElement('span');n.className='nbz-n';n.innerHTML=T('Slot ','Slot ')+(i+1);b.prepend(k);if(!b.querySelector('.ic')){const ph=document.createElement('i');ph.style.cssText='grid-column:2';b.append(ph)}b.append(n)});
+  const nInv=inv.querySelectorAll('[data-equip]:not([data-equip=""])').length;
+  const R=document.createElement('div');R.className='nbz-c nbz-r';R.innerHTML=`<div class="nbz-h">${T('Umiejętność do slotu ','Skill for slot ')}${sel}</div><p class="nbz-s">${T('Zdobyte umiejętności','Skills learned')} · ${nInv}</p>`;
+  for(const s of states){if(/Możesz zmienić|You can change/.test(s.textContent))s.classList.add('nbz-ok');}
+  const warn=states.filter(s=>!s.classList.contains('nbz-ok'));R.append(...warn);
+  inv.querySelectorAll('[data-equip]:not([data-equip=""])').forEach(b=>{const sm=b.querySelector('small');if(!sm)return;const parts=sm.textContent.split(' · ');const last=parts.length>2?parts.pop():'';sm.textContent=parts.join(' · ');const ss=document.createElement('span');ss.className='nbz-ss';
+   const m=/(slot|Slot)\s*(\d)/.exec(last);ss.textContent=m?(b.classList.contains('selected-skill')?'✓ ':'')+'Slot '+m[2]:T('w rezerwie','in reserve');b.append(ss)});
+  const empty=inv.querySelector('[data-equip=""]');R.append(inv);const d=document.createElement('div');d.className='nbz-d';R.append(d);
+  const E=document.createElement('div');E.className='nbz-e';if(empty)E.append(empty);R.append(E);
+  states.filter(s=>s.classList.contains('nbz-ok')).forEach(s=>R.append(s));
+  const tabs=el.querySelector(':scope>.pcmp-loadout-tabs');el.append(L,R);if(tabs)el.prepend(tabs);el.classList.add('nbz');
+  opis();if(fs){const f=el.querySelector(fs);if(f&&!f.disabled)f.focus({preventScroll:true})}hint()}
+ if(typeof renderLoadoutOne==='function'){const prev=renderLoadoutOne;renderLoadoutOne=function(){prev();try{przestaw()}catch(e){quietErr('pauzaMakieta',e)}}}
+ const pd=(e,on)=>{const b=e.target.closest&&e.target.closest('.slot-inventory [data-equip]');const k=b&&b.dataset.equip||null;if(on&&k){pod=k;opis()}else if(!on&&b){pod=null;opis()}};
+ el.addEventListener('mouseover',e=>pd(e,true));el.addEventListener('mouseout',e=>pd(e,false));el.addEventListener('focusin',e=>pd(e,true));el.addEventListener('focusout',e=>pd(e,false));
+ new MutationObserver(hint).observe(pause,{attributes:true,subtree:true,attributeFilter:['hidden']});
+}catch(e){quietErr('pauzaMakieta',e)}})();
 requestAnimationFrame(frame);
 })();
 
