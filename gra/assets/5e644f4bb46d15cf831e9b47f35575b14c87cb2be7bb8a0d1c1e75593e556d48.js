@@ -5565,10 +5565,10 @@ function heroBladeMat(fr,k){const key='E'+k;if(fr[key]!==undefined)return fr[key
   const m=n.clone(),t1=texFrom(cv),t2=texFrom(ec);for(const p of ['minFilter','magFilter','generateMipmaps'])if(n.map[p]!==undefined)t1[p]=n.map[p];for(const p of ['minFilter','magFilter','generateMipmaps'])if(n.emissiveMap[p]!==undefined)t2[p]=n.emissiveMap[p];
   m.map=t1;m.emissiveMap=t2;m.needsUpdate=true;fr[key]=m;return m}catch(e){return null}}
 // 16.11.2026 (pilot): ruch z kodu na sprite'cie bohatera: oddech, kolysanie kroku, pochylenie w strone ruchu i ciosu, dopchniecie w chwili uderzenia,
-// rozciagniecie przy zrywie, przysiad po skoku i uniku. TYLKO wyglad: nie zmienia pl.x/pl.y, zasiegow, czasow ani trafien. Wylacza je opcja wstrzasow (SETT.shake); do porownania u autora ?ruch=0 (tylko lokalnie, warunek LOKALNIE).
-const HERO_MOTION_OFF=new URLSearchParams(location.search).get('ruch')==='0',HERO_MOTION=new WeakMap();
+// rozciagniecie przy zrywie, przysiad po skoku i uniku. TYLKO wyglad: nie zmienia pl.x/pl.y, zasiegow, czasow ani trafien. Wylacza je opcja wstrzasow (SETT.shake); do porownania u autora ?ruch=0 (tylko lokalnie: ten sam warunek co LOKALNIE w czesci 27, tam jest w domknieciu).
+const HERO_MOTION_OFF=(location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname))&&new URLSearchParams(location.search).get('ruch')==='0',HERO_MOTION=new WeakMap();
 function heroMotion(p,mesh,hs,dt,rz0){let j=HERO_MOTION.get(p);if(!j){j={x:p.x,y:p.y,vx:0,vy:0,lean:0,px:0,py:0,sx:1,sy:1,lift:0,sq:0,st:''};HERO_MOTION.set(p,j)}
-  if((HERO_MOTION_OFF&&LOKALNIE)||!SETT.shake||p.dead){j.x=p.x;j.y=p.y;j.vx=j.vy=j.lean=j.px=j.py=j.lift=j.sq=0;j.sx=j.sy=1;j.st='';mesh.rotation.z=rz0;return}
+  if(HERO_MOTION_OFF||!SETT.shake||p.dead){j.x=p.x;j.y=p.y;j.vx=j.vy=j.lean=j.px=j.py=j.lift=j.sq=0;j.sx=j.sy=1;j.st='';mesh.rotation.z=rz0;return}
   if(dt>0){const dx=p.x-j.x,dy=p.y-j.y;j.x=p.x;j.y=p.y;if(Math.abs(dx)+Math.abs(dy)>48){j.vx=j.vy=0}else{const k=Math.min(1,dt*14);j.vx+=(dx/dt-j.vx)*k;j.vy+=(dy/dt-j.vy)*k}
     const a=p.atk,roll=p.roll>0,st=a?a.kind+':'+a.stage:roll?'roll':'';if(st!==j.st){if(j.st==='leap:air')j.sq=1;else if(j.st==='roll')j.sq=.55;j.st=st}j.sq=Math.max(0,j.sq-dt*5.5);
     const sp=Math.hypot(j.vx,j.vy),nx=sp>1?Math.abs(j.vx)/sp:0,ny=sp>1?Math.abs(j.vy)/sp:0,e=Math.max(0,Math.min(1,(sp-110)/480));
