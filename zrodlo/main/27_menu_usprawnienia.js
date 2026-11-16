@@ -871,6 +871,8 @@ ${O} #nbW .bo.wyb .im{scale:1.04!important;filter:brightness(calc(var(--b) * (.9
 ${O} #nbW .bo.wyb .pod{opacity:1!important}
 ${O} #nbW .bo.potw .im{animation:nbwOd 4.6s ease-in-out infinite,nbwPotw .9s ease-out!important}
 ${O} #nbW.potw .bo:not(.wyb){--b:.32!important;--s:.5!important}
+${O} #nbW .nwlr{position:absolute!important;top:calc(62.6% + 14*var(--u))!important;z-index:50!important;font:700 calc(14*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-radius:calc(4*var(--u))!important;padding:calc(6*var(--u)) calc(8*var(--u))!important;background:rgba(0,0,0,.55)!important;pointer-events:none!important}
+${O} #nbW .nwlr.l{left:calc(56*var(--u))!important}${O} #nbW .nwlr.r{right:calc(56*var(--u))!important}
 ${O} #nbW .nwt{position:absolute!important;top:62.6%!important;translate:-50% 0!important;width:calc(226*var(--u))!important;height:calc(56*var(--u))!important;font-size:calc(17*var(--u))!important;z-index:50!important}
 ${O} #nbW .npal{left:50%!important;bottom:5%!important;width:21%!important;aspect-ratio:1!important;translate:-50% 0!important;background:url('${IMG.pal}') center/100% 100% no-repeat!important;z-index:40!important;filter:brightness(calc(.9 + 1.5 * (var(--fl) - 1)))!important}
 ${O} #nbW .npl{left:50%!important;bottom:12.9%!important;width:14.5%!important;aspect-ratio:384/512!important;translate:-50% 0!important;background:url('${IMG.ogien}') 0 0/400% 200% no-repeat!important;mix-blend-mode:screen!important;z-index:41!important}
@@ -1025,8 +1027,8 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
  const ST=W.querySelector('.nst'),RZ=W.querySelector('.rz'),TABS=W.querySelector('.nwz'),PAN=W.querySelector('.pan'),pa=W.querySelector('.pa'),pb=W.querySelector('.pb'),CV=W.querySelector('canvas'),CX=CV.getContext('2d');
  const B={},TB={};
  for(const c of ORDER){const [x,h]=POS[c],e=mk('div','bo');e.style.cssText=`left:${x}%;height:${h}%;--ar:${NB_KAMIEN_AR[c]}`;e.innerHTML=`<i class="pod"></i><i class="ci"></i><i class="im" style="background-image:url('${NB_KAMIEN[c]}')"></i>`;
-  e.addEventListener('click',()=>{if(wyb===c)potwierdz();else ustaw(c,true)});RZ.append(e);B[c]=e;
-  const t=mk('button','nbd nwt');t.type='button';t.style.left=x+'%';t.textContent=hero(c).cls.toUpperCase();t.addEventListener('click',()=>{if(wyb===c)potwierdz();else ustaw(c)});t.addEventListener('focus',()=>ustaw(c));TABS.append(t);TB[c]=t}
+  e.addEventListener('click',()=>ustaw(c,true));/* 16.11.2026: klik mysza tylko zaznacza; dalej przyciskiem Wybierz */RZ.append(e);B[c]=e;
+  const t=mk('button','nbd nwt');t.type='button';t.style.left=x+'%';t.textContent=hero(c).cls.toUpperCase();t.addEventListener('click',ev=>{if(ev.detail===0&&wyb===c)potwierdz();else ustaw(c)});/* Enter / A na zaznaczonym = Wybierz; mysz tylko zaznacza */t.addEventListener('focus',()=>ustaw(c));TABS.append(t);TB[c]=t}
  let wyb='r',tryb=null,blok=false,anim=0,t0=0,fl=1,flT=1,isk=[];
  function ustaw(c,fokus){if(blok||!B[c])return;const zm=c!==wyb||!B[c].classList.contains('wyb');wyb=c;
   for(const k of ORDER){B[k].classList.toggle('wyb',k===c);TB[k].classList.toggle('zn',k===c)}
@@ -1056,6 +1058,9 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
  let omin=false;const graj=title.querySelector('.premium-journey');
  if(graj)graj.addEventListener('click',e=>{if(omin||!title.classList.contains('pc-home'))return;e.preventDefault();e.stopImmediatePropagation();otworz('graj')},true);
  {const prev=pcMenuBack;pcMenuBack=()=>{if(!W.hidden){if(!blok)wroc();return true}return prev?prev():false}}
+ /* 16.11.2026: LB / RB zmieniaja bohatera przy ognisku */
+ {const pc0=padCycle;padCycle=function(root,sel,step){if(!W.hidden&&sel===PADTABS){if(!blok){const i=ORDER.indexOf(wyb);ustaw(ORDER[(i+step+ORDER.length)%ORDER.length],true)}return true}return pc0(root,sel,step)}}
+ for(const [c,t] of [['l','LB'],['r','RB']]){const b=mk('span','nwlr '+c);b.textContent=t;b.setAttribute('aria-hidden','true');ST.append(b)}
  window.NB_OBOZ={otworz,zamknij};
 
  /* ================= PRZYGOTOWANIE ================= */
@@ -1168,7 +1173,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
  title.addEventListener('pointerdown',e=>{const b=e.target.closest&&e.target.closest('.premium-map .m2-ch');ptrT=performance.now();ptrSel=b&&b.classList.contains('premium-selected')?b:null},true);
  title.addEventListener('focusin',e=>{const b=e.target;if(!punkt(b)||b.disabled||b.classList.contains('premium-selected')||performance.now()-ptrT<600)return;b.dispatchEvent(new Event('pointerenter'))});
  // Enter / A na zaznaczonym punkcie albo drugi klik mysza w zaznaczony punkt = „Przygotuj sie" (ta sama akcja co przycisk na dole)
- window.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.premium-map .m2-ch');if(!b||!punkt(b)||b.disabled)return;const kb=e.detail===0;if(kb?b.classList.contains('premium-selected'):ptrSel===b){e.stopImmediatePropagation();e.preventDefault();ptrSel=null;if(!go.disabled)go.click()}},true);
+ window.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.premium-map .m2-ch');if(!b||!punkt(b)||b.disabled)return;const kb=e.detail===0;if(kb&&b.classList.contains('premium-selected')){/* 16.11.2026: klik mysza tylko zaznacza miejsce */e.stopImmediatePropagation();e.preventDefault();ptrSel=null;if(!go.disabled)go.click()}},true);
  const U=n=>`calc(${n} * var(--pc-u))`,TU=n=>`calc(${n} * var(--pc-u) * var(--nbts,1))`,M='#orient'.repeat(260)+'.pc-menu #title:not(.pc-home)',CH=M+' .premium-map>.m2-right>.m2-ch';
  const KLODKA=`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 14'%3E%3Cpath d='M3.2 6.2V4.3a2.8 2.8 0 0 1 5.6 0v1.9' fill='none' stroke='%23b8a37e' stroke-width='1.5'/%3E%3Crect x='1.4' y='6' width='9.2' height='7.4' rx='1.3' fill='%23b8a37e'/%3E%3C/svg%3E")`;
  const st=document.createElement('style');st.id='nb-mapa-podrozy';st.textContent=`
