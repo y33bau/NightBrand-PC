@@ -1208,6 +1208,127 @@ ${M} .premium-map>.premium-banner>.pc-destination-facts>div{gap:${U(6)}!importan
 ${M} .premium-map>.premium-banner>.pc-destination-facts small{font-size:max(11px,${TU(13)})!important}
 `;document.head.append(st);
 }catch(e){quietErr('mapaPodrozy',e)}})();
+// 16.11.2026: Opcje wg makiety GPT (runda opcje-makieta). Nakladka na istniejace przelaczniki: kazdy wiersz steruje oryginalna kontrolka
+// (klik w przycisk wyboru, wartosc suwaka, przelacznik), wiec zapis i dzialanie ustawien bez zmian. Lewy panel: lista; prawy: podglad z opisem.
+// Sterowanie zostaje w dawnym ukladzie (schematy klawiatury i pada). Pad: wiersz = suwak (lewo/prawo zmienia), przelacznik = A.
+(()=>{try{
+ const opts=$('opts');if(!opts)return;const content=opts.querySelector('.premium-page-content'),tabsEl=opts.querySelector('.tabs');if(!content||!tabsEl)return;
+ const T=(p,e)=>EN?e:p,O='#orient'.repeat(400),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),
+  TL='assets/tla/',IMG={aud:TL+'97b8d8b5e7e5da70944aef02ec7e777a3f1e37659ab1be2db2b361380bbd634b.webp',gfx:TL+'76c4abede7b11dab955422e0b91d11d6a38a1feecdd13c62d91f37a0813a6057.webp',set:TL+'ecf32c2027558304a42a83f5f5579adfa4793432dc7df3f2276ec6b7f2846daa.webp',dat:TL+'4a6ee44e8d3191b5cc561568e1c539fea1d7145356e5558f88ec0674a86ab5c5.webp'},
+  q=s=>opts.querySelector(s);
+ // spis wierszy: s = naglowek sekcji; t: ch (wybor z przyciskow), rng (suwak), tgl (przelacznik), act (przycisk), info (tekst), trn (tryb testera)
+ const SPEC=()=>({
+  aud:[{s:T('Głośność','Volume')},{t:'rng',e:'#pane-aud .musSl',n:T('Muzyka','Music'),d:T('Głośność muzyki w menu i w czasie nocy.','Music volume in menus and during the night.')},{t:'rng',e:'#pane-aud .sfxSl',n:T('Efekty','Effects'),d:T('Głośność ciosów, kroków, okrzyków i dźwięków menu.','Volume of hits, steps, shouts and menu sounds.')}],
+  gfx:[{s:T('Obraz','Display')},{t:'rng',e:'#briSl',n:T('Jasność obrazu','Brightness'),d:T('Jeśli gra jest dla Ciebie zbyt ciemna, zwiększ jasność. Domyślnie 100%.','If the game looks too dark, raise the brightness. Default 100%.')},{t:'ch',e:'#fsRow',n:T('Tryb wyświetlania','Display mode'),d:T('Gra w oknie przeglądarki albo na pełnym ekranie.','Play in the browser window or full screen.')},
+   {s:T('Jakość','Quality')},{t:'ch',e:'#qualityRow',n:T('Jakość grafiki','Graphics quality'),d:T('Auto: na komputerze Wysoka. Ultra: najlepszy obraz dla mocnych komputerów; jeśli gra klatkuje, wybierz niższy poziom.','Auto: High on a computer. Ultra: the best image for strong PCs; if the game stutters, pick a lower level.')},
+   {s:T('Płynność','Smoothness')},{t:'ch',e:'#fpsRow',n:T('Limit klatek','Frame limit'),d:T('Niższy limit może pomóc, gdy gra klatkuje. 120 ma sens tylko na ekranie 120 Hz lub szybszym.','A lower limit can help when the game stutters. 120 only makes sense on a 120 Hz or faster screen.')},{t:'tgl',e:'#fpsTgl',n:T('Licznik FPS','FPS counter'),d:T('Pokazuje liczbę klatek na sekundę (diagnostyka).','Shows frames per second (diagnostics).')},
+   {s:T('Zaawansowane','Advanced')},{t:'ch',e:'#gShadowRow',n:T('Cienie','Shadows')},{t:'ch',e:'#gLightsRow',n:T('Światła dynamiczne','Dynamic lights')},{t:'ch',e:'#gFxRow',n:T('Efekty obrazu','Image effects'),d:T('Poświata i rozmycie.','Glow and blur.')},{t:'ch',e:'#gPartsRow',n:T('Cząsteczki','Particles'),d:T('Iskry, pył, popiół.','Sparks, dust, ash.')},{t:'ch',e:'#gResRow',n:T('Rozdzielczość obrazu','Render resolution')},{t:'ch',e:'#gDynRow',n:T('Dynamiczna rozdzielczość','Dynamic resolution'),d:T('Sama obniża ostrość sceny, gdy gra nie wyrabia, i podnosi ją, gdy jest zapas.','Lowers scene sharpness when the game struggles and raises it when there is headroom.')},{t:'ch',e:'#gDprRow',n:T('Gęstość pikseli','Pixel density'),d:T('Niższa jest lżejsza dla karty graficznej, ale mniej ostra.','Lower is lighter on the graphics card but less sharp.')},{t:'ch',e:'#gTexRow',n:T('Tekstury ziemi HD','HD ground textures'),d:T('Ostrzejsza ziemia (2048 px), pobierana przy pierwszym włączeniu, ok. 12 MB.','Sharper ground (2048 px), downloaded the first time, about 12 MB.')}],
+  set:[{s:T('Ogólne','General')},{t:'ch',e:'#pane-set .langrow',n:T('Język','Language'),d:T('Język napisów w grze i w menu.','Language of the game and menus.')},{t:'ch',e:'#tsRow',n:T('Tekst w menu','Menu text'),d:T('Powiększa tekst w menu, Kronice, instrukcji i podsumowaniu nocy.','Enlarges text in menus, the Chronicle, the guide and the night summary.')},
+   {s:T('Czytelność','Readability')},{t:'rng',e:'#sub-ui .ftsSl',n:T('Wielkość napisów','Text size'),fts:1,d:T('Wielkość napisów w czasie nocy.','Size of in-game text during the night.')},{t:'tgl',e:'#sub-ui .dmgTgl',n:T('Liczby obrażeń','Damage numbers'),d:T('Liczby obrażeń nad wrogami.','Damage numbers above enemies.')},{t:'tgl',e:'#contrastTgl',n:T('Kontrastowe ostrzeżenia','High-contrast warnings'),d:T('Ostrzeżenia przed atakami w kolorach żółtym i białym.','Attack warnings in yellow and white.')},
+   {s:T('Komfort','Comfort')},{t:'tgl',e:'#shakeTgl',n:T('Wstrząsy kamery','Camera shake')},{t:'tgl',e:'#rumbleTgl',n:T('Wibracje pada','Controller vibration')},{t:'tgl',e:'#flashTgl',n:T('Intensywne błyski','Intense flashes')},{t:'tgl',e:'#oneHandTgl',n:T('Automatyczne szybkie ataki','Automatic quick attacks'),d:T('Postać sama atakuje pobliskich wrogów (gra jedną ręką). Nadal możesz używać bloku, uniku i silnego ataku.','Your hero attacks nearby enemies by itself (one-handed play). You can still block, dodge and use the heavy attack.')},
+   {s:T('Samouczek','Tutorial')},{t:'act',e:'#repeatTut',n:T('Powtórz samouczek','Repeat the tutorial'),d:T('Przy następnej nocy samouczek tego trybu zacznie się od początku.','The tutorial for this mode starts over on your next night.')},
+   {t:'trn',e:'#trnOpt'}],
+  dat:[{s:T('Postęp','Progress')},{t:'info',e:'#datInfo'},{t:'act',e:'#expSave',n:T('Zapisz postęp do pliku','Save progress to a file'),dq:'#saveMsg'},{t:'act',e:'#impSave',n:T('Wczytaj postęp z pliku','Load progress from a file'),dq:'#saveMsg'},
+   {s:T('Diagnostyka','Diagnostics')},{t:'act',e:'#copyErrors',n:T('Kopiuj raport błędów','Copy the error report'),d:T('Kopiuje do schowka raport błędów dla autora gry.','Copies an error report for the game author.')},
+   {s:T('Usuwanie zapisu','Delete save')},{t:'act',e:'#clearSave',n:T('Wyczyść zapis postępu','Clear saved progress'),dan:1,d:T('Usuwa rekordy, poziomy i odblokowane perki w obu trybach. Tego nie da się cofnąć.','Removes records, levels and unlocked perks in both modes. This cannot be undone.')}]});
+ const st=document.createElement('style');st.id='nb-opcje-makieta';st.textContent=`
+${O} #opts.nbq-on .premium-page-content>.pane:not(#pane-ctl){display:none!important}
+${O} #opts.nbq-on .premium-page-content{--u:calc(min(100vw,177.78vh)/1920)}
+${O} #opts.nbq-on:not(.nbq-ctl) .premium-page-content{overflow:hidden!important;padding:0!important}
+${O} #opts .nbq{display:none!important}
+${O} #opts.nbq-on:not(.nbq-ctl) .nbq{display:grid!important;grid-template-columns:47% 1fr!important;gap:calc(24*var(--u))!important;height:100%!important;min-height:calc(560*var(--u))!important;padding:calc(6*var(--u)) 0!important;box-sizing:border-box!important}
+${O} #opts .nbq-l,${O} #opts .nbq-p{position:relative!important;min-height:0!important;border:calc(18*var(--u)) solid transparent!important;border-image:var(--nbq-rama) 48 stretch!important;background:linear-gradient(180deg,rgba(13,10,10,.92),rgba(8,6,7,.95)) padding-box!important}
+${O} #opts .nbq-l{overflow-y:auto!important;padding:calc(12*var(--u)) calc(16*var(--u))!important;scrollbar-width:thin!important;scrollbar-color:#7a5530 rgba(255,255,255,.04)!important}
+${O} #opts .nbq-h{display:block!important;text-align:left!important;margin:calc(14*var(--u)) 0 calc(4*var(--u))!important;padding:calc(10*var(--u)) calc(18*var(--u))!important;font:700 calc(29*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.05em!important;color:#f0dcb6!important;text-shadow:0 2px 4px #000!important;background:linear-gradient(180deg,rgba(60,40,30,.55),rgba(26,18,14,.85))!important;border:1px solid rgba(160,120,70,.35)!important;box-shadow:inset 0 1px 0 rgba(255,210,150,.08)!important}
+${O} #opts .nbq-h:first-child{margin-top:0!important}
+${O} #opts .nbq-r{position:relative!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:calc(16*var(--u))!important;width:100%!important;box-sizing:border-box!important;min-height:calc(47*var(--u))!important;margin:0!important;padding:0 calc(28*var(--u)) 0 calc(18*var(--u))!important;font:400 calc(23*var(--u))/1.2 Georgia,serif!important;color:#ecdcbc!important;background:rgba(30,24,22,.55)!important;border:0!important;border-bottom:1px solid rgba(255,230,190,.06)!important;cursor:pointer!important;text-align:left!important;text-transform:none!important;letter-spacing:0!important;border-radius:0!important;box-shadow:none!important}
+${O} #opts .nbq-r>input{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;margin:0!important;opacity:0!important;pointer-events:none!important}
+${O} #opts .nbq-r:hover{background:rgba(70,48,34,.6)!important}
+${O} #opts .nbq-r:focus-within,${O} #opts .nbq-r.pf,${O} #opts .nbq-r:focus-visible,${O} #opts .nbq-r.nbq-ak{background:linear-gradient(90deg,rgba(150,92,46,.85),rgba(96,58,30,.75))!important;box-shadow:inset 0 0 0 1px rgba(255,200,130,.55),inset calc(4*var(--u)) 0 0 #e0a860!important;color:#fff0d8!important;outline:none!important}
+${O} #opts .nbq-v{display:flex!important;align-items:center!important;gap:calc(14*var(--u))!important;flex:none!important;min-width:calc(170*var(--u))!important;justify-content:flex-end!important;font:400 calc(23*var(--u))/1 Georgia,serif!important;color:#f0dcb6!important;white-space:nowrap!important}
+${O} #opts .nbq-v b{font:400 calc(23*var(--u))/1 Georgia,serif!important;min-width:calc(110*var(--u))!important;text-align:center!important;color:#fff0d8!important}
+${O} #opts .nbq-a{font:700 calc(26*var(--u))/1 Georgia,serif!important;color:#e0b878!important;padding:0 calc(6*var(--u))!important;cursor:pointer!important;user-select:none!important}
+${O} #opts .nbq-a:hover{color:#fff0d8!important}
+${O} #opts .nbq-cb{display:inline-block!important;width:calc(17*var(--u))!important;height:calc(17*var(--u))!important;border:1px solid #c8b694!important;position:relative!important;margin-right:calc(4*var(--u))!important}
+${O} #opts .nbq-r.on .nbq-cb::after{content:'✓'!important;position:absolute!important;left:calc(1*var(--u))!important;top:calc(-6*var(--u))!important;font:700 calc(20*var(--u))/1 Georgia,serif!important;color:#f0dcb6!important}
+${O} #opts .nbq-v .nbq-ow{min-width:calc(52*var(--u))!important;text-align:left!important}
+${O} #opts .nbq-r.nbq-act .nbq-v{color:#e0b878!important;min-width:0!important}
+${O} #opts .nbq-r.nbq-dan{color:#f0b09a!important}
+${O} #opts .nbq-info{text-align:left!important;padding:calc(12*var(--u)) calc(18*var(--u))!important;font:italic calc(19*var(--u))/1.35 Georgia,serif!important;color:#d8c8a6!important;background:rgba(30,24,22,.4)!important}
+${O} #opts .nbq-trn{display:flex!important;gap:calc(10*var(--u))!important;padding:calc(8*var(--u)) calc(18*var(--u))!important;background:rgba(30,24,22,.55)!important}
+${O} #opts .nbq-trn input{flex:1!important;min-width:0!important;height:calc(40*var(--u))!important;font:400 calc(19*var(--u))/1 Georgia,serif!important;color:#ecdcbc!important;background:#0c0a0a!important;border:1px solid rgba(201,160,100,.45)!important;padding:0 calc(10*var(--u))!important}
+${O} #opts .nbq-trn button{height:calc(40*var(--u))!important;padding:0 calc(18*var(--u))!important;font:700 calc(16*var(--u))/1 Cinzel,Georgia,serif!important;color:#f0dcb6!important;background:rgba(60,40,28,.85)!important;border:1px solid rgba(201,160,100,.55)!important}
+${O} #opts .nbq-p{overflow:hidden!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;padding:calc(30*var(--u))!important}
+${O} #opts .nbq-pi{position:absolute!important;inset:0!important;display:block!important;background-position:center!important;background-size:cover!important;background-repeat:no-repeat!important;filter:brightness(.62) saturate(.85)!important}
+${O} #opts .nbq-pg{position:absolute!important;inset:0!important;display:block!important;background:linear-gradient(180deg,rgba(8,6,7,0) 35%,rgba(8,6,7,.82) 72%,rgba(8,6,7,.96))!important}
+${O} #opts .nbq-pt{position:relative!important;text-align:left!important}
+${O} #opts .nbq-pk{display:block!important;font:600 calc(16*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.2em!important;color:#c08a5a!important;margin-bottom:calc(14*var(--u))!important}
+${O} #opts .nbq-pn{display:block!important;font:400 calc(36*var(--u))/1.15 Georgia,serif!important;color:#f6e6c8!important;text-shadow:0 2px 6px #000!important}
+${O} #opts .nbq-pd{display:block!important;margin-top:calc(14*var(--u))!important;font:400 calc(19*var(--u))/1.4 Georgia,serif!important;color:#d8c8a6!important;max-width:calc(700*var(--u))!important}
+${O} #opts .nbq-tb{position:static!important;align-self:center!important;flex:none!important;font:700 calc(14*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-radius:calc(4*var(--u))!important;padding:calc(5*var(--u)) calc(8*var(--u))!important;background:rgba(0,0,0,.5)!important;pointer-events:none!important}
+${O} #opts .nbq-tb.l{order:-1!important;margin-right:calc(6*var(--u))!important}${O} #opts .nbq-tb.r{order:99!important;margin-left:calc(6*var(--u))!important}
+${O} #opts .nbq-f{display:flex!important;justify-content:center!important;align-items:center!important;gap:calc(48*var(--u))!important;flex:none!important;padding:calc(12*var(--u)) 0 calc(4*var(--u))!important;border-top:1px solid rgba(201,160,100,.22)!important;font:400 calc(21*var(--u))/1 Georgia,serif!important;color:#ecdcbc!important;--u:calc(min(100vw,177.78vh)/1920)}
+${O} #opts .nbq-f>span{display:flex!important;align-items:center!important;gap:calc(14*var(--u))!important}
+${O} #opts .nbq-f kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-radius:calc(4*var(--u))!important;padding:calc(6*var(--u)) calc(9*var(--u))!important;background:rgba(0,0,0,.5)!important}
+`;document.head.append(st);
+ {const r=getComputedStyle(document.documentElement);}
+ const box=document.createElement('div');box.className='nbq';box.innerHTML='<div class="nbq-l" role="list"></div><div class="nbq-p"><div class="nbq-pi"></div><div class="nbq-pg"></div><div class="nbq-pt"><span class="nbq-pk"></span><span class="nbq-pn"></span><span class="nbq-pd"></span></div></div>';
+ content.prepend(box);const L=box.querySelector('.nbq-l');
+ box.style.setProperty('--nbq-rama',"url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp')");
+ const foot=document.createElement('div');foot.className='nbq-f';opts.append(foot);
+ for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb '+c;b.textContent=t;c==='l'?tabsEl.prepend(b):tabsEl.append(b)}
+ let tab='',rows=[],akt=null;
+ const curTab=()=>{const t=opts.querySelector('.tabs>.tab.on');return t?t.dataset.tab:'gfx'};
+ const chBtns=g=>[...g.querySelectorAll('button')].filter(b=>!b.hidden);
+ const chIdx=g=>{const b=chBtns(g);let i=b.findIndex(x=>x.classList.contains('on')||x.getAttribute('aria-pressed')==='true');return i};
+ function val(r){const e=r.el;
+  if(r.t==='ch'){const b=chBtns(e),i=chIdx(e);return{i,txt:i>=0?b[i].textContent.trim():'—',n:b.length}}
+  if(r.t==='rng')return{v:+e.value,txt:Math.round(+e.value)+'%'};
+  if(r.t==='tgl')return{on:!!e.checked};return{}}
+ function upd(){for(const r of rows){if(!r.row)continue;const v=val(r);
+   if(r.t==='ch'){r.inp.max=String(Math.max(0,(v.n-1)*5));r.inp.value=String(Math.max(0,v.i)*5);r.row.querySelector('b').textContent=v.txt}
+   else if(r.t==='rng'){r.inp.value=String(v.v);r.row.querySelector('b').textContent=v.txt}
+   else if(r.t==='tgl'){r.inp.checked=v.on;r.row.classList.toggle('on',v.on);r.row.querySelector('.nbq-ow').textContent=v.on?T('Wł.','On'):T('Wył.','Off')}
+   else if(r.t==='info'){const sp=[...r.el.querySelectorAll('span')].filter(x=>!x.children.length).map(x=>x.textContent.trim()).filter(x=>x&&!/^(Postęp i rekordy|Progress and records)$/i.test(x));r.row.textContent=(sp.length?sp.join(' · '):r.el.textContent.trim())}}
+  podglad()}
+ function podglad(){const r=akt||rows.find(x=>x.row&&x.t!=='info'),pi=box.querySelector('.nbq-pi');pi.style.setProperty('background-image',`url('${IMG[tab]||IMG.set}')`,'important');
+  const k=box.querySelector('.nbq-pk'),n=box.querySelector('.nbq-pn'),d=box.querySelector('.nbq-pd');n.style.fontSize='';
+  if(!r){k.textContent='';n.textContent='';d.textContent='';return}
+  if(r.fts){const v=+r.el.value||100;k.textContent=T('PODGLĄD NAPISÓW','TEXT PREVIEW');n.textContent=T('Droga prowadzi do kaplicy.','The road leads to the chapel.');n.style.fontSize=`calc(${36*v/100}*var(--u))`;d.textContent=T('Wielkość tekstu · ','Text size · ')+Math.round(v)+'%';return}
+  k.textContent=(r.sec||'').toUpperCase();n.textContent=r.n||'';d.textContent=r.dq?(q(r.dq)?.textContent.trim()||''):(r.d||(r.t==='ch'?T('Obecnie: ','Current: ')+val(r).txt+'.':''))}
+ function apply(r){if(r.t==='ch'){const b=chBtns(r.el),i=Math.round(+r.inp.value/5);if(b[i]&&!(b[i].classList.contains('on')||b[i].getAttribute('aria-pressed')==='true'))b[i].click()}
+  else if(r.t==='rng'){r.el.value=r.inp.value;r.el.dispatchEvent(new Event('input',{bubbles:true}));r.el.dispatchEvent(new Event('change',{bubbles:true}))}
+  else if(r.t==='tgl'){if(!!r.el.checked!==r.inp.checked)r.el.click()}
+  setTimeout(upd,30)}
+ function build(){tab=curTab();akt=null;rows=[];L.innerHTML='';const spec=SPEC()[tab]||[];let sec='';
+  for(const s of spec){if(s.s){sec=s.s;const h=document.createElement('div');h.className='nbq-h';h.textContent=s.s;L.append(h);continue}
+   const el=q(s.e);if(!el)continue;const r={...s,el,sec};
+   if(s.t==='trn'){if(el.hidden||getComputedStyle(el).display==='none')continue;const h=document.createElement('div');h.className='nbq-h';h.textContent=T('Tryb testera','Tester mode');L.append(h);
+    const w=document.createElement('div');w.className='nbq-trn';w.innerHTML=`<input type="password" aria-label="${T('Kod','Code')}"><button type="button">${T('Odblokuj','Unlock')}</button>`;const [i,b]=w.children;
+    const go=()=>{const c=$('trnCode');if(c){c.value=i.value;$('trnBtn')?.click();i.value=''}};b.addEventListener('click',go);i.addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter')go()});L.append(w);continue}
+   if(s.t==='info'){const d=document.createElement('div');d.className='nbq-info';r.row=d;L.append(d);rows.push(r);continue}
+   if(s.t==='act'){const b=document.createElement('button');b.type='button';b.className='nbq-r nbq-act'+(s.dan?' nbq-dan':'');b.innerHTML=`<span>${esc(s.n)}</span><span class="nbq-v">›</span>`;b.addEventListener('click',()=>{el.click();setTimeout(upd,60)});r.row=b;r.inp=b;L.append(b);rows.push(r);continue}
+   const lab=document.createElement('label');lab.className='nbq-r';const inp=document.createElement('input');r.row=lab;r.inp=inp;
+   if(s.t==='tgl'){inp.type='checkbox';lab.innerHTML=`<span>${esc(s.n)}</span><span class="nbq-v"><i class="nbq-cb"></i><span class="nbq-ow"></span></span>`;inp.addEventListener('change',()=>apply(r))}
+   else{inp.type='range';if(s.t==='ch'){inp.min='0';inp.step='5'}else{inp.min=el.min||'0';inp.max=el.max||'100';inp.step=String(Math.max(5,+el.step||0))}
+    lab.innerHTML=`<span>${esc(s.n)}</span><span class="nbq-v"><i class="nbq-a" data-d="-1">‹</i><b></b><i class="nbq-a" data-d="1">›</i></span>`;
+    inp.addEventListener('input',()=>apply(r));
+    inp.addEventListener('keydown',e=>{const d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(!d)return;e.preventDefault();const nv=Math.max(+inp.min,Math.min(+inp.max,+inp.value+(+inp.step||5)*d));if(nv!==+inp.value){inp.value=String(nv);apply(r)}});/* strzalki: wlasny krok (domyslna obsluga suwaka bywa blokowana) */
+    lab.addEventListener('click',e=>{const a=e.target.closest('.nbq-a');e.preventDefault();inp.focus({preventScroll:true});if(!a)return;const stp=+inp.step||5,nv=Math.max(+inp.min,Math.min(+inp.max,+inp.value+stp*(+a.dataset.d)));if(nv!==+inp.value){inp.value=String(nv);apply(r)}})}
+   inp.setAttribute('aria-label',s.n);inp.tabIndex=0;lab.append(inp);L.append(lab);rows.push(r)}
+  upd()}
+ const fokus=e=>{const r=rows.find(x=>x.row&&x.row.contains(e.target));if(r){akt=r;for(const x of rows)x.row&&x.row.classList.toggle('nbq-ak',x===r);podglad()}};
+ L.addEventListener('focusin',fokus);L.addEventListener('mouseover',fokus);
+ function stopka(){const pad=document.body.classList.contains('padnav');foot.innerHTML=pad?`<span><kbd>LB / RB</kbd>${T('Zakładki','Tabs')}</span><span><kbd>A</kbd>${T('Wybierz','Select')}</span><span><kbd>B</kbd>${T('Wróć','Back')}</span>`:`<span><kbd>← →</kbd>${T('Zmień wartość','Change value')}</span><span><kbd>Enter</kbd>${T('Wybierz','Select')}</span><span><kbd>Esc</kbd>${T('Wróć','Back')}</span>`}
+ function nazwyZakladek(){const m={aud:T('Dźwięk','Sound'),set:T('Rozgrywka i interfejs','Gameplay & interface')};for(const b of opts.querySelectorAll('.tabs>.tab'))if(m[b.dataset.tab]&&b.textContent!==m[b.dataset.tab])b.textContent=m[b.dataset.tab]}
+ function sync(){if(opts.hidden)return;opts.classList.add('nbq-on');nazwyZakladek();const t=curTab();opts.classList.toggle('nbq-ctl',t==='ctl');if(t!==tab)build();else upd();stopka()}
+ new MutationObserver(()=>setTimeout(sync,0)).observe(opts,{attributes:true,attributeFilter:['hidden']});
+ tabsEl.addEventListener('click',()=>setTimeout(sync,0));
+ opts.addEventListener('change',e=>{if(!box.contains(e.target))setTimeout(upd,30)},true);
+ new MutationObserver(()=>{if(!opts.hidden&&tab==='dat')upd()}).observe(q('#datInfo')||opts,{childList:true,subtree:true,characterData:true});
+ new MutationObserver(stopka).observe(document.body,{attributes:true,attributeFilter:['class']});
+ sync();
+}catch(e){quietErr('opcjeMakieta',e)}})();
 requestAnimationFrame(frame);
 })();
 

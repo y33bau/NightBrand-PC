@@ -872,3 +872,4 @@ cache796 · Przygotowanie: kolumny do dolnego marginesu, min. 3 kafle perkow
 cache797 · Przygotowanie: opis ofiar pod przyciskami
 cache798 · Przygotowanie: jasniejsze zablokowane kafle
 cache799 · Nowe intro muzyczne od autora (stare usuniete)
+cache800 · Opcje wg makiety GPT: lista z podgladem, zakladki LB/RB, stopka
