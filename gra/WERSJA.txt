@@ -856,3 +856,4 @@ cache780 · Mapa podrozy zamiast listy rozdzialow (nie sprawdzono: pad fizyczny,
 cache781 · Pieczec przy poziomie, kadr portretow Miry, Iwa i Mileny w przygotowaniu (nie sprawdzono: pad, dzwiek, FPS u autora, itch.io)
 cache782 · Usuniete sterowanie dotykowe: drazek i przyciski, opcje dotyku, nakladka obrotu telefonu, galezie telefonu w jakosci i HUD (nie sprawdzono: pad, dzwiek, FPS u autora, itch.io)
 cache783 · Publikacja: usuniete sterowanie dotykowe (782) + naglowek Mapa podrozy (nie sprawdzono: pad, dzwiek, FPS u autora, itch.io)
+cache784 · Nowa muzyka: 7 utworow (c1-c6 rozdzialy, intro); NIE sprawdzono: sluchania w grze, petli, sciezki bossa (crypt bez zmian)
