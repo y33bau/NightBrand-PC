@@ -9,7 +9,7 @@
 #pauseQuit p{margin:0}`;document.head.append(st)}
 (()=>{
  const root=$('orient');if(!root.classList.contains('pc-menu')||new URLSearchParams(location.search).get('menu2')==='0')return;
- root.classList.add('nb2');if(!coarse)root.classList.add('nb2-pc');
+ root.classList.add('nb2');root.classList.add('nb2-pc');
  const T=(p,e)=>EN?e:p,mk=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e};
  const title=$('title'),prep=$('prep'),put=(el,text)=>{if(el&&el.textContent!==text)el.textContent=text};
  const CLS=[...'rkzdm'],medalRing=v=>v?MEDAL_C[v]:'rgba(230,214,184,.22)';
@@ -64,12 +64,12 @@
 
  // ---------- Opcje ----------
  $('optsBtn').addEventListener('click',()=>{document.querySelector('#opts .tab[data-tab="gfx"]')?.click()});
- if(!coarse){ // PC: bez wzmianek o telefonie i baterii (kod dotyku zostaje)
+ { // PC: bez wzmianek o telefonie i baterii w opisach jakosci
   for(const p of document.querySelectorAll('#pane-gfx .figcap')){const t=p.textContent;
    const n=t.replace('Auto: telefon i tablet dostają Średnią, komputer Wysoką.','Auto: na komputerze Wysoka.').replace('dla mocnych komputerów i tabletów','dla mocnych komputerów').replace('Niższy limit oszczędza baterię i może pomóc','Niższy limit może pomóc')
     .replace(/Auto: phones and tablets get Medium, (?:a )?computers? (?:gets? )?High\./i,'Auto: High on a computer.').replace(/A lower limit saves battery and (?:can|may) help/i,'A lower limit can help').replace('strong computers and tablets','strong computers');
    if(n!==t)p.textContent=n}}
- // Pelny ekran: przelacznik w Grafice. Wybor „W oknie" pamieta klucz nb_fs (goFull go szanuje).
+ // Pelny ekran: przelacznik w Grafice. Wybor „W oknie" pamieta klucz nb_fs.
  {const d=document.documentElement,can=!!(d.requestFullscreen||d.webkitRequestFullscreen)&&document.fullscreenEnabled!==false,host=document.querySelector('#pane-gfx .pc-brightness-tile')||$('pane-gfx');
   if(can&&host){const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement),lab=mk('p','figcap nb2-fslab',T('Tryb wyświetlania','Display mode')),row=mk('div','qrow');row.id='fsRow';row.setAttribute('role','group');row.setAttribute('aria-label',T('Tryb wyświetlania','Display mode'));
    const mkB=(on,text)=>{const b=mk('button','go alt',text);b.type='button';b.dataset.fs=on?'1':'0';b.addEventListener('click',()=>{try{localStorage.setItem('nb_fs',on?'1':'0')}catch(e){}try{if(on&&!isFs()){const r=(d.requestFullscreen||d.webkitRequestFullscreen).call(d);if(r&&r.catch)r.catch(()=>{})}else if(!on&&isFs())(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){}setTimeout(sync,60)});return b};
@@ -190,7 +190,6 @@
 @N@ #pause .nbp-pane[data-pane=gfx] .qrow>button:is([aria-pressed=true],.on){background:var(--nbs-on)!important;border-color:var(--nbs-line)!important;color:#fff0d5!important;box-shadow:inset 0 -2px #c9a45a!important}
 @N@ #pause .nbp-pane[data-pane=gfx] .qrow>button:is(:focus-visible,.pf){outline:2px solid var(--nbs-focus)!important;outline-offset:1px!important}
 /* --- Opcje --- */
-@N@.nb2-pc #opts .stab[data-sub=touch],@N@.nb2-pc #opts label:has(#touchLeftTgl),@N@.nb2-pc #opts label:has(#touchSizeSl),@N@.nb2-pc #opts label:has(.touchSizeSl){display:none!important}
 @N@ #opts .nb2-fslab{margin-top:1.6vh!important}
 @N@ #opts #pane-dat:not([hidden]){display:flex!important;flex-direction:column!important;align-items:center!important;gap:1.4vh!important}
 @N@ #opts #pane-dat #copyErrors{margin-top:1.2vh!important;font-size:max(12px,1.9vh)!important;opacity:.85!important}
@@ -526,7 +525,7 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
  setMode('edit');
  /* ---- blokada gry w trybie edycji ---- */
  const stop=e=>{if(mode!=='edit'||inUi(e.target))return;e.preventDefault();e.stopImmediatePropagation()};
- ['click','dblclick','contextmenu','mouseup','mousedown','touchstart','wheel','auxclick'].forEach(t=>window.addEventListener(t,stop,true));
+ ['click','dblclick','contextmenu','mouseup','mousedown','wheel','auxclick'].forEach(t=>window.addEventListener(t,stop,true));
  window.addEventListener('pointerdown',e=>{
   if(mode!=='edit'||inUi(e.target))return;
   e.preventDefault();e.stopImmediatePropagation();

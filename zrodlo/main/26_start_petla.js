@@ -333,7 +333,6 @@ const style=el('style','premium-style');style.textContent=`
 #title .premium-banner{border-image-source:${url('ramka-okno')};border-image-slice:155}
 #title .premium-hero{border-image-source:${url('ramka-karta')};border-image-slice:85}
 #title .premium-nav #manBtn{font-size:0!important}#title .premium-nav #manBtn:after{content:'${EN?'Guide':'Instrukcja'}';font:700 22px Grenze,Georgia,serif}
-#title .premium-controls .touchcorner{position:static!important;inset:auto!important}
 @media(max-height:550px){#title .premium-nav #manBtn:after{font-size:16px}}
 `;style.textContent=style.textContent.replaceAll('#title','#orient#orient#orient#orient#orient #title');document.head.append(style);
 
@@ -618,21 +617,20 @@ const q=s=>root.querySelector(s),V={lv:q('.nbh-lv span'),hp:q('.nbh-hp'),st:q('.
  ph:q('.nbh-night>small'),clk:q('.nbh-night>strong'),coin:q('.nbh-coins b'),radar:q('.nbh-radar'),hint:q('.nbh-hint'),boss:q('.nbh-boss'),bn:q('.nbh-bh strong'),bp:q('.nbh-bh span'),bf:q('.nbh-btr i'),pf:q('.nbh-poise i')};
 V.radar.append($('mini'));ash.dataset.cap=T('AKTYWNE UMIEJĘTNOŚCI','ACTIVE SKILLS');
 const setBar=(row,v,mx)=>{row.querySelector('.nbh-tr i').style.width=(Math.max(0,Math.min(1,v/mx))*100).toFixed(2)+'%';row.querySelector('.nbh-lab span').innerHTML=`${Math.max(0,Math.ceil(v))} <i>/ ${Math.round(mx)}</i>`};
-// skale: PC liczony od 1280x720, dotyk od 844x390 (jak w makiecie)
+// skala HUD liczona od 1280x720
 let lastScale='';
-function scale(){const t=!!coarse,W=innerWidth,H=innerHeight,s=t?Math.min(W/844,H/390):Math.min(W/1280,H/720),v=Math.max(t?.85:.8,Math.min(t?1.5:1.7,s));
- root.classList.toggle('touch',t);ash.classList.toggle('nbh-touch',t);scr.style.setProperty('--hs',v.toFixed(3));
- const b=$('btns'),r=b&&b.getBoundingClientRect(),sr=scr.getBoundingClientRect();if(t&&r&&r.height)scr.style.setProperty('--btns-top',Math.round(sr.bottom-r.top)+'px');lastScale=W+'x'+H+t}
+function scale(){const W=innerWidth,H=innerHeight,s=Math.min(W/1280,H/720),v=Math.max(.8,Math.min(1.7,s));
+ scr.style.setProperty('--hs',v.toFixed(3));lastScale=W+'x'+H}
 addEventListener('resize',()=>requestAnimationFrame(scale));
 // PC: pozioma os listwy bossa pokrywa sie z osia srodkow kol umiejetnosci
 let alignT=0;
-function alignBoss(){if(coarse||scr.classList.contains('pc-hud')||V.boss.hidden)return;const sk=ash.querySelector('.active-slot'),tr=V.boss.querySelector('.nbh-btr');if(!sk||ash.hidden)return;
+function alignBoss(){if(scr.classList.contains('pc-hud')||V.boss.hidden)return;const sk=ash.querySelector('.active-slot'),tr=V.boss.querySelector('.nbh-btr');if(!sk||ash.hidden)return;
  const a=tr.getBoundingClientRect(),b=sk.getBoundingClientRect();if(!a.height||!b.height)return;const cur=parseFloat(getComputedStyle(V.boss).bottom)||0,nb=cur+(a.top+a.height/2)-(b.top+b.height/2);
  if(Math.abs(nb-cur)>.5)V.boss.style.setProperty('--boss-bottom',nb.toFixed(1)+'px')}
 let last='',lastB='',mp=null,shown=false;
 function home(mpOn){const chal=$('chal');if(mpOn){chal.after($('buffs'));hudEl.append($('chips'))}else V.more.append($('buffs'),$('chips'))}
 function upd(){const show=!!S&&!hudEl.hidden;root.hidden=!show;if(!show){shown=false;return}
- if(!shown||lastScale!==innerWidth+'x'+innerHeight+!!coarse){shown=true;scale()}
+ if(!shown||lastScale!==innerWidth+'x'+innerHeight){shown=true;scale()}
  const isMp=hudEl.classList.contains('mp2');if(isMp!==mp){mp=isMp;root.classList.toggle('mp2',mp);home(mp)}
  const mx=pl.max||1,hp=Math.max(0,pl.hp),sm=pl.staMax||1,mm=pl.manaMax||SL.mana.max||1,tt=$('time').textContent.trim(),ch=$('chal');
  const key=[S.lvl,Math.ceil(hp),mx,Math.floor(pl.sta),sm,Math.floor(pl.mana||0),mm,S.xp,S.need,S.coins,tt,ch.hidden?'':ch.textContent,PAD.on?1:0].join('|');
@@ -705,7 +703,6 @@ ${NB} .nbh-hint{position:absolute;right:25px;bottom:22px;color:#d0c0a4;font-size
 ${NB} .nbh-hint kbd{font:10px Georgia,serif;border:0;border-bottom:1px solid #958161;background:none;padding:2px;color:#e8d8bb}
 ${NB} .nbh-hint span{padding:0 7px;color:#9b7d50}
 ${NB}.bossfight .nbh-hint{bottom:100px}
-${NB}.touch .nbh-hint{display:none}
 ${NB} .nbh-boss{position:absolute;left:50%;bottom:var(--boss-bottom,10px);width:min(530px,calc(100% - 650px));min-width:330px;padding:8px 12px;transform:translateX(-50%) scale(var(--hs,1));transform-origin:50% 100%;background:linear-gradient(90deg,transparent,#0c0b10bb 15%,#0c0b10bb 85%,transparent);text-shadow:0 2px 3px #000}
 ${NB} .nbh-bh{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:5px}
 ${NB} .nbh-bh small{font-size:9px;letter-spacing:1.5px;color:#b9a181;white-space:nowrap}
@@ -731,46 +728,6 @@ ${AS} .active-slot .slot-cd:after{content:' s';font-size:.6em;margin-left:1px}
 ${AS} .active-slot.empty{opacity:.5}
 ${AS} .active-slot.empty>span{color:#8d7f6b}
 ${AS}.lt-held .active-slot{border-color:#e2a258!important;box-shadow:inset 0 0 0 2px #101115ad,0 0 8px #e2a25877!important}
-${AS}.nbh-touch:not([hidden]){left:0!important;top:0!important;right:0!important;bottom:0!important;transform:none!important;padding:0!important;background:none!important;display:block!important;pointer-events:none!important}
-${AS}.nbh-touch:after{content:none}
-${AS}.nbh-touch .active-slot{position:absolute!important;pointer-events:auto;width:56px!important;height:56px!important;transform:scale(var(--hs,1));box-shadow:inset 0 0 0 3px #1011158c,0 3px 8px #0006!important}
-${AS}.nbh-touch .active-slot .ic{width:40px!important;height:40px!important}
-${AS}.nbh-touch .active-slot:nth-child(1){left:${SC}24px);bottom:${SC}132px)}
-${AS}.nbh-touch .active-slot:nth-child(2){left:${SC}90px);bottom:${SC}132px)}
-${AS}.nbh-touch .active-slot:nth-child(3){right:${SC}84px);bottom:calc(var(--btns-top,170px) + 26px)}
-${AS}.nbh-touch .active-slot:nth-child(4){right:${SC}18px);bottom:calc(var(--btns-top,170px) + 26px)}
-${AS}.nbh-touch .active-slot:nth-child(5){right:${SC}150px);bottom:calc(var(--btns-top,170px) + 26px)}
-${AS}.nbh-touch .active-slot:nth-child(6){left:${SC}156px);bottom:${SC}132px)}
-${NB}.touch .nbh-vitals{left:8px;top:8px;width:205px;padding:3px 5px 5px}
-${NB}.touch .nbh-id{height:24px}
-${NB}.touch .nbh-lv{width:24px;height:26px;font-size:18px}
-${NB}.touch .nbh-tr{height:22px;padding:5px 10%}
-${NB}.touch .nbh-hp .nbh-tr{height:26px}
-${NB}.touch .nbh-tr:before{inset:5px 10%}
-${NB}.touch .nbh-res{margin-top:2px}
-${NB}.touch .nbh-lab b{font-size:7px}
-${NB}.touch .nbh-lab span{font-size:11px}
-${NB}.touch .nbh-xp{font-size:7px}
-${NB}.touch .nbh-xp>div{height:6px;border-width:1px}
-${NB}.touch .nbh-chal{margin-top:8px;max-width:170px}
-${NB}.touch .nbh-chal small{font-size:8px}
-${NB}.touch .nbh-chal span{font-size:15px}
-${NB}.touch .nbh-chal i{font-size:10px}
-${NB}.touch .nbh-more #buffs{font-size:10px!important;max-width:180px}
-${NB}.touch .nbh-radar{top:12px;right:12px;width:70px;height:70px}
-${NB}.touch .nbh-night{top:20px;right:calc(12px + 80px*var(--hs,1))}
-${NB}.touch .nbh-night>strong{font-size:18px;letter-spacing:.5px}
-${NB}.touch .nbh-night>strong.txt{font-size:13px;max-width:150px}
-${NB}.touch .nbh-night>small{font-size:7px}
-${NB}.touch .nbh-coins{font-size:11px;gap:5px;margin-top:4px}
-${NB}.touch .nbh-coins small{font-size:7px}
-${NB}.touch .nbh-coins img{width:11px;height:11px}
-${NB}.touch .nbh-boss{width:40%;min-width:0;bottom:10px;padding:4px 8px}
-${NB}.touch .nbh-bh strong{font-size:16px;letter-spacing:3px}
-${NB}.touch .nbh-bh small{font-size:7px}
-${NB}.touch .nbh-bh span{font-size:10px}
-${NB}.touch .nbh-btr{height:20px;padding:4px 10%}
-${NB}.touch .nbh-btr:before{inset:4px 10%}
 `;
 document.head.append(style);
 })();
@@ -812,15 +769,10 @@ ${M}[data-k]:not([data-k='']):after{content:attr(data-k);order:-1;display:block;
 ${M}.boss{color:#f4d5ad!important;font-size:calc(23px*var(--hs,1))!important}
 ${M}.boss:before{background:radial-gradient(ellipse,#30110feb,#08090ba8 48%,transparent 73%)!important}
 ${M}.boss[data-k]:after{color:#de9760}
-${OR} #screen.nbm-t:not(.port) #msg{top:calc(12px*var(--hs,1))!important;width:calc(100% - 450px*var(--hs,1))!important;max-width:calc(410px*var(--hs,1))!important;padding:calc(8px*var(--hs,1)) calc(10px*var(--hs,1))!important;font-size:calc(16px*var(--hs,1))!important;line-height:1.25!important}
-${OR} #screen.nbm-t:not(.port) #msg.boss{font-size:calc(18px*var(--hs,1))!important}
-${OR} #screen.nbm-t:not(.port) #msg[data-k]:after{font-size:calc(7px*var(--hs,1));letter-spacing:calc(2px*var(--hs,1))}
 ${OR} #nbHud .nbh-gain{position:absolute;right:0;top:100%;margin-top:3px;white-space:nowrap;font-size:13px;color:#edc477;text-shadow:0 2px 4px #000;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .6s;pointer-events:none}
 ${OR} #nbHud .nbh-gain.on{opacity:1;transform:none}
-${OR} #nbHud.touch .nbh-gain{font-size:11px}
 @media(prefers-reduced-motion:reduce){${M},${OR} #nbHud .nbh-gain{transition:none!important}}`;
 document.head.append(st);
-const scr=$('screen'),sync=()=>scr.classList.toggle('nbm-t',!!coarse);sync();addEventListener('resize',sync);
 })();
 // ===== Pauza: zakladki Umiejetnosci / Sterowanie / Audio; istniejace kontrolki i ich obsluga zostaja =====
 (()=>{
@@ -868,7 +820,7 @@ nav.addEventListener('click',e=>{const b=e.target.closest('.nbp-tab');if(b)show(
 new MutationObserver(()=>{if(pz.hidden)return;
  const nm=$('start'+CH),t=nm&&CH<=6?[...nm.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim():'';sub.textContent=t;
  show(load.hidden||!(S&&S.sk&&ACTIVE_SLASHER.some(k=>S.sk[k]))?'controls':'skills');outs();// bez żadnej aktywnej umiejętności pauza zaczyna od Sterowania
- if(!keys.querySelector('.stab.on'))pauseSub(coarse?'touch':PAD.on?'pad':'kb')}).observe(pz,{attributes:true,attributeFilter:['hidden']});
+ if(!keys.querySelector('.stab.on'))pauseSub(PAD.on?'pad':'kb')}).observe(pz,{attributes:true,attributeFilter:['hidden']});
 show('skills');
 const R=PREMIUM_ASSETS,P='#orient'.repeat(12)+' #pause.nbp',st=mk('style','nbp-style');
 st.textContent=`
@@ -2251,10 +2203,10 @@ ${'#orient'.repeat(44)}.pc-menu #pause #skillLoadout .pcmp-loadout-tabs{grid-col
 
 // PC: spokojne komunikaty i dolny panel rozmowy. Tylko prezentacja i nawigacja UI.
 // Miniatura pochodzi z tej samej klatki atlasu co NPC w swiecie, bez nowych plikow.
-// ?pcdialogue=0 przywraca dotychczasowa oprawe; sterowanie dotykowe pozostaje bez zmian.
+// ?pcdialogue=0 przywraca dotychczasowa oprawe.
 (()=>{
  const root=$('orient'),dlg=$('dialog');
- if(coarse||!root.classList.contains('pc-menu')||new URLSearchParams(location.search).get('pcdialogue')==='0')return;
+ if(!root.classList.contains('pc-menu')||new URLSearchParams(location.search).get('pcdialogue')==='0')return;
  root.classList.add('pc-conversations');
  const T=(p,e)=>EN?e:p,make=(tag,c)=>{const el=document.createElement(tag);el.className=c;return el};
  const picture=make('div','pc-talk-portrait'),portrait=make('canvas','');portrait.width=portrait.height=192;picture.append(portrait);picture.setAttribute('aria-hidden','true');
@@ -2318,7 +2270,7 @@ ${D} :is(.next,#dlgBtns,#witChoices)[hidden]{display:none!important}
 
 // Quiet PC tutorial card and secondary skip actions; existing timers and touch code remain in charge.
 (()=>{
- const root=$('orient');if(!root.classList.contains('pc-menu')||coarse||isPort()||new URLSearchParams(location.search).get('tutorialui')==='0')return;
+ const root=$('orient');if(!root.classList.contains('pc-menu')||isPort()||new URLSearchParams(location.search).get('tutorialui')==='0')return;
  root.classList.add('pc-tutorial');const card=$('tut'),skip=$('tutSkip'),head=document.createElement('div'),label=document.createElement('span'),count=document.createElement('span'),foot=document.createElement('div');
  head.className='pc-tut-head';label.textContent=EN?'Hint':'Podpowiedź';count.id='pcTutCount';count.textContent='';count.setAttribute('aria-hidden','true');head.append(label,count);foot.className='pc-tut-foot';foot.append(skip);card.prepend(head);card.append(foot);card.setAttribute('role','status');card.setAttribute('aria-atomic','true');
  const P='#orient'.repeat(48)+'.pc-menu.pc-tutorial #screen:not(.port)',T=P+' #tut',B=P+' #tutSkip',I=P+' #intro #iskip',style=document.createElement('style');style.id='pc-quiet-tutorial';

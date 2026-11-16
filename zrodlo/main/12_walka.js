@@ -16,9 +16,9 @@ const SL={regen:32,delay:.55,roll:20,blockRegen:.25,stepCost:8,
 // level-up cards in slasher mode raise the hero's attributes instead of giving skills
 const SLASH_UP=['_vit','_dex','_str','_int'];
 // direction from the hero to the mouse pointer (screen y is foreshortened by the camera tilt)
-function aimDir(){if(clock-PAD.aimT<.15)return [PAD.ax,PAD.ay];if(coarse||clock-mouseT>3)return null;V.set(pl.x/16,.9,pl.y/16).project(cam);const r=$('screen').getBoundingClientRect();
+function aimDir(){if(clock-PAD.aimT<.15)return [PAD.ax,PAD.ay];if(clock-mouseT>3)return null;V.set(pl.x/16,.9,pl.y/16).project(cam);const r=$('screen').getBoundingClientRect();
   const hx=(V.x+1)/2*r.width,hy=(1-V.y)/2*r.height,dx=mouseX-hx,dy=(mouseY-hy)/Math.sin(PITCH),d=Math.hypot(dx,dy);return d>4?[dx/d,dy/d]:null}
-// keyboard and touch: lock on to the closest enemy roughly in front
+// keyboard: lock on to the closest enemy roughly in front
 function autoAim(){let b=null,bd=1e9;for(const e of S.enemies){if(e.dead||e.rise>0||e.type==='wisp')continue;const dx=e.x-pl.x,dy=e.y-pl.y,d=Math.hypot(dx,dy);if(d>75||d<1)continue;const f=(dx*pl.fx+dy*pl.fy)/d;if(f<-.2)continue;const sc=d*(1.6-f);if(sc<bd){bd=sc;b=[dx/d,dy/d]}}return b}
 // ---- STYLE WALKI (slasher): trzy gałęzie kart z poziomami. Osiem poziomów w jednej gałęzi daje bonus zestawu ----
 const BR={def:{n:(EN?'Defender':'Obrońca'),set:(EN?'Parry: 0.9 s of invulnerability instead of 0.7 s; +2% health (once per 2.5 s).':'Parowanie: 0,9 s nietykalności zamiast 0,7 s; +2% życia (raz na 2,5 s).')},off:{n:(EN?'Assassin':'Zabójca'),set:(EN?'Hitting a stunned enemy restores 6 stamina.':'Trafienie ogłuszonego wroga zwraca 6 staminy.')},wav:{n:(EN?'Wavemaster':'Mistrz fal'),set:(EN?'Waves deal +30% damage and apply the blade status.':'Fale +30% obrażeń i nakładają status ostrza.')}},SET_N=8;
@@ -378,7 +378,7 @@ function renderLoadout(){
  for(const i of [1,2]){const b=document.createElement('button');b.type='button';b.className='nbp-tab';b.dataset.loadoutPlayer=i;b.setAttribute('aria-pressed',String((S.loadoutPlayer||1)===i));b.textContent=(EN?'Player ':'Gracz ')+i;tabs.append(b)}$('skillLoadout').prepend(tabs)
 }
 $('skillLoadout').addEventListener('click',e=>{const player=e.target.closest('[data-loadout-player]');if(player){S.loadoutPlayer=+player.dataset.loadoutPlayer;renderLoadout();return}const slot=e.target.closest('[data-slot]'),choice=e.target.closest('[data-equip]'),change=()=>{if(slot){S.loadoutSelected=+slot.dataset.slot;renderLoadout()}else if(choice)equipActive(S.loadoutSelected||0,choice.dataset.equip||null)};if(pl2&&S.loadoutPlayer===2)asP2(change);else change()});
-for(const ev of ['pointerdown','mousedown','touchstart'])$('activeSkillHud').addEventListener(ev,e=>e.stopPropagation());
+for(const ev of ['pointerdown','mousedown'])$('activeSkillHud').addEventListener(ev,e=>e.stopPropagation());
 $('activeSkillHud').addEventListener('click',e=>{e.stopPropagation();const b=e.target.closest('[data-active]');if(b){e.preventDefault();activateSlot(+b.dataset.active)}});
 
 function swordCanAct(){return !!(S&&S.phase==='play'&&!S.paused&&!S.notice&&!S.dialog&&!S.choosing&&!S.shop&&!S.intro&&!pl.dead&&pl.roll<=0&&!(pl.broken>0)&&!pl.atk&&!pl.block&&!pl.charging)}

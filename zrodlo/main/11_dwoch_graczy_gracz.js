@@ -226,7 +226,7 @@ let HINTS_ENABLED=true;try{HINTS_ENABLED=localStorage.getItem('pn_hints')!=='0'}
 function setHints(on){HINTS_ENABLED=!!on;$('hintsTgl').checked=HINTS_ENABLED;try{localStorage.setItem('pn_hints',on?'1':'0')}catch(e){}if(!on){$('tut').classList.remove('on');$('tutSkip').hidden=true}TUT.sid=null}
 // the old pausing event box is gone; this only hands out a pending Wit reward once its message has been shown
 function pumpNotice(){if(!S||S.phase!=='play'||S.notice||S.intro||S.dialog||S.choosing||S.shop||S.paused)return;if(S.witRewardPending&&S.pendLv>0&&!S.banner&&!(S.noticeQueue||[]).length){S.witRewardPending=false;openLevelUp()}}
-function dismissNotice(){if(!S||!S.notice)return;S.notice=null;$('notice').hidden=true;resetInput();for(const k in keys)keys[k]=false;pumpNotice();if(!S.notice)$('touch').hidden=!coarse||!!(S.dialog||S.choosing||S.shop||S.intro||S.paused)}
+function dismissNotice(){if(!S||!S.notice)return;S.notice=null;$('notice').hidden=true;resetInput();for(const k in keys)keys[k]=false;pumpNotice()}
 function say(t,kind='event'){if(!t)return;if(kind==='hint'&&isPort())return;if(S&&S.phase==='play'){const q=S.noticeQueue||(S.noticeQueue=[]);if(S.banner?.text!==t&&!q.some(n=>n.text===t))q.push({text:t,kind});return}const m=$('msg');m.classList.remove('boss','tick','tickhold');m.textContent=t;m.classList.add('on');clearTimeout(msgT);msgT=setTimeout(()=>m.classList.remove('on'),messageDuration(t)*1000)}
 // Event messages: a banner at the top of the screen that never pauses the game. Each stays MSG.show seconds of play
 // time at minimum, extended by text length up to MSG.max; the next waits until fade-out ends (MSG.gap).

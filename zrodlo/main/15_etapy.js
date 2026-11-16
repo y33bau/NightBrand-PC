@@ -57,13 +57,13 @@ function shopDesc(it){if(it.id==='heart'&&S&&S.pk&&S.pk.hpMul<1)return(EN?`+${he
 function renderShop(){$('shopCoins').textContent=S.coins;const box=$('shopCards');box.innerHTML='';
   SHOP.forEach((it,i)=>{const pr=price(it),maxed=shopMaxed(it),b=document.createElement('button');b.type='button';b.className='card';b.id='shop'+i;b.disabled=maxed||S.coins<pr;
     b.innerHTML=(EN?`<span class="ck">Item ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Sold out':pr+' coins'}</span><span class="cd">${shopDesc(it)}</span>`:`<span class="ck">Towar ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Wyprzedane':pr+' monet'}</span><span class="cd">${shopDesc(it)}</span>`);b.addEventListener('click',()=>buy(i));box.appendChild(b)})}
-function openShop(){resetInput();S.shop=true;play('shopIn',0);pl.swingT=0;renderShop();$('shop').hidden=false;$('touch').hidden=true;setTimeout(()=>{const f=$('shopClose');f&&f.focus()},30)}
+function openShop(){resetInput();S.shop=true;play('shopIn',0);pl.swingT=0;renderShop();$('shop').hidden=false;setTimeout(()=>{const f=$('shopClose');f&&f.focus()},30)}
 function buy(i){const it=SHOP[i];if(!it||!S.shop)return;const pr=price(it);if(S.coins<pr||shopMaxed(it)){play('empty',0);return}
   S.coins-=pr;S.bought[it.id]=(S.bought[it.id]||0)+1;uiSnd('buy');
   if(it.id==='brew')pl.hp=pl.max;else if(it.id==='heart'){const hv=heartHp();pl.max+=hv;heal(hv)}else if(it.id==='whet')S.whet++;else if(it.id==='amulet'){pl.staMax=Math.min(180,pl.staMax+20);pl.sta=pl.staMax}
   else if(it.id==='scroll'){S.lvl++;S.need=xpNeed(S.lvl);S.pendLv++}else if(it.id==='magnet')S.magnet+=.4;
   renderShop()}
-function closeShop(){if(!S||!S.shop)return;S.shop=false;uiSnd('back');$('shop').hidden=true;$('touch').hidden=!coarse;const mdg=S.merchant&&S.merchant.dg;leaveMerchant();say(mdg?(EN?'Marga: "The stairs lead up. The night will wait for you."':'Marga: „Schody prowadzą na górę. Noc na ciebie poczeka”.'):(EN?'Marga: "Careful. The Order Collector has caught the scent of your gold."':'Marga: „Uważaj. Poborca Zakonu zwęszył twoje złoto”.'));if(S.pendLv>0)openLevelUp()}
+function closeShop(){if(!S||!S.shop)return;S.shop=false;uiSnd('back');$('shop').hidden=true;const mdg=S.merchant&&S.merchant.dg;leaveMerchant();say(mdg?(EN?'Marga: "The stairs lead up. The night will wait for you."':'Marga: „Schody prowadzą na górę. Noc na ciebie poczeka”.'):(EN?'Marga: "Careful. The Order Collector has caught the scent of your gold."':'Marga: „Uważaj. Poborca Zakonu zwęszył twoje złoto”.'));if(S.pendLv>0)openLevelUp()}
 
 // 9.11.2026: jedno losowe zdarzenie w środku nocy (nie w krypcie, nie przy bossach, nie w pierwszej nocy)
 const NEV={krew:{d:45,mob:1.4,coin:2},mgla:{d:40,fog:.022},lowy:{d:30,coins:40}};

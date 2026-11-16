@@ -189,7 +189,7 @@ function finishWorldArt(w){if(depthOn(w.ch))depthApron(w);buildRoofs(w);prepareP
   for(const m of [w.halos,w.cores]){m.frustumCulled=false;m.renderOrder=40;hl.forEach((l,i)=>m.setColorAt(i,new THREE.Color(l.col)))}
   applySurfaceQuality(w);
 }
-function applySurfaceQuality(w){const seen=new Set();w.group.traverse(o=>{for(const m of [].concat(o.material||[])){if(m.groundLite)m.groundLite.value=coarse||SETT.quality==='low'?1:0;if(seen.has(m)||!m.userData.surfaceDetail)continue;seen.add(m);const map=SETT.quality==='low'?null:m.userData.surfaceDetail;if(m.bumpMap!==map){m.bumpMap=map;m.needsUpdate=true}const tex=m.userData.surfaceDetail,aniso=Math.min(GFX.aniso,renderer.capabilities.getMaxAnisotropy());if(tex.anisotropy!==aniso){tex.anisotropy=aniso;tex.needsUpdate=true}}})}
+function applySurfaceQuality(w){const seen=new Set();w.group.traverse(o=>{for(const m of [].concat(o.material||[])){if(m.groundLite)m.groundLite.value=SETT.quality==='low'?1:0;if(seen.has(m)||!m.userData.surfaceDetail)continue;seen.add(m);const map=SETT.quality==='low'?null:m.userData.surfaceDetail;if(m.bumpMap!==map){m.bumpMap=map;m.needsUpdate=true}const tex=m.userData.surfaceDetail,aniso=Math.min(GFX.aniso,renderer.capabilities.getMaxAnisotropy());if(tex.anisotropy!==aniso){tex.anisotropy=aniso;tex.needsUpdate=true}}})}
 function floorAO(fg,solidish){for(let ty=0;ty<MH;ty++)for(let tx=0;tx<MW;tx++){const t=tileAt(tx,ty);if(VOID.has(t)||t===21||t===45)continue;
   let o=0;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const n=tileAt(tx+dx,ty+dy);if(WALLC.has(n))o+=dx&&dy?.5:1;else if(solidish.has(n))o+=dx&&dy?.25:.5}
   if(o>0){fg.fillStyle=`rgba(4,3,6,${Math.min(.35,o*.07)})`;fg.fillRect(tx*16,ty*16,16,16)}

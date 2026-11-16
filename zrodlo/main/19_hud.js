@@ -32,10 +32,8 @@ function hud(){renderActiveHud();if(!S)return;drawMini(1/60);const left=S.endles
   if(S.hl&&clock-S.hl.t>3){S.hl=null;chipsDirty=true}
   if(chipsDirty){chipsDirty=false;const chip=k=>{const mx=ENCH.includes(k)&&S.mainEnchant&&S.mainEnchant!==k?3:SK[k].max||9;return`<span class="sk${S.hl&&S.hl.k===k?' hi':''}" title="${SK[k].name}"><i data-premium-skill="${k}" class="ic ic-${SK[k].ic||k}"></i><em>${'<b class="on"></b>'.repeat(S.sk[k])+'<b></b>'.repeat(Math.max(0,mx-S.sk[k]))}</em></span>`};
     $('chips').innerHTML=SLASH_SK.filter(k=>S.sk[k]).map(chip).join('')}}
-// touch controls: detected automatically, but the switch on the title screen can force them on or off (remembered in this browser)
-let coarse=matchMedia('(pointer:coarse)').matches;
-try{const v=localStorage.getItem('pn_touch');if(v==='1'||v==='0')coarse=v==='1'}catch(e){}
-function applyTouchMode(){$('opts').classList.add('sl');$('figKb').hidden=false;$('touchTgl').checked=coarse;
+// 16.11.2026: sterowanie dotykowe usuniete (decyzja autora: gra na komputer; na telefonie tylko z padem)
+function applyTouchMode(){$('opts').classList.add('sl');$('figKb').hidden=false;
   $('warn').textContent=''}
 
 function applyStory(){$('storyTgl').checked=!STORYMODE;$('sFab').classList.toggle('on',STORYMODE);$('sArc').classList.toggle('on',!STORYMODE);$('sFab').setAttribute('aria-pressed',String(STORYMODE));$('sArc').setAttribute('aria-pressed',String(!STORYMODE));$('storyModeHint').textContent=STORYMODE?(EN?'You unlock acts one by one.':'Rozdziały odblokowujesz po kolei.'):(EN?'All acts available right away.':'Wszystkie rozdziały dostępne od razu.');}
@@ -58,14 +56,8 @@ for(const b of document.querySelectorAll('#diffSw [data-d]'))b.addEventListener(
 $('storyTgl').addEventListener('change',e=>{STORYMODE=!e.target.checked;try{localStorage.setItem('pn_story',STORYMODE?'1':'0')}catch(x){}applyStory();renderRecords()});
 applyStory();
 $('briSl').value=Math.round(SETT.bri*100);$('briSl').addEventListener('input',e=>{SETT.bri=+e.target.value/100;postMat.uniforms.bri.value=SETT.bri;try{localStorage.setItem('pn_bri',String(SETT.bri))}catch(x){}});
-$('touchTgl').addEventListener('change',e=>{coarse=e.target.checked;try{localStorage.setItem('pn_touch',coarse?'1':'0')}catch(err){}applyTouchMode()});
 addEventListener('resize',()=>{if($('title')&&!$('title').hidden)applyTouchMode()});
 applyTouchMode();
-// full screen on phones and tablets: standard API, Safari's webkit variant (iPad), nothing to do when launched from the home screen
-function goFull(){try{if(localStorage.getItem('nb_fs')==='0')return}catch(e){}const d=document.documentElement,inApp=navigator.standalone||matchMedia('(display-mode: fullscreen), (display-mode: standalone)').matches;
-  if(inApp||document.fullscreenElement||document.webkitFullscreenElement)return;const fs=d.requestFullscreen||d.webkitRequestFullscreen;if(!fs)return;
-  try{const p=fs.call(d);if(p&&p.then)p.then(lockLandscape,()=>{});else lockLandscape()}catch(e){}}
-function lockLandscape(){try{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}// the game is landscape only: lock where allowed, otherwise the #rot hint covers portrait
 // wyglad przyciskow Fabularny / Arcade (paczka NightBrand_PRZYCISKI_TRYBOW); logika trybu bez zmian (aria-checked ustawia syncTitleMode)
 {const st=document.createElement('style');st.textContent=`/* NightBrand: standalone, scoped appearance. No gameplay or mode-selection logic. */
 .nb-mode-select {
