@@ -1648,7 +1648,7 @@ ${J} .premium-map .m2-ch:not(:disabled):is(:hover,:focus-visible,.pf) .pc-chapte
   glyph(home,'flow',0,T('Menu główne','Main menu'),'action');
   glyph(modeInfo.querySelector('small'),'flow',1,T('Tryb gry','Game mode'),'action');
   glyph(modeInfo.querySelector('strong'),'heads',STORYMODE?6:7,STORYMODE?T('Fabularny','Story'):'Arcade','action');
-  for(const [el,n,text] of [[prepare,4,T('Przygotuj się','Prepare')],[$('prepGo'),5,T('Gotowy','Ready')]]){
+  for(const [el,n,text] of [[prepare,4,T('Przygotuj się','Prepare')],[$('prepGo'),5,T('Wyrusz w noc','Set out')]]){
    // Loading/error feedback remains live text, with the original handler and timing.
    if(el.textContent.trim()===text)glyph(el,'heads',n,text,'action');else{el.classList.remove('pcg-action');el.querySelector(':scope>.pcg-glyph')?.remove();el.setAttribute('aria-label',el.textContent.trim())}
   }

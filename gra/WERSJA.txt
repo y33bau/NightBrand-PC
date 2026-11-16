@@ -857,3 +857,4 @@ cache781 · Pieczec przy poziomie, kadr portretow Miry, Iwa i Mileny w przygotow
 cache782 · Usuniete sterowanie dotykowe: drazek i przyciski, opcje dotyku, nakladka obrotu telefonu, galezie telefonu w jakosci i HUD (nie sprawdzono: pad, dzwiek, FPS u autora, itch.io)
 cache783 · Publikacja: usuniete sterowanie dotykowe (782) + naglowek Mapa podrozy (nie sprawdzono: pad, dzwiek, FPS u autora, itch.io)
 cache784 · Nowa muzyka: 7 utworow (c1-c6 rozdzialy, intro); NIE sprawdzono: sluchania w grze, petli, sciezki bossa (crypt bez zmian)
+cache785 · Baner Tej nocy ciasniejszy (miesci sie w ramce), przycisk Gotowy -> Wyrusz w noc; NIE sprawdzono: pad, EN, inne rozdzielczosci niz 1920x1080

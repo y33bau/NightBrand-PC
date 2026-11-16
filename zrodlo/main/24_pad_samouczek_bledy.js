@@ -184,7 +184,7 @@ function padHintTick(mid,dt){if(PCUR.el&&(!mid||PADASK)&&!PCUR.el.hidden){PCUR.e
   {const home=mid==='title'&&$('title').classList.contains('pc-home'),L=[['DPAD',EN?'Select':'Wybierz'],['A',EN?'Confirm':'Zatwierdź']];
    const b={pause:EN?'Resume':'Wznów',shop:EN?'Close':'Zamknij',end:'Menu',opts:EN?'Back':'Wróć',manual:EN?'Back':'Wróć',prep:EN?'Back':'Wróć',kap:EN?'Back':'Wróć',conf:EN?'Back':'Wróć'}[mid]||(mid==='title'&&!home?(EN?'Back':'Wróć'):'');if(b)L.push(['B',b]);
    if(['title','prep','kap','manual'].includes(mid))L.push(['VIEW',EN?'Options':'Opcje']);
-   const st={prep:EN?'Ready':'Gotowy',pause:EN?'Resume':'Wznów',shop:EN?'Close':'Zamknij'}[mid]||(mid==='title'&&!home?(EN?'Prepare':'Przygotuj się'):'');if(st)L.push(['MENU',st]);
+   const st={prep:EN?'Set out':'Wyrusz',pause:EN?'Resume':'Wznów',shop:EN?'Close':'Zamknij'}[mid]||(mid==='title'&&!home?(EN?'Prepare':'Przygotuj się'):'');if(st)L.push(['MENU',st]);
    // pozycja: zawsze prawy dolny róg (wybór autora 13.11.2026), z odstępem od ikon przeglądarki przy prawej krawędzi
    const LH=32*u;let lw=30*u;for(const [k,t] of L)lw+=20*u*PADICON[k][1]+(t.length*9.2+24)*u;
    const lx=innerWidth-lw-56*u,ly=innerHeight-LH-1*u;placed.push([lx,ly,lw,LH]);

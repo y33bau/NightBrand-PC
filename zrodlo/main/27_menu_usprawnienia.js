@@ -966,9 +966,9 @@ ${O} #nbP .ntd{display:grid!important;grid-template-columns:repeat(4,1fr)!import
 ${O} #nbP .ntd div{text-align:center!important;padding:calc(8*var(--u)) 0!important;background:rgba(255,240,220,.04)!important;border-top:1px solid rgba(201,160,100,.25)!important}
 ${O} #nbP .ntd b{display:block!important;font:700 calc(25*var(--u))/1 Cinzel,Georgia,serif!important;color:#f0dcb6!important}
 ${O} #nbP .ntd span{display:block!important;margin-top:calc(6*var(--u))!important;font:600 calc(12.5*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.04em!important;color:#c8b694!important;text-transform:uppercase!important;white-space:nowrap!important}
-${O} #nbP .ng{position:absolute!important;left:calc(880*var(--u))!important;top:calc(886*var(--u))!important;width:calc(500*var(--u))!important;height:calc(170*var(--u))!important;padding:calc(8*var(--u)) calc(18*var(--u))!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:calc(8*var(--u))!important}
-${O} #nbP .ng .h2{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.26em!important;color:#c8b694!important}
-${O} #nbP .ng .nrr{display:flex!important;justify-content:space-between!important;gap:calc(10*var(--u))!important;font-size:calc(17*var(--u))!important;color:#ecdcbc!important}
+${O} #nbP .ng{position:absolute!important;left:calc(880*var(--u))!important;top:calc(886*var(--u))!important;width:calc(500*var(--u))!important;height:calc(170*var(--u))!important;padding:calc(2*var(--u)) calc(12*var(--u))!important;box-sizing:border-box!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;justify-content:space-evenly!important;gap:0!important}
+${O} #nbP .ng .h2{font:700 calc(14*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.26em!important;color:#c8b694!important;text-align:center!important;margin:0!important;padding:0 0 calc(3*var(--u))!important;border-bottom:1px solid rgba(201,160,100,.28)!important}
+${O} #nbP .ng .nrr{display:flex!important;justify-content:space-between!important;align-items:center!important;gap:calc(10*var(--u))!important;font-size:calc(16*var(--u))!important;line-height:1.1!important;margin:0!important;color:#ecdcbc!important}
 ${O} #nbP .ng .nrr em{font:700 calc(18*var(--u))/1 Cinzel,Georgia,serif!important;font-style:normal!important;color:#f0c27a!important;text-align:right!important}
 ${O} #nbP .pr{position:absolute!important;left:calc(1420*var(--u))!important;top:calc(886*var(--u))!important;width:calc(440*var(--u))!important;height:calc(170*var(--u))!important;display:flex!important;flex-direction:column!important;gap:calc(8*var(--u))!important}
 ${O} #nbP .op2{display:flex!important;gap:calc(8*var(--u))!important}
@@ -976,7 +976,7 @@ ${O} #nbP .op2 button{flex:1!important;height:calc(46*var(--u))!important;font-s
 ${O} #nbP .op2 button::before{content:'☐  '!important;font-family:Georgia,serif!important}
 ${O} #nbP .op2 button.zn::before{content:'☑  '!important}
 ${O} #nbP .op2 button[hidden]{display:none!important}
-${O} #nbP .ngot{flex:1!important;font-size:calc(32*var(--u))!important}
+${O} #nbP .ngot{flex:1!important;font-size:calc(29*var(--u))!important;letter-spacing:.04em!important;white-space:nowrap!important}
 ${O} #nbP .tt,${O} #nbP .gn:not(.pu),${O} #nbP .gn:not(.pu) .ntx,${O} #nbP .wz,${O} #nbP .npk,${O} #nbW .pan,${O} #nbW .nte b{text-align:left!important}
 ${O} #nbP .gn:not(.pu) .ntx{flex:1!important;min-width:0!important}
 ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b{text-shadow:0 2px 4px #000!important}
@@ -1043,7 +1043,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
  <section class="nbr kol nk3"><div class="nhd"><i class="nr"><i>III</i></i><div class="tt"><b>${T('KLĄTWY','CURSES')}</b><span>${T('Do trzech. Każda utrudnia noc i daje premię Popiołów: im cięższa, tym większa.','Up to three. Each makes the night harder and adds an Ashes bonus: the harsher, the bigger.')}</span></div><span class="licz l3"></span></div><div class="trzy g3"></div><div class="nmn"></div><div class="ls nlk"></div></section>
  <section class="nbr ntr"><div class="rw"><div class="nhd"><i class="nr"><i>IV</i></i><div class="tt"><b>${T('TRUDNOŚĆ','DIFFICULTY')}</b></div></div><div class="rw dd" style="flex:1"><button type="button" class="nbd" data-d="e">${T('Łatwy','Easy')}</button><button type="button" class="nbd" data-d="n">${T('Normalny','Normal')}</button><button type="button" class="nbd" data-d="h">${T('Trudny','Hard')}</button></div></div><div class="ntd"></div></section>
  <section class="nbr ng"><div class="h2">${T('TEJ NOCY','TONIGHT')}</div><div class="nrr"><span>${T('Perk','Perk')}</span><em class="n0"></em></div><div class="nrr"><span>${T('Za wyzwanie','Challenge reward')}</span><em class="n1"></em></div><div class="nrr"><span>${T('Popioły (klątwy × trudność)','Ashes (curses × difficulty)')}</span><em class="n2"></em></div><div class="nrr"><span>${T('Ofiara (Popioły)','Offering (Ashes)')}</span><em class="n3"></em></div></section>
- <div class="pr"><div class="op2"><button type="button" class="nbd o1">${T('Samouczek','Tutorial')}</button><button type="button" class="nbd o2">${T('2 graczy','2 players')}</button></div><button type="button" class="nbd gl ngot">${T('Gotowy','Ready')}<small></small></button></div>
+ <div class="pr"><div class="op2"><button type="button" class="nbd o1">${T('Samouczek','Tutorial')}</button><button type="button" class="nbd o2">${T('2 graczy','2 players')}</button></div><button type="button" class="nbd gl ngot">${T('Wyrusz w noc','Set out')}<small></small></button></div>
  <i class="nw nbzi"></i></div>`;
  prep.append(P);
  const q$=s=>P.querySelector(s),TDN=[T('Liczba wrogów','Enemy count'),T('Życie wrogów','Enemy health'),T('Obrażenia wrogów','Enemy damage'),T('Popioły','Ashes')],
