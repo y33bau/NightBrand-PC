@@ -864,3 +864,4 @@ cache788 · Wybory w rozmowach: poprawka fabuly Wita (Prawo rachunku, Marga, ech
 cache789 · NPC bez migotania tekstury: jedna klatka + oddech z kodu (Wolch, Bartosz, Wierzbica, Dobromir, Nawoj, Rudna, Straznik, Pieczetnik, Lucjan, Marga, Chojrak); NIE sprawdzono: wyglad w grze, pad, EN, itch.io
 cache790 · Nowe grafiki NPC: Aurel, Izolda, Ottokar, Chojrak (arkusze 4 klatki + portrety); NIE sprawdzono: wyglad w grze (skala, stopy), rozmowy, pad, itch.io
 cache791 · Mniej swiatla na NPC (kolor i emisja, bez jasnej krawedzi), mniejszy ladniejszy baner Rozmawiaj, mocniejsza bursztynowa plama pod bohaterem; NIE sprawdzono: wyglad w grze, pad, itch.io
+cache792 · Poprawka: blad PADTABS przy kliknieciu w trakcie ladowania (iPhone Safari); NIE sprawdzono na iPhonie

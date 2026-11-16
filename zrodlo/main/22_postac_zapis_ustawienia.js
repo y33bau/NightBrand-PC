@@ -1,3 +1,6 @@
+// 16.11.2026: selektory kart pada zadeklarowane tu, bo klik w trakcie ladowania (iPhone/Safari) uzywal ich przed inicjalizacja (ReferenceError PADTABS)
+const PADTABS='.nbp-nav>.nbp-tab,.pc-prep-tabs>.pc-prep-tab,#kapTabs>.tab,.tabs>.tab';
+const PADSUBS='.subtabs>.stab,#pauseKeys .stab';
 // ---- postać: poziom, perki i wyzwania nocy (postęp zapisany pod kluczem 's'; dawne dane Hordy 'a' są ignorowane) ----
 const PERKS=[
  {id:'szklana',lv:1,n:(EN?'Glass Blade':'Szklana klinga'),pl:(EN?'+20% damage of all sword attacks':'+20% obrażeń wszystkich ataków mieczem'),mi:(EN?'−20% maximum health':'−20% maksymalnego zdrowia'),fx:k=>{k.dmg*=1.2;pl.max=Math.round(pl.max*.8);k.hpMul*=.8}},

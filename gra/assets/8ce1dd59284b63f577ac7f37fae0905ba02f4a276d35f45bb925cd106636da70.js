@@ -6354,6 +6354,9 @@ let startBusy=false;
 function beginRun(){if(startBusy)return;startBusy=true;uiSnd('runStart');const b=$('prepGo'),label=b.innerHTML;b.disabled=true;b.textContent=(EN?'Preparing the act…':'Przygotowywanie rozdziału…');requestAnimationFrame(()=>setTimeout(()=>{try{if(!$('prep').hidden)start(PREP.ch)}catch(e){console.error(e);toMenu();say((EN?'Failed to prepare the act. Refresh the game and try again.':'Nie udało się przygotować rozdziału. Odśwież grę i spróbuj ponownie.'))}finally{startBusy=false;b.disabled=false;b.innerHTML=label}},0))}
 function start(ch){if(!A)return;if(!groupReady(ch))return waitChapter(ch,()=>start(ch));ftClear();hbClear();$('pause').hidden=true;resetInput();if(SETT.quality==='low')for(const k of Object.keys(WORLDS))if(+k!==ch)releaseWorld(+k);ensureWorld(ch);useWorld(ch);initAudio();if(AC&&AC.state==='suspended')acResume();newGame();applyPrep();lastHud='';MUS.base=ch;for(const k of Object.keys(MUS_BUFS))musRelease(k);if(ch===1)musLoadBuf('crypt');if(ch===1&&STORY)musLoadBuf('intro');if(!(ch===1&&AUDIO_DATA.intro))musStart(ch);for(const id of ['title','end','lvl','dialog','prep'])$(id).hidden=true;$('hud').hidden=false;camTarget.set(pl.x/16,0,pl.y/16);if(ch>=1&&ch<=6)storyIntro(ch);if(ch===1&&INTRO&&AUDIO_DATA.intro)musStart('intro')}
 
+// 16.11.2026: selektory kart pada zadeklarowane tu, bo klik w trakcie ladowania (iPhone/Safari) uzywal ich przed inicjalizacja (ReferenceError PADTABS)
+const PADTABS='.nbp-nav>.nbp-tab,.pc-prep-tabs>.pc-prep-tab,#kapTabs>.tab,.tabs>.tab';
+const PADSUBS='.subtabs>.stab,#pauseKeys .stab';
 // ---- postać: poziom, perki i wyzwania nocy (postęp zapisany pod kluczem 's'; dawne dane Hordy 'a' są ignorowane) ----
 const PERKS=[
  {id:'szklana',lv:1,n:(EN?'Glass Blade':'Szklana klinga'),pl:(EN?'+20% damage of all sword attacks':'+20% obrażeń wszystkich ataków mieczem'),mi:(EN?'−20% maximum health':'−20% maksymalnego zdrowia'),fx:k=>{k.dmg*=1.2;pl.max=Math.round(pl.max*.8);k.hpMul*=.8}},
@@ -7247,8 +7250,6 @@ addEventListener('keydown',e=>{const kk=e.key.toLowerCase(),m={arrowdown:'d',arr
 // 13.11.2026 (runda pad-menu-2): nawigacja padem wg Xbox Accessibility Guideline 112.
 // Fokus nie gubi się: gdy menu przerysuje przyciski albo mysz zdejmie fokus, wraca na ten sam
 // element (lub jego odpowiednik po id/zakładce/tekście, albo najbliższy na ekranie), a nie na pierwszy.
-const PADTABS='.nbp-nav>.nbp-tab,.pc-prep-tabs>.pc-prep-tab,#kapTabs>.tab,.tabs>.tab';
-const PADSUBS='.subtabs>.stab,#pauseKeys .stab';
 function padIsTab(e){return !!(e.matches&&(e.matches(PADTABS)||e.matches(PADSUBS)))}
 function padTiny(e){const r=e.getBoundingClientRect();return r.width<4||r.height<4}
 function padItems(root){return [...root.querySelectorAll('button,input,summary')].filter(e=>!e.disabled&&e.offsetParent!==null&&!padIsTab(e)&&!padTiny(e))}
