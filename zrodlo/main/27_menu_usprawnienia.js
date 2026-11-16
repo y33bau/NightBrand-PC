@@ -1112,6 +1112,75 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
  for(const id of ['hintsTgl','mpTgl'])$(id)?.addEventListener('change',odswiez);
  new MutationObserver(()=>{if(aktywny()&&!prep.hidden)setTimeout(()=>{if(P.contains(document.activeElement))return;const f=P.querySelector('.npk.zn')||P.querySelector('.npk:not(.za)')||P.querySelector('.ngot');f?.focus({preventScroll:true})},60)}).observe(prep,{attributes:true,attributeFilter:['hidden']});
 }catch(e){quietErr('obozPrzygotowanie',e)}})();
+// ===== 16.11.2026: Mapa podrozy (runda mapa-podrozy). Wybor rozdzialu na mapie swiata zamiast listy kafli.
+// Tylko prezentacja i nawigacja: te same przyciski start*, chLocked, premiumPrepare i openPrep; zapis, odblokowania i balans bez zmian.
+// Klik w punkt zaznacza; drugi klik (albo Enter / A na zaznaczonym punkcie) otwiera przygotowanie. Lewo/prawo idzie po kolejnosci fabularnej. ?mapa=0 wylacza.
+(()=>{try{
+ if(/[?&]mapa=0\b/.test(location.search))return;
+ const title=$('title'),list=title&&title.querySelector('.premium-map>.m2-right'),go=$('premiumPrepare');if(!list||!go)return;
+ const MAPA='assets/ui/be1d57f7257a9c66a961af02b208f067afa531278d69cf9775e29783cdfead04.webp';
+ // polozenie znacznika miejsca na tle (% szerokosci, % wysokosci); plakietka z nazwa stoi pod znacznikiem
+ const PKT={1:[15.5,61.5],2:[21,87],6:[46,78],3:[80,66],4:[67.5,36],5:[60.5,16.5]};
+ // trasa: od, do, punkt kontrolny krzywej (szyb, winda, prom, droga przez las, podejscie pod Cytadele)
+ const TRASA=[[1,2,12,76],[2,6,33,73],[6,3,63,83],[3,4,63,57],[4,5,63,28]];
+ const NS='http://www.w3.org/2000/svg',svg=document.createElementNS(NS,'svg'),seg={};
+ svg.setAttribute('class','nbm-trasa');svg.setAttribute('viewBox','0 0 100 100');svg.setAttribute('preserveAspectRatio','none');svg.setAttribute('aria-hidden','true');
+ for(const [a,b,cx,cy] of TRASA){const p=document.createElementNS(NS,'path'),A=PKT[a],B=PKT[b];p.setAttribute('d',`M${A[0]} ${A[1]} Q${cx} ${cy} ${B[0]} ${B[1]}`);p.setAttribute('vector-effect','non-scaling-stroke');svg.append(p);seg[b]=p}
+ list.prepend(svg);
+ const mk=(t,c)=>{const e=document.createElement(t);e.className=c;return e},put=(e,t)=>{if(e.textContent!==t)e.textContent=t};
+ const dodaj=(b,i)=>{if(b.querySelector(':scope>.nbm-tag'))return;const pin=mk('span','nbm-pin'),tag=mk('span','nbm-tag'),nm=mk('span','nbm-nm'),st=mk('small','nbm-st');pin.setAttribute('aria-hidden','true');tag.setAttribute('aria-hidden','true');nm.textContent=chRoman(i)+' · '+CHN[i-1];tag.append(nm,st);b.append(pin,tag);b.style.setProperty('--nbm-x',PKT[i][0]+'%');b.style.setProperty('--nbm-y',PKT[i][1]+'%')};
+ const naMapie=()=>!title.hidden&&!title.classList.contains('pc-home');
+ const odswiez=()=>{if(!naMapie())return;for(const i of CAMPAIGN){const b=$('start'+i);if(!b)continue;dodaj(b,i);const lk=b.disabled,won=!lk&&!!(SETT.save['s'+i]&&SETT.save['s'+i].win);if(b.classList.contains('nbm-lk')!==lk)b.classList.toggle('nbm-lk',lk);if(b.classList.contains('nbm-won')!==won)b.classList.toggle('nbm-won',won);put(b.querySelector('.nbm-st'),lk?(b.dataset.status||''):'');const p=seg[i];if(p&&p.classList.contains('on')===lk)p.classList.toggle('on',!lk)}};
+ new MutationObserver(odswiez).observe(list,{childList:true,subtree:true,attributes:true,attributeFilter:['class','disabled','data-status']});
+ new MutationObserver(odswiez).observe(title,{attributes:true,attributeFilter:['hidden','class']});odswiez();
+ const punkt=e=>e&&e.matches&&e.matches('.premium-map .m2-ch')&&naMapie();
+ // lewo/prawo: kolejnosc fabularna (I..VI), z pominieciem zablokowanych; na koncu trasy fokus zostaje; gora/dol bez zmian (najblizszy przycisk)
+ const navMove0=navMove;navMove=function(id,d,pad){const ae=document.activeElement;if(id==='title'&&(d==='l'||d==='r')&&punkt(ae)){const L=CAMPAIGN.map(i=>$('start'+i)).filter(b=>b&&!b.disabled&&b.offsetParent!==null),n=L[L.indexOf(ae)+(d==='r'?1:-1)];if(n)n.focus({preventScroll:true});return true}return navMove0(id,d,pad)};
+ // fokus z klawiatury lub pada zaznacza miejsce (karta po prawej pokazuje jego opis); fokus po kliknieciu mysza zaznacza sam klik
+ let ptrT=0,ptrSel=null;
+ title.addEventListener('pointerdown',e=>{const b=e.target.closest&&e.target.closest('.premium-map .m2-ch');ptrT=performance.now();ptrSel=b&&b.classList.contains('premium-selected')?b:null},true);
+ title.addEventListener('focusin',e=>{const b=e.target;if(!punkt(b)||b.disabled||b.classList.contains('premium-selected')||performance.now()-ptrT<600)return;b.dispatchEvent(new Event('pointerenter'))});
+ // Enter / A na zaznaczonym punkcie albo drugi klik mysza w zaznaczony punkt = „Przygotuj sie" (ta sama akcja co przycisk na dole)
+ window.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.premium-map .m2-ch');if(!b||!punkt(b)||b.disabled)return;const kb=e.detail===0;if(kb?b.classList.contains('premium-selected'):ptrSel===b){e.stopImmediatePropagation();e.preventDefault();ptrSel=null;if(!go.disabled)go.click()}},true);
+ const U=n=>`calc(${n} * var(--pc-u))`,TU=n=>`calc(${n} * var(--pc-u) * var(--nbts,1))`,M='#orient'.repeat(260)+'.pc-menu #title:not(.pc-home)',CH=M+' .premium-map>.m2-right>.m2-ch';
+ const KLODKA=`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 14'%3E%3Cpath d='M3.2 6.2V4.3a2.8 2.8 0 0 1 5.6 0v1.9' fill='none' stroke='%23b8a37e' stroke-width='1.5'/%3E%3Crect x='1.4' y='6' width='9.2' height='7.4' rx='1.3' fill='%23b8a37e'/%3E%3C/svg%3E")`;
+ const st=document.createElement('style');st.id='nb-mapa-podrozy';st.textContent=`
+${M} .premium-map{display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important;gap:${U(18)}!important;container-type:size!important;align-items:stretch!important}
+${M} .premium-map>.m2-right{grid-column:1!important;grid-row:1!important;align-self:center!important;justify-self:start!important;position:relative!important;display:block!important;box-sizing:border-box!important;width:min(calc(100cqw - ${U(350)}),calc(100cqh * 1.6479))!important;height:auto!important;min-height:0!important;max-height:none!important;aspect-ratio:1610/977!important;padding:0!important;margin:0!important;overflow:visible!important;background:url('${MAPA}') center/100% 100% no-repeat #120e0b!important;border:1px solid #a4895e66!important;border-image:none!important;box-shadow:inset 0 0 ${U(46)} #000b,0 ${U(4)} ${U(18)} #0009!important;mask-image:none!important;gap:0!important}
+${M} .nbm-trasa{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;pointer-events:none!important;overflow:visible!important;z-index:1!important}
+${M} .nbm-trasa path{fill:none;stroke:#dcc08a;stroke-opacity:.3;stroke-width:max(1.5px,${U(2.4)});stroke-dasharray:${U(7)} ${U(6)};stroke-linecap:round}
+${M} .nbm-trasa path.on{stroke-opacity:.85}
+${CH}{position:absolute!important;left:var(--nbm-x)!important;top:var(--nbm-y)!important;right:auto!important;bottom:auto!important;transform:translate(-50%,${U(-8)})!important;width:auto!important;height:auto!important;min-width:0!important;min-height:0!important;max-width:none!important;margin:0!important;padding:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;gap:${U(5)}!important;background:none!important;border:0!important;border-image:none!important;border-radius:0!important;box-shadow:none!important;outline:0!important;font-size:0!important;line-height:0!important;color:transparent!important;overflow:visible!important;z-index:2!important;filter:none!important;opacity:1!important;cursor:pointer!important;mask-image:none!important;clip-path:none!important;text-shadow:none!important}
+${CH}:before,${CH}:after{content:none!important;display:none!important}
+${CH}>:not(.nbm-pin,.nbm-tag){display:none!important}
+${CH}.premium-selected{z-index:4!important}
+${CH}:is(:hover,:focus-visible,.pf){z-index:5!important}
+${CH}:disabled{cursor:default!important}
+${M} .nbm-pin{display:block!important;box-sizing:border-box!important;width:${U(16)};height:${U(16)};border-radius:50%;background:radial-gradient(circle,#f0d394 0 26%,#2a1f14 30% 100%);border:${U(2)} solid #c9a464;box-shadow:0 0 0 ${U(2)} #000a,0 0 ${U(8)} #000;transition:transform .15s,box-shadow .15s}
+${M} .nbm-tag{display:flex!important;flex-direction:column!important;align-items:center!important;gap:${U(2)}!important;padding:${U(5)} ${U(14)} ${U(6)}!important;border-radius:${U(17)}!important;background:linear-gradient(#1e1712f0,#110d0af2)!important;border:1px solid #a4895e99!important;box-shadow:0 ${U(2)} ${U(9)} #000d!important;white-space:nowrap!important;transition:border-color .15s,box-shadow .15s,background .15s}
+${M} .nbm-nm{display:flex!important;align-items:center!important;gap:${U(7)}!important;font:400 max(13px,${TU(17)})/1.15 Georgia,serif!important;color:#ead9b8!important;text-shadow:0 1px 2px #000!important;letter-spacing:.01em!important}
+${M} .nbm-st{display:block!important;font:400 max(11px,${TU(12.5)})/1.1 Georgia,serif!important;color:#b69e74!important;letter-spacing:.02em!important}
+${M} .nbm-st:empty{display:none!important}
+${CH}.nbm-lk .nbm-nm{color:#a99a80!important}
+${CH}.nbm-lk .nbm-nm:before{content:''!important;display:block!important;width:.62em!important;height:.74em!important;background:${KLODKA} center/contain no-repeat!important;flex:none!important}
+${CH}.nbm-lk .nbm-pin{background:radial-gradient(circle,#6d6253 0 26%,#1d1914 30% 100%)!important;border-color:#7d6e58!important}
+${CH}.nbm-won .nbm-nm:before{content:'✓'!important;color:#e6c47c!important;font-weight:700!important;flex:none!important}
+${CH}.nbm-won .nbm-pin{background:radial-gradient(circle,#ffe2a2 0 42%,#8a6528 46% 100%)!important}
+${CH}.premium-selected .nbm-tag{border-color:#e2bf74!important;background:linear-gradient(#3b2b19f5,#1d150ef5)!important;box-shadow:0 0 0 1px #e2bf7488,0 0 ${U(16)} #e0b46055,0 ${U(2)} ${U(9)} #000d!important}
+${CH}.premium-selected .nbm-nm{color:#fff0cf!important}
+${CH}.premium-selected .nbm-pin{transform:scale(1.3);box-shadow:0 0 0 ${U(2)} #000a,0 0 ${U(12)} #f0c46a}
+${CH}:not(:disabled):hover .nbm-tag{border-color:#d6b778!important}
+${CH}:is(:focus-visible,.pf) .nbm-tag{outline:2px solid var(--nbs-focus,#e8c47a)!important;outline-offset:${U(3)}!important}
+${M} .premium-map>.premium-banner{grid-column:2!important;grid-row:1!important;position:relative!important;width:100%!important;height:100%!important;min-height:0!important;box-sizing:border-box!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;padding:${U(20)} ${U(24)} ${U(22)}!important;background-color:#0e0b0b!important;background-size:100% 54%,auto 54%!important;background-position:top center,top center!important;background-repeat:no-repeat!important;border:1px solid #a4895e55!important;border-image:none!important;mask-image:none!important;overflow:hidden!important;box-shadow:inset 0 0 ${U(40)} #000a!important}
+${M} .premium-map>.premium-banner>.premium-caption{position:static!important;inset:auto!important;margin:0!important;padding:0!important;font-size:${TU(36)}!important;line-height:1.08!important;text-align:left!important;max-width:none!important;white-space:normal!important}
+${M} .premium-map>.premium-banner>.premium-caption:before{margin:0 0 ${U(8)}!important;font-size:${TU(13)}!important}
+${M} .premium-map>.premium-banner>.nb2-chdesc{display:block!important;position:static!important;inset:auto!important;margin:${U(10)} 0 0!important;padding:0!important;max-width:none!important;width:auto!important;white-space:normal!important;font-size:max(12px,${TU(15)})!important;line-height:1.35!important}
+${M} .premium-map>.premium-banner>.pc-destination-facts{position:static!important;inset:auto!important;margin:${U(14)} 0 0!important;padding:${U(12)} 0 0!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:${U(10)} ${U(16)}!important}
+${M} .premium-map>.premium-banner>.pc-destination-facts>.nb2-medcell{grid-column:1/-1!important}
+${M} .premium-map>.premium-banner>.pc-destination-facts>div{gap:${U(6)}!important}
+${M} .premium-map>.premium-banner>.pc-destination-facts small{font-size:max(11px,${TU(13)})!important}
+`;document.head.append(st);
+}catch(e){quietErr('mapaPodrozy',e)}})();
 requestAnimationFrame(frame);
 })();
 
