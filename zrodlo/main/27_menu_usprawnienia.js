@@ -1718,7 +1718,7 @@ ${O} #nbPow kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;colo
   <li><i><span>II</span></i><div>${T('<b>Jasność.</b> Ustaw ją tak, by w cieniach dało się dostrzec wrogów. Noc bywa bardzo ciemna.','<b>Brightness.</b> Set it so you can make out enemies in the shadows. The night can be very dark.')}</div></li>
   <li><i><span>III</span></i><div>${T('<b>Pełny ekran i słuchawki.</b> Noc wygląda i brzmi najlepiej bez rozpraszaczy.','<b>Full screen and headphones.</b> The night looks and sounds best without distractions.')}</div></li>
   <li><i><span>IV</span></i><div>${T('<b>Sterowanie.</b> Klawiatura z myszą albo pad Xbox. Klawisze zmienisz w Opcjach, a podstawy znajdziesz w Instrukcji.','<b>Controls.</b> Keyboard and mouse or an Xbox controller. Change keys in Options; the basics are in the Guide.')}</div></li></ul>
-  <p class="end">${T('Powodzenia. Niech Piętno prowadzi Twój miecz.','Good luck. May the Brand guide your blade.')}<span class="sig">${T('Dziękuję, Y3ebau','Thank you, Y3ebau')}</span></p>
+  <p class="end">${T('Powodzenia. Niech Piętno prowadzi Twój miecz.','Good luck. May the Brand guide your blade.')}<span class="sig">${T('Dziękuję, y33bau','Thank you, y33bau')}</span></p>
   <div class="btns"><button type="button" class="gfx">${T('Ustawienia grafiki','Graphics settings')}</button><button type="button" class="go2">${T('Dalej','Continue')}</button></div>
   <button type="button" class="cb" role="checkbox" aria-checked="false"><i></i>${T('Nie pokazuj ponownie','Don\'t show again')}</button>
  </div><div class="foot"></div></div>`;
