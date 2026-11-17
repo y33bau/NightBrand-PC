@@ -1,4 +1,4 @@
-Stan na 2026-11-17, cache 812, rola agent główny
+Stan na 2026-11-17, cache 814, rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,19 +6,21 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 812 (`745db17`), opublikowane 17.11.2026; kopia w nightbrand-backup (`b492fa6`) |
-| Gałęzie czekające na „publikuj” | `runda-813-fokus-menu` (cache 813) |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 812 (`b492fa6`) |
-| Zip itch.io | `NightBrand_itch_812.zip` na pulpicie autora w `NIGHTBRAND` |
+| main | cache 814 (`1830f96`), opublikowane 17.11.2026 |
+| Gałęzie czekające na „publikuj” | brak |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 814 (`8413bb6`) |
+| Zip itch.io | `NightBrand_itch_814.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 148–152 MB (limit 500 MB) |
 
 ## Decyzje autora (najnowsze)
+- 17.11: banery bez złotej ramki: deski w Ognisku/Przygotowaniu bez ramki z mocniejszym żarem; lokalizacje na mapie z ramką przy fokusie i mocniejszym podświetleniem; deski na dole mapy bez zmian; karty perków i wiersze list zostają ze złotą ramką.
 - 17.11: klasa Miry = **Tancerka Popiołu / Ash Dancer** (PL w 811, EN w 810); dawniej Zabójczyni (wdrożone w 810: `HEROES` w 22 i opisy technik w 12). Gałąź stylu „Zabójca/Assassin” i wyzwanie „Assassin's Strike” zostają.
 - 17.11: kopia nightbrand-backup odświeżana po każdej publikacji; limit 500/450 wszędzie; test przez zip + `TEST_z_zipa.bat`; dokumenty bieżące w repo (`docs/`).
 - 16.11: gra na PC, dotyk usunięty (782–783), limit 500 MB, praca rolami.
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 813–814 (fokus i podświetlenia): Kaplica i Kronika strzałkami i padem (opis po prawej idzie za zaznaczeniem), brak zostających podświetleń po kliknięciu myszą, lokalizacje na mapie, deski w Ognisku i Przygotowaniu, odłączenie pada w menu.
 - 811 (kociołki 12/10/8%, sloty 5–6 na listach klawiszy, przełączniki tylko lokalnie, lżejsze style menu): leczenie przy kociołku na trzech trudnościach, lista „Własne klawisze” (przewinąć do dołu), lista pada w Opcjach.
 - 810 (Ash Dancer): angielski napis klasy Miry w menu i Instrukcji (czy się mieści).
 - 809 (logo i piętno): pieczęć w Krypcie prestiżu, ekran wyboru języka, ikona.
@@ -32,7 +34,6 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 
 ## Zgłoszone autorowi, czekają na decyzję
 - Przegląd 810 (`docs/przeglady/PRZEGLAD_810_2026-11-17.md`): 5 uwag WAŻNYCH (warstwy menu, przełączniki w adresie bez `LOKALNIE`, zasada o nieistniejącym perku „Bez litości”, sloty 5 i 6 niewidoczne w Opcjach, tempo leczenia kociołków na Łatwym) i 9 drobnych.
-- Kaplica: po kliknięciu wiersza myszą fokus nie przechodzi na kliknięty wiersz.
 - Rozmowy NPC: kłamstwo Izoldy (40 monet) płaci więcej niż prawda (30 + pół paska); siła upiorów Skryby i Ottokara; wypłata warty 70 monet.
 - Przygotowanie: czy przywrócić łączny mnożnik Popiołów w „Tej nocy”.
 - `docs/PLAN_ELECTRON_WINDOWS.md` nie istnieje: napisać plan albo czekać (autor: „jeszcze poczekamy”).
