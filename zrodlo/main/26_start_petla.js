@@ -55,7 +55,7 @@ ${scope} :is(#prepPerks,#prepCh,#prepCurseL) .opt.on>b{color:#ffe2a2!important}
 
 /* Toggle inputs retain the original checkmark and interaction. */
 ${scope} .tgl input:checked+.sl{background:linear-gradient(135deg,#443824,#201c16)!important;border-color:var(--nb-ui-gold)!important;box-shadow:inset 0 0 0 2px #171512!important}
-${scope} .tgl input:focus-visible+.sl,${scope} .tgl.pf .sl,${scope} .rng:is(:focus-within,.pf){outline:2px solid var(--nb-ui-focus)!important;outline-offset:2px!important;filter:none!important}
+${scope} .tgl input:focus-visible+.sl,${scope} .tgl.pf .sl,${scope} .rng:is(:has(:focus-visible),.pf){outline:2px solid var(--nb-ui-focus)!important;outline-offset:2px!important;filter:none!important}
 ${scope} :is(input:not([type=checkbox]):not([type=range]),select):focus-visible{outline:2px solid var(--nb-ui-focus)!important;outline-offset:2px!important;box-shadow:none!important}
 /* Display headings stay in Grenze; reading text becomes quieter and consistently left aligned. */
 ${scope} :is(.card .cd,.mbox p,.mbox li,.pane p,.pane .figcap,.m2k-d,.nbp-journal .nbp-jp,.nbp-journal li,.nbp-audio p,.loadout-copy small,#diffCap,#endText){font-family:var(--nb-ui-reading)!important;font-size:var(--nb-ui-body)!important;font-weight:400!important;line-height:var(--nb-ui-leading)!important;color:var(--nb-ui-paper)!important;text-align:left!important;letter-spacing:normal!important}
@@ -543,7 +543,7 @@ const corrections=el('style','premium-review-corrections');corrections.textConte
 #opts .rng .rf,#pause .rng .rf{left:11.5%!important;top:calc(50% - 2px)!important;height:4px!important;width:calc(var(--v,.5)*78%)!important;background:linear-gradient(90deg,#7f251a,#df642d)!important;border-radius:2px;box-shadow:0 0 5px #bf321c55}
 #opts .rng .rh,#pause .rng .rh{position:absolute;left:calc(11.5% + var(--v,.5)*78%)!important;top:50%!important;transform:translate(-50%,-50%)!important;width:22px!important;height:26px!important;border:2px solid #ad8754!important;border-radius:4px!important;background:linear-gradient(135deg,#584b3e,#171719 45%,#342522)!important;box-shadow:inset 0 0 0 2px #111,0 2px 5px #000!important;mix-blend-mode:normal}
 #opts .rng .rh:after,#pause .rng .rh:after{content:'';position:absolute;inset:5px 7px;background:#e18443;box-shadow:0 0 5px #c74720}
-#opts .rng:focus-within,#pause .rng:focus-within{outline:1px solid #eea565!important;outline-offset:1px;border-radius:4px}
+#opts .rng:has(:focus-visible),#pause .rng:has(:focus-visible){outline:1px solid #eea565!important;outline-offset:1px;border-radius:4px}
 #opts .tgl{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important;width:100%!important;min-height:40px!important;margin:10px 0!important}
 #opts .tgl .sl,#pause .tgl .sl,#prep .tgl .sl,#title .tgl .sl{display:inline-block!important;position:relative!important;box-sizing:border-box!important;background:linear-gradient(135deg,#282426,#111013)!important;background-image:none!important;border:1px solid #8a6947!important;border-radius:3px!important;box-shadow:inset 0 0 0 3px #121113,0 1px 3px #000!important;transform:none!important;flex:none}
 #opts .tgl input:checked+.sl,#pause .tgl input:checked+.sl,#prep .tgl input:checked+.sl,#title .tgl input:checked+.sl{background:linear-gradient(135deg,#57271d,#231615)!important;border-color:#da8a4e!important;box-shadow:inset 0 0 0 2px #201415,0 0 6px #d443233d!important}
@@ -1968,8 +1968,8 @@ ${ui} #opts button:is([aria-pressed=true],[aria-checked=true]){background:var(--
 ${ui} #opts button:is([aria-pressed],[role=radio]):is(:focus-visible,.pf){outline:2px solid #e2c898!important;outline-offset:2px!important}
 ${ui} #intro #iskip{font:450 max(16px,${TF(21)})/1.25 Cinzel,Georgia,serif!important;text-transform:none!important;letter-spacing:.025em!important;color:#f2dfbb!important;padding:.35em 1em!important;min-height:40px!important}
 ${ui} #intro #iskip:is(:hover,:focus-visible,.pf){background:var(--frame-wine)!important}
-${ui} #lvl #cards .card:hover,${ui} #lvl #cards:not(:has(.card:hover)) .card:is(:focus,.pf){background:linear-gradient(150deg,#502330f5,#261920f2)!important;outline:2px solid #e3bb78!important;outline-offset:-2px!important;box-shadow:inset 0 0 18px #9f4d4933!important}
-${ui} #lvl #cards .card:hover .cn,${ui} #lvl #cards:not(:has(.card:hover)) .card:is(:focus,.pf) .cn{color:#fff1cc!important}
+${ui} #lvl #cards .card:hover,${ui} #lvl #cards:not(:has(.card:hover)) .card:is(:focus-visible,.pf){background:linear-gradient(150deg,#502330f5,#261920f2)!important;outline:2px solid #e3bb78!important;outline-offset:-2px!important;box-shadow:inset 0 0 18px #9f4d4933!important}
+${ui} #lvl #cards .card:hover .cn,${ui} #lvl #cards:not(:has(.card:hover)) .card:is(:focus-visible,.pf) .cn{color:#fff1cc!important}
 ${ui} #lang :is(.lgpick,button[data-lang],.lgfr){border:0!important;border-image:none!important;border-radius:0!important;background:none!important;box-shadow:none!important;outline:0!important}
 ${ui} #lang :is(button[data-lang],.lgfr):before,${ui} #lang :is(button[data-lang],.lgfr):after{content:none!important}
 ${ui} #lang .lglb{position:absolute!important;clip-path:inset(50%)!important;width:1px!important;height:1px!important;overflow:hidden!important}

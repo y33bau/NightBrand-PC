@@ -107,7 +107,7 @@ function padTick0(dt){
   {const pn=(g?1:0)+(g2?1:0);if(pn<(PAD.n||0)&&S&&S.phase==='play'&&!S.paused&&(INPUT_LAST==='p'||pl2)){togglePause(true);if(S.paused)padLostMsg(true)}PAD.n=pn}
   {const mt=S?S.mpTurn||0:0;if(mt!==PAD.mpT){PAD.mpT=mt;PAD.lock=.4;PAD.fresh=true}}const sw=!!(g2&&pl2&&S&&S.choosing&&S.mpTurn===2);if(sw){const tg=g;g=g2;g2=tg}MPCLK=sw;pad2Tick(g2);PAD.prev=PAD.cur;PAD.g=g;
   {const pp=!!g;if(pp!==PAD.pp){PAD.pp=pp;padPrioSet(pp)}}
-  if(!g){PAD.cur=[];PAD.x=PAD.y=0;PAD.atk=PAD.blk=PAD.skillHeld=PAD.skillConsumed=false;return}
+  if(!g){PAD.cur=[];PAD.x=PAD.y=0;PAD.atk=PAD.blk=PAD.skillHeld=PAD.skillConsumed=false;if(document.body.classList.contains('padnav')){/* 813: pad odlaczony = zdejmij jego zlote zaznaczenie, zeby nie zostawalo na ekranie */document.body.classList.remove('padnav','padlast');for(const e of document.querySelectorAll('.pf'))e.classList.remove('pf')}return}
   PAD.cur=g.buttons.map(b=>!!b&&(b.pressed||b.value>.5));if(PAD.cur.some(Boolean)){INPUT_LAST='p';document.body.classList.add('padlast','padnav')}
   // krzyżak w nietypowych padach: oś hat (axes[9]) albo osie 6/7
   if(g.mapping!=='standard'||g.buttons.length<16){const ax=g.axes||[];let u=0,d=0,l=0,r=0;

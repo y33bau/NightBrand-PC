@@ -7,9 +7,9 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 | Co | Wartość |
 |---|---|
 | main | cache 812 (`745db17`), opublikowane 17.11.2026; kopia w nightbrand-backup (`b492fa6`) |
-| Gałęzie czekające na „publikuj” | brak |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 810 (odświeżona po publikacji) |
-| Zip itch.io | `NightBrand_itch_810.zip` na pulpicie autora w `NIGHTBRAND` |
+| Gałęzie czekające na „publikuj” | `runda-813-fokus-menu` (cache 813) |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 812 (`b492fa6`) |
+| Zip itch.io | `NightBrand_itch_812.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 148–152 MB (limit 500 MB) |
 
 ## Decyzje autora (najnowsze)

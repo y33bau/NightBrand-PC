@@ -113,7 +113,7 @@ function lvPopLabel(){try{const m=document.querySelector('.pch-level'),r=m&&m.of
 ${Z}#lvl{background:radial-gradient(ellipse at 50% 45%,#08070b00 0%,#08070b52 82%)!important}
 ${Z}#lvl .level-panel{background:linear-gradient(180deg,#0e0c101a,#0e0c100d)!important}
 ${Z}#lvl .card{background:linear-gradient(150deg,#2a1f2661,#110d1757)!important;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);text-shadow:0 1px 2px #000c}
-${Z}#lvl #cards .card:is(:focus,:focus-visible,.pf){background:linear-gradient(150deg,#502330a6,#26192099)!important}
+${Z}#lvl #cards .card:is(:focus-visible,.pf){background:linear-gradient(150deg,#502330a6,#26192099)!important}
 ${Z}#lvl .card .fx{background:#09070a59!important}
 ${Z}#lvl.lvsoft{animation:lvSoftBg .6s ease-out both}
 ${Z}#lvl.lvsoft .card{animation:lvSoftCard .7s cubic-bezier(.2,.8,.2,1) both}
