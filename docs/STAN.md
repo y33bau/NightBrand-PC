@@ -30,8 +30,6 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - Ogólnie: pad na nowych ekranach, kooperacja, menu po angielsku, itch.io na żywo.
 
 ## Zgłoszone autorowi, czekają na decyzję
-- Opcje → Grafika piszą o „telefonie i tablecie” i baterii (polecane: usunąć).
-- Lista klawiszy w Opcjach i Pauzie: „Wybór karty 1 2 3”, a kart jest 4 (polecane: dopisać 4).
 - Kaplica: po kliknięciu wiersza myszą fokus nie przechodzi na kliknięty wiersz.
 - Rozmowy NPC: kłamstwo Izoldy (40 monet) płaci więcej niż prawda (30 + pół paska); siła upiorów Skryby i Ottokara; wypłata warty 70 monet.
 - Przygotowanie: czy przywrócić łączny mnożnik Popiołów w „Tej nocy”.
@@ -46,6 +44,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - Warianty fabularne (Chojrak i Wiesława w porcie), karta Ambrożego, efekty w nowym stylu, strojenie Wypadu.
 
 ## Porządki
+- Opcje (sprawdzone 17.11 na zrzutach autora z 810: teksty o telefonie i baterii nie są widoczne, schemat klawiatury ma „1–4 wybór karty”). Zostały tylko resztki w źródle: stare zdania w `index.html` (`#pane-gfx .figcap`) podmieniane w locie przez część 27 oraz martwe wpisy w `I18N_DOM`. Sprzątnąć przy okazji, bez wpływu na gracza.
 - `wydaj.py usun gra HASH` (usuwa plik, wpis z manifestu i sw.js; odmawia, gdy hash jest w źródle lub CSS), potem usunąć: `ui/702ff214…` (stare logo), `ui/e87781cf…`, `ui/a8a2aa56…` (stare piętno), `ui/2766d233…` (stara pieczęć), `ui/516bd882…` (stare koło przy poziomie).
 - Nieużywane reguły CSS dotyku (`#touch`, `#btns`, `#rot`, `pointer:coarse`) usunąć przez `rehash`.
 - `narzedzia/stan.py` (cache, commit, rozmiar gra/, liczba plików zipa, gałęzie czekające).
