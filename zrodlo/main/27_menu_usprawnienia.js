@@ -1803,15 +1803,18 @@ ${O} #pause .nbp-head>.nbp-sub{order:3!important;position:static!important;trans
   if(performance.now()-ptr<800)return;/* klikniecie mysza obsluguje sam wiersz */
   requestAnimationFrame(()=>{if(document.activeElement===r&&r.isConnected&&!r.classList.contains('on'))r.click()})});
 }catch(e){quietErr('kapFokus',e)}})();
-// 17.11.2026 (runda 813, gamedev): banery bez zlotej ramki (decyzja autora). Rozdzialy na mapie i deski w Ognisku/Przygotowaniu
-// przy fokusie z klawiatury lub padu oraz pod mysza: jasniejszy baner z zarem zamiast obrysu.
+// 17.11.2026 (runda 813-814, gamedev): deski w Ognisku/Przygotowaniu bez zlotej ramki, mocniejszy zar (decyzja autora).
+// Lokalizacje na mapie: ramka przy fokusie zostaje (decyzja autora), mocniejsze podswietlenie wybranej, wskazanej i pod mysza.
 (()=>{try{const B='#orient'.repeat(260),CH=B+'.pc-menu #title:not(.pc-home) .premium-map>.m2-right>.m2-ch',U=n=>`calc(${n} * var(--pc-u,1px))`,
  st=document.createElement('style');st.id='nb-banery-bez-ramki';st.textContent=`
 ${CH}:is(:focus-visible,.pf){outline:none!important;box-shadow:none!important}
-${CH}:is(:focus-visible,.pf) .nbm-tag,${CH}:not(:disabled):hover .nbm-tag{outline:none!important;border-color:#f3cf86!important;background:linear-gradient(#6a4422f5,#3a2414f5)!important;box-shadow:0 0 0 1px #f3cf8699,0 0 ${U(18)} rgba(255,150,60,.75),0 0 ${U(38)} rgba(255,110,40,.45),0 ${U(2)} ${U(9)} #000d!important}
-${CH}:is(:focus-visible,.pf) .nbm-nm,${CH}:not(:disabled):hover .nbm-nm{color:#fff3d6!important;text-shadow:0 0 ${U(8)} rgba(255,160,70,.9),0 1px 2px #000!important}
-${CH}:is(:focus-visible,.pf) .nbm-st,${CH}:not(:disabled):hover .nbm-st{color:#e8cf9f!important}
-${CH}:is(:focus-visible,.pf) .nbm-pin,${CH}:not(:disabled):hover .nbm-pin{transform:scale(1.35);box-shadow:0 0 0 ${U(2)} #000a,0 0 ${U(14)} #ffb45a}
+${CH}.premium-selected .nbm-tag{border-color:#ecc77c!important;background:linear-gradient(#4e331cf5,#2a1b10f5)!important;box-shadow:0 0 0 1px #ecc77caa,0 0 ${U(16)} rgba(255,150,60,.55),0 0 ${U(30)} rgba(255,110,40,.3),0 ${U(2)} ${U(9)} #000d!important}
+${CH}.premium-selected .nbm-nm{color:#fff3d6!important;text-shadow:0 0 ${U(6)} rgba(255,160,70,.75),0 1px 2px #000!important}
+${CH}:is(:focus-visible,.pf) .nbm-tag,${CH}:not(:disabled):hover .nbm-tag{border-color:#ffd58e!important;background:linear-gradient(#7a4c22f7,#3e2614f7)!important;box-shadow:0 0 0 1px #ffd58ecc,0 0 ${U(22)} rgba(255,160,70,.9),0 0 ${U(48)} rgba(255,120,40,.6),0 ${U(2)} ${U(9)} #000d!important}
+${CH}:is(:focus-visible,.pf) .nbm-tag{outline:2px solid var(--nbs-focus,#e8c47a)!important;outline-offset:${U(3)}!important}
+${CH}:is(:focus-visible,.pf) .nbm-nm,${CH}:not(:disabled):hover .nbm-nm{color:#fff6e0!important;text-shadow:0 0 ${U(10)} rgba(255,170,80,1),0 1px 2px #000!important}
+${CH}:is(:focus-visible,.pf) .nbm-st,${CH}:not(:disabled):hover .nbm-st{color:#f0d9aa!important}
+${CH}:is(:focus-visible,.pf) .nbm-pin,${CH}:not(:disabled):hover .nbm-pin{transform:scale(1.45);box-shadow:0 0 0 ${U(2)} #000a,0 0 ${U(18)} #ffb45a,0 0 ${U(30)} rgba(255,140,50,.6)}
 ${B} :is(#nbP,#nbW) button.nbd:is(:focus-visible,.pf){outline:none!important;box-shadow:none!important}
 ${B} #kap #kapList:not(.nbk-beasts):has(>.m2k-row:is(:focus-visible,.pf))>.m2k-row:hover:not(.on,:focus-visible,.pf){background:rgba(30,24,22,.5)!important;box-shadow:none!important}${B} #kap.nbk-kap #kapList:not(.nbk-beasts):has(>.m2k-row:is(:focus-visible,.pf))>.m2k-row.lk:hover:not(.on,:focus-visible,.pf){background:rgba(20,16,15,.45)!important}/* nawigacja klawiatura/padem: wiersz pod mysza nie swieci drugi raz */
 ${B} :is(#nbP,#nbW) button.nbd:not(:disabled):is(:hover,:focus-visible,.pf){filter:brightness(1.28) saturate(1.15) drop-shadow(0 0 calc(10*var(--u)) rgba(255,130,50,.75))!important;color:#fff0d8!important;text-shadow:0 0 calc(12*var(--u)) rgba(255,150,60,.9)!important}`;
