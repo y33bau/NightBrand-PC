@@ -6,7 +6,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 810 (`3cf2040`); gałąź `runda-811-poprawki-przegladu` = 811 + 812 czeka na „publikuj” |
+| main | cache 812 (`745db17`), opublikowane 17.11.2026; kopia w nightbrand-backup (`b492fa6`) |
 | Gałęzie czekające na „publikuj” | brak |
 | Kopia zapasowa | y33bau/nightbrand-backup = kopia 810 (odświeżona po publikacji) |
 | Zip itch.io | `NightBrand_itch_810.zip` na pulpicie autora w `NIGHTBRAND` |
