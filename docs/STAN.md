@@ -30,7 +30,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - Ogólnie: pad na nowych ekranach, kooperacja, menu po angielsku, itch.io na żywo.
 
 ## Zgłoszone autorowi, czekają na decyzję
-- Przegląd 810 (`docs/przeglady/PRZEGLAD_810_2026-11-17.md`): 4 uwagi WAŻNE (warstwy menu, przełączniki w adresie bez `LOKALNIE`, zasada o nieistniejącym perku „Bez litości”, sloty 5 i 6 niewidoczne w Opcjach) i 8 drobnych.
+- Przegląd 810 (`docs/przeglady/PRZEGLAD_810_2026-11-17.md`): 5 uwag WAŻNYCH (warstwy menu, przełączniki w adresie bez `LOKALNIE`, zasada o nieistniejącym perku „Bez litości”, sloty 5 i 6 niewidoczne w Opcjach, tempo leczenia kociołków na Łatwym) i 9 drobnych.
 - Kaplica: po kliknięciu wiersza myszą fokus nie przechodzi na kliknięty wiersz.
 - Rozmowy NPC: kłamstwo Izoldy (40 monet) płaci więcej niż prawda (30 + pół paska); siła upiorów Skryby i Ottokara; wypłata warty 70 monet.
 - Przygotowanie: czy przywrócić łączny mnożnik Popiołów w „Tej nocy”.

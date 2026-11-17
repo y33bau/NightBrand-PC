@@ -42,6 +42,62 @@ Foldery `web\`, `demo-hd2d\`, `gra-2d\` na komputerze autora są nieaktualne. Ni
 - **Zapis**: ustawienia w `localStorage pn_access` (`saveAccess`, `applyAccess`); błędy `handleGameError`, `pn_errors`. Brak zapisu w środku nocy.
 - **Ekran**: `fit()` (max 2,4:1), kamera perspektywiczna fov 24°, pitch 55°, DIST 30.
 
+## 2b. Gra w liczbach (sprawdzone w kodzie 17.11.2026, cache 810)
+Źródło liczb podane w nawiasie. Zmiana czegokolwiek z tej sekcji = zmiana balansu (zgoda autora), poza literówkami w opisach.
+
+### Pętla gry
+Menu główne → Ognisko (bohater) → Mapa podróży (rozdział) → Przygotowanie do nocy (perk, wyzwanie, klątwy do 3, trudność, ofiara) → noc → podsumowanie (Popioły, doświadczenie postaci) → Kaplica / Kronika → kolejna noc. Tryb Fabularny (wstępy, rozmowy) i Arcade (bez fabuły).
+
+### Noc (części 01, 10, 13, 15)
+- `NIGHT=960` s (16 min). `BREAK_AT=480`: północ. O północy Poborca Zakonu (`collector`, 900 HP; V: Leszy 1100, VI: Arcysędzia Rachmistrz ×1,3), po nim kram Margi 120 s. Kociołki napełniają się o północy.
+- Po 16 min boss rozdziału (`BOSS_HP_MUL=1.5`, `BOSS_SPD_MUL=1.1`, HP rośnie z czasem: `bossHealth` ×(1+t/360)): I Zrost (`boss`), II Cumlin (`cumlin`), III Bosman (`boss` w porcie, 1800), IV `beast` (2200), V Strzyga (`strzyga`), VI Wierzyciel (`boss`, 2600). Wygrana w porcie: boss + dwa kołowroty + wejście na prom.
+- Napory: `SURGE=[240,720]`, po 15 s, tempo pojawiania ×1,5. Elity: 3 na noc (`ELITE.times=[255,600,735]`, HP ×3,5, obrażenia ×1,65; 30% szans na elitę z imieniem, najwyżej jedna).
+- Od 20. poziomu nocy +10% wrogów (`LATE_LVL`, `LATE_MUL`).
+- Krypta (`dg`, CH=9): pod cmentarzem rozdz. I, raz na noc, przed północą; czas na górze stoi.
+- Balans rozdziałów `CHAPTER_BALANCE` (HP / boss / obrażenia / liczba wrogów): I .90/.92/.85/.78 → II .94/.96/.88/.84 → III (port) .96/.98/.90/.87 → IV .98/1/.92/.90 → V 1.02/1.03/.96/.95 → VI 1.06/1.06/1/1. Rozdział I dodatkowo łagodnie rozkręca liczbę wrogów w pierwszych 90–120 s.
+- Wrogowie każdego rozdziału: `spawnTick` (13). I: opętani, ghule, rycerze, nietoperze, tarczownicy. II: krasnoludy, ghule, strażnicy. III port: opętani, ghule, tarczownicy, rycerze. IV Złotogród: szaleńcy, ogary, zgniłe rycerze, milicja, grabarze, maruderzy. V Czarnobór: bandyci, wilki, strzygonie, kusznicy, topielce (na bagnie), zmory, kozły, biesy, upiory. VI Cytadela: wg sal (dziedziniec, kancelaria, sala, skarbiec, krypta, tron): strażnicy, skazańcy, kruki, sędziowie, przeklęci, skrybowie, szczury papierowe, arbitrzy, golemy ksiąg, kaci, dłużnicy, widma. Statystyki: `ET` (10).
+
+### Trudność (`DF`, część 10)
+| | HP wrogów | Obrażenia | Liczba | Monety | Doświadczenie | Popioły | Pula kociołka |
+|---|---|---|---|---|---|---|---|
+| Łatwy | ×0,75 | ×0,7 | ×0,8 (pierwsze 3 min dodatkowo −10%) | ×0,9 | ×1 | ×0,8 | 200 HP |
+| Normalny | ×1 | ×1 | ×1 | ×1 | ×1 | ×1 | 150 HP |
+| Trudny | ×1,25 | ×1,2 | ×1,12 | ×1,15 | ×1,15 | ×1,3 | 100 HP |
+Tempo leczenia kociołka: Normalny 10% maks. HP/s, Łatwy i Trudny 6%/s (patrz przegląd 810, uwaga o kociołkach).
+
+### Rozwój w nocy
+- Doświadczenie nocy: `xpNeed(l)=ceil(5·l·1,05^(l−1))`. Awans: 4 karty (klawisze 1–4, R przerzut), leczenie `S.pk.lvHeal=0.1` (10% maks. HP). Karty: umiejętności, style, pakty, cechy (`_vit` +15 maks. HP itd.).
+- Serduszko (pickup `h`): +10% maks. HP, 3% szans.
+- Style (`STY`, `BR` w 12): trzy gałęzie Obrońca / Zabójca / Mistrz fal, premia zestawu po 8 poziomach w gałęzi (`SET_N=8`).
+- Umiejętności wsparcia wspólne: Odłamek szronu, Kula ognia, Kamienny obrońca (oraz odpychająca fala `aard`). Techniki klasowe: patrz tabela klas.
+- Sloty aktywne: solo 5 (Q E F R G / pad LT+X Y B A, LT+RB), Dar pieczęci 6. (klawisz 6 / LT+LS), kooperacja 4 na gracza (`spawnP2` przycina).
+- Kram Margi (`SHOP`): Gorzki wywar 20 (pełne leczenie), Serce z popiołu 45 (+20 maks. HP, ×1,6 ceny, maks. 3), Osełka 35 (+10% obrażeń umiejętności, ×1,5, maks. 3), Amulet wiatru 60 (+20 staminy), Zwój pamięci 40 (poziom), Kamień przyciągania 25 (+40% zasięgu). Cena rośnie o 35% po zakupie.
+- Odrodzenie przy kociołku: raz na noc, 70% HP, bez monet, −50% doświadczenia postaci za noc.
+
+### Postęp stały (część 22)
+- Poziom postaci (wspólny dla bohaterów): `PNEED(l)=150+75·(l−1)`, `PMAX=10`. Poziomy 1–8 odblokowują perki (po jednym), poziom 10 daje drugie miejsce na perk.
+- Perki: 8 na klasę (40), każdy z zaletą i wadą (`PERKS`, pole `who`, brak = Rycerz). **Perku „Bez litości” nie ma w kodzie.**
+- Wyzwania nocy: 10 na klasę (50), nagroda Popioły + monety na następną noc (`CHALS_*`).
+- Klątwy (`CURSES`, 11 sztuk, do 3 naraz): premia Popiołów +10…+35%, sumowana; przy porażce połowa.
+- Ofiary (`OFIARY`): Sakwa 40 Popiołów (+60 monet), Żar 60 (+10% obrażeń), Tarcza 90 (raz 1 HP zamiast śmierci, solo).
+- Popioły: za zabitych, czas, wygraną, wyzwanie, pierwsze przejście rozdziału (+50); mnożnik trudności; przy odrodzeniu ×0,5.
+- Kaplica Popiołów (`EMBU`): 3 zakładki. Ciało i stal (zdrowie +5%/poz., regeneracja staminy, blok, unik, silny atak, riposta; po 3 poziomy 50/120/250). Pakt i spryt (zasięg zbierania, monety na start, darmowe przerzuty, Oko kruka, przetapianie monet). Krypta prestiżu (Ostatnia szansa 1500, Łup elity 1200, Dar pieczęci, komplety zbroi). Stopnie ołtarza: II po wydaniu 300, III po 800. „Rozsyp Popioły” zwraca 100% z dwóch pierwszych zakładek.
+- Kronika: wyzwanie dnia, noc tygodnia, osiągnięcia i medale (brąz/srebro/złoto), Bestiariusz, Statystyki, Zapiski.
+
+### Bohaterowie (`HEROES` 22, `applyChar` 22, techniki `TECH` 27)
+Baza (Rycerz): 100 HP, 100 staminy, 60 many; szybki atak 14 staminy, obrażenia 17/19/28 (3 ciosy combo); silny 36 staminy, 48 obrażeń; parowanie 0,18 s (`SL` w 12).
+| Litera | Imię, przydomek | Klasa PL / EN | Broń | Różnice względem bazy | Techniki |
+|---|---|---|---|---|---|
+| r | Hadræn Bez Herbu | Rycerz / Knight | miecz | baza; fale cięcia przy parowaniu | Wypad, Wir Ostrza |
+| k | Goran Łamacz Karków | Kat / Executioner | topór | HP ×1,25, ruch ×0,88, szybki 22/25/36 (18 st.), silny 66 (42 st.), odporność na przełamanie ×1,5 | Atak z doskoku, Hak Kata |
+| z | Mira Tancerka Popiołów | Zabójczyni / Ash Dancer | dwie szable | HP ×0,75, stamina ×1,35, ruch ×1,18, otrzymywane obrażenia ×1,1, combo 5 cięć 13/14/13/14/24, silny = Szkarłatny Wir 42 (44 st.), seria przyspiesza ataki | Rozszarpanie, Wachlarz Ostrzy, Ostatni Taniec |
+| d | Iwo Zwiastun Ciszy | Dzwonnik / Bellringer | młot | HP ×1,15, ruch ×0,9, szybki 21/24/35, silny 72 (44 st.), blok ×0,8 staminy; co 3. parowanie Ostatni Ton (zasięg 78, ogłuszenie 1,6 s) | Echo Żałoby, Zastaw Życia |
+| m | Milena Niedogasła | Woskownica / Candlebound | lichtarz-włócznia | zasięg 40/46, szybki 16/17/26 (15 st.), silny 52 (38 st.); parowania ładują Żywy Knot (do 5), silny zostawia pas wosku (spowolnienie) | Odlew Skazańca, Dogasanie (mana) |
+Każdy bohater: 8 perków, 10 wyzwań, własne zbroje z Kaplicy, własne statystyki w Kronice.
+
+### Zapis (localStorage)
+`pn_prog` (poziom postaci, perki, wyzwania, rekordy), `pn_embers` (Kaplica), `pn_meta` (Kronika, statystyki), `pn_save` (zapis na start nocy; brak zapisu w środku nocy), `pn_access` (ustawienia grafiki i dostępności), `pn_keys` (klawisze), `pn_lang`, `pn_diff`, `pn_story`, `pn_mus`, `pn_sfx`, `pn_fts`, `pn_dmg`, `pn_bri`, `pn_hints`, `pn_tut_h`, `pn_mp`, `pn_errors` (raport błędów), `pn_trainer` (tryb testera), `pn_powitanie`, `nb_pc_last_chapter`, `nb_fs`, `nbLayoutImg` (edytor menu). Eksport/import zapisu do pliku: Opcje → Dane zapisu.
+
 ### 2a. Klasy postaci (pięć)
 | Litera | Imię | Klasa PL / EN | Broń, cecha |
 |---|---|---|---|
