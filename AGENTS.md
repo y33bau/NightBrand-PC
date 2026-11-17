@@ -1,5 +1,5 @@
 # Zasady dla agentów (Claude, Codex)
-Stan na 2026-11-17, cache 809, rola agent główny. Te zasady są ważniejsze niż starsze dokumenty w projektach claude.ai i niż pliki PC_*.md / UI_*.md w tym repo (to historia rund). Wszystko, co obowiązuje każdego agenta, leży w tym repo: nowe konto może nie widzieć projektu w claude.ai.
+Stan na 2026-11-17, cache 810, rola agent główny. Te zasady są ważniejsze niż starsze dokumenty w projektach claude.ai i niż pliki PC_*.md / UI_*.md w tym repo (to historia rund). Wszystko, co obowiązuje każdego agenta, leży w tym repo: nowe konto może nie widzieć projektu w claude.ai.
 
 Gdzie co jest: bieżący stan i lista spraw `docs/STAN.md`; logi sesji `docs/logi/`; mapa kodu i przepisy `docs/PODRECZNIK_AGENTA.md`. Kolejność ważności: instrukcje projektu > ten plik > `docs/STAN.md` > ostatni log > reszta. Dokument starszy niż ostatni log to historia.
 

@@ -1,4 +1,4 @@
-Stan na 2026-11-17, cache 809, rola agent główny
+Stan na 2026-11-17, cache 810, rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,19 +6,20 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | `4fe6088`, cache `nightbrand-codex-20261117-809` |
-| Gałęzie czekające na „publikuj” | `docs-porzadki-809` (ta runda: dokumenty) |
-| Kopia zapasowa | y33bau/nightbrand-backup, main `04a7ffe` = kopia 809 |
-| Zip itch.io | `NightBrand_itch_809.zip` (584 pliki, 148,5 MB) na pulpicie autora w `NIGHTBRAND` |
+| main | po publikacji 17.11: cache `nightbrand-codex-20261117-810` (sprawdź `git log -3`) |
+| Gałęzie czekające na „publikuj” | brak |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 810 (odświeżona po publikacji) |
+| Zip itch.io | `NightBrand_itch_810.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 148–152 MB (limit 500 MB) |
 
 ## Decyzje autora (najnowsze)
-- 17.11: Zabójczyni po angielsku = **Ash Dancer** (w grze jeszcze „Assassin” w 4 miejscach: `HEROES` w 22, `kind` technik rend/fan/ldance w 12; do poprawy rundą gamedev). Gałąź stylu „Zabójca/Assassin” i wyzwanie „Assassin's Strike” zostają.
+- 17.11: Zabójczyni po angielsku = **Ash Dancer** (wdrożone w 810: `HEROES` w 22 i opisy technik w 12). Gałąź stylu „Zabójca/Assassin” i wyzwanie „Assassin's Strike” zostają.
 - 17.11: kopia nightbrand-backup odświeżana po każdej publikacji; limit 500/450 wszędzie; test przez zip + `TEST_z_zipa.bat`; dokumenty bieżące w repo (`docs/`).
 - 16.11: gra na PC, dotyk usunięty (782–783), limit 500 MB, praca rolami.
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 810 (Ash Dancer): angielski napis klasy Miry w menu i Instrukcji (czy się mieści).
 - 809 (logo i piętno): pieczęć w Krypcie prestiżu, ekran wyboru języka, ikona.
 - 808 (Instrukcja): pad, EN.
 - 807 (ekran powitalny): EN do zatwierdzenia.

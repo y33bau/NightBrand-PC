@@ -1,4 +1,4 @@
-Stan na 2026-11-17, cache 809, rola agent główny
+Stan na 2026-11-17, cache 810, rola agent główny
 
 # Podręcznik agenta: NightBrand PC
 Cel: nowy agent zaczyna pracę w kilka minut, bez odkrywania gry od nowa. Zasady: `AGENTS.md`. Stan bieżący: `docs/STAN.md`. Gdy coś tu nie zgadza się z kodem, popraw ten plik na końcu rundy.
@@ -47,7 +47,7 @@ Foldery `web\`, `demo-hd2d\`, `gra-2d\` na komputerze autora są nieaktualne. Ni
 |---|---|---|---|
 | r | Hadræn | Rycerz / Knight | miecz |
 | k | Goran | Kat / Executioner | topór |
-| z | Mira | Zabójczyni / Ash Dancer (w grze jeszcze „Assassin”, do poprawy) | ostrza, techniki rend/fan/ldance |
+| z | Mira | Zabójczyni / Ash Dancer | ostrza, techniki rend/fan/ldance |
 | d | Iwo | Dzwonnik / Bellringer | młot, co trzecie parowanie ogłusza tonem |
 | m | Milena | Woskownica / Candlebound | lichtarz-włócznia, Żywy Knot, pas wosku |
 
