@@ -730,7 +730,7 @@ trDom(document.body);
   if(!box)return;box.addEventListener('keydown',e=>{const k=({a:'ArrowLeft',d:'ArrowRight'})[e.key.toLowerCase()]||e.key;if(k==='ArrowLeft'||k==='ArrowRight'){const bs=[...box.querySelectorAll('button')],i=bs.indexOf(document.activeElement);bs[(i+1+bs.length)%bs.length].focus();e.preventDefault()}});
   if(!saved){box.hidden=false;const fo=()=>{if(box.hidden)return;const f=box.querySelector('button.on');if(f&&!box.contains(document.activeElement))f.focus()};for(const t of [60,400,1500,4000,8000,14000])setTimeout(fo,t);addEventListener('keydown',e=>{if(!box.hidden&&!box.contains(document.activeElement)&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Enter',' '].includes(e.key)){e.preventDefault();e.stopImmediatePropagation();fo()}},true)}})();
 if(!window.THREE){$('screen').insertAdjacentHTML('beforeend',(EN?'<div id="err">Failed to load the 3D library. Please refresh the page.</div>':'<div id="err">Nie udało się wczytać biblioteki 3D. Odśwież stronę.</div>'));return}
-const TS=16,MW=104,MH=91,WW=MW*TS,WH=MH*TS,NIGHT=960,BREAK_AT=480,PITCH=55*Math.PI/180,DIST=30,
+const TS=16,MW=104,MH=91,WW=MW*TS,WH=MH*TS,NIGHT=960,BREAK_AT=480,KAMV=({'1':[45,16],'2':[35,22]})[nbParam('kamera')]||[55,12],/* test kamery (tylko lokalnie, ?kamera=1|2): [pochylenie, polowa fov]; DIST dobrany tak, by szerokosc widoku zostala ta sama */KAMH=KAMV[1]*Math.PI/180,PITCH=KAMV[0]*Math.PI/180,DIST=KAMV[1]===12?30:30*Math.tan(12*Math.PI/180)/Math.tan(KAMH),
   // the 3D scene is drawn at this height and scaled up: higher = sharper sprites; phones get a lighter setting
   RT_H=720;
 const P={ink:'#08070a',bone:'#d8cfb8',bone2:'#9d9584',blood:'#951518',blood2:'#560a0d',ember:'#ff6a1a',ember2:'#ffb347',st0:'#0d0c10',st1:'#1b1a1f',st2:'#24232a',st3:'#34323b',st4:'#46434e',inlay:'#5a4a22',
@@ -5678,7 +5678,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
   if(S){const cp=pl.dead&&pl2&&!pl2.dead?pl2:pl;tx=cp.x/16;tz=cp.y/16}else{idleA+=dt*.08;const I=W.idle;tx=I[0]+Math.sin(idleA)*I[2];tz=I[1]+Math.cos(idleA*.7)*I[3]}
   if(S&&depthOn()){const hw=11.5*Math.min(1.35,Math.max(.75,cam.aspect/(16/9)));const hx=tx,hz=tz;if(MW>hw*2+2)tx=Math.min(MW-hw,Math.max(hw,tx));tz=Math.min(MH-7.5,Math.max(8.5,tz));tx=Math.min(hx+hw*.6,Math.max(hx-hw*.6,tx));tz=Math.min(hz+4,Math.max(hz-2.2,tz))}
   camTarget.x+=(tx-camTarget.x)*Math.min(1,dt*8);camTarget.z+=(tz-camTarget.z)*Math.min(1,dt*8);if(!S||S.t<.1){camTarget.x=tx;camTarget.z=tz}
-  let sx=0,sz=0;if(SETT.shake&&S&&S.shakeT>0){const pxw=2*DIST*Math.tan(12*Math.PI/180)/RT_H;S.shkT=(S.shkT||0)-dt;if(S.shkT<=0||!S.shk){S.shkT=.04;S.shk=[Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw,Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw/Math.sin(PITCH)]}sx=S.shk[0];sz=S.shk[1]}
+  let sx=0,sz=0;if(SETT.shake&&S&&S.shakeT>0){const pxw=2*DIST*Math.tan(KAMH)/RT_H;S.shkT=(S.shkT||0)-dt;if(S.shkT<=0||!S.shk){S.shkT=.04;S.shk=[Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw,Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw/Math.sin(PITCH)]}sx=S.shk[0];sz=S.shk[1]}
   const EZ=S&&S.exec>0&&SETT.shake?1-.16*Math.min(1,S.exec/.3):1;cam.position.set(camTarget.x+sx,Math.sin(PITCH)*DIST*EZ,camTarget.z+Math.cos(PITCH)*DIST*EZ+sz);cam.lookAt(camTarget.x+sx,.8,camTarget.z+sz);syncSwordGlow();syncCombatEffects(dt);syncWhirlVisual(dt);syncBloodHD(dt);
   const z0=S&&S.zones[0];if(z0){W.zoneLight.x=z0.x/16;W.zoneLight.z=z0.y/16}
   for(const L of LSRC){let k=L.base;
@@ -7195,7 +7195,7 @@ function fit(){const st=$('stage'),r=st.getBoundingClientRect();let w=Math.max(1
   const scr=$('screen');scr.style.width=w+'px';scr.style.height=h+'px';scr.classList.toggle('port',port);document.documentElement.classList.toggle('port',port);scr.style.fontSize=(Math.max(10,s*5.2)*SETT.fts/100)+'px';
   renderer.setPixelRatio(Math.min(GFX.dpr,window.devicePixelRatio||1));renderer.setSize(w,h,false);FIT.w=w;FIT.h=h;rtApply();
   
-  cam.aspect=w/h;cam.fov=2*Math.atan(Math.tan(12*Math.PI/180)/Math.min(1,w/h))*180/Math.PI;cam.updateProjectionMatrix()}
+  cam.aspect=w/h;cam.fov=2*Math.atan(Math.tan(KAMH)/Math.min(1,w/h))*180/Math.PI;cam.updateProjectionMatrix()}
 addEventListener('resize',fit);fit();
 // fit again when the page comes back (some browsers report the new size late)
 const refit=()=>{fit();setTimeout(fit,120);setTimeout(fit,400);setTimeout(fit,900)};

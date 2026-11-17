@@ -887,3 +887,4 @@ cache811 · 811: kociolki 12/10/8% (Latwy/Normalny/Trudny) i opisy; przelaczniki
 cache812 · 812: drobne z przegladu 810: nazwa klasy Tancerka Popiolu, mgielka w porcie, logowanie bledow menu, usuniete 6 nieuzywanych obrazow (wydaj.py usun), teksty Grafiki bez podmiany w locie, sprawdz.py bez falszywych uwag. Nie sprawdzono: wyglad portu, pad, dzwiek, FPS, EN, itch.io
 cache813 · 813: fokus Kaplicy/Kroniki idzie za wyborem, podswietlenia nie zostaja po kliknieciu mysza, pad odlaczony zdejmuje zaznaczenie, banery rozdzialow i deski Ogniska/Przygotowania bez zlotej ramki. Nie sprawdzono: prawdziwy pad, EN, itch.io, FPS u autora
 cache814 · 814: lokalizacje na mapie: ramka przy fokusie wraca, mocniejsze podswietlenie wybranej, wskazanej i pod mysza. Nie sprawdzono: wyglad w przegladarce, pad, EN, itch.io
+cache815 · Test kamery ?kamera=1|2 (tylko lokalnie), domyslnie bez zmian. NIE sprawdzono: wyglad, pad, FPS, walka z nowym katem
