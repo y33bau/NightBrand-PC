@@ -19,6 +19,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 811 (kociołki 12/10/8%, sloty 5–6 na listach klawiszy, przełączniki tylko lokalnie, lżejsze style menu): leczenie przy kociołku na trzech trudnościach, lista „Własne klawisze” (przewinąć do dołu), lista pada w Opcjach.
 - 810 (Ash Dancer): angielski napis klasy Miry w menu i Instrukcji (czy się mieści).
 - 809 (logo i piętno): pieczęć w Krypcie prestiżu, ekran wyboru języka, ikona.
 - 808 (Instrukcja): pad, EN.

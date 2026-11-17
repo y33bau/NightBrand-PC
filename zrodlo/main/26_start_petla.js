@@ -1046,7 +1046,7 @@ ${Z} .nbo-sep{height:1px;background:linear-gradient(90deg,#0000,#b08a4a55,#0000)
 // PC concept 2, whole-menu presentation. Reversible switch: ?pcmenu=0 / ?pcmenu=1.
 (()=>{
  const root=$('orient'),title=$('title'),prep=$('prep');
- const enabled=new URLSearchParams(location.search).get('pcmenu')!=='0';
+ const enabled=nbParam('pcmenu')!=='0';
  root.classList.toggle('pc-menu',enabled);if(!enabled)return;
  Object.assign(PREMIUM_ASSETS,{'portret-woskownica':'assets/ui/f02195e1fb9431e1610f3b80209762e46e53a9d3cd82b94e357519012df9b20d.webp','portret-rycerz':'assets/ui/5b34b85844e657eca2c40af65c5a8744f7175b81ebe8b37e9614215ef8cda24e.png','portret-kat':'assets/ui/5496889094dbd50b342769c840ab925bcac7c6da2bea4b64307a20dce787cffa.png','portret-zabojczyni':'assets/ui/3a7c4c89940259420bcc50b5647ff9d712a117a9d5f3ea4915a67034db1f5df3.png','portret-dzwonnik':'assets/ui/5857e9efd70536997aa98e905aec4855bc6b8912b04a498e662ff7370327f36f.webp'});
  // 15.11.2026: portrety = popiersia z postaci przy ognisku (aktualny wyglad), wszyscy zwroceni w prawo, Rycerz przodem
@@ -1608,9 +1608,9 @@ ${J} .premium-map .m2-ch:not(:disabled):is(:hover,:focus-visible,.pf) .pc-chapte
  s.textContent=s.textContent.replace(/(font(?:-size)?\s*:[^;{}]*?)calc\((\d+) \* var\(--pc-u\)\)/g,'$1calc($2 * var(--pc-u) * var(--nbts,1))');
  document.head.append(s);
  // Approved graphical family. Original PNG atlases stay intact; CSS selects their alpha bounds.
- if(new URLSearchParams(location.search).get('pcgfx')==='0')return;
+ if(nbParam('pcgfx')==='0')return;
  root.classList.add('pc-gfx');
- const unifiedType=new URLSearchParams(location.search).get('pctype')!=='0';
+ const unifiedType=nbParam('pctype')!=='0';
  root.classList.toggle('pc-type',unifiedType);
  const GF={play:'assets/ui/fcd1dc2f86b4932e3c706c70e446b7554315edfeaf6c00d3455c3da0c7b64d84.png',menu:'assets/ui/312d55c97b1cf9d5b855da5b159a1c08ba4a94da86e03eefe20e382c6302cea2.png',heads:'assets/ui/0feb5f7b6fa5faf685551209ad13e7e268c3a89afed074de179287851d767fff.png',panel:'assets/ui/2e6c2d60621704b366ab4a96a93626d10a2e0b040841f03d4833a890d54f3203.png',idle:'assets/ui/270f1ffe61905a5191c71634cd1a3b723502a1ace335d0607a6b07dc3f71a33a.png',selected:'assets/ui/bb4b3cd2510833299ef03f2c59686902263bbe6a4fa9a9906b974d3c3a167fd8.png',divider:'assets/ui/a1ab25049eefdca890c62690c24911780f5d4f5105719bca27640107f13fd44f.png'};
  const GM=[[[159,63,441,122],[224,238,319,120],[208,409,342,119],[201,575,360,109],[154,733,450,128],[249,901,263,139]],[[875,62,397,113],[892,240,367,125],[922,403,304,118],[865,574,418,117],[937,736,274,114],[884,899,377,144]]][EN?1:0];
@@ -2006,7 +2006,7 @@ ${menus} :is(.tab,.stab,.nbp-tab,.pc-prep-tab):hover:not(.on):not([aria-pressed=
 // ?pchud=0 przywraca poprzednia oprawe. Dotyk i drugi gracz zachowuja swoj HUD.
 (()=>{
  const scr=$('screen'),old=$('nbHud'),active=$('activeSkillHud'),T=(p,e)=>EN?e:p;
- const enabled=new URLSearchParams(location.search).get('pchud')!=='0';
+ const enabled=nbParam('pchud')!=='0';
  // 15.11.2026: oprawa drewno + kute zelazo (grafiki autora); rama kuli = kula wygaszona, wnetrze szkla = kula pelna przycieta do poziomu, luk staminy na obreczy kuli many
  const A={orb:'assets/ui/a430371a63da8407179be5e4db41567c2b0103ecfec5a37ca8f6464bed79cf0b.webp',hp:'assets/ui/72b72c558ce081be58d3970a6ed144afd5f15d3936d63ecee453b8c2af3506de.webp',mp:'assets/ui/02d43b9dd5c3c0271441e897527c8ad3afe9bb8bb5f01fcc97f22855b6553bd1.webp',arc:'assets/ui/15018f9b4105ed11c944d486647df99fcfcd7e34ff12941030797930fc2ead5a.webp',rail:'assets/ui/e2ab8b7dba2e3b5ab99f5ca81d2aa2ae658a254c348dcaacf1bbd7306b2cfa4e.webp',slot:'assets/ui/d0735ef08d1ba72dfc7e65606ef7ccb0bf992e1ff0eb3f3c9813183037150ddc.webp',clock:'assets/ui/85b7e06d8aa3a070c6ee897976b197e615c8ae6b3a209adf57e2a1e1dc86e6c9.webp',map:'assets/ui/91f72e8e543fbca09e28454533a862efa7d6edb6d8dc562ef726c870773166cc.webp'};
  // geometria doku (piksele obrazu 2172 x 724): srodki okienek, szerokosc listwy w jednostkach HUD
@@ -2206,7 +2206,7 @@ ${'#orient'.repeat(44)}.pc-menu #pause #skillLoadout .pcmp-loadout-tabs{grid-col
 // ?pcdialogue=0 przywraca dotychczasowa oprawe.
 (()=>{
  const root=$('orient'),dlg=$('dialog');
- if(!root.classList.contains('pc-menu')||new URLSearchParams(location.search).get('pcdialogue')==='0')return;
+ if(!root.classList.contains('pc-menu')||nbParam('pcdialogue')==='0')return;
  root.classList.add('pc-conversations');
  const T=(p,e)=>EN?e:p,make=(tag,c)=>{const el=document.createElement(tag);el.className=c;return el};
  const picture=make('div','pc-talk-portrait'),portrait=make('canvas','');portrait.width=portrait.height=192;picture.append(portrait);picture.setAttribute('aria-hidden','true');
@@ -2270,7 +2270,7 @@ ${D} :is(.next,#dlgBtns,#witChoices)[hidden]{display:none!important}
 
 // Quiet PC tutorial card and secondary skip actions; existing timers and touch code remain in charge.
 (()=>{
- const root=$('orient');if(!root.classList.contains('pc-menu')||isPort()||new URLSearchParams(location.search).get('tutorialui')==='0')return;
+ const root=$('orient');if(!root.classList.contains('pc-menu')||isPort()||nbParam('tutorialui')==='0')return;
  root.classList.add('pc-tutorial');const card=$('tut'),skip=$('tutSkip'),head=document.createElement('div'),label=document.createElement('span'),count=document.createElement('span'),foot=document.createElement('div');
  head.className='pc-tut-head';label.textContent=EN?'Hint':'Podpowiedź';count.id='pcTutCount';count.textContent='';count.setAttribute('aria-hidden','true');head.append(label,count);foot.className='pc-tut-foot';foot.append(skip);card.prepend(head);card.append(foot);card.setAttribute('role','status');card.setAttribute('aria-atomic','true');
  const P='#orient'.repeat(48)+'.pc-menu.pc-tutorial #screen:not(.port)',T=P+' #tut',B=P+' #tutSkip',I=P+' #intro #iskip',style=document.createElement('style');style.id='pc-quiet-tutorial';
@@ -2308,7 +2308,7 @@ ${B}{font-size:max(11px,calc(12 * var(--hint-u) * var(--nbts,1)))!important;min-
 
 // ===== HUD PC, szlif czytelnosci (runda hud-pc-1): pasek staminy pod bohaterem, grubszy luk staminy i pasek doswiadczenia,
 // wieksze liczniki monet, czerwona winieta przy niskim zyciu. Tylko odczyt stanu gry. ?hudfix=0 wylacza.
-(()=>{if(new URLSearchParams(location.search).get('hudfix')==='0')return;
+(()=>{if(nbParam('hudfix')==='0')return;
  const scr=$('screen'),nb=$('nbHud');if(!scr||!nb)return;const V3=new THREE.Vector3();
  const bars=[0,1].map(i=>{const e=document.createElement('div');e.className='nbx-sta nbx-sta'+(i+1);e.setAttribute('aria-hidden','true');e.innerHTML='<i></i>';scr.insertBefore(e,nb);return{e,f:e.firstChild,t:0,w:''}});
  const prevHud=hud;let lastXp=-1,xpT=0,lastCoins=-1,coinT=0;
@@ -2353,7 +2353,7 @@ ${O} #prompt[hidden]{display:none!important}
 ${O} #prompt .pk{display:inline-block;padding:.04em .5em;border:1px solid rgba(214,174,100,.75);border-radius:999px;background:rgba(201,162,92,.18);color:#f6dfa8;font-weight:700;font-size:.92em;letter-spacing:.04em}`;document.head.appendChild(st)}
 {const st=document.createElement('style');st.textContent='html body #pause#pause .btnrow button.go{white-space:nowrap!important;width:auto!important;max-width:none!important;min-width:max-content!important;height:auto!important;flex:0 0 auto!important}';document.head.append(st)}
 // Zywe menu: iskry unoszace sie znad pogorzeliska i migotanie luny pozarow na ilustracji tytulowej. Tylko rozjasnia obraz (screen), nie lapie klikniec. ?menufx=0 wylacza.
-{const ti=$('title');if(ti&&new URLSearchParams(location.search).get('menufx')!=='0'){const cv=document.createElement('canvas');cv.id='titleFx';cv.setAttribute('aria-hidden','true');cv.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;mix-blend-mode:screen';ti.prepend(cv);
+{const ti=$('title');if(ti&&nbParam('menufx')!=='0'){const cv=document.createElement('canvas');cv.id='titleFx';cv.setAttribute('aria-hidden','true');cv.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;mix-blend-mode:screen';ti.prepend(cv);
  const g=cv.getContext('2d'),P=[],reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;let last=0,CW=0,CH_=0;
  const spawn=first=>({x:Math.random(),y:first?Math.random():1+Math.random()*.08,vx:(Math.random()-.5)*.02,vy:-(.025+Math.random()*.055),r:.9+Math.random()*1.9,l:first?Math.random()*4:0,life:6+Math.random()*8,ph:Math.random()*6.283});
  const tick=t=>{requestAnimationFrame(tick);if(ti.hidden||document.hidden||t-last<33)return;const dt=Math.min(.1,(t-last)/1000);last=t;const w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return;if(w!==CW||h!==CH_){CW=cv.width=w;CH_=cv.height=h}
@@ -2363,7 +2363,7 @@ ${O} #prompt .pk{display:inline-block;padding:.04em .5em;border:1px solid rgba(2
   for(let i=0;i<P.length;i++){const p=P[i];p.l+=dt;p.x+=(p.vx+Math.sin(t*.0008+p.ph)*.012)*dt;p.y+=p.vy*dt;if(p.l>p.life||p.y<-.05){P[i]=spawn(false);continue}const a=Math.min(1,p.l/1.2)*Math.min(1,(p.life-p.l)/2)*(.5+.35*Math.sin(t*.006+p.ph));g.fillStyle='rgba(255,'+(150+((p.ph*20)|0)%70)+',70,'+Math.max(0,a).toFixed(3)+')';g.beginPath();g.arc(p.x*CW,p.y*CH_,p.r*CH_/900,0,6.283);g.fill()}};
  requestAnimationFrame(tick)}}
 // Porzadek menu (runda menu-porzadek-pc-1): jedna zasada zaznaczenia/najechania/fokusu, napisy w ramkach, Kaplica, Kronika, Kram. ?menufix=0 wylacza.
-if(new URLSearchParams(location.search).get('menufix')!=='0'){const st=document.createElement('style');st.id='nbMenuFix';st.textContent=`/* NightBrand PC: porzadek menu (jedna zasada zaznaczenia, napisy w ramkach). ?menufix=0 wylacza. */
+if(nbParam('menufix')!=='0'){const st=document.createElement('style');st.id='nbMenuFix';st.textContent=`/* NightBrand PC: porzadek menu (jedna zasada zaznaczenia, napisy w ramkach). ?menufix=0 wylacza. */
 :root{--nbs-on:linear-gradient(145deg,rgba(97,48,59,.92),rgba(53,28,37,.96));--nbs-line:rgba(196,110,130,.9);--nbs-idle:rgba(230,214,184,.17);--nbs-hover:rgba(230,214,184,.55);--nbs-focus:#ecc977;--nbs-cell:rgba(12,9,14,.46);--nbs-cellh:rgba(46,33,42,.62)}
 /* --- Kaplica i Kronika: pozycje listy --- */
 @P@ #kap .m2k-row{border:1px solid var(--nbs-idle)!important;background:var(--nbs-cell)!important;border-radius:2px!important;height:auto!important;min-height:min-content!important;flex:0 0 auto!important;opacity:1!important;transition:background .12s,border-color .12s,box-shadow .12s;cursor:pointer;outline:0}
@@ -2486,8 +2486,8 @@ html[lang=en] @Q@ #prep .nb-prep-class:not(.on)::after{content:'Select  ›'!imp
 @Q@ #manual #manBody>ul,@Q@ #manual #manBody>p{margin-bottom:3vh!important}
 @Q@ #manual #manBody .mh{margin-top:3.4vh!important}
 }
-`.replace(/@P@/g,'#orient'.repeat(30)).replace(/@Q@/g,'#orient'.repeat(110));document.head.append(st)}
+`.replace(/@P@/g,'#orient'.repeat(30)).replace(/@Q@/g,'#orient'.repeat(70));document.head.append(st)}
 // 12.11.2026: sygnal przewijania w panelach pauzy (gradient u dolu, gdy jest wiecej tresci)
-if(new URLSearchParams(location.search).get('menufix')!=='0'){const st=document.createElement('style');st.id='nbScrollHint';st.textContent=`#pause .nbp-panel.nb-more::after{content:'\\25BE';display:block;position:sticky;bottom:0;height:30px;margin-top:-30px;text-align:center;line-height:34px;font-size:17px;color:#e8c878;pointer-events:none;background:linear-gradient(to bottom,rgba(10,8,8,0),rgba(10,8,8,.92))}`;document.head.append(st);
+if(nbParam('menufix')!=='0'){const st=document.createElement('style');st.id='nbScrollHint';st.textContent=`#pause .nbp-panel.nb-more::after{content:'\\25BE';display:block;position:sticky;bottom:0;height:30px;margin-top:-30px;text-align:center;line-height:34px;font-size:17px;color:#e8c878;pointer-events:none;background:linear-gradient(to bottom,rgba(10,8,8,0),rgba(10,8,8,.92))}`;document.head.append(st);
 setInterval(()=>{const p=document.getElementById('pause');if(!p||p.hidden||p.offsetParent===null)return;p.querySelectorAll('.nbp-panel').forEach(e=>e.classList.toggle('nb-more',e.scrollHeight>e.clientHeight+12&&e.scrollTop+e.clientHeight<e.scrollHeight-8))},300)}
 

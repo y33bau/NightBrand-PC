@@ -63,7 +63,7 @@ Menu główne → Ognisko (bohater) → Mapa podróży (rozdział) → Przygotow
 | Łatwy | ×0,75 | ×0,7 | ×0,8 (pierwsze 3 min dodatkowo −10%) | ×0,9 | ×1 | ×0,8 | 200 HP |
 | Normalny | ×1 | ×1 | ×1 | ×1 | ×1 | ×1 | 150 HP |
 | Trudny | ×1,25 | ×1,2 | ×1,12 | ×1,15 | ×1,15 | ×1,3 | 100 HP |
-Tempo leczenia kociołka: Normalny 10% maks. HP/s, Łatwy i Trudny 6%/s (patrz przegląd 810, uwaga o kociołkach).
+Tempo leczenia kociołka (od 811, decyzja autora): Łatwy 12%, Normalny 10%, Trudny 8% maks. HP na sekundę, aż do wyczerpania zapasu z tabeli.
 
 ### Rozwój w nocy
 - Doświadczenie nocy: `xpNeed(l)=ceil(5·l·1,05^(l−1))`. Awans: 4 karty (klawisze 1–4, R przerzut), leczenie `S.pk.lvHeal=0.1` (10% maks. HP). Karty: umiejętności, style, pakty, cechy (`_vit` +15 maks. HP itd.).
@@ -76,7 +76,7 @@ Tempo leczenia kociołka: Normalny 10% maks. HP/s, Łatwy i Trudny 6%/s (patrz p
 
 ### Postęp stały (część 22)
 - Poziom postaci (wspólny dla bohaterów): `PNEED(l)=150+75·(l−1)`, `PMAX=10`. Poziomy 1–8 odblokowują perki (po jednym), poziom 10 daje drugie miejsce na perk.
-- Perki: 8 na klasę (40), każdy z zaletą i wadą (`PERKS`, pole `who`, brak = Rycerz). **Perku „Bez litości” nie ma w kodzie.**
+- Perki: 8 na klasę (40), każdy z zaletą i wadą (`PERKS`, pole `who`, brak = Rycerz). (Dawna zasada o perku „Bez litości” skreślona 17.11: takiego perku nie ma.)
 - Wyzwania nocy: 10 na klasę (50), nagroda Popioły + monety na następną noc (`CHALS_*`).
 - Klątwy (`CURSES`, 11 sztuk, do 3 naraz): premia Popiołów +10…+35%, sumowana; przy porażce połowa.
 - Ofiary (`OFIARY`): Sakwa 40 Popiołów (+60 monet), Żar 60 (+10% obrażeń), Tarcza 90 (raz 1 HP zamiast śmierci, solo).

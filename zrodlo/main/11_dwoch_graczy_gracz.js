@@ -1,6 +1,6 @@
 /* ===== tryb 2 graczy (etap 1): gracz 2 = drugi pad, kamera na graczu 1 ===== */
 const PAD2={cur:[],prev:[],x:0,y:0,ax:0,ay:0,aimT:-99,atk:false,blk:false,roll:false,heavy:false,g:null};
-let MPON=false;function mpWanted(){return(MPON||/[?&]mp=1/.test(location.search))&&!!PAD2.g}
+let MPON=false;function mpWanted(){return(MPON||nbParam('mp')==='1')&&!!PAD2.g}
 function spawnP2(){S.activeSlots=S.activeSlots.slice(0,4);while(S.activeSlots.length<4)S.activeSlots.push(null);pl2=Object.assign({},pl,{x:pl.x+14,y:pl.y+6,visualGuard:null,atk:null,actives:mpActiveState()});pl2.revT=0;pl.revT=0;if(!mesh2){mesh2=new THREE.Mesh(geo32,heroIdleMat());scene.add(mesh2)}mesh2.visible=true}
 // Tylko stan wykonawczy umiejetnosci jest osobny; rozwoj Nocy i wyuczone skille pozostaja wspolne.
 const MP_ACTIVE_KEYS=['activeSlots','loadoutSelected','activeWind','combatLock','swordShots','swordTrails','shotWind','swordGuardian','zDance','zDanceL','manaHitCd','manaFlash','stamFlash','aardCd','shotCd','guardCd','whirlCd','leapCd','lungeCd','rendCd','fanCd','ldCd','hookCd','echoCd','pledgeCd','shadowReady','retaliate'];
@@ -313,7 +313,7 @@ function questTick(dt){if(!S||S.phase!=='play')return;
 
 function shake(m,t){if(!SETT.shake)return;S.shakeM=Math.max(S.shakeM,m);S.shakeT=Math.max(S.shakeT,t)}
 // Blood HD: shared artwork, bounded reusable meshes, no gameplay randomness or shaders.
-const BLOOD_HD_ON=new URLSearchParams(location.search).get('blood')!=='0';
+const BLOOD_HD_ON=nbParam('blood')!=='0';
 const bloodHD={ready:false,stamps:[],textures:[],ground:[],sprays:[],drops:null,dropDummy:new THREE.Object3D(),serial:0,groundNext:0,sprayNext:0};
 function initBloodHD(){
   if(!BLOOD_HD_ON)return;
@@ -405,7 +405,7 @@ const might=()=>(1+.1*(S.whet||0))*(S.fury>0?1.2:1)*(S.pk?S.pk.dmg:1);
 function spriteMesh(geo){const m=new THREE.Mesh(geo,A.fx.slash[0].n);scene.add(m);return m}
 function addVfx(anim,dur,x,y,h,size,mode,rot=0,flip=1){const m=spriteMesh(geoC);m.renderOrder=6;setFrame(m,anim[0]);const f={mesh:m,anim,t:0,dur,x,y,h,size,mode,rot,flip};polishMagic(f,anim._magicKind);if(anim._sc)f.size*=anim._sc;S.vfx.push(f);return m}
 // Combat presentation only: never changes AI, hitboxes, rewards or gameplay RNG.
-const COMBAT_POLISH_ON=new URLSearchParams(location.search).get('combatfx')!=='0';
+const COMBAT_POLISH_ON=nbParam('combatfx')!=='0';
 let combatVisualSeed=0x63b09a17;
 function combatVisualBuild(fn){const original=Math.random;Math.random=()=>{combatVisualSeed=(Math.imul(combatVisualSeed,1664525)+1013904223)>>>0;return combatVisualSeed/4294967296};try{return fn()}finally{Math.random=original}}
 const MAGIC_KINDS=new Set(['knock_ring','frostf','firef','frosti','firei','freeze','burn','poison','bleed','knock','stone','bolt','boss','boltHit','earth']);
@@ -433,7 +433,7 @@ function enemyImpactShape(e){
   return {push:v.amplitude*q,lean:(v.heavy?.065:.038)*q,stretch:(v.heavy?.045:.025)*q};
 }
 // Visual-only blade placement: owner-relative anchor and floor-safe billboard bounds.
-const WEAPON_FX_ON=new URLSearchParams(location.search).get('weaponfx')!=='0',WEAPON_BOX=new WeakMap();
+const WEAPON_FX_ON=nbParam('weaponfx')!=='0',WEAPON_BOX=new WeakMap();
 function bindWeaponFx(f,owner=pl){if(!f)return f;f.weaponOwner=owner;f.weaponX=owner.x;f.weaponY=owner.y;f.weaponAspect=.74;return f}
 function weaponFloorLift(f,fr){
   const key=f.size+':'+f.rot+':'+f.weaponAspect;if(f.weaponFloor!==undefined&&f.weaponFloorKey===key)return f.weaponFloor;f.weaponFloorKey=key;

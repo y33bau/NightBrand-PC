@@ -8,7 +8,7 @@
 .nbk-group{margin:.9em 0 .2em;font:600 1em Cinzel,Georgia,serif;letter-spacing:.08em;color:#d9b876;text-align:left}
 #pauseQuit p{margin:0}`;document.head.append(st)}
 (()=>{
- const root=$('orient');if(!root.classList.contains('pc-menu')||new URLSearchParams(location.search).get('menu2')==='0')return;
+ const root=$('orient');if(!root.classList.contains('pc-menu')||nbParam('menu2')==='0')return;
  root.classList.add('nb2');root.classList.add('nb2-pc');
  const T=(p,e)=>EN?e:p,mk=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e};
  const title=$('title'),prep=$('prep'),put=(el,text)=>{if(el&&el.textContent!==text)el.textContent=text};
@@ -212,7 +212,7 @@
 /* --- Kaplica --- */
 @N@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips:empty::after{content:'zablokowane'!important}
 html[lang=en] @N@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips:empty::after{content:'locked'!important}
-`.replace(/@N@/g,'#orient'.repeat(130)+'.nb2');document.head.append(css);
+`.replace(/@N@/g,'#orient'.repeat(80)+'.nb2');document.head.append(css);
 })();
 // 13.11.2026: Przygotowanie — zamiast rozwijanego „Ustawienia” dwa przełączniki widoczne na ekranie
 // (Samouczek, 2 graczy). Przyciski klikają oryginalne pola wyboru, więc logika i zapis zostają bez zmian.
@@ -225,7 +225,7 @@ html[lang=en] @N@ #kap:not(.pc-chronicle) .m2k-row.lk .m2k-pips:empty::after{con
   b.addEventListener('click',()=>{inp.click();sync()});inp.addEventListener('change',sync);sync();setInterval(sync,700);return b};
  wrap.append(mk(hi,EN?'Tutorial':'Samouczek'),mk(mp,EN?'2 players':'2 graczy','mpTglT',$('mpTglL')));
  pop.after(wrap);pop.hidden=true;pop.open=false;
- const Z='#orient'.repeat(140),st=document.createElement('style');st.id='pc-prep-quick';st.textContent=
+ const Z='#orient'.repeat(90),st=document.createElement('style');st.id='pc-prep-quick';st.textContent=
 `${Z} #prep details.pc-popover[hidden]{display:none!important}
 ${Z} #prep .pc-prep-quick{position:absolute!important;right:0!important;top:50%!important;transform:translateY(-50%)!important;display:flex!important;gap:calc(10 * min(.05981vw,.10627vh))!important;z-index:5}
 ${Z} #prep .pc-prep-quick .pc-quick{display:inline-flex!important;align-items:center!important;gap:.6em!important;width:auto!important;min-width:0!important;height:auto!important;min-height:0!important;margin:0!important;padding:.95vh 1.6vh!important;border:1px solid var(--nbs-idle,#a68b5e66)!important;border-image:none!important;background:var(--nbs-cell,#16111499)!important;color:#eadcc4!important;font:500 max(12px,1.85vh)/1 Cinzel,Georgia,serif!important;letter-spacing:.04em!important;text-transform:none!important;white-space:nowrap!important;cursor:pointer}
@@ -238,7 +238,7 @@ ${Z} #prep .pc-prep-quick .pc-quick:hover{border-color:var(--nbs-hover,#d8b878)!
 }catch(e){quietErr('prepQuick',e)}})();
 // 13.11.2026: pauza bez przewijania. Audio: trzy karty w jednym rzędzie. Grafika: lewa kolumna Jasność + Płynność,
 // prawa Jakość + Zaawansowane (te w dwóch kolumnach), zamiast długiej listy pod spodem.
-(()=>{const Z='#orient'.repeat(140),st=document.createElement('style');st.id='pc-pause-fit';st.textContent=
+(()=>{const Z='#orient'.repeat(90),st=document.createElement('style');st.id='pc-pause-fit';st.textContent=
 `${Z} #pause .nbp-audiogrid{max-width:none!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:stretch!important}
 ${Z} #pause .nbp-audiogrid>.nbp-ah{grid-column:1/-1!important}
 ${Z} :is(#pause .nbp-ah,#opts .nbo-ah)>:is(small,h2,h3){display:none!important}
@@ -273,7 +273,7 @@ document.head.append(st)})();
  const sync=()=>{a1.classList.toggle('is-on',!!STORYMODE);a2.classList.toggle('is-on',!STORYMODE);b.setAttribute('aria-label',(EN?'Game mode: ':'Tryb gry: ')+(STORYMODE?a1.textContent:'Arcade'))};
  sync();b.addEventListener('click',()=>setTimeout(sync,0));for(const id of ['sFab','sArc'])$(id)?.addEventListener('click',()=>setTimeout(sync,0));
  const st0=b.querySelector('strong');if(st0)new MutationObserver(sync).observe(st0,{childList:true,characterData:true,subtree:true});
- const Z='#orient'.repeat(140),U='min(.05981vw,.10627vh)',st=document.createElement('style');st.id='nb2-mode-seg';st.textContent=
+ const Z='#orient'.repeat(90),U='min(.05981vw,.10627vh)',st=document.createElement('style');st.id='nb2-mode-seg';st.textContent=
 `${Z} #title .pc-journey-mode.nb2-mode{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:calc(7 * ${U})!important}
 ${Z} #title .pc-journey-mode.nb2-mode>strong,${Z} #title .pc-journey-mode.nb2-mode>.nb2-mode-hint{display:none!important}
 ${Z} #title .pc-journey-mode.nb2-mode>small{font:500 calc(13 * ${U})/1 Cinzel,Georgia,serif!important;letter-spacing:.18em!important;text-transform:uppercase!important;color:#b89a68!important}
@@ -622,12 +622,12 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
 // 14.11.2026: odswiezenie menu glownego, etap 1 (grafiki ChatGPT). Tylko wyglad: te same przyciski, kolejnosc, nawigacja padem i klawiatura.
 // Zaznaczenie: pas mgly z zarem i rozzarzone pietno. Zlota ramka padu (.pf, styl pad-focus) zostaje bez zmian.
 (()=>{try{
- const Z='#orient'.repeat(150)+' #title.pc-home',A=u=>`url('${u}')`,
+ const Z='#orient'.repeat(100)+' #title.pc-home',A=u=>`url('${u}')`,
   PAS=A('assets/ui/aa11153800fd0cba5e5c2f75624de5a0095be6f72b9c354d45d6e1407eddf649.webp'),PAS_ON=A('assets/ui/8db53ef35bb4029e41d8805f4883df423d733c54d619333967a58e5291bca9d5.webp'),GRAJ=A('assets/ui/94a14dac03245fb2b6bdbad243ff76c16d68d88ed8b3de2dca3e39c48653e067.webp'),SEP=A('assets/ui/dc953247d88ddda8bd2dbc13f0f1ec4f6427ab12419da7836ac468cad25ea55d.webp'),PIET=A('assets/ui/3e41296df198ad0a7931533ef11a0d92fa9a4f28adf151e60f6c33e5372e0d58.webp'),
   IK={'premium-journey':A('assets/ui/de7572b3ab143465b2bffd81fd6516e066bbb9bbed4088b9b7c94c9fdfc3ee29.webp'),kapBtn:A('assets/ui/09c2709d88e884e8fb245450a7c371617c68d7b5fb1452a5956ead6c57cf33ee.webp'),kronBtn:A('assets/ui/65573edb49b7e9f6506f19263870f7d4e2f30c32233621a1b26b37675767b78c.webp'),manBtn:A('assets/ui/7c65e8bd51920f28d168cf22b7eab6cfdcb943622d1424c5d053388d742a6ac9.webp'),optsBtn:A('assets/ui/c18aafac5bf475178a58ebc01f17e3fc4dd47acb1461ce60ecc4e865f8355c06.webp')},
   ON=':is(:hover,:focus,:focus-visible,.pf)',NAV=Z+' .premium-nav>:is(.premium-journey,#kapBtn,#kronBtn,#manBtn,#optsBtn)',
   KURSOR="url('assets/ui/f2bdfe0d27c4a8f08d3ffa8134a8a68bff08b21b4d9738ab1163dc0abff798b6.png') 1 1",KURSOR_ON="url('assets/ui/bbb913eb13015dbe4642b534d69766dd39a04688ad6f98bd4b3611032eea7bf7.png') 1 1";
- const URNA=`url('assets/ui/bec1edb981cde86153bfc1f97330a541237d7963c2926133284dbc3f9ef457bf.webp')`,RAMKA=`url('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp')`,PR='#orient'.repeat(150)+' :is(#title,#prep,#kap,#opts,#manual)',PAS_G=`url('assets/ui/eacf8e623d8575a62966b86c0f4baf6c00e3f31f40fbc778335edece46b7a824.webp')`,K='#orient'.repeat(220),S='#orient'.repeat(220)+' :is(#prep,#kap,#opts,#manual,#pause,#lvl,#shop,#end,#conf,#title:not(.pc-home),#notice,#dialog,#witChoices,#finale,#intro,#recovery)',PAS_EL='.tab,.stab,.nbp-tab,.slot-tab,.nb-mode,.m2-b:not(.m2k-buy),.m2-kap,.backar,.pc-home-button,.nb2-mode,.pc-journey-mode,#pause .go.alt,#end .go.alt,#notice .go.alt,#dialog .go.alt,#dialog button.next,#witChoices .go.alt,#recovery .go.alt,#intro .iskip',CARD='.m2k-row,.m2-ch,#opts .go.alt,.lvl-card,.card,.shopc .it',MAIN='.premium-go,.m2k-buy,#prepGo,.go:not(.alt):not(.slot-tab)',PANEL='.premium-banner,#kapDet,#manual .premium-page-content,#pause #skillLoadout,#lvl .level-panel,#shop .shopc,#end .nbs-grid,#conf';
+ const URNA=`url('assets/ui/bec1edb981cde86153bfc1f97330a541237d7963c2926133284dbc3f9ef457bf.webp')`,RAMKA=`url('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp')`,PR='#orient'.repeat(100)+' :is(#title,#prep,#kap,#opts,#manual)',PAS_G=`url('assets/ui/eacf8e623d8575a62966b86c0f4baf6c00e3f31f40fbc778335edece46b7a824.webp')`,K='#orient'.repeat(110),S='#orient'.repeat(110)+' :is(#prep,#kap,#opts,#manual,#pause,#lvl,#shop,#end,#conf,#title:not(.pc-home),#notice,#dialog,#witChoices,#finale,#intro,#recovery)',PAS_EL='.tab,.stab,.nbp-tab,.slot-tab,.nb-mode,.m2-b:not(.m2k-buy),.m2-kap,.backar,.pc-home-button,.nb2-mode,.pc-journey-mode,#pause .go.alt,#end .go.alt,#notice .go.alt,#dialog .go.alt,#dialog button.next,#witChoices .go.alt,#recovery .go.alt,#intro .iskip',CARD='.m2k-row,.m2-ch,#opts .go.alt,.lvl-card,.card,.shopc .it',MAIN='.premium-go,.m2k-buy,#prepGo,.go:not(.alt):not(.slot-tab)',PANEL='.premium-banner,#kapDet,#manual .premium-page-content,#pause #skillLoadout,#lvl .level-panel,#shop .shopc,#end .nbs-grid,#conf';
  const st=document.createElement('style');st.id='nb-menu-odswiezenie';st.textContent=`
 ${Z} .premium-rail{overflow:visible!important}
 ${NAV}{border-color:transparent!important;border-image:none!important;background-color:transparent!important;background-image:none!important;position:relative!important;isolation:isolate!important;overflow:visible!important}
@@ -677,8 +677,8 @@ ${PR} .pc-profile>.pcg-edge{display:none!important}
 ${PR} img.pc-profile-ash{content:${A('assets/ui/bec1edb981cde86153bfc1f97330a541237d7963c2926133284dbc3f9ef457bf.webp')}!important;filter:none!important;object-fit:contain!important}
 ${PR} .pc-profile-stat+.pc-profile-stat{position:relative!important;padding-left:2.4em!important}
 ${PR} .pc-profile-stat+.pc-profile-stat::before{content:''!important;position:absolute!important;left:0!important;top:50%!important;width:2.1em!important;height:2.1em!important;transform:translateY(-50%)!important;background:${A('assets/ikony/8f08bd944371bb357b2917aaa848ae7ecf7194a91030eeacdeb413f592fd653c.webp')} center/contain no-repeat!important}/* 16.11.2026: pieczec (ikona Daru pieczeci) zamiast pustego kola przy poziomie */
-${'#orient'.repeat(150)} :is(#title,#kap,#opts,#manual,#prep,#conf,#end,#lang){cursor:${KURSOR},auto!important}
-${'#orient'.repeat(150)} :is(#title,#kap,#opts,#manual,#prep,#conf,#end,#lang) :is(button,a,summary,label,input,[role=button],[role=tab],[role=radio]){cursor:${KURSOR_ON},pointer!important}
+${'#orient'.repeat(100)} :is(#title,#kap,#opts,#manual,#prep,#conf,#end,#lang){cursor:${KURSOR},auto!important}
+${'#orient'.repeat(100)} :is(#title,#kap,#opts,#manual,#prep,#conf,#end,#lang) :is(button,a,summary,label,input,[role=button],[role=tab],[role=radio]){cursor:${KURSOR_ON},pointer!important}
 
 /* 14.11.2026: reszta menu w tym samym stylu (Przygotowanie, Kaplica, Kronika, Opcje, Instrukcja, Pauza, Awans, Kram, Koniec nocy) */
 ${S} :is(.pf,:focus-visible){outline:2px solid rgba(255,138,58,.85)!important;outline-offset:2px!important;box-shadow:0 0 0 1px #000c,0 0 16px 2px rgba(255,110,40,.42)!important;filter:none!important}
@@ -738,7 +738,8 @@ ${S} .pc-fantasy-title::before{display:none!important}
 }catch(e){quietErr('menuOdswiezenie',e)}})();
 
 // 15.11.2026: nowy standard pozostalych sekcji menu (Kaplica, Kronika, Opcje, Instrukcja, Przygotowanie, Pauza, Awans, Koniec nocy, rozmowy, komunikaty): zakladki i przyciski na spalonej desce, panele w spopielonej ramie z okuciami, karty w spalonej ramie banerow rozdzialow
-(()=>{try{const P='#orient'.repeat(300)+' ';const st=document.createElement('style');st.id='nb-menu-standard';st.textContent=`
+/* 17.11.2026 (porzadki menu): prefiksy '#orient'.repeat(N) skrocone bez zmiany wygladu. Chromium liczy najwyzej 255 identyfikatorow w selektorze, wiec 260/300/400 = 255; nizsze grupy przesuniete z zachowaniem kolejnosci (220->110, 150->100, 140->90, 130->80, w czesci 26: 110->70). Nowe warstwy: 255 = najmocniejsza; nie dawaj wiecej niz 255. Weryfikacja: docs/przeglady/MENU_PRZED_PO_811.md */
+(()=>{try{const P='#orient'.repeat(255)+' ';const st=document.createElement('style');st.id='nb-menu-standard';st.textContent=`
 ${P}:is(.tab,.stab,.nbp-tab,.pc-prep-tab,.backar,#kapBack,.premium-back,.go.alt,#dialog button.next,.premium-difficulty,.pc-quick){border-color:transparent!important;border-image:none!important;background:url('assets/ui/1866b3882ad2b65ecbf08dff6da7240130cacb270a985e7a8d9ee8495a60a112.webp') center/100% 100% no-repeat border-box!important;box-shadow:none!important;outline:none!important;animation:none!important;color:#e6d6b8!important}
 ${P}:is(.tab,.stab,.nbp-tab,.pc-prep-tab,.backar,#kapBack,.premium-back,.go.alt,#dialog button.next,.premium-difficulty,.pc-quick)::before,${P}:is(.tab,.stab,.nbp-tab,.pc-prep-tab,.backar,#kapBack,.premium-back,.go.alt,#dialog button.next,.premium-difficulty,.pc-quick)::after{background:none!important;border:none!important;box-shadow:none!important}
 ${P}:is(.tab,.stab,.nbp-tab,.pc-prep-tab,.backar,#kapBack,.premium-back,.go.alt,#dialog button.next,.premium-difficulty,.pc-quick)>.pcg-edge{display:none!important}
@@ -768,7 +769,7 @@ const NB_KAMIEN={r:'assets/ui/5603fdc363945b6e1f72befd731652697b1d181fec06a9fd79
 // 14.11.2026: menu glowne - oboz przy ognisku; przy ogniu siedzi ostatnio wybrana postac (prog().char). Tylko wyglad, bez wplywu na nawigacje.
 (()=>{try{
  const H=NB_KAMIEN,T=document.getElementById('title');if(!T)return;
- const st=document.createElement('style');st.id='nb-oboz';const Z='#orient'.repeat(150)+' #title.pc-home';
+ const st=document.createElement('style');st.id='nb-oboz';const Z='#orient'.repeat(100)+' #title.pc-home';
  st.textContent=`${Z}{background-image:none!important;background-color:#08070a!important;isolation:isolate!important}
 #title:not(.pc-home)>#nbOboz{display:none}
 #nbOboz{position:absolute;left:50%;top:50%;width:max(100%,177.78vh);height:max(100%,56.25vw);transform:translate(-50%,-50%);z-index:-1;pointer-events:none;overflow:hidden}
@@ -825,7 +826,7 @@ const NB_KAMIEN={r:'assets/ui/5603fdc363945b6e1f72befd731652697b1d181fec06a9fd79
    m:T('Lichtarz-włócznia: duży zasięg i kontrola pola. Parowania ładują Żywy Knot, silny atak zostawia pas gorącego wosku.','Candlestick spear: long reach and area control. Parries charge the Living Wick; a heavy blow leaves a strip of hot wax.')},
   STYL={r:T('Walka w zwarciu · miecz · garda','Melee · sword · guard'),k:T('Walka w zwarciu · topór · łańcuch','Melee · axe · chain'),z:T('Szybkie serie · dwie szable · uniki','Fast combos · twin sabres · dodges'),d:T('Walka w zwarciu · parowanie · ogłuszenie','Melee · parry · stun'),m:T('Zasięg włóczni · wosk · kontrola pola','Spear reach · wax · area control')},
   TECH={r:['wypad','whirl'],k:['leap','hook'],z:['rend','fan','ldance'],d:['zalecho','zastaw'],m:['odlew','dogasanie']},
-  O='#orient'.repeat(400),mk=(tag,cls,html)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e},
+  O='#orient'.repeat(255),mk=(tag,cls,html)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e},
   esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),
   hero=c=>HEROES[c]||HEROES.r,cur=()=>{try{return charId()}catch(e){return 'r'}},
   ruch=!matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1148,7 +1149,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
 // Tylko prezentacja i nawigacja: te same przyciski start*, chLocked, premiumPrepare i openPrep; zapis, odblokowania i balans bez zmian.
 // Klik w punkt zaznacza; drugi klik (albo Enter / A na zaznaczonym punkcie) otwiera przygotowanie. Lewo/prawo idzie po kolejnosci fabularnej. ?mapa=0 wylacza.
 (()=>{try{
- if(/[?&]mapa=0\b/.test(location.search))return;
+ if(nbParam('mapa')==='0')return;
  const title=$('title'),list=title&&title.querySelector('.premium-map>.m2-right'),go=$('premiumPrepare');if(!list||!go)return;
  const MAPA='assets/ui/be1d57f7257a9c66a961af02b208f067afa531278d69cf9775e29783cdfead04.webp';
  // polozenie znacznika miejsca na tle (% szerokosci, % wysokosci); plakietka z nazwa stoi pod znacznikiem
@@ -1174,7 +1175,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
  title.addEventListener('focusin',e=>{const b=e.target;if(!punkt(b)||b.disabled||b.classList.contains('premium-selected')||performance.now()-ptrT<600)return;b.dispatchEvent(new Event('pointerenter'))});
  // Enter / A na zaznaczonym punkcie albo drugi klik mysza w zaznaczony punkt = „Przygotuj sie" (ta sama akcja co przycisk na dole)
  window.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.premium-map .m2-ch');if(!b||!punkt(b)||b.disabled)return;const kb=e.detail===0;if(kb&&b.classList.contains('premium-selected')){/* 16.11.2026: klik mysza tylko zaznacza miejsce */e.stopImmediatePropagation();e.preventDefault();ptrSel=null;if(!go.disabled)go.click()}},true);
- const U=n=>`calc(${n} * var(--pc-u))`,TU=n=>`calc(${n} * var(--pc-u) * var(--nbts,1))`,M='#orient'.repeat(260)+'.pc-menu #title:not(.pc-home)',CH=M+' .premium-map>.m2-right>.m2-ch';
+ const U=n=>`calc(${n} * var(--pc-u))`,TU=n=>`calc(${n} * var(--pc-u) * var(--nbts,1))`,M='#orient'.repeat(255)+'.pc-menu #title:not(.pc-home)',CH=M+' .premium-map>.m2-right>.m2-ch';
  const KLODKA=`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 14'%3E%3Cpath d='M3.2 6.2V4.3a2.8 2.8 0 0 1 5.6 0v1.9' fill='none' stroke='%23b8a37e' stroke-width='1.5'/%3E%3Crect x='1.4' y='6' width='9.2' height='7.4' rx='1.3' fill='%23b8a37e'/%3E%3C/svg%3E")`;
  const st=document.createElement('style');st.id='nb-mapa-podrozy';st.textContent=`
 ${M} .premium-map{display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important;gap:${U(18)}!important;container-type:size!important;align-items:stretch!important}
@@ -1218,7 +1219,7 @@ ${M} .premium-map>.premium-banner>.pc-destination-facts small{font-size:max(11px
 // Sterowanie zostaje w dawnym ukladzie (schematy klawiatury i pada). Pad: wiersz = suwak (lewo/prawo zmienia), przelacznik = A.
 (()=>{try{
  const opts=$('opts');if(!opts)return;const content=opts.querySelector('.premium-page-content'),tabsEl=opts.querySelector('.tabs');if(!content||!tabsEl)return;
- const T=(p,e)=>EN?e:p,O='#orient'.repeat(400),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),
+ const T=(p,e)=>EN?e:p,O='#orient'.repeat(255),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),
   TL='assets/tla/',IMG={aud:TL+'97b8d8b5e7e5da70944aef02ec7e777a3f1e37659ab1be2db2b361380bbd634b.webp',gfx:TL+'76c4abede7b11dab955422e0b91d11d6a38a1feecdd13c62d91f37a0813a6057.webp',set:TL+'ecf32c2027558304a42a83f5f5579adfa4793432dc7df3f2276ec6b7f2846daa.webp',dat:TL+'4a6ee44e8d3191b5cc561568e1c539fea1d7145356e5558f88ec0674a86ab5c5.webp'},
   q=s=>opts.querySelector(s);
  // spis wierszy: s = naglowek sekcji; t: ch (wybor z przyciskow), rng (suwak), tgl (przelacznik), act (przycisk), info (tekst), trn (tryb testera)
@@ -1339,7 +1340,7 @@ ${O} :is(#opts,#pause) .nbq-f kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,se
 // tylko przestawione po renderLoadoutOne, wiec wyposazanie, blokada w walce i 2 graczy dzialaja jak wczesniej. Stopka: podpowiedz, Porzuc noc, Wroc do gry.
 (()=>{try{
  const pause=$('pause'),el=$('skillLoadout');if(!pause||!el)return;
- const T=(p,e)=>EN?e:p,O='#orient'.repeat(400),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ const T=(p,e)=>EN?e:p,O='#orient'.repeat(255),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  const st=document.createElement('style');st.id='nb-pauza-makieta';st.textContent=`
 ${O} #pause{--u:calc(min(100vw,177.78vh)/1920)}
 ${O} #pause .nbp-nav>.nbq-tb{align-self:center!important;font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-radius:calc(4*var(--u))!important;padding:calc(6*var(--u)) calc(9*var(--u))!important;background:rgba(0,0,0,.5)!important;pointer-events:none!important}
@@ -1435,7 +1436,7 @@ ${O} #pause #skillLoadout.nbz>h2,${O} #pause #skillLoadout.nbz>p:not(.loadout-st
 // po prawej panel tematu (ilustracja, haslo, klawisze z gry dla Walki, przycisk Plac cwiczen z dawnej zakladki). Tresc instrukcji bez zmian.
 (()=>{try{
  const man=$('manual');if(!man)return;const lay=man.querySelector('.premium-page-layout'),tabs=$('manTabs'),cont=man.querySelector('.premium-page-content');if(!lay||!tabs||!cont)return;
- const T=(p,e)=>EN?e:p,O='#orient'.repeat(400),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),TL='assets/tla/';
+ const T=(p,e)=>EN?e:p,O='#orient'.repeat(255),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),TL='assets/tla/';
  const st=document.createElement('style');st.id='nb-instrukcja-makieta';st.textContent=`
 ${O} #manual{--u:calc(min(100vw,177.78vh)/1920)}
 ${O} #manual .premium-page-layout{display:grid!important;grid-template-columns:47% 1fr!important;grid-template-rows:auto minmax(0,1fr)!important;gap:calc(22*var(--u)) calc(24*var(--u))!important;max-width:none!important;width:100%!important;min-height:0!important;flex:1!important}
@@ -1524,7 +1525,7 @@ ${O} #manual .nbq-f kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!import
 // Tylko prezentacja po renderKap / renderKron: te same przyciski i dane, zakup, zasady i zapis bez zmian.
 (()=>{try{
  const kap=$('kap');if(!kap)return;
- const T=(p,e)=>EN?e:p,O='#orient'.repeat(400),TL='assets/tla/',esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ const T=(p,e)=>EN?e:p,O='#orient'.repeat(255),TL='assets/tla/',esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
  const RAMA="url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp')",POSAG=TL+'7a06226b13595ae657baf802e50d3a3216056b366b61e3e4cf4db5b2e5142872.webp';
  const ROZ={I:'c8c3968edb367c7be327106c1fafd57e5edf67ba28a6181eda3bb585e73f84ef',II:'7c2d199370c18c4f9538807b7ed4ea2710679c89c412cdfb964d73c229e04c11',III:'d1fa360949a93c4762b2578a14cf8957aaeb8e64bbf3a69445d984fc7aaa7c93',IV:'3dc098a98d1294fe0047673365fdfb738239db093f7bdb89d526acf2c8d4f7ad',V:'b5acdd84a065fd7fbd3dc0d51dda1175fd3a0551641b5bf02964dafd288473a7',VI:'76c4abede7b11dab955422e0b91d11d6a38a1feecdd13c62d91f37a0813a6057'};
  const KTAB=['','','','','','97b8d8b5e7e5da70944aef02ec7e777a3f1e37659ab1be2db2b361380bbd634b'];
@@ -1631,7 +1632,7 @@ ${O} #kap .nbq-f kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important
 // Dziennik i Mapa w dwoch panelach w ramach. Tylko prezentacja; ustawienia i ich zapis bez zmian.
 (()=>{try{
  const pause=$('pause');if(!pause)return;const panel=pause.querySelector('.nbp-panel');if(!panel)return;
- const T=(p,e)=>EN?e:p,O='#orient'.repeat(400),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),TL='assets/tla/';
+ const T=(p,e)=>EN?e:p,O='#orient'.repeat(255),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),TL='assets/tla/';
  const ROZ=['c8c3968edb367c7be327106c1fafd57e5edf67ba28a6181eda3bb585e73f84ef','7c2d199370c18c4f9538807b7ed4ea2710679c89c412cdfb964d73c229e04c11','3dc098a98d1294fe0047673365fdfb738239db093f7bdb89d526acf2c8d4f7ad','b5acdd84a065fd7fbd3dc0d51dda1175fd3a0551641b5bf02964dafd288473a7','76c4abede7b11dab955422e0b91d11d6a38a1feecdd13c62d91f37a0813a6057','d1fa360949a93c4762b2578a14cf8957aaeb8e64bbf3a69445d984fc7aaa7c93'];
  const RAMA="url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp')";
  const st=document.createElement('style');st.id='nb-pauza-zakladki';st.textContent=`
@@ -1703,7 +1704,7 @@ ${O} #pause .nbq-m ul.nbp-leg li::before,${O} #pause .nbq-m ul.nbp-leg li i{tran
 // przyciski Dalej i Ustawienia grafiki, „Nie pokazuj ponownie” (pn_powitanie=0). Raz na uruchomienie; nie zmienia ustawien ani zapisu gry.
 (()=>{try{
  const title=$('title'),lang=$('lang');if(!title)return;
- const T=(p,e)=>EN?e:p,O='#orient'.repeat(400),U='assets/ui/';
+ const T=(p,e)=>EN?e:p,O='#orient'.repeat(255),U='assets/ui/';
  let off=false,ss=false;try{off=localStorage.getItem('pn_powitanie')==='0';ss=sessionStorage.getItem('nbPow')==='1'}catch(e){}
  if(off||ss)return;
  const st=document.createElement('style');st.id='nb-powitanie';st.textContent=`
@@ -1772,7 +1773,7 @@ ${O} #nbPow kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;colo
 // 16.11.2026: Sterowanie w Pauzie i Opcjach w nowym ukladzie (prosba autora): po lewej lista klawiszy w ramie (wlasne klawisze; dla pada lista przyciskow),
 // po prawej schemat (obraz klawiatury lub pada) w ramie. Te same elementy co dotad (przyciski zmiany klawiszy dzialaja jak wczesniej). Naglowek pauzy: nazwa rozdzialu pod ozdobnikiem.
 (()=>{try{
- const O='#orient'.repeat(400),RAMA="url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp')",C=':is(#pauseKeys,#pane-ctl)';
+ const O='#orient'.repeat(255),RAMA="url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp')",C=':is(#pauseKeys,#pane-ctl)';
  const st=document.createElement('style');st.id='nb-sterowanie-makieta';st.textContent=`
 ${O} ${C}{--u:calc(min(100vw,177.78vh)/1920)}
 ${O} ${C}>div:not(.subtabs):not(.opsep):not([hidden]):has(>img.nb-ctl-img){display:grid!important;grid-template-columns:47% 1fr!important;grid-template-rows:minmax(0,1fr)!important;gap:calc(24*var(--u))!important;align-items:stretch!important;max-width:calc(1700*var(--u))!important;margin:calc(10*var(--u)) auto 0!important;height:calc(560*var(--u))!important}

@@ -12,12 +12,12 @@ const moon=new THREE.DirectionalLight(0xd0c0ff,0);moon.position.set(-6,14,-10);s
 let filmUniforms=null;
 // Wspolny standard oprawy, indywidualna paleta kazdej mapy. ?art=0 = porownanie przed.
 // Dotychczasowy przelacznik ?art1=0 nadal pozwala porownac tylko rozdzial I.
-const ART_ON=new URLSearchParams(location.search).get('art')!=='0';
-const CH1_ART_ON=ART_ON&&new URLSearchParams(location.search).get('art1')!=='0';
+const ART_ON=nbParam('art')!=='0';
+const CH1_ART_ON=ART_ON&&nbParam('art1')!=='0';
 const chapterArt=(ch=CH)=>ch===1?CH1_ART_ON:ART_ON;
 // Swiatlo i glebia (runda swiatlo-pc-1): rozdzialy I-V, bez krypty. ?depth=0 = porownanie przed.
 // Wiersz: mnoznik swiatla otoczenia, nieba, ognisk, zasiegu ognisk, swiatla bohatera, jego zasiegu, kolor ziemi za mapa.
-const DEPTH_ON=new URLSearchParams(location.search).get('depth')!=='0';
+const DEPTH_ON=nbParam('depth')!=='0';
 const DEPTH_CH={1:[.6,.72,1.75,1.35,1.22,1.15,0x262729],2:[.62,.72,1.8,1.35,1.2,1.15,0x15131a],3:[.74,.8,1.6,1.3,1.2,1.15,0x1d1a18],4:[.72,.8,1.7,1.35,1.2,1.15,0x121a16],5:[.72,.8,1.75,1.35,1.3,1.15,0x16151c]};
 const depthOn=(ch=CH)=>DEPTH_ON?DEPTH_CH[ch]||null:null;
 // Sciana ciemniejsza u podstawy i jasniejsza u gory (kolory wierzcholkow, bez nowego shadera).

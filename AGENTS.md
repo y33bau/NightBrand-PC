@@ -20,7 +20,7 @@ Gdzie co jest: bieżący stan i lista spraw `docs/STAN.md`; logi sesji `docs/log
 7. Edytuj tylko zrodlo/main/*.js i index.html, nigdy zbudowanych plików ani assets/ ręcznie. Build: `zbuduj.py` → `wydaj.py wersja` (sprawdz.py: WYNIK OK). Zasoby: `wydaj.py dodaj` / `rehash`.
 8. Każda runda na nowej gałęzi od main. Merge do main (--ff-only) i push tylko na wyraźne „publikuj” / „wrzucaj” autora. Po publikacji: log w `docs/logi/` i aktualizacja `docs/STAN.md` (w tym samym repo), kopia w nightbrand-backup, zip itch.io na pulpit autora.
 9. Praca rolami (agent główny, gamedev, grafik, koncepciarz, recenzent); w meldunku podaj rolę. W rundzie kod zmienia jedna rola i jeden wykonawca (albo Claude, albo Codex). Koncepciarz i recenzent niczego nie wdrażają.
-10. Balans (leczenie przy awansie 10%, „Bez litości”, sloty 5/6, kooperacja 4+4) bez zgody autora bez zmian. Zgoda na oprawę to nie zgoda na balans. Niezamówionych rzeczy nie dotykaj: usterkę zgłoś i zapytaj.
+10. Balans (leczenie przy awansie 10%, kociołki 12/10/8% na sekundę, sloty 5/6, kooperacja 4+4) bez zgody autora bez zmian. Zgoda na oprawę to nie zgoda na balans. Niezamówionych rzeczy nie dotykaj: usterkę zgłoś i zapytaj.
 11. Nie obiecuj działania na padzie, w dźwięku ani na itch.io bez sprawdzenia; w meldunku wypisz, czego NIE sprawdzono.
 12. Autor jest w IT początkujący i dyktuje po polsku: odpowiadaj po polsku, krótko, wynik najpierw, jedna polecana opcja z uzasadnieniem. Nie każ mu uruchamiać gita, kopiować folderów ani pisać .bat.
 13. Teksty EN pisane przez agenta oznaczaj jako niezatwierdzone. Nowy dokument zaczyna się linią „Stan na RRRR-MM-DD, cache N, rola X”.

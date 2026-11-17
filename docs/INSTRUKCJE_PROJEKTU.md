@@ -31,7 +31,7 @@ ZASADY PRACY
 11. Nie obiecuj działania na padzie, w dźwięku ani na itch.io bez sprawdzenia. W meldunku zawsze: czego NIE sprawdzono.
 
 TWARDE ZASADY (bez zgody Adriana nie zmieniaj)
-12. Balans: leczenie przy awansie 10% maks. HP; sloty solo 5, szósty z Darem pieczęci, kooperacja 4+4 (wspólny rozwój, osobne wyposażenie); zmiana wyposażenia w pauzie zawsze; noc 16 min, północ po 8, kram 120 s; trudności i nagrody wg docs/PODRECZNIK_AGENTA.md §2b. Usuwanie mechanik, źródła leczenia, podstawy walki i rozwoju: tylko za zgodą. Zgoda na oprawę to nie zgoda na balans. Drobne błędy wolno poprawić i zgłosić.
+12. Balans: leczenie przy awansie 10% maks. HP; kociołki leczą 12/10/8% maks. HP na sekundę (Łatwy/Normalny/Trudny); sloty solo 5, szósty z Darem pieczęci, kooperacja 4+4 (wspólny rozwój, osobne wyposażenie); zmiana wyposażenia w pauzie zawsze; noc 16 min, północ po 8, kram 120 s; trudności i nagrody wg docs/PODRECZNIK_AGENTA.md §2b. Usuwanie mechanik, źródła leczenia, podstawy walki i rozwoju: tylko za zgodą. Zgoda na oprawę to nie zgoda na balans. Drobne błędy wolno poprawić i zgłosić.
 13. Bez Hordy i zmiennej SLASHER. Bez zapisu w środku nocy. Bez nowych shaderów bez zgody.
 14. Pad (Xbox XAG): pad ma pierwszeństwo przed myszą; zakładki LB/RB (podzakładki LT/RT); Back otwiera Opcje; wspólne złote podświetlenie; znaczki przycisków przy kontrolkach. Ostrzeżenia to podświetlenie wrogów, nie ikony.
 15. Narzędzia autora (edytory, tryby testowe, przełączniki w adresie) tylko lokalnie: warunek LOKALNIE z części 27 + parametr.
@@ -54,5 +54,6 @@ Duże, ryzykowne zmiany: Opus lub Fable. Drobne zadania, prompty, dokumentacja: 
 - Test przez zip na pulpicie zamiast pobierania gałęzi z GitHuba.
 - Stan i przepisy w repo (`docs/`), nie w dokumentach projektu.
 - Pięciu bohaterów i sześć rozdziałów wymienionych z nazwy; Zabójczyni EN = Ash Dancer.
-- Pominięta zasada o perku „Bez litości”, bo takiego perku nie ma w kodzie (przegląd 810). Czeka na decyzję Adriana: przywrócić perk albo skreślić zasadę na stałe.
+- Skreślona zasada o perku „Bez litości” (takiego perku nie ma w kodzie; decyzja Adriana 17.11).
+- Dopisane tempo kociołków: Łatwy 12%, Normalny 10%, Trudny 8% maks. HP na sekundę (decyzja Adriana 17.11).
 - Dopisane: przełączniki w adresie podlegają zasadzie „tylko lokalnie”.

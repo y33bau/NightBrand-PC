@@ -308,7 +308,7 @@ const at=(anim,t,fps,loop=true)=>anim[loop?Math.floor(t*fps)%anim.length:Math.mi
 
 let heroMesh,margaMesh;
 // Znacznik pod stopami gracza: miekka ciepla plama swiatla bez krawedzi (16.11.2026: zamiast pierscienia z trzema widocznymi strefami), zeby bohater nie ginal w tlumie. ?heromark=0 wylacza.
-const HERO_MARK_ON=new URLSearchParams(location.search).get('heromark')!=='0';
+const HERO_MARK_ON=nbParam('heromark')!=='0';
 const heroMarks=(()=>{const c=canvas(128,128),g=c.getContext('2d'),gr=g.createRadialGradient(64,64,0,64,64,64);for(let i=0;i<=16;i++){const r=i/16;gr.addColorStop(r,'rgba(255,255,255,'+(.6*Math.exp(-r*r*4.2)*(1-r*r)).toFixed(3)+')')}g.fillStyle=gr;g.fillRect(0,0,128,128);const t=texFrom(c);t.magFilter=t.minFilter=THREE.LinearFilter;
  return [0xffbd72,0xf4b4d2].map(col=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:t,color:col,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.5,fog:false}));m.visible=false;m.renderOrder=-2;m.frustumCulled=false;scene.add(m);return m})})();
 function heroMark(i,p){const m=heroMarks[i];if(!HERO_MARK_ON||!p||p.dead||!S||S.phase!=='play'){m.visible=false;return}m.visible=true;m.position.set(p.x/16,.045,p.y/16);const s=2.35+(p.roll>0?.3:0);m.scale.set(s,1,s);m.material.opacity=(SETT.flash?.4:.3)*(p.inv>0&&p.roll<=0?.7:1)}
