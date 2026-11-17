@@ -1,4 +1,4 @@
-Stan na 2026-11-17, cache 810, rola agent główny
+Stan na 2026-11-17, cache 812, rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,14 +6,14 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | po publikacji 17.11: cache `nightbrand-codex-20261117-810` (sprawdź `git log -3`) |
+| main | cache 810 (`3cf2040`); gałąź `runda-811-poprawki-przegladu` = 811 + 812 czeka na „publikuj” |
 | Gałęzie czekające na „publikuj” | brak |
 | Kopia zapasowa | y33bau/nightbrand-backup = kopia 810 (odświeżona po publikacji) |
 | Zip itch.io | `NightBrand_itch_810.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 148–152 MB (limit 500 MB) |
 
 ## Decyzje autora (najnowsze)
-- 17.11: Zabójczyni po angielsku = **Ash Dancer** (wdrożone w 810: `HEROES` w 22 i opisy technik w 12). Gałąź stylu „Zabójca/Assassin” i wyzwanie „Assassin's Strike” zostają.
+- 17.11: klasa Miry = **Tancerka Popiołu / Ash Dancer** (PL w 811, EN w 810); dawniej Zabójczyni (wdrożone w 810: `HEROES` w 22 i opisy technik w 12). Gałąź stylu „Zabójca/Assassin” i wyzwanie „Assassin's Strike” zostają.
 - 17.11: kopia nightbrand-backup odświeżana po każdej publikacji; limit 500/450 wszędzie; test przez zip + `TEST_z_zipa.bat`; dokumenty bieżące w repo (`docs/`).
 - 16.11: gra na PC, dotyk usunięty (782–783), limit 500 MB, praca rolami.
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
@@ -46,13 +46,12 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - Warianty fabularne (Chojrak i Wiesława w porcie), karta Ambrożego, efekty w nowym stylu, strojenie Wypadu.
 
 ## Porządki
-- Opcje (sprawdzone 17.11 na zrzutach autora z 810: teksty o telefonie i baterii nie są widoczne, schemat klawiatury ma „1–4 wybór karty”). Zostały tylko resztki w źródle: stare zdania w `index.html` (`#pane-gfx .figcap`) podmieniane w locie przez część 27 oraz martwe wpisy w `I18N_DOM`. Sprzątnąć przy okazji, bez wpływu na gracza.
-- `wydaj.py usun gra HASH` (usuwa plik, wpis z manifestu i sw.js; odmawia, gdy hash jest w źródle lub CSS), potem usunąć: `ui/702ff214…` (stare logo), `ui/e87781cf…`, `ui/a8a2aa56…` (stare piętno), `ui/2766d233…` (stara pieczęć), `ui/516bd882…` (stare koło przy poziomie).
-- Nieużywane reguły CSS dotyku (`#touch`, `#btns`, `#rot`, `pointer:coarse`) usunąć przez `rehash`.
-- `narzedzia/stan.py` (cache, commit, rozmiar gra/, liczba plików zipa, gałęzie czekające).
+- Zrobione w 812: `wydaj.py usun` (+6 nieużywanych obrazów usuniętych), `__pycache__` poza repo, historia rund w `docs/historia/`, teksty Grafiki bez podmiany w locie, `sprawdz.py` bez fałszywych uwag o module startowym.
+- Gałęzie: 100 scalonych do usunięcia czeka na zgodę (`docs/GALEZIE_DO_USUNIECIA.md`); 35 niescalonych do decyzji.
+- Obrazy schematów sterowania (PL/EN, klawiatura i pad) pokazują 4 sloty: potrzebna nowa grafika z 5. i 6. slotem (listy tekstowe już mają 1–6).
+- Port: dodana mgiełka w powietrzu; dekoracje ogólne (`DECOR`, `NP_CFG`) celowo nie dodane (trupy, siano, trawa nie pasują do nabrzeża) – do decyzji grafika.
+- Puste `catch{}`: w menu (część 27) błędy logiki trafiają teraz do raportu błędów; reszta (zapis ustawień, dźwięk, schowek) celowo cicha.
 - Testy UI niepasujące do nowego menu (`test-przygotowanie-ui.cjs` i podobne): dostosować albo oznaczyć jako przestarzałe.
-- Ok. 130 starych gałęzi na GitHubie (za zgodą).
-- Pliki `PC_MENU_*`, `PC_HUD_*`, `UI_*` z katalogu głównego → `docs/historia/`.
-- Kanon `teksty/KANON_FABULY_I_NAZWY_2026-11-10.md`: numeracja sprzed Portu, Radan → Hadræn.
+- Kanon `teksty/KANON_FABULY_I_NAZWY_2026-11-10.md`: numeracja sprzed Portu, Radan → Hadræn, Zabójczyni → Tancerka Popiołu.
 - Prompty graficzne z projektu claude.ai (`claude/PROMPTY_*`) → `docs/prompty/`.
-- Na pulpicie autora stare `TEST_*.bat` i zipy 762–808 (za zgodą).
+- Na pulpicie autora stare `TEST_*.bat` i zipy 762–809 (za zgodą).

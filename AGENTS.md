@@ -1,5 +1,5 @@
 # Zasady dla agentów (Claude, Codex)
-Stan na 2026-11-17, cache 810, rola agent główny. Te zasady są ważniejsze niż starsze dokumenty w projektach claude.ai i niż pliki PC_*.md / UI_*.md w tym repo (to historia rund). Wszystko, co obowiązuje każdego agenta, leży w tym repo: nowe konto może nie widzieć projektu w claude.ai.
+Stan na 2026-11-17, cache 812, rola agent główny. Te zasady są ważniejsze niż starsze dokumenty w projektach claude.ai i niż pliki w docs/historia/ (PC_*.md, UI_*.md: historia rund). Wszystko, co obowiązuje każdego agenta, leży w tym repo: nowe konto może nie widzieć projektu w claude.ai.
 
 Gdzie co jest: bieżący stan i lista spraw `docs/STAN.md`; logi sesji `docs/logi/`; mapa kodu i przepisy `docs/PODRECZNIK_AGENTA.md`. Kolejność ważności: instrukcje projektu > ten plik > `docs/STAN.md` > ostatni log > reszta. Dokument starszy niż ostatni log to historia.
 
@@ -13,7 +13,7 @@ Gdzie co jest: bieżący stan i lista spraw `docs/STAN.md`; logi sesji `docs/log
 2. Repo robocze: y33bau/NightBrand-PC (tylko tu rozwijamy). y33bau/nightbrand-backup: kopia zapasowa wersji PC, odświeżana po każdej publikacji (`git archive main` z NightBrand-PC → nadpisanie zawartości bez `.git` → commit → push main; przepis w podręczniku §5). y33bau/nightbrand (GitHub Pages, wersja 562): zamrożone.
 3. Publikacja: itch.io (zip HTML5, najwyżej 1000 plików, `wydaj.py itch`). Wersja Windows w Electronie czeka (plan niezapisany). Xbox tylko rozważany: nie projektuj pod konsole bez zgody autora. Wgrywa autor.
 4. Limit rozmiaru folderu gry (gra/): 500 MB (sprawdz.py: błąd powyżej 500, ostrzeżenie od 450). Nie ściskaj zasobów na siłę; RAM po zdekodowaniu obrazów mierz osobno.
-5. 5 bohaterów: r Hadræn (Rycerz/Knight), k Goran (Kat/Executioner), z Mira (Zabójczyni/Ash Dancer), d Iwo (Dzwonnik/Bellringer), m Milena (Woskownica/Candlebound). 6 rozdziałów: I Spalona Osada, II Dolne Miasto, III Solne Nabrzeże (w kodzie CH=6), IV Upadły Złotogród, V Czarnobór, VI Cytadela Wierzycieli.
+5. 5 bohaterów: r Hadræn (Rycerz/Knight), k Goran (Kat/Executioner), z Mira (Tancerka Popiołu/Ash Dancer, dawniej Zabójczyni), d Iwo (Dzwonnik/Bellringer), m Milena (Woskownica/Candlebound). 6 rozdziałów: I Spalona Osada, II Dolne Miasto, III Solne Nabrzeże (w kodzie CH=6), IV Upadły Złotogród, V Czarnobór, VI Cytadela Wierzycieli.
 6. Wersja = cache w gra/sw.js + commit. Nie wymyślaj numerów.
 
 ## Zasady pracy

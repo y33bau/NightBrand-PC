@@ -23,7 +23,9 @@ for n,f in files.items():
     b=open(A+n,'rb').read()
     if len(b)!=f['bytes']:err.append('manifest: zly rozmiar '+n)
     if f.get('sha256') and f['sha256']!=hashlib.sha256(b).hexdigest():err.append('manifest: zly sha256 '+n)
-for n in sorted(disk-set(files)):info.append('na dysku, poza manifestem: '+n)
+_idx=open(R+'/index.html',encoding='utf8',errors='ignore').read() if os.path.exists(R+'/index.html') else ''  # 17.11.2026: modul startowy wczytywany wprost z index.html nie musi byc w manifescie
+for n in sorted(disk-set(files)):
+    if n not in _idx:info.append('na dysku, poza manifestem: '+n)
 for k in('styles','scripts'):
     for u in man[k]:
         if u[len('assets/'):] not in disk:err.append('manifest.%s wskazuje brakujacy plik %s'%(k,u))
@@ -34,7 +36,8 @@ else:info.append('cache: '+m.group(1))
 swa=set(x[len('assets/'):] for x in re.findall(r'assets/[^"\']+',sw))
 for n in sorted(swa-disk-{'manifest.json'}):err.append('sw.js wymienia brakujacy plik: '+n)
 for n in sorted(set(files)-swa):warn.append('plik w manifescie, ale nie w sw.js (nie bedzie offline): '+n)
-for n in sorted(swa-set(files)):info.append('sw.js ma plik spoza manifestu: '+n)
+for n in sorted(swa-set(files)-{'manifest.json'}):
+    if n not in _idx:info.append('sw.js ma plik spoza manifestu: '+n)
 for x in re.findall(r'"([^"/][^"]*\.(?:png|html|txt|webmanifest))"',sw[:sw.index('];')]):
     if not os.path.exists(R+'/'+x):err.append('sw.js wymienia brakujacy plik: '+x)
 # 4) sieroty (plik zasobu nie wspomniany w zadnym kodzie)

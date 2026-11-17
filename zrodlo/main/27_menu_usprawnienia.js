@@ -64,11 +64,6 @@
 
  // ---------- Opcje ----------
  $('optsBtn').addEventListener('click',()=>{document.querySelector('#opts .tab[data-tab="gfx"]')?.click()});
- { // PC: bez wzmianek o telefonie i baterii w opisach jakosci
-  for(const p of document.querySelectorAll('#pane-gfx .figcap')){const t=p.textContent;
-   const n=t.replace('Auto: telefon i tablet dostają Średnią, komputer Wysoką.','Auto: na komputerze Wysoka.').replace('dla mocnych komputerów i tabletów','dla mocnych komputerów').replace('Niższy limit oszczędza baterię i może pomóc','Niższy limit może pomóc')
-    .replace(/Auto: phones and tablets get Medium, (?:a )?computers? (?:gets? )?High\./i,'Auto: High on a computer.').replace(/A lower limit saves battery and (?:can|may) help/i,'A lower limit can help').replace('strong computers and tablets','strong computers');
-   if(n!==t)p.textContent=n}}
  // Pelny ekran: przelacznik w Grafice. Wybor „W oknie" pamieta klucz nb_fs.
  {const d=document.documentElement,can=!!(d.requestFullscreen||d.webkitRequestFullscreen)&&document.fullscreenEnabled!==false,host=document.querySelector('#pane-gfx .pc-brightness-tile')||$('pane-gfx');
   if(can&&host){const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement),lab=mk('p','figcap nb2-fslab',T('Tryb wyświetlania','Display mode')),row=mk('div','qrow');row.id='fsRow';row.setAttribute('role','group');row.setAttribute('aria-label',T('Tryb wyświetlania','Display mode'));
@@ -794,7 +789,7 @@ const NB_KAMIEN={r:'assets/ui/5603fdc363945b6e1f72befd731652697b1d181fec06a9fd79
  box.innerHTML='<i class="tlo"></i><i class="cien"></i><i class="luna"></i><i class="ogA"></i><i class="ogB"></i><i class="kontakt"></i><i class="bohater"></i><i class="mgla"></i><i class="ziarno"></i><canvas class="isk"></canvas>';T.prepend(box);
  const AR=NB_KAMIEN_AR,LUSTRO={z:1,d:1};
  const hero=box.querySelector('.bohater');
- const pokaz=()=>{let c='r';try{const q=prog();if(q&&H[q.char])c=q.char}catch(e){}if(hero.dataset.c===c)return;hero.dataset.c=c;hero.style.backgroundImage=`url('${H[c]}')`;hero.style.setProperty('--ar',AR[c]);hero.classList.toggle('lustro',!!LUSTRO[c])};
+ const pokaz=()=>{let c='r';try{const q=prog();if(q&&H[q.char])c=q.char}catch(e){quietErr('menu:bohater',e)}if(hero.dataset.c===c)return;hero.dataset.c=c;hero.style.backgroundImage=`url('${H[c]}')`;hero.style.setProperty('--ar',AR[c]);hero.classList.toggle('lustro',!!LUSTRO[c])};
  pokaz();new MutationObserver(pokaz).observe(T,{attributes:true,attributeFilter:['hidden','class']});
 // 15.11.2026: ten sam ogien co na ekranie wyboru postaci (plynne przejscie klatek, iskry, migotanie swiatla), zamiast starego 8-klatkowego
  {const oA=box.querySelector('.ogA'),oB=box.querySelector('.ogB'),luna=box.querySelector('.luna'),CVs=box.querySelector('canvas.isk'),CXs=CVs.getContext('2d'),RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1083,7 +1078,7 @@ ${O} #nbW .kl,${O} #nbW .nbt b,${O} #nbP .nbt b,${O} #nbP .wz b,${O} #nbP .npk b
   liczba=x=>String(Math.round(x*100)/100).replace('.',EN?'.':',');
  let podP=null,podO=null,plan=0,zabOtw=false;
  const aktywny=()=>!prep.hidden&&!PREP.daily&&!PREP.weekly;
- function perki(){const q=prog();let cls='r';try{cls=perkCls()}catch(e){}return PERKS.filter(d=>(d.who||'r')===cls).map(d=>({d,za:d.lv>q.lv}))}
+ function perki(){const q=prog();let cls='r';try{cls=perkCls()}catch(e){quietErr('menu:perki',e)}return PERKS.filter(d=>(d.who||'r')===cls).map(d=>({d,za:d.lv>q.lv}))}
  function minus(d){try{return perkMinus(d)}catch(e){return d.mi||''}}
  function gnP(){const L=perki(),id=podP!=null?podP:PREP.perks[0],g=q$('.g1'),it=L.find(x=>x.d.id===id);g.className='nbk gn g1';
   if(!it){g.classList.add('pu');g.innerHTML=`<div class="ntx"><b>${T('NIE WYBRANO PERKU','NO PERK CHOSEN')}</b><span>${T('Wybierz jeden poniżej. Bez perku też można wyjść w noc.','Pick one below. You can also go without one.')}</span></div>`;return}
@@ -1597,7 +1592,7 @@ ${O} #kap .nbq-f kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important
 `;document.head.append(st);
  const foot=document.createElement('div');foot.className='nbq-f';kap.append(foot);
  const stopka=()=>{const pad=document.body.classList.contains('padnav');foot.innerHTML=pad?`<span><kbd>LB / RB</kbd>${T('Zakładki','Tabs')}</span><span><kbd>A</kbd>${T('Wybierz','Select')}</span><span><kbd>B</kbd>${T('Wróć','Back')}</span>`:`<span><kbd>Q / E</kbd>${T('Zakładki','Tabs')}</span><span><kbd>Enter</kbd>${T('Wybierz','Select')}</span><span><kbd>Esc</kbd>${T('Wróć','Back')}</span>`};
- const heroOf=txt=>{try{for(const c of ['r','k','z','d','m'])if(HEROES[c]&&txt.includes(HEROES[c].n))return c}catch(e){}return null};
+ const heroOf=txt=>{try{for(const c of ['r','k','z','d','m'])if(HEROES[c]&&txt.includes(HEROES[c].n))return c}catch(e){quietErr('menu:heroOf',e)}return null};
  function wspolne(){const tb=$('kapTabs');if(!tb)return null;for(const b of tb.querySelectorAll('.tab')){const n=b.firstChild;if(n&&n.nodeType===3&&/^\d+\.\s/.test(n.data))n.data=n.data.replace(/^\d+\.\s/,'')}
   if(!tb.querySelector('.nbq-tb'))for(const [c,t] of [['l','LB'],['r','RB']]){const s=document.createElement('span');s.className='nbq-tb '+c;s.textContent=t;tb.append(s)}
   const on=tb.querySelector('.tab.on');const L=$('kapList');if(L)L.dataset.nbh=on?on.textContent.replace(/(NOWE|NEW)$/,'').trim():'';stopka();return tb}
@@ -1675,7 +1670,7 @@ ${O} #pause .nbq-m ul.nbp-leg li::before,${O} #pause .nbq-m ul.nbp-leg li i{tran
  const chB=g=>[...g.querySelectorAll('button')].filter(b=>!b.hidden),chI=g=>chB(g).findIndex(x=>x.classList.contains('on')||x.getAttribute('aria-pressed')==='true');
  function val(r){const e=r.el;if(r.t==='ch'){const b=chB(e),i=chI(e);return{i,txt:i>=0?b[i].textContent.trim():'—',n:b.length}}if(r.t==='rng')return{v:+e.value,txt:Math.round(+e.value)+'%'};return{on:!!e.checked}}
  function upd(){for(const r of rows){const v=val(r);if(r.t==='ch'){r.inp.max=String(Math.max(0,(v.n-1)*5));r.inp.value=String(Math.max(0,v.i)*5);r.row.querySelector('b').textContent=v.txt}else if(r.t==='rng'){r.inp.value=String(v.v);r.row.querySelector('b').textContent=v.txt}else{r.inp.checked=v.on;r.row.classList.toggle('on',v.on);r.row.querySelector('.nbq-ow').textContent=v.on?T('Wł.','On'):T('Wył.','Off')}}podglad()}
- function podglad(){const r=akt||rows[0],pi=box.querySelector('.nbq-pi');let ci=0;try{ci=Math.max(0,CHN.indexOf((pause.querySelector('.nbp-sub')||{}).textContent||''))}catch(e){}pi.style.setProperty('background-image',`url('${TL+ROZ[ci%6]}.webp')`,'important');
+ function podglad(){const r=akt||rows[0],pi=box.querySelector('.nbq-pi');let ci=0;try{ci=Math.max(0,CHN.indexOf((pause.querySelector('.nbp-sub')||{}).textContent||''))}catch(e){quietErr('menu:pauza-rozdzial',e)}pi.style.setProperty('background-image',`url('${TL+ROZ[ci%6]}.webp')`,'important');
   const k=box.querySelector('.nbq-pk'),n=box.querySelector('.nbq-pn'),d=box.querySelector('.nbq-pd');n.style.fontSize='';if(!r){k.textContent=n.textContent=d.textContent='';return}
   if(r.fts){const v=+r.el.value||100;k.textContent=T('PODGLĄD NAPISÓW','TEXT PREVIEW');n.textContent=T('Droga prowadzi do kaplicy.','The road leads to the chapel.');n.style.fontSize=`calc(${36*v/100}*var(--u))`;d.textContent=T('Wielkość tekstu · ','Text size · ')+Math.round(v)+'%';return}
   k.textContent=(r.sec||'').toUpperCase();n.textContent=r.n;d.textContent=r.d||(r.t==='ch'?T('Obecnie: ','Current: ')+val(r).txt+'.':'')}
@@ -1692,11 +1687,11 @@ ${O} #pause .nbq-m ul.nbp-leg li::before,${O} #pause .nbq-m ul.nbp-leg li i{tran
  // Dziennik i Mapa: dwa panele
  function dziennik(){const j=pause.querySelector('.nbp-journal');if(!j||j.classList.contains('nbq-j')&&j.querySelector('.nbq-c2'))return;const ol=j.querySelector('ol');if(!ol)return;j.classList.add('nbq-j');
   const c=document.createElement('div');c.className='nbq-c2';c.innerHTML=`<div class="nbq-h2">${T('Dziennik nocy','Night journal')}</div>`;c.append(ol);const ch=(j.querySelector('.nbp-jp')||{}).textContent||'';
-  let ci=0;try{ci=Math.max(0,CHN.indexOf(ch))}catch(e){}const a=document.createElement('div');a.className='nbq-art';a.innerHTML=`<i class="nbq-ai" style="background-image:url('${TL+ROZ[ci%6]}.webp')"></i><i class="nbq-ag"></i><div><span class="k">${T('Dziennik','Journal')}</span><span class="n">${esc(ch)}</span><span class="d">${T('Wiadomości z tej nocy: ','Messages from this night: ')}${[...ol.querySelectorAll('li')].filter(x=>!/nie ma jeszcze|no messages|nothing yet/i.test(x.textContent)).length}</span></div>`;j.append(c,a)}
+  let ci=0;try{ci=Math.max(0,CHN.indexOf(ch))}catch(e){quietErr('menu:dziennik-rozdzial',e)}const a=document.createElement('div');a.className='nbq-art';a.innerHTML=`<i class="nbq-ai" style="background-image:url('${TL+ROZ[ci%6]}.webp')"></i><i class="nbq-ag"></i><div><span class="k">${T('Dziennik','Journal')}</span><span class="n">${esc(ch)}</span><span class="d">${T('Wiadomości z tej nocy: ','Messages from this night: ')}${[...ol.querySelectorAll('li')].filter(x=>!/nie ma jeszcze|no messages|nothing yet/i.test(x.textContent)).length}</span></div>`;j.append(c,a)}
  function mapa(){const m=pause.querySelector('.nbp-map');if(!m||m.querySelector(':scope>.nbq-c2'))return;const cv=m.querySelector('canvas'),leg=m.querySelector('.nbp-leg');if(!cv||!leg)return;m.classList.add('nbq-m');
   const a=document.createElement('div');a.className='nbq-c2';a.append(cv);const b=document.createElement('div');b.className='nbq-c2';b.innerHTML=`<div class="nbq-h2">${T('Mapa rozdziału','Act map')}</div>`;b.append(leg);m.append(a,b)}
  function sync(){if(pause.hidden)return;const i=tabIdx(),vis=i===2||i===3;panel.classList.toggle('nbq-pv',vis);box.classList.toggle('nbq-vis',vis);if(vis&&i!==tab){tab=i;build()}else if(vis)upd();if(!vis)tab=-1;
-  if(i===4)try{dziennik()}catch(e){}if(i===5)try{mapa()}catch(e){}}
+  if(i===4)try{dziennik()}catch(e){quietErr('menu:pauza-zakladka',e)}if(i===5)try{mapa()}catch(e){quietErr('menu:pauza-zakladka',e)}}
  new MutationObserver(()=>setTimeout(sync,0)).observe(pause,{attributes:true,subtree:true,attributeFilter:['hidden','class','aria-selected','aria-pressed']});
  pause.addEventListener('change',e=>{if(!box.contains(e.target))setTimeout(upd,30)},true);
 }catch(e){quietErr('pauzaZakladki',e)}})();

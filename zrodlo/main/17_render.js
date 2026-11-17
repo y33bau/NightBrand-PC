@@ -237,8 +237,9 @@ const AMB_K={ember:{c:[1,.55,.15],s:CH1_ART_ON?.19:.26,a:CH1_ART_ON?.65:.95,add:
  spark:{c:[1,.72,.28],s:ART_ON?.16:.18,a:ART_ON?.8:1,add:1,y:[0,1.2],v:[1.1,2.1],life:[1.2,2.6],fl:1},dustw:{c:[.7,.5,.38],s:ART_ON?.20:.22,a:ART_ON?.23:.28,add:1,y:[.2,3],v:[-.05,.05],life:[6,10]},
  mote:{c:[1,.84,.42],s:ART_ON?.17:.2,a:ART_ON?.58:.75,add:1,y:[.4,3.5],v:[-.06,.08],life:[5,9],tw:1},fly:{c:[.05,.05,.04],s:0.1,a:.9,add:0,y:[.3,1.4],v:[0,0],life:[3,6],jit:1},
  firefly:{c:[.78,1,.38],s:ART_ON?.22:.28,a:ART_ON?.8:1,add:1,y:[.3,2.2],v:[-.08,.12],life:[6,11],pulse:1},mote2:{c:[.86,.84,.78],s:.16,a:ART_ON?.28:.32,add:1,y:[.4,4],v:[-.04,.05],life:[6,10],tw:1},
- paper:{c:[.86,.82,.7],s:ART_ON?.22:.26,a:ART_ON?.75:.9,add:0,y:[3,7],v:[-.28,-.16],life:[8,12],sw:1}};
-const AMB_CFG={1:[['ember',55],['ash',45]],2:[['spark',55],['dustw',35]],3:[['mote',60],['fly',16]],4:[['firefly',45]],5:[['mote2',50],['paper',20]],9:[['mote2',35]]};
+ paper:{c:[.86,.82,.7],s:ART_ON?.22:.26,a:ART_ON?.75:.9,add:0,y:[3,7],v:[-.28,-.16],life:[8,12],sw:1},
+ /*17.11.2026: port (rozdz. III) - chlodna morska mgielka*/spray:{c:[.72,.84,.92],s:.15,a:.26,add:1,y:[.2,2.5],v:[-.03,.04],life:[6,10],tw:1}};
+const AMB_CFG={1:[['ember',55],['ash',45]],2:[['spark',55],['dustw',35]],3:[['mote',60],['fly',16]],4:[['firefly',45]],5:[['mote2',50],['paper',20]],6:[['spray',40],['ember',16]],9:[['mote2',35]]};
 function ambTex(){const c=canvas(32,32),g=c.getContext('2d'),gr=g.createRadialGradient(16,16,0,16,16,16);gr.addColorStop(0,'rgba(255,255,255,1)');gr.addColorStop(.35,'rgba(255,255,255,.65)');gr.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=gr;g.fillRect(0,0,32,32);const t=new THREE.CanvasTexture(c);return t}
 let AMB_TEX=null;
 function ambSystem(add,n){const geo=new THREE.BufferGeometry(),pos=new Float32Array(n*3),col=new Float32Array(n*3),sz=new Float32Array(n),al=new Float32Array(n);

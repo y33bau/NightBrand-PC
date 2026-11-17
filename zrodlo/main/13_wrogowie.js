@@ -489,7 +489,7 @@ function spawnTick(dt){
     if(t>45&&Math.random()<.14){spawnEnemy('shieldman',p[0],p[1]);continue}
     if(CH===1)spawnEnemy(t>110&&r<.25?'knight':t>50&&r<.5?'ghoul':'possessed',p[0],p[1]);else spawnEnemy(t>70&&r<.25?'warden':t>35&&r<.5?'ghoul':'dwarf',p[0],p[1])}
 }
-// ---- elity: 3 na noc (3., 7. i 10. minuta; w pierwszej nocy nieco później), zwykły wróg z rozdziału, bordowa poświata ----
+// ---- elity: 3 na noc (4:15, 10:00 i 12:15; w pierwszej nocy nieco później), zwykły wróg z rozdziału, bordowa poświata ----
 const ELITE={times:[255,600,735],timesFirst:[270,620,750],/* 15.11.2026: noc 16 min; pierwszy i ostatni konczy Napor */t:180,hp:3.5,dmg:1.65,type:{1:'knight',2:'warden',3:'rotknight',4:'bandit',5:'executioner',6:'knight'}};
 // 9.11.2026: elity z imieniem: czasem (30%, najwyżej jedna na noc) elita ma imię, własną kartę w Bestiariuszu i jednorazową nagrodę; statystyki jak zwykła elita
 const NAMED={1:[['bogumil','Sir Bogumił Wiarołomny','Sir Bogumil the Oathbreaker','Przysięgał bronić osady, a otworzył bramę Zakonowi. Do dziś nosi herb, którego się wyparł.','He swore to hold the settlement, then opened its gate to the Holy Order. He still wears the crest he renounced.'],['dobieslaw','Dobiesław Spopielały','Dobieslaw the Ashen','Spłonął razem z kaplicą, ale zbroja nie pozwoliła mu upaść. Przy każdym kroku sypie się z niej popiół.','He burned with the chapel, but his armour would not let him fall. Ash sifts out of it with every step.'],['wojmir','Wojmir Krwawa Ostroga','Wojmir Bloodspur','Najmłodszy z rycerzy osady. Noc obiecała mu chwałę i dotrzymała słowa po swojemu.','The youngest of the settlement\'s knights. The Night promised him glory, and kept its word in its own fashion.']],

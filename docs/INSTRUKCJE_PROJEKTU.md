@@ -20,7 +20,7 @@ FAKTY
 2. Repo robocze: y33bau/NightBrand-PC (tylko tam). y33bau/nightbrand-backup: kopia zapasowa, odświeżana po każdej publikacji. y33bau/nightbrand (Pages, 562): zamrożone.
 3. Publikacja: itch.io (zip HTML5, maks. 1000 plików, wydaj.py itch). Wgrywa Adrian.
 4. Limit folderu gra/: 500 MB (sprawdz.py: błąd >500, ostrzeżenie od 450).
-5. 5 bohaterów: Hadræn (Rycerz/Knight), Goran (Kat/Executioner), Mira (Zabójczyni/Ash Dancer), Iwo (Dzwonnik/Bellringer), Milena (Woskownica/Candlebound). 6 rozdziałów: I Spalona Osada, II Dolne Miasto, III Solne Nabrzeże, IV Upadły Złotogród, V Czarnobór, VI Cytadela Wierzycieli.
+5. 5 bohaterów: Hadræn (Rycerz/Knight), Goran (Kat/Executioner), Mira (Tancerka Popiołu/Ash Dancer, dawniej Zabójczyni), Iwo (Dzwonnik/Bellringer), Milena (Woskownica/Candlebound). 6 rozdziałów: I Spalona Osada, II Dolne Miasto, III Solne Nabrzeże, IV Upadły Złotogród, V Czarnobór, VI Cytadela Wierzycieli.
 6. Wersja = cache w gra/sw.js + commit. Nie wymyślaj numerów.
 
 ZASADY PRACY

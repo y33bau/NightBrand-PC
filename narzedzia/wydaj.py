@@ -4,6 +4,7 @@
   python3 wydaj.py dodaj KATALOG PLIK KATEGORIA [leniwy]                # nowy zasob (hash w nazwie) do assets/KATEGORIA/, manifestu i sw.js; leniwy = pobierany przy pierwszym uzyciu
                                                                         # KATEGORIA: bohaterowie wrogowie npc rekwizyty tekstury efekty ikony ui tla muzyka dzwieki czcionki (js/css: bez kategorii)
   python3 wydaj.py wersja KATALOG "opis rundy"                          # nowy numer cache w sw.js + linijka w WERSJA.txt + kontrola limitu plikow itch.io + kontrola sprawdz.py
+  python3 wydaj.py usun KATALOG HASH [HASH...]                         # usuwa nieuzywany zasob: plik, wpis w manifescie i w sw.js; odmawia, gdy hash (16 znakow) wystepuje w zrodle, index.html albo innych plikach js/css
   python3 wydaj.py itch KATALOG [PLIK.zip]                              # zip dla itch.io: drobne pliki sklejone w paczke (opcja bez-paczek wylacza), bez edytor-map/ i bez wpisow katalogow, kontrola limitu; domyslnie ../NightBrand_itch_<cache>.zip
 rehash: podmienia plik pod nowa nazwa (SHA-256 tresci), usuwa stary, poprawia manifest.json i sw.js."""
 import sys,os,re,json,hashlib,datetime,subprocess
@@ -133,4 +134,27 @@ elif cmd=='dodaj':
             i=sw.index('const C=');i=sw.index('F=[',i)+3;sw=sw[:i]+('"%s",'%url)+sw[i:]
         open(R+'/sw.js','w',encoding='utf8',newline='').write(sw)
     print(url)
+elif cmd=='usun':
+    # 17.11.2026: usun KATALOG HASH...: tylko zasoby, ktorych nikt nie uzywa
+    A=R+'/assets/';hs=sys.argv[3:]
+    if not hs:die('podaj HASH (pierwsze 8+ znakow nazwy pliku)')
+    zr=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'zrodlo','main')
+    teksty=[open(R+'/index.html',encoding='utf8',errors='ignore').read()]
+    if os.path.isdir(zr):teksty+=[open(os.path.join(zr,x),encoding='utf8',errors='ignore').read() for x in os.listdir(zr) if x.endswith('.js')]
+    pl=[]
+    for d,ds,fs in os.walk(A):
+        for x in fs:pl.append(os.path.relpath(os.path.join(d,x),R).replace(os.sep,'/'))
+    m=json.load(open(A+'manifest.json',encoding='utf8'));sw=open(R+'/sw.js',encoding='utf8').read()
+    for h in hs:
+        if len(h)<8:die('za krotki hash: '+h)
+        traf=[u for u in pl if os.path.basename(u).startswith(h)]
+        if len(traf)!=1:die('hash %s pasuje do %d plikow'%(h,len(traf)))
+        url=traf[0];pelny=os.path.basename(url).split('.')[0];k=pelny[:16]
+        inne=[open(R+'/'+u,encoding='utf8',errors='ignore').read() for u in pl if u!=url and u.rsplit('.',1)[-1] in('js','css','json') and not u.endswith('manifest.json')]
+        if any(k in t for t in teksty+inne):die('%s jest uzywany (zrodlo, index.html albo inny plik js/css) - nie usuwam'%url)
+        os.remove(R+'/'+url);m['files']=[f for f in m['files'] if f['url']!=url]
+        sw=sw.replace('"%s",'%url,'').replace(',"%s"'%url,'').replace('"%s"'%url,'')
+        print('usuniety:',url)
+    open(A+'manifest.json','w',encoding='utf8',newline='').write(json.dumps(m,ensure_ascii=False,separators=(',',':')))
+    open(R+'/sw.js','w',encoding='utf8',newline='').write(sw)
 else:die(__doc__)

@@ -90,7 +90,7 @@ Baza (Rycerz): 100 HP, 100 staminy, 60 many; szybki atak 14 staminy, obrażenia 
 |---|---|---|---|---|---|
 | r | Hadræn Bez Herbu | Rycerz / Knight | miecz | baza; fale cięcia przy parowaniu | Wypad, Wir Ostrza |
 | k | Goran Łamacz Karków | Kat / Executioner | topór | HP ×1,25, ruch ×0,88, szybki 22/25/36 (18 st.), silny 66 (42 st.), odporność na przełamanie ×1,5 | Atak z doskoku, Hak Kata |
-| z | Mira Tancerka Popiołów | Zabójczyni / Ash Dancer | dwie szable | HP ×0,75, stamina ×1,35, ruch ×1,18, otrzymywane obrażenia ×1,1, combo 5 cięć 13/14/13/14/24, silny = Szkarłatny Wir 42 (44 st.), seria przyspiesza ataki | Rozszarpanie, Wachlarz Ostrzy, Ostatni Taniec |
+| z | Mira Tancerka Popiołów | Tancerka Popiołu / Ash Dancer (dawniej Zabójczyni) | dwie szable | HP ×0,75, stamina ×1,35, ruch ×1,18, otrzymywane obrażenia ×1,1, combo 5 cięć 13/14/13/14/24, silny = Szkarłatny Wir 42 (44 st.), seria przyspiesza ataki | Rozszarpanie, Wachlarz Ostrzy, Ostatni Taniec |
 | d | Iwo Zwiastun Ciszy | Dzwonnik / Bellringer | młot | HP ×1,15, ruch ×0,9, szybki 21/24/35, silny 72 (44 st.), blok ×0,8 staminy; co 3. parowanie Ostatni Ton (zasięg 78, ogłuszenie 1,6 s) | Echo Żałoby, Zastaw Życia |
 | m | Milena Niedogasła | Woskownica / Candlebound | lichtarz-włócznia | zasięg 40/46, szybki 16/17/26 (15 st.), silny 52 (38 st.); parowania ładują Żywy Knot (do 5), silny zostawia pas wosku (spowolnienie) | Odlew Skazańca, Dogasanie (mana) |
 Każdy bohater: 8 perków, 10 wyzwań, własne zbroje z Kaplicy, własne statystyki w Kronice.
@@ -103,7 +103,7 @@ Każdy bohater: 8 perków, 10 wyzwań, własne zbroje z Kaplicy, własne statyst
 |---|---|---|---|
 | r | Hadræn | Rycerz / Knight | miecz |
 | k | Goran | Kat / Executioner | topór |
-| z | Mira | Zabójczyni / Ash Dancer | ostrza, techniki rend/fan/ldance |
+| z | Mira | Tancerka Popiołu / Ash Dancer (dawniej Zabójczyni) | ostrza, techniki rend/fan/ldance |
 | d | Iwo | Dzwonnik / Bellringer | młot, co trzecie parowanie ogłusza tonem |
 | m | Milena | Woskownica / Candlebound | lichtarz-włócznia, Żywy Knot, pas wosku |
 
