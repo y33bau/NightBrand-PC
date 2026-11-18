@@ -40,7 +40,7 @@ Foldery `web\`, `demo-hd2d\`, `gra-2d\` na komputerze autora są nieaktualne. Ni
 - **Klawisze**: `KB_DEF` / `KB.map` (09), `kbName()`.
 - **Grafika**: `SETT.qmode` → `qualityFromMode()` → `SETT.quality` + `gfxResolve()` → `GFX` {shadow, lights, fx, parts, res, aniso, dpr, hdTex} z `GPRE`. `gfxApply()`, `fit()` → `rtApply()`, dynamiczna rozdzielczość `dynOn/dynTick/dynReset`, `SETT.fpsCap`, licznik `fpsBoxShow/fpsSample`.
 - **Zapis**: ustawienia w `localStorage pn_access` (`saveAccess`, `applyAccess`); błędy `handleGameError`, `pn_errors`. Brak zapisu w środku nocy.
-- **Ekran**: `fit()` (max 2,4:1), kamera perspektywiczna fov 24°, pitch 55°, DIST 30.
+- **Ekran**: `fit()` (max 2,4:1), kamera perspektywiczna: klasyczna fov 24°, pitch 55°, DIST 30; przestrzenna (Opcje, `SETT.kam`) 45°, fov 28°, DIST 22,7. Stałe `KAMV`, `KAMH`, `PITCH`, `DIST` w części 01, czytane raz przy starcie (zmiana = przeładowanie). Oprawa 3D: `NB3D` na końcu części 17; port w bryle: `port3dBuild` w części 06.
 
 ## 2b. Gra w liczbach (sprawdzone w kodzie 17.11.2026, cache 810)
 Źródło liczb podane w nawiasie. Zmiana czegokolwiek z tej sekcji = zmiana balansu (zgoda autora), poza literówkami w opisach.

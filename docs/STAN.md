@@ -1,4 +1,4 @@
-Stan na 2026-11-17, cache 814, rola agent główny
+Stan na 2026-11-18, cache 816, rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,13 +6,15 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 814 (`1830f96`), opublikowane 17.11.2026 |
+| main | cache 816, opublikowane 18.11.2026 (log `docs/logi/LOG_SESJI_2026-11-18.md`) |
 | Gałęzie czekające na „publikuj” | brak |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 814 (`8413bb6`) |
-| Zip itch.io | `NightBrand_itch_814.zip` na pulpicie autora w `NIGHTBRAND` |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 816 |
+| Zip itch.io | `NightBrand_itch_816.zip` w `~/Desktop/NIGHTBRAND` na Macu autora |
 | Rozmiar gra/ | ok. 148–152 MB (limit 500 MB) |
 
 ## Decyzje autora (najnowsze)
+- 18.11: port w bryle (bez żurawia: zostaje obrazkiem); kamera klasyczna/przestrzenna w Opcjach; nowe shadery dozwolone dla oprawy 3D (promienie światła, cienie od ognisk); oddalenie kamery przy bossie i naporze zostaje.
+- 18.11: autor testuje też na Macu (`Uruchom_test_kamery.command` w `~/Desktop/NIGHTBRAND`).
 - 17.11: banery bez złotej ramki: deski w Ognisku/Przygotowaniu bez ramki z mocniejszym żarem; lokalizacje na mapie z ramką przy fokusie i mocniejszym podświetleniem; deski na dole mapy bez zmian; karty perków i wiersze list zostają ze złotą ramką.
 - 17.11: klasa Miry = **Tancerka Popiołu / Ash Dancer** (PL w 811, EN w 810); dawniej Zabójczyni (wdrożone w 810: `HEROES` w 22 i opisy technik w 12). Gałąź stylu „Zabójca/Assassin” i wyzwanie „Assassin's Strike” zostają.
 - 17.11: kopia nightbrand-backup odświeżana po każdej publikacji; limit 500/450 wszędzie; test przez zip + `TEST_z_zipa.bat`; dokumenty bieżące w repo (`docs/`).
@@ -20,6 +22,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 815–816 (port w bryle, kamera przestrzenna, promienie, cienie od ognisk, oddalenie w walce): FPS na obu kamerach, walka z bossem (oddalenie), pad w Opcjach przy wierszu Kamera, napisy EN kamery.
 - 813–814 (fokus i podświetlenia): Kaplica i Kronika strzałkami i padem (opis po prawej idzie za zaznaczeniem), brak zostających podświetleń po kliknięciu myszą, lokalizacje na mapie, deski w Ognisku i Przygotowaniu, odłączenie pada w menu.
 - 811 (kociołki 12/10/8%, sloty 5–6 na listach klawiszy, przełączniki tylko lokalnie, lżejsze style menu): leczenie przy kociołku na trzech trudnościach, lista „Własne klawisze” (przewinąć do dołu), lista pada w Opcjach.
 - 810 (Ash Dancer): angielski napis klasy Miry w menu i Instrukcji (czy się mieści).
