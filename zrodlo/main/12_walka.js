@@ -388,7 +388,7 @@ function swordShotLaunch(w){const ice=w.k==='frostshot',spd=ice?190:150,range=(i
  S.swordShots.push({x:pl.x+w.x*8,y:pl.y+w.y*8,vx:w.x*spd,vy:w.y*spd,spd,R:ice?SL.shot.iceR:SL.shot.fireHit,t:range/spd,L,ice,fire:!ice,ch:CH,hit:new Set(),n:0,max:ice?SL.shot.targets[L-1]:1});
  const p=S.swordShots[S.swordShots.length-1];{const fl=skFrames(ice?'frostf':'firef');if(fl)addVfx(skLoop(fl,p.t,ice?11:10),p.t,p.x,p.y,.55,ice?1.7:1.9,'bill',-screenAng(w.x,w.y));else addVfx(ice?A.fx.nova:A.fx.inferno,p.t,p.x,p.y,.55,ice?1:1.3,'bill',ice?-screenAng(w.x,w.y):0)}p.visual=S.vfx[S.vfx.length-1];
  swordSparks(pl.x+w.x*10,pl.y+w.y*10,ice?'#9ee9ff':'#ffa44b',ice?8:12)}
-function fireballExplode(p,main){const L=p.L,R=SL.shot.fireR[L-1],base=SL.shot.fireDmg[L-1]*(1+.07*(S.lvl-1))*skillMul();
+function fireballExplode(p,main){nb3dBurst(p.x,p.y,0xffa040,3.4,6.5,.45);const L=p.L,R=SL.shot.fireR[L-1],base=SL.shot.fireDmg[L-1]*(1+.07*(S.lvl-1))*skillMul();
  for(const e of [...S.enemies]){if(e.dead||e.rise>0)continue;const dx=e.x-p.x,dy=e.y-p.y,d=Math.hypot(dx,dy);if(e!==main&&d>R+e.r)continue;
   if(damageEnemy(e,base*(e===main?1:SL.shot.splash),dx/(d||1),dy/(d||1),e===main?.4:.7,'sk:embershot')&&e===main&&!e.dead){e.burn=Math.max(e.burn||0,1+.5*L);e.burnD=Math.max(e.burnD||0,2)}}
  if(!skAdd('firei',.75,p.x,p.y,.2,R/13,'bill'))addVfx(A.fx.inferno,.5,p.x,p.y,0,R/14,'bill');for(let i=0;i<26;i++){const an=Math.random()*Math.PI*2,sp=rnd(30,120);S.parts.push({k:'e',x:p.x,y:p.y,z:rnd(4,18),vx:Math.cos(an)*sp,vy:Math.sin(an)*sp*.6,vz:rnd(8,30),c:Math.random()<.5?'#ff6a1a':'#ffb347',life:rnd(.3,.7)})}

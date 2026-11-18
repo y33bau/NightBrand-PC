@@ -123,8 +123,106 @@ const PORT_PROP_SIZE={winch:[2.25,1.85],crane:[4.8,5.2],cargo:[1.8,1.65],salt:[1
 // atlas zbutwialych rekwizytow (15.11.2026): 4x3 klatki po 256 px, rzedami jak w PORT_REK
 const PORT_REK=[['lodz','pale','skrzynia','siec'],['kotwica','beczka_ryby','malze','ikra'],['deski','pacholek','wiecierz','wrak']];// szerokosc i wysokosc w jednostkach swiata (1 j. = ok. 125 cm)
 const PORT_SHIP=[52,8.7,14.4],PORT_FERRY_ART=[32.5,7.9,8.6,6.4];
+// 18.11.2026 (port w bryle, decyzja autora): statek, prom, zuraw, kolowroty, skrzynie, beczki, worki z sola i pale portu jako geometria 3D zamiast plaskich obrazkow.
+// Tylko wyglad: kolizje zostaja na kaflach (02_swiaty.js). Porownanie przed: ?port3d=0 (tylko lokalnie).
+const PORT3D_ON=nbParam('port3d')!=='0';
+const PORT3D_KEYS=new Set(['cargo','skrzynia','beczka_ryby','salt','bollard','pacholek','winch','crane','pale','lodz']);
+function port3dKit(){
+ const kit=new Map(),M=new THREE.Matrix4(),E=new THREE.Euler(),Qk=new THREE.Quaternion(),Pv=new THREE.Vector3(),Sv=new THREE.Vector3();
+ const put=(geo,mat,base,x,y,z,sx,sy,sz,rx=0,ry=0,rz=0)=>{E.set(rx,ry,rz);Qk.setFromEuler(E);M.compose(Pv.set(x,y,z),Qk,Sv.set(sx,sy,sz));const k=geo.uuid+'|'+mat.uuid;let e=kit.get(k);if(!e)kit.set(k,e={geo,mat,list:[]});e.list.push(base.clone().multiply(M))};
+ const at=(x,z,ry=0,s=1,y=0,flip=false)=>new THREE.Matrix4().compose(new THREE.Vector3(x,y,z),new THREE.Quaternion().setFromEuler(new THREE.Euler(0,ry,0)),new THREE.Vector3(flip?-s:s,s,s));
+ const finish=(parent,cast=true)=>{for(const {geo,mat,list} of kit.values()){const im=new THREE.InstancedMesh(geo,mat,list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=cast;im.receiveShadow=true;im.frustumCulled=false;parent.add(im)}kit.clear()};
+ return {put,at,finish}}
+// tekstury rysowane w kodzie: lina, juta i zwiniety zagiel
+function port3dTex(kind){const c=canvas(64,64),g=c.getContext('2d');
+ if(kind==='rope'){g.fillStyle='#7a6646';g.fillRect(0,0,64,64);for(let i=-64;i<128;i+=8){g.strokeStyle='#a48b62';g.lineWidth=4;g.beginPath();g.moveTo(i,0);g.lineTo(i+32,64);g.stroke();g.strokeStyle='#4e3f2a';g.lineWidth=1.2;g.beginPath();g.moveTo(i+3.5,0);g.lineTo(i+35.5,64);g.stroke()}}
+ else if(kind==='jute'){g.fillStyle='#8a7756';g.fillRect(0,0,64,64);for(let i=0;i<64;i+=3){g.fillStyle=i%6?'rgba(40,30,18,.22)':'rgba(220,205,170,.16)';g.fillRect(i,0,1,64);g.fillRect(0,i,64,1)}for(let n=0;n<70;n++){g.fillStyle='rgba(235,238,236,'+(.15+Math.random()*.3).toFixed(2)+')';g.fillRect(Math.random()*64,Math.random()*64,1.5,1.5)}}
+ else{g.fillStyle='#2b2f3a';g.fillRect(0,0,64,64);g.fillStyle='rgba(110,30,34,.55)';g.fillRect(8,6,18,22);g.fillRect(38,34,14,20);for(let i=0;i<64;i+=4){g.fillStyle='rgba(0,0,0,.18)';g.fillRect(0,i,64,1)}for(let n=0;n<90;n++){g.fillStyle='rgba(150,160,175,'+(Math.random()*.12).toFixed(2)+')';g.fillRect(Math.random()*64,Math.random()*64,2,1)}}
+ const t=texFrom(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.magFilter=THREE.LinearFilter;t.minFilter=THREE.LinearMipmapLinearFilter;t.generateMipmaps=true;return t}
+// kadlub lodzi: przekroje wzdluz dlugosci (dziob na -x, rufa na +x), deski biegna wzdluz burt
+function port3dHull(L,B,D,H,N=26,M=12){const pos=[],uv=[],idx=[],deck=[],duv=[],didx=[];
+ const half=t=>Math.max(.03,B/2*Math.pow(Math.sin(Math.PI*Math.min(.999,Math.max(.001,t))),t>.5?.42:.62));
+ const top=t=>H*(1+.42*Math.pow(2*t-1,2)*(t>.5?1.35:1)),keel=t=>-D*Math.pow(Math.sin(Math.PI*t),.35);
+ for(let i=0;i<=N;i++){const t=i/N,x=(t-.5)*L,b=half(t),yt=top(t),yk=keel(t);let arc=0,px=null;
+  for(let j=0;j<=M;j++){const a=(j/M*2-1)*Math.PI/2,z=b*Math.sin(a),y=yt-(yt-yk)*Math.pow(Math.cos(a),.75);if(px)arc+=Math.hypot(z-px[0],y-px[1]);px=[z,y];pos.push(x,y,z);uv.push(arc/1.6,x/1.6)}}
+ for(let i=0;i<N;i++)for(let j=0;j<M;j++){const a=i*(M+1)+j,b=a+M+1;idx.push(a,b,a+1,b,b+1,a+1)}
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();
+ const dy=H*.45;for(let i=0;i<=N;i++){const t=i/N,x=(t-.5)*L,b=half(t)*.93;deck.push(x,dy,-b,x,dy,b);duv.push(-b/1.4,x/1.4,b/1.4,x/1.4)}
+ for(let i=0;i<N;i++){const a=i*2;didx.push(a,a+2,a+1,a+1,a+2,a+3)}
+ const dg=new THREE.BufferGeometry();dg.setAttribute('position',new THREE.Float32BufferAttribute(deck,3));dg.setAttribute('uv',new THREE.Float32BufferAttribute(duv,2));dg.setIndex(didx);dg.computeVertexNormals();
+ return {hull:g,deck:dg,half,top,deckY:dy}}
+function port3dBuild(I,ROOT){
+ const K=port3dKit(),{put,at}=K,hash=(x,y)=>{const s=Math.sin(x*91.7+y*47.3)*43758.5453;return s-Math.floor(s)};
+ const BOX=new THREE.BoxGeometry(1,1,1),CYL=new THREE.CylinderGeometry(1,1,1,14),CYL6=new THREE.CylinderGeometry(1,1,1,8),TOR=new THREE.TorusGeometry(1,.16,6,18),SPH=new THREE.SphereGeometry(1,14,10);
+ const BARREL=new THREE.LatheGeometry([[0,0],[.40,0],[.465,.22],[.5,.5],[.465,.78],[.40,1],[0,1]].map(([a,b])=>new THREE.Vector2(a,b)),16);
+ // tekstury wyciete z malowanego atlasu portu (te same obrazy co dawne rekwizyty), wiec bryly zachowuja styl gry
+ const A=I.port_atlas,cropT=(x,y,w,h,rot=0,rx=1,ry=1)=>{const c=canvas(128,128),g=c.getContext('2d');g.drawImage(A,x,y,w,h,0,0,128,128);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.magFilter=THREE.LinearFilter;t.minFilter=THREE.LinearMipmapLinearFilter;t.generateMipmaps=true;t.anisotropy=4;if(rot){t.center.set(.5,.5);t.rotation=rot}t.repeat.set(rx,ry);return t};
+ const pm=(t,k=.86,cut=false,e=0x040302)=>{const m=phong({map:t,emissive:e});m.color.setRGB(k,k*.98,k*.94);return cut?cutaway(m):m};
+ const tCrate=cropT(1062,700,138,135),tBarrel=cropT(1352,805,100,130,0,3,1),tRope=cropT(700,140,110,135,Math.PI/2),tRopeT=cropT(700,140,110,135,0,4,1),tBeam=cropT(603,95,42,155),tBeamH=cropT(603,95,42,155,Math.PI/2),tPost=cropT(615,720,73,220,0,2,1),tJute=cropT(320,690,75,70),tDeck=cropT(180,200,200,120,Math.PI/2,1,1);
+ const crateM=pm(tCrate,.78),barrelM=pm(tBarrel,.82),ropeM=pm(tRope,.74),ropeT=pm(tRopeT,.66),beam=pm(tBeam),beamH=pm(tBeamH),post=pm(tPost,.9),jute=pm(tJute,.82),deck=pm(tDeck,.85);
+ const beamC=pm(tBeam,.86,true),beamHC=pm(tBeamH,.86,true),ropeTC=pm(tRopeT,.66,true);
+ const stone=worldSurf(phong({emissive:0x08090a}),I.port_plyty,1.6,'p3dStone');stone.color.setRGB(1.0,1.03,1.04);
+ const iron=phong({color:0x55575a,shininess:34,specular:0x4a535c,emissive:0x070707}),ironC=cutaway(phong({color:0x55575a,shininess:34,specular:0x4a535c,emissive:0x070707}));
+ const salt=phong({color:0xaeb4b6,shininess:30,specular:0x1e2224}),sail=phong({map:port3dTex('sail'),color:0xc8c8d0,side:THREE.DoubleSide});
+ const sub=(b,x,z,ry=0,y=0)=>b.clone().multiply(at(x,z,ry,1,y));
+ // --- elementy
+ const crate=(b0,x,z,s,ry,y=0)=>{const b=sub(b0,x,z,ry,y);put(BOX,crateM,b,0,s/2,0,s,s,s)};
+ const barrel=(b,x,z,r,h,withRope)=>{put(BARREL,barrelM,b,x,0,z,r*2,h,r*2);if(withRope)put(TOR,ropeT,b,x,h*.62,z,r*1.03,r*1.03,r*1.03,Math.PI/2)};
+ const sack=(b,x,z,s,ry,open)=>{put(SPH,jute,b,x,s*.55,z,s*.5,s*.6,s*.42,0,ry);put(CYL6,jute,b,x,s*1.12,z,.07*s,.22*s,.07*s);put(TOR,ropeT,b,x,s*1.05,z,.09*s,.09*s,.09*s,Math.PI/2);if(open)put(SPH,salt,b,x,s*.95,z,s*.36,s*.12,s*.3,0,ry)};
+ const coil=(b,x,z,r)=>{for(let k=0;k<3;k++)put(TOR,ropeT,b,x,.04+k*.05,z,r-k*.02,r-k*.02,r*.9,Math.PI/2)};
+ // --- modele rekwizytow (wymiary w jednostkach swiata, 1 j. = ok. 125 cm)
+ const MODEL={
+  cargo:(b,h)=>{crate(b,-.28,-.12,.78,.08+h*.2);crate(b,.34,.24,.56,-.12+h*.3);if(h>.45)crate(b,-.3,-.12,.44,.5+h,.78);barrel(b,.48,-.36,.27,.74,true)},
+  skrzynia:(b,h)=>{crate(b,0,0,.72,h*.4-.2)},
+  beczka_ryby:(b,h)=>{barrel(b,-.12,0,.3,.82,true);barrel(b,.38,.22,.24,.6,false)},
+  salt:(b,h)=>{for(const z of [-.42,0,.42])put(BOX,beamH,b,0,.05,z,1.3,.1,.14);for(const x of [-.5,0,.5])put(BOX,beam,b,x,.13,0,.18,.05,1.0);sack(b,-.36,-.12,.72,.3,false);sack(b,.26,-.2,.62,-.4,false);sack(b,-.05,.25,.66,.1,true);put(SPH,salt,b,.45,.0,.45,.28,.12,.24)},
+  bollard:(b,h)=>{for(const [x,z,hh] of [[-.15,-.06,1.0],[.17,-.1,.78],[.02,.2,.86]])put(CYL6,post,b,x,hh/2,z,.17,hh,.17,0,h*6);for(const y of [.32,.56])put(TOR,ropeT,b,0,y,.01,.42,.42,.42,Math.PI/2);coil(b,.46,.36,.24)},
+  pacholek:(b,h)=>{put(CYL,post,b,0,.36,0,.2,.72,.2);put(CYL,iron,b,0,.74,0,.24,.06,.24);put(BOX,beamH,b,0,.52,0,.62,.09,.09,0,h*3);put(TOR,ropeT,b,0,.3,0,.24,.24,.24,Math.PI/2);coil(b,.34,.3,.2)},
+  pale:(b,h)=>{for(const [x,z,hh,tl] of [[-.32,-.1,1.25,.06],[.08,.12,.95,-.08],[.4,-.05,1.4,.05],[-.05,-.35,.7,-.1]])put(CYL6,post,b,x,-.75+hh/2,z,.13,hh+.6,.13,tl,h*5,tl*.7)},
+  winch:(b,h)=>{for(const z of [-.45,.45])put(BOX,beamH,b,0,.08,z,1.95,.16,.2);for(const x of [-.78,.78])put(BOX,beamH,b,x,.08,0,.2,.16,1.1,0,Math.PI/2);
+   for(const x of [-.72,.72]){for(const s of [-1,1])put(BOX,beam,b,x,.62,s*.21,.17,1.25,.17,-s*.36,0,0);put(BOX,beam,b,x,1.2,0,.22,.2,.34);put(BOX,beamH,b,x,.42,0,.12,.12,.8,0,Math.PI/2)}
+   put(CYL,ropeM,b,0,1.0,0,.36,1.1,.36,0,0,Math.PI/2);for(const x of [-.6,.6])put(CYL,iron,b,x,1.0,0,.47,.07,.47,0,0,Math.PI/2);put(CYL,iron,b,0,1.0,0,.06,1.95,.06,0,0,Math.PI/2);
+   put(CYL,iron,b,.88,1.0,0,.4,.07,.4,0,0,Math.PI/2);for(let k=0;k<14;k++){const a=k/14*Math.PI*2;put(BOX,iron,b,.88,1.0+Math.sin(a)*.43,Math.cos(a)*.43,.07,.07,.07,a)}
+   put(BOX,iron,b,1.0,.84,0,.05,.38,.06);put(CYL,beam,b,1.12,.68,0,.05,.26,.05,0,0,Math.PI/2)},
+  crane:(b,h)=>{put(BOX,stone,b,0,.3,0,1.55,.6,1.55);put(BOX,stone,b,0,.66,0,1.2,.12,1.2);
+   put(BOX,beamC,b,0,2.75,0,.42,4.3,.42);for(const [x,z] of [[-.62,-.62],[.62,-.62],[-.62,.62],[.62,.62]])put(BOX,beamC,b,x*.55,1.45,z*.55,.15,1.75,.15,-z*.42,0,x*.42);
+   for(const y of [1.3,2.3,3.4,4.5])put(BOX,ironC,b,0,y,0,.46,.07,.46);
+   const bx0=0,by0=3.3,bx1=2.75,by1=4.75,bl=Math.hypot(bx1-bx0,by1-by0),ba=Math.atan2(by1-by0,bx1-bx0);put(BOX,beamHC,b,(bx0+bx1)/2,(by0+by1)/2,0,bl,.26,.26,0,0,ba);put(BOX,beamHC,b,.55,3.0,0,1.3,.14,.14,0,0,.75);
+   const tx0=0,ty0=4.95,tl=Math.hypot(bx1-tx0,by1-ty0),ta=Math.atan2(by1-ty0,bx1-tx0);put(CYL6,ropeTC,b,(tx0+bx1)/2,(ty0+by1)/2,0,.03,tl,.03,0,0,ta-Math.PI/2);
+   put(CYL,ironC,b,bx1,by1-.12,0,.16,.07,.16,Math.PI/2);put(CYL6,ropeTC,b,bx1+.12,(by1+2.5)/2,0,.025,by1-2.5,.025);put(TOR,ironC,b,bx1+.12,2.38,0,.12,.12,.12);
+   crate(b,bx1+.12,0,.42,.3,1.94)},
+  lodz:(b,h)=>{const L=2.5,hull=P3_SMALL;put(hull.hull,deck,b,0,-.2,0,1,1,1);put(hull.deck,beam,b,0,-.3,0,1,1,1);for(const x of [-.5,.35])put(BOX,beamH,b,x,-.2+hull.deckY+.12,0,.16,.05,hull.half(.5+x/L)*1.75,0,Math.PI/2);put(BOX,beamH,b,.2,-.2+hull.deckY+.07,.15,1.1,.04,.12,0,.35)}
+ };
+ const P3_SMALL=port3dHull(2.5,1.0,.32,.38,18,9);
+ return {K,MODEL,mats:{wood:deck,woodDark:deck,beam,beamH,iron,rope:ropeT,jute,salt,sail,stone,post,deck},geos:{BOX,CYL,CYL6,TOR,SPH},barrel,sack,coil,crate,hash,sub}}
+// koga Zakonu na kotwicy: kadlub, poklad, kasztel rufowy, maszt z rejka i zwinietym zaglem, olinowanie, latarnia na rufie
+function port3dShip(P,x,z,y){const {K,mats,geos,barrel,sack,coil}=P,{put,at}=K,{BOX,CYL,CYL6,TOR}=geos,{wood,woodDark,iron,rope,sail}=mats;
+ const L=12.6,B=4.3,h=port3dHull(L,B,1.7,1.35),grp=new THREE.Group(),b=at(0,0);grp.position.set(x,y,z);
+ put(h.hull,woodDark,b,0,0,0,1,1,1);put(h.deck,wood,b,0,0,0,1,1,1);
+ // relingi wzdluz burt
+ const N=20;for(const s of [-1,1])for(let i=1;i<N;i++){const t0=i/N,t1=(i+1)/N,x0=(t0-.5)*L,x1=(t1-.5)*L,z0=s*h.half(t0),z1=s*h.half(t1),y0=h.top(t0),y1=h.top(t1);
+  put(BOX,woodDark,b,(x0+x1)/2,(y0+y1)/2+.04,(z0+z1)/2,Math.hypot(x1-x0,z1-z0)+.02,.12,.14,0,-Math.atan2(z1-z0,x1-x0),Math.atan2(y1-y0,x1-x0));
+  if(i%2===0)put(BOX,woodDark,b,x0,y0-.25,z0*.97,.12,.55,.12)}
+ // kasztel rufowy
+ const cx0=L/2-3.1,cx1=L/2-.7,cy=h.top(.83)+.25,cw=h.half(.8)*1.75;put(BOX,wood,b,(cx0+cx1)/2,cy,0,cx1-cx0,.16,cw);put(BOX,woodDark,b,cx0,cy-.55,0,.16,1.1,cw*.98);
+ for(const s of [-1,1]){put(BOX,woodDark,b,(cx0+cx1)/2,cy+.62,s*cw/2,cx1-cx0,.1,.1);for(let k=0;k<=4;k++)put(BOX,woodDark,b,cx0+(cx1-cx0)*k/4,cy+.32,s*cw/2,.1,.6,.1)}
+ put(BOX,woodDark,b,cx0,cy+.62,0,.1,.1,cw);for(let k=0;k<=3;k++)put(BOX,woodDark,b,cx0,cy+.32,-cw/2+cw*k/3,.1,.6,.1);
+ // maszt, rejka i zwiniety zagiel
+ const mx=-1.0,dk=h.deckY,mh=8.6;put(CYL,woodDark,b,mx,dk+mh/2,0,.2,mh,.2);put(CYL,woodDark,b,mx,dk+mh+.15,0,.12,.3,.12);for(const yy of [1.2,1.45,4.4])put(TOR,rope,b,mx,dk+yy,0,.23,.23,.23,Math.PI/2);
+ const ry=dk+mh-1.1;put(CYL,woodDark,b,mx,ry,0,.11,7.2,.11,Math.PI/2);put(CYL,sail,b,mx,ry-.32,0,.3,6.6,.36,Math.PI/2);for(let k=-3;k<=3;k++)put(TOR,rope,b,mx,ry-.3,k*.95,.33,.33,.33);
+ // olinowanie: wanty do burt, sztag do dziobu i rufy
+ const top=new THREE.Vector3(mx,dk+mh-.2,0),line=(a,c)=>{const d=c.clone().sub(a),m=a.clone().add(c).multiplyScalar(.5),q=new THREE.Quaternion().setFromUnitVectors(UP,d.clone().normalize()),mm=new THREE.Matrix4().compose(m,q,new THREE.Vector3(.025,d.length(),.025));K.put(CYL6,rope,b.clone().multiply(mm),0,0,0,1,1,1)};
+ for(const s of [-1,1])for(const dx of [-.9,0,.9])line(top,new THREE.Vector3(mx+dx,h.top((mx+dx)/L+.5)+.05,s*h.half((mx+dx)/L+.5)*.98));
+ line(top,new THREE.Vector3(-L/2+.3,h.top(.02)+.1,0));line(top,new THREE.Vector3(cx0+.2,cy+.62,0));
+ for(const s of [-1,1])line(new THREE.Vector3(mx,ry,s*3.5),new THREE.Vector3(mx+(s>0?2.6:-2.4),h.top(.5)+.1,s*h.half(.5)*.95));
+ // ladunek, luk i latarnia
+ put(BOX,woodDark,b,1.2,dk+.1,0,1.4,.14,1.0);for(const k of [-.35,0,.35])put(BOX,iron,b,1.2+k,dk+.18,0,.06,.03,.9);
+ {const bd=at(0,0,0,1,dk);sack(bd,-3.2,.6,.62,.2,false);sack(bd,-2.7,.95,.58,-.3,false);sack(bd,-3.0,1.15,.55,.6,true);barrel(bd,-.3,-.9,.3,.72,true);coil(bd,.4,1.0,.3)}
+ const lx=L/2-.55,ly=cy+1.25,lz=cw*.42;put(BOX,woodDark,b,lx,cy+.65,lz,.08,1.3,.08);put(BOX,woodDark,b,lx-.2,ly+.12,lz,.45,.06,.06);
+ const lamp=new THREE.Mesh(new THREE.BoxGeometry(.2,.28,.2),new THREE.MeshBasicMaterial({color:0xf4c480}));lamp.position.set(lx-.38,ly-.08,lz);grp.add(lamp);
+ K.finish(grp);return {grp,lamp:[x+lx-.38,y+ly-.08,z+lz]}}
 function buildSolneNabrzeze(I){
- const random=rng(60139);
+ const random=rng(60139);const P3=PORT3D_ON?port3dBuild(I,ROOT):null;
  const ground=(x,y)=>{if(x<0||y<0||x>=MW||y>=MH)return 45;const i=y*MW+x,t=map[i];return t===31||t===27?(W.under[i]||40):t};
  const land=t=>t!==45&&t!==21;
  // --- nawierzchnie: ciagla siatka UV, kolor wierzcholkow niesie wilgoc przy wodzie, cien pod scianami i przejscia miedzy materialami
@@ -223,6 +321,8 @@ function buildSolneNabrzeze(I){
  const rim=new THREE.BoxGeometry(1,.74,.2),beam=new THREE.BoxGeometry(1,.23,.15);
  const edges=(geo,mat,list)=>instanced(geo,mat,list,([x,y,dx])=>{M4.makeRotationY(dx?Math.PI/2:0);M4.setPosition(x,-.3,y);return M4});
  edges(rim,stone,edgeStone);edges(beam,wood,edgeWood);
+ if(P3){/* 18.11.2026: poklad pomostu ma grubosc (oblicowka do wody), nabrzeze kamienne obrzeze */const lay=(geo,mat,list,h)=>instanced(geo,mat,list,([x,y,dx])=>{M4.makeRotationY(dx?Math.PI/2:0);M4.setPosition(x,h,y);return M4});
+  lay(new THREE.BoxGeometry(1.01,.38,.13),worldSurf(phong({color:0x7a6a5a}),I.port_deski,1.7,'p3dFascia'),edgeWood,-.15);lay(new THREE.BoxGeometry(1.0,.09,.34),worldSurf(phong({color:0xb4babb,shininess:6}),I.port_plyty,1.6,'p3dCoping'),edgeStone,.065)}
  instanced(new THREE.CylinderGeometry(.1,.14,1.3,6),wood,piles,([x,y])=>M4.makeTranslation(x,-.15,y));
  // 15.11.2026 (mapy-wygladzenie): styk pomostu z kamiennym nabrzezem ma belke progowa i kamienny kraweznik, zamiast golej prostej linii miedzy teksturami
  {const sill=[],kerb=[];for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++){if(ground(x,y)!==43)continue;
@@ -376,16 +476,19 @@ function buildSolneNabrzeze(I){
   m.rotation.x=-Math.PI/2;m.scale.y=1;m.position.y=.052;m.castShadow=false;m.receiveShadow=true;ferryRings=[[(x0+x1)/2-w/2+w*.027,z0+d*.412],[(x0+x1)/2+w/2-w*.027,z0+d*.412]];ferryBox=[x0-1.6,z0-1.6,x1+1.6,z0+d+.6]}
  else{const [fx,fy,fw,fh]=PORT_FERRY_ART,m=sprite(frames.ferry,MP(fx),MP(fy),fw,fh);m.rotation.x=-Math.PI/2;m.scale.y=1.38;m.position.y=.052;m.castShadow=false;m.receiveShadow=true}
  // koga Zakonu na kotwicy przy wschodnim pomoscie: sama dekoracja, stoi na wodzie poza polem gry
- if(I.port_statek){const img=I.port_statek;img.nbDensity=img.width/96;const fr=procFrame(img,0,0,96,64,'prop'),[sx,sy,sw]=PORT_SHIP,m=sprite(fr,MP(sx),MP(sy),sw,sw*2/3);m.position.y=-.55;m.castShadow=false;W.portShip=m;
+ if(P3){P3.K.finish(ROOT);const [sx,sy]=PORT_SHIP,s=port3dShip(P3,MP(sx),MP(sy)-2.6,-.19);ROOT.add(s.grp);W.portShip3=s.grp;W.portShip3.userData.y0=-.19;W.LSRC.push({col:0xffb46a,base:.8,dist:6,x:s.lamp[0],y:s.lamp[1],z:s.lamp[2],kind:'fire',ph:2.2})}
+ else if(I.port_statek){const img=I.port_statek;img.nbDensity=img.width/96;const fr=procFrame(img,0,0,96,64,'prop'),[sx,sy,sw]=PORT_SHIP,m=sprite(fr,MP(sx),MP(sy),sw,sw*2/3);m.position.y=-.55;m.castShadow=false;W.portShip=m;
   W.LSRC.push({col:0xffb46a,base:.8,dist:6,x:MP(sx)+sw*.29,y:3.9,z:MP(sy)-.4,kind:'fire',ph:2.2})}
  const R={well:[32,32,32,32],stocks:[64,32,32,32],shrine:[96,32,32,32],gallows:[0,64,64,32],wheel:[64,96,32,32],barrel:[96,96,32,32],marga_cart:[0,128,64,32],crow_post:[64,128,32,32],covered_corpses:[96,128,32,32],order_banner:[32,160,32,32],burnt_hay:[64,160,32,32],dead_horse:[96,160,32,32],shop_sign:[0,0,32,32]};
  const PF={};for(const k in R)PF[k]=I['p1_'+k]?procFrame(I['p1_'+k],0,0,R[k][2],R[k][3],'prop'):procFrame(I.br_props,R[k][0],R[k][1],R[k][2],R[k][3],'prop');
  for(const p of PROPS){
+  if(P3&&PORT3D_KEYS.has(p.k)){const h=P3.hash(p.x,p.y),fixed=p.k==='winch'||p.k==='crane';P3.MODEL[p.k](P3.K.at(p.x,p.y-.42,(p.flip?Math.PI:0)+(fixed?0:(h-.5)*.7)),h);continue}
   if(frames[p.k]){const [w,h]=PORT_PROP_SIZE[p.k],m=sprite(frames[p.k],p.x,p.y,w,h,p.flip);m.userData.propAsset=true;const o={mesh:m,frames:[frames[p.k]],fps:0,ph:0,kind:'static'};propObjs.push(o);p.obj=o;continue}
   const fr=p.shrine!==undefined?PF.shrine:PF[p.k];if(!fr)continue;
   const rc=p.shrine!==undefined?R.shrine:R[p.k],m=mkProp([fr],p.x,p.y,rc);if(p.flip)m.scale.x=-1;
   propObjs.push({mesh:m,frames:p.shrine!==undefined?[fr,fr]:[fr],fps:0,ph:Math.random()*3,kind:p.shrine!==undefined?'shrine':'static',si:p.shrine});
  }
+ if(P3)P3.K.finish(ROOT);
  if(I.p2_brazier_0){const bz=[0,1,2,3].map(i=>procFrame(I['p2_brazier_'+i],0,0,32,32,'prop'));
   for(const [x,y] of braziers)propObjs.push({mesh:mkProp(bz,x+.5,y+.92,[0,0,32,32]),frames:bz,fps:6,ph:Math.random()*3})}
  // --- lancuchy od kolowrotow do promu

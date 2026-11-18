@@ -170,7 +170,7 @@ function fit(){const st=$('stage'),r=st.getBoundingClientRect();let w=Math.max(1
   const scr=$('screen');scr.style.width=w+'px';scr.style.height=h+'px';scr.classList.toggle('port',port);document.documentElement.classList.toggle('port',port);scr.style.fontSize=(Math.max(10,s*5.2)*SETT.fts/100)+'px';
   renderer.setPixelRatio(Math.min(GFX.dpr,window.devicePixelRatio||1));renderer.setSize(w,h,false);FIT.w=w;FIT.h=h;rtApply();
   
-  cam.aspect=w/h;cam.fov=2*Math.atan(Math.tan(12*Math.PI/180)/Math.min(1,w/h))*180/Math.PI;cam.updateProjectionMatrix()}
+  cam.aspect=w/h;cam.fov=2*Math.atan(Math.tan(KAMH)/Math.min(1,w/h))*180/Math.PI;cam.updateProjectionMatrix()}
 addEventListener('resize',fit);fit();
 // fit again when the page comes back (some browsers report the new size late)
 const refit=()=>{fit();setTimeout(fit,120);setTimeout(fit,400);setTimeout(fit,900)};

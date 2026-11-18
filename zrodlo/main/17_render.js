@@ -102,10 +102,10 @@ function syncThreatRings(){
 function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMarks[0].visible=false;heroMarks[1].visible=false}try{ambTick(dt);shockTick(dt)}catch(e){quietErr('amb',e)}if(!S)syncThreatRings();
   let tx,tz;
   if(S){const cp=pl.dead&&pl2&&!pl2.dead?pl2:pl;tx=cp.x/16;tz=cp.y/16}else{idleA+=dt*.08;const I=W.idle;tx=I[0]+Math.sin(idleA)*I[2];tz=I[1]+Math.cos(idleA*.7)*I[3]}
-  if(S&&depthOn()){const hw=11.5*Math.min(1.35,Math.max(.75,cam.aspect/(16/9)));const hx=tx,hz=tz;if(MW>hw*2+2)tx=Math.min(MW-hw,Math.max(hw,tx));tz=Math.min(MH-7.5,Math.max(8.5,tz));tx=Math.min(hx+hw*.6,Math.max(hx-hw*.6,tx));tz=Math.min(hz+4,Math.max(hz-2.2,tz))}
+  if(S&&depthOn()){const hw=11.5*KAMV[3]*Math.min(1.35,Math.max(.75,cam.aspect/(16/9)));const hx=tx,hz=tz;if(MW>hw*2+2)tx=Math.min(MW-hw,Math.max(hw,tx));tz=Math.min(MH-KAMV[5],Math.max(KAMV[4],tz));tx=Math.min(hx+hw*.6,Math.max(hx-hw*.6,tx));tz=Math.min(hz+4,Math.max(hz-2.2,tz))}
   camTarget.x+=(tx-camTarget.x)*Math.min(1,dt*8);camTarget.z+=(tz-camTarget.z)*Math.min(1,dt*8);if(!S||S.t<.1){camTarget.x=tx;camTarget.z=tz}
-  let sx=0,sz=0;if(SETT.shake&&S&&S.shakeT>0){const pxw=2*DIST*Math.tan(12*Math.PI/180)/RT_H;S.shkT=(S.shkT||0)-dt;if(S.shkT<=0||!S.shk){S.shkT=.04;S.shk=[Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw,Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw/Math.sin(PITCH)]}sx=S.shk[0];sz=S.shk[1]}
-  const EZ=S&&S.exec>0&&SETT.shake?1-.16*Math.min(1,S.exec/.3):1;cam.position.set(camTarget.x+sx,Math.sin(PITCH)*DIST*EZ,camTarget.z+Math.cos(PITCH)*DIST*EZ+sz);cam.lookAt(camTarget.x+sx,.8,camTarget.z+sz);syncSwordGlow();syncCombatEffects(dt);syncWhirlVisual(dt);syncBloodHD(dt);
+  let sx=0,sz=0;if(SETT.shake&&S&&S.shakeT>0){const pxw=2*DIST*Math.tan(KAMH)/RT_H;S.shkT=(S.shkT||0)-dt;if(S.shkT<=0||!S.shk){S.shkT=.04;S.shk=[Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw,Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw/Math.sin(PITCH)]}sx=S.shk[0];sz=S.shk[1]}
+  const EZ=(S&&S.exec>0&&SETT.shake?1-.16*Math.min(1,S.exec/.3):1)*nb3dZoom(dt);cam.position.set(camTarget.x+sx,Math.sin(PITCH)*DIST*EZ,camTarget.z+Math.cos(PITCH)*DIST*EZ+sz);cam.lookAt(camTarget.x+sx,.8,camTarget.z+sz);syncSwordGlow();syncCombatEffects(dt);syncWhirlVisual(dt);syncBloodHD(dt);
   const z0=S&&S.zones[0];if(z0){W.zoneLight.x=z0.x/16;W.zoneLight.z=z0.y/16}
   for(const L of LSRC){let k=L.base;
     if(L.kind==='fire')k*=.85+Math.sin(clock*13+L.ph)*.08+Math.random()*.12;else if(L.kind==='lava'||L.kind==='rot')k*=.9+Math.sin(clock*1.7+L.ph)*.1;else if(L.kind==='rune')k*=.75+.25*Math.sin(clock*2+L.ph);
@@ -115,8 +115,8 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
     L.k=k;L.d=k>0?Math.hypot(L.x-camTarget.x,(L.z-camTarget.z)*1.3):1e9}
   if(W&&W.halos&&W.haloL){const hl=W.haloL;for(let i=0;i<hl.length;i++){const L=hl[i],f=L.base>0?Math.min(1.35,L.k/L.base):0;TMPC.setHex(L.col).multiplyScalar(f);W.halos.setColorAt(i,TMPC);TMPC.lerp(WHITE_C,.35).multiplyScalar(1);W.cores.setColorAt(i,TMPC);if(W.groundLights&&W.groundL){const gi=W.groundL.indexOf(L);if(gi>=0){TMPC.setHex(L.col).multiplyScalar(f);W.groundLights.setColorAt(gi,TMPC)}}}
    W.halos.instanceColor.needsUpdate=true;W.cores.instanceColor.needsUpdate=true;if(W.groundLights&&W.groundLights.instanceColor)W.groundLights.instanceColor.needsUpdate=true}
-  const nearL=LSRC.filter(L=>L.k>0).sort((a,b)=>a.d-b.d);const lightCap=GFX.lights;
-  LPOOL.forEach((l,i)=>{const L=i<lightCap?nearL[i]:null;if(!L||L.d>26){l.intensity=0;return}l.color.setHex(L.col);l.distance=L.dist;l.position.set(L.x,L.y,L.z);l.intensity=L.k*Math.min(1,(26-L.d)/4);{const dp=depthOn();if(dp){l.intensity*=dp[2];l.distance*=dp[3]}}});
+  const nearL=LSRC.filter(L=>L.k>0).concat(nb3dDynLights(dt)).sort((a,b)=>a.d-b.d);const lightCap=GFX.lights;
+  LPOOL.forEach((l,i)=>{const L=i<lightCap?nearL[i]:null;if(!L||L.d>26){l.intensity=0;return}l.color.setHex(L.col);l.distance=L.dist;if(NB3D_ON&&L.kind==='fire')l.position.set(L.x+Math.sin(clock*7.3+L.ph)*.06,L.y+Math.sin(clock*9.1+L.ph*1.7)*.05,L.z+Math.cos(clock*6.7+L.ph)*.06);else l.position.set(L.x,L.y,L.z);l.intensity=L.k*Math.min(1,(26-L.d)/4);{const dp=depthOn();if(dp){l.intensity*=dp[2];l.distance*=dp[3]}}});nb3dTick(dt,nearL);
   if(S&&S.t>0&&Math.random()<dt*22*GFX.parts){const a=Math.random()*Math.PI*2,d=Math.random()*200;S.parts.push(CH===4?(Math.random()<.35?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(4,26),vx:rnd(-4,4),vy:rnd(-2,2),vz:rnd(-1.5,1.5),c:Math.random()<.5?'#c8e070':'#7fffd0',life:rnd(1.5,3.5)}:{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(1,8),vx:rnd(-5,-1),vy:rnd(-1,1),vz:rnd(-.5,.5),c:Math.random()<.6?'#4a5660':'#5e6a72',life:rnd(3,6)}):CH===3?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(30,70),vx:rnd(-3,3),vy:rnd(-1,1),vz:rnd(-5,-2),c:Math.random()<.6?'#c8a040':'#7a6030',life:rnd(4,7)}:CH===PORT?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(1,9),vx:rnd(-6,-2),vy:rnd(-1,1),vz:rnd(-.4,.6),c:Math.random()<.6?'#5d6f7c':'#8496a0',life:rnd(3,6)}:CH===1?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(30,70),vx:rnd(-6,2),vy:rnd(-1,1),vz:rnd(-9,-5),c:Math.random()<.6?'#6a6670':'#8a8490',life:rnd(3,6)}:{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(4,40),vx:rnd(-3,3),vy:rnd(-2,2),vz:rnd(-1,2),c:Math.random()<.7?'#5c5566':'#7d6a58',life:rnd(2,4)})}
   if(S&&CH===2&&Math.abs(pl.x/16-MP(37.5))<16&&Math.random()<dt*14)S.parts.push({k:'e',x:rnd(MP(35.2),MP(39.8))*16,y:(camTarget.z+rnd(-7,7))*16,z:-rnd(20,90),vx:rnd(-2,2),vy:0,vz:rnd(14,30),c:Math.random()<.6?'#ff6a1a':'#ffb347',life:rnd(2,4)});
   for(const o of WATER_ALL)if(o.ch===CH)o.tex.offset.set(clock*(o.deep?.0022:.004),clock*(o.deep?.0015:.0028));
@@ -147,7 +147,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
   CUT.value.set(S&&!pl.dead?pl.x/16:-99,0,S&&!pl.dead?pl.y/16:-99);
   if(S&&!pl.dead&&(CH===3||CH===4)){V.set(pl.x/16,.9,pl.y/16).project(cam);CUTS.value.set((V.x+1)/2*rt.width,(V.y+1)/2*rt.height,rt.height*.16)}else CUTS.value.set(-999,-999,0);
   if(S){const art=chapterArt()?ART_LIGHT[CH]:null;plLight.color.setHex(art?art[0]:0xffd2a0);plLight.distance=art?art[2]:13;plLight.position.set(pl.x/16,2.4,pl.y/16);plLight.intensity=pl.dead?.6:(art?art[1]:2.05)+Math.sin(clock*9)*(art?.025:.06);{const dp=depthOn();if(dp){plLight.intensity*=dp[4];plLight.distance*=dp[5]}}}else plLight.position.set(tx,2.4,tz);
-  let bi=0;const bdp=depthOn(),blob=(x,z,s)=>{if(bi>=MAXB)return;if(bdp)s=s*1.55+.25;V.set(x,.03,z);SC.set(s,1,s*(bdp?.5:.6));M4.compose(V,Q.set(0,0,0,1),SC);blobs.setMatrixAt(bi++,M4)};
+  let bi=0;const bdp=depthOn(),blob=(x,z,s)=>{if(bi>=MAXB)return;if(bdp)s=s*1.55+.25;V.set(x,.03,z);SC.set(s,1,s*(bdp?.5:.6));M4.compose(V,Q.set(0,0,0,1),SC);blobs.setMatrixAt(bi++,M4);nb3dShadow(x,z,s)};
   // NPCs of the active chapter
   for(const n of W.npcs){const m=W.npcMeshes[n.id];if(!m)continue;const st=S?S.npc[n.id]:{state:'alive',t:0};
     m.visible=st.state!=='gone'&&st.state!=='risen';if(n.id==='marga'&&S&&S.merchant&&CH===1)m.visible=false;if(!m.visible)continue;const fr=A[n.art];
@@ -212,7 +212,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
     pGeo.setDrawRange(0,n);pGeo.attributes.position.needsUpdate=true;pGeo.attributes.color.needsUpdate=true;
     postMat.uniforms.hurt.value=SETT.flash?Math.max(S.hurt*1.2,pl.dead?.25:0,(!pl.dead&&pl.hp<pl.max*.3)?(.12+.08*Math.sin(clock*5)):0):pl.dead?.18:pl.hp<pl.max*.3?.1:0;
   }else{heroMesh.visible=false;if(mesh2)mesh2.visible=false;if(mpTotLast)mpTotLast.visible=false;mpHudTick();pGeo.setDrawRange(0,0);postMat.uniforms.hurt.value=0}
-  blobs.count=bi;blobs.instanceMatrix.needsUpdate=true;
+  blobs.count=bi;blobs.instanceMatrix.needsUpdate=true;nb3dShadowEnd();
   decalT-=dt;if(decalDirty&&decalT<=0){decalTex.needsUpdate=true;decalDirty=false;decalT=.15}
   updatePowerVisuals();
   // talk prompt
@@ -292,3 +292,81 @@ const SHOCK={t:9,x:.5,y:.5,s:0};const SHV=new THREE.Vector3();
 function shockAt(x,y,str){if(postMat.uniforms.low.value>.5)return;SHV.set(x/16,.4,y/16).project(cam);if(Math.abs(SHV.x)>1.2||Math.abs(SHV.y)>1.2)return;if(SHOCK.t<.25&&SHOCK.s>str)return;SHOCK.t=0;SHOCK.x=SHV.x*.5+.5;SHOCK.y=SHV.y*.5+.5;SHOCK.s=str}
 function shockTick(dt){SHOCK.t+=dt;const u=postMat.uniforms.shock.value;if(SHOCK.t<.55)u.set(SHOCK.x,SHOCK.y,SHOCK.t,SHOCK.s*(1-SHOCK.t/.55));else u.set(0,0,0,0)}
 
+// ===== 18.11.2026: oprawa 3D (decyzja autora; nowe shadery za zgoda autora z 18.11.2026) =====
+// 1) promienie swiatla w mgle: stozki pod latarniami i nad ogniskami oraz smugi ksiezyca (addytywny shader z szumem pylu),
+// 2) ruchome swiatla od pociskow ognia/lodu i wybuchow kul ognia (bez nowych lamp: biora miejsca z istniejacej puli LPOOL, wiec bez rekompilacji materialow),
+// 3) cienie od ognisk pod postaciami i wrogami (miekki shader, kierunek od najblizszych swiatel),
+// 4) kamera w walce: lekkie oddalenie przy bossie i w czasie naporu. Wszystko TYLKO wyglad: nie zmienia pozycji, zasiegow, trafien ani balansu.
+// ?oprawa3d=0 (tylko lokalnie) = porownanie przed. Na jakosci Srednia/Niska promienie sa wylaczone (GFX.fx=0).
+const NB3D_ON=nbParam('oprawa3d')!=='0';
+const NB3D={dyn:[],pool:[],pi:0,bursts:[],lights:[],si:0,zoom:1,zt:0,bossNear:false,max:56,moonCells:[]};
+const NB3D_VS=`varying vec3 vP;varying vec3 vN;varying vec3 vV;varying vec3 vC;varying vec3 vW;
+ void main(){vec4 lp=vec4(position,1.);vec3 n=normal;
+ #ifdef USE_INSTANCING
+  lp=instanceMatrix*lp;n=mat3(instanceMatrix)*n;
+ #endif
+ vC=vec3(1.);
+ #ifdef USE_INSTANCING_COLOR
+  vC=instanceColor;
+ #endif
+ vP=position;vec4 wp=modelMatrix*lp;vW=wp.xyz;vN=normalize(mat3(modelMatrix)*n);vV=normalize(cameraPosition-wp.xyz);gl_Position=projectionMatrix*viewMatrix*wp;}`;
+// stozek: wierzcholek w y=0, podstawa w y=-1; jasny w srodku, miekkie brzegi (patrzymy na sciane bokiem), wygasa ku podstawie, pyl i krople plyna w smudze
+const NB3D_FS=`uniform float uT;uniform float uI;varying vec3 vP;varying vec3 vN;varying vec3 vV;varying vec3 vC;varying vec3 vW;
+ float hh(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+ float nz(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hh(i),hh(i+vec2(1.,0.)),f.x),mix(hh(i+vec2(0.,1.)),hh(i+1.),f.x),f.y);}
+ void main(){float t=clamp(-vP.y,0.,1.);float e=abs(dot(normalize(vN),normalize(vV)));float edge=pow(e,1.8);
+  float fall=smoothstep(0.,.14,t)*pow(1.-t,1.25);
+  float dust=.5+.5*nz(vec2(vW.x*1.3+vW.z*.6,vW.y*2.2-uT*.6))*(.6+.4*nz(vW.xz*2.3+vec2(uT*.15,-uT*.1)));
+  float a=edge*fall*dust*uI;gl_FragColor=vec4(vC*a,1.);}`;
+const nb3dShaftMat=(k)=>new THREE.ShaderMaterial({uniforms:{uT:{value:0},uI:{value:k}},vertexShader:NB3D_VS,fragmentShader:NB3D_FS,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,fog:false});
+const NB3D_CONE=(()=>{const g=new THREE.CylinderGeometry(.16,1,1,20,4,true);g.translate(0,-.5,0);return g})();
+const NB3D_SHAFTS=(()=>{const m=new THREE.InstancedMesh(NB3D_CONE,nb3dShaftMat(1.15),NB3D.max);m.frustumCulled=false;m.renderOrder=6;for(let i=0;i<NB3D.max;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
+const NB3D_MOON=(()=>{const m=new THREE.InstancedMesh(NB3D_CONE,nb3dShaftMat(.95),12);m.frustumCulled=false;m.renderOrder=6;for(let i=0;i<12;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
+// cien od swiatla: pas wychodzacy od stop w strone przeciwna do ognia; uv.y=0 przy stopach, 1 na koncu
+const NB3D_LSH=(()=>{const g=new THREE.PlaneGeometry(1,1);g.translate(0,.5,0);g.rotateX(-Math.PI/2);
+ const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,uniforms:{},vertexShader:`varying vec2 vU;varying float vO;void main(){vU=uv;vO=1.;
+  #ifdef USE_INSTANCING_COLOR
+   vO=instanceColor.r;
+  #endif
+  vec4 p=vec4(position,1.);
+  #ifdef USE_INSTANCING
+   p=instanceMatrix*p;
+  #endif
+  gl_Position=projectionMatrix*viewMatrix*modelMatrix*p;}`,
+  fragmentShader:`varying vec2 vU;varying float vO;void main(){float w=mix(.95,.5,vU.y);float d=abs(vU.x-.5)*2./w;float a=(1.-smoothstep(.35,1.,d))*pow(1.-vU.y,1.3)*smoothstep(0.,.06,vU.y);gl_FragColor=vec4(.015,.012,.03,a*vO);}`});
+ const m=new THREE.InstancedMesh(g,mat,700);m.frustumCulled=false;m.renderOrder=-1;for(let i=0;i<700;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
+const NB3D_M=new THREE.Matrix4(),NB3D_Q=new THREE.Quaternion(),NB3D_V=new THREE.Vector3(),NB3D_S=new THREE.Vector3(),NB3D_C=new THREE.Color(),NB3D_DIR=new THREE.Vector3(),NB3D_E=new THREE.Euler();
+// --- ruchome swiatla: pociski i krotkie blyski wybuchow
+function nb3dBurst(x,y,col,k,dist,life){if(!NB3D_ON)return;if(NB3D.bursts.length>12)NB3D.bursts.shift();NB3D.bursts.push({x:x/16,z:y/16,col,k,dist,life,t:0})}
+function nb3dDyn(x,y,z,col,k,dist,pri){const o=NB3D.pool[NB3D.pi]||(NB3D.pool[NB3D.pi]={kind:'dyn'});NB3D.pi++;o.x=x;o.y=y;o.z=z;o.col=col;o.k=k;o.base=k;o.dist=dist;o.d=Math.hypot(x-camTarget.x,(z-camTarget.z)*1.3)*pri;NB3D.dyn.push(o)}
+function nb3dDynLights(dt){NB3D.dyn.length=0;NB3D.pi=0;if(!NB3D_ON||!S)return NB3D.dyn;
+ for(const p of S.swordShots||[])if(p&&p.t>0)nb3dDyn(p.x/16,.75,p.y/16,p.ice?0x8fd6ff:0xff8a3a,p.ice?1.15:1.7,p.ice?4.2:5.2,.55);
+ let n=0;for(const f of S.eproj||[]){if(n>=6)break;if(f&&(!f.anim||f.anim===A.fireball)){nb3dDyn(f.x/16,.7,f.y/16,0xff7a2c,1.25,4.2,.7);n++}}
+ for(let i=NB3D.bursts.length-1;i>=0;i--){const b=NB3D.bursts[i];b.t+=dt;if(b.t>=b.life){NB3D.bursts.splice(i,1);continue}const f=1-b.t/b.life;nb3dDyn(b.x,1.1,b.z,b.col,b.k*f*f,b.dist,.4)}
+ return NB3D.dyn}
+// --- cienie od swiatel pod postaciami
+function nb3dShadow(x,z,s){if(!NB3D_ON||NB3D.si>=690)return;let a=null,b=null,sa=0,sb=0;
+ for(const L of NB3D.lights){const dx=x-L.x,dz=z-L.z,d=Math.hypot(dx,dz),r=L.dist*1.15;if(d>r||d<.12)continue;const st=L.k*(1-d/r);if(st>sa){b=a;sb=sa;a=L;sa=st}else if(st>sb){b=L;sb=st}}
+ for(const [L,st] of [[a,sa],[b,sb]]){if(!L||st<.05||NB3D.si>=690)continue;const dx=x-L.x,dz=z-L.z,d=Math.hypot(dx,dz),ln=Math.min(3.6,s*(.85+d*.5/Math.max(.6,L.y*.8))),w=s*.82;
+  NB3D_E.set(0,Math.atan2(-dx,-dz),0);NB3D_Q.setFromEuler(NB3D_E);NB3D_M.compose(NB3D_V.set(x,.036,z),NB3D_Q,NB3D_S.set(w,1,ln));NB3D_LSH.setMatrixAt(NB3D.si,NB3D_M);NB3D_C.setRGB(Math.min(.68,st*1.25),0,0);NB3D_LSH.setColorAt(NB3D.si,NB3D_C);NB3D.si++}}
+function nb3dShadowEnd(){NB3D_LSH.count=NB3D.si;NB3D_LSH.instanceMatrix.needsUpdate=true;if(NB3D_LSH.instanceColor)NB3D_LSH.instanceColor.needsUpdate=true;NB3D.si=0}
+// --- promienie w mgle i smugi ksiezyca
+const NB3D_MOON_CH={1:1,3:.8,4:1,6:1.1};
+function nb3dTick(dt,nearL){const on=NB3D_ON&&GFX.fx>0;NB3D.lights.length=0;for(const L of nearL){if(NB3D.lights.length>=8)break;if(L.kind==='fire'||L.kind==='lava'||L.kind==='dyn'||L.kind==='zone')NB3D.lights.push(L)}
+ NB3D_SHAFTS.material.uniforms.uT.value=NB3D_MOON.material.uniforms.uT.value=clock%1000;
+ if(W&&W.portShip3){const g=W.portShip3;g.position.y=g.userData.y0+Math.sin(clock*.7)*.05;g.rotation.z=Math.sin(clock*.53)*.018;g.rotation.x=Math.sin(clock*.41+1)*.012}
+ if(!on){NB3D_SHAFTS.count=0;NB3D_MOON.count=0;return}
+ let n=0;for(const L of LSRC){if(n>=NB3D.max)break;if(L.kind!=='fire'||!(L.k>0)||L.d>24)continue;const low=L.y<1.05,len=low?2.4:L.y+.15,r=low?.75:.9+L.y*.42;
+  if(low){NB3D_Q.setFromAxisAngle(NB3D_DIR.set(1,0,0),Math.PI);NB3D_M.compose(NB3D_V.set(L.x,L.y+.05,L.z),NB3D_Q,NB3D_S.set(r,len,r))}else{NB3D_Q.identity();NB3D_M.compose(NB3D_V.set(L.x,L.y+.05,L.z),NB3D_Q,NB3D_S.set(r,len,r))}
+  NB3D_SHAFTS.setMatrixAt(n,NB3D_M);NB3D_C.setHex(L.col).multiplyScalar(Math.min(1.4,L.k/(L.base||1))*(low?.55:1));NB3D_SHAFTS.setColorAt(n,NB3D_C);n++}
+ NB3D_SHAFTS.count=n;NB3D_SHAFTS.instanceMatrix.needsUpdate=true;if(NB3D_SHAFTS.instanceColor)NB3D_SHAFTS.instanceColor.needsUpdate=true;
+ // smugi ksiezyca: przypiete do siatki swiata co 13 j. (nie jada za kamera), tylko na mapach pod niebem
+ const mk=NB3D_MOON_CH[CH]||0;let m=0;if(mk&&S&&!S.dg){const AT=ATM[CH]||{};NB3D_DIR.copy(moon.position).normalize();const cs=13,gx0=Math.floor((camTarget.x-20)/cs),gz0=Math.floor((camTarget.z-16)/cs);
+  for(let gx=gx0;gx<=gx0+3&&m<12;gx++)for(let gz=gz0;gz<=gz0+3&&m<12;gz++){const h1=Math.abs(Math.sin(gx*12.9898+gz*78.233)*43758.5453)%1,h2=Math.abs(Math.sin(gx*39.346+gz*11.135)*43758.5453)%1;if(h1>.42)continue;
+   const len=17,gxw=gx*cs+h2*9,gzw=gz*cs+h1*9;NB3D_Q.setFromUnitVectors(UP,NB3D_DIR);NB3D_M.compose(NB3D_V.set(gxw,0,gzw).addScaledVector(NB3D_DIR,len),NB3D_Q,NB3D_S.set(1.6+h2*1.4,len,1.6+h2*1.4));
+   NB3D_MOON.setMatrixAt(m,NB3D_M);NB3D_C.setHex(AT.mc||0xb8c4dd).multiplyScalar(mk*(.55+.45*Math.sin(clock*.23+h1*9)));NB3D_MOON.setColorAt(m,NB3D_C);m++}}
+ NB3D_MOON.count=m;NB3D_MOON.instanceMatrix.needsUpdate=true;if(NB3D_MOON.instanceColor)NB3D_MOON.instanceColor.needsUpdate=true}
+// --- kamera w walce: przy bossie w poblizu i w czasie naporu kamera lekko sie oddala (plynnie, ok. 1 s)
+function nb3dZoom(dt){if(!NB3D_ON||!S||S.phase!=='play'){NB3D.zoom+=(1-NB3D.zoom)*Math.min(1,dt*2);return NB3D.zoom}
+ NB3D.zt-=dt;if(NB3D.zt<=0){NB3D.zt=.3;NB3D.bossNear=false;for(const e of S.enemies){if(e.dead||!bossBar(e))continue;if(Math.hypot(e.x-pl.x,e.y-pl.y)<22*16){NB3D.bossNear=true;break}}}
+ const tg=NB3D.bossNear?1.09:surgeOn()?1.05:1;NB3D.zoom+=(tg-NB3D.zoom)*Math.min(1,dt*1.1);return NB3D.zoom}
