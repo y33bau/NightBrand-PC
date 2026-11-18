@@ -126,7 +126,8 @@ const PORT_SHIP=[52,8.7,14.4],PORT_FERRY_ART=[32.5,7.9,8.6,6.4];
 // 18.11.2026 (port w bryle, decyzja autora): statek, prom, zuraw, kolowroty, skrzynie, beczki, worki z sola i pale portu jako geometria 3D zamiast plaskich obrazkow.
 // Tylko wyglad: kolizje zostaja na kaflach (02_swiaty.js). Porownanie przed: ?port3d=0 (tylko lokalnie).
 const PORT3D_ON=nbParam('port3d')!=='0';
-const PORT3D_KEYS=new Set(['cargo','skrzynia','beczka_ryby','salt','bollard','pacholek','winch','crane','pale','lodz']);
+// 18.11.2026: zuraw zostaje malowanym obrazkiem (decyzja autora: obrazek ladniejszy od bryly)
+const PORT3D_KEYS=new Set(['cargo','skrzynia','beczka_ryby','salt','bollard','pacholek','winch','pale','lodz']);
 function port3dKit(){
  const kit=new Map(),M=new THREE.Matrix4(),E=new THREE.Euler(),Qk=new THREE.Quaternion(),Pv=new THREE.Vector3(),Sv=new THREE.Vector3();
  const put=(geo,mat,base,x,y,z,sx,sy,sz,rx=0,ry=0,rz=0)=>{E.set(rx,ry,rz);Qk.setFromEuler(E);M.compose(Pv.set(x,y,z),Qk,Sv.set(sx,sy,sz));const k=geo.uuid+'|'+mat.uuid;let e=kit.get(k);if(!e)kit.set(k,e={geo,mat,list:[]});e.list.push(base.clone().multiply(M))};
@@ -160,9 +161,8 @@ function port3dBuild(I,ROOT){
  const pm=(t,k=.86,cut=false,e=0x040302)=>{const m=phong({map:t,emissive:e});m.color.setRGB(k,k*.98,k*.94);return cut?cutaway(m):m};
  const tCrate=cropT(1062,700,138,135),tBarrel=cropT(1352,805,100,130,0,3,1),tRope=cropT(700,140,110,135,Math.PI/2),tRopeT=cropT(700,140,110,135,0,4,1),tBeam=cropT(603,95,42,155),tBeamH=cropT(603,95,42,155,Math.PI/2),tPost=cropT(615,720,73,220,0,2,1),tJute=cropT(320,690,75,70),tDeck=cropT(180,200,200,120,Math.PI/2,1,1);
  const crateM=pm(tCrate,.78),barrelM=pm(tBarrel,.82),ropeM=pm(tRope,.74),ropeT=pm(tRopeT,.66),beam=pm(tBeam),beamH=pm(tBeamH),post=pm(tPost,.9),jute=pm(tJute,.82),deck=pm(tDeck,.85);
- const beamC=pm(tBeam,.86,true),beamHC=pm(tBeamH,.86,true),ropeTC=pm(tRopeT,.66,true);
  const stone=worldSurf(phong({emissive:0x08090a}),I.port_plyty,1.6,'p3dStone');stone.color.setRGB(1.0,1.03,1.04);
- const iron=phong({color:0x55575a,shininess:34,specular:0x4a535c,emissive:0x070707}),ironC=cutaway(phong({color:0x55575a,shininess:34,specular:0x4a535c,emissive:0x070707}));
+ const iron=phong({color:0x55575a,shininess:34,specular:0x4a535c,emissive:0x070707});
  const salt=phong({color:0xaeb4b6,shininess:30,specular:0x1e2224}),sail=phong({map:port3dTex('sail'),color:0xc8c8d0,side:THREE.DoubleSide});
  const sub=(b,x,z,ry=0,y=0)=>b.clone().multiply(at(x,z,ry,1,y));
  // --- elementy
@@ -184,13 +184,6 @@ function port3dBuild(I,ROOT){
    put(CYL,ropeM,b,0,1.0,0,.36,1.1,.36,0,0,Math.PI/2);for(const x of [-.6,.6])put(CYL,iron,b,x,1.0,0,.47,.07,.47,0,0,Math.PI/2);put(CYL,iron,b,0,1.0,0,.06,1.95,.06,0,0,Math.PI/2);
    put(CYL,iron,b,.88,1.0,0,.4,.07,.4,0,0,Math.PI/2);for(let k=0;k<14;k++){const a=k/14*Math.PI*2;put(BOX,iron,b,.88,1.0+Math.sin(a)*.43,Math.cos(a)*.43,.07,.07,.07,a)}
    put(BOX,iron,b,1.0,.84,0,.05,.38,.06);put(CYL,beam,b,1.12,.68,0,.05,.26,.05,0,0,Math.PI/2)},
-  crane:(b,h)=>{put(BOX,stone,b,0,.3,0,1.55,.6,1.55);put(BOX,stone,b,0,.66,0,1.2,.12,1.2);
-   put(BOX,beamC,b,0,2.75,0,.42,4.3,.42);for(const [x,z] of [[-.62,-.62],[.62,-.62],[-.62,.62],[.62,.62]])put(BOX,beamC,b,x*.55,1.45,z*.55,.15,1.75,.15,-z*.42,0,x*.42);
-   for(const y of [1.3,2.3,3.4,4.5])put(BOX,ironC,b,0,y,0,.46,.07,.46);
-   const bx0=0,by0=3.3,bx1=2.75,by1=4.75,bl=Math.hypot(bx1-bx0,by1-by0),ba=Math.atan2(by1-by0,bx1-bx0);put(BOX,beamHC,b,(bx0+bx1)/2,(by0+by1)/2,0,bl,.26,.26,0,0,ba);put(BOX,beamHC,b,.55,3.0,0,1.3,.14,.14,0,0,.75);
-   const tx0=0,ty0=4.95,tl=Math.hypot(bx1-tx0,by1-ty0),ta=Math.atan2(by1-ty0,bx1-tx0);put(CYL6,ropeTC,b,(tx0+bx1)/2,(ty0+by1)/2,0,.03,tl,.03,0,0,ta-Math.PI/2);
-   put(CYL,ironC,b,bx1,by1-.12,0,.16,.07,.16,Math.PI/2);put(CYL6,ropeTC,b,bx1+.12,(by1+2.5)/2,0,.025,by1-2.5,.025);put(TOR,ironC,b,bx1+.12,2.38,0,.12,.12,.12);
-   crate(b,bx1+.12,0,.42,.3,1.94)},
   lodz:(b,h)=>{const L=2.5,hull=P3_SMALL;put(hull.hull,deck,b,0,-.2,0,1,1,1);put(hull.deck,beam,b,0,-.3,0,1,1,1);for(const x of [-.5,.35])put(BOX,beamH,b,x,-.2+hull.deckY+.12,0,.16,.05,hull.half(.5+x/L)*1.75,0,Math.PI/2);put(BOX,beamH,b,.2,-.2+hull.deckY+.07,.15,1.1,.04,.12,0,.35)}
  };
  const P3_SMALL=port3dHull(2.5,1.0,.32,.38,18,9);
@@ -482,7 +475,7 @@ function buildSolneNabrzeze(I){
  const R={well:[32,32,32,32],stocks:[64,32,32,32],shrine:[96,32,32,32],gallows:[0,64,64,32],wheel:[64,96,32,32],barrel:[96,96,32,32],marga_cart:[0,128,64,32],crow_post:[64,128,32,32],covered_corpses:[96,128,32,32],order_banner:[32,160,32,32],burnt_hay:[64,160,32,32],dead_horse:[96,160,32,32],shop_sign:[0,0,32,32]};
  const PF={};for(const k in R)PF[k]=I['p1_'+k]?procFrame(I['p1_'+k],0,0,R[k][2],R[k][3],'prop'):procFrame(I.br_props,R[k][0],R[k][1],R[k][2],R[k][3],'prop');
  for(const p of PROPS){
-  if(P3&&PORT3D_KEYS.has(p.k)){const h=P3.hash(p.x,p.y),fixed=p.k==='winch'||p.k==='crane';P3.MODEL[p.k](P3.K.at(p.x,p.y-.42,(p.flip?Math.PI:0)+(fixed?0:(h-.5)*.7)),h);continue}
+  if(P3&&PORT3D_KEYS.has(p.k)){const h=P3.hash(p.x,p.y),fixed=p.k==='winch';P3.MODEL[p.k](P3.K.at(p.x,p.y-.42,(p.flip?Math.PI:0)+(fixed?0:(h-.5)*.7)),h);continue}
   if(frames[p.k]){const [w,h]=PORT_PROP_SIZE[p.k],m=sprite(frames[p.k],p.x,p.y,w,h,p.flip);m.userData.propAsset=true;const o={mesh:m,frames:[frames[p.k]],fps:0,ph:0,kind:'static'};propObjs.push(o);p.obj=o;continue}
   const fr=p.shrine!==undefined?PF.shrine:PF[p.k];if(!fr)continue;
   const rc=p.shrine!==undefined?R.shrine:R[p.k],m=mkProp([fr],p.x,p.y,rc);if(p.flip)m.scale.x=-1;
