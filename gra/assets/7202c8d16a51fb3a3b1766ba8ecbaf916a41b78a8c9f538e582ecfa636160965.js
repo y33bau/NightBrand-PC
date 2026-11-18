@@ -5787,10 +5787,10 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
     else if(L.kind==='npc'){const st=S?S.npc[L.npc]:{state:'alive'};k=st.state==='alive'||st.state==='talked'||st.state==='trial'||st.state==='offered'?L.base*(.8+.2*Math.sin(clock*3+L.ph)):st.state==='fading'?L.base*Math.max(0,st.t/1.5):0}
     else if(L.kind==='merchant')k=S&&S.merchant?L.base*(.85+.15*Math.sin(clock*4)):0;else if(L.kind==='zone')k=z0?1.6*Math.min(1,z0.life)*(.85+Math.random()*.2):0;
     L.k=k;L.d=k>0?Math.hypot(L.x-camTarget.x,(L.z-camTarget.z)*1.3):1e9}
-  if(W&&W.halos&&W.haloL){const hl=W.haloL;for(let i=0;i<hl.length;i++){const L=hl[i],f=L.base>0?Math.min(1.35,L.k/L.base):0;TMPC.setHex(L.col).multiplyScalar(f);W.halos.setColorAt(i,TMPC);TMPC.lerp(WHITE_C,.35).multiplyScalar(1);W.cores.setColorAt(i,TMPC);if(W.groundLights&&W.groundL){const gi=W.groundL.indexOf(L);if(gi>=0){TMPC.setHex(L.col).multiplyScalar(f);W.groundLights.setColorAt(gi,TMPC)}}}
+  if(W&&W.halos&&W.haloL){const hl=W.haloL;for(let i=0;i<hl.length;i++){const L=hl[i],f=(L.base>0?Math.min(1.35,L.k/L.base):0)*(L.kind==='fire'?.7:1);TMPC.setHex(L.col).multiplyScalar(f);W.halos.setColorAt(i,TMPC);TMPC.lerp(WHITE_C,.35).multiplyScalar(1);W.cores.setColorAt(i,TMPC);if(W.groundLights&&W.groundL){const gi=W.groundL.indexOf(L);if(gi>=0){TMPC.setHex(L.col).multiplyScalar(f*(L.kind==='fire'?.75:1));W.groundLights.setColorAt(gi,TMPC)}}}
    W.halos.instanceColor.needsUpdate=true;W.cores.instanceColor.needsUpdate=true;if(W.groundLights&&W.groundLights.instanceColor)W.groundLights.instanceColor.needsUpdate=true}
   const nearL=LSRC.filter(L=>L.k>0).concat(nb3dDynLights(dt)).sort((a,b)=>a.d-b.d);const lightCap=GFX.lights;
-  LPOOL.forEach((l,i)=>{const L=i<lightCap?nearL[i]:null;if(!L||L.d>26){l.intensity=0;return}l.color.setHex(L.col);l.distance=L.dist;if(NB3D_ON&&L.kind==='fire')l.position.set(L.x+Math.sin(clock*7.3+L.ph)*.06,L.y+Math.sin(clock*9.1+L.ph*1.7)*.05,L.z+Math.cos(clock*6.7+L.ph)*.06);else l.position.set(L.x,L.y,L.z);l.intensity=L.k*Math.min(1,(26-L.d)/4);{const dp=depthOn();if(dp){l.intensity*=dp[2];l.distance*=dp[3]}}});nb3dTick(dt,nearL);
+  LPOOL.forEach((l,i)=>{const L=i<lightCap?nearL[i]:null;if(!L||L.d>26){l.intensity=0;return}l.color.setHex(L.col);l.distance=L.dist;if(NB3D_ON&&L.kind==='fire')l.position.set(L.x+Math.sin(clock*7.3+L.ph)*.06,L.y+Math.sin(clock*9.1+L.ph*1.7)*.05,L.z+Math.cos(clock*6.7+L.ph)*.06);else l.position.set(L.x,L.y,L.z);l.intensity=L.k*Math.min(1,(26-L.d)/4);{const dp=depthOn();if(dp){l.intensity*=dp[2];l.distance*=dp[3]}}/* 18.11.2026: latarnie i ogniska slabsze (autor: przeswietlaja) */if(L.kind==='fire')l.intensity*=FIRE_DIM});nb3dTick(dt,nearL);
   if(S&&S.t>0&&Math.random()<dt*22*GFX.parts){const a=Math.random()*Math.PI*2,d=Math.random()*200;S.parts.push(CH===4?(Math.random()<.35?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(4,26),vx:rnd(-4,4),vy:rnd(-2,2),vz:rnd(-1.5,1.5),c:Math.random()<.5?'#c8e070':'#7fffd0',life:rnd(1.5,3.5)}:{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(1,8),vx:rnd(-5,-1),vy:rnd(-1,1),vz:rnd(-.5,.5),c:Math.random()<.6?'#4a5660':'#5e6a72',life:rnd(3,6)}):CH===3?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(30,70),vx:rnd(-3,3),vy:rnd(-1,1),vz:rnd(-5,-2),c:Math.random()<.6?'#c8a040':'#7a6030',life:rnd(4,7)}:CH===PORT?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(1,9),vx:rnd(-6,-2),vy:rnd(-1,1),vz:rnd(-.4,.6),c:Math.random()<.6?'#5d6f7c':'#8496a0',life:rnd(3,6)}:CH===1?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(30,70),vx:rnd(-6,2),vy:rnd(-1,1),vz:rnd(-9,-5),c:Math.random()<.6?'#6a6670':'#8a8490',life:rnd(3,6)}:{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(4,40),vx:rnd(-3,3),vy:rnd(-2,2),vz:rnd(-1,2),c:Math.random()<.7?'#5c5566':'#7d6a58',life:rnd(2,4)})}
   if(S&&CH===2&&Math.abs(pl.x/16-MP(37.5))<16&&Math.random()<dt*14)S.parts.push({k:'e',x:rnd(MP(35.2),MP(39.8))*16,y:(camTarget.z+rnd(-7,7))*16,z:-rnd(20,90),vx:rnd(-2,2),vy:0,vz:rnd(14,30),c:Math.random()<.6?'#ff6a1a':'#ffb347',life:rnd(2,4)});
   for(const o of WATER_ALL)if(o.ch===CH)o.tex.offset.set(clock*(o.deep?.0022:.004),clock*(o.deep?.0015:.0028));
@@ -5972,7 +5972,7 @@ function shockTick(dt){SHOCK.t+=dt;const u=postMat.uniforms.shock.value;if(SHOCK
 // 3) cienie od ognisk pod postaciami i wrogami (miekki shader, kierunek od najblizszych swiatel),
 // 4) kamera w walce: lekkie oddalenie przy bossie i w czasie naporu. Wszystko TYLKO wyglad: nie zmienia pozycji, zasiegow, trafien ani balansu.
 // ?oprawa3d=0 (tylko lokalnie) = porownanie przed. Na jakosci Srednia/Niska promienie sa wylaczone (GFX.fx=0).
-const NB3D_ON=nbParam('oprawa3d')!=='0';
+const NB3D_ON=nbParam('oprawa3d')!=='0',FIRE_DIM=.48;
 const NB3D={dyn:[],pool:[],pi:0,bursts:[],lights:[],si:0,zoom:1,zt:0,bossNear:false,max:56,moonCells:[]};
 const NB3D_VS=`varying vec3 vP;varying vec3 vN;varying vec3 vV;varying vec3 vC;varying vec3 vW;
  void main(){vec4 lp=vec4(position,1.);vec3 n=normal;
@@ -5994,7 +5994,7 @@ const NB3D_FS=`uniform float uT;uniform float uI;varying vec3 vP;varying vec3 vN
   float a=edge*fall*dust*uI;gl_FragColor=vec4(vC*a,1.);}`;
 const nb3dShaftMat=(k)=>new THREE.ShaderMaterial({uniforms:{uT:{value:0},uI:{value:k}},vertexShader:NB3D_VS,fragmentShader:NB3D_FS,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,fog:false});
 const NB3D_CONE=(()=>{const g=new THREE.CylinderGeometry(.16,1,1,20,4,true);g.translate(0,-.5,0);return g})();
-const NB3D_SHAFTS=(()=>{const m=new THREE.InstancedMesh(NB3D_CONE,nb3dShaftMat(1.15),NB3D.max);m.frustumCulled=false;m.renderOrder=6;for(let i=0;i<NB3D.max;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
+const NB3D_SHAFTS=(()=>{const m=new THREE.InstancedMesh(NB3D_CONE,nb3dShaftMat(.5),NB3D.max);m.frustumCulled=false;m.renderOrder=6;for(let i=0;i<NB3D.max;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
 const NB3D_MOON=(()=>{const m=new THREE.InstancedMesh(NB3D_CONE,nb3dShaftMat(.95),12);m.frustumCulled=false;m.renderOrder=6;for(let i=0;i<12;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
 // cien od swiatla: pas wychodzacy od stop w strone przeciwna do ognia; uv.y=0 przy stopach, 1 na koncu
 const NB3D_LSH=(()=>{const g=new THREE.PlaneGeometry(1,1);g.translate(0,.5,0);g.rotateX(-Math.PI/2);
@@ -6066,7 +6066,7 @@ const NB3D_CLOUD=nb3dLayer(.042,1,'vec2 p=vW.xz*.035+vec2(uT*.012,uT*.006);float
 const NB3D_FOGK={1:.24,2:.07,3:.13,4:.3,5:.1,6:.26,9:.14},NB3D_CLOUDK={1:.3,3:.2,4:.32,6:.3};
 // --- odbicia swiatel: smuga od zrodla w strone kamery, drga jak fala; tylko na mapach z deszczem (mokra ziemia) i nad woda portu
 const NB3D_REFL=(()=>{const g=new THREE.PlaneGeometry(1,1);g.translate(0,.5,0);g.rotateX(Math.PI/2);
- const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,uniforms:{uT:{value:0},uI:{value:.5}},
+ const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,uniforms:{uT:{value:0},uI:{value:.32}},
   vertexShader:'varying vec2 vU;varying vec3 vC;varying vec3 vW;void main(){vU=uv;vC=vec3(1.);\n#ifdef USE_INSTANCING_COLOR\nvC=instanceColor;\n#endif\nvec4 p=vec4(position,1.);\n#ifdef USE_INSTANCING\np=instanceMatrix*p;\n#endif\nvec4 w=modelMatrix*p;vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}',
   fragmentShader:'uniform float uT;uniform float uI;varying vec2 vU;varying vec3 vC;varying vec3 vW;'+NB3D_NZ+'void main(){float y=vU.y;float x=abs(vU.x-.5)*2.;float wob=nz(vec2(vW.z*3.1-uT*1.7,vW.x*.7));float w=mix(.95,.45,y)*(.75+.5*wob);float body=(1.-smoothstep(w*.35,w,x))*pow(1.-y,1.15)*smoothstep(0.,.06,y);float band=.55+.45*sin(vW.z*14.+uT*4.+wob*6.);gl_FragColor=vec4(vC*body*band*uI,1.);}'});
  const m=new THREE.InstancedMesh(g,mat,48);m.frustumCulled=false;m.renderOrder=3;for(let i=0;i<48;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
@@ -6118,7 +6118,7 @@ function nb3dTick2(dt){const T=clock%1000,play=!!S&&S.phase==='play',fx=NB3D_ON&
   B.m.position.copy(top);B.m.quaternion.setFromUnitVectors(UP,d.normalize());B.m.scale.set(1.9,len,1.9);B.m.material.uniforms.uT.value=T;
   B.spot.position.set(B.p.x,.07,B.p.z);B.spot.scale.set(5.2,1,4.2)}
  // cieply kontur postaci: cztery najsilniejsze ognie przy kamerze
- const FK=NB3D_FIRE;FK.k.value=NB3D_ON?.62:0;for(let i=0;i<4;i++){const L=NB3D.lights[i];if(L&&L.kind!=='zone'){FK.p.value[i].set(L.x,L.y,L.z,L.k);FK.c.value[i].setHex(L.col);FK.r.value[i]=L.dist*1.25}else FK.p.value[i].w=0}
+ const FK=NB3D_FIRE;FK.k.value=NB3D_ON?.45:0;for(let i=0;i<4;i++){const L=NB3D.lights[i];if(L&&L.kind!=='zone'){FK.p.value[i].set(L.x,L.y,L.z,L.k);FK.c.value[i].setHex(L.col);FK.r.value[i]=L.dist*1.25}else FK.p.value[i].w=0}
  // dlugie cienie przy blysku: od ksiezyca, dla rekwizytow w poblizu kamery
  NB3D2.boltShadow=NB3D_ON&&S&&SETT.flash?S.flash||0:0;
  if(NB3D2.boltShadow>.05&&PROPS){NB3D_DIR.copy(moon.position).normalize();for(const p of PROPS){if(Math.abs(p.x-cen.x)>16||Math.abs(p.y-cen.z)>12)continue;nb3dBoltShadow(p.x,p.y-.15,p.tree?1.6:1.1)}}}
