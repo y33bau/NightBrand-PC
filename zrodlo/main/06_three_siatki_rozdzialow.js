@@ -469,7 +469,7 @@ function buildSolneNabrzeze(I){
   m.rotation.x=-Math.PI/2;m.scale.y=1;m.position.y=.052;m.castShadow=false;m.receiveShadow=true;ferryRings=[[(x0+x1)/2-w/2+w*.027,z0+d*.412],[(x0+x1)/2+w/2-w*.027,z0+d*.412]];ferryBox=[x0-1.6,z0-1.6,x1+1.6,z0+d+.6]}
  else{const [fx,fy,fw,fh]=PORT_FERRY_ART,m=sprite(frames.ferry,MP(fx),MP(fy),fw,fh);m.rotation.x=-Math.PI/2;m.scale.y=1.38;m.position.y=.052;m.castShadow=false;m.receiveShadow=true}
  // koga Zakonu na kotwicy przy wschodnim pomoscie: sama dekoracja, stoi na wodzie poza polem gry
- if(P3){P3.K.finish(ROOT);const [sx,sy]=PORT_SHIP,s=port3dShip(P3,MP(sx),MP(sy)-2.6,-.19);ROOT.add(s.grp);W.portShip3=s.grp;W.portShip3.userData.y0=-.19;W.LSRC.push({col:0xffb46a,base:.8,dist:6,x:s.lamp[0],y:s.lamp[1],z:s.lamp[2],kind:'fire',ph:2.2})}
+ if(P3){P3.K.finish(ROOT);const [sx,sy]=PORT_SHIP,s=port3dShip(P3,MP(sx),MP(sy)-2.6,-.19);ROOT.add(s.grp);W.portShip3=s.grp;W.portLamp=s.lamp;W.portShip3.userData.y0=-.19;W.LSRC.push({col:0xffb46a,base:.8,dist:6,x:s.lamp[0],y:s.lamp[1],z:s.lamp[2],kind:'fire',ph:2.2})}
  else if(I.port_statek){const img=I.port_statek;img.nbDensity=img.width/96;const fr=procFrame(img,0,0,96,64,'prop'),[sx,sy,sw]=PORT_SHIP,m=sprite(fr,MP(sx),MP(sy),sw,sw*2/3);m.position.y=-.55;m.castShadow=false;W.portShip=m;
   W.LSRC.push({col:0xffb46a,base:.8,dist:6,x:MP(sx)+sw*.29,y:3.9,z:MP(sy)-.4,kind:'fire',ph:2.2})}
  const R={well:[32,32,32,32],stocks:[64,32,32,32],shrine:[96,32,32,32],gallows:[0,64,64,32],wheel:[64,96,32,32],barrel:[96,96,32,32],marga_cart:[0,128,64,32],crow_post:[64,128,32,32],covered_corpses:[96,128,32,32],order_banner:[32,160,32,32],burnt_hay:[64,160,32,32],dead_horse:[96,160,32,32],shop_sign:[0,0,32,32]};
@@ -495,7 +495,7 @@ function buildSolneNabrzeze(I){
   ROOT.add(chain);W.solneChains.push(chain);
  }
  // --- trzciny przy palach i brzegu (ta sama grafika co w Czarnoborze)
- const reeds=procFrame(I.p4_reeds,0,0,I.p4_reeds.width/(I.p4_reeds.nbDensity||1),I.p4_reeds.height/(I.p4_reeds.nbDensity||1),'prop');
+ const reeds=procFrame(I.p4_reeds,0,0,I.p4_reeds.width/(I.p4_reeds.nbDensity||1),I.p4_reeds.height/(I.p4_reeds.nbDensity||1),'prop');if(PORT3D_ON)nb3dSwayMat(reeds.n);
  for(const [x,y] of piles)if(random()<.6&&offFerry(x,y))sprite(reeds,x+.35,y+.8,1.2,1.2);
  for(let n=0;n<85;n++){
   const x=2+(random()*(MW-4)|0),y=2+(random()*(MH-4)|0);if(ground(x,y)!==45)continue;

@@ -238,7 +238,7 @@ function update(dt){if(S&&S.exec>0){S.exec-=dt;dt*=S.exec>.35?.2:.5}
   if(CH===4){if(Math.random()<dt*.04)play('howl',6);for(const q of W.wisps)if(Math.abs(q.x*16-pl.x)<240&&Math.abs(q.z*16-pl.y)<150&&Math.random()<dt*3)S.parts.push({k:'e',x:q.x*16+rnd(-4,4),y:q.z*16+rnd(-3,3),z:rnd(6,14),vx:rnd(-3,3),vy:0,vz:rnd(2,6),c:'#7fffd0',life:rnd(.6,1.2)})}
   if(CH===3)for(let i=0;i<4;i++){const q=W.rots[(Math.random()*W.rots.length)|0];if(q&&Math.abs(q[0]*16-pl.x)<220&&Math.abs(q[1]*16-pl.y)<140&&Math.random()<dt*14)S.parts.push({k:'e',x:q[0]*16+rnd(2,14),y:q[1]*16+rnd(2,14),z:0,vx:0,vy:0,vz:rnd(3,9),c:Math.random()<.5?'#b8203a':'#701226',life:rnd(.5,1.1)})}
   if(CH!==2){for(const p of PROPS)if(p.fire&&Math.random()<dt*(p.big?9:5)){S.parts.push({k:'e',x:p.x*16+rnd(-4,4),y:p.y*16-4,z:10,vx:rnd(-6,6),vy:0,vz:rnd(16,34),c:Math.random()<.5?P.ember:P.ember2,life:rnd(.8,1.6)});if(Math.random()<.35)S.parts.push({k:'a',x:p.x*16+rnd(-3,3),y:p.y*16-4,z:16,vx:rnd(-4,2),vy:0,vz:rnd(8,14),c:'#3a3640',life:rnd(1.5,3)})}
-    if(CH===1)S.nextBolt-=dt;if(S.nextBolt<=0&&!S.opening){S.nextBolt=rnd(14,30);S.flash=1;setTimeout(()=>play('thunder',0),400)}}
+    if(CH===1||(CH===PORT&&NB3D_ON))S.nextBolt-=dt;/* 18.11.2026: blyskawice takze nad portem (rzadziej) */if(S.nextBolt<=0&&!S.opening){S.nextBolt=CH===PORT?rnd(22,40):rnd(14,30);S.flash=1;setTimeout(()=>play('thunder',0),400)}}
   S.flash=Math.max(0,S.flash-dt*2.4);
   for(let i=0;i<S.shr.length;i++)S.shr[i]=Math.min(60,S.shr[i]+1.4*dt);
   for(const [x,y] of braziers)if(Math.random()<dt*4)S.parts.push({k:'e',x:x*16+8+rnd(-3,3),y:y*16+8,z:18,vx:rnd(-4,4),vy:0,vz:rnd(14,30),c:P.ember2,life:rnd(.8,1.6)});

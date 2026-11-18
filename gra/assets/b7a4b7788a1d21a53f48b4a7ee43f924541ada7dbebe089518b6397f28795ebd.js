@@ -1300,11 +1300,11 @@ function applyAtmos(){const a=ATM[CH],dp=depthOn();amb.color.setHex(a.amb);amb.i
 // moon rim light on sprites: figure pixels whose screen-left neighbour is empty get a cold edge glow (flips with the sprite mirroring)
 const RIM_K=.55;
 const RIMU={col:{value:new THREE.Color(0x9ebbea)},k:{value:0}};
-function moonRim(m,step){const prev=m.onBeforeCompile;m.customProgramCacheKey=()=>'moonrim';
-  m.onBeforeCompile=sh=>{if(prev)prev.call(m,sh);sh.uniforms.uRimC=RIMU.col;sh.uniforms.uRimK=RIMU.k;sh.uniforms.uRimStep={value:step};
-    sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying float vRimS;').replace('#include <begin_vertex>','#include <begin_vertex>\nvRimS=modelMatrix[0][0]>=0.?1.:-1.;');
-    sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying float vRimS;uniform vec3 uRimC;uniform float uRimK;uniform float uRimStep;')
-      .replace('#include <emissivemap_fragment>','#include <emissivemap_fragment>\n{float ra=texture2D(map,vUv).a;float rl=texture2D(map,vUv+vec2(-vRimS*uRimStep,0.)).a;float rl2=texture2D(map,vUv+vec2(-vRimS*uRimStep*2.,0.)).a;float rim=step(.5,ra)*(1.-step(.5,rl))+step(.5,ra)*step(.5,rl)*(1.-step(.5,rl2))*.45;totalEmissiveRadiance+=uRimC*uRimK*rim;}')}}
+function moonRim(m,step){const prev=m.onBeforeCompile;m.customProgramCacheKey=()=>'moonrim2';
+  m.onBeforeCompile=sh=>{if(prev)prev.call(m,sh);sh.uniforms.uRimC=RIMU.col;sh.uniforms.uRimK=RIMU.k;sh.uniforms.uRimStep={value:step};sh.uniforms.uFireP=NB3D_FIRE.p;sh.uniforms.uFireC=NB3D_FIRE.c;sh.uniforms.uFireR=NB3D_FIRE.r;sh.uniforms.uFireK=NB3D_FIRE.k;
+    sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying float vRimS;varying vec3 vRimO;').replace('#include <begin_vertex>','#include <begin_vertex>\nvRimS=modelMatrix[0][0]>=0.?1.:-1.;vRimO=(modelMatrix*vec4(0.,0.,0.,1.)).xyz;');
+    sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying float vRimS;varying vec3 vRimO;uniform vec3 uRimC;uniform float uRimK;uniform float uRimStep;uniform vec4 uFireP[4];uniform vec3 uFireC[4];uniform float uFireR[4];uniform float uFireK;')
+      .replace('#include <emissivemap_fragment>','#include <emissivemap_fragment>\n{float ra=texture2D(map,vUv).a;float rl=texture2D(map,vUv+vec2(-vRimS*uRimStep,0.)).a;float rl2=texture2D(map,vUv+vec2(-vRimS*uRimStep*2.,0.)).a;float rim=step(.5,ra)*(1.-step(.5,rl))+step(.5,ra)*step(.5,rl)*(1.-step(.5,rl2))*.45;totalEmissiveRadiance+=uRimC*uRimK*rim;\nif(uFireK>0.){for(int i=0;i<4;i++){vec4 L=uFireP[i];if(L.w<=0.)continue;vec2 dd=L.xz-vRimO.xz;float ds=length(dd);float k=L.w*clamp(1.-ds/uFireR[i],0.,1.)*smoothstep(.05,.45,abs(dd.x)/max(ds,.01));if(k<=0.)continue;float su=(dd.x>=0.?1.:-1.)*vRimS*uRimStep;float fa=texture2D(map,vUv+vec2(su,0.)).a;float fb=texture2D(map,vUv+vec2(su*2.,0.)).a;float fr=step(.5,ra)*(1.-step(.5,fa))+step(.5,ra)*step(.5,fa)*(1.-step(.5,fb))*.5;float sideW=clamp(.5+(dd.x>=0.?1.:-1.)*vRimS*(vUv.x-.5)*2.,0.,1.);totalEmissiveRadiance+=uFireC[i]*k*uFireK*(fr*.9+step(.5,ra)*sideW*sideW*.16);}}}')}}
 const phong=o=>{const detail=o.map&&o.map.userData&&o.map.userData.surface,m=new THREE.MeshPhongMaterial(Object.assign({shininess:0,specular:0x000000},detail?{bumpMap:o.map,bumpScale:.075,shininess:18,specular:0x151820}:{},o));if(detail)m.userData.surfaceDetail=o.map;return m};
 function canvas(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c}
 function texFrom(c,rep){const t=new THREE.CanvasTexture(c);t.magFilter=THREE.NearestFilter;t.minFilter=THREE.NearestFilter;t.generateMipmaps=false;if(rep){t.wrapS=t.wrapT=THREE.RepeatWrapping}return t}
@@ -1858,7 +1858,7 @@ function softenProps(w){// 12.11.2026: Akt I - rekwizyty bez twardego cienia z s
  w.group.traverse(o=>{if(!o.userData||!o.userData.propAsset)return;o.castShadow=false;const ms=Array.isArray(o.material)?o.material:[o.material];for(const m of ms){if(!m||seen.has(m)||!m.color||m.userData.noSoften)continue;seen.add(m);m.color.multiply(tint);if(m.emissiveMap&&m.emissive&&m.emissiveIntensity>0)m.emissiveIntensity*=.72}})}
 function finishWorldArt(w){if(depthOn(w.ch))depthApron(w);buildRoofs(w);preparePowerFires(w);if(w.ch!==PORT)composeWorldProps(w);dressSettlementsHD(w);dressNeutral(w);settleWorldProps(w);if(w.ch===1&&depthOn(1))softenProps(w);const flat=new Set(['dwarf_bones','covered_corpses','beggar_bodies','doorway_bones','wheel','burnt_hay','cz_bones','cz_pelts','cz_walk','cz_wisp','cz_crow','mushrooms','ferns','brambles','reeds','wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11','scroll','book','pages','keys','seal','purse','shackles','skull']);
   const props=w.PROPS.filter(p=>!flat.has(p.k)&&!VOID.has(tileAt(Math.floor(p.x),Math.floor(p.y-.2))));
-  w.groundShadows=instanced(groundFxGeo,groundShadowMat,props,p=>{const m=p.obj&&p.obj.mesh,s=p.k==='sacred_oak'?2.2:p.tree?.8:m?Math.min(2,Math.max(.3,m.geometry.parameters.width*Math.abs(m.scale.x)*.5)):.65;return M4.compose(V.set(p.x,.024,p.y-.1),Q.identity(),SC.set(s*1.1,1,s*.6))},false,false);
+  w.groundShadows=instanced(groundFxGeo,groundShadowMat,props,p=>{const m=p.obj&&p.obj.mesh,s=p.k==='sacred_oak'?2.2:p.tree?.8:(!m&&p.port&&PORT_PROP_SIZE[p.k])?Math.min(2,PORT_PROP_SIZE[p.k][0]*.62):m?Math.min(2,Math.max(.3,m.geometry.parameters.width*Math.abs(m.scale.x)*.5)):.65;return M4.compose(V.set(p.x,.024,p.y-.1),Q.identity(),SC.set(s*1.1,1,s*.6))},false,false);
   const lights=w.LSRC.filter(l=>['fire','shrine','rune','npc','stone','merchant'].includes(l.kind)&&l.base>0&&[-1,0,1].every(dy=>[-1,0,1].every(dx=>!VOID.has(tileAt(Math.floor(l.x)+dx,Math.floor(l.z)+dy))))).slice(0,48);w.groundL=lights;
   w.groundLights=instanced(groundFxGeo,groundGlowMat,lights,l=>{const s=l.kind==='fire'?3.5:l.kind==='shrine'?3:2.2;return M4.compose(V.set(l.x,.028,l.z),Q.identity(),SC.set(s,1,s*.7))},false,false);
   lights.forEach((l,i)=>w.groundLights.setColorAt(i,new THREE.Color(l.col)));w.groundLights.instanceColor&&(w.groundLights.instanceColor.needsUpdate=true);
@@ -2350,7 +2350,7 @@ function buildSolneNabrzeze(I){
   m.rotation.x=-Math.PI/2;m.scale.y=1;m.position.y=.052;m.castShadow=false;m.receiveShadow=true;ferryRings=[[(x0+x1)/2-w/2+w*.027,z0+d*.412],[(x0+x1)/2+w/2-w*.027,z0+d*.412]];ferryBox=[x0-1.6,z0-1.6,x1+1.6,z0+d+.6]}
  else{const [fx,fy,fw,fh]=PORT_FERRY_ART,m=sprite(frames.ferry,MP(fx),MP(fy),fw,fh);m.rotation.x=-Math.PI/2;m.scale.y=1.38;m.position.y=.052;m.castShadow=false;m.receiveShadow=true}
  // koga Zakonu na kotwicy przy wschodnim pomoscie: sama dekoracja, stoi na wodzie poza polem gry
- if(P3){P3.K.finish(ROOT);const [sx,sy]=PORT_SHIP,s=port3dShip(P3,MP(sx),MP(sy)-2.6,-.19);ROOT.add(s.grp);W.portShip3=s.grp;W.portShip3.userData.y0=-.19;W.LSRC.push({col:0xffb46a,base:.8,dist:6,x:s.lamp[0],y:s.lamp[1],z:s.lamp[2],kind:'fire',ph:2.2})}
+ if(P3){P3.K.finish(ROOT);const [sx,sy]=PORT_SHIP,s=port3dShip(P3,MP(sx),MP(sy)-2.6,-.19);ROOT.add(s.grp);W.portShip3=s.grp;W.portLamp=s.lamp;W.portShip3.userData.y0=-.19;W.LSRC.push({col:0xffb46a,base:.8,dist:6,x:s.lamp[0],y:s.lamp[1],z:s.lamp[2],kind:'fire',ph:2.2})}
  else if(I.port_statek){const img=I.port_statek;img.nbDensity=img.width/96;const fr=procFrame(img,0,0,96,64,'prop'),[sx,sy,sw]=PORT_SHIP,m=sprite(fr,MP(sx),MP(sy),sw,sw*2/3);m.position.y=-.55;m.castShadow=false;W.portShip=m;
   W.LSRC.push({col:0xffb46a,base:.8,dist:6,x:MP(sx)+sw*.29,y:3.9,z:MP(sy)-.4,kind:'fire',ph:2.2})}
  const R={well:[32,32,32,32],stocks:[64,32,32,32],shrine:[96,32,32,32],gallows:[0,64,64,32],wheel:[64,96,32,32],barrel:[96,96,32,32],marga_cart:[0,128,64,32],crow_post:[64,128,32,32],covered_corpses:[96,128,32,32],order_banner:[32,160,32,32],burnt_hay:[64,160,32,32],dead_horse:[96,160,32,32],shop_sign:[0,0,32,32]};
@@ -2376,7 +2376,7 @@ function buildSolneNabrzeze(I){
   ROOT.add(chain);W.solneChains.push(chain);
  }
  // --- trzciny przy palach i brzegu (ta sama grafika co w Czarnoborze)
- const reeds=procFrame(I.p4_reeds,0,0,I.p4_reeds.width/(I.p4_reeds.nbDensity||1),I.p4_reeds.height/(I.p4_reeds.nbDensity||1),'prop');
+ const reeds=procFrame(I.p4_reeds,0,0,I.p4_reeds.width/(I.p4_reeds.nbDensity||1),I.p4_reeds.height/(I.p4_reeds.nbDensity||1),'prop');if(PORT3D_ON)nb3dSwayMat(reeds.n);
  for(const [x,y] of piles)if(random()<.6&&offFerry(x,y))sprite(reeds,x+.35,y+.8,1.2,1.2);
  for(let n=0;n<85;n++){
   const x=2+(random()*(MW-4)|0),y=2+(random()*(MH-4)|0);if(ground(x,y)!==45)continue;
@@ -4657,7 +4657,7 @@ function bossTitle(e){const dgt=e.dgBoss&&DG_TITLES[e.type];if(dgt)return EN?[dg
 function slowMo(d,min){if(!S)return;S.slowD=Math.max(S.slowT>0?S.slowD:0,d);S.slowT=Math.max(S.slowT||0,d);S.slowMin=Math.min(S.slowT>0&&S.slowMin?S.slowMin:1,min)}
 let BOSS_CARD_UNTIL=0;
 function slowTick(dt,frozen){if(BOSS_CARD_UNTIL&&performance.now()>BOSS_CARD_UNTIL){BOSS_CARD_UNTIL=0;const c=$('bossCard');if(c){c.style.transition='opacity .6s ease';c.style.opacity='0'}}if(!S||!(S.slowT>0))return 1;if(!frozen)S.slowT-=dt;if(S.slowT<=0){S.slowT=0;S.slowMin=1;return 1}const k=S.slowT/S.slowD,m=S.slowMin;return k>.35?m:m+(1-m)*(1-k/.35)}
-function bossIntro(e){if(S.dg&&!e.dgBoss)return;const[n,t]=bossTitle(e);let c=$('bossCard');if(!c){c=document.createElement('div');c.id='bossCard';c.setAttribute('aria-live','polite');c.innerHTML='<b></b><i></i>';($('msg')&&$('msg').parentNode||document.body).appendChild(c);const st=document.createElement('style');st.textContent='#bossCard{position:absolute;left:50%;top:26%;transform:translate(-50%,-50%);z-index:40;pointer-events:none;text-align:center;opacity:0;transition:opacity .45s ease;min-width:60vw;padding:1.1em 2em;background:radial-gradient(ellipse at center,rgba(8,4,6,.82) 0%,rgba(8,4,6,.55) 45%,rgba(8,4,6,0) 72%)}#bossCard.nbbc-show{opacity:1}#bossCard b{display:block;font:700 clamp(28px,4.4vw,64px)/1.05 Georgia,serif;letter-spacing:.14em;text-transform:uppercase;color:#f0d79a;text-shadow:0 0 18px rgba(170,30,30,.75),0 3px 0 #2a0c0c}#bossCard i{display:block;margin-top:.45em;font:italic 400 clamp(15px,1.7vw,26px)/1.2 Georgia,serif;color:#d9c3a0;letter-spacing:.04em}#bossCard b:after{content:"";display:block;width:46%;height:2px;margin:.32em auto 0;background:linear-gradient(90deg,transparent,#a8322a,transparent)}';document.head.appendChild(st)}
+function bossIntro(e){if(S.dg&&!e.dgBoss)return;nb3dCine(e);const[n,t]=bossTitle(e);let c=$('bossCard');if(!c){c=document.createElement('div');c.id='bossCard';c.setAttribute('aria-live','polite');c.innerHTML='<b></b><i></i>';($('msg')&&$('msg').parentNode||document.body).appendChild(c);const st=document.createElement('style');st.textContent='#bossCard{position:absolute;left:50%;top:26%;transform:translate(-50%,-50%);z-index:40;pointer-events:none;text-align:center;opacity:0;transition:opacity .45s ease;min-width:60vw;padding:1.1em 2em;background:radial-gradient(ellipse at center,rgba(8,4,6,.82) 0%,rgba(8,4,6,.55) 45%,rgba(8,4,6,0) 72%)}#bossCard.nbbc-show{opacity:1}#bossCard b{display:block;font:700 clamp(28px,4.4vw,64px)/1.05 Georgia,serif;letter-spacing:.14em;text-transform:uppercase;color:#f0d79a;text-shadow:0 0 18px rgba(170,30,30,.75),0 3px 0 #2a0c0c}#bossCard i{display:block;margin-top:.45em;font:italic 400 clamp(15px,1.7vw,26px)/1.2 Georgia,serif;color:#d9c3a0;letter-spacing:.04em}#bossCard b:after{content:"";display:block;width:46%;height:2px;margin:.32em auto 0;background:linear-gradient(90deg,transparent,#a8322a,transparent)}';document.head.appendChild(st)}
  c.querySelector('b').textContent=n;c.querySelector('i').textContent=t;c.querySelector('i').hidden=!t;c.style.transition='none';c.style.opacity='1';BOSS_CARD_UNTIL=performance.now()+2600;slowMo(1.2,.35);padRumble(.6,.6,500)}
 // Relative to the knight's standing silhouette. Keep one size throughout the animation.
 // 15.11.2026: wieksza zaloga, bo nowy Rycerz jest wyzszy (200 px zamiast 168 w klatce): zwykli ok. 0,95 Rycerza, ciezcy ok. 1,1, Bosman ok. 1,35
@@ -5474,7 +5474,7 @@ function update(dt){if(S&&S.exec>0){S.exec-=dt;dt*=S.exec>.35?.2:.5}
   if(CH===4){if(Math.random()<dt*.04)play('howl',6);for(const q of W.wisps)if(Math.abs(q.x*16-pl.x)<240&&Math.abs(q.z*16-pl.y)<150&&Math.random()<dt*3)S.parts.push({k:'e',x:q.x*16+rnd(-4,4),y:q.z*16+rnd(-3,3),z:rnd(6,14),vx:rnd(-3,3),vy:0,vz:rnd(2,6),c:'#7fffd0',life:rnd(.6,1.2)})}
   if(CH===3)for(let i=0;i<4;i++){const q=W.rots[(Math.random()*W.rots.length)|0];if(q&&Math.abs(q[0]*16-pl.x)<220&&Math.abs(q[1]*16-pl.y)<140&&Math.random()<dt*14)S.parts.push({k:'e',x:q[0]*16+rnd(2,14),y:q[1]*16+rnd(2,14),z:0,vx:0,vy:0,vz:rnd(3,9),c:Math.random()<.5?'#b8203a':'#701226',life:rnd(.5,1.1)})}
   if(CH!==2){for(const p of PROPS)if(p.fire&&Math.random()<dt*(p.big?9:5)){S.parts.push({k:'e',x:p.x*16+rnd(-4,4),y:p.y*16-4,z:10,vx:rnd(-6,6),vy:0,vz:rnd(16,34),c:Math.random()<.5?P.ember:P.ember2,life:rnd(.8,1.6)});if(Math.random()<.35)S.parts.push({k:'a',x:p.x*16+rnd(-3,3),y:p.y*16-4,z:16,vx:rnd(-4,2),vy:0,vz:rnd(8,14),c:'#3a3640',life:rnd(1.5,3)})}
-    if(CH===1)S.nextBolt-=dt;if(S.nextBolt<=0&&!S.opening){S.nextBolt=rnd(14,30);S.flash=1;setTimeout(()=>play('thunder',0),400)}}
+    if(CH===1||(CH===PORT&&NB3D_ON))S.nextBolt-=dt;/* 18.11.2026: blyskawice takze nad portem (rzadziej) */if(S.nextBolt<=0&&!S.opening){S.nextBolt=CH===PORT?rnd(22,40):rnd(14,30);S.flash=1;setTimeout(()=>play('thunder',0),400)}}
   S.flash=Math.max(0,S.flash-dt*2.4);
   for(let i=0;i<S.shr.length;i++)S.shr[i]=Math.min(60,S.shr[i]+1.4*dt);
   for(const [x,y] of braziers)if(Math.random()<dt*4)S.parts.push({k:'e',x:x*16+8+rnd(-3,3),y:y*16+8,z:18,vx:rnd(-4,4),vy:0,vz:rnd(14,30),c:P.ember2,life:rnd(.8,1.6)});
@@ -5777,9 +5777,9 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
   let tx,tz;
   if(S){const cp=pl.dead&&pl2&&!pl2.dead?pl2:pl;tx=cp.x/16;tz=cp.y/16}else{idleA+=dt*.08;const I=W.idle;tx=I[0]+Math.sin(idleA)*I[2];tz=I[1]+Math.cos(idleA*.7)*I[3]}
   if(S&&depthOn()){const hw=11.5*KAMV[3]*Math.min(1.35,Math.max(.75,cam.aspect/(16/9)));const hx=tx,hz=tz;if(MW>hw*2+2)tx=Math.min(MW-hw,Math.max(hw,tx));tz=Math.min(MH-KAMV[5],Math.max(KAMV[4],tz));tx=Math.min(hx+hw*.6,Math.max(hx-hw*.6,tx));tz=Math.min(hz+4,Math.max(hz-2.2,tz))}
-  camTarget.x+=(tx-camTarget.x)*Math.min(1,dt*8);camTarget.z+=(tz-camTarget.z)*Math.min(1,dt*8);if(!S||S.t<.1){camTarget.x=tx;camTarget.z=tz}
+  let cineZ=1;if(NB3D2.cine){const q=nb3dCineT(dt,tx,tz);tx=q[0];tz=q[1];cineZ=q[2]}camTarget.x+=(tx-camTarget.x)*Math.min(1,dt*8);camTarget.z+=(tz-camTarget.z)*Math.min(1,dt*8);if(!S||S.t<.1){camTarget.x=tx;camTarget.z=tz}
   let sx=0,sz=0;if(SETT.shake&&S&&S.shakeT>0){const pxw=2*DIST*Math.tan(KAMH)/RT_H;S.shkT=(S.shkT||0)-dt;if(S.shkT<=0||!S.shk){S.shkT=.04;S.shk=[Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw,Math.round(rnd(-1,1)*S.shakeM/pxw)*pxw/Math.sin(PITCH)]}sx=S.shk[0];sz=S.shk[1]}
-  const EZ=(S&&S.exec>0&&SETT.shake?1-.16*Math.min(1,S.exec/.3):1)*nb3dZoom(dt);cam.position.set(camTarget.x+sx,Math.sin(PITCH)*DIST*EZ,camTarget.z+Math.cos(PITCH)*DIST*EZ+sz);cam.lookAt(camTarget.x+sx,.8,camTarget.z+sz);syncSwordGlow();syncCombatEffects(dt);syncWhirlVisual(dt);syncBloodHD(dt);
+  const EZ=(S&&S.exec>0&&SETT.shake?1-.16*Math.min(1,S.exec/.3):1)*nb3dZoom(dt)*cineZ;cam.position.set(camTarget.x+sx,Math.sin(PITCH)*DIST*EZ,camTarget.z+Math.cos(PITCH)*DIST*EZ+sz);cam.lookAt(camTarget.x+sx,.8,camTarget.z+sz);syncSwordGlow();syncCombatEffects(dt);syncWhirlVisual(dt);syncBloodHD(dt);
   const z0=S&&S.zones[0];if(z0){W.zoneLight.x=z0.x/16;W.zoneLight.z=z0.y/16}
   for(const L of LSRC){let k=L.base;
     if(L.kind==='fire')k*=.85+Math.sin(clock*13+L.ph)*.08+Math.random()*.12;else if(L.kind==='lava'||L.kind==='rot')k*=.9+Math.sin(clock*1.7+L.ph)*.1;else if(L.kind==='rune')k*=.75+.25*Math.sin(clock*2+L.ph);
@@ -5803,7 +5803,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
   const wf=((clock*3)|0)%4;if(CH===1&&wf!==waterFrame&&waterFrames.length){waterFrame=wf;waterG.clearRect(0,0,64,64);waterG.drawImage(waterFrames[wf],0,0);waterTex.needsUpdate=true}
   // weather and dawn (chapter I)
   const fl=SETT.flash&&S?S.flash:0,dawn=CH!==2&&S&&S.opening?Math.min(1,(3.4-S.opening)/2.4):0,AT=ATM[CH];
-  amb.intensity=AT.ai+fl*1.4+dawn*.9;hemi.intensity=AT.hi+fl*.8+dawn*.5;if(dawn>0){TMPC.setHex(AT.amb);amb.color.copy(TMPC.lerp(DAWN,dawn))}else amb.color.setHex(AT.amb);
+  amb.intensity=AT.ai+fl*1.4+dawn*.9;hemi.intensity=AT.hi+fl*.8+dawn*.5;if(dawn>0){TMPC.setHex(AT.amb);amb.color.copy(TMPC.lerp(DAWN,dawn))}else amb.color.setHex(AT.amb);nb3dNight();
   postMat.uniforms.flash.value=fl*.3;postMat.uniforms.haze.value=CH===2&&S&&S.phase==='play'&&!S.dg&&SETT.quality!=='low'?1:0;postMat.uniforms.tm.value=clock%600;postMat.uniforms.grain.value=SETT.quality==='low'?0:chapterArt()?.015:.03;postMat.uniforms.gtm.value=SETT.flash?clock%600:0;postMat.uniforms.sharp.value=S&&S.shakeT>0?1:Math.max(0,postMat.uniforms.sharp.value-dt*4);
   rain.visible=CH===1||CH===PORT;if(rain.visible){rain.material.opacity=(CH===PORT?.13:CH1_ART_ON?.20:.32)*(1-dawn*.7);for(let i=0;i<RAIN_N;i++){const d=DROPS[i];d.y-=d.s*dt;d.x-=d.s*.12*dt;if(d.y<0){d.y+=12;d.x=rnd(-15,15);d.z=rnd(-10,10);if(S&&dt>0&&i%9===0)S.parts.push({k:'d',x:(camTarget.x+d.x)*16,y:(camTarget.z+d.z)*16,z:1,vx:rnd(-6,6),vy:rnd(-3,3),vz:rnd(8,14),c:'#6a7a96',life:.25})}
     const x=camTarget.x+d.x,z=camTarget.z+d.z,o=i*6,hid=CH===PORT&&portCovered(x,z);rainPos[o]=x;rainPos[o+1]=hid?-99:d.y;rainPos[o+2]=z;rainPos[o+3]=x+.07;rainPos[o+4]=hid?-99:d.y-.55;rainPos[o+5]=z}rainGeo.attributes.position.needsUpdate=true}
@@ -6016,10 +6016,11 @@ function nb3dDyn(x,y,z,col,k,dist,pri){const o=NB3D.pool[NB3D.pi]||(NB3D.pool[NB
 function nb3dDynLights(dt){NB3D.dyn.length=0;NB3D.pi=0;if(!NB3D_ON||!S)return NB3D.dyn;
  for(const p of S.swordShots||[])if(p&&p.t>0)nb3dDyn(p.x/16,.75,p.y/16,p.ice?0x8fd6ff:0xff8a3a,p.ice?1.15:1.7,p.ice?4.2:5.2,.55);
  let n=0;for(const f of S.eproj||[]){if(n>=6)break;if(f&&(!f.anim||f.anim===A.fireball)){nb3dDyn(f.x/16,.7,f.y/16,0xff7a2c,1.25,4.2,.7);n++}}
+ if(NB3D_BEAM.on)nb3dDyn(NB3D_BEAM.p.x,1.7,NB3D_BEAM.p.z,0xcfdcff,1.45,7.5,.5);
  for(let i=NB3D.bursts.length-1;i>=0;i--){const b=NB3D.bursts[i];b.t+=dt;if(b.t>=b.life){NB3D.bursts.splice(i,1);continue}const f=1-b.t/b.life;nb3dDyn(b.x,1.1,b.z,b.col,b.k*f*f,b.dist,.4)}
  return NB3D.dyn}
 // --- cienie od swiatel pod postaciami
-function nb3dShadow(x,z,s){if(!NB3D_ON||NB3D.si>=690)return;let a=null,b=null,sa=0,sb=0;
+function nb3dShadow(x,z,s){if(!NB3D_ON||NB3D.si>=690)return;if(NB3D2.boltShadow>.05)nb3dBoltShadow(x,z,s);let a=null,b=null,sa=0,sb=0;
  for(const L of NB3D.lights){const dx=x-L.x,dz=z-L.z,d=Math.hypot(dx,dz),r=L.dist*1.15;if(d>r||d<.12)continue;const st=L.k*(1-d/r);if(st>sa){b=a;sb=sa;a=L;sa=st}else if(st>sb){b=L;sb=st}}
  for(const [L,st] of [[a,sa],[b,sb]]){if(!L||st<.05||NB3D.si>=690)continue;const dx=x-L.x,dz=z-L.z,d=Math.hypot(dx,dz),ln=Math.min(3.6,s*(.85+d*.5/Math.max(.6,L.y*.8))),w=s*.82;
   NB3D_E.set(0,Math.atan2(-dx,-dz),0);NB3D_Q.setFromEuler(NB3D_E);NB3D_M.compose(NB3D_V.set(x,.036,z),NB3D_Q,NB3D_S.set(w,1,ln));NB3D_LSH.setMatrixAt(NB3D.si,NB3D_M);NB3D_C.setRGB(Math.min(.68,st*1.25),0,0);NB3D_LSH.setColorAt(NB3D.si,NB3D_C);NB3D.si++}}
@@ -6027,7 +6028,7 @@ function nb3dShadowEnd(){NB3D_LSH.count=NB3D.si;NB3D_LSH.instanceMatrix.needsUpd
 // --- promienie w mgle i smugi ksiezyca
 const NB3D_MOON_CH={1:1,3:.8,4:1,6:1.1};
 function nb3dTick(dt,nearL){const on=NB3D_ON&&GFX.fx>0;NB3D.lights.length=0;for(const L of nearL){if(NB3D.lights.length>=8)break;if(L.kind==='fire'||L.kind==='lava'||L.kind==='dyn'||L.kind==='zone')NB3D.lights.push(L)}
- NB3D_SHAFTS.material.uniforms.uT.value=NB3D_MOON.material.uniforms.uT.value=clock%1000;
+ NB3D_SHAFTS.material.uniforms.uT.value=NB3D_MOON.material.uniforms.uT.value=clock%1000;try{nb3dTick2(dt)}catch(e){quietErr('nb3d2',e)}
  if(W&&W.portShip3){const g=W.portShip3;g.position.y=g.userData.y0+Math.sin(clock*.7)*.05;g.rotation.z=Math.sin(clock*.53)*.018;g.rotation.x=Math.sin(clock*.41+1)*.012}
  if(!on){NB3D_SHAFTS.count=0;NB3D_MOON.count=0;return}
  let n=0;for(const L of LSRC){if(n>=NB3D.max)break;if(L.kind!=='fire'||!(L.k>0)||L.d>24)continue;const low=L.y<1.05,len=low?2.4:L.y+.15,r=low?.75:.9+L.y*.42;
@@ -6044,6 +6045,84 @@ function nb3dTick(dt,nearL){const on=NB3D_ON&&GFX.fx>0;NB3D.lights.length=0;for(
 function nb3dZoom(dt){if(!NB3D_ON||!S||S.phase!=='play'){NB3D.zoom+=(1-NB3D.zoom)*Math.min(1,dt*2);return NB3D.zoom}
  NB3D.zt-=dt;if(NB3D.zt<=0){NB3D.zt=.3;NB3D.bossNear=false;for(const e of S.enemies){if(e.dead||!bossBar(e))continue;if(Math.hypot(e.x-pl.x,e.y-pl.y)<22*16){NB3D.bossNear=true;break}}}
  const tg=NB3D.bossNear?1.09:surgeOn()?1.05:1;NB3D.zoom+=(tg-NB3D.zoom)*Math.min(1,dt*1.1);return NB3D.zoom}
+
+// ===== 18.11.2026 (runda oprawa-2, decyzja autora: "rob wszystko oprocz brył"; nowe shadery za zgoda autora) =====
+// mgla przy ziemi, cienie chmur, odbicia swiatel na mokrej ziemi i wodzie (deszcz), kregi deszczu na wodzie portu, wiatr w trzcinach,
+// noc, ktora sie zmienia (ksiezyc wedruje, polnoc ciemniejsza, przedswit), blyskawice z dlugimi cieniami, reflektor Zakonu w porcie,
+// najazd kamery przy wejsciu bossa (wylaczany opcja "Wstrzasy kamery"), cieply kontur postaci od strony ognia. Wszystko TYLKO wyglad.
+const NB3D_NZ=`float hh(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+ float nz(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hh(i),hh(i+vec2(1.,0.)),f.x),mix(hh(i+vec2(0.,1.)),hh(i+1.),f.x),f.y);}
+ float fbm(vec2 p){return .55*nz(p)+.3*nz(p*2.07+7.3)+.15*nz(p*4.31+13.1);}`;
+const NB3D2={cine:null,ringT:0,boltShadow:0,windK:{value:.05},refl:null};
+// --- warstwy przy ziemi: mgla (dwie warstwy) i cienie chmur; plaszczyzny jada z kamera, wzor jest przypiety do swiata (nie plywa)
+function nb3dLayer(y,order,frag,blend){const g=new THREE.PlaneGeometry(70,56);g.rotateX(-Math.PI/2);
+ const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,blending:blend||THREE.NormalBlending,uniforms:{uT:{value:0},uC:{value:new THREE.Color()},uA:{value:0},uCen:{value:new THREE.Vector2()}},
+  vertexShader:'varying vec3 vW;void main(){vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}',
+  fragmentShader:'uniform float uT;uniform vec3 uC;uniform float uA;uniform vec2 uCen;varying vec3 vW;'+NB3D_NZ+'void main(){float edge=1.-smoothstep(20.,30.,length(vW.xz-uCen));'+frag+'}'});
+ const m=new THREE.Mesh(g,mat);m.position.y=y;m.renderOrder=order;m.frustumCulled=false;m.visible=false;scene.add(m);return m}
+const NB3D_FOG=[nb3dLayer(.32,5,'vec2 p=vW.xz*.11+vec2(uT*.045,uT*.016);float n=fbm(p);gl_FragColor=vec4(uC,smoothstep(.42,.86,n)*uA*edge);'),
+ nb3dLayer(.85,5,'vec2 p=vW.xz*.07+vec2(-uT*.03,uT*.021);float n=fbm(p+3.7);gl_FragColor=vec4(uC,smoothstep(.48,.9,n)*uA*.75*edge);')];
+const NB3D_CLOUD=nb3dLayer(.042,1,'vec2 p=vW.xz*.035+vec2(uT*.012,uT*.006);float n=fbm(p);gl_FragColor=vec4(.01,.012,.02,smoothstep(.45,.75,n)*uA*edge);');
+const NB3D_FOGK={1:.24,2:.07,3:.13,4:.3,5:.1,6:.26,9:.14},NB3D_CLOUDK={1:.3,3:.2,4:.32,6:.3};
+// --- odbicia swiatel: smuga od zrodla w strone kamery, drga jak fala; tylko na mapach z deszczem (mokra ziemia) i nad woda portu
+const NB3D_REFL=(()=>{const g=new THREE.PlaneGeometry(1,1);g.translate(0,.5,0);g.rotateX(Math.PI/2);
+ const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,uniforms:{uT:{value:0},uI:{value:.5}},
+  vertexShader:'varying vec2 vU;varying vec3 vC;varying vec3 vW;void main(){vU=uv;vC=vec3(1.);\n#ifdef USE_INSTANCING_COLOR\nvC=instanceColor;\n#endif\nvec4 p=vec4(position,1.);\n#ifdef USE_INSTANCING\np=instanceMatrix*p;\n#endif\nvec4 w=modelMatrix*p;vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}',
+  fragmentShader:'uniform float uT;uniform float uI;varying vec2 vU;varying vec3 vC;varying vec3 vW;'+NB3D_NZ+'void main(){float y=vU.y;float x=abs(vU.x-.5)*2.;float wob=nz(vec2(vW.z*3.1-uT*1.7,vW.x*.7));float w=mix(.95,.45,y)*(.75+.5*wob);float body=(1.-smoothstep(w*.35,w,x))*pow(1.-y,1.15)*smoothstep(0.,.06,y);float band=.55+.45*sin(vW.z*14.+uT*4.+wob*6.);gl_FragColor=vec4(vC*body*band*uI,1.);}'});
+ const m=new THREE.InstancedMesh(g,mat,48);m.frustumCulled=false;m.renderOrder=3;for(let i=0;i<48;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
+// --- kregi deszczu na wodzie portu (kaluze maja swoje od 9.11)
+const NB3D_RING=(()=>{const g=new THREE.PlaneGeometry(1,1);g.rotateX(-Math.PI/2);
+ const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,blending:THREE.AdditiveBlending,uniforms:{},
+  vertexShader:'varying vec2 vU;varying float vA;void main(){vU=uv;vA=0.;\n#ifdef USE_INSTANCING_COLOR\nvA=instanceColor.r;\n#endif\nvec4 p=vec4(position,1.);\n#ifdef USE_INSTANCING\np=instanceMatrix*p;\n#endif\ngl_Position=projectionMatrix*viewMatrix*modelMatrix*p;}',
+  fragmentShader:'varying vec2 vU;varying float vA;void main(){float d=length(vU-.5)*2.;float r=vA;float ring=smoothstep(r-.12,r,d)*(1.-smoothstep(r,r+.05,d));float r2=r*.6;ring+=.5*smoothstep(r2-.1,r2,d)*(1.-smoothstep(r2,r2+.04,d));gl_FragColor=vec4(vec3(.42,.5,.6)*ring*(1.-vA)*.55,1.);}'});
+ const m=new THREE.InstancedMesh(g,mat,40);m.frustumCulled=false;m.renderOrder=3;for(let i=0;i<40;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return {m,list:[]}})();
+// --- reflektor Zakonu: snop z latarni kogi omiata nabrzeze (tylko port)
+const NB3D_BEAM=(()=>{const m=new THREE.Mesh(NB3D_CONE,nb3dShaftMat(.5));m.frustumCulled=false;m.renderOrder=6;m.visible=false;scene.add(m);
+ const spot=new THREE.Mesh(new THREE.PlaneGeometry(1,1).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({map:glowC('#cfdcff'),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.35,fog:false}));spot.visible=false;spot.renderOrder=3;scene.add(spot);return {m,spot,p:new THREE.Vector3(),on:false}})();
+// --- wiatr: kolysanie trzcin (i innych pojedynczych roslin), mocniej w czasie naporu
+function nb3dSwayMat(m){if(!m||m.userData.nbWind)return;m.userData.nbWind=1;const prev=m.onBeforeCompile,pk=m.customProgramCacheKey?m.customProgramCacheKey():'';
+ m.onBeforeCompile=(sh,r)=>{if(prev)prev.call(m,sh,r);sh.uniforms.uSway=SWAY;sh.uniforms.uWind=NB3D2.windK;sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nuniform float uSway;uniform float uWind;').replace('#include <begin_vertex>','#include <begin_vertex>\n{float ph=modelMatrix[3].x*.73+modelMatrix[3].z*.51;float hg=clamp(position.y/1.3,0.,1.);transformed.x+=(sin(uSway*1.9+ph)*.65+sin(uSway*.71+ph*1.7)*.35)*uWind*hg*hg/max(abs(modelMatrix[0][0]),.2);}')};
+ m.customProgramCacheKey=()=>pk+'|nbwind';m.needsUpdate=true}
+// --- cieply kontur od strony ognia na postaciach (rozszerza moonRim): wspolne uniformy dla wszystkich klatek
+const NB3D_FIRE={p:{value:[0,1,2,3].map(()=>new THREE.Vector4(0,0,0,0))},c:{value:[0,1,2,3].map(()=>new THREE.Color())},r:{value:[1,1,1,1]},k:{value:0}};
+// --- najazd kamery na bossa
+function nb3dCine(e){if(!NB3D_ON||!SETT.shake||!e)return;NB3D2.cine={t:0,len:2.1,x:e.x/16,z:e.y/16}}
+function nb3dCineT(dt,tx,tz){const c=NB3D2.cine;if(!c)return [tx,tz,1];c.t+=dt;if(c.t>=c.len){NB3D2.cine=null;return [tx,tz,1]}
+ const w=c.t<.45?c.t/.45:c.t>c.len-.6?(c.len-c.t)/.6:1,e=w*w*(3-2*w)*.62;return [tx+(c.x-tx)*e,tz+(c.z-tz)*e,1-.2*e]}
+// --- noc: ksiezyc wedruje, polnoc ciemniejsza, przed switem chlodniej (mnoznik swiatla otoczenia; balans bez zmian)
+function nb3dNight(){if(!NB3D_ON||!S||S.dg){moon.position.set(-6,14,-10);return}const f=Math.min(1,Math.max(0,S.t/NIGHT)),a=-1.15+2.3*f;moon.position.set(Math.sin(a)*13,14-4*Math.abs(Math.sin(a)),-10+Math.cos(a)*3);
+ if(S.phase!=='play'||S.opening)return;const mid=Math.exp(-Math.pow((S.t-BREAK_AT)/170,2)),late=Math.max(0,Math.min(1,(S.t-(NIGHT-160))/160));
+ amb.intensity*=1-.13*mid+.06*late;hemi.intensity*=1-.15*mid+.1*late;if(late>0)amb.color.lerp(TMPC.setHex(0xa8b8dc),.22*late)}
+// --- wspolna klatka dla wszystkich efektow tej rundy (wolana z nb3dTick)
+function nb3dTick2(dt){const T=clock%1000,play=!!S&&S.phase==='play',fx=NB3D_ON&&GFX.fx>0,cen=camTarget;
+ // wiatr
+ NB3D2.windK.value+=((NB3D_ON?(S&&surgeOn()?.13:.055):0)-NB3D2.windK.value)*Math.min(1,dt*.8);
+ // mgla i chmury
+ const fk=fx?(NB3D_FOGK[S&&S.dg?9:CH]||0):0,ck=fx&&!(S&&S.dg)?(NB3D_CLOUDK[CH]||0):0;
+ for(const m of NB3D_FOG){m.visible=fk>0;if(!m.visible)continue;m.position.x=cen.x;m.position.z=cen.z;const u=m.material.uniforms;u.uT.value=T;u.uA.value=fk;u.uCen.value.set(cen.x,cen.z);u.uC.value.copy(scene.fog.color).lerp(TMPC.setHex(ATM[CH]?ATM[CH].mc||0xb8c4dd:0xb8c4dd),.55).multiplyScalar(1.15)}
+ NB3D_CLOUD.visible=ck>0;if(ck>0){NB3D_CLOUD.position.x=cen.x;NB3D_CLOUD.position.z=cen.z;const u=NB3D_CLOUD.material.uniforms;u.uT.value=T;u.uA.value=ck;u.uCen.value.set(cen.x,cen.z)}
+ // odbicia swiatel (deszcz: rozdzial I i port)
+ const wet=fx&&(CH===1||CH===PORT)&&!(S&&S.dg);let n=0;
+ if(wet){NB3D_REFL.material.uniforms.uT.value=T;const add=(x,y,z,col,k)=>{if(n>=48)return;const h=Math.max(.2,y),len=1.4+h*1.5,w=.42+h*.18;NB3D_M.compose(NB3D_V.set(x,.06,z+h*.45),NB3D_Q.identity(),NB3D_S.set(w,1,len));NB3D_REFL.setMatrixAt(n,NB3D_M);NB3D_C.setHex(col).multiplyScalar(Math.min(1.5,k));NB3D_REFL.setColorAt(n,NB3D_C);n++};
+  for(const L of LSRC){if(L.kind!=='fire'||!(L.k>0)||L.d>22)continue;add(L.x,L.y,L.z,L.col,L.k/(L.base||1))}
+  for(const L of NB3D.dyn)add(L.x,L.y,L.z,L.col,L.k*.6)}
+ NB3D_REFL.count=n;NB3D_REFL.instanceMatrix.needsUpdate=true;if(NB3D_REFL.instanceColor)NB3D_REFL.instanceColor.needsUpdate=true;
+ // kregi deszczu na wodzie portu
+ const R=NB3D_RING,rain=fx&&CH===PORT&&W&&W.waters&&W.waters.length&&!(S&&S.dg);let rc=0;
+ if(rain){NB3D2.ringT+=dt*26;while(NB3D2.ringT>1&&R.list.length<40){NB3D2.ringT--;for(let k=0;k<6;k++){const t=W.waters[(Math.random()*W.waters.length)|0];if(Math.abs(t[0]+.5-cen.x)<17&&Math.abs(t[1]+.5-cen.z)<13){R.list.push({x:t[0]+Math.random(),z:t[1]+Math.random(),a:0,s:.5+Math.random()*.6});break}}}if(NB3D2.ringT>1)NB3D2.ringT=1;
+  for(let i=R.list.length-1;i>=0;i--){const r=R.list[i];r.a+=dt/.85;if(r.a>=1){R.list.splice(i,1);continue}NB3D_M.compose(NB3D_V.set(r.x,-.165,r.z),NB3D_Q.identity(),NB3D_S.set(r.s,1,r.s));R.m.setMatrixAt(rc,NB3D_M);NB3D_C.setRGB(r.a,0,0);R.m.setColorAt(rc,NB3D_C);rc++}}else R.list.length=0;
+ R.m.count=rc;R.m.instanceMatrix.needsUpdate=true;if(R.m.instanceColor)R.m.instanceColor.needsUpdate=true;
+ // reflektor Zakonu
+ const B=NB3D_BEAM;B.on=fx&&CH===PORT&&!!(W&&W.portLamp)&&!(S&&S.dg);B.m.visible=B.spot.visible=B.on;
+ if(B.on){const [lx,ly,lz]=W.portLamp,t=clock;B.p.set(lx-13+Math.sin(t*.19)*17,0,lz+8.5+Math.sin(t*.37+1)*4.5);const top=NB3D_V.set(lx,ly,lz),d=top.clone().sub(B.p),len=d.length();
+  B.m.position.copy(top);B.m.quaternion.setFromUnitVectors(UP,d.normalize());B.m.scale.set(1.9,len,1.9);B.m.material.uniforms.uT.value=T;
+  B.spot.position.set(B.p.x,.07,B.p.z);B.spot.scale.set(5.2,1,4.2)}
+ // cieply kontur postaci: cztery najsilniejsze ognie przy kamerze
+ const FK=NB3D_FIRE;FK.k.value=NB3D_ON?.62:0;for(let i=0;i<4;i++){const L=NB3D.lights[i];if(L&&L.kind!=='zone'){FK.p.value[i].set(L.x,L.y,L.z,L.k);FK.c.value[i].setHex(L.col);FK.r.value[i]=L.dist*1.25}else FK.p.value[i].w=0}
+ // dlugie cienie przy blysku: od ksiezyca, dla rekwizytow w poblizu kamery
+ NB3D2.boltShadow=NB3D_ON&&S&&SETT.flash?S.flash||0:0;
+ if(NB3D2.boltShadow>.05&&PROPS){NB3D_DIR.copy(moon.position).normalize();for(const p of PROPS){if(Math.abs(p.x-cen.x)>16||Math.abs(p.y-cen.z)>12)continue;nb3dBoltShadow(p.x,p.y-.15,p.tree?1.6:1.1)}}}
+function nb3dBoltShadow(x,z,s){if(NB3D.si>=690)return;const k=NB3D2.boltShadow,ln=Math.min(7,s*4.2);NB3D_E.set(0,Math.atan2(NB3D_DIR.x,NB3D_DIR.z),0);NB3D_Q.setFromEuler(NB3D_E);NB3D_M.compose(NB3D_V.set(x,.037,z),NB3D_Q,NB3D_S.set(s*.8,1,ln));NB3D_LSH.setMatrixAt(NB3D.si,NB3D_M);NB3D_C.setRGB(Math.min(.8,k*.9),0,0);NB3D_LSH.setColorAt(NB3D.si,NB3D_C);NB3D.si++}
 /* ============ MINIMAP ============ */
 const MINI={fog:canvas(MW,MH),t:0};
 const MCOL={20:'#34303c',26:'#34303c',30:'#34303c',29:'#8a6a2a',32:'#3b3128',25:'#6a6070',24:'#d4500e',23:'#140406',22:'#15131a',27:'#ff8a2a',31:'#4a4452',
