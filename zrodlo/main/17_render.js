@@ -223,7 +223,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
   const mc=S&&S.merchant;margaMesh.visible=!!mc;if(mc){setFrame(margaMesh,at(A.marga,clock,3));margaMesh.position.set(mc.x/16,0,mc.y/16);const k=mc.state==='in'?1-mc.t:mc.state==='out'?mc.t:1;margaMesh.scale.set(1,SQ*Math.max(.05,k),1);blob(mc.x/16,mc.y/16,1);W.merchantLight.x=mc.x/16;W.merchantLight.z=mc.y/16+.3}
   if(S&&S.collector&&!S.collector.dead&&Math.random()<dt*10){const c=S.collector,a=Math.random()*Math.PI*2;S.parts.push({k:'e',x:c.x+Math.cos(a)*14,y:c.y+Math.sin(a)*8,z:rnd(6,26),vx:-Math.sin(a)*10,vy:Math.cos(a)*6,vz:rnd(2,8),c:Math.random()<.6?'#e0b84a':'#fff0b0',life:rnd(.6,1.2)})}
 }
-function draw(){const tD=SETT.fpsShow?performance.now():0;renderer.setRenderTarget(rt);renderer.render(scene,cam);{const ub=postMat.uniforms.low.value<.5;postMat.uniforms.useB.value=ub?1:0;if(ub)blurPasses()}if(tD){const r=renderer.info.render;FPS.calls=r.calls;FPS.tri=r.triangles}renderer.setRenderTarget(null);renderer.render(postScene,postCam);if(tD)FPS.draw+=performance.now()-tD}
+function draw(){const tD=SETT.fpsShow?performance.now():0;postMat.uniforms.uSh.value=NB3D_ON?(GFX.fx>=2?.35:GFX.fx>=1?.45:.3):0;renderer.setRenderTarget(rt);renderer.render(scene,cam);{const ub=postMat.uniforms.low.value<.5;postMat.uniforms.useB.value=ub?1:0;if(ub)blurPasses()}if(tD){const r=renderer.info.render;FPS.calls=r.calls;FPS.tri=r.triangles}renderer.setRenderTarget(null);renderer.render(postScene,postCam);if(tD)FPS.draw+=performance.now()-tD}
 
 
 /* 9.11.2026: oprawa: klimat w powietrzu (drobinki dla każdego rozdziału, pasma mgły w Czarnoborze), kałuże z kręgami w deszczu (rozdz. I),
@@ -379,12 +379,13 @@ function nb3dZoom(dt){if(!NB3D_ON||!S||S.phase!=='play'){NB3D.zoom+=(1-NB3D.zoom
 const NB3D_NZ=`float hh(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
  float nz(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hh(i),hh(i+vec2(1.,0.)),f.x),mix(hh(i+vec2(0.,1.)),hh(i+1.),f.x),f.y);}
  float fbm(vec2 p){return .55*nz(p)+.3*nz(p*2.07+7.3)+.15*nz(p*4.31+13.1);}`;
+const NB3D_PL={value:new THREE.Vector4(-99,-99,-99,-99)};
 const NB3D2={cine:null,ringT:0,boltShadow:0,windK:{value:.05},refl:null};
 // --- warstwy przy ziemi: mgla (dwie warstwy) i cienie chmur; plaszczyzny jada z kamera, wzor jest przypiety do swiata (nie plywa)
 function nb3dLayer(y,order,frag,blend){const g=new THREE.PlaneGeometry(70,56);g.rotateX(-Math.PI/2);
- const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,blending:blend||THREE.NormalBlending,uniforms:{uT:{value:0},uC:{value:new THREE.Color()},uA:{value:0},uCen:{value:new THREE.Vector2()}},
+ const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,blending:blend||THREE.NormalBlending,uniforms:{uT:{value:0},uC:{value:new THREE.Color()},uA:{value:0},uCen:{value:new THREE.Vector2()},uP:NB3D_PL},
   vertexShader:'varying vec3 vW;void main(){vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}',
-  fragmentShader:'uniform float uT;uniform vec3 uC;uniform float uA;uniform vec2 uCen;varying vec3 vW;'+NB3D_NZ+'void main(){float edge=1.-smoothstep(20.,30.,length(vW.xz-uCen));'+frag+'}'});
+  fragmentShader:'uniform float uT;uniform vec3 uC;uniform float uA;uniform vec2 uCen;uniform vec4 uP;varying vec3 vW;'+NB3D_NZ+'void main(){float edge=(1.-smoothstep(20.,30.,length(vW.xz-uCen)))*smoothstep(.9,2.4,length(vW.xz-uP.xy))*smoothstep(.9,2.4,length(vW.xz-uP.zw));'+frag+'}'});
  const m=new THREE.Mesh(g,mat);m.position.y=y;m.renderOrder=order;m.frustumCulled=false;m.visible=false;scene.add(m);return m}
 const NB3D_FOG=[nb3dLayer(.32,5,'vec2 p=vW.xz*.11+vec2(uT*.045,uT*.016);float n=fbm(p);gl_FragColor=vec4(uC,smoothstep(.34,.8,n)*uA*edge);'),
  nb3dLayer(.85,5,'vec2 p=vW.xz*.07+vec2(-uT*.03,uT*.021);float n=fbm(p+3.7);gl_FragColor=vec4(uC,smoothstep(.48,.9,n)*uA*.75*edge);')];
@@ -420,7 +421,7 @@ function nb3dNight(){if(!NB3D_ON||!S||S.dg){moon.position.set(-6,14,-10);return}
  if(S.phase!=='play'||S.opening)return;const mid=Math.exp(-Math.pow((S.t-BREAK_AT)/170,2)),late=Math.max(0,Math.min(1,(S.t-(NIGHT-160))/160));
  amb.intensity*=1-.13*mid+.06*late;hemi.intensity*=1-.15*mid+.1*late;if(late>0)amb.color.lerp(TMPC.setHex(0xa8b8dc),.22*late)}
 // --- wspolna klatka dla wszystkich efektow tej rundy (wolana z nb3dTick)
-function nb3dTick2(dt){const T=clock%1000,play=!!S&&S.phase==='play',fx=NB3D_ON&&GFX.fx>0,cen=camTarget;
+function nb3dTick2(dt){{const a=S&&pl&&!pl.dead?pl:null,b=S&&pl2&&!pl2.dead?pl2:null;NB3D_PL.value.set(a?a.x/16:-99,a?a.y/16:-99,b?b.x/16:-99,b?b.y/16:-99)}const T=clock%1000,play=!!S&&S.phase==='play',fx=NB3D_ON&&GFX.fx>0,cen=camTarget;
  // wiatr
  NB3D2.windK.value+=((NB3D_ON?(S&&surgeOn()?.13:.055):0)-NB3D2.windK.value)*Math.min(1,dt*.8);
  // mgla i chmury

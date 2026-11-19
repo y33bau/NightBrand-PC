@@ -1,7 +1,8 @@
 // Runda 308: dynamiczna rozdzielczosc sceny. Co ok. 60 klatek liczy "wolne" klatki (dluzsze niz cel * 1.25); przy >=25% wolnych obniza skale sceny (do podlogi 450 px wysokosci),
 // przy 0 wolnych i po przerwie podnosi ja malymi krokami. Cel: limit klatek (45 liczone jak 30) albo 60. Okno uwzglednia faktyczne odswiezanie ekranu (najmniejszy dt).
 function dynOn(){return SETT.gDyn==='on'||(SETT.gDyn==='auto'&&(SETT.qmode==='auto'||SETT.qmode==='ultra'||SETT.qmode==='high'))}
-function rtApply(){const w=FIT.w,h=FIT.h,port=h>w,q=Math.round((GFX.res||RT_H)*SETT.rscale*dynS),rw=port?q:Math.round(q*w/h),rh=port?Math.round(q*h/w):q;rt.setSize(rw,rh);postMat.uniforms.res.value.set(rw,rh)}
+function nbResH(){if(GFX.res<0)return Math.max(720,Math.min(2160,Math.round(FIT.h*Math.min(GFX.dpr,window.devicePixelRatio||1))));return GFX.res||RT_H}
+function rtApply(){const w=FIT.w,h=FIT.h,port=h>w,q=Math.round(nbResH()*SETT.rscale*dynS),rw=port?q:Math.round(q*w/h),rh=port?Math.round(q*h/w):q;rt.setSize(rw,rh);postMat.uniforms.res.value.set(rw,rh)}
 function dynReset(){dynS=1;dynN=dynSlow=dynPrev=0;dynBlock=0;dynHold=8000}
 function dynTick(now){
   if(!dynOn()){if(dynS!==1){dynReset();rtApply()}dynPrev=0;return}
@@ -12,7 +13,7 @@ function dynTick(now){
   const cap=SETT.fpsCap,T=Math.max(1000/(cap===45?30:(cap||60)),Math.min(dynMin,16.67));
   dynN++;if(dt>T*1.15)dynSlow++;
   if(dynN<60)return;
-  const floor=Math.min(1,450/((GFX.res||RT_H)*SETT.rscale));
+  const floor=Math.min(1,450/(nbResH()*SETT.rscale));
   if(dynSlow>=12&&dynS>floor+.001){dynS=Math.max(floor,dynS*.88);if(now-dynUpT<4000)dynHold=Math.min(60000,dynHold*2);dynBlock=now+dynHold;rtApply()}
   else if(dynSlow===0&&dynS<1&&now>dynBlock){dynS=Math.min(1,dynS*1.06);dynUpT=now;rtApply()}
   else if(dynS>=1)dynHold=8000;

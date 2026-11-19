@@ -3371,10 +3371,10 @@ const colCache={};const col=h=>colCache[h]||(colCache[h]=new THREE.Color(h));
 
 // post-processing: low-res target, tilt-shift blur at top and bottom, vignette
 const rt=new THREE.WebGLRenderTarget(16,9,{minFilter:THREE.LinearFilter,magFilter:THREE.LinearFilter});
-const postMat=new THREE.ShaderMaterial({uniforms:{tD:{value:rt.texture},tB:{value:null},useB:{value:0},shock:{value:new THREE.Vector4()},res:{value:new THREE.Vector2(480,270)},hurt:{value:0},flash:{value:0},sharp:{value:0},bri:{value:1},low:{value:0},hq:{value:0},haze:{value:0},tm:{value:0},gSh:{value:new THREE.Vector3(1,1,1)},gHi:{value:new THREE.Vector3(1,1,1)},gSat:{value:1},gCon:{value:1},grain:{value:0},gtm:{value:0},cold:{value:new THREE.Color(0xdceaff)},warm:{value:new THREE.Color(0xffeedc)}},
+const postMat=new THREE.ShaderMaterial({uniforms:{tD:{value:rt.texture},uSh:{value:0},tB:{value:null},useB:{value:0},shock:{value:new THREE.Vector4()},res:{value:new THREE.Vector2(480,270)},hurt:{value:0},flash:{value:0},sharp:{value:0},bri:{value:1},low:{value:0},hq:{value:0},haze:{value:0},tm:{value:0},gSh:{value:new THREE.Vector3(1,1,1)},gHi:{value:new THREE.Vector3(1,1,1)},gSat:{value:1},gCon:{value:1},grain:{value:0},gtm:{value:0},cold:{value:new THREE.Color(0xdceaff)},warm:{value:new THREE.Color(0xffeedc)}},
   vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}',
-  fragmentShader:`uniform sampler2D tD;uniform sampler2D tB;uniform float useB;uniform vec4 shock;uniform vec2 res;uniform float hurt;uniform float flash;uniform float sharp;uniform float bri;uniform float low;uniform float hq;uniform float haze;uniform float tm;uniform vec3 gSh;uniform vec3 gHi;uniform float gSat;uniform float gCon;uniform float grain;uniform float gtm;uniform vec3 cold;uniform vec3 warm;varying vec2 vUv;
-  void main(){float u=max(res.y/720.,1.);vec2 uv=vUv;float sk=0.;if(shock.w>0.){float ar=res.x/res.y;vec2 d=(vUv-shock.xy)*vec2(ar,1.);float r=length(d);sk=smoothstep(.06,0.,abs(r-shock.z*.95))*shock.w;uv-=d/max(r,1e-4)*sk*.022/vec2(ar,1.);}if(haze>0.){vec3 h0=texture2D(tD,uv-vec2(0.,.03)).rgb;float hot=smoothstep(.22,.55,h0.r-h0.b)*smoothstep(.5,.85,h0.r);uv.x+=(sin(uv.y*95.+tm*5.3)+sin(uv.y*41.-tm*3.1))*.0013*hot*haze;}vec3 c=texture2D(tD,uv).rgb;float focus=smoothstep(.28,.51,abs(vUv.y-.51))*(1.-sharp);
+  fragmentShader:`uniform sampler2D tD;uniform float uSh;uniform sampler2D tB;uniform float useB;uniform vec4 shock;uniform vec2 res;uniform float hurt;uniform float flash;uniform float sharp;uniform float bri;uniform float low;uniform float hq;uniform float haze;uniform float tm;uniform vec3 gSh;uniform vec3 gHi;uniform float gSat;uniform float gCon;uniform float grain;uniform float gtm;uniform vec3 cold;uniform vec3 warm;varying vec2 vUv;
+  void main(){float u=max(res.y/720.,1.);vec2 uv=vUv;float sk=0.;if(shock.w>0.){float ar=res.x/res.y;vec2 d=(vUv-shock.xy)*vec2(ar,1.);float r=length(d);sk=smoothstep(.06,0.,abs(r-shock.z*.95))*shock.w;uv-=d/max(r,1e-4)*sk*.022/vec2(ar,1.);}if(haze>0.){vec3 h0=texture2D(tD,uv-vec2(0.,.03)).rgb;float hot=smoothstep(.22,.55,h0.r-h0.b)*smoothstep(.5,.85,h0.r);uv.x+=(sin(uv.y*95.+tm*5.3)+sin(uv.y*41.-tm*3.1))*.0013*hot*haze;}vec3 c=texture2D(tD,uv).rgb;if(uSh>0.){vec2 px=1./res;vec3 nb=texture2D(tD,uv+vec2(0.,px.y)).rgb+texture2D(tD,uv-vec2(0.,px.y)).rgb+texture2D(tD,uv+vec2(px.x,0.)).rgb+texture2D(tD,uv-vec2(px.x,0.)).rgb;c=max(c+(c-nb*.25)*uSh,vec3(0.));}float focus=smoothstep(.28,.51,abs(vUv.y-.51))*(1.-sharp);
     if(useB>.5){vec3 b=texture2D(tB,uv).rgb;float fo=smoothstep(.24,.5,abs(vUv.y-.5))*(1.-sharp*.7);c=mix(c,b,fo*.72);vec3 bl=max(b-vec3(.45),vec3(0.));c+=bl*bl*.8+bl*.12;}
     else if(low<.5){vec3 soft=vec3(0.),glow=vec3(0.);float total=0.;
       for(int i=-1;i<=1;i++)for(int j=-1;j<=1;j++){float w=1.-.22*float(i*i+j*j);vec3 s=texture2D(tD,vUv+vec2(float(i),float(j))*(2.+focus*1.5)*u/res).rgb;soft+=s*w;glow+=max(s-vec3(.52),vec3(0.))*w;total+=w;}
@@ -3419,8 +3419,8 @@ let dynS=1,dynN=0,dynSlow=0,dynPrev=0,dynBlock=0,dynHold=8000,dynUpT=0,dynMin=1e
 // Runda 309: tekstury ziemi 2048 px (powiekszone Real-ESRGAN), pobierane dopiero przy wlaczeniu (Ultra albo przelacznik); klucz = nazwa obrazu z IMGS
 const HD_TEX={"cc0_ash":"assets/tekstury/5118a73dc051461831a7ec6849e8252ffe8dbb59550ab487cd54743ea9bab01e.webp","cc0_blackrock":"assets/tekstury/fa68ce09d94814fc9f1210db166712cf89ba57f999352bc3a63f082d1a4b784c.webp","cc0_charcoal":"assets/tekstury/9a3a981e012c1389ca8cc99da2e7ce7207d4a358eeda4941ab20951e1e18277f.webp","cc0_cracks":"assets/tekstury/65539f806640d93b275f593e69ad4b88d3943e12b35afa36f068b4cbcdad37f3.webp","cc0_darkrock":"assets/tekstury/dd6c90379c1bfbd65a18dd4bc7558abf6d07d1a503cc61935054883aab9ea034.webp","cc0_deski":"assets/tekstury/128c08a55828210e58b651ea27d5f6ad2da2701d75ec7846f699d52cae16b319.webp","cc0_dirt2":"assets/tekstury/306e8fcf61c811a1e339bc1d5f75b6425229836d186edbd3bef77388d89664c6.webp","cc0_dirt3":"assets/tekstury/727e1104e3cc10a78070062925f6da05117271d6590660fada9213a8d0c019cf.webp","cc0_forestmoss":"assets/tekstury/af61fa84c04b16c222106029c6d52d3b6cc6db64239a660ce551d5ab8f723abf.webp","cc0_ground1":"assets/tekstury/a4270839a1096193c3ce3dc8fb2d986220cdf7abf973d87bd313716c0048589c.webp","cc0_ground2":"assets/tekstury/c82e6e215e6388da0597c82a80b8270fa5567cb1b201e6b60a23c76d76cd1081.webp","cc0_leaves":"assets/tekstury/326121aa341243cebe25304f4f4197b01cb2b5d3811545e179e7fb4f89770ed4.webp","cc0_moss1":"assets/tekstury/eea3ac29fefc677a880c1c65b78304c5ab556246a94024c5bd945ccee057d12e.webp","cc0_mud":"assets/tekstury/1d6401e33794ecc7ad47603637bd66400e67b3589939e636bb6aba7fa36ad9ca.webp","cc0_zl_moss":"assets/tekstury/fe7538557374cd93e15752591c2e8b7f35c94bcb7418252a8e8ca6b8baea8fc9.webp","cc0_zl_place":"assets/tekstury/5a2a739d1c3f3faa3bc93a16e9392538abe93466a18b3c7e8e508613c112c0ec.webp","cc0_zl_street":"assets/tekstury/dc2682873abe84e63272b66f641d3b37ba42c168157be5432eb8439ca6b9aba3.webp"},HDREG=[],HDIMG={};
 // graphics presets (Runda 306): shadow 0/1/2 (off/normal/high), lights = dynamic point lights, fx 0/1/2 (none/standard/high glow+blur), parts = particle multiplier, res = scene height (0 = automatic), aniso = texture filtering
-const GPRE={ultra:{shadow:2,lights:10,fx:2,parts:1.5,res:1080,aniso:16,dpr:2,hdTex:1},high:{shadow:1,lights:10,fx:1,parts:1,res:0,aniso:4,dpr:1.5,hdTex:0},mid:{shadow:0,lights:4,fx:0,parts:.5,res:540,aniso:1,dpr:1,hdTex:0},min:{shadow:0,lights:4,fx:0,parts:.5,res:540,aniso:1,dpr:1,hdTex:0}};
-const GFX={shadow:1,lights:10,fx:1,parts:1,res:0,aniso:4,dpr:1.5,hdTex:0};
+const GPRE={/* 19.11.2026: ostrzejszy obraz (autor): Wysoka 1080 linii zamiast 720, Ultra natywna rozdzielczosc ekranu (res -1); gdy gra klatkuje, dynamiczne skalowanie samo obniza */ultra:{shadow:2,lights:10,fx:2,parts:1.5,res:-1,aniso:16,dpr:2,hdTex:1},high:{shadow:1,lights:10,fx:1,parts:1,res:1080,aniso:4,dpr:1.5,hdTex:0},mid:{shadow:0,lights:4,fx:0,parts:.5,res:540,aniso:1,dpr:1,hdTex:0},min:{shadow:0,lights:4,fx:0,parts:.5,res:540,aniso:1,dpr:1,hdTex:0}};
+const GFX={shadow:1,lights:10,fx:1,parts:1,res:1080,aniso:4,dpr:1.5,hdTex:0};
 function gfxResolve(){const m=SETT.qmode==='auto'?(SETT.quality==='high'?'high':'mid'):SETT.qmode,p=GPRE[m]||GPRE.high;for(const [k,o] of [['shadow','gShadow'],['lights','gLights'],['fx','gFx'],['parts','gParts'],['res','gRes'],['dpr','gDpr'],['hdTex','gTex']])GFX[k]=SETT[o]==='auto'?p[k]:SETT[o];GFX.aniso=p.aniso}
 function isRecord(x){return !!x&&typeof x==='object'&&!Array.isArray(x)}
 function clampNumber(x,min,max,fallback){return Number.isFinite(+x)?Math.max(min,Math.min(max,+x)):fallback}
@@ -5897,7 +5897,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
   const mc=S&&S.merchant;margaMesh.visible=!!mc;if(mc){setFrame(margaMesh,at(A.marga,clock,3));margaMesh.position.set(mc.x/16,0,mc.y/16);const k=mc.state==='in'?1-mc.t:mc.state==='out'?mc.t:1;margaMesh.scale.set(1,SQ*Math.max(.05,k),1);blob(mc.x/16,mc.y/16,1);W.merchantLight.x=mc.x/16;W.merchantLight.z=mc.y/16+.3}
   if(S&&S.collector&&!S.collector.dead&&Math.random()<dt*10){const c=S.collector,a=Math.random()*Math.PI*2;S.parts.push({k:'e',x:c.x+Math.cos(a)*14,y:c.y+Math.sin(a)*8,z:rnd(6,26),vx:-Math.sin(a)*10,vy:Math.cos(a)*6,vz:rnd(2,8),c:Math.random()<.6?'#e0b84a':'#fff0b0',life:rnd(.6,1.2)})}
 }
-function draw(){const tD=SETT.fpsShow?performance.now():0;renderer.setRenderTarget(rt);renderer.render(scene,cam);{const ub=postMat.uniforms.low.value<.5;postMat.uniforms.useB.value=ub?1:0;if(ub)blurPasses()}if(tD){const r=renderer.info.render;FPS.calls=r.calls;FPS.tri=r.triangles}renderer.setRenderTarget(null);renderer.render(postScene,postCam);if(tD)FPS.draw+=performance.now()-tD}
+function draw(){const tD=SETT.fpsShow?performance.now():0;postMat.uniforms.uSh.value=NB3D_ON?(GFX.fx>=2?.35:GFX.fx>=1?.45:.3):0;renderer.setRenderTarget(rt);renderer.render(scene,cam);{const ub=postMat.uniforms.low.value<.5;postMat.uniforms.useB.value=ub?1:0;if(ub)blurPasses()}if(tD){const r=renderer.info.render;FPS.calls=r.calls;FPS.tri=r.triangles}renderer.setRenderTarget(null);renderer.render(postScene,postCam);if(tD)FPS.draw+=performance.now()-tD}
 
 
 /* 9.11.2026: oprawa: klimat w powietrzu (drobinki dla każdego rozdziału, pasma mgły w Czarnoborze), kałuże z kręgami w deszczu (rozdz. I),
@@ -6053,12 +6053,13 @@ function nb3dZoom(dt){if(!NB3D_ON||!S||S.phase!=='play'){NB3D.zoom+=(1-NB3D.zoom
 const NB3D_NZ=`float hh(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
  float nz(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hh(i),hh(i+vec2(1.,0.)),f.x),mix(hh(i+vec2(0.,1.)),hh(i+1.),f.x),f.y);}
  float fbm(vec2 p){return .55*nz(p)+.3*nz(p*2.07+7.3)+.15*nz(p*4.31+13.1);}`;
+const NB3D_PL={value:new THREE.Vector4(-99,-99,-99,-99)};
 const NB3D2={cine:null,ringT:0,boltShadow:0,windK:{value:.05},refl:null};
 // --- warstwy przy ziemi: mgla (dwie warstwy) i cienie chmur; plaszczyzny jada z kamera, wzor jest przypiety do swiata (nie plywa)
 function nb3dLayer(y,order,frag,blend){const g=new THREE.PlaneGeometry(70,56);g.rotateX(-Math.PI/2);
- const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,blending:blend||THREE.NormalBlending,uniforms:{uT:{value:0},uC:{value:new THREE.Color()},uA:{value:0},uCen:{value:new THREE.Vector2()}},
+ const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,blending:blend||THREE.NormalBlending,uniforms:{uT:{value:0},uC:{value:new THREE.Color()},uA:{value:0},uCen:{value:new THREE.Vector2()},uP:NB3D_PL},
   vertexShader:'varying vec3 vW;void main(){vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}',
-  fragmentShader:'uniform float uT;uniform vec3 uC;uniform float uA;uniform vec2 uCen;varying vec3 vW;'+NB3D_NZ+'void main(){float edge=1.-smoothstep(20.,30.,length(vW.xz-uCen));'+frag+'}'});
+  fragmentShader:'uniform float uT;uniform vec3 uC;uniform float uA;uniform vec2 uCen;uniform vec4 uP;varying vec3 vW;'+NB3D_NZ+'void main(){float edge=(1.-smoothstep(20.,30.,length(vW.xz-uCen)))*smoothstep(.9,2.4,length(vW.xz-uP.xy))*smoothstep(.9,2.4,length(vW.xz-uP.zw));'+frag+'}'});
  const m=new THREE.Mesh(g,mat);m.position.y=y;m.renderOrder=order;m.frustumCulled=false;m.visible=false;scene.add(m);return m}
 const NB3D_FOG=[nb3dLayer(.32,5,'vec2 p=vW.xz*.11+vec2(uT*.045,uT*.016);float n=fbm(p);gl_FragColor=vec4(uC,smoothstep(.34,.8,n)*uA*edge);'),
  nb3dLayer(.85,5,'vec2 p=vW.xz*.07+vec2(-uT*.03,uT*.021);float n=fbm(p+3.7);gl_FragColor=vec4(uC,smoothstep(.48,.9,n)*uA*.75*edge);')];
@@ -6094,7 +6095,7 @@ function nb3dNight(){if(!NB3D_ON||!S||S.dg){moon.position.set(-6,14,-10);return}
  if(S.phase!=='play'||S.opening)return;const mid=Math.exp(-Math.pow((S.t-BREAK_AT)/170,2)),late=Math.max(0,Math.min(1,(S.t-(NIGHT-160))/160));
  amb.intensity*=1-.13*mid+.06*late;hemi.intensity*=1-.15*mid+.1*late;if(late>0)amb.color.lerp(TMPC.setHex(0xa8b8dc),.22*late)}
 // --- wspolna klatka dla wszystkich efektow tej rundy (wolana z nb3dTick)
-function nb3dTick2(dt){const T=clock%1000,play=!!S&&S.phase==='play',fx=NB3D_ON&&GFX.fx>0,cen=camTarget;
+function nb3dTick2(dt){{const a=S&&pl&&!pl.dead?pl:null,b=S&&pl2&&!pl2.dead?pl2:null;NB3D_PL.value.set(a?a.x/16:-99,a?a.y/16:-99,b?b.x/16:-99,b?b.y/16:-99)}const T=clock%1000,play=!!S&&S.phase==='play',fx=NB3D_ON&&GFX.fx>0,cen=camTarget;
  // wiatr
  NB3D2.windK.value+=((NB3D_ON?(S&&surgeOn()?.13:.055):0)-NB3D2.windK.value)*Math.min(1,dt*.8);
  // mgla i chmury
@@ -7791,7 +7792,8 @@ function frameLimit(){return SETT.quality==='low'?.2:.5}
 // Runda 308: dynamiczna rozdzielczosc sceny. Co ok. 60 klatek liczy "wolne" klatki (dluzsze niz cel * 1.25); przy >=25% wolnych obniza skale sceny (do podlogi 450 px wysokosci),
 // przy 0 wolnych i po przerwie podnosi ja malymi krokami. Cel: limit klatek (45 liczone jak 30) albo 60. Okno uwzglednia faktyczne odswiezanie ekranu (najmniejszy dt).
 function dynOn(){return SETT.gDyn==='on'||(SETT.gDyn==='auto'&&(SETT.qmode==='auto'||SETT.qmode==='ultra'||SETT.qmode==='high'))}
-function rtApply(){const w=FIT.w,h=FIT.h,port=h>w,q=Math.round((GFX.res||RT_H)*SETT.rscale*dynS),rw=port?q:Math.round(q*w/h),rh=port?Math.round(q*h/w):q;rt.setSize(rw,rh);postMat.uniforms.res.value.set(rw,rh)}
+function nbResH(){if(GFX.res<0)return Math.max(720,Math.min(2160,Math.round(FIT.h*Math.min(GFX.dpr,window.devicePixelRatio||1))));return GFX.res||RT_H}
+function rtApply(){const w=FIT.w,h=FIT.h,port=h>w,q=Math.round(nbResH()*SETT.rscale*dynS),rw=port?q:Math.round(q*w/h),rh=port?Math.round(q*h/w):q;rt.setSize(rw,rh);postMat.uniforms.res.value.set(rw,rh)}
 function dynReset(){dynS=1;dynN=dynSlow=dynPrev=0;dynBlock=0;dynHold=8000}
 function dynTick(now){
   if(!dynOn()){if(dynS!==1){dynReset();rtApply()}dynPrev=0;return}
@@ -7802,7 +7804,7 @@ function dynTick(now){
   const cap=SETT.fpsCap,T=Math.max(1000/(cap===45?30:(cap||60)),Math.min(dynMin,16.67));
   dynN++;if(dt>T*1.15)dynSlow++;
   if(dynN<60)return;
-  const floor=Math.min(1,450/((GFX.res||RT_H)*SETT.rscale));
+  const floor=Math.min(1,450/(nbResH()*SETT.rscale));
   if(dynSlow>=12&&dynS>floor+.001){dynS=Math.max(floor,dynS*.88);if(now-dynUpT<4000)dynHold=Math.min(60000,dynHold*2);dynBlock=now+dynHold;rtApply()}
   else if(dynSlow===0&&dynS<1&&now>dynBlock){dynS=Math.min(1,dynS*1.06);dynUpT=now;rtApply()}
   else if(dynS>=1)dynHold=8000;
