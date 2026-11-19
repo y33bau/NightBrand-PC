@@ -1296,7 +1296,7 @@ if(ART_ON){
   GRADE[6]=[[.84,.98,1.09],[1.03,1.02,.99],.91,1.05];
   ART_LIGHT[6]=[0xd3e0e5,1.28,8.5];
 }
-function applyAtmos(){const a=ATM[CH],dp=depthOn();amb.color.setHex(a.amb);amb.intensity=a.ai*(dp?dp[0]:1);hemi.color.setHex(a.hs);hemi.groundColor.setHex(a.hg);hemi.intensity=a.hi*(dp?dp[1]:1);scene.fog.color.setHex(a.fog);scene.fog.density=a.fd;renderer.setClearColor(a.clear);moon.intensity=a.mi||0;if(a.mc)moon.color.setHex(a.mc);RIMU.k.value=RIM_K*(.5+(a.mi||0)*3);RIMU.col.value.setHex(a.mc||0x9ebbea);if(filmUniforms){filmUniforms.cold.value.setHex(a.cold);filmUniforms.warm.value.setHex(a.warm);const g=GRADE[CH]||GRADE[9];filmUniforms.gSh.value.set(...g[0]);filmUniforms.gHi.value.set(...g[1]);filmUniforms.gSat.value=g[2];filmUniforms.gCon.value=g[3]}if(typeof setAmbience==='function')setAmbience()}
+function applyAtmos(){const a=ATM[CH],dp=depthOn();amb.color.setHex(a.amb);amb.intensity=a.ai*(dp?dp[0]:1);hemi.color.setHex(a.hs);hemi.groundColor.setHex(a.hg);hemi.intensity=a.hi*(dp?dp[1]:1);scene.fog.color.setHex(a.fog);scene.fog.density=a.fd;renderer.setClearColor(a.clear);moon.intensity=a.mi||0;if(a.mc)moon.color.setHex(a.mc);RIMU.k.value=RIM_K*(.5+(a.mi||0)*3);RIMU.col.value.setHex(a.mc||0x9ebbea);if(filmUniforms){filmUniforms.cold.value.setHex(a.cold);filmUniforms.warm.value.setHex(a.warm);const g=GRADE[CH]||GRADE[9],gk=nbParam('oprawa3d')!=='0'?1.8:1,sc=v=>1+(v-1)*gk;/* 19.11.2026: filmowe kolory rozdzialow mocniej (autor) */filmUniforms.gSh.value.set(...g[0].map(sc));filmUniforms.gHi.value.set(...g[1].map(sc));filmUniforms.gSat.value=sc(g[2]);filmUniforms.gCon.value=sc(g[3])}if(typeof setAmbience==='function')setAmbience()}
 // moon rim light on sprites: figure pixels whose screen-left neighbour is empty get a cold edge glow (flips with the sprite mirroring)
 const RIM_K=.55;
 const RIMU={col:{value:new THREE.Color(0x9ebbea)},k:{value:0}};
@@ -5887,7 +5887,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
     pGeo.setDrawRange(0,n);pGeo.attributes.position.needsUpdate=true;pGeo.attributes.color.needsUpdate=true;
     postMat.uniforms.hurt.value=SETT.flash?Math.max(S.hurt*1.2,pl.dead?.25:0,(!pl.dead&&pl.hp<pl.max*.3)?(.12+.08*Math.sin(clock*5)):0):pl.dead?.18:pl.hp<pl.max*.3?.1:0;
   }else{heroMesh.visible=false;if(mesh2)mesh2.visible=false;if(mpTotLast)mpTotLast.visible=false;mpHudTick();pGeo.setDrawRange(0,0);postMat.uniforms.hurt.value=0}
-  blobs.count=bi;blobs.instanceMatrix.needsUpdate=true;nb3dShadowEnd();
+  blobs.count=bi;blobs.instanceMatrix.needsUpdate=true;nb3dShadowEnd();try{nb3dRefl()}catch(e){quietErr('nb3dRefl',e)}
   decalT-=dt;if(decalDirty&&decalT<=0){decalTex.needsUpdate=true;decalDirty=false;decalT=.15}
   updatePowerVisuals();
   // talk prompt
@@ -5898,7 +5898,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMark
   const mc=S&&S.merchant;margaMesh.visible=!!mc;if(mc){setFrame(margaMesh,at(A.marga,clock,3));margaMesh.position.set(mc.x/16,0,mc.y/16);const k=mc.state==='in'?1-mc.t:mc.state==='out'?mc.t:1;margaMesh.scale.set(1,SQ*Math.max(.05,k),1);blob(mc.x/16,mc.y/16,1);W.merchantLight.x=mc.x/16;W.merchantLight.z=mc.y/16+.3}
   if(S&&S.collector&&!S.collector.dead&&Math.random()<dt*10){const c=S.collector,a=Math.random()*Math.PI*2;S.parts.push({k:'e',x:c.x+Math.cos(a)*14,y:c.y+Math.sin(a)*8,z:rnd(6,26),vx:-Math.sin(a)*10,vy:Math.cos(a)*6,vz:rnd(2,8),c:Math.random()<.6?'#e0b84a':'#fff0b0',life:rnd(.6,1.2)})}
 }
-function draw(){const tD=SETT.fpsShow?performance.now():0;postMat.uniforms.uSh.value=NB3D_ON?(GFX.fx>=2?.35:GFX.fx>=1?.45:.3):0;renderer.setRenderTarget(rt);renderer.render(scene,cam);{const ub=postMat.uniforms.low.value<.5;postMat.uniforms.useB.value=ub?1:0;if(ub)blurPasses()}if(tD){const r=renderer.info.render;FPS.calls=r.calls;FPS.tri=r.triangles}renderer.setRenderTarget(null);renderer.render(postScene,postCam);if(tD)FPS.draw+=performance.now()-tD}
+function draw(){const tD=SETT.fpsShow?performance.now():0;postMat.uniforms.uSh.value=NB3D_ON?(GFX.fx>=2?.25:GFX.fx>=1?.3:.2):0;renderer.setRenderTarget(rt);renderer.render(scene,cam);{const ub=postMat.uniforms.low.value<.5;postMat.uniforms.useB.value=ub?1:0;if(ub)blurPasses()}if(tD){const r=renderer.info.render;FPS.calls=r.calls;FPS.tri=r.triangles}renderer.setRenderTarget(null);renderer.render(postScene,postCam);if(tD)FPS.draw+=performance.now()-tD}
 
 
 /* 9.11.2026: oprawa: klimat w powietrzu (drobinki dla każdego rozdziału, pasma mgły w Czarnoborze), kałuże z kręgami w deszczu (rozdz. I),
@@ -5995,7 +5995,7 @@ const NB3D_FS=`uniform float uT;uniform float uI;uniform float uE;varying vec3 v
   float a=edge*fall*dust*uI;gl_FragColor=vec4(vC*a,1.);}`;
 const nb3dShaftMat=(k,e=1.8)=>new THREE.ShaderMaterial({uniforms:{uT:{value:0},uI:{value:k},uE:{value:e}},vertexShader:NB3D_VS,fragmentShader:NB3D_FS,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,fog:false});
 const NB3D_CONE=(()=>{const g=new THREE.CylinderGeometry(.16,1,1,20,4,true);g.translate(0,-.5,0);return g})();
-const NB3D_SHAFTS=(()=>{const m=new THREE.InstancedMesh(NB3D_CONE,nb3dShaftMat(.85),NB3D.max);m.frustumCulled=false;m.renderOrder=6;for(let i=0;i<NB3D.max;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
+const NB3D_SHAFTS=(()=>{const m=new THREE.InstancedMesh(NB3D_CONE,nb3dShaftMat(.62),NB3D.max);m.frustumCulled=false;m.renderOrder=6;for(let i=0;i<NB3D.max;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
 const NB3D_MOON=(()=>{const m=new THREE.InstancedMesh(NB3D_CONE,nb3dShaftMat(1.25,3.),12);m.frustumCulled=false;m.renderOrder=6;for(let i=0;i<12;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
 // cien od swiatla: pas wychodzacy od stop w strone przeciwna do ognia; uv.y=0 przy stopach, 1 na koncu
 const NB3D_LSH=(()=>{const g=new THREE.PlaneGeometry(1,1);g.translate(0,.5,0);g.rotateX(-Math.PI/2);
@@ -6009,7 +6009,7 @@ const NB3D_LSH=(()=>{const g=new THREE.PlaneGeometry(1,1);g.translate(0,.5,0);g.
   #endif
   gl_Position=projectionMatrix*viewMatrix*modelMatrix*p;}`,
   fragmentShader:`varying vec2 vU;varying float vO;void main(){float w=mix(.95,.5,vU.y);float d=abs(vU.x-.5)*2./w;float a=(1.-smoothstep(.35,1.,d))*pow(1.-vU.y,1.3)*smoothstep(0.,.06,vU.y);gl_FragColor=vec4(.015,.012,.03,a*vO);}`});
- const m=new THREE.InstancedMesh(g,mat,700);m.frustumCulled=false;m.renderOrder=-1;for(let i=0;i<700;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
+ const m=new THREE.InstancedMesh(g,mat,1200);m.frustumCulled=false;m.renderOrder=-1;for(let i=0;i<1200;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
 const NB3D_M=new THREE.Matrix4(),NB3D_Q=new THREE.Quaternion(),NB3D_V=new THREE.Vector3(),NB3D_S=new THREE.Vector3(),NB3D_C=new THREE.Color(),NB3D_DIR=new THREE.Vector3(),NB3D_E=new THREE.Euler();
 // --- ruchome swiatla: pociski i krotkie blyski wybuchow
 function nb3dBurst(x,y,col,k,dist,life){if(!NB3D_ON)return;if(NB3D.bursts.length>12)NB3D.bursts.shift();NB3D.bursts.push({x:x/16,z:y/16,col,k,dist,life,t:0})}
@@ -6021,9 +6021,9 @@ function nb3dDynLights(dt){NB3D.dyn.length=0;NB3D.pi=0;if(!NB3D_ON||!S)return NB
  for(let i=NB3D.bursts.length-1;i>=0;i--){const b=NB3D.bursts[i];b.t+=dt;if(b.t>=b.life){NB3D.bursts.splice(i,1);continue}const f=1-b.t/b.life;nb3dDyn(b.x,1.1,b.z,b.col,b.k*f*f,b.dist,.4)}
  return NB3D.dyn}
 // --- cienie od swiatel pod postaciami
-function nb3dShadow(x,z,s){if(!NB3D_ON||NB3D.si>=690)return;if(NB3D2.boltShadow>.05)nb3dBoltShadow(x,z,s);let a=null,b=null,sa=0,sb=0;
+function nb3dShadow(x,z,s){if(!NB3D_ON||NB3D.si>=1190)return;if(NB3D2.boltShadow>.05)nb3dBoltShadow(x,z,s);else if(nb3dMoonOn())nb3dMoonShadow(x,z,s,.26);let a=null,b=null,sa=0,sb=0;
  for(const L of NB3D.lights){const dx=x-L.x,dz=z-L.z,d=Math.hypot(dx,dz),r=L.dist*1.15;if(d>r||d<.12)continue;const st=L.k*(1-d/r);if(st>sa){b=a;sb=sa;a=L;sa=st}else if(st>sb){b=L;sb=st}}
- for(const [L,st] of [[a,sa],[b,sb]]){if(!L||st<.05||NB3D.si>=690)continue;const dx=x-L.x,dz=z-L.z,d=Math.hypot(dx,dz),ln=Math.min(3.6,s*(.85+d*.5/Math.max(.6,L.y*.8))),w=s*.82;
+ for(const [L,st] of [[a,sa],[b,sb]]){if(!L||st<.05||NB3D.si>=1190)continue;const dx=x-L.x,dz=z-L.z,d=Math.hypot(dx,dz),ln=Math.min(3.6,s*(.85+d*.5/Math.max(.6,L.y*.8))),w=s*.82;
   NB3D_E.set(0,Math.atan2(-dx,-dz),0);NB3D_Q.setFromEuler(NB3D_E);NB3D_M.compose(NB3D_V.set(x,.036,z),NB3D_Q,NB3D_S.set(w,1,ln));NB3D_LSH.setMatrixAt(NB3D.si,NB3D_M);NB3D_C.setRGB(Math.min(.82,st*1.5),0,0);NB3D_LSH.setColorAt(NB3D.si,NB3D_C);NB3D.si++}}
 function nb3dShadowEnd(){NB3D_LSH.count=NB3D.si;NB3D_LSH.instanceMatrix.needsUpdate=true;if(NB3D_LSH.instanceColor)NB3D_LSH.instanceColor.needsUpdate=true;NB3D.si=0}
 // --- promienie w mgle i smugi ksiezyca
@@ -6068,7 +6068,7 @@ const NB3D_CLOUD=nb3dLayer(.042,1,'vec2 p=vW.xz*.035+vec2(uT*.012,uT*.006);float
 const NB3D_FOGK={1:.4,2:.14,3:.24,4:.5,5:.2,6:.4,9:.26},NB3D_CLOUDK={1:.55,3:.4,4:.58,6:.55};
 // --- odbicia swiatel: smuga od zrodla w strone kamery, drga jak fala; tylko na mapach z deszczem (mokra ziemia) i nad woda portu
 const NB3D_REFL=(()=>{const g=new THREE.PlaneGeometry(1,1);g.translate(0,.5,0);g.rotateX(Math.PI/2);
- const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,uniforms:{uT:{value:0},uI:{value:.8}},
+ const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,uniforms:{uT:{value:0},uI:{value:.5}},
   vertexShader:'varying vec2 vU;varying vec3 vC;varying vec3 vW;void main(){vU=uv;vC=vec3(1.);\n#ifdef USE_INSTANCING_COLOR\nvC=instanceColor;\n#endif\nvec4 p=vec4(position,1.);\n#ifdef USE_INSTANCING\np=instanceMatrix*p;\n#endif\nvec4 w=modelMatrix*p;vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}',
   fragmentShader:'uniform float uT;uniform float uI;varying vec2 vU;varying vec3 vC;varying vec3 vW;'+NB3D_NZ+'void main(){float y=vU.y;float x=abs(vU.x-.5)*2.;float wob=nz(vec2(vW.z*3.1-uT*1.7,vW.x*.7));float w=mix(.95,.45,y)*(.75+.5*wob);float body=(1.-smoothstep(w*.35,w,x))*pow(1.-y,1.15)*smoothstep(0.,.06,y);float band=.55+.45*sin(vW.z*14.+uT*4.+wob*6.);gl_FragColor=vec4(vC*body*band*uI,1.);}'});
  const m=new THREE.InstancedMesh(g,mat,48);m.frustumCulled=false;m.renderOrder=3;for(let i=0;i<48;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
@@ -6110,9 +6110,9 @@ function nb3dTick2(dt){{const a=S&&pl&&!pl.dead?pl:null,b=S&&pl2&&!pl2.dead?pl2:
   for(const L of NB3D.dyn)add(L.x,L.y,L.z,L.col,L.k*.6)}
  NB3D_REFL.count=n;NB3D_REFL.instanceMatrix.needsUpdate=true;if(NB3D_REFL.instanceColor)NB3D_REFL.instanceColor.needsUpdate=true;
  // kregi deszczu na wodzie portu
- const R=NB3D_RING,rain=fx&&CH===PORT&&W&&W.waters&&W.waters.length&&!(S&&S.dg);let rc=0;
- if(rain){NB3D2.ringT+=dt*26;while(NB3D2.ringT>1&&R.list.length<40){NB3D2.ringT--;for(let k=0;k<6;k++){const t=W.waters[(Math.random()*W.waters.length)|0];if(Math.abs(t[0]+.5-cen.x)<17&&Math.abs(t[1]+.5-cen.z)<13){R.list.push({x:t[0]+Math.random(),z:t[1]+Math.random(),a:0,s:.5+Math.random()*.6});break}}}if(NB3D2.ringT>1)NB3D2.ringT=1;
-  for(let i=R.list.length-1;i>=0;i--){const r=R.list[i];r.a+=dt/.85;if(r.a>=1){R.list.splice(i,1);continue}NB3D_M.compose(NB3D_V.set(r.x,-.165,r.z),NB3D_Q.identity(),NB3D_S.set(r.s,1,r.s));R.m.setMatrixAt(rc,NB3D_M);NB3D_C.setRGB(r.a,0,0);R.m.setColorAt(rc,NB3D_C);rc++}}else R.list.length=0;
+ const R=NB3D_RING,rain=fx&&(CH===PORT&&W&&W.waters&&W.waters.length||CH===1)&&!(S&&S.dg);let rc=0;
+ if(rain){NB3D2.ringT+=CH===PORT?dt*26:0;while(NB3D2.ringT>1&&R.list.length<40){NB3D2.ringT--;for(let k=0;k<6;k++){const t=W.waters[(Math.random()*W.waters.length)|0];if(Math.abs(t[0]+.5-cen.x)<17&&Math.abs(t[1]+.5-cen.z)<13){R.list.push({x:t[0]+Math.random(),z:t[1]+Math.random(),a:0,s:.5+Math.random()*.6});break}}}if(NB3D2.ringT>1)NB3D2.ringT=1;
+  for(let i=R.list.length-1;i>=0;i--){const r=R.list[i];r.a+=dt/.85;if(r.a>=1){R.list.splice(i,1);continue}NB3D_M.compose(NB3D_V.set(r.x,r.y!==undefined?r.y:-.165,r.z),NB3D_Q.identity(),NB3D_S.set(r.s,1,r.s));R.m.setMatrixAt(rc,NB3D_M);NB3D_C.setRGB(r.a,0,0);R.m.setColorAt(rc,NB3D_C);rc++}}else R.list.length=0;
  R.m.count=rc;R.m.instanceMatrix.needsUpdate=true;if(R.m.instanceColor)R.m.instanceColor.needsUpdate=true;
  // reflektor Zakonu
  const B=NB3D_BEAM;B.on=fx&&CH===PORT&&!!(W&&W.portLamp)&&!(S&&S.dg);B.m.visible=B.spot.visible=B.on;
@@ -6123,8 +6123,31 @@ function nb3dTick2(dt){{const a=S&&pl&&!pl.dead?pl:null,b=S&&pl2&&!pl2.dead?pl2:
  const FK=NB3D_FIRE;FK.k.value=NB3D_ON?.9:0;for(let i=0;i<4;i++){const L=NB3D.lights[i];if(L&&L.kind!=='zone'){FK.p.value[i].set(L.x,L.y,L.z,L.k);FK.c.value[i].setHex(L.col);FK.r.value[i]=L.dist*1.25}else FK.p.value[i].w=0}
  // dlugie cienie przy blysku: od ksiezyca, dla rekwizytow w poblizu kamery
  NB3D2.boltShadow=NB3D_ON&&S&&SETT.flash?S.flash||0:0;
- if(NB3D2.boltShadow>.05&&PROPS){NB3D_DIR.copy(moon.position).normalize();for(const p of PROPS){if(Math.abs(p.x-cen.x)>16||Math.abs(p.y-cen.z)>12)continue;nb3dBoltShadow(p.x,p.y-.15,p.tree?1.6:1.1)}}}
-function nb3dBoltShadow(x,z,s){if(NB3D.si>=690)return;const k=NB3D2.boltShadow,ln=Math.min(7,s*4.2);NB3D_E.set(0,Math.atan2(NB3D_DIR.x,NB3D_DIR.z),0);NB3D_Q.setFromEuler(NB3D_E);NB3D_M.compose(NB3D_V.set(x,.037,z),NB3D_Q,NB3D_S.set(s*.8,1,ln));NB3D_LSH.setMatrixAt(NB3D.si,NB3D_M);NB3D_C.setRGB(Math.min(.8,k*.9),0,0);NB3D_LSH.setColorAt(NB3D.si,NB3D_C);NB3D.si++}
+ if(NB3D2.boltShadow>.05&&PROPS){NB3D_DIR.copy(moon.position).normalize();for(const p of PROPS){if(Math.abs(p.x-cen.x)>16||Math.abs(p.y-cen.z)>12)continue;nb3dBoltShadow(p.x,p.y-.15,p.tree?1.6:1.1)}}
+ else if(PROPS&&nb3dMoonOn()){for(const p of PROPS){if(Math.abs(p.x-cen.x)>16||Math.abs(p.y-cen.z)>12)continue;nb3dMoonShadow(p.x,p.y-.15,p.tree?1.7:1.15,.3)}}
+ try{nb3dSteps(dt)}catch(e){}}
+function nb3dBoltShadow(x,z,s){if(NB3D.si>=1190)return;const k=NB3D2.boltShadow,ln=Math.min(7,s*4.2);NB3D_E.set(0,Math.atan2(NB3D_DIR.x,NB3D_DIR.z),0);NB3D_Q.setFromEuler(NB3D_E);NB3D_M.compose(NB3D_V.set(x,.037,z),NB3D_Q,NB3D_S.set(s*.8,1,ln));NB3D_LSH.setMatrixAt(NB3D.si,NB3D_M);NB3D_C.setRGB(Math.min(.8,k*.9),0,0);NB3D_LSH.setColorAt(NB3D.si,NB3D_C);NB3D.si++}
+// ===== 19.11.2026 (runda oprawa-3, autor: "lecimy na pelnej"): odbicia postaci na mokrej ziemi, staly cien od ksiezyca, rozbryzgi krokow w deszczu =====
+// Odbicie = plaska, odwrocona kopia klatki postaci polozona na ziemi w strone kamery, z falowaniem; tylko bohaterowie i do 10 najblizszych wrogow (malo rysowania).
+const NB3D_REFL_GEO=(()=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute([0,0,0,1,0,0,0,0,1,1,0,1],3));g.setAttribute('uv',new THREE.Float32BufferAttribute([0,0,1,0,0,1,1,1],2));g.setIndex([0,2,1,1,2,3]);return g})();
+const NB3D_RFS=[];for(let i=0;i<12;i++){const m=new THREE.Mesh(NB3D_REFL_GEO,new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2,uniforms:{map:{value:null},uT:{value:0},uA:{value:0}},
+ vertexShader:'varying vec2 vU;varying vec3 vW;void main(){vU=uv;vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}',
+ fragmentShader:'uniform sampler2D map;uniform float uT;uniform float uA;varying vec2 vU;varying vec3 vW;void main(){float v=vU.y;vec2 uv=vec2(vU.x+sin(v*24.+uT*3.3+vW.z*3.)*.014*v+sin(vW.x*7.+uT*2.)*.004,v);vec4 t=texture2D(map,uv);if(t.a<.45)discard;float a=uA*pow(1.-v,1.05)*smoothstep(0.,.05,v)*(.82+.18*sin(vW.z*16.-uT*5.));gl_FragColor=vec4(t.rgb*vec3(.62,.7,.84),a);}'}));
+ m.frustumCulled=false;m.renderOrder=2;m.visible=false;scene.add(m);NB3D_RFS.push(m)}
+const NB3D_REFL_K={1:.62,6:.68};
+function nb3dReflOne(i,src,a){const m=NB3D_RFS[i];if(!src||!src.visible||!src.material||!src.material.map||!src.geometry){m.visible=false;return}const g=src.geometry;if(!g.boundingBox)g.computeBoundingBox();const bb=g.boundingBox,sx=src.scale.x,sy=Math.abs(src.scale.y),k=sy/Math.tan(PITCH);
+ m.position.set(src.position.x+bb.min.x*sx,.045,src.position.z+Math.max(0,bb.min.y)*k);m.scale.set((bb.max.x-bb.min.x)*sx,1,(bb.max.y-Math.max(0,bb.min.y))*k);const u=m.material.uniforms;u.map.value=src.material.map;u.uT.value=clock%1000;u.uA.value=a;m.visible=true}
+function nb3dRefl(){const k=NB3D_ON&&GFX.fx>0&&S&&!S.dg?(NB3D_REFL_K[CH]||0):0;let n=0;
+ if(k>0){if(heroMesh&&pl&&!pl.dead)nb3dReflOne(n++,heroMesh,k);if(typeof mesh2!=='undefined'&&mesh2&&pl2&&!pl2.dead)nb3dReflOne(n++,mesh2,k);
+  const cx=camTarget.x*16,cz=camTarget.z*16,L=[];for(const e of S.enemies){if(e.dead||!e.mesh||!e.mesh.visible)continue;const d=Math.abs(e.x-cx)+Math.abs(e.y-cz);if(d<300)L.push([d,e])}L.sort((a,b)=>a[0]-b[0]);
+  for(const [,e] of L){if(n>=12)break;nb3dReflOne(n++,e.mesh,k*.85)}}
+ for(;n<12;n++)NB3D_RFS[n].visible=false}
+// --- staly cien od ksiezyca (slaby, miekki, obraca sie z wedrujacym ksiezycem); mapy pod niebem
+function nb3dMoonOn(){return NB3D_ON&&S&&!S.dg&&!!NB3D_MOON_CH[CH]}
+function nb3dMoonShadow(x,z,s,k){if(NB3D.si>=1190)return;NB3D_DIR.copy(moon.position).normalize();const ln=Math.min(4.2,s*2.4);NB3D_E.set(0,Math.atan2(NB3D_DIR.x,NB3D_DIR.z),0);NB3D_Q.setFromEuler(NB3D_E);NB3D_M.compose(NB3D_V.set(x,.035,z),NB3D_Q,NB3D_S.set(s*.75,1,ln));NB3D_LSH.setMatrixAt(NB3D.si,NB3D_M);NB3D_C.setRGB(k,0,0);NB3D_LSH.setColorAt(NB3D.si,NB3D_C);NB3D.si++}
+// --- rozbryzgi: kroki w deszczu zostawiaja male kregi (rozdzial I i port)
+const NB3D_STEP=new Map();
+function nb3dSteps(dt){if(!NB3D_ON||GFX.fx<=0||!S||S.dg||!(CH===1||CH===PORT))return;for(const p of [pl,pl2]){if(!p||p.dead||!p.moving)continue;let t=(NB3D_STEP.get(p)||0)-dt;if(t<=0){t=.27;const R=NB3D_RING.list;if(R.length<40)R.push({x:p.x/16+(Math.random()-.5)*.3,z:p.y/16+.1+(Math.random()-.5)*.2,a:0,s:.32+Math.random()*.2,y:.04})}NB3D_STEP.set(p,t)}}
 /* ============ MINIMAP ============ */
 const MINI={fog:canvas(MW,MH),t:0};
 const MCOL={20:'#34303c',26:'#34303c',30:'#34303c',29:'#8a6a2a',32:'#3b3128',25:'#6a6070',24:'#d4500e',23:'#140406',22:'#15131a',27:'#ff8a2a',31:'#4a4452',
