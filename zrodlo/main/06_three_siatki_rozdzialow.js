@@ -315,6 +315,7 @@ function buildSolneNabrzeze(I){
  const rim=new THREE.BoxGeometry(1,.74,.2),beam=new THREE.BoxGeometry(1,.23,.15);
  const edges=(geo,mat,list)=>instanced(geo,mat,list,([x,y,dx])=>{M4.makeRotationY(dx?Math.PI/2:0);M4.setPosition(x,-.3,y);return M4});
  edges(rim,stone,edgeStone);edges(beam,wood,edgeWood);
+ if(P3){/* 19.11.2026: piana fal przy krawedziach (strona wody wyliczona z polozenia krawedzi wzgledem srodka kafla) */const fl=[];for(const [x,y,dx] of edgeStone.concat(edgeWood)){if(dx){const s=Math.sign(x-(Math.floor(x)+.5))||1;fl.push([x+s*.62,y,s>0?-Math.PI/2:Math.PI/2])}else{const s=Math.sign(y-(Math.floor(y)+.5))||1;fl.push([x,y+s*.62,s>0?Math.PI:0])}}const fm=nb3dFoam(fl);if(fm){ROOT.add(fm);W.foam=fm}}
  if(P3){/* 18.11.2026: poklad pomostu ma grubosc (oblicowka do wody), nabrzeze kamienne obrzeze */const lay=(geo,mat,list,h)=>instanced(geo,mat,list,([x,y,dx])=>{M4.makeRotationY(dx?Math.PI/2:0);M4.setPosition(x,h,y);return M4});
   lay(new THREE.BoxGeometry(1.01,.38,.13),worldSurf(phong({color:0x7a6a5a}),I.port_deski,1.7,'p3dFascia'),edgeWood,-.15);lay(new THREE.BoxGeometry(1.0,.09,.34),worldSurf(phong({color:0xb4babb,shininess:6}),I.port_plyty,1.6,'p3dCoping'),edgeStone,.065)}
  instanced(new THREE.CylinderGeometry(.1,.14,1.3,6),wood,piles,([x,y])=>M4.makeTranslation(x,-.15,y));
