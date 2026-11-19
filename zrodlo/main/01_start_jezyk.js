@@ -21,8 +21,8 @@ trDom(document.body);
 if(!window.THREE){$('screen').insertAdjacentHTML('beforeend',(EN?'<div id="err">Failed to load the 3D library. Please refresh the page.</div>':'<div id="err">Nie udało się wczytać biblioteki 3D. Odśwież stronę.</div>'));return}
 const TS=16,MW=104,MH=91,WW=MW*TS,WH=MH*TS,NIGHT=960,BREAK_AT=480,KAM_P=(()=>{const q=nbParam('kamera');if(q==='p'||q==='k')return q==='p';try{const v=JSON.parse(localStorage.getItem('pn_access')||'{}');return !(v&&v.kam==='k')}catch(e){return true}})(),/* 18.11.2026: przestrzenna domyslnie (autor) */
   /* 18.11.2026: kamera klasyczna albo przestrzenna (Opcje > Grafika, wczytywana przy starcie gry). [pochylenie st., polowa kata widzenia st., odleglosc, szerokosc widoku wzgledem klasycznej, ograniczenia kamery przy brzegach mapy: gora, dol].
-     Przestrzenna (42 st., od 18.11 domyslna) dobrana tak, by widoczna powierzchnia podlogi byla taka sama jak w klasycznej (glebiej o ok. 10%, wezej w srodku o ok. 16%). ?kamera=p|k tylko lokalnie. */
-  KAMV=KAM_P?[42,15,19.92,.84,10.7,6.9]:[55,12,30,1,8.5,7.5],KAMH=KAMV[1]*Math.PI/180,PITCH=KAMV[0]*Math.PI/180,DIST=KAMV[2],
+     Przestrzenna (od 18.11 domyslna; 19.11 autor: 45 st. i troche dalej): szerokosc widoku ok. 96% klasycznej, glebia ok. 116% (widac nieco wiecej pola walki niz w klasycznej). ?kamera=p|k tylko lokalnie. */
+  KAMV=KAM_P?[45,14,24.5,.96,10.9,7.6]:[55,12,30,1,8.5,7.5],KAMH=KAMV[1]*Math.PI/180,PITCH=KAMV[0]*Math.PI/180,DIST=KAMV[2],
   // the 3D scene is drawn at this height and scaled up: higher = sharper sprites; phones get a lighter setting
   RT_H=720;
 const P={ink:'#08070a',bone:'#d8cfb8',bone2:'#9d9584',blood:'#951518',blood2:'#560a0d',ember:'#ff6a1a',ember2:'#ffb347',st0:'#0d0c10',st1:'#1b1a1f',st2:'#24232a',st3:'#34323b',st4:'#46434e',inlay:'#5a4a22',
