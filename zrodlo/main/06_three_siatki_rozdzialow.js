@@ -127,7 +127,8 @@ const PORT_SHIP=[52,8.7,14.4],PORT_FERRY_ART=[32.5,7.9,8.6,6.4];
 // Tylko wyglad: kolizje zostaja na kaflach (02_swiaty.js). Porownanie przed: ?port3d=0 (tylko lokalnie).
 const PORT3D_ON=nbParam('port3d')!=='0';
 // 18.11.2026: zuraw zostaje malowanym obrazkiem (decyzja autora: obrazek ladniejszy od bryly)
-const PORT3D_KEYS=new Set(['cargo','skrzynia','beczka_ryby','salt','bollard','pacholek','winch','pale','lodz']);
+// 19.11.2026: worki z sola tez wracaja do obrazka (bryly wygladaly jak blade kule)
+const PORT3D_KEYS=new Set(['cargo','skrzynia','beczka_ryby','bollard','pacholek','winch','pale','lodz']);
 function port3dKit(){
  const kit=new Map(),M=new THREE.Matrix4(),E=new THREE.Euler(),Qk=new THREE.Quaternion(),Pv=new THREE.Vector3(),Sv=new THREE.Vector3();
  const put=(geo,mat,base,x,y,z,sx,sy,sz,rx=0,ry=0,rz=0)=>{E.set(rx,ry,rz);Qk.setFromEuler(E);M.compose(Pv.set(x,y,z),Qk,Sv.set(sx,sy,sz));const k=geo.uuid+'|'+mat.uuid;let e=kit.get(k);if(!e)kit.set(k,e={geo,mat,list:[]});e.list.push(base.clone().multiply(M))};
@@ -190,20 +191,24 @@ function port3dBuild(I,ROOT){
  const P3_SMALL=port3dHull(2.5,1.0,.32,.38,18,9);
  return {K,MODEL,mats:{wood:deck,woodDark:deck,beam,beamH,iron,rope:ropeT,jute,salt,sail,stone,post,deck},geos:{BOX,CYL,CYL6,TOR,SPH},barrel,sack,coil,crate,hash,sub}}
 // koga Zakonu na kotwicy: kadlub, poklad, kasztel rufowy, maszt z rejka i zwinietym zaglem, olinowanie, latarnia na rufie
-function port3dShip(P,x,z,y){const {K,mats,geos,barrel,sack,coil}=P,{put,at}=K,{BOX,CYL,CYL6,TOR}=geos,{wood,woodDark,iron,rope,sail}=mats;
+// 19.11.2026: deski kadluba i pokladu rysowane w kodzie (pasy wzdluz statku, szwy, smola, gwozdzie); wczesniej kadlub mial blada teksture pokladu promu
+function port3dPlanks(base,light){const c=canvas(256,256),g=c.getContext('2d');g.fillStyle=base;g.fillRect(0,0,256,256);for(let i=0;i<8;i++){const x=i*32,v=(Math.sin(i*12.9)*.5+.5);g.fillStyle='rgba('+(light?'255,235,200':'200,170,130')+','+(.04+v*.08).toFixed(3)+')';g.fillRect(x+2,0,28,256);g.fillStyle='rgba(0,0,0,.55)';g.fillRect(x,0,2,256);for(let y=(i*71)%200;y<256;y+=220){g.fillStyle='rgba(0,0,0,.45)';g.fillRect(x,y,32,2);g.fillStyle='rgba(30,25,20,.7)';g.fillRect(x+6,y+5,2,2);g.fillRect(x+24,y+5,2,2)}}for(let n=0;n<260;n++){g.fillStyle='rgba(0,0,0,'+(Math.random()*.12).toFixed(3)+')';g.fillRect(Math.random()*256,Math.random()*256,1+Math.random()*3,4+Math.random()*16)}const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=4;return t}
+function port3dShip(P,x,z,y){const {K,mats,geos,barrel,sack,coil}=P,{put,at}=K,{BOX,CYL,CYL6,TOR}=geos,{iron,rope,sail,beam,beamH}=mats;
+ const hullT=port3dPlanks('#3b2c21',false),deckT=port3dPlanks('#6b5641',true);hullT.repeat.set(1.2,.35);deckT.repeat.set(1.1,.35);
+ const woodDark=phong({map:hullT,color:0xc8beb4,shininess:22,specular:0x2a3036,emissive:0x050403,side:THREE.DoubleSide}),wood=phong({map:deckT,color:0xd8ccbe,shininess:8,specular:0x161a1e,emissive:0x060504,side:THREE.DoubleSide}),wale=phong({color:0x5c2a22,shininess:16,specular:0x241a18,emissive:0x080303}),rail=phong({map:deckT,color:0x9a8a7a,emissive:0x050403});
  const L=12.6,B=4.3,h=port3dHull(L,B,1.7,1.35),grp=new THREE.Group(),b=at(0,0);grp.position.set(x,y,z);
  put(h.hull,woodDark,b,0,0,0,1,1,1);put(h.deck,wood,b,0,0,0,1,1,1);
  // relingi wzdluz burt
  const N=20;for(const s of [-1,1])for(let i=1;i<N;i++){const t0=i/N,t1=(i+1)/N,x0=(t0-.5)*L,x1=(t1-.5)*L,z0=s*h.half(t0),z1=s*h.half(t1),y0=h.top(t0),y1=h.top(t1);
-  put(BOX,woodDark,b,(x0+x1)/2,(y0+y1)/2+.04,(z0+z1)/2,Math.hypot(x1-x0,z1-z0)+.02,.12,.14,0,-Math.atan2(z1-z0,x1-x0),Math.atan2(y1-y0,x1-x0));
+  put(BOX,rail,b,(x0+x1)/2,(y0+y1)/2+.04,(z0+z1)/2,Math.hypot(x1-x0,z1-z0)+.02,.12,.16,0,-Math.atan2(z1-z0,x1-x0),Math.atan2(y1-y0,x1-x0));put(BOX,wale,b,(x0+x1)/2,(y0+y1)/2-.34,(z0+z1)/2*1.012,Math.hypot(x1-x0,z1-z0)+.03,.2,.08,0,-Math.atan2(z1-z0,x1-x0),Math.atan2(y1-y0,x1-x0));
   if(i%2===0)put(BOX,woodDark,b,x0,y0-.25,z0*.97,.12,.55,.12)}
  // kasztel rufowy
  const cx0=L/2-3.1,cx1=L/2-.7,cy=h.top(.83)+.25,cw=h.half(.8)*1.75;put(BOX,wood,b,(cx0+cx1)/2,cy,0,cx1-cx0,.16,cw);put(BOX,woodDark,b,cx0,cy-.55,0,.16,1.1,cw*.98);
  for(const s of [-1,1]){put(BOX,woodDark,b,(cx0+cx1)/2,cy+.62,s*cw/2,cx1-cx0,.1,.1);for(let k=0;k<=4;k++)put(BOX,woodDark,b,cx0+(cx1-cx0)*k/4,cy+.32,s*cw/2,.1,.6,.1)}
  put(BOX,woodDark,b,cx0,cy+.62,0,.1,.1,cw);for(let k=0;k<=3;k++)put(BOX,woodDark,b,cx0,cy+.32,-cw/2+cw*k/3,.1,.6,.1);
  // maszt, rejka i zwiniety zagiel
- const mx=-1.0,dk=h.deckY,mh=8.6;put(CYL,woodDark,b,mx,dk+mh/2,0,.2,mh,.2);put(CYL,woodDark,b,mx,dk+mh+.15,0,.12,.3,.12);for(const yy of [1.2,1.45,4.4])put(TOR,rope,b,mx,dk+yy,0,.23,.23,.23,Math.PI/2);
- const ry=dk+mh-1.1;put(CYL,woodDark,b,mx,ry,0,.11,7.2,.11,Math.PI/2);put(CYL,sail,b,mx,ry-.32,0,.3,6.6,.36,Math.PI/2);for(let k=-3;k<=3;k++)put(TOR,rope,b,mx,ry-.3,k*.95,.33,.33,.33);
+ const mx=-1.0,dk=h.deckY,mh=8.6;put(CYL,beam,b,mx,dk+mh/2,0,.22,mh,.22);put(CYL,beam,b,mx,dk+mh+.15,0,.12,.3,.12);for(const yy of [1.2,1.45,4.4])put(TOR,rope,b,mx,dk+yy,0,.23,.23,.23,Math.PI/2);
+ const ry=dk+mh-1.1;put(CYL,beamH,b,mx,ry,0,.12,7.2,.12,Math.PI/2);put(CYL,sail,b,mx,ry-.32,0,.3,6.6,.36,Math.PI/2);for(let k=-3;k<=3;k++)put(TOR,rope,b,mx,ry-.3,k*.95,.33,.33,.33);
  // olinowanie: wanty do burt, sztag do dziobu i rufy
  const top=new THREE.Vector3(mx,dk+mh-.2,0),line=(a,c)=>{const d=c.clone().sub(a),m=a.clone().add(c).multiplyScalar(.5),q=new THREE.Quaternion().setFromUnitVectors(UP,d.clone().normalize()),mm=new THREE.Matrix4().compose(m,q,new THREE.Vector3(.025,d.length(),.025));K.put(CYL6,rope,b.clone().multiply(mm),0,0,0,1,1,1)};
  for(const s of [-1,1])for(const dx of [-.9,0,.9])line(top,new THREE.Vector3(mx+dx,h.top((mx+dx)/L+.5)+.05,s*h.half((mx+dx)/L+.5)*.98));
@@ -339,7 +344,7 @@ function buildSolneNabrzeze(I){
  const ao=(x,z,w,d)=>{const m=new THREE.Mesh(aoGeo,groundShadowMat);m.scale.set(w,1,d);m.position.set(x,.035,z);m.renderOrder=2;ROOT.add(m)};
  const glow=cutaway(new THREE.MeshBasicMaterial({color:0xd98a3c}));
  // 15.11.2026 (port w standardzie map): tynk kamienic i deski szop jak w Zlotogrodzie, prawdziwe polacie dachu z dachowka (karczma), lupkiem (kantor) i latanymi deskami (szopy, sklad)
- const plasterW=I.wl_town?worldSurf(cutaway(phong({color:0x968e80})),I.wl_town,3.2,'portPlaster'):plaster,plankW=I.wl_plank?worldSurf(cutaway(phong({color:0x8a7e70})),I.wl_plank,2.6,'portPlank'):siding;
+ /* 19.11.2026 (autor: obic domy tekstura): jasniejszy tynk i deski (wczesniej ciemnoszare plamy), tynk w gestszym wzorze */const plasterW=I.wl_town?worldSurf(cutaway(phong({color:0xd8cdb8,emissive:0x0a0907})),I.wl_town,2.2,'portPlaster'):plaster,plankW=I.wl_plank?worldSurf(cutaway(phong({color:0xc0b09c,emissive:0x080605})),I.wl_plank,2.2,'portPlank'):siding;
  const roofTex=k=>{if(!I[k])return null;const t=wallTex(I[k]).clone();t.needsUpdate=true;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(1,1);return t};
  const roofOf=(k,col,shin)=>I[k]?cutaway(phong({map:roofTex(k),color:col,shininess:shin,specular:0x161a1e,side:THREE.DoubleSide})):slate;
  const roofM={inn:roofOf('p3_roof_tile',0xa89890,4),office:roofOf('rf_lupek',0xb8c2c8,10),shed:roofOf('p3_roof_shack',0xa49a90,3)};
@@ -385,6 +390,9 @@ function buildSolneNabrzeze(I){
   part(grime2,cx,eave-.28,cz,bw+.04,.56,bd+.04);// zaciek pod okapem
   ao(cx,cz,bw*1.45+1,bd*1.45+1);
   part(wall,cx,(eave+.46)/2,cz,bw,eave-.46,bd);
+  if(PORT3D_ON&&kind!=='shed'){/* mur pruski: slupy, rygle i zastrzaly na tynku */const t=.13,o=.045,h0=.5,h1=eave-.06,mid=(h0+h1)/2,np=Math.max(2,Math.round(bw/1.35));
+   for(const zf of [bz-o,front+o]){for(const yy of [h0+.03,mid,h1])part(timbers,cx,yy,zf,bw+.04,t,t);for(let k=0;k<=np;k++){const xx=bx+bw*k/np;part(timbers,xx,mid,zf,t,h1-h0,t)}const sw=bw/np;for(const [k,sg] of [[0,1],[np-1,-1]]){const x0=bx+sw*k+sw/2;part(timbers,x0,(h0+mid)/2,zf,Math.hypot(sw,mid-h0)*.92,t*.9,t*.9,sg*Math.atan2(mid-h0,sw))}}
+   const nq=Math.max(2,Math.round(bd/1.35));for(const xf of [bx-o,bx+bw+o]){for(const yy of [h0+.03,mid,h1])part(timbers,xf,yy,cz,t,t,bd+.04);for(let k=0;k<=nq;k++)part(timbers,xf,mid,bz+bd*k/nq,t,h1-h0,t)}}
   for(const side of [-1,1]){
    roofSlope(roofM[kind]||slate,cx,eave,half,pitch,bz-.24,front+.24,side);
    for(const end of [bz,front])part(timbers,cx+side*(bw/2-.1),eave/2,end,.17,eave,.16);
@@ -498,12 +506,10 @@ function buildSolneNabrzeze(I){
  }
  // --- trzciny przy palach i brzegu (ta sama grafika co w Czarnoborze)
  const reeds=procFrame(I.p4_reeds,0,0,I.p4_reeds.width/(I.p4_reeds.nbDensity||1),I.p4_reeds.height/(I.p4_reeds.nbDensity||1),'prop');if(PORT3D_ON)nb3dSwayMat(reeds.n);
- for(const [x,y] of piles)if(random()<.6&&offFerry(x,y))sprite(reeds,x+.35,y+.8,1.2,1.2);
- for(let n=0;n<85;n++){
-  const x=2+(random()*(MW-4)|0),y=2+(random()*(MH-4)|0);if(ground(x,y)!==45)continue;
-  if(![[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>land(ground(x+a,y+b))))continue;
-  if(offFerry(x,y))sprite(reeds,x+.5,y+.7,1.3,1.15);
- }
+ // 19.11.2026 (autor: szuwary wystawaly z desek): szuwary tylko na wodzie, odsuniete od brzegu, gesciej przy pomostach
+ {let cnt=0;for(let y=1;y<MH-1&&cnt<38;y++)for(let x=1;x<MW-1&&cnt<38;x++){if(ground(x,y)!==45||!offFerry(x,y))continue;let ax=0,ay=0,pier=false,lnd=false;
+  for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const g=ground(x+a,y+b);if(land(g)){lnd=true;ax+=a;ay+=b;if(g===43)pier=true}}
+  if(!lnd||random()>(pier?.3:.1))continue;const px=x+.5-Math.sign(ax)*.3+(random()-.5)*.25,py=y+.55-Math.sign(ay)*.3;sprite(reeds,px,py,1.15+random()*.3,1.1);cnt++}}
 }
 
 // Chapter I meshes: M1 ground, M2 walls, M3 props

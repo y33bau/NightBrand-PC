@@ -491,7 +491,7 @@ function nb3dKill(e){if(!NB3D_ON||!e)return;const d=Math.hypot(e.x/16-camTarget.
 function nb3dFoam(list){if(!NB3D_ON||!list||!list.length)return null;const g=new THREE.PlaneGeometry(1,1);g.rotateX(-Math.PI/2);
  const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,uniforms:{uT:{value:0}},
   vertexShader:'varying vec2 vU;varying vec3 vW;void main(){vU=uv;vec4 p=vec4(position,1.);\n#ifdef USE_INSTANCING\np=instanceMatrix*p;\n#endif\nvec4 w=modelMatrix*p;vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}',
-  fragmentShader:'uniform float uT;varying vec2 vU;varying vec3 vW;'+NB3D_NZ+'void main(){float wave=.5+.5*sin(uT*1.7+vW.x*1.3+vW.z*1.1);float reach=.28+.5*wave;float y=vU.y;float band=(1.-smoothstep(reach-.22,reach,y))*smoothstep(0.,.05,y);float n=fbm(vec2(vW.x*3.+uT*.4,vW.z*3.-uT*.3));float a=band*smoothstep(.25,.65,n+wave*.25)*.8;gl_FragColor=vec4(vec3(.78,.84,.88),a);}'});
+  fragmentShader:'uniform float uT;varying vec2 vU;varying vec3 vW;'+NB3D_NZ+'void main(){float wave=.5+.5*sin(uT*1.7+vW.x*1.3+vW.z*1.1);float reach=.16+.3*wave;float y=vU.y;float band=(1.-smoothstep(reach-.22,reach,y))*smoothstep(0.,.05,y);float n=fbm(vec2(vW.x*3.+uT*.4,vW.z*3.-uT*.3));float a=band*smoothstep(.4,.75,n+wave*.2)*.3;gl_FragColor=vec4(vec3(.78,.84,.88),a);}'});
  const m=new THREE.InstancedMesh(g,mat,list.length),M=new THREE.Matrix4(),Q=new THREE.Quaternion();
  list.forEach(([x,z,ang],i)=>{Q.setFromAxisAngle(UP,ang);M.compose(new THREE.Vector3(x,-.165,z),Q,new THREE.Vector3(1.02,1,.75));m.setMatrixAt(i,M)});m.frustumCulled=false;m.renderOrder=9;return m}
 function nb3dTick4(dt){const fx=NB3D_ON&&GFX.fx>0;
