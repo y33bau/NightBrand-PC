@@ -132,7 +132,8 @@ function port3dKit(){
  const kit=new Map(),M=new THREE.Matrix4(),E=new THREE.Euler(),Qk=new THREE.Quaternion(),Pv=new THREE.Vector3(),Sv=new THREE.Vector3();
  const put=(geo,mat,base,x,y,z,sx,sy,sz,rx=0,ry=0,rz=0)=>{E.set(rx,ry,rz);Qk.setFromEuler(E);M.compose(Pv.set(x,y,z),Qk,Sv.set(sx,sy,sz));const k=geo.uuid+'|'+mat.uuid;let e=kit.get(k);if(!e)kit.set(k,e={geo,mat,list:[]});e.list.push(base.clone().multiply(M))};
  const at=(x,z,ry=0,s=1,y=0,flip=false)=>new THREE.Matrix4().compose(new THREE.Vector3(x,y,z),new THREE.Quaternion().setFromEuler(new THREE.Euler(0,ry,0)),new THREE.Vector3(flip?-s:s,s,s));
- const finish=(parent,cast=true)=>{for(const {geo,mat,list} of kit.values()){const im=new THREE.InstancedMesh(geo,mat,list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=cast;im.receiveShadow=true;im.frustumCulled=false;parent.add(im)}kit.clear()};
+ /* 19.11.2026: bryly portu nie rzucaja cieni od swiatla bohatera (cien punktowy = 6 przebiegow na kazda bryle, podwajal wywolania rysowania i obciazenie procesora); maja plamy cienia pod spodem */
+ const finish=(parent,cast=false)=>{for(const {geo,mat,list} of kit.values()){const im=new THREE.InstancedMesh(geo,mat,list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=cast;im.receiveShadow=true;im.frustumCulled=false;parent.add(im)}kit.clear()};
  return {put,at,finish}}
 // tekstury rysowane w kodzie: lina, juta i zwiniety zagiel
 function port3dTex(kind){const c=canvas(64,64),g=c.getContext('2d');
