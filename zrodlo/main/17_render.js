@@ -343,7 +343,7 @@ function nb3dDyn(x,y,z,col,k,dist,pri){const o=NB3D.pool[NB3D.pi]||(NB3D.pool[NB
 function nb3dDynLights(dt){NB3D.dyn.length=0;NB3D.pi=0;if(!NB3D_ON||!S)return NB3D.dyn;
  for(const p of S.swordShots||[])if(p&&p.t>0)nb3dDyn(p.x/16,.75,p.y/16,p.ice?0x8fd6ff:0xff8a3a,p.ice?1.15:1.7,p.ice?4.2:5.2,.55);
  let n=0;for(const f of S.eproj||[]){if(n>=6)break;if(f&&(!f.anim||f.anim===A.fireball)){nb3dDyn(f.x/16,.7,f.y/16,0xff7a2c,1.25,4.2,.7);n++}}
- if(NB3D_BEAM.on)nb3dDyn(NB3D_BEAM.p.x,1.7,NB3D_BEAM.p.z,0xcfdcff,1.45,7.5,.5);nb3dBlade();
+ if(NB3D_BEAM.on)nb3dDyn(NB3D_BEAM.p.x,1.7,NB3D_BEAM.p.z,0xcfdcff,1.45,7.5,.5);/* 19.11.2026: swiecace ostrze usuniete (autor) */
  for(let i=NB3D.bursts.length-1;i>=0;i--){const b=NB3D.bursts[i];b.t+=dt;if(b.t>=b.life){NB3D.bursts.splice(i,1);continue}const f=1-b.t/b.life;nb3dDyn(b.x,1.1,b.z,b.col,b.k*f*f,b.dist,.4)}
  return NB3D.dyn}
 // --- cienie od swiatel pod postaciami
@@ -447,7 +447,7 @@ function nb3dTick2(dt){{const a=S&&pl&&!pl.dead?pl:null,b=S&&pl2&&!pl2.dead?pl2:
   B.m.position.copy(top);B.m.quaternion.setFromUnitVectors(UP,d.normalize());B.m.scale.set(1.9,len,1.9);B.m.material.uniforms.uT.value=T;
   B.spot.position.set(B.p.x,.07,B.p.z);B.spot.scale.set(5.2,1,4.2)}
  // cieply kontur postaci: cztery najsilniejsze ognie przy kamerze
- const FK=NB3D_FIRE;FK.k.value=NB3D_ON?.9:0;for(let i=0;i<4;i++){const L=NB3D.lights[i];if(L&&L.kind!=='zone'){FK.p.value[i].set(L.x,L.y,L.z,L.k);FK.c.value[i].setHex(L.col);FK.r.value[i]=L.dist*1.25}else FK.p.value[i].w=0}
+ const FK=NB3D_FIRE;FK.k.value=NB3D_ON?.5:0;/* 19.11.2026: slabiej i z limitem (Zabojczyni sie wybielala) */for(let i=0;i<4;i++){const L=NB3D.lights[i];if(L&&L.kind!=='zone'){FK.p.value[i].set(L.x,L.y,L.z,L.k);FK.c.value[i].setHex(L.col);FK.r.value[i]=L.dist*1.25}else FK.p.value[i].w=0}
  // dlugie cienie przy blysku: od ksiezyca, dla rekwizytow w poblizu kamery
  NB3D2.boltShadow=NB3D_ON&&S&&SETT.flash?S.flash||0:0;
  if(NB3D2.boltShadow>.05&&PROPS){NB3D_DIR.copy(moon.position).normalize();for(const p of PROPS){if(Math.abs(p.x-cen.x)>16||Math.abs(p.y-cen.z)>12)continue;nb3dBoltShadow(p.x,p.y-.15,p.tree?1.6:1.1)}}
@@ -505,6 +505,3 @@ function nb3dTick4(dt){const fx=NB3D_ON&&GFX.fx>0;
  NB3D_FX.ca=Math.max(0,NB3D_FX.ca-dt*2.6);if(S&&S.hitstop>0&&SETT.shake)NB3D_FX.ca=Math.max(NB3D_FX.ca,.45);
  // piana fal
  if(W&&W.foam)W.foam.material.uniforms.uT.value=clock%1000}
-// swiecace ostrze: ruchome swiatlo przy mieczu, mocniej w trakcie ciecia (dokladane do listy ruchomych swiatel)
-function nb3dBlade(){if(!NB3D_ON||!S||!pl||pl.dead)return;let f=0,i=0;try{f=sk('fireblade')||0;i=sk('iceblade')||0}catch(e){return}if(!f&&!i)return;const sw=(pl.swingT>0||(pl.atk&&pl.atk.stage==='act'))?1:0,k=(.35+.25*Math.max(f,i)/3)+sw*1.1;
- nb3dDyn(pl.x/16+(pl.fx||0)*.55,.9,pl.y/16+(pl.fy||0)*.45,f>=i?0xff8a3a:0x8fd6ff,k,4.2+sw*1.5,.45)}

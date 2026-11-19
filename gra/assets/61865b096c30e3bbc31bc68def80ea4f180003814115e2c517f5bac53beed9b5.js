@@ -1304,7 +1304,7 @@ function moonRim(m,step){const prev=m.onBeforeCompile;m.customProgramCacheKey=()
   m.onBeforeCompile=sh=>{if(prev)prev.call(m,sh);sh.uniforms.uRimC=RIMU.col;sh.uniforms.uRimK=RIMU.k;sh.uniforms.uRimStep={value:step};sh.uniforms.uFireP=NB3D_FIRE.p;sh.uniforms.uFireC=NB3D_FIRE.c;sh.uniforms.uFireR=NB3D_FIRE.r;sh.uniforms.uFireK=NB3D_FIRE.k;
     sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying float vRimS;varying vec3 vRimO;').replace('#include <begin_vertex>','#include <begin_vertex>\nvRimS=modelMatrix[0][0]>=0.?1.:-1.;vRimO=(modelMatrix*vec4(0.,0.,0.,1.)).xyz;');
     sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying float vRimS;varying vec3 vRimO;uniform vec3 uRimC;uniform float uRimK;uniform float uRimStep;uniform vec4 uFireP[4];uniform vec3 uFireC[4];uniform float uFireR[4];uniform float uFireK;')
-      .replace('#include <emissivemap_fragment>','#include <emissivemap_fragment>\n{float ra=texture2D(map,vUv).a;float rl=texture2D(map,vUv+vec2(-vRimS*uRimStep,0.)).a;float rl2=texture2D(map,vUv+vec2(-vRimS*uRimStep*2.,0.)).a;float rim=step(.5,ra)*(1.-step(.5,rl))+step(.5,ra)*step(.5,rl)*(1.-step(.5,rl2))*.45;totalEmissiveRadiance+=uRimC*uRimK*rim;\nif(uFireK>0.){for(int i=0;i<4;i++){vec4 L=uFireP[i];if(L.w<=0.)continue;vec2 dd=L.xz-vRimO.xz;float ds=length(dd);float k=L.w*clamp(1.-ds/uFireR[i],0.,1.)*smoothstep(.05,.45,abs(dd.x)/max(ds,.01));if(k<=0.)continue;float su=(dd.x>=0.?1.:-1.)*vRimS*uRimStep;float fa=texture2D(map,vUv+vec2(su,0.)).a;float fb=texture2D(map,vUv+vec2(su*2.,0.)).a;float fr=step(.5,ra)*(1.-step(.5,fa))+step(.5,ra)*step(.5,fa)*(1.-step(.5,fb))*.5;float sideW=clamp(.5+(dd.x>=0.?1.:-1.)*vRimS*(vUv.x-.5)*2.,0.,1.);totalEmissiveRadiance+=uFireC[i]*k*uFireK*(fr*.9+step(.5,ra)*sideW*sideW*.3);}}}')}}
+      .replace('#include <emissivemap_fragment>','#include <emissivemap_fragment>\n{float ra=texture2D(map,vUv).a;float rl=texture2D(map,vUv+vec2(-vRimS*uRimStep,0.)).a;float rl2=texture2D(map,vUv+vec2(-vRimS*uRimStep*2.,0.)).a;float rim=step(.5,ra)*(1.-step(.5,rl))+step(.5,ra)*step(.5,rl)*(1.-step(.5,rl2))*.45;totalEmissiveRadiance+=uRimC*uRimK*rim;\nif(uFireK>0.){vec3 fAdd=vec3(0.);for(int i=0;i<4;i++){vec4 L=uFireP[i];if(L.w<=0.)continue;vec2 dd=L.xz-vRimO.xz;float ds=length(dd);float k=L.w*clamp(1.-ds/uFireR[i],0.,1.)*smoothstep(.05,.45,abs(dd.x)/max(ds,.01));if(k<=0.)continue;float su=(dd.x>=0.?1.:-1.)*vRimS*uRimStep;float fa=texture2D(map,vUv+vec2(su,0.)).a;float fb=texture2D(map,vUv+vec2(su*2.,0.)).a;float fr=step(.5,ra)*(1.-step(.5,fa))+step(.5,ra)*step(.5,fa)*(1.-step(.5,fb))*.5;float sideW=clamp(.5+(dd.x>=0.?1.:-1.)*vRimS*(vUv.x-.5)*2.,0.,1.);fAdd+=uFireC[i]*k*uFireK*(fr*.9+step(.5,ra)*sideW*sideW*.1);}totalEmissiveRadiance+=min(fAdd,vec3(.22));}}')}}
 const phong=o=>{const detail=o.map&&o.map.userData&&o.map.userData.surface,m=new THREE.MeshPhongMaterial(Object.assign({shininess:0,specular:0x000000},detail?{bumpMap:o.map,bumpScale:.075,shininess:18,specular:0x151820}:{},o));if(detail)m.userData.surfaceDetail=o.map;return m};
 function canvas(w,h){const c=document.createElement('canvas');c.width=w;c.height=h;return c}
 function texFrom(c,rep){const t=new THREE.CanvasTexture(c);t.magFilter=THREE.NearestFilter;t.minFilter=THREE.NearestFilter;t.generateMipmaps=false;if(rep){t.wrapS=t.wrapT=THREE.RepeatWrapping}return t}
@@ -6019,7 +6019,7 @@ function nb3dDyn(x,y,z,col,k,dist,pri){const o=NB3D.pool[NB3D.pi]||(NB3D.pool[NB
 function nb3dDynLights(dt){NB3D.dyn.length=0;NB3D.pi=0;if(!NB3D_ON||!S)return NB3D.dyn;
  for(const p of S.swordShots||[])if(p&&p.t>0)nb3dDyn(p.x/16,.75,p.y/16,p.ice?0x8fd6ff:0xff8a3a,p.ice?1.15:1.7,p.ice?4.2:5.2,.55);
  let n=0;for(const f of S.eproj||[]){if(n>=6)break;if(f&&(!f.anim||f.anim===A.fireball)){nb3dDyn(f.x/16,.7,f.y/16,0xff7a2c,1.25,4.2,.7);n++}}
- if(NB3D_BEAM.on)nb3dDyn(NB3D_BEAM.p.x,1.7,NB3D_BEAM.p.z,0xcfdcff,1.45,7.5,.5);nb3dBlade();
+ if(NB3D_BEAM.on)nb3dDyn(NB3D_BEAM.p.x,1.7,NB3D_BEAM.p.z,0xcfdcff,1.45,7.5,.5);/* 19.11.2026: swiecace ostrze usuniete (autor) */
  for(let i=NB3D.bursts.length-1;i>=0;i--){const b=NB3D.bursts[i];b.t+=dt;if(b.t>=b.life){NB3D.bursts.splice(i,1);continue}const f=1-b.t/b.life;nb3dDyn(b.x,1.1,b.z,b.col,b.k*f*f,b.dist,.4)}
  return NB3D.dyn}
 // --- cienie od swiatel pod postaciami
@@ -6123,7 +6123,7 @@ function nb3dTick2(dt){{const a=S&&pl&&!pl.dead?pl:null,b=S&&pl2&&!pl2.dead?pl2:
   B.m.position.copy(top);B.m.quaternion.setFromUnitVectors(UP,d.normalize());B.m.scale.set(1.9,len,1.9);B.m.material.uniforms.uT.value=T;
   B.spot.position.set(B.p.x,.07,B.p.z);B.spot.scale.set(5.2,1,4.2)}
  // cieply kontur postaci: cztery najsilniejsze ognie przy kamerze
- const FK=NB3D_FIRE;FK.k.value=NB3D_ON?.9:0;for(let i=0;i<4;i++){const L=NB3D.lights[i];if(L&&L.kind!=='zone'){FK.p.value[i].set(L.x,L.y,L.z,L.k);FK.c.value[i].setHex(L.col);FK.r.value[i]=L.dist*1.25}else FK.p.value[i].w=0}
+ const FK=NB3D_FIRE;FK.k.value=NB3D_ON?.5:0;/* 19.11.2026: slabiej i z limitem (Zabojczyni sie wybielala) */for(let i=0;i<4;i++){const L=NB3D.lights[i];if(L&&L.kind!=='zone'){FK.p.value[i].set(L.x,L.y,L.z,L.k);FK.c.value[i].setHex(L.col);FK.r.value[i]=L.dist*1.25}else FK.p.value[i].w=0}
  // dlugie cienie przy blysku: od ksiezyca, dla rekwizytow w poblizu kamery
  NB3D2.boltShadow=NB3D_ON&&S&&SETT.flash?S.flash||0:0;
  if(NB3D2.boltShadow>.05&&PROPS){NB3D_DIR.copy(moon.position).normalize();for(const p of PROPS){if(Math.abs(p.x-cen.x)>16||Math.abs(p.y-cen.z)>12)continue;nb3dBoltShadow(p.x,p.y-.15,p.tree?1.6:1.1)}}
@@ -6181,9 +6181,6 @@ function nb3dTick4(dt){const fx=NB3D_ON&&GFX.fx>0;
  NB3D_FX.ca=Math.max(0,NB3D_FX.ca-dt*2.6);if(S&&S.hitstop>0&&SETT.shake)NB3D_FX.ca=Math.max(NB3D_FX.ca,.45);
  // piana fal
  if(W&&W.foam)W.foam.material.uniforms.uT.value=clock%1000}
-// swiecace ostrze: ruchome swiatlo przy mieczu, mocniej w trakcie ciecia (dokladane do listy ruchomych swiatel)
-function nb3dBlade(){if(!NB3D_ON||!S||!pl||pl.dead)return;let f=0,i=0;try{f=sk('fireblade')||0;i=sk('iceblade')||0}catch(e){return}if(!f&&!i)return;const sw=(pl.swingT>0||(pl.atk&&pl.atk.stage==='act'))?1:0,k=(.35+.25*Math.max(f,i)/3)+sw*1.1;
- nb3dDyn(pl.x/16+(pl.fx||0)*.55,.9,pl.y/16+(pl.fy||0)*.45,f>=i?0xff8a3a:0x8fd6ff,k,4.2+sw*1.5,.45)}
 /* ============ MINIMAP ============ */
 const MINI={fog:canvas(MW,MH),t:0};
 const MCOL={20:'#34303c',26:'#34303c',30:'#34303c',29:'#8a6a2a',32:'#3b3128',25:'#6a6070',24:'#d4500e',23:'#140406',22:'#15131a',27:'#ff8a2a',31:'#4a4452',
