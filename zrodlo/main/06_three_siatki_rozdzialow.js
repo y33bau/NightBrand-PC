@@ -517,13 +517,15 @@ function buildSolneNabrzeze(I){
 // Proba 2 (autor: bryly z koloru "wygladaja cyfrowo, jak z prototypu"): beczka oklejona malunkiem z jej obrazka p1_barrel (pas klepek z obreczami i mchem, lustrzany, wiec bez szwu; wieko z gory obrazka), bez polysku. Kolo zostaje obrazkiem (jego malunek jest w perspektywie, nie da sie go nakleic). Porownanie przed: ?rek3d=0 (tylko lokalnie).
 const REK3D_ON=nbParam('rek3d')!=='0';
 const REK3D_KEYS=new Set(['barrel']);
-function rek3dBuild(ROOT,I){
- const img=I.p1_barrel;if(!img)return null;
+// 20.11.2026 (autor: "poprosze o wszystko w wersji testowej"): ta sama beczka w rozdz. IV (malunek p3_barrel) i V (malunek p1_barrel; wczesniej stary piksel z atlasu br_props). Wycinki liczone od obrysu obrazka (box), wiec pasuja do obu rozmiarow.
+const REK3D_BOX={p1_barrel:[83,55,300,360],p3_barrel:[52,45,203,240]};
+function rek3dBuild(ROOT,I,key='p1_barrel'){
+ const img=I[key],bx=REK3D_BOX[key];if(!img||!bx)return null;const sk=img.width/(key==='p3_barrel'?256:384),bw=(bx[2]-bx[0])*sk,bh=(bx[3]-bx[1])*sk,X=f=>bx[0]*sk+bw*f,Y=f=>bx[1]*sk+bh*f;
  const K=port3dKit(),{put,at}=K,hash=(x,y)=>{const s=Math.sin(x*91.7+y*47.3)*43758.5453;return s-Math.floor(s)};
  // bok: srodkowy pas obrazka (najmniej skrocony perspektywa) + jego lustro = kafel bez szwu, 3 kafle na obwod
- const side=(()=>{const c=canvas(140,256),g=c.getContext('2d');g.drawImage(img,152,118,70,234,0,0,70,256);g.save();g.translate(140,0);g.scale(-1,1);g.drawImage(img,152,118,70,234,0,0,70,256);g.restore();const t=new THREE.CanvasTexture(c);t.wrapS=THREE.RepeatWrapping;t.repeat.set(3,1);t.anisotropy=4;return t})();
+ const side=(()=>{const c=canvas(140,256),g=c.getContext('2d');const sx=X(.32),sy=Y(.207),sw=bw*.32,sh=Y(.974)-sy;g.drawImage(img,sx,sy,sw,sh,0,0,70,256);g.save();g.translate(140,0);g.scale(-1,1);g.drawImage(img,sx,sy,sw,sh,0,0,70,256);g.restore();const t=new THREE.CanvasTexture(c);t.wrapS=THREE.RepeatWrapping;t.repeat.set(3,1);t.anisotropy=4;return t})();
  // wieko: elipsa z gory obrazka rozciagnieta do kola
- const lid=(()=>{const c=canvas(128,128),g=c.getContext('2d');g.drawImage(img,108,58,168,56,0,0,128,128);return new THREE.CanvasTexture(c)})();
+ const lid=(()=>{const c=canvas(128,128),g=c.getContext('2d');g.drawImage(img,X(.115),Y(.01),bw*.774,bh*.183,0,0,128,128);return new THREE.CanvasTexture(c)})();
  const mat=map=>{const m=phong({map,shininess:4,specular:0x080808});m.color.setRGB(.74,.72,.7);return m};
  const sideM=mat(side),lidM=mat(lid);
  const BODY=new THREE.LatheGeometry([[.40,0],[.465,.22],[.5,.5],[.465,.78],[.40,1]].map(([a,b])=>new THREE.Vector2(a,b)),18),DISC=new THREE.CircleGeometry(1,18);
@@ -576,7 +578,7 @@ function buildBrzeznica(I){
   const PF={};for(const k in R)PF[k]=I['p1_'+k]?procFrame(I['p1_'+k],0,0,R[k][2],R[k][3],'prop'):procFrame(I.br_props,R[k][0],R[k][1],R[k][2],R[k][3],'prop');
   // stairs down into the crypt (Lower City transition sheet)
   if(I.p1_crypt_stairs){R.crypt_stairs=[0,0,96,72];PF.crypt_stairs=procFrame(I.p1_crypt_stairs,0,0,96,72,'prop')}else{R.crypt_stairs=[0,0,64,32];PF.crypt_stairs=procFrame(I.trans,0,0,64,32,'prop')}
-  const R3=REK3D_ON?rek3dBuild(ROOT,I):null;W.rek3d=R3;
+  const R3=REK3D_ON?rek3dBuild(ROOT,I):null;WORLDS[CH].rek3d=R3;
   for(const p of PROPS){
     let frames,rc;
     if(R3&&REK3D_KEYS.has(p.k)&&!p.anim&&p.shrine===undefined){R3.place(p);continue}
@@ -698,7 +700,9 @@ function buildStolica(I){planGround(3);
   const ANIM={fire:['debris_fire',4],pyre:['pyre',4],bloom:['rot_bloom',2]};
   for(let i=0;i<4;i++)if(I['p2_brazier_'+i])PF['brazier_'+i]=procFrame(I['p2_brazier_'+i],0,0,32,32,'prop'); // 13.11.2026: nowe, wyrownane klatki koksownika
   for(const [x,y] of braziers){const frames=[0,1,2,3].map(i=>PF['brazier_'+i]);propObjs.push({mesh:mkProp(frames,x+.5,y+.92,RC.brazier_0),frames,fps:6,ph:Math.random()*3})}
+  const R3=REK3D_ON?rek3dBuild(ROOT,I,I.p3_barrel?'p3_barrel':'p1_barrel'):null;WORLDS[CH].rek3d=R3;
   for(const p of PROPS){let frames,rc;
+    if(R3&&REK3D_KEYS.has(p.k)&&!p.anim&&p.shrine===undefined&&!p.still){R3.place(p);continue}
     if(ANIM[p.anim]){const [k,n]=ANIM[p.anim];frames=[...Array(n).keys()].map(i=>PF[k+'_'+i]);rc=RC[k+'_0']}
     else if(p.shrine!==undefined){frames=[PF.healing_shrine,PF.depleted_shrine];rc=RC.healing_shrine}
     else{const k=p.still||p.k;frames=[PF[k]];rc=RC[k]}
@@ -771,7 +775,9 @@ function buildCzarnobor(I){planGround(4);
   const PF={},RC={};for(const k in RB){PF[k]=(I['p1_'+k]&&/^debris_fire_\d$/.test(k))?procFrame(I['p1_'+k],0,0,RB[k][2],RB[k][3],'prop'):procFrame(I.br_props,RB[k][0],RB[k][1],RB[k][2],RB[k][3],'prop');RC[k]=RB[k]}
   if(I.cz_props)for(const k in RK){const [x,y,w=32]=RK[k];RC[k]=[x,y,w,32];PF[k]=I['p4_'+k]?procFrame(I['p4_'+k],0,0,w,32,'prop'):procFrame(I.cz_props,x,y,w,32,'prop')}
   const ANIM={fire:['debris_fire',4],campfire:[I.cz_props?'cz_fire':'debris_fire',4],wisp:['cz_wisp',2],crow:['cz_crow',2]};
+  const R3=REK3D_ON?rek3dBuild(ROOT,I):null;WORLDS[CH].rek3d=R3;
   for(const p of PROPS){if(OBJ[p.k]||p.stone!==undefined)continue;let frames,rc2;
+    if(R3&&REK3D_KEYS.has(p.k)&&!p.anim&&p.shrine===undefined){R3.place(p);continue}
     if(!PF[p.k]&&!ANIM[p.anim]&&p.shrine===undefined){const alt={cz_skullpole:'impaled_head',cz_gallows:'gallows',cz_wagon:'marga_cart',cz_tent:'burnt_hay',cz_cauldron:'barrel',cz_firewood:'barrel',cz_beehive:'barrel',cz_wheel:'wheel',cz_idol:'crow_post',cz_sacpole:'crow_post',cz_pelts:'burnt_hay',cz_bones:'covered_corpses'}[p.k];if(alt)p.k=alt}
     if(ANIM[p.anim]&&PF[ANIM[p.anim][0]+'_0']){const [k,n]=ANIM[p.anim];frames=[...Array(n).keys()].map(i=>PF[k+'_'+i]);rc2=RC[k+'_0']}
     else if(p.shrine!==undefined){frames=PF.cz_shrine?[PF.cz_shrine,PF.cz_shrine_burnt]:[PF.shrine,PF.shrine];rc2=RC.cz_shrine||RB.shrine}

@@ -902,3 +902,4 @@ cache826 · Rozdzial I (Normalny/Trudny): start nocy 80% liczby wrogow zamiast 6
 cache827 · Port: domy z murem pruskim i jasniejszym tynkiem/deskami, statek (smolowane deski, poklad, pas pod relingiem), szuwary tylko na wodzie, worki z sola znow obrazkiem, subtelniejsza piana. Kontrola polozenia rekwizytow w rozdzialach I-VI: bez bledow do poprawy. NIE sprawdzono: krypta (CH 9), FPS u autora, pad, itch.io
 cache828 · Runda bryl rekwizytow 1: beczki i kola wozow rozdz. I jako bryly 3D (?rek3d=0 = stary wyglad). Nie sprawdzono: FPS u autora, pad, walka, inne rozdzialy, itch.io
 cache829 · Runda bryl rekwizytow 1, proba 2: beczki rozdz. I jako bryly oklejone malunkiem z obrazka p1_barrel; kola wracaja do obrazka (?rek3d=0 = stary wyglad). Nie sprawdzono: FPS u autora, pad, walka, itch.io
+cache830 · Bryly rekwizytow 1, wersja testowa: beczki oklejone malunkiem w rozdz. I, IV, V (?rek3d=0 = stary wyglad). Nie sprawdzono: FPS u autora, pad, walka, itch.io
