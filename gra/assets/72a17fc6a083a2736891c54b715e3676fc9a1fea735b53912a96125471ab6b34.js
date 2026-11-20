@@ -1856,7 +1856,7 @@ function depthApron(w){const m=new THREE.Mesh(new THREE.PlaneGeometry(MW+260,MH+
 function softenProps(w){// 12.11.2026: Akt I - rekwizyty bez twardego cienia z swiatla bohatera i lekko sciemnione do koloru ziemi (?softprops=0 = przed)
  if(nbParam('softprops')==='0')return;const seen=new Set(),tint=new THREE.Color(.76,.77,.8);
  w.group.traverse(o=>{if(!o.userData||!o.userData.propAsset)return;o.castShadow=false;const ms=Array.isArray(o.material)?o.material:[o.material];for(const m of ms){if(!m||seen.has(m)||!m.color||m.userData.noSoften)continue;seen.add(m);m.color.multiply(tint);if(m.emissiveMap&&m.emissive&&m.emissiveIntensity>0)m.emissiveIntensity*=.72}})}
-function finishWorldArt(w){if(depthOn(w.ch))depthApron(w);buildRoofs(w);preparePowerFires(w);if(w.ch!==PORT)composeWorldProps(w);dressSettlementsHD(w);dressNeutral(w);settleWorldProps(w);if(w.ch===1&&depthOn(1))softenProps(w);const flat=new Set(['dwarf_bones','covered_corpses','beggar_bodies','doorway_bones','wheel','burnt_hay','cz_bones','cz_pelts','cz_walk','cz_wisp','cz_crow','mushrooms','ferns','brambles','reeds','wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11','scroll','book','pages','keys','seal','purse','shackles','skull']);
+function finishWorldArt(w){if(depthOn(w.ch))depthApron(w);buildRoofs(w);preparePowerFires(w);if(w.ch!==PORT)composeWorldProps(w);if(w.rek3d){w.rek3d.finish();w.rek3d=null}dressSettlementsHD(w);dressNeutral(w);settleWorldProps(w);if(w.ch===1&&depthOn(1))softenProps(w);const flat=new Set(['dwarf_bones','covered_corpses','beggar_bodies','doorway_bones','wheel','burnt_hay','cz_bones','cz_pelts','cz_walk','cz_wisp','cz_crow','mushrooms','ferns','brambles','reeds','wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11','scroll','book','pages','keys','seal','purse','shackles','skull']);
   const props=w.PROPS.filter(p=>!flat.has(p.k)&&!VOID.has(tileAt(Math.floor(p.x),Math.floor(p.y-.2))));
   w.groundShadows=instanced(groundFxGeo,groundShadowMat,props,p=>{const m=p.obj&&p.obj.mesh,s=p.k==='sacred_oak'?2.2:p.tree?.8:(!m&&p.port&&PORT_PROP_SIZE[p.k])?Math.min(2,PORT_PROP_SIZE[p.k][0]*.62):m?Math.min(2,Math.max(.3,m.geometry.parameters.width*Math.abs(m.scale.x)*.5)):.65;return M4.compose(V.set(p.x,.024,p.y-.1),Q.identity(),SC.set(s*1.1,1,s*.6))},false,false);
   const lights=w.LSRC.filter(l=>['fire','shrine','rune','npc','stone','merchant'].includes(l.kind)&&l.base>0&&[-1,0,1].every(dy=>[-1,0,1].every(dx=>!VOID.has(tileAt(Math.floor(l.x)+dx,Math.floor(l.z)+dy))))).slice(0,48);w.groundL=lights;
@@ -2394,6 +2394,36 @@ function buildSolneNabrzeze(I){
 }
 
 // Chapter I meshes: M1 ground, M2 walls, M3 props
+// 20.11.2026 (runda bryl rekwizytow 1, rozdz. I): beczki i kola wozow jako geometria 3D zamiast plaskich obrazkow (obrazki slabo trzymaly perspektywe: wygladaly jak naklejki na ziemi). Tylko wyglad, kolizje bez zmian. Szubienica, wozy Margi i reszta zostaja obrazkami. Porownanie przed: ?rek3d=0 (tylko lokalnie).
+const REK3D_ON=nbParam('rek3d')!=='0';
+const REK3D_KEYS=new Set(['barrel','wheel']);
+function rek3dBuild(ROOT){
+ const K=port3dKit(),{put,at}=K,hash=(x,y)=>{const s=Math.sin(x*91.7+y*47.3)*43758.5453;return s-Math.floor(s)};
+ const CYL=new THREE.CylinderGeometry(1,1,1,10),TOR=new THREE.TorusGeometry(1,.16,6,20),TIRE=new THREE.TorusGeometry(1,.045,5,26),BOX=new THREE.BoxGeometry(1,1,1);
+ const BARREL=new THREE.LatheGeometry([[0,0],[.40,0],[.465,.22],[.5,.5],[.465,.78],[.40,1],[0,1]].map(([a,b])=>new THREE.Vector2(a,b)),14);
+ const mk=(base,k,rx)=>{const t=port3dPlanks(base,false);t.repeat.set(rx,1);const m=phong({map:t,emissive:0x060403});m.color.setRGB(k,k*.98,k*.94);return m};
+ const barrelM=mk('#33261b',.82,1.8),woodM=mk('#2e231a',.82,1),iron=phong({color:0x2c2a28,shininess:14,specular:0x1c2024,emissive:0x040404});
+ const M4a=new THREE.Matrix4(),M4b=new THREE.Matrix4(),E=new THREE.Euler();
+ const rot=(rx,ry,rz)=>M4b.makeRotationFromEuler(E.set(rx,ry,rz)).clone(),mv=(x,y,z)=>M4a.makeTranslation(x,y,z).clone();
+ const MODEL={
+  // beczka: klepki, cztery obreczy; co piata lezy na boku
+  barrel:(b,h)=>{const r=.27+h*.05,H=.7+h*.12,tip=h>.8;
+   if(tip)b=b.clone().multiply(mv(0,r*.98,0)).multiply(rot(0,0,Math.PI/2)).multiply(mv(0,-H/2,0));
+   put(BARREL,barrelM,b,0,0,0,r*2,H,r*2);
+   for(const [y,s] of [[.08,.84],[.26,.95],[.74,.95],[.92,.85]])put(TOR,iron,b,0,H*y,0,r*s,r*s,r*s*.5,Math.PI/2)},
+  // kolo wozu: obrecz z zelaznym bandazem, piasta i szprychy (dwie wylamane), lezy lekko przechylone
+  wheel:(b,h)=>{const R=.42,th=.2+h*.85,bw=b.clone().multiply(mv(0,R*Math.sin(th)+.05,0)).multiply(rot(-Math.PI/2+th,0,h*.5));/* przechylone: plasko lezace kolo w calosci chowalo sie pod warstwa mgly przy ziemi (.32 j.) */
+   put(TOR,woodM,bw,0,0,0,R,R,R*.7);put(TIRE,iron,bw,0,0,0,R*1.1,R*1.1,R*2.6);
+   put(CYL,woodM,bw,0,0,0,.095,.2,.095,Math.PI/2);
+   for(let k=0;k<8;k++){if(k===2||k===5)continue;const a=k/8*Math.PI*2+h,L=R-.09;put(BOX,woodM,bw,Math.cos(a)*(L/2+.08),Math.sin(a)*(L/2+.08),0,L,.05,.05,0,0,a)}
+   const a=2/8*Math.PI*2+h;put(BOX,woodM,bw,Math.cos(a)*.14,Math.sin(a)*.14,0,.12,.05,.05,0,0,a)}
+ };
+ const shadow=(x,z,sx,sz)=>{const m=new THREE.Mesh(groundFxGeo,groundShadowMat);m.position.set(x,.02,z);m.scale.set(sx,1,sz);m.renderOrder=1;ROOT.add(m)};
+ // pozycje rozstrzyga composeWorldProps (przesuwa kola przy wozach/beczkach przez p.obj.mesh), wiec modele powstaja dopiero w finish(), po tym kroku
+ const list=[];
+ const PROXY_GEO=new THREE.PlaneGeometry(1.6,1.6);/* zastepnik p.obj.mesh (nie trafia do sceny): inne kroki czytaja z niego polozenie, skale i szerokosc siatki (cien pod rekwizytem) */
+ const place=p=>{const proxy=new THREE.Mesh(PROXY_GEO);proxy.position.set(p.x,0,p.y);p.obj={mesh:proxy};list.push([p,proxy])};
+ return {place,finish:()=>{for(const [p,m] of list){const h=hash(p.x,p.y),x=m.position.x,z=m.position.z-.42;MODEL[p.k](at(x,z,(p.flip?Math.PI:0)+h*6.28),h);if(p.k==='wheel')shadow(x,z,1.15,1.0)/* cien beczki daje istniejacy krok groundShadows */}list.length=0;K.finish(ROOT)}}}
 function buildBrzeznica(I){
   const F=I.br_ground,Wl=I.br_walls,r=rng(77);planGround(1);
   const fc=canvas(WW,WH),fg=fc.getContext('2d');
@@ -2430,8 +2460,10 @@ function buildBrzeznica(I){
   const PF={};for(const k in R)PF[k]=I['p1_'+k]?procFrame(I['p1_'+k],0,0,R[k][2],R[k][3],'prop'):procFrame(I.br_props,R[k][0],R[k][1],R[k][2],R[k][3],'prop');
   // stairs down into the crypt (Lower City transition sheet)
   if(I.p1_crypt_stairs){R.crypt_stairs=[0,0,96,72];PF.crypt_stairs=procFrame(I.p1_crypt_stairs,0,0,96,72,'prop')}else{R.crypt_stairs=[0,0,64,32];PF.crypt_stairs=procFrame(I.trans,0,0,64,32,'prop')}
+  const R3=REK3D_ON?rek3dBuild(ROOT):null;W.rek3d=R3;
   for(const p of PROPS){
     let frames,rc;
+    if(R3&&REK3D_KEYS.has(p.k)&&!p.anim&&p.shrine===undefined){R3.place(p);continue}
     if(p.anim==='fire'){frames=[0,1,2,3].map(i=>PF['debris_fire_'+i]);rc=R.debris_fire_0}else if(p.anim==='hfire'){frames=[0,1,2,3].map(i=>PF['house_fire_'+i]);rc=R.house_fire_0}
     else if(p.shrine!==undefined){frames=[PF.shrine,PF.shrine];rc=R.shrine}
     else{frames=[PF[p.k]];rc=R[p.k]}

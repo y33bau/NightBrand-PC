@@ -900,3 +900,4 @@ cache824 · Usuniete swiecace ostrze (autor); cieply kontur od ognia slabszy i z
 cache825 · Kamera przestrzenna 45 st. i troche dalej (autor): szerokosc ok. 96% klasycznej, glebia ok. 116%. NIE sprawdzono: walka na zywo z nowym polem widzenia, FPS u autora, pad, itch.io
 cache826 · Rozdzial I (Normalny/Trudny): start nocy 80% liczby wrogow zamiast 65%, po 90 s bez zmian; Latwy bez zmian (decyzja autora). NIE sprawdzono: gra na zywo, FPS u autora, pad, itch.io
 cache827 · Port: domy z murem pruskim i jasniejszym tynkiem/deskami, statek (smolowane deski, poklad, pas pod relingiem), szuwary tylko na wodzie, worki z sola znow obrazkiem, subtelniejsza piana. Kontrola polozenia rekwizytow w rozdzialach I-VI: bez bledow do poprawy. NIE sprawdzono: krypta (CH 9), FPS u autora, pad, itch.io
+cache828 · Runda bryl rekwizytow 1: beczki i kola wozow rozdz. I jako bryly 3D (?rek3d=0 = stary wyglad). Nie sprawdzono: FPS u autora, pad, walka, inne rozdzialy, itch.io
