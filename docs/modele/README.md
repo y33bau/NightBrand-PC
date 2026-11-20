@@ -1,8 +1,8 @@
-Stan na 2026-11-20, cache 832, rola grafik
+Stan na 2026-11-20, cache 833, rola grafik
 
 # Modele rekwizytów z Blendera
 
-Rekwizyty o prostym kształcie (beczka, głaz, pień z siekierą, ul, kurhan, stos drewna, studnia) są w grze modelami 3D (`assets/rekwizyty/*.glb`). Kod: `zrodlo/main/06_three_siatki_rozdzialow.js` (`P3D_GLB`, `P3D_MAP`, `paint3dFinish`).
+Rekwizyty o prostym kształcie są w grze modelami 3D: partia 1 (beczka, głaz, pień z siekierą, ul, kurhan, stos drewna, studnia) w `potok.py`, partia 2 (sarkofagi rozdz. II i IV, kowadło, wózek kopalniany, skrzynia, nagrobek, krzyż na grobie, namiot, misa ofiarna, ława) w `partia2.py` (`assets/rekwizyty/*.glb`). Kod: `zrodlo/main/06_three_siatki_rozdzialow.js` (`P3D_GLB`, `P3D_MAP`, `paint3dFinish`).
 
 Jak to działa:
 - Model w `.glb` ma tylko kształt, normalne i wypalone cienie (kolory wierzchołków). Nie ma tekstury.
@@ -17,4 +17,4 @@ Jak zrobić lub poprawić model:
 3. `/tmp/bl/bin/python potok.py -- NAZWA` → `/tmp/blend/out/NAZWA.glb`; podgląd z kamery gry i z boku: `/tmp/bl/bin/python podglad.py -- NAZWA` (`NAZWA_porownanie.png`).
 4. `python3 narzedzia/wydaj.py dodaj gra PLIK.glb rekwizyty leniwy`, nowy adres wpisz do `P3D_GLB`, stary plik usuń (`wydaj.py usun`).
 
-Nie nadają się (namalowane w perspektywie): sarkofagi, koła, wozy, szubienice, beczka z atramentem, skrzynia, postacie, ognie, drzewa.
+Rzut z kamery działa też dla rekwizytów namalowanych w perspektywie. Bez sensu albo za trudne: koła (prawie płaskie), dyby (model czarny i nieczytelny), gruz z filarem, pęknięty dzwon, miechy, postacie, ognie (animowane), drzewa, kamienie runiczne (zapalane).

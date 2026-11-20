@@ -905,3 +905,4 @@ cache829 · Runda bryl rekwizytow 1, proba 2: beczki rozdz. I jako bryly oklejon
 cache830 · Bryly rekwizytow 1, wersja testowa: beczki oklejone malunkiem w rozdz. I, IV, V (?rek3d=0 = stary wyglad). Nie sprawdzono: FPS u autora, pad, walka, itch.io
 cache831 · Bryly z malunkiem, wersja testowa: beczki (I, IV, V), studnia w porcie, w rozdz. V stos drewna, ul, pien z siekiera, glaz, kurhan (?rek3d=0 = stary wyglad). Nie sprawdzono: FPS u autora, pad, walka, itch.io
 cache832 · Modele z Blendera: beczki (I, IV, V), glaz, pien z siekiera, ul, kurhan, stos drewna (V), studnia (port); malunek rzucany z kamery (?rek3d=0 = stary wyglad). Nie sprawdzono: FPS u autora, pad, walka, itch.io
+cache833 · Modele z Blendera, partia 2: sarkofagi (II, IV), kowadlo, wozek, nagrobek, krzyz, namiot, misa, lawa, skrzynia (?rek3d=0 = stary wyglad). Nie sprawdzono: FPS u autora, pad, walka, itch.io; wozek, misa i skrzynia nieobejrzane w grze

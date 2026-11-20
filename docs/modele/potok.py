@@ -9,7 +9,7 @@ import numpy as np
 ARGS=sys.argv[sys.argv.index('--')+1:]
 OUT='/tmp/blend/out/';os.makedirs(OUT,exist_ok=True)
 P=math.radians(45);UP=Vector((0,math.sin(P),math.cos(P)))
-IDX={x['klucze'][0]:x['plik'] for x in json.load(open('/home/claude/nightbrand-pc/docs/INDEKS_ASSETOW.json'))['pliki'] if x.get('klucze')}
+IDX={k:x['plik'] for x in json.load(open('/home/claude/nightbrand-pc/docs/INDEKS_ASSETOW.json'))['pliki'] for k in (x.get('klucze') or [])}
 def sprite(key):
     im=Image.open('/home/claude/nightbrand-pc/gra/'+IDX[key]).convert('RGBA');a=np.array(im)[...,3]>128
     ys,xs=np.where(a);W,H=im.size
@@ -184,6 +184,7 @@ def m_studnia(F):
     o=join([ring,water,beam,drum,rope,bucket,crank,knob]+posts,'studnia');decimate(o,.3);obj_apply(o);shade(o,True,35);return o
 MODELE.update({'pien':('p4_axe_stump',m_pien),'ul':('p4_cz_beehive',m_ul),'kurhan':('p4_burial_mound',m_kurhan),'drewno':('p4_cz_firewood',m_drewno),'studnia':('p1_well',m_studnia)})
 
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'partia2.py')).read())
 # ---------- wypalanie cieni, eksport, podglad ----------
 def bake_ao(o):
     sc=bpy.context.scene;sc.render.engine='CYCLES';sc.cycles.device='CPU';sc.cycles.samples=64

@@ -6,8 +6,8 @@ import numpy as np
 from scipy import ndimage
 names=sys.argv[sys.argv.index('--')+1:]
 P=math.radians(45);UP=Vector((0,math.sin(P),math.cos(P)))
-IDX={x['klucze'][0]:x['plik'] for x in json.load(open('/home/claude/nightbrand-pc/docs/INDEKS_ASSETOW.json'))['pliki'] if x.get('klucze')}
-KEY={'glaz':'p4_mossy_boulder','beczka1':'p1_barrel','beczka3':'p3_barrel','pien':'p4_axe_stump','ul':'p4_cz_beehive','kurhan':'p4_burial_mound','drewno':'p4_cz_firewood','studnia':'p1_well'}
+IDX={k:x['plik'] for x in json.load(open('/home/claude/nightbrand-pc/docs/INDEKS_ASSETOW.json'))['pliki'] for k in (x.get('klucze') or [])}
+KEY={'glaz':'p4_mossy_boulder','beczka1':'p1_barrel','beczka3':'p3_barrel','pien':'p4_axe_stump','ul':'p4_cz_beehive','kurhan':'p4_burial_mound','drewno':'p4_cz_firewood','studnia':'p1_well','sarkofag2':'p2_sarcophagus','sarkofag3':'p3_sarcophagus','kowadlo':'p2_anvil','wozek':'p2_mine_cart','skrzynia':'p5_chest','nagrobek':'p1_tombstone','krzyz':'p1_grave_cross','dyby':'p1_stocks','namiot':'p4_cz_tent','misa':'p3_offering_bowl','lawa':'p5_bench_b'}
 for n in names:
     bpy.ops.wm.read_factory_settings(use_empty=True)
     bpy.ops.import_scene.gltf(filepath='/tmp/blend/out/%s.glb'%n)

@@ -2404,10 +2404,13 @@ function LOKALNIE_REK3D(){try{return /^(localhost|127\.0\.0\.1|\[::1\])$/.test(l
 const P3D_GLB={beczka:'assets/rekwizyty/9c2b288a2f3e2836e6dfe2464e2e129fd8930da48f3515b3fffce329f628bf27.glb',glaz:'assets/rekwizyty/3cb68cacf5ffaedd72fce29dbbca8db4e7ac096239e46b549c9668db387046bf.glb',
  pien:'assets/rekwizyty/8e5f9297f89c8dd2cb0b59b6d3caa9e209a8ce36c582fbef0c0471545102c94f.glb',ul:'assets/rekwizyty/c40c8201a0698d7495a80fd087edb12d31d057927dde4a668294fa2b9d78fc99.glb',
  kurhan:'assets/rekwizyty/254e774d7a66d8de38394ba9683eed3ca9380c7266d0cceba3bad13450f5f414.glb',drewno:'assets/rekwizyty/64d715a6a73520da33b3ffeb683e620406f444122867ea745a0a34188d552ba1.glb',
- studnia:'assets/rekwizyty/b8b1849daf3675db429c598019be29d6a6579a8377b7ec1a763832dee5429c37.glb'};
+ studnia:'assets/rekwizyty/b8b1849daf3675db429c598019be29d6a6579a8377b7ec1a763832dee5429c37.glb',
+ // partia 2 (20.11.2026)
+ sarkofag2:'assets/rekwizyty/7a1fd59e30f1d188ba58473f0cdb3d4dd5dc2a459a587d4d9c54eb28b965945d.glb',sarkofag3:'assets/rekwizyty/8f13a8553f74fa9fbf2467410a92b83b44de9fb45273ffb060c5e02b69f5178f.glb',kowadlo:'assets/rekwizyty/f575e38ba9da1ecf5a91117de65ed77d147854b8c36738e3004b385ebc67fe09.glb',wozek:'assets/rekwizyty/3705ea434ab8f04db7b99a570e8d68417a11c5883cc7d14b631f5b510a374e60.glb',skrzynia:'assets/rekwizyty/5c777017ca36b728084d7d67f26c0886910b9a0cb1dd4458eb004f51dde0354e.glb',nagrobek:'assets/rekwizyty/386e376c2ca397ad53a1447326acbe51459b52da2063c072c643b416e78b146d.glb',krzyz:'assets/rekwizyty/6282357a705b2de0cec4bd2d827e607060276786d01dfdc7518df8121f0979ed.glb',namiot:'assets/rekwizyty/789d91fd0158f5f5522a95d4319909615208d2e2ff51cb4b09de378fc3d8d9ad.glb',misa:'assets/rekwizyty/76eb154ce9f03249f23ec0123eb905b04e628f5e2d778d6d857352b4e189925a.glb',lawa:'assets/rekwizyty/3d8789aacb7c2b12f598045767b50cec55348362af0b566cb23395e2b790d164.glb'};
 // rozdzial -> klucz rekwizytu -> [model, obrazek z malunkiem]. Rozdz. V: beczka z atlasu br_props dostaje malunek p1_barrel.
-const P3D_MAP={1:{barrel:['beczka','p1_barrel']},3:{barrel:['beczka','p3_barrel']},
- 4:{barrel:['beczka','p1_barrel'],cz_firewood:['drewno','p4_cz_firewood'],cz_beehive:['ul','p4_cz_beehive'],axe_stump:['pien','p4_axe_stump'],mossy_boulder:['glaz','p4_mossy_boulder'],burial_mound:['kurhan','p4_burial_mound']},
+const P3D_MAP={1:{barrel:['beczka','p1_barrel'],tombstone:['nagrobek','p1_tombstone'],grave_cross:['krzyz','p1_grave_cross']},2:{sarcophagus:['sarkofag2','p2_sarcophagus'],anvil:['kowadlo','p2_anvil'],mine_cart:['wozek','p2_mine_cart']},
+ 3:{barrel:['beczka','p3_barrel'],sarcophagus:['sarkofag3','p3_sarcophagus'],offering_bowl:['misa','p3_offering_bowl']},5:{chest:['skrzynia','p5_chest'],bench_a:['lawa','p5_bench_b'],bench_b:['lawa','p5_bench_b']},
+ 4:{barrel:['beczka','p1_barrel'],cz_firewood:['drewno','p4_cz_firewood'],cz_beehive:['ul','p4_cz_beehive'],axe_stump:['pien','p4_axe_stump'],mossy_boulder:['glaz','p4_mossy_boulder'],burial_mound:['kurhan','p4_burial_mound'],cz_tent:['namiot','p4_cz_tent']},
  6:{well:['studnia','p1_well']}};
 const P3D_GEO={};
 // minimalny czytnik .glb: pierwsza siatka, POSITION/NORMAL/COLOR_0 i indeksy (bez biblioteki GLTFLoader)
