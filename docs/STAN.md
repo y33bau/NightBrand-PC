@@ -23,7 +23,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
-- 817–827: FPS i procesor (porównać z 814), walka z bossem (najazd kamery, oddalenie), kamera wyprzedzająca ruch, odbicia, deszcz 3D, pad w Opcjach (wiersz Kamera).
+- 817–827: autor sprawdził 20.11.2026 („sprawdzono wszystko, działa”).
 - 815–816 (port w bryle, kamera przestrzenna, promienie, cienie od ognisk, oddalenie w walce): FPS na obu kamerach, walka z bossem (oddalenie), pad w Opcjach przy wierszu Kamera, napisy EN kamery.
 - 813–814 (fokus i podświetlenia): Kaplica i Kronika strzałkami i padem (opis po prawej idzie za zaznaczeniem), brak zostających podświetleń po kliknięciu myszą, lokalizacje na mapie, deski w Ognisku i Przygotowaniu, odłączenie pada w menu.
 - 811 (kociołki 12/10/8%, sloty 5–6 na listach klawiszy, przełączniki tylko lokalnie, lżejsze style menu): leczenie przy kociołku na trzech trudnościach, lista „Własne klawisze” (przewinąć do dołu), lista pada w Opcjach.
