@@ -1,4 +1,4 @@
-Stan na 2026-11-18, cache 816, rola agent główny
+Stan na 2026-11-20, cache 827, rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,13 +6,14 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 816, opublikowane 18.11.2026 (log `docs/logi/LOG_SESJI_2026-11-18.md`) |
+| main | cache 827, opublikowane 20.11.2026 (log `docs/logi/LOG_SESJI_2026-11-19.md`) |
 | Gałęzie czekające na „publikuj” | brak |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 816 |
-| Zip itch.io | `NightBrand_itch_816.zip` w `~/Desktop/NIGHTBRAND` na Macu autora |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 827 |
+| Zip itch.io | `NightBrand_itch_827.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 148–152 MB (limit 500 MB) |
 
 ## Decyzje autora (najnowsze)
+- 19.11: kamera przestrzenna domyślna, 45° i trochę dalej; efekty oprawy wyraźne ("AAA"), latarnie słabsze; bez świecącego ostrza; żuraw i worki z solą jako obrazki; rozdz. I Normalny/Trudny start 80% wrogów.
 - 18.11: port w bryle (bez żurawia: zostaje obrazkiem); kamera klasyczna/przestrzenna w Opcjach; nowe shadery dozwolone dla oprawy 3D (promienie światła, cienie od ognisk); oddalenie kamery przy bossie i naporze zostaje.
 - 18.11: autor testuje też na Macu (`Uruchom_test_kamery.command` w `~/Desktop/NIGHTBRAND`).
 - 17.11: banery bez złotej ramki: deski w Ognisku/Przygotowaniu bez ramki z mocniejszym żarem; lokalizacje na mapie z ramką przy fokusie i mocniejszym podświetleniem; deski na dole mapy bez zmian; karty perków i wiersze list zostają ze złotą ramką.
@@ -22,6 +23,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 817–827: FPS i procesor (porównać z 814), walka z bossem (najazd kamery, oddalenie), kamera wyprzedzająca ruch, odbicia, deszcz 3D, pad w Opcjach (wiersz Kamera).
 - 815–816 (port w bryle, kamera przestrzenna, promienie, cienie od ognisk, oddalenie w walce): FPS na obu kamerach, walka z bossem (oddalenie), pad w Opcjach przy wierszu Kamera, napisy EN kamery.
 - 813–814 (fokus i podświetlenia): Kaplica i Kronika strzałkami i padem (opis po prawej idzie za zaznaczeniem), brak zostających podświetleń po kliknięciu myszą, lokalizacje na mapie, deski w Ognisku i Przygotowaniu, odłączenie pada w menu.
 - 811 (kociołki 12/10/8%, sloty 5–6 na listach klawiszy, przełączniki tylko lokalnie, lżejsze style menu): leczenie przy kociołku na trzech trudnościach, lista „Własne klawisze” (przewinąć do dołu), lista pada w Opcjach.
