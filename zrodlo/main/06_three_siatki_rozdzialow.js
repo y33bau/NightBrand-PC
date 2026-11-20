@@ -542,6 +542,65 @@ function rek3dBuild(ROOT,I,key='p1_barrel'){
   /* oznaczone jak rekwizyty: softenProps przyciemnia je tym samym odcieniem co obrazki rozdz. I */
   const g=new THREE.Group();K.finish(g);for(const c of g.children)c.userData.propAsset=true;ROOT.add(g)};
  return {place,finish}}
+// 20.11.2026 (autor: "rob wszystko co sie da"): kolejne rekwizyty o prostym ksztalcie jako bryly oklejone malunkiem z ich wlasnych obrazkow:
+// rozdz. III (port) studnia, rozdz. V stos drewna, ul, pien z siekiera, glaz, kurhan (w rozdz. I studnia jest czescia ilustracji starosty, w VI studni nie ma). Bryla przejmuje miejsce i rozmiar obrazka (szerokosc jego siatki po skalowaniu), obrazek jest usuwany.
+// Zostaja obrazkami (namalowane w perspektywie): sarkofagi, kola, wozy, szubienice, postacie, ognie, drzewa, beczka z atramentem, skrzynia. Kolizje bez zmian. Porownanie przed: ?rek3d=0 (tylko lokalnie).
+const P3D_IMG={6:{well:'p1_well'},4:{cz_firewood:'p4_cz_firewood',cz_beehive:'p4_cz_beehive',axe_stump:'p4_axe_stump',mossy_boulder:'p4_mossy_boulder',burial_mound:'p4_burial_mound'}};
+function paint3dImg(ch,k){const n=REK3D_ON&&P3D_IMG[ch]&&P3D_IMG[ch][k];return n&&IMGS[n]?IMGS[n]:null}
+// wycinek obrazka (wspolrzedne 0..1) jako tekstura; mir = dopisane lustro (kafel bez szwu), rot = obrot o 90 st.
+function p3dTex(img,x0,y0,x1,y1,w=128,h=128,mir=false,rot=false,bg=null){const c=canvas(mir?w*2:w,h),g=c.getContext('2d'),W=img.width,H=img.height,a=[x0*W,y0*H,(x1-x0)*W,(y1-y0)*H];if(bg){g.fillStyle=bg;g.fillRect(0,0,c.width,c.height)}/* bg: tlo pod przezroczystymi rogami wycinka (inaczej czarne plamy) */g.drawImage(img,...a,0,0,w,h);if(mir){g.save();g.translate(w*2,0);g.scale(-1,1);g.drawImage(img,...a,0,0,w,h);g.restore()}
+ const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=4;if(rot){t.center.set(.5,.5);t.rotation=Math.PI/2}return t}
+function p3dMat(t,k=.76,rx=1,ry=1){if(rx!==1||ry!==1)t.repeat.set(rx,ry);const m=phong({map:t,shininess:4,specular:0x080808});m.color.setRGB(k,k*.98,k*.95);return m}
+// grudkowatosc: przesuniecie wierzcholka zalezne tylko od jego polozenia (te same punkty = to samo przesuniecie, bryla bez dziur)
+function p3dLumpy(geo,amp,seed){const P=geo.attributes.position,v=new THREE.Vector3();for(let i=0;i<P.count;i++){v.fromBufferAttribute(P,i);const n=Math.sin(v.x*7.1+seed)*Math.cos(v.z*6.3-seed)+Math.sin(v.y*9.7+v.x*3.1+seed*2)*.5;const len=v.length()||1;v.multiplyScalar(1+n*amp/len);if(v.y<0)v.y=0;P.setXYZ(i,v.x,v.y,v.z)}geo.computeVertexNormals();return geo}
+const P3D_CACHE=new Map();
+function p3dKit(key,img,make){let k=P3D_CACHE.get(key);if(!k){k=make(img);P3D_CACHE.set(key,k)}return k}
+const P3D_MODEL={
+ // stos polan: konce w strone kamery (sloje z obrazka), kora z boku polana
+ cz_firewood:(img,w)=>{const K=p3dKit('fw',img,i=>({side:p3dMat(p3dTex(i,.50,.60,.78,.66,128,64,true,true),.62),end:p3dMat(p3dTex(i,.205,.385,.335,.515),.68),G:new THREE.CylinderGeometry(1,1,1,12)}));
+  const r=w*.085,L=w*.95,out=[];let n=0;for(const [row,cnt] of [[0,5],[1,4],[2,3]])for(let j=0;j<cnt;j++){const x=(j-(cnt-1)/2)*r*2.02,y=r+row*r*1.72,h=Math.sin(++n*12.9)*.5;out.push([K.G,[K.side,K.end,K.end],x,y,h*r*.6,r*(.92+.08*h),L*(.92+.1*h),r*(.92+.08*h),Math.PI/2,0,h*.05])}return out},
+ // ul ze slomy na stoliku z desek
+ cz_beehive:(img,w)=>{const K=p3dKit('bh',img,i=>({straw:p3dMat(p3dTex(i,.25,.40,.60,.58,128,96,true),.78,3,1.6),plank:p3dMat(p3dTex(i,.12,.66,.68,.72,256,48),.76),leg:p3dMat(p3dTex(i,.14,.76,.19,.88,32,96),.72),
+   D:new THREE.LatheGeometry([[.5,0],[.52,.18],[.5,.4],[.42,.64],[.29,.84],[.14,.96],[.0,1]].map(([a,b])=>new THREE.Vector2(a,b)),20),B:new THREE.BoxGeometry(1,1,1),C:new THREE.CylinderGeometry(1,1,1,10),dark:phong({color:0x0c0907})}));
+  const d=w*.74,ht=w*.32,o=[];o.push([K.B,K.plank,0,ht,0,w,w*.07,w*.62]);for(const sx of [-1,1])for(const sz of [-1,1])o.push([K.B,K.leg,sx*w*.4,ht/2,sz*w*.22,w*.09,ht,w*.09]);
+  o.push([K.D,K.straw,0,ht+w*.035,0,d,d*.86,d]);o.push([K.C,K.straw,0,ht+w*.035+d*.86,0,d*.09,d*.07,d*.09]);o.push([K.B,K.dark,0,ht+w*.035+d*.07,d*.47,d*.17,d*.14,d*.06]);return o},
+ // pien: kora z boku, sloje z lustrzanego polkola wierzchu, siekiera wbita w wierzch, kilka wiorow
+ axe_stump:(img,w)=>{const K=p3dKit('st',img,i=>({bark:p3dMat(p3dTex(i,.22,.56,.70,.74,128,96,true),.6,2,1),top:p3dMat(p3dTex(i,.58,.41,.76,.49,64,128,true,false,'#8a6a48'),.62),blade:p3dMat(p3dTex(i,.41,.33,.49,.48),.85),
+   handle:p3dMat(p3dTex(i,.66,.17,.76,.20,128,32,false,true,'#6b4a2c'),.8),chip:p3dMat(p3dTex(i,.76,.78,.86,.86,32,32),.82),
+   T:new THREE.LatheGeometry([[.6,0],[.55,.08],[.5,.3],[.48,.7],[.47,1]].map(([a,b])=>new THREE.Vector2(a,b)),18),Dk:new THREE.CircleGeometry(.47,18),B:new THREE.BoxGeometry(1,1,1),C:new THREE.CylinderGeometry(1,1,1,8)}));
+  const d=w*.72,H=d*.62,o=[/* siekiera wieksza: to ona odroznia ten pien */[K.T,K.bark,0,0,0,d,H,d],[K.Dk,K.top,0,H+.002,0,d,d,1,-Math.PI/2,0,0]];
+  o.push([K.B,K.blade,-d*.08,H+d*.17,0,d*.42,d*.36,d*.045,0,0,.15]);o.push([K.C,K.handle,d*.3,H+d*.46,0,d*.05,d*.85,d*.05,0,0,-1.05]);
+  for(let i=0;i<4;i++){const a=i*1.9+.4;o.push([K.B,K.chip,Math.cos(a)*d*.72,d*.02,Math.sin(a)*d*.62,d*.13,d*.04,d*.09,0,a,0])}return o},
+ // glaz z mchem
+ mossy_boulder:(img,w)=>{const K=p3dKit('bo',img,i=>({rock:p3dMat(p3dTex(i,.18,.32,.85,.85,256,192,true),.6,1,1),G:p3dLumpy(new THREE.IcosahedronGeometry(1,2),.13,1.7)}));return [[K.G,K.rock,0,0,0,w*.44,w*.36,w*.36]]},
+ // kurhan: kopiec ziemi z kamieniami i krzyz
+ burial_mound:(img,w)=>{const K=p3dKit('bm',img,i=>({dirt:p3dMat(p3dTex(i,.2,.6,.82,.88,256,128,true),.72,1,1),wood:p3dMat(p3dTex(i,.48,.32,.55,.46,32,96),.78),
+   M:p3dLumpy(new THREE.SphereGeometry(1,22,10,0,Math.PI*2,0,Math.PI/2),.07,4.2),B:new THREE.BoxGeometry(1,1,1)}));
+  const h=w*.22;return [[K.M,K.dirt,0,0,0,w*.45,h,w*.36],[K.B,K.wood,0,h+w*.17,-w*.04,w*.05,w*.5,w*.05],[K.B,K.wood,0,h+w*.29,-w*.04,w*.3,w*.05,w*.045]]},
+ // studnia: murowana cembrowina (bok, wnetrze, wierzch), woda, dwa slupy, belka, kolowrot z lina, wiadro
+ well:(img,w,key)=>{const q=key==='p5_well'?{st:[.13,.70,.73,.88],top:[.15,.63,.35,.71],post:[.14,.25,.20,.45],rope:[.32,.15,.5,.28],buck:[.35,.57,.5,.66]}:{st:[.14,.70,.72,.88],top:[.15,.62,.35,.72],post:[.17,.25,.23,.45],rope:[.34,.15,.5,.28],buck:[.36,.50,.48,.60]};
+  const K=p3dKit('we'+key,img,i=>({stone:p3dMat(p3dTex(i,...q.st,128,96,true),.78,3,1),inner:p3dMat(p3dTex(i,...q.st,128,96,true),.45,3,1),top:p3dMat(p3dTex(i,...q.top),.8,3,1),post:p3dMat(p3dTex(i,...q.post,32,128),.76),
+   beam:p3dMat(p3dTex(i,...q.post,32,128,false,true),.74),rope:p3dMat(p3dTex(i,...q.rope,128,64,false,true,'#7a5a32'),.85),buck:p3dMat(p3dTex(i,...q.buck,128,64,true),.8),water:phong({color:0x0a0c10,shininess:60,specular:0x2a3440}),
+   O:new THREE.CylinderGeometry(.5,.52,1,22,1,true),I:new THREE.CylinderGeometry(.4,.4,1,22,1,true),Rg:new THREE.RingGeometry(.4,.505,22,1),Dk:new THREE.CircleGeometry(.4,22),B:new THREE.BoxGeometry(1,1,1),C:new THREE.CylinderGeometry(1,1,1,12)}));
+  K.inner.side=THREE.BackSide;const D=w*.6,H=D*.5,o=[[K.O,K.stone,0,H/2,0,D,H,D],[K.I,K.inner,0,H/2,0,D,H,D],[K.Rg,K.top,0,H+.002,0,D,D,1,-Math.PI/2,0,0],[K.Dk,K.water,0,H*.45,0,D,D,1,-Math.PI/2,0,0]];
+  const ph=D*1.25;for(const sx of [-1,1])o.push([K.B,K.post,sx*D*.43,ph/2,0,D*.12,ph,D*.12]);o.push([K.B,K.beam,0,ph-D*.07,0,D*1.02,D*.1,D*.1]);
+  o.push([K.C,K.rope,0,ph-D*.2,0,D*.1,D*.4,D*.1,0,0,Math.PI/2]);o.push([K.C,K.rope,0,ph-D*.5,0,D*.015,D*.5,D*.015]);o.push([K.C,K.buck,0,H+D*.02,D*.05,D*.13,D*.2,D*.13]);
+  o.push([K.B,K.beam,D*.56,ph-D*.2,0,D*.12,D*.04,D*.04]);o.push([K.C,K.beam,D*.64,ph-D*.28,0,D*.03,D*.18,D*.03]);return o}
+};
+const P3D_M=new THREE.Matrix4(),P3D_L=new THREE.Matrix4(),P3D_E=new THREE.Euler(),P3D_Q=new THREE.Quaternion(),P3D_V=new THREE.Vector3(),P3D_S=new THREE.Vector3();
+// buduje wszystkie bryly swiata naraz (jedna siatka instancji na pare ksztalt + material)
+function p3dEmit(root,items){const kit=new Map();
+ for(const {k,img,key,x,z,W,ry} of items){const f=P3D_MODEL[k];if(!f)continue;P3D_M.compose(P3D_V.set(x,0,z),P3D_Q.setFromEuler(P3D_E.set(0,ry,0)),P3D_S.set(1,1,1));
+  for(const [geo,mat,px,py,pz,sx,sy,sz,rx=0,yy=0,rz=0] of f(img,W,key)){P3D_L.compose(P3D_V.set(px,py,pz),P3D_Q.setFromEuler(P3D_E.set(rx,yy,rz)),P3D_S.set(sx,sy,sz));const mk=geo.uuid+'|'+(Array.isArray(mat)?mat.map(m=>m.uuid).join(','):mat.uuid);let e=kit.get(mk);if(!e)kit.set(mk,e={geo,mat,list:[]});e.list.push(P3D_M.clone().multiply(P3D_L))}}
+ for(const {geo,mat,list} of kit.values()){const im=new THREE.InstancedMesh(geo,mat,list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=false;im.receiveShadow=true;im.frustumCulled=false;im.userData.propAsset=true;root.add(im)}}
+// po composeWorldProps: obrazki tych rekwizytow ustepuja brylom (miejsce i szerokosc bierzemy z obrazka)
+function paint3dFinish(w){if(!REK3D_ON||!P3D_IMG[w.ch])return;const items=[],hash=(x,y)=>{const s=Math.sin(x*91.7+y*47.3)*43758.5453;return s-Math.floor(s)};
+ for(const {p,W} of (w.p3d||[])){const img=paint3dImg(w.ch,p.k);if(img)items.push({k:p.k==='well'?'well':p.k,img,key:P3D_IMG[w.ch][p.k],x:p.x,z:p.y-.42,W,ry:(p.flip?Math.PI:0)+(hash(p.x,p.y)-.5)*.5})}
+ w.p3d=null;
+ for(const p of w.PROPS){const img=paint3dImg(w.ch,p.k);if(!img||p.anim||p.shrine!==undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);const m=o&&o.mesh;if(!m||!m.parent||!m.geometry||!m.geometry.parameters||m.isInstancedMesh)continue;
+  const W=m.geometry.parameters.width*Math.abs(m.scale.x),round=p.k!=='well';items.push({k:p.k,img,key:P3D_IMG[w.ch][p.k],x:m.position.x,z:m.position.z-.42,W,ry:(m.scale.x<0?Math.PI:0)+(round?(hash(p.x,p.y)-.5)*1.2:0)});
+  m.parent.remove(m);const i=w.propObjs.findIndex(q=>q.mesh===m);if(i>=0)w.propObjs.splice(i,1)}
+ if(items.length)p3dEmit(w.group,items)}
 function buildBrzeznica(I){
   const F=I.br_ground,Wl=I.br_walls,r=rng(77);planGround(1);
   const fc=canvas(WW,WH),fg=fc.getContext('2d');
@@ -760,6 +819,7 @@ function buildCzarnobor(I){planGround(4);
   const byK={};for(const p of PROPS)if(OBJ[p.k])(byK[p.k]=byK[p.k]||[]).push(p);
   let saplings=0;for(const p of PROPS){if(!p.tree||!['spruce','birch'].includes(p.k)||saplings>=8||groundHash(Math.floor(p.x),Math.floor(p.y))%7!==0)continue;const x=p.x+.26,y=p.y-.3,i=Math.floor(y)*MW+Math.floor(x);if(tileAt(Math.floor(x),Math.floor(y))!==31||W.clearways.has(i))continue;(byK[p.k]||(byK[p.k]=[])).push({...p,x,y,artSmall:true});saplings++}
 
+  if(REK3D_ON)for(const k in byK)if(paint3dImg(4,k)){const o=OBJ[k];WORLDS[CH].p3d=(WORLDS[CH].p3d||[]).concat(byK[k].filter(p=>!p.artSmall).map(p=>({p,W:o[2]/16*o[4]})));delete byK[k]}
   for(const k in byK){const o=OBJ[k],s=o[4],low=k==='ferns'||k==='reeds'||k==='mushrooms'||k==='brambles'||/^(wd|sp)\d+$/.test(k);
     const fy=(()=>{const img=FR[k].n.map&&FR[k].n.map.image;if(!img)return 0;propFoot(img);const R=PROP_RAWB.get(img);if(!R)return 0;const g=G2(o[2],o[3]);if(!g.boundingBox)g.computeBoundingBox();const bb=g.boundingBox,y=(bb.max.y-R.b*(bb.max.y-bb.min.y))*s*SQ;return y>.05?.01-y:0})(); // 13.11.2026: rekwizyt z pustym marginesem u dolu (np. swiety dab) nie wisi nad ziemia
     const im=instanced(G2(o[2],o[3]),FR[k].n,byK[k],p=>M4.compose(V.set(p.x,fy,p.y),Q.identity(),SC.set((p.flip?-1:1)*s*(p.artSmall?.62:1)*(p.tree?(.94+.06*Math.sin(p.x*.71+p.y*.39)):1),s*SQ*(p.artSmall?.62:1)*(k==='tall_pine'?.85:p.tree?(.94+.06*Math.sin(p.x*.71+p.y*.39)):1),s)),!low,false);im.customDistanceMaterial=FR[k].d;im.frustumCulled=false}

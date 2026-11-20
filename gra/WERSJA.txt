@@ -903,3 +903,4 @@ cache827 · Port: domy z murem pruskim i jasniejszym tynkiem/deskami, statek (sm
 cache828 · Runda bryl rekwizytow 1: beczki i kola wozow rozdz. I jako bryly 3D (?rek3d=0 = stary wyglad). Nie sprawdzono: FPS u autora, pad, walka, inne rozdzialy, itch.io
 cache829 · Runda bryl rekwizytow 1, proba 2: beczki rozdz. I jako bryly oklejone malunkiem z obrazka p1_barrel; kola wracaja do obrazka (?rek3d=0 = stary wyglad). Nie sprawdzono: FPS u autora, pad, walka, itch.io
 cache830 · Bryly rekwizytow 1, wersja testowa: beczki oklejone malunkiem w rozdz. I, IV, V (?rek3d=0 = stary wyglad). Nie sprawdzono: FPS u autora, pad, walka, itch.io
+cache831 · Bryly z malunkiem, wersja testowa: beczki (I, IV, V), studnia w porcie, w rozdz. V stos drewna, ul, pien z siekiera, glaz, kurhan (?rek3d=0 = stary wyglad). Nie sprawdzono: FPS u autora, pad, walka, itch.io
