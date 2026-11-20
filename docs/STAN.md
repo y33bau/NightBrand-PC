@@ -1,4 +1,4 @@
-Stan na 2026-11-20, cache 827, rola agent główny
+Stan na 2026-11-20, cache 835, rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,13 +6,14 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 827, opublikowane 20.11.2026 (log `docs/logi/LOG_SESJI_2026-11-19.md`) |
+| main | cache 835, opublikowane 20.11.2026 (log `docs/logi/LOG_SESJI_2026-11-20.md`) |
 | Gałęzie czekające na „publikuj” | brak |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 827 |
-| Zip itch.io | `NightBrand_itch_827.zip` na pulpicie autora w `NIGHTBRAND` |
-| Rozmiar gra/ | ok. 148–152 MB (limit 500 MB) |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 835 |
+| Zip itch.io | `NightBrand_itch_835.zip` na pulpicie autora w `NIGHTBRAND` |
+| Rozmiar gra/ | ok. 170 MB (limit 500 MB); zip itch.io 691 plików / 1000 |
 
 ## Decyzje autora (najnowsze)
+- 20.11: rekwizyty jako modele 3D. Główna droga: Meshy (Image to 3D z malunków; autor ma Pro, generuje Claude Code na jego komputerze do `~/Desktop/NIGHTBRAND/modele_meshy`), odchudzanie `docs/modele/meshy_odchudz.py`, kod `P3D_MESHY`/`P3D_MMAP` w części 06. Priorytet: obiekty, potem NPC; rycerz w 3D dopiero po próbie z NPC. Modele składane w Blenderze z rzutem malunku (`P3D_GLB`) zostają tylko dla rekwizytów bez modelu z Meshy. Autor: „prawdziwy skok jakości”.
 - 19.11: kamera przestrzenna domyślna, 45° i trochę dalej; efekty oprawy wyraźne ("AAA"), latarnie słabsze; bez świecącego ostrza; żuraw i worki z solą jako obrazki; rozdz. I Normalny/Trudny start 80% wrogów.
 - 18.11: port w bryle (bez żurawia: zostaje obrazkiem); kamera klasyczna/przestrzenna w Opcjach; nowe shadery dozwolone dla oprawy 3D (promienie światła, cienie od ognisk); oddalenie kamery przy bossie i naporze zostaje.
 - 18.11: autor testuje też na Macu (`Uruchom_test_kamery.command` w `~/Desktop/NIGHTBRAND`).
@@ -23,6 +24,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 828–835 (modele 3D rekwizytów, 32 z Meshy): FPS przy wielu modelach, rozmiary modeli, tył modeli, łańcuchy/wózek/proch/posągi Cytadeli (nieobejrzane na zrzutach), itch.io.
 - 817–827: autor sprawdził 20.11.2026 („sprawdzono wszystko, działa”).
 - 815–816 (port w bryle, kamera przestrzenna, promienie, cienie od ognisk, oddalenie w walce): FPS na obu kamerach, walka z bossem (oddalenie), pad w Opcjach przy wierszu Kamera, napisy EN kamery.
 - 813–814 (fokus i podświetlenia): Kaplica i Kronika strzałkami i padem (opis po prawej idzie za zaznaczeniem), brak zostających podświetleń po kliknięciu myszą, lokalizacje na mapie, deski w Ognisku i Przygotowaniu, odłączenie pada w menu.
