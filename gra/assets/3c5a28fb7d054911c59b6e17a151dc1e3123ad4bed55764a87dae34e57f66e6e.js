@@ -2394,36 +2394,33 @@ function buildSolneNabrzeze(I){
 }
 
 // Chapter I meshes: M1 ground, M2 walls, M3 props
-// 20.11.2026 (runda bryl rekwizytow 1, rozdz. I): beczki i kola wozow jako geometria 3D zamiast plaskich obrazkow (obrazki slabo trzymaly perspektywe: wygladaly jak naklejki na ziemi). Tylko wyglad, kolizje bez zmian. Szubienica, wozy Margi i reszta zostaja obrazkami. Porownanie przed: ?rek3d=0 (tylko lokalnie).
+// 20.11.2026 (runda bryl rekwizytow 1, rozdz. I): beczki jako bryly 3D zamiast plaskich obrazkow (obrazek wygladal jak naklejka na ziemi). Tylko wyglad, kolizje bez zmian.
+// Proba 2 (autor: bryly z koloru "wygladaja cyfrowo, jak z prototypu"): beczka oklejona malunkiem z jej obrazka p1_barrel (pas klepek z obreczami i mchem, lustrzany, wiec bez szwu; wieko z gory obrazka), bez polysku. Kolo zostaje obrazkiem (jego malunek jest w perspektywie, nie da sie go nakleic). Porownanie przed: ?rek3d=0 (tylko lokalnie).
 const REK3D_ON=nbParam('rek3d')!=='0';
-const REK3D_KEYS=new Set(['barrel','wheel']);
-function rek3dBuild(ROOT){
+const REK3D_KEYS=new Set(['barrel']);
+function rek3dBuild(ROOT,I){
+ const img=I.p1_barrel;if(!img)return null;
  const K=port3dKit(),{put,at}=K,hash=(x,y)=>{const s=Math.sin(x*91.7+y*47.3)*43758.5453;return s-Math.floor(s)};
- const CYL=new THREE.CylinderGeometry(1,1,1,10),TOR=new THREE.TorusGeometry(1,.16,6,20),TIRE=new THREE.TorusGeometry(1,.045,5,26),BOX=new THREE.BoxGeometry(1,1,1);
- const BARREL=new THREE.LatheGeometry([[0,0],[.40,0],[.465,.22],[.5,.5],[.465,.78],[.40,1],[0,1]].map(([a,b])=>new THREE.Vector2(a,b)),14);
- const mk=(base,k,rx)=>{const t=port3dPlanks(base,false);t.repeat.set(rx,1);const m=phong({map:t,emissive:0x060403});m.color.setRGB(k,k*.98,k*.94);return m};
- const barrelM=mk('#33261b',.82,1.8),woodM=mk('#2e231a',.82,1),iron=phong({color:0x2c2a28,shininess:14,specular:0x1c2024,emissive:0x040404});
- const M4a=new THREE.Matrix4(),M4b=new THREE.Matrix4(),E=new THREE.Euler();
- const rot=(rx,ry,rz)=>M4b.makeRotationFromEuler(E.set(rx,ry,rz)).clone(),mv=(x,y,z)=>M4a.makeTranslation(x,y,z).clone();
- const MODEL={
-  // beczka: klepki, cztery obreczy; co piata lezy na boku
-  barrel:(b,h)=>{const r=.27+h*.05,H=.7+h*.12,tip=h>.8;
-   if(tip)b=b.clone().multiply(mv(0,r*.98,0)).multiply(rot(0,0,Math.PI/2)).multiply(mv(0,-H/2,0));
-   put(BARREL,barrelM,b,0,0,0,r*2,H,r*2);
-   for(const [y,s] of [[.08,.84],[.26,.95],[.74,.95],[.92,.85]])put(TOR,iron,b,0,H*y,0,r*s,r*s,r*s*.5,Math.PI/2)},
-  // kolo wozu: obrecz z zelaznym bandazem, piasta i szprychy (dwie wylamane), lezy lekko przechylone
-  wheel:(b,h)=>{const R=.42,th=.2+h*.85,bw=b.clone().multiply(mv(0,R*Math.sin(th)+.05,0)).multiply(rot(-Math.PI/2+th,0,h*.5));/* przechylone: plasko lezace kolo w calosci chowalo sie pod warstwa mgly przy ziemi (.32 j.) */
-   put(TOR,woodM,bw,0,0,0,R,R,R*.7);put(TIRE,iron,bw,0,0,0,R*1.1,R*1.1,R*2.6);
-   put(CYL,woodM,bw,0,0,0,.095,.2,.095,Math.PI/2);
-   for(let k=0;k<8;k++){if(k===2||k===5)continue;const a=k/8*Math.PI*2+h,L=R-.09;put(BOX,woodM,bw,Math.cos(a)*(L/2+.08),Math.sin(a)*(L/2+.08),0,L,.05,.05,0,0,a)}
-   const a=2/8*Math.PI*2+h;put(BOX,woodM,bw,Math.cos(a)*.14,Math.sin(a)*.14,0,.12,.05,.05,0,0,a)}
- };
- const shadow=(x,z,sx,sz)=>{const m=new THREE.Mesh(groundFxGeo,groundShadowMat);m.position.set(x,.02,z);m.scale.set(sx,1,sz);m.renderOrder=1;ROOT.add(m)};
- // pozycje rozstrzyga composeWorldProps (przesuwa kola przy wozach/beczkach przez p.obj.mesh), wiec modele powstaja dopiero w finish(), po tym kroku
- const list=[];
+ // bok: srodkowy pas obrazka (najmniej skrocony perspektywa) + jego lustro = kafel bez szwu, 3 kafle na obwod
+ const side=(()=>{const c=canvas(140,256),g=c.getContext('2d');g.drawImage(img,152,118,70,234,0,0,70,256);g.save();g.translate(140,0);g.scale(-1,1);g.drawImage(img,152,118,70,234,0,0,70,256);g.restore();const t=new THREE.CanvasTexture(c);t.wrapS=THREE.RepeatWrapping;t.repeat.set(3,1);t.anisotropy=4;return t})();
+ // wieko: elipsa z gory obrazka rozciagnieta do kola
+ const lid=(()=>{const c=canvas(128,128),g=c.getContext('2d');g.drawImage(img,108,58,168,56,0,0,128,128);return new THREE.CanvasTexture(c)})();
+ const mat=map=>{const m=phong({map,shininess:4,specular:0x080808});m.color.setRGB(.74,.72,.7);return m};
+ const sideM=mat(side),lidM=mat(lid);
+ const BODY=new THREE.LatheGeometry([[.40,0],[.465,.22],[.5,.5],[.465,.78],[.40,1]].map(([a,b])=>new THREE.Vector2(a,b)),18),DISC=new THREE.CircleGeometry(1,18);
+ const E=new THREE.Euler(),M=new THREE.Matrix4();
+ const barrel=(b,h)=>{const r=.24+h*.03,H=.6+h*.08,tip=h>.82;
+  if(tip)b=b.clone().multiply(M.makeTranslation(0,r*.98,0).clone()).multiply(M.makeRotationFromEuler(E.set(0,0,Math.PI/2)).clone()).multiply(M.makeTranslation(0,-H/2,0).clone());
+  else b=b.clone().multiply(M.makeRotationFromEuler(E.set((h-.5)*.09,0,(hash(h,3)-.5)*.09)).clone());/* lekki przechyl: idealnie pionowe beczki wygladaly jak z prototypu */
+  put(BODY,sideM,b,0,-.015,0,r*2,H,r*2);put(DISC,lidM,b,0,H-.017,0,r*.8,r*.8,1,-Math.PI/2);if(tip)put(DISC,lidM,b,0,-.013,0,r*.8,r*.8,1,Math.PI/2)};
+ // pozycje rozstrzyga composeWorldProps (przez p.obj.mesh), wiec modele powstaja dopiero w finish(), po tym kroku
  const PROXY_GEO=new THREE.PlaneGeometry(1.6,1.6);/* zastepnik p.obj.mesh (nie trafia do sceny): inne kroki czytaja z niego polozenie, skale i szerokosc siatki (cien pod rekwizytem) */
+ const list=[];
  const place=p=>{const proxy=new THREE.Mesh(PROXY_GEO);proxy.position.set(p.x,0,p.y);p.obj={mesh:proxy};list.push([p,proxy])};
- return {place,finish:()=>{for(const [p,m] of list){const h=hash(p.x,p.y),x=m.position.x,z=m.position.z-.42;MODEL[p.k](at(x,z,(p.flip?Math.PI:0)+h*6.28),h);if(p.k==='wheel')shadow(x,z,1.15,1.0)/* cien beczki daje istniejacy krok groundShadows */}list.length=0;K.finish(ROOT)}}}
+ const finish=()=>{for(const [p,m] of list){const h=hash(p.x,p.y);barrel(at(m.position.x,m.position.z-.42,(p.flip?Math.PI:0)+h*6.28),h)}list.length=0;
+  /* oznaczone jak rekwizyty: softenProps przyciemnia je tym samym odcieniem co obrazki rozdz. I */
+  const g=new THREE.Group();K.finish(g);for(const c of g.children)c.userData.propAsset=true;ROOT.add(g)};
+ return {place,finish}}
 function buildBrzeznica(I){
   const F=I.br_ground,Wl=I.br_walls,r=rng(77);planGround(1);
   const fc=canvas(WW,WH),fg=fc.getContext('2d');
@@ -2460,7 +2457,7 @@ function buildBrzeznica(I){
   const PF={};for(const k in R)PF[k]=I['p1_'+k]?procFrame(I['p1_'+k],0,0,R[k][2],R[k][3],'prop'):procFrame(I.br_props,R[k][0],R[k][1],R[k][2],R[k][3],'prop');
   // stairs down into the crypt (Lower City transition sheet)
   if(I.p1_crypt_stairs){R.crypt_stairs=[0,0,96,72];PF.crypt_stairs=procFrame(I.p1_crypt_stairs,0,0,96,72,'prop')}else{R.crypt_stairs=[0,0,64,32];PF.crypt_stairs=procFrame(I.trans,0,0,64,32,'prop')}
-  const R3=REK3D_ON?rek3dBuild(ROOT):null;W.rek3d=R3;
+  const R3=REK3D_ON?rek3dBuild(ROOT,I):null;W.rek3d=R3;
   for(const p of PROPS){
     let frames,rc;
     if(R3&&REK3D_KEYS.has(p.k)&&!p.anim&&p.shrine===undefined){R3.place(p);continue}
