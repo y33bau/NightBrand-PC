@@ -540,6 +540,7 @@ function p3dParseGlb(buf){const dv=new DataView(buf);if(dv.getUint32(0,true)!==0
   if(a.normalized){const d=T===Uint8Array?255:T===Uint16Array?65535:1;arr=Float32Array.from(arr,x=>x/d)}return {arr,n}};
  const g=new THREE.BufferGeometry(),P=acc(pr.attributes.POSITION);g.setAttribute('position',new THREE.BufferAttribute(P.arr,3));
  if(pr.attributes.NORMAL!==undefined)g.setAttribute('normal',new THREE.BufferAttribute(acc(pr.attributes.NORMAL).arr,3));else g.computeVertexNormals();
+ if(pr.attributes.TEXCOORD_0!==undefined)g.setAttribute('uv',new THREE.BufferAttribute(acc(pr.attributes.TEXCOORD_0).arr,2));
  if(pr.attributes.COLOR_0!==undefined){const C=acc(pr.attributes.COLOR_0),c=new Float32Array(P.arr.length);for(let i=0;i<P.arr.length/3;i++){c[i*3]=C.arr[i*C.n];c[i*3+1]=C.arr[i*C.n+1];c[i*3+2]=C.arr[i*C.n+2]}g.setAttribute('color',new THREE.BufferAttribute(c,3))}
  if(pr.indices!==undefined){const I=acc(pr.indices);g.setIndex(new THREE.BufferAttribute(I.arr instanceof Uint8Array?Uint16Array.from(I.arr):I.arr,1))}
  g.computeBoundingBox();return g}
@@ -565,20 +566,59 @@ function p3dGeo(model,key){const id=model+'|'+key;let e=P3D_UV.get(id);if(e)retu
  g.setAttribute('uv',new THREE.BufferAttribute(uv,2));
  const m=phong({map:pt.tex,shininess:3,specular:0x060606,side:THREE.DoubleSide});m.vertexColors=!!g.attributes.color;m.color.setRGB(.9,.88,.86);
  e={g,m,w:x1-x0,zf,cx:(x0+x1)/2,box:b};P3D_UV.set(id,e);return e}
+// 20.11.2026: modele z Meshy (Image to 3D z malunkow rekwizytow), odchudzone: geometria ~6 tys. trojkatow + kolor i mapa normalnych 1024 (narzedzia: docs/modele/meshy_odchudz.py).
+// Maja wlasna teksture, wiec bez rzutu z kamery. Gdy rekwizyt ma model z Meshy, ma on pierwszenstwo przed modelem z rzutem.
+const P3D_MESHY={
+ p1_barrel:{g:'assets/rekwizyty/97fb75a8881a339304583244c0bd49e14926df213171e8cc202bc4fb7e082c3f.glb',k:'assets/rekwizyty/6378950ac708ebdb909216be2d0cba56e925981ad690d76722d081a43a700b4c.webp',n:'assets/rekwizyty/dac99927dd8a7a7a1c8a7160290faf188b6df82577f9a2ad9655f4c6071f9261.webp'},
+ p1_burnt_hay:{g:'assets/rekwizyty/5ec363da5df40a8ced1bd949a78c20846762160a4eb3beaf7a867954c5158206.glb',k:'assets/rekwizyty/3d5e13469c6c7b914bd4a5a7cef84639ded47081d69ae7357e73e6cf774ec133.webp',n:'assets/rekwizyty/e274d7112a6c85989e0a2a81e624edd14da962cb4ec0fa5d58268d4126b78c1c.webp'},
+ p1_covered_corpses:{g:'assets/rekwizyty/abee30f52826a1d652ad9a0da0c86679a3fd1c9df82a8821703279144e800d03.glb',k:'assets/rekwizyty/8fd031e042f4af03c66d552d333976570b6818b3df930bc660341479c99ae5d5.webp',n:'assets/rekwizyty/3439b2a9425bb251427ea1e036c2236ee6f571a7919f3ea18c9f3b7c81b9b946.webp'},
+ p1_grave_cross:{g:'assets/rekwizyty/b4dbfcf1a61b1125bfff237553a97481014fa7d52d8499697cf20c604e718a8a.glb',k:'assets/rekwizyty/e4ba358c132532ed7354dd592c8401d602f37e5a034f79bf2a0aa90eadec6e19.webp',n:'assets/rekwizyty/ddebccfb7caa958e8b2d24b1a2c99f57bfedfe1521dc7d32ed3e92df716a9948.webp'},
+ p1_order_banner:{g:'assets/rekwizyty/d49be01ebf435aefdf7bc5001afd2665635a2f76374538889d33f5d25e0370c1.glb',k:'assets/rekwizyty/49aa559401a329a213b49fdc992e00a64e5ff4395dae702c3e65bb025b09582d.webp',n:'assets/rekwizyty/99abfbc6aa1cc93a3e0f38fed9fc71929190a0bdcfa46cdec618d0ce91cbe0ee.webp'},
+ p1_wheel:{g:'assets/rekwizyty/581b37a3442b2abc63b80ace2e1d897886ddc1656a94b7fe04c6b4b78863e0f7.glb',k:'assets/rekwizyty/930877e50049dcd47b4340be60cf9d48b74de26d1d7e9990a6d455f3e2431c73.webp',n:'assets/rekwizyty/68ff3d049bf22c9a5b4be4211bb0d58c98bdf404dad5f7dc8cf8be377be95e7c.webp'},
+ p2_anvil:{g:'assets/rekwizyty/a62b161c3f712f3d1a3a7c2f51cdcc2dd41a145337dfafa6d7035ff327dea7e5.glb',k:'assets/rekwizyty/9d4f94b6e39192da9cf0c88cfea6a61c92a82b2b0adcec7e884e79d7c6648f50.webp',n:'assets/rekwizyty/af1d2b1b6c4b762f191a0b79c6fbfde0824c8610314a8ceeecb6102f9e57ce64.webp'},
+ p2_clan_banner:{g:'assets/rekwizyty/b4c244c4557d58c53fd43d5a866699af07155c7d3f8707ef5c0e3af58ed58b29.glb',k:'assets/rekwizyty/a00ef714391f39de4c3dc73c655282961d6e19ef23605f0b66582944b4c801fd.webp',n:'assets/rekwizyty/09ebd7c60a53916a0efdf8ebe721fb1fcd5ad1c2a41fb239a4b7ae577f192ec9.webp'},
+ p2_pickaxe_rack:{g:'assets/rekwizyty/98fc30b5158173955e7057df8e5a82a083e6948d60ec922fdd823d317f2563ca.glb',k:'assets/rekwizyty/bb4866d31fc47ea6c95247aa97331edd292504eb44d5ac39af8b2863bff0aa39.webp',n:'assets/rekwizyty/4dd19488976f7eb42c2b75b88b3e722f7acf90cda848b2a2162887c190ab5aa4.webp'},
+ p2_rune_lantern:{g:'assets/rekwizyty/87e40dbdc16c6df6cd521ee0653c879223c70bc8d8d91bfd4a98f281fd5abb16.glb',k:'assets/rekwizyty/5b6882c3fb863043c18ac6310e687ccbf94b0b5e44315248ad495ff8d6fdeaeb.webp',n:'assets/rekwizyty/cc630eeb95c456e2f434a8bd028a80bee179ad714efd778f60e570b223a96c8b.webp'},
+ p3_beggar_bodies:{g:'assets/rekwizyty/e781f9c695514de5248c2c5c4741babcd738fe771e64b4abdbedfb19bf8d3fa1.glb',k:'assets/rekwizyty/d938de293686766a51b1b5619203381a593ac713c0b388991dda8105c597fe70.webp',n:'assets/rekwizyty/060da19595e8caee1c4fa27d0481d31456ee418d49fd680699dff84c39cc564c.webp'},
+ p3_street_lantern:{g:'assets/rekwizyty/ad711376a10734b1054c5254dc756c36a2c3980c7a8ef13eb3bebec28c18b5d5.glb',k:'assets/rekwizyty/4fb7dab949da1d4c5f39a922449e64b6137ebfe63d97c9af2bd553591a1771b1.webp',n:'assets/rekwizyty/cbd79335f58e0c4dcd7cc136fb14f0208d5e563dca44068ece7106ad50a53a09.webp'},
+ p4_cz_bones:{g:'assets/rekwizyty/417d919bac3e76f45b2a0e1f5db19b947cc7ed9d80f369ee6a28fa47ea606f92.glb',k:'assets/rekwizyty/01fcaf2f1f7a311bc0834d4613cf31c495358cd847f6aa4f9418e706d9800b65.webp',n:'assets/rekwizyty/e0868627318470a790949fcc2a559b1362a0499450cd96459561ae29eba53e25.webp'},
+ p4_wolf_skull_bush:{g:'assets/rekwizyty/d586721774ff3fd131184a6603e7af22cfb88d0993db56963afb6bd01b586b7a.glb',k:'assets/rekwizyty/b37432f36b5ff4f77771cf6f6440b023730550a5bef0811b7fe63999d26b90f9.webp',n:'assets/rekwizyty/ffccf61c5d54b0d1b087b09c1c48f5033b0f77566f1ab41a838010368b5b88e8.webp'},
+ p5_candelabra:{g:'assets/rekwizyty/3a3c0e859ce967b915b1409a30a9e73e762c266d2479d9e8dd1f0d0a06edff5b.glb',k:'assets/rekwizyty/7f5b1158e2f7db4fffd8ad56c98e7b819c2fa11e6680676436c535958d1d6f50.webp',n:'assets/rekwizyty/7884fd5e77e8512602f68250058ac353abbc9deea67d5ca0c99c201a6407ccd0.webp'}};
+// rozdzial -> klucz rekwizytu -> model z Meshy (nazwa = obrazek, z ktorego powstal)
+const P3D_MMAP={1:{barrel:'p1_barrel',grave_cross:'p1_grave_cross',covered_corpses:'p1_covered_corpses',burnt_hay:'p1_burnt_hay',wheel:'p1_wheel',order_banner:'p1_order_banner'},
+ 2:{rune_lantern:'p2_rune_lantern',pickaxe_rack:'p2_pickaxe_rack',clan_banner:'p2_clan_banner',anvil:'p2_anvil'},3:{beggar_bodies:'p3_beggar_bodies',street_lantern:'p3_street_lantern'},
+ 4:{cz_bones:'p4_cz_bones',wolf_skull_bush:'p4_wolf_skull_bush',barrel:'p1_barrel'},5:{candelabra:'p5_candelabra'}};
+const P3D_MGEO={};
+const P3D_MREADY=REK3D_ON?Promise.all(Object.entries(P3D_MESHY).map(([k,e])=>fetch(e.g).then(r=>r.arrayBuffer()).then(b=>{P3D_MGEO[k]=p3dParseGlb(b)}).catch(er=>quietErr('meshy '+k,er)))):Promise.resolve();
+function meshyFor(ch,k){const n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];return n&&P3D_MGEO[n]?n:null}
+const P3D_MMAT=new Map();
+function meshyMat(n){let m=P3D_MMAT.get(n);if(m)return m;const L=new THREE.TextureLoader(),e=P3D_MESHY[n],t=u=>{const x=L.load(u);x.flipY=false;x.anisotropy=4;return x};
+ m=phong({map:t(e.k),normalMap:t(e.n),shininess:6,specular:0x101010,side:THREE.DoubleSide});m.color.setRGB(.92,.9,.88);P3D_MMAT.set(n,m);return m}
+// szerokosc i srodek obrysu malunku (ulamki obrazka): model dostaje szerokosc obrysu, nie calego obrazka
+const P3D_ABOX=new Map();
+function p3dAlphaBox(key){let b=P3D_ABOX.get(key);if(b)return b;const img=IMGS[key];if(!img)return [0,0,1,1];const W=96,H=Math.round(96*img.height/img.width),c=canvas(W,H),g=c.getContext('2d');g.drawImage(img,0,0,W,H);
+ const px=g.getImageData(0,0,W,H).data;let x0=W,y0=H,x1=0,y1=0;for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(px[(y*W+x)*4+3]>128){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
+ b=x1<x0?[0,0,1,1]:[x0/W,y0/H,(x1+1)/W,(y1+1)/H];P3D_ABOX.set(key,b);return b}
+function meshyEmit(root,items){const by=new Map(),M=new THREE.Matrix4(),V=new THREE.Vector3(),Q=new THREE.Quaternion(),S=new THREE.Vector3();
+ for(const it of items){const g=P3D_MGEO[it.n];if(!g)continue;const bb=g.boundingBox,gw=bb.max.x-bb.min.x||1,ab=p3dAlphaBox(it.n),s=it.W*(ab[2]-ab[0])/gw,fl=it.flip?-1:1,dx=((ab[0]+ab[2])/2-.5)*it.W*fl;
+  // przod-spod modelu na linii obrazka (tam stala jego dolna krawedz)
+  M.compose(V.set(it.x+dx,0,it.z-bb.max.z*s),Q,S.set(s*fl,s,s));(by.get(it.n)||by.set(it.n,[]).get(it.n)).push(M.clone())}
+ for(const [n,list] of by){const im=new THREE.InstancedMesh(P3D_MGEO[n],meshyMat(n),list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=false;im.receiveShadow=true;im.frustumCulled=false;im.userData.propAsset=true;root.add(im)}}
 function paint3dImg(ch,k){const e=REK3D_ON&&P3D_MAP[ch]&&P3D_MAP[ch][k];return e&&P3D_GEO[e[0]]&&IMGS[e[1]]?e:null}
 // po composeWorldProps: obrazki tych rekwizytow ustepuja modelom (miejsce i szerokosc bierzemy z obrazka)
-function paint3dFinish(w){if(!REK3D_ON||!P3D_MAP[w.ch])return;const items=[];
- for(const {p,W} of (w.p3d||[])){const e=paint3dImg(w.ch,p.k);if(e)items.push({e,x:p.x,z:p.y,W,flip:!!p.flip})}
+function paint3dFinish(w){if(!REK3D_ON||(!P3D_MAP[w.ch]&&!P3D_MMAP[w.ch]))return;const items=[],mitems=[];
+ for(const {p,W} of (w.p3d||[])){const n=meshyFor(w.ch,p.k);if(n){mitems.push({n,x:p.x,z:p.y,W,flip:!!p.flip});continue}const e=paint3dImg(w.ch,p.k);if(e)items.push({e,x:p.x,z:p.y,W,flip:!!p.flip})}
  w.p3d=null;
- for(const p of w.PROPS){const e=paint3dImg(w.ch,p.k);if(!e||p.anim||p.shrine!==undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);const m=o&&o.mesh;
+ for(const p of w.PROPS){const n=meshyFor(w.ch,p.k),e=n?null:paint3dImg(w.ch,p.k);if((!e&&!n)||p.anim||p.shrine!==undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);const m=o&&o.mesh;
   if(!m||!m.parent||!m.geometry||!m.geometry.parameters||m.isInstancedMesh)continue;
-  items.push({e,x:m.position.x,z:m.position.z,W:m.geometry.parameters.width*Math.abs(m.scale.x),flip:m.scale.x<0});
+  const it={x:m.position.x,z:m.position.z,W:m.geometry.parameters.width*Math.abs(m.scale.x),flip:m.scale.x<0};if(n)mitems.push(Object.assign(it,{n}));else items.push(Object.assign(it,{e}));
   m.parent.remove(m);const i=w.propObjs.findIndex(q=>q.mesh===m);if(i>=0)w.propObjs.splice(i,1)}
  const by=new Map(),M=new THREE.Matrix4(),V=new THREE.Vector3(),Qi=new THREE.Quaternion(),S=new THREE.Vector3();
  for(const it of items){const G=p3dGeo(it.e[0],it.e[1]);if(!G)continue;const s=it.W*(G.box[2]-G.box[0])/G.w,dx=((G.box[0]+G.box[2])/2-.5)*it.W*(it.flip?-1:1);
   // srodek obrysu jak srodek malunku na obrazku; przod-spod modelu na linii obrazka (tam stoi jego dolna krawedz)
   M.compose(V.set(it.x+dx-G.cx*s*(it.flip?-1:1),0,it.z-G.zf*s),Qi,S.set(it.flip?-s:s,s,s));(by.get(G)||by.set(G,[]).get(G)).push(M.clone())}
- for(const [G,list] of by){const im=new THREE.InstancedMesh(G.g,G.m,list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=false;im.receiveShadow=true;im.frustumCulled=false;im.userData.propAsset=true;w.group.add(im)}}
+ for(const [G,list] of by){const im=new THREE.InstancedMesh(G.g,G.m,list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=false;im.receiveShadow=true;im.frustumCulled=false;im.userData.propAsset=true;w.group.add(im)}
+ if(mitems.length)meshyEmit(w.group,mitems)}
 function buildBrzeznica(I){
   const F=I.br_ground,Wl=I.br_walls,r=rng(77);planGround(1);
   const fc=canvas(WW,WH),fg=fc.getContext('2d');
@@ -793,7 +833,7 @@ function buildCzarnobor(I){planGround(4);
   const byK={};for(const p of PROPS)if(OBJ[p.k])(byK[p.k]=byK[p.k]||[]).push(p);
   let saplings=0;for(const p of PROPS){if(!p.tree||!['spruce','birch'].includes(p.k)||saplings>=8||groundHash(Math.floor(p.x),Math.floor(p.y))%7!==0)continue;const x=p.x+.26,y=p.y-.3,i=Math.floor(y)*MW+Math.floor(x);if(tileAt(Math.floor(x),Math.floor(y))!==31||W.clearways.has(i))continue;(byK[p.k]||(byK[p.k]=[])).push({...p,x,y,artSmall:true});saplings++}
 
-  if(REK3D_ON)for(const k in byK)if(paint3dImg(4,k)){const o=OBJ[k];WORLDS[CH].p3d=(WORLDS[CH].p3d||[]).concat(byK[k].filter(p=>!p.artSmall).map(p=>({p,W:o[2]/16*o[4]})));delete byK[k]}
+  if(REK3D_ON)for(const k in byK)if(paint3dImg(4,k)||meshyFor(4,k)){const o=OBJ[k];WORLDS[CH].p3d=(WORLDS[CH].p3d||[]).concat(byK[k].filter(p=>!p.artSmall).map(p=>({p,W:o[2]/16*o[4]})));delete byK[k]}
   for(const k in byK){const o=OBJ[k],s=o[4],low=k==='ferns'||k==='reeds'||k==='mushrooms'||k==='brambles'||/^(wd|sp)\d+$/.test(k);
     const fy=(()=>{const img=FR[k].n.map&&FR[k].n.map.image;if(!img)return 0;propFoot(img);const R=PROP_RAWB.get(img);if(!R)return 0;const g=G2(o[2],o[3]);if(!g.boundingBox)g.computeBoundingBox();const bb=g.boundingBox,y=(bb.max.y-R.b*(bb.max.y-bb.min.y))*s*SQ;return y>.05?.01-y:0})(); // 13.11.2026: rekwizyt z pustym marginesem u dolu (np. swiety dab) nie wisi nad ziemia
     const im=instanced(G2(o[2],o[3]),FR[k].n,byK[k],p=>M4.compose(V.set(p.x,fy,p.y),Q.identity(),SC.set((p.flip?-1:1)*s*(p.artSmall?.62:1)*(p.tree?(.94+.06*Math.sin(p.x*.71+p.y*.39)):1),s*SQ*(p.artSmall?.62:1)*(k==='tall_pine'?.85:p.tree?(.94+.06*Math.sin(p.x*.71+p.y*.39)):1),s)),!low,false);im.customDistanceMaterial=FR[k].d;im.frustumCulled=false}
