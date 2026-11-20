@@ -24,7 +24,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
-- 828–835 (modele 3D rekwizytów, 32 z Meshy): FPS przy wielu modelach, rozmiary modeli, tył modeli, łańcuchy/wózek/proch/posągi Cytadeli (nieobejrzane na zrzutach), itch.io.
+- 828–835 (modele 3D rekwizytów, 32 z Meshy): FPS sprawdzony przez autora 20.11 („prawie bez zmian”). Do sprawdzenia: rozmiary modeli, tył modeli, łańcuchy/wózek/proch/posągi Cytadeli (nieobejrzane na zrzutach), itch.io.
 - 817–827: autor sprawdził 20.11.2026 („sprawdzono wszystko, działa”).
 - 815–816 (port w bryle, kamera przestrzenna, promienie, cienie od ognisk, oddalenie w walce): FPS na obu kamerach, walka z bossem (oddalenie), pad w Opcjach przy wierszu Kamera, napisy EN kamery.
 - 813–814 (fokus i podświetlenia): Kaplica i Kronika strzałkami i padem (opis po prawej idzie za zaznaczeniem), brak zostających podświetleń po kliknięciu myszą, lokalizacje na mapie, deski w Ognisku i Przygotowaniu, odłączenie pada w menu.
