@@ -37,6 +37,8 @@
 !/assets/*/*.ogg
 !/assets/*/*.woff2
 !/assets/*/*.ttf
+# 20.11.2026: modele 3D rekwizytow (Blender, docs/modele/)
+!/assets/*/*.glb
 # Never publish working files, originals, screenshots, archives, or installers.
 backup/
 test-results/

@@ -1856,7 +1856,7 @@ function depthApron(w){const m=new THREE.Mesh(new THREE.PlaneGeometry(MW+260,MH+
 function softenProps(w){// 12.11.2026: Akt I - rekwizyty bez twardego cienia z swiatla bohatera i lekko sciemnione do koloru ziemi (?softprops=0 = przed)
  if(nbParam('softprops')==='0')return;const seen=new Set(),tint=new THREE.Color(.76,.77,.8);
  w.group.traverse(o=>{if(!o.userData||!o.userData.propAsset)return;o.castShadow=false;const ms=Array.isArray(o.material)?o.material:[o.material];for(const m of ms){if(!m||seen.has(m)||!m.color||m.userData.noSoften)continue;seen.add(m);m.color.multiply(tint);if(m.emissiveMap&&m.emissive&&m.emissiveIntensity>0)m.emissiveIntensity*=.72}})}
-function finishWorldArt(w){if(depthOn(w.ch))depthApron(w);buildRoofs(w);preparePowerFires(w);if(w.ch!==PORT)composeWorldProps(w);if(w.rek3d){w.rek3d.finish();w.rek3d=null}paint3dFinish(w);dressSettlementsHD(w);dressNeutral(w);settleWorldProps(w);if(w.ch===1&&depthOn(1))softenProps(w);const flat=new Set(['dwarf_bones','covered_corpses','beggar_bodies','doorway_bones','wheel','burnt_hay','cz_bones','cz_pelts','cz_walk','cz_wisp','cz_crow','mushrooms','ferns','brambles','reeds','wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11','scroll','book','pages','keys','seal','purse','shackles','skull']);
+function finishWorldArt(w){if(depthOn(w.ch))depthApron(w);buildRoofs(w);preparePowerFires(w);if(w.ch!==PORT)composeWorldProps(w);paint3dFinish(w);dressSettlementsHD(w);dressNeutral(w);settleWorldProps(w);if(w.ch===1&&depthOn(1))softenProps(w);const flat=new Set(['dwarf_bones','covered_corpses','beggar_bodies','doorway_bones','wheel','burnt_hay','cz_bones','cz_pelts','cz_walk','cz_wisp','cz_crow','mushrooms','ferns','brambles','reeds','wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11','scroll','book','pages','keys','seal','purse','shackles','skull']);
   const props=w.PROPS.filter(p=>!flat.has(p.k)&&!VOID.has(tileAt(Math.floor(p.x),Math.floor(p.y-.2))));
   w.groundShadows=instanced(groundFxGeo,groundShadowMat,props,p=>{const m=p.obj&&p.obj.mesh,s=p.k==='sacred_oak'?2.2:p.tree?.8:(!m&&p.port&&PORT_PROP_SIZE[p.k])?Math.min(2,PORT_PROP_SIZE[p.k][0]*.62):m?Math.min(2,Math.max(.3,m.geometry.parameters.width*Math.abs(m.scale.x)*.5)):.65;return M4.compose(V.set(p.x,.024,p.y-.1),Q.identity(),SC.set(s*1.1,1,s*.6))},false,false);
   const lights=w.LSRC.filter(l=>['fire','shrine','rune','npc','stone','merchant'].includes(l.kind)&&l.base>0&&[-1,0,1].every(dy=>[-1,0,1].every(dx=>!VOID.has(tileAt(Math.floor(l.x)+dx,Math.floor(l.z)+dy))))).slice(0,48);w.groundL=lights;
@@ -2394,94 +2394,69 @@ function buildSolneNabrzeze(I){
 }
 
 // Chapter I meshes: M1 ground, M2 walls, M3 props
-// 20.11.2026 (runda bryl rekwizytow 1, rozdz. I): beczki jako bryly 3D zamiast plaskich obrazkow (obrazek wygladal jak naklejka na ziemi). Tylko wyglad, kolizje bez zmian.
-// Proba 2 (autor: bryly z koloru "wygladaja cyfrowo, jak z prototypu"): beczka oklejona malunkiem z jej obrazka p1_barrel (pas klepek z obreczami i mchem, lustrzany, wiec bez szwu; wieko z gory obrazka), bez polysku. Kolo zostaje obrazkiem (jego malunek jest w perspektywie, nie da sie go nakleic). Porownanie przed: ?rek3d=0 (tylko lokalnie).
-const REK3D_ON=nbParam('rek3d')!=='0';
-const REK3D_KEYS=new Set(['barrel']);
-// 20.11.2026 (autor: "poprosze o wszystko w wersji testowej"): ta sama beczka w rozdz. IV (malunek p3_barrel) i V (malunek p1_barrel; wczesniej stary piksel z atlasu br_props). Wycinki liczone od obrysu obrazka (box), wiec pasuja do obu rozmiarow.
-const REK3D_BOX={p1_barrel:[83,55,300,360],p3_barrel:[52,45,203,240]};
-function rek3dBuild(ROOT,I,key='p1_barrel'){
- const img=I[key],bx=REK3D_BOX[key];if(!img||!bx)return null;const sk=img.width/(key==='p3_barrel'?256:384),bw=(bx[2]-bx[0])*sk,bh=(bx[3]-bx[1])*sk,X=f=>bx[0]*sk+bw*f,Y=f=>bx[1]*sk+bh*f;
- const K=port3dKit(),{put,at}=K,hash=(x,y)=>{const s=Math.sin(x*91.7+y*47.3)*43758.5453;return s-Math.floor(s)};
- // bok: srodkowy pas obrazka (najmniej skrocony perspektywa) + jego lustro = kafel bez szwu, 3 kafle na obwod
- const side=(()=>{const c=canvas(140,256),g=c.getContext('2d');const sx=X(.32),sy=Y(.207),sw=bw*.32,sh=Y(.974)-sy;g.drawImage(img,sx,sy,sw,sh,0,0,70,256);g.save();g.translate(140,0);g.scale(-1,1);g.drawImage(img,sx,sy,sw,sh,0,0,70,256);g.restore();const t=new THREE.CanvasTexture(c);t.wrapS=THREE.RepeatWrapping;t.repeat.set(3,1);t.anisotropy=4;return t})();
- // wieko: elipsa z gory obrazka rozciagnieta do kola
- const lid=(()=>{const c=canvas(128,128),g=c.getContext('2d');g.drawImage(img,X(.115),Y(.01),bw*.774,bh*.183,0,0,128,128);return new THREE.CanvasTexture(c)})();
- const mat=map=>{const m=phong({map,shininess:4,specular:0x080808});m.color.setRGB(.74,.72,.7);return m};
- const sideM=mat(side),lidM=mat(lid);
- const BODY=new THREE.LatheGeometry([[.40,0],[.465,.22],[.5,.5],[.465,.78],[.40,1]].map(([a,b])=>new THREE.Vector2(a,b)),18),DISC=new THREE.CircleGeometry(1,18);
- const E=new THREE.Euler(),M=new THREE.Matrix4();
- const barrel=(b,h)=>{const r=.24+h*.03,H=.6+h*.08,tip=h>.82;
-  if(tip)b=b.clone().multiply(M.makeTranslation(0,r*.98,0).clone()).multiply(M.makeRotationFromEuler(E.set(0,0,Math.PI/2)).clone()).multiply(M.makeTranslation(0,-H/2,0).clone());
-  else b=b.clone().multiply(M.makeRotationFromEuler(E.set((h-.5)*.09,0,(hash(h,3)-.5)*.09)).clone());/* lekki przechyl: idealnie pionowe beczki wygladaly jak z prototypu */
-  put(BODY,sideM,b,0,-.015,0,r*2,H,r*2);put(DISC,lidM,b,0,H-.017,0,r*.8,r*.8,1,-Math.PI/2);if(tip)put(DISC,lidM,b,0,-.013,0,r*.8,r*.8,1,Math.PI/2)};
- // pozycje rozstrzyga composeWorldProps (przez p.obj.mesh), wiec modele powstaja dopiero w finish(), po tym kroku
- const PROXY_GEO=new THREE.PlaneGeometry(1.6,1.6);/* zastepnik p.obj.mesh (nie trafia do sceny): inne kroki czytaja z niego polozenie, skale i szerokosc siatki (cien pod rekwizytem) */
- const list=[];
- const place=p=>{const proxy=new THREE.Mesh(PROXY_GEO);proxy.position.set(p.x,0,p.y);p.obj={mesh:proxy};list.push([p,proxy])};
- const finish=()=>{for(const [p,m] of list){const h=hash(p.x,p.y);barrel(at(m.position.x,m.position.z-.42,(p.flip?Math.PI:0)+h*6.28),h)}list.length=0;
-  /* oznaczone jak rekwizyty: softenProps przyciemnia je tym samym odcieniem co obrazki rozdz. I */
-  const g=new THREE.Group();K.finish(g);for(const c of g.children)c.userData.propAsset=true;ROOT.add(g)};
- return {place,finish}}
-// 20.11.2026 (autor: "rob wszystko co sie da"): kolejne rekwizyty o prostym ksztalcie jako bryly oklejone malunkiem z ich wlasnych obrazkow:
-// rozdz. III (port) studnia, rozdz. V stos drewna, ul, pien z siekiera, glaz, kurhan (w rozdz. I studnia jest czescia ilustracji starosty, w VI studni nie ma). Bryla przejmuje miejsce i rozmiar obrazka (szerokosc jego siatki po skalowaniu), obrazek jest usuwany.
-// Zostaja obrazkami (namalowane w perspektywie): sarkofagi, kola, wozy, szubienice, postacie, ognie, drzewa, beczka z atramentem, skrzynia. Kolizje bez zmian. Porownanie przed: ?rek3d=0 (tylko lokalnie).
-const P3D_IMG={6:{well:'p1_well'},4:{cz_firewood:'p4_cz_firewood',cz_beehive:'p4_cz_beehive',axe_stump:'p4_axe_stump',mossy_boulder:'p4_mossy_boulder',burial_mound:'p4_burial_mound'}};
-function paint3dImg(ch,k){const n=REK3D_ON&&P3D_IMG[ch]&&P3D_IMG[ch][k];return n&&IMGS[n]?IMGS[n]:null}
-// wycinek obrazka (wspolrzedne 0..1) jako tekstura; mir = dopisane lustro (kafel bez szwu), rot = obrot o 90 st.
-function p3dTex(img,x0,y0,x1,y1,w=128,h=128,mir=false,rot=false,bg=null){const c=canvas(mir?w*2:w,h),g=c.getContext('2d'),W=img.width,H=img.height,a=[x0*W,y0*H,(x1-x0)*W,(y1-y0)*H];if(bg){g.fillStyle=bg;g.fillRect(0,0,c.width,c.height)}/* bg: tlo pod przezroczystymi rogami wycinka (inaczej czarne plamy) */g.drawImage(img,...a,0,0,w,h);if(mir){g.save();g.translate(w*2,0);g.scale(-1,1);g.drawImage(img,...a,0,0,w,h);g.restore()}
- const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=4;if(rot){t.center.set(.5,.5);t.rotation=Math.PI/2}return t}
-function p3dMat(t,k=.76,rx=1,ry=1){if(rx!==1||ry!==1)t.repeat.set(rx,ry);const m=phong({map:t,shininess:4,specular:0x080808});m.color.setRGB(k,k*.98,k*.95);return m}
-// grudkowatosc: przesuniecie wierzcholka zalezne tylko od jego polozenia (te same punkty = to samo przesuniecie, bryla bez dziur)
-function p3dLumpy(geo,amp,seed){const P=geo.attributes.position,v=new THREE.Vector3();for(let i=0;i<P.count;i++){v.fromBufferAttribute(P,i);const n=Math.sin(v.x*7.1+seed)*Math.cos(v.z*6.3-seed)+Math.sin(v.y*9.7+v.x*3.1+seed*2)*.5;const len=v.length()||1;v.multiplyScalar(1+n*amp/len);if(v.y<0)v.y=0;P.setXYZ(i,v.x,v.y,v.z)}geo.computeVertexNormals();return geo}
-const P3D_CACHE=new Map();
-function p3dKit(key,img,make){let k=P3D_CACHE.get(key);if(!k){k=make(img);P3D_CACHE.set(key,k)}return k}
-const P3D_MODEL={
- // stos polan: konce w strone kamery (sloje z obrazka), kora z boku polana
- cz_firewood:(img,w)=>{const K=p3dKit('fw',img,i=>({side:p3dMat(p3dTex(i,.50,.60,.78,.66,128,64,true,true),.62),end:p3dMat(p3dTex(i,.205,.385,.335,.515),.68),G:new THREE.CylinderGeometry(1,1,1,12)}));
-  const r=w*.085,L=w*.95,out=[];let n=0;for(const [row,cnt] of [[0,5],[1,4],[2,3]])for(let j=0;j<cnt;j++){const x=(j-(cnt-1)/2)*r*2.02,y=r+row*r*1.72,h=Math.sin(++n*12.9)*.5;out.push([K.G,[K.side,K.end,K.end],x,y,h*r*.6,r*(.92+.08*h),L*(.92+.1*h),r*(.92+.08*h),Math.PI/2,0,h*.05])}return out},
- // ul ze slomy na stoliku z desek
- cz_beehive:(img,w)=>{const K=p3dKit('bh',img,i=>({straw:p3dMat(p3dTex(i,.25,.40,.60,.58,128,96,true),.78,3,1.6),plank:p3dMat(p3dTex(i,.12,.66,.68,.72,256,48),.76),leg:p3dMat(p3dTex(i,.14,.76,.19,.88,32,96),.72),
-   D:new THREE.LatheGeometry([[.5,0],[.52,.18],[.5,.4],[.42,.64],[.29,.84],[.14,.96],[.0,1]].map(([a,b])=>new THREE.Vector2(a,b)),20),B:new THREE.BoxGeometry(1,1,1),C:new THREE.CylinderGeometry(1,1,1,10),dark:phong({color:0x0c0907})}));
-  const d=w*.74,ht=w*.32,o=[];o.push([K.B,K.plank,0,ht,0,w,w*.07,w*.62]);for(const sx of [-1,1])for(const sz of [-1,1])o.push([K.B,K.leg,sx*w*.4,ht/2,sz*w*.22,w*.09,ht,w*.09]);
-  o.push([K.D,K.straw,0,ht+w*.035,0,d,d*.86,d]);o.push([K.C,K.straw,0,ht+w*.035+d*.86,0,d*.09,d*.07,d*.09]);o.push([K.B,K.dark,0,ht+w*.035+d*.07,d*.47,d*.17,d*.14,d*.06]);return o},
- // pien: kora z boku, sloje z lustrzanego polkola wierzchu, siekiera wbita w wierzch, kilka wiorow
- axe_stump:(img,w)=>{const K=p3dKit('st',img,i=>({bark:p3dMat(p3dTex(i,.22,.56,.70,.74,128,96,true),.6,2,1),top:p3dMat(p3dTex(i,.58,.41,.76,.49,64,128,true,false,'#8a6a48'),.62),blade:p3dMat(p3dTex(i,.41,.33,.49,.48),.85),
-   handle:p3dMat(p3dTex(i,.66,.17,.76,.20,128,32,false,true,'#6b4a2c'),.8),chip:p3dMat(p3dTex(i,.76,.78,.86,.86,32,32),.82),
-   T:new THREE.LatheGeometry([[.6,0],[.55,.08],[.5,.3],[.48,.7],[.47,1]].map(([a,b])=>new THREE.Vector2(a,b)),18),Dk:new THREE.CircleGeometry(.47,18),B:new THREE.BoxGeometry(1,1,1),C:new THREE.CylinderGeometry(1,1,1,8)}));
-  const d=w*.72,H=d*.62,o=[/* siekiera wieksza: to ona odroznia ten pien */[K.T,K.bark,0,0,0,d,H,d],[K.Dk,K.top,0,H+.002,0,d,d,1,-Math.PI/2,0,0]];
-  o.push([K.B,K.blade,-d*.08,H+d*.17,0,d*.42,d*.36,d*.045,0,0,.15]);o.push([K.C,K.handle,d*.3,H+d*.46,0,d*.05,d*.85,d*.05,0,0,-1.05]);
-  for(let i=0;i<4;i++){const a=i*1.9+.4;o.push([K.B,K.chip,Math.cos(a)*d*.72,d*.02,Math.sin(a)*d*.62,d*.13,d*.04,d*.09,0,a,0])}return o},
- // glaz z mchem
- mossy_boulder:(img,w)=>{const K=p3dKit('bo',img,i=>({rock:p3dMat(p3dTex(i,.18,.32,.85,.85,256,192,true),.6,1,1),G:p3dLumpy(new THREE.IcosahedronGeometry(1,2),.13,1.7)}));return [[K.G,K.rock,0,0,0,w*.44,w*.36,w*.36]]},
- // kurhan: kopiec ziemi z kamieniami i krzyz
- burial_mound:(img,w)=>{const K=p3dKit('bm',img,i=>({dirt:p3dMat(p3dTex(i,.2,.6,.82,.88,256,128,true),.72,1,1),wood:p3dMat(p3dTex(i,.48,.32,.55,.46,32,96),.78),
-   M:p3dLumpy(new THREE.SphereGeometry(1,22,10,0,Math.PI*2,0,Math.PI/2),.07,4.2),B:new THREE.BoxGeometry(1,1,1)}));
-  const h=w*.22;return [[K.M,K.dirt,0,0,0,w*.45,h,w*.36],[K.B,K.wood,0,h+w*.17,-w*.04,w*.05,w*.5,w*.05],[K.B,K.wood,0,h+w*.29,-w*.04,w*.3,w*.05,w*.045]]},
- // studnia: murowana cembrowina (bok, wnetrze, wierzch), woda, dwa slupy, belka, kolowrot z lina, wiadro
- well:(img,w,key)=>{const q=key==='p5_well'?{st:[.13,.70,.73,.88],top:[.15,.63,.35,.71],post:[.14,.25,.20,.45],rope:[.32,.15,.5,.28],buck:[.35,.57,.5,.66]}:{st:[.14,.70,.72,.88],top:[.15,.62,.35,.72],post:[.17,.25,.23,.45],rope:[.34,.15,.5,.28],buck:[.36,.50,.48,.60]};
-  const K=p3dKit('we'+key,img,i=>({stone:p3dMat(p3dTex(i,...q.st,128,96,true),.78,3,1),inner:p3dMat(p3dTex(i,...q.st,128,96,true),.45,3,1),top:p3dMat(p3dTex(i,...q.top),.8,3,1),post:p3dMat(p3dTex(i,...q.post,32,128),.76),
-   beam:p3dMat(p3dTex(i,...q.post,32,128,false,true),.74),rope:p3dMat(p3dTex(i,...q.rope,128,64,false,true,'#7a5a32'),.85),buck:p3dMat(p3dTex(i,...q.buck,128,64,true),.8),water:phong({color:0x0a0c10,shininess:60,specular:0x2a3440}),
-   O:new THREE.CylinderGeometry(.5,.52,1,22,1,true),I:new THREE.CylinderGeometry(.4,.4,1,22,1,true),Rg:new THREE.RingGeometry(.4,.505,22,1),Dk:new THREE.CircleGeometry(.4,22),B:new THREE.BoxGeometry(1,1,1),C:new THREE.CylinderGeometry(1,1,1,12)}));
-  K.inner.side=THREE.BackSide;const D=w*.6,H=D*.5,o=[[K.O,K.stone,0,H/2,0,D,H,D],[K.I,K.inner,0,H/2,0,D,H,D],[K.Rg,K.top,0,H+.002,0,D,D,1,-Math.PI/2,0,0],[K.Dk,K.water,0,H*.45,0,D,D,1,-Math.PI/2,0,0]];
-  const ph=D*1.25;for(const sx of [-1,1])o.push([K.B,K.post,sx*D*.43,ph/2,0,D*.12,ph,D*.12]);o.push([K.B,K.beam,0,ph-D*.07,0,D*1.02,D*.1,D*.1]);
-  o.push([K.C,K.rope,0,ph-D*.2,0,D*.1,D*.4,D*.1,0,0,Math.PI/2]);o.push([K.C,K.rope,0,ph-D*.5,0,D*.015,D*.5,D*.015]);o.push([K.C,K.buck,0,H+D*.02,D*.05,D*.13,D*.2,D*.13]);
-  o.push([K.B,K.beam,D*.56,ph-D*.2,0,D*.12,D*.04,D*.04]);o.push([K.C,K.beam,D*.64,ph-D*.28,0,D*.03,D*.18,D*.03]);return o}
-};
-const P3D_M=new THREE.Matrix4(),P3D_L=new THREE.Matrix4(),P3D_E=new THREE.Euler(),P3D_Q=new THREE.Quaternion(),P3D_V=new THREE.Vector3(),P3D_S=new THREE.Vector3();
-// buduje wszystkie bryly swiata naraz (jedna siatka instancji na pare ksztalt + material)
-function p3dEmit(root,items){const kit=new Map();
- for(const {k,img,key,x,z,W,ry} of items){const f=P3D_MODEL[k];if(!f)continue;P3D_M.compose(P3D_V.set(x,0,z),P3D_Q.setFromEuler(P3D_E.set(0,ry,0)),P3D_S.set(1,1,1));
-  for(const [geo,mat,px,py,pz,sx,sy,sz,rx=0,yy=0,rz=0] of f(img,W,key)){P3D_L.compose(P3D_V.set(px,py,pz),P3D_Q.setFromEuler(P3D_E.set(rx,yy,rz)),P3D_S.set(sx,sy,sz));const mk=geo.uuid+'|'+(Array.isArray(mat)?mat.map(m=>m.uuid).join(','):mat.uuid);let e=kit.get(mk);if(!e)kit.set(mk,e={geo,mat,list:[]});e.list.push(P3D_M.clone().multiply(P3D_L))}}
- for(const {geo,mat,list} of kit.values()){const im=new THREE.InstancedMesh(geo,mat,list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=false;im.receiveShadow=true;im.frustumCulled=false;im.userData.propAsset=true;root.add(im)}}
-// po composeWorldProps: obrazki tych rekwizytow ustepuja brylom (miejsce i szerokosc bierzemy z obrazka)
-function paint3dFinish(w){if(!REK3D_ON||!P3D_IMG[w.ch])return;const items=[],hash=(x,y)=>{const s=Math.sin(x*91.7+y*47.3)*43758.5453;return s-Math.floor(s)};
- for(const {p,W} of (w.p3d||[])){const img=paint3dImg(w.ch,p.k);if(img)items.push({k:p.k==='well'?'well':p.k,img,key:P3D_IMG[w.ch][p.k],x:p.x,z:p.y-.42,W,ry:(p.flip?Math.PI:0)+(hash(p.x,p.y)-.5)*.5})}
+// 20.11.2026 (runda bryl rekwizytow 1): rekwizyty o prostym ksztalcie jako modele 3D z Blendera (pliki .glb w assets/rekwizyty, zrodla: docs/modele/).
+// Model ma tylko ksztalt, normalne i wypalone cienie (kolory wierzcholkow). Malunek nakleja gra: rzut obrazka rekwizytu z kata kamery (PITCH),
+// wiec z widoku gracza model wyglada jak dotychczasowy obrazek, ale ma prawdziwa bryle, cien i zaslanianie. Modele sie nie obracaja (rzut by sie rozjechal).
+// Bryla zajmuje miejsce i szerokosc obrazka; obrazek jest usuwany. Kolizje bez zmian. Brak modelu (np. jeszcze sie wczytuje) = zostaje obrazek.
+// Porownanie przed: ?rek3d=0 (tylko lokalnie).
+const REK3D_ON=!(LOKALNIE_REK3D()&&nbParam('rek3d')==='0');
+function LOKALNIE_REK3D(){try{return /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)||location.protocol==='file:'}catch(e){return false}}
+const P3D_GLB={beczka:'assets/rekwizyty/9c2b288a2f3e2836e6dfe2464e2e129fd8930da48f3515b3fffce329f628bf27.glb',glaz:'assets/rekwizyty/3cb68cacf5ffaedd72fce29dbbca8db4e7ac096239e46b549c9668db387046bf.glb',
+ pien:'assets/rekwizyty/8e5f9297f89c8dd2cb0b59b6d3caa9e209a8ce36c582fbef0c0471545102c94f.glb',ul:'assets/rekwizyty/c40c8201a0698d7495a80fd087edb12d31d057927dde4a668294fa2b9d78fc99.glb',
+ kurhan:'assets/rekwizyty/254e774d7a66d8de38394ba9683eed3ca9380c7266d0cceba3bad13450f5f414.glb',drewno:'assets/rekwizyty/64d715a6a73520da33b3ffeb683e620406f444122867ea745a0a34188d552ba1.glb',
+ studnia:'assets/rekwizyty/b8b1849daf3675db429c598019be29d6a6579a8377b7ec1a763832dee5429c37.glb'};
+// rozdzial -> klucz rekwizytu -> [model, obrazek z malunkiem]. Rozdz. V: beczka z atlasu br_props dostaje malunek p1_barrel.
+const P3D_MAP={1:{barrel:['beczka','p1_barrel']},3:{barrel:['beczka','p3_barrel']},
+ 4:{barrel:['beczka','p1_barrel'],cz_firewood:['drewno','p4_cz_firewood'],cz_beehive:['ul','p4_cz_beehive'],axe_stump:['pien','p4_axe_stump'],mossy_boulder:['glaz','p4_mossy_boulder'],burial_mound:['kurhan','p4_burial_mound']},
+ 6:{well:['studnia','p1_well']}};
+const P3D_GEO={};
+// minimalny czytnik .glb: pierwsza siatka, POSITION/NORMAL/COLOR_0 i indeksy (bez biblioteki GLTFLoader)
+function p3dParseGlb(buf){const dv=new DataView(buf);if(dv.getUint32(0,true)!==0x46546C67)throw Error('glb');let o=12,json=null,bin=null;
+ while(o<buf.byteLength){const len=dv.getUint32(o,true),type=dv.getUint32(o+4,true);if(type===0x4E4F534A)json=JSON.parse(new TextDecoder().decode(new Uint8Array(buf,o+8,len)));else if(type===0x004E4942)bin=buf.slice(o+8,o+8+len);o+=8+len}
+ const pr=json.meshes[0].primitives[0],CT={5126:Float32Array,5125:Uint32Array,5123:Uint16Array,5121:Uint8Array},N={SCALAR:1,VEC2:2,VEC3:3,VEC4:4};
+ const acc=i=>{const a=json.accessors[i],bv=json.bufferViews[a.bufferView],T=CT[a.componentType],n=N[a.type];let arr=new T(bin,(bv.byteOffset||0)+(a.byteOffset||0),a.count*n);
+  if(a.normalized){const d=T===Uint8Array?255:T===Uint16Array?65535:1;arr=Float32Array.from(arr,x=>x/d)}return {arr,n}};
+ const g=new THREE.BufferGeometry(),P=acc(pr.attributes.POSITION);g.setAttribute('position',new THREE.BufferAttribute(P.arr,3));
+ if(pr.attributes.NORMAL!==undefined)g.setAttribute('normal',new THREE.BufferAttribute(acc(pr.attributes.NORMAL).arr,3));else g.computeVertexNormals();
+ if(pr.attributes.COLOR_0!==undefined){const C=acc(pr.attributes.COLOR_0),c=new Float32Array(P.arr.length);for(let i=0;i<P.arr.length/3;i++){c[i*3]=C.arr[i*C.n];c[i*3+1]=C.arr[i*C.n+1];c[i*3+2]=C.arr[i*C.n+2]}g.setAttribute('color',new THREE.BufferAttribute(c,3))}
+ if(pr.indices!==undefined){const I=acc(pr.indices);g.setIndex(new THREE.BufferAttribute(I.arr instanceof Uint8Array?Uint16Array.from(I.arr):I.arr,1))}
+ g.computeBoundingBox();return g}
+// modele sa male (20-220 KB); pobierane od startu gry, zanim gracz wejdzie do rozdzialu
+const P3D_READY=REK3D_ON?Promise.all(Object.entries(P3D_GLB).map(([k,u])=>fetch(u).then(r=>r.arrayBuffer()).then(b=>{P3D_GEO[k]=p3dParseGlb(b)}).catch(e=>quietErr('p3d '+k,e)))):Promise.resolve();
+// malunek bez przezroczystych brzegow: przezroczyste piksele dostaja kolor najblizszego kryjacego (model wystaje odrobine poza obrys obrazka)
+const P3D_TEX=new Map();
+function p3dPaint(key){let t=P3D_TEX.get(key);if(t)return t;const img=IMGS[key];if(!img)return null;const W=img.width,H=img.height,c=canvas(W,H),g=c.getContext('2d');g.drawImage(img,0,0);
+ const d=g.getImageData(0,0,W,H),px=d.data;let x0=W,y0=H,x1=0,y1=0;for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(px[(y*W+x)*4+3]>128){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
+ let ok=new Uint8Array(W*H);for(let i=0;i<W*H;i++)ok[i]=px[i*4+3]>128?1:0;
+ for(let pass=0;pass<48;pass++){const nk=ok.slice();let any=0;for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=y*W+x;if(ok[i])continue;let r=0,gg=0,b=0,n=0;
+   for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const xx=x+dx,yy=y+dy;if(xx<0||yy<0||xx>=W||yy>=H)continue;const j=yy*W+xx;if(!ok[j])continue;r+=px[j*4];gg+=px[j*4+1];b+=px[j*4+2];n++}
+   if(n){px[i*4]=r/n;px[i*4+1]=gg/n;px[i*4+2]=b/n;nk[i]=1;any=1}}ok=nk;if(!any)break}
+ for(let i=0;i<W*H;i++)px[i*4+3]=255;g.putImageData(d,0,0);
+ const tx=new THREE.CanvasTexture(c);tx.anisotropy=4;
+ t={tex:tx,box:[x0/W,y0/H,(x1+1)/W,(y1+1)/H]};P3D_TEX.set(key,t);return t}
+// geometria z UV = rzut obrazka z kamery gry; jedna kopia na pare (model, obrazek)
+const P3D_UV=new Map();
+function p3dGeo(model,key){const id=model+'|'+key;let e=P3D_UV.get(id);if(e)return e;const src=P3D_GEO[model],pt=p3dPaint(key);if(!src||!pt)return null;
+ const g=src.clone(),P=g.attributes.position,cs=Math.cos(PITCH),sn=Math.sin(PITCH),n=P.count;let x0=1e9,x1=-1e9,s0=1e9,s1=-1e9,zf=-1e9;
+ for(let i=0;i<n;i++){const x=P.getX(i),s=P.getY(i)*cs-P.getZ(i)*sn;if(x<x0)x0=x;if(x>x1)x1=x;if(s<s0)s0=s;if(s>s1)s1=s;if(P.getZ(i)>zf&&P.getY(i)<.02)zf=P.getZ(i)}
+ const b=pt.box,uv=new Float32Array(n*2);for(let i=0;i<n;i++){const u=(P.getX(i)-x0)/(x1-x0),w=(P.getY(i)*cs-P.getZ(i)*sn-s0)/(s1-s0);uv[i*2]=b[0]+u*(b[2]-b[0]);uv[i*2+1]=1-(b[3]-w*(b[3]-b[1]))}
+ g.setAttribute('uv',new THREE.BufferAttribute(uv,2));
+ const m=phong({map:pt.tex,shininess:3,specular:0x060606,side:THREE.DoubleSide});m.vertexColors=!!g.attributes.color;m.color.setRGB(.9,.88,.86);
+ e={g,m,w:x1-x0,zf,cx:(x0+x1)/2,box:b};P3D_UV.set(id,e);return e}
+function paint3dImg(ch,k){const e=REK3D_ON&&P3D_MAP[ch]&&P3D_MAP[ch][k];return e&&P3D_GEO[e[0]]&&IMGS[e[1]]?e:null}
+// po composeWorldProps: obrazki tych rekwizytow ustepuja modelom (miejsce i szerokosc bierzemy z obrazka)
+function paint3dFinish(w){if(!REK3D_ON||!P3D_MAP[w.ch])return;const items=[];
+ for(const {p,W} of (w.p3d||[])){const e=paint3dImg(w.ch,p.k);if(e)items.push({e,x:p.x,z:p.y,W,flip:!!p.flip})}
  w.p3d=null;
- for(const p of w.PROPS){const img=paint3dImg(w.ch,p.k);if(!img||p.anim||p.shrine!==undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);const m=o&&o.mesh;if(!m||!m.parent||!m.geometry||!m.geometry.parameters||m.isInstancedMesh)continue;
-  const W=m.geometry.parameters.width*Math.abs(m.scale.x),round=p.k!=='well';items.push({k:p.k,img,key:P3D_IMG[w.ch][p.k],x:m.position.x,z:m.position.z-.42,W,ry:(m.scale.x<0?Math.PI:0)+(round?(hash(p.x,p.y)-.5)*1.2:0)});
+ for(const p of w.PROPS){const e=paint3dImg(w.ch,p.k);if(!e||p.anim||p.shrine!==undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);const m=o&&o.mesh;
+  if(!m||!m.parent||!m.geometry||!m.geometry.parameters||m.isInstancedMesh)continue;
+  items.push({e,x:m.position.x,z:m.position.z,W:m.geometry.parameters.width*Math.abs(m.scale.x),flip:m.scale.x<0});
   m.parent.remove(m);const i=w.propObjs.findIndex(q=>q.mesh===m);if(i>=0)w.propObjs.splice(i,1)}
- if(items.length)p3dEmit(w.group,items)}
+ const by=new Map(),M=new THREE.Matrix4(),V=new THREE.Vector3(),Qi=new THREE.Quaternion(),S=new THREE.Vector3();
+ for(const it of items){const G=p3dGeo(it.e[0],it.e[1]);if(!G)continue;const s=it.W*(G.box[2]-G.box[0])/G.w,dx=((G.box[0]+G.box[2])/2-.5)*it.W*(it.flip?-1:1);
+  // srodek obrysu jak srodek malunku na obrazku; przod-spod modelu na linii obrazka (tam stoi jego dolna krawedz)
+  M.compose(V.set(it.x+dx-G.cx*s*(it.flip?-1:1),0,it.z-G.zf*s),Qi,S.set(it.flip?-s:s,s,s));(by.get(G)||by.set(G,[]).get(G)).push(M.clone())}
+ for(const [G,list] of by){const im=new THREE.InstancedMesh(G.g,G.m,list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=false;im.receiveShadow=true;im.frustumCulled=false;im.userData.propAsset=true;w.group.add(im)}}
 function buildBrzeznica(I){
   const F=I.br_ground,Wl=I.br_walls,r=rng(77);planGround(1);
   const fc=canvas(WW,WH),fg=fc.getContext('2d');
@@ -2518,10 +2493,8 @@ function buildBrzeznica(I){
   const PF={};for(const k in R)PF[k]=I['p1_'+k]?procFrame(I['p1_'+k],0,0,R[k][2],R[k][3],'prop'):procFrame(I.br_props,R[k][0],R[k][1],R[k][2],R[k][3],'prop');
   // stairs down into the crypt (Lower City transition sheet)
   if(I.p1_crypt_stairs){R.crypt_stairs=[0,0,96,72];PF.crypt_stairs=procFrame(I.p1_crypt_stairs,0,0,96,72,'prop')}else{R.crypt_stairs=[0,0,64,32];PF.crypt_stairs=procFrame(I.trans,0,0,64,32,'prop')}
-  const R3=REK3D_ON?rek3dBuild(ROOT,I):null;WORLDS[CH].rek3d=R3;
   for(const p of PROPS){
     let frames,rc;
-    if(R3&&REK3D_KEYS.has(p.k)&&!p.anim&&p.shrine===undefined){R3.place(p);continue}
     if(p.anim==='fire'){frames=[0,1,2,3].map(i=>PF['debris_fire_'+i]);rc=R.debris_fire_0}else if(p.anim==='hfire'){frames=[0,1,2,3].map(i=>PF['house_fire_'+i]);rc=R.house_fire_0}
     else if(p.shrine!==undefined){frames=[PF.shrine,PF.shrine];rc=R.shrine}
     else{frames=[PF[p.k]];rc=R[p.k]}
@@ -2640,9 +2613,7 @@ function buildStolica(I){planGround(3);
   const ANIM={fire:['debris_fire',4],pyre:['pyre',4],bloom:['rot_bloom',2]};
   for(let i=0;i<4;i++)if(I['p2_brazier_'+i])PF['brazier_'+i]=procFrame(I['p2_brazier_'+i],0,0,32,32,'prop'); // 13.11.2026: nowe, wyrownane klatki koksownika
   for(const [x,y] of braziers){const frames=[0,1,2,3].map(i=>PF['brazier_'+i]);propObjs.push({mesh:mkProp(frames,x+.5,y+.92,RC.brazier_0),frames,fps:6,ph:Math.random()*3})}
-  const R3=REK3D_ON?rek3dBuild(ROOT,I,I.p3_barrel?'p3_barrel':'p1_barrel'):null;WORLDS[CH].rek3d=R3;
   for(const p of PROPS){let frames,rc;
-    if(R3&&REK3D_KEYS.has(p.k)&&!p.anim&&p.shrine===undefined&&!p.still){R3.place(p);continue}
     if(ANIM[p.anim]){const [k,n]=ANIM[p.anim];frames=[...Array(n).keys()].map(i=>PF[k+'_'+i]);rc=RC[k+'_0']}
     else if(p.shrine!==undefined){frames=[PF.healing_shrine,PF.depleted_shrine];rc=RC.healing_shrine}
     else{const k=p.still||p.k;frames=[PF[k]];rc=RC[k]}
@@ -2716,9 +2687,7 @@ function buildCzarnobor(I){planGround(4);
   const PF={},RC={};for(const k in RB){PF[k]=(I['p1_'+k]&&/^debris_fire_\d$/.test(k))?procFrame(I['p1_'+k],0,0,RB[k][2],RB[k][3],'prop'):procFrame(I.br_props,RB[k][0],RB[k][1],RB[k][2],RB[k][3],'prop');RC[k]=RB[k]}
   if(I.cz_props)for(const k in RK){const [x,y,w=32]=RK[k];RC[k]=[x,y,w,32];PF[k]=I['p4_'+k]?procFrame(I['p4_'+k],0,0,w,32,'prop'):procFrame(I.cz_props,x,y,w,32,'prop')}
   const ANIM={fire:['debris_fire',4],campfire:[I.cz_props?'cz_fire':'debris_fire',4],wisp:['cz_wisp',2],crow:['cz_crow',2]};
-  const R3=REK3D_ON?rek3dBuild(ROOT,I):null;WORLDS[CH].rek3d=R3;
   for(const p of PROPS){if(OBJ[p.k]||p.stone!==undefined)continue;let frames,rc2;
-    if(R3&&REK3D_KEYS.has(p.k)&&!p.anim&&p.shrine===undefined){R3.place(p);continue}
     if(!PF[p.k]&&!ANIM[p.anim]&&p.shrine===undefined){const alt={cz_skullpole:'impaled_head',cz_gallows:'gallows',cz_wagon:'marga_cart',cz_tent:'burnt_hay',cz_cauldron:'barrel',cz_firewood:'barrel',cz_beehive:'barrel',cz_wheel:'wheel',cz_idol:'crow_post',cz_sacpole:'crow_post',cz_pelts:'burnt_hay',cz_bones:'covered_corpses'}[p.k];if(alt)p.k=alt}
     if(ANIM[p.anim]&&PF[ANIM[p.anim][0]+'_0']){const [k,n]=ANIM[p.anim];frames=[...Array(n).keys()].map(i=>PF[k+'_'+i]);rc2=RC[k+'_0']}
     else if(p.shrine!==undefined){frames=PF.cz_shrine?[PF.cz_shrine,PF.cz_shrine_burnt]:[PF.shrine,PF.shrine];rc2=RC.cz_shrine||RB.shrine}
