@@ -2450,6 +2450,11 @@ function p3dGeo(model,key){const id=model+'|'+key;let e=P3D_UV.get(id);if(e)retu
 // 20.11.2026: modele z Meshy (Image to 3D z malunkow rekwizytow), odchudzone: geometria ~6 tys. trojkatow + kolor i mapa normalnych 1024 (narzedzia: docs/modele/meshy_odchudz.py).
 // Maja wlasna teksture, wiec bez rzutu z kamery. Gdy rekwizyt ma model z Meshy, ma on pierwszenstwo przed modelem z rzutem.
 const P3D_MESHY={
+ p4_t_oak_roots:{g:'assets/rekwizyty/099ae47d5d55a26129e2b6a63a56555d2222286e03577d42d7cf1a0f09d312fa.glb',k:'assets/rekwizyty/fcee3211c0833bbdf1d3c925b17f989a9c60db2b40105d751ade75eda840ea76.webp'},
+ p4_t_leafy:{g:'assets/rekwizyty/df43a799e2b87241e5b22d5cd60a3ee87dca5827e5347e7d999b8bf367d01f88.glb',k:'assets/rekwizyty/7637a68c576092068ee6f03f2a24ab5554fd845165e4592652b2c371fc333e68.webp'},
+ p4_t_birch_a:{g:'assets/rekwizyty/2dcc89c147f51b678994521c36c1f5fc1508353688b53afd121b57589f7c4926.glb',k:'assets/rekwizyty/726094c12629243ec156045e4e113c54d19221e572ca816fe26abfda246f9bff.webp'},
+ p4_t_birch_b:{g:'assets/rekwizyty/62238f0a7c5f0af406cb17db8c4371d991d468e060cee74066833d6099825825.glb',k:'assets/rekwizyty/f7d9a23905e087f699283232c9dda62bf8f82d48c5ef5bfa80bd652d1f1410a2.webp'},
+ p4_t_dry_rust:{g:'assets/rekwizyty/ab540d18b46570ae7f0625d55c17b2dba7f0a1b0bfde4c0479d6913ebab27744.glb',k:'assets/rekwizyty/39e5cf5f4bce47e64a606b9607c9355a9e9372618365a782acfca19905d9b44c.webp'},
  p1_barrel:{g:'assets/rekwizyty/97fb75a8881a339304583244c0bd49e14926df213171e8cc202bc4fb7e082c3f.glb',k:'assets/rekwizyty/6378950ac708ebdb909216be2d0cba56e925981ad690d76722d081a43a700b4c.webp',n:'assets/rekwizyty/dac99927dd8a7a7a1c8a7160290faf188b6df82577f9a2ad9655f4c6071f9261.webp'},
  p1_burnt_hay:{g:'assets/rekwizyty/5ec363da5df40a8ced1bd949a78c20846762160a4eb3beaf7a867954c5158206.glb',k:'assets/rekwizyty/3d5e13469c6c7b914bd4a5a7cef84639ded47081d69ae7357e73e6cf774ec133.webp',n:'assets/rekwizyty/e274d7112a6c85989e0a2a81e624edd14da962cb4ec0fa5d58268d4126b78c1c.webp'},
  p1_covered_corpses:{g:'assets/rekwizyty/abee30f52826a1d652ad9a0da0c86679a3fd1c9df82a8821703279144e800d03.glb',k:'assets/rekwizyty/8fd031e042f4af03c66d552d333976570b6818b3df930bc660341479c99ae5d5.webp',n:'assets/rekwizyty/3439b2a9425bb251427ea1e036c2236ee6f571a7919f3ea18c9f3b7c81b9b946.webp'},
@@ -2521,16 +2526,18 @@ const P3D_MESHY={
  p5_throne:{g:'assets/rekwizyty/c333edc23d27e9fe2da522945b546dfa1d46fc6c59e70d59150ef25fe46c97b7.glb',k:'assets/rekwizyty/d4d8754e1048afc64337483c7f8bfd1a58bf21c86ab0ce897e3ffe65e30ad29d.webp',n:'assets/rekwizyty/a18e1c4c1ccba98d574c81ad90ec811ceca42361e0eb6ae6b7952d7fd6d742af.webp'},
  p5_vault:{g:'assets/rekwizyty/039e41c66fe0d5630a20ef71f2b3b4ad181324cb97e646720b8ef7b839547130.glb',k:'assets/rekwizyty/0aa492b702efde2a49dff78b6879b9993481ed88661cb624f310110ad3455163.webp',n:'assets/rekwizyty/f4b602a5bc153d01d99feef785ec0b39a7c7d99dc6efc6e4762a57bcb15dde25.webp'}};
 // rozdzial -> klucz rekwizytu -> model z Meshy (nazwa = obrazek, z ktorego powstal)
+// las Czarnoboru: 5 drzew 3D wymieszanych po miejscu (galeria Meshy, CC0, autor Tansy)
+const P3D_LAS=['p4_t_oak_roots','p4_t_leafy','p4_t_birch_a','p4_t_birch_b','p4_t_dry_rust'];
 const P3D_MMAP={1:{barrel:'p1_barrel',grave_cross:'p1_grave_cross',covered_corpses:'p1_covered_corpses',burnt_hay:'p1_burnt_hay',wheel:'p1_wheel',order_banner:'p1_order_banner',tombstone:'p1_tombstone',gallows:'p1_gallows',marga_cart:'p1_marga_cart',shop_sign:'p1_shop_sign',dead_horse:'p1_dead_horse',crow_post:'p1_crow_post',well:'p1_well',stocks:'p1_stocks'},
  2:{rune_lantern:'p2_rune_lantern',pickaxe_rack:'p2_pickaxe_rack',clan_banner:'p2_clan_banner',anvil:'p2_anvil',king_statue:'p2_king_statue',black_powder:'p2_black_powder',sarcophagus:'p2_sarcophagus',chains:'p2_chains',mine_cart:'p2_mine_cart',fallen_pillar:'p2_fallen_pillar',bellows:'p2_bellows'},
  3:{beggar_bodies:'p3_beggar_bodies',street_lantern:'p3_street_lantern',royal_banner:'p3_royal_banner',saint_king:'p3_saint_king',barrel:'p3_barrel',plague_cart:'p3_plague_cart',gibbet:'p3_gibbet',chains:'p3_chains',sarcophagus:'p3_sarcophagus',queen_fountain:'p3_queen_fountain',gallows:'p3_gallows',wheel:'p3_wheel',dead_horse:'p3_dead_horse',offering_bowl:'p3_offering_bowl'},
- 4:{cz_bones:'p4_cz_bones',wolf_skull_bush:'p4_wolf_skull_bush',barrel:'p1_barrel',burial_mound:'p4_burial_mound',mossy_boulder:'p4_mossy_boulder',drowned_cart:'p4_drowned_cart',cz_wagon:'p4_cz_wagon',cz_tent:'p4_cz_tent',cz_sacpole:'p4_cz_sacpole',cz_firewood:'p4_cz_firewood',cz_pelts:'p4_cz_pelts',cz_beehive:'p4_cz_beehive',axe_stump:'p4_axe_stump',cz_idol:'p4_cz_idol',cz_gallows:'p4_cz_gallows',cz_wheel:'p4_cz_wheel'},5:{candelabra:'p5_candelabra',statue_a:'p5_statue_a',statue_b:'p5_statue_b',armour:'p5_armour',bench_a:'p5_bench_b',bench_b:'p5_bench_b',bookcase_a:'p5_bookcase_a',bookcase_b:'p5_bookcase_b',vault:'p5_vault',lectern:'p5_lectern',desk:'p5_desk',scale:'p5_scale',cage:'p5_cage',rack:'p5_rack',throne:'p5_throne'},6:{well:'p1_well',marga_cart:'p1_marga_cart',covered_corpses:'p1_covered_corpses',crow_post:'p1_crow_post',wheel:'p1_wheel',gallows:'p1_gallows',stocks:'p1_stocks',burnt_hay:'p1_burnt_hay',dead_horse:'p1_dead_horse',shop_sign:'p1_shop_sign'}};
+ 4:{birch:P3D_LAS,spruce:P3D_LAS,tall_pine:P3D_LAS,dead_oak:P3D_LAS,dead_spruce:P3D_LAS,cz_bones:'p4_cz_bones',wolf_skull_bush:'p4_wolf_skull_bush',barrel:'p1_barrel',burial_mound:'p4_burial_mound',mossy_boulder:'p4_mossy_boulder',drowned_cart:'p4_drowned_cart',cz_wagon:'p4_cz_wagon',cz_tent:'p4_cz_tent',cz_sacpole:'p4_cz_sacpole',cz_firewood:'p4_cz_firewood',cz_pelts:'p4_cz_pelts',cz_beehive:'p4_cz_beehive',axe_stump:'p4_axe_stump',cz_idol:'p4_cz_idol',cz_gallows:'p4_cz_gallows',cz_wheel:'p4_cz_wheel'},5:{candelabra:'p5_candelabra',statue_a:'p5_statue_a',statue_b:'p5_statue_b',armour:'p5_armour',bench_a:'p5_bench_b',bench_b:'p5_bench_b',bookcase_a:'p5_bookcase_a',bookcase_b:'p5_bookcase_b',vault:'p5_vault',lectern:'p5_lectern',desk:'p5_desk',scale:'p5_scale',cage:'p5_cage',rack:'p5_rack',throne:'p5_throne'},6:{well:'p1_well',marga_cart:'p1_marga_cart',covered_corpses:'p1_covered_corpses',crow_post:'p1_crow_post',wheel:'p1_wheel',gallows:'p1_gallows',stocks:'p1_stocks',burnt_hay:'p1_burnt_hay',dead_horse:'p1_dead_horse',shop_sign:'p1_shop_sign'}};
 const P3D_MGEO={};
 const P3D_MREADY=REK3D_ON?Promise.all(Object.entries(P3D_MESHY).map(([k,e])=>fetch(e.g).then(r=>r.arrayBuffer()).then(b=>{P3D_MGEO[k]=p3dParseGlb(b)}).catch(er=>quietErr('meshy '+k,er)))):Promise.resolve();
-function meshyFor(ch,k){const n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];return n&&P3D_MGEO[n]?n:null}
+function meshyFor(ch,k,p){let n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];if(Array.isArray(n))n=n[p?groundHash(Math.floor(p.x),Math.floor(p.y))%n.length:0];return n&&P3D_MGEO[n]?n:null}
 const P3D_MMAT=new Map();
 function meshyMat(n){let m=P3D_MMAT.get(n);if(m)return m;const L=new THREE.TextureLoader(),e=P3D_MESHY[n],t=u=>{const x=L.load(u);x.flipY=false;x.anisotropy=4;return x};
- m=phong({map:t(e.k),normalMap:t(e.n),shininess:6,specular:0x101010,side:THREE.DoubleSide});m.color.setRGB(.92,.9,.88);P3D_MMAT.set(n,m);return m}
+ m=phong({map:t(e.k),normalMap:e.n?t(e.n):null,shininess:6,specular:0x101010,side:THREE.DoubleSide});m.color.setRGB(.92,.9,.88);if(P3D_LAS.includes(n))cutCircle(m);P3D_MMAT.set(n,m);return m}
 // szerokosc i srodek obrysu malunku (ulamki obrazka): model dostaje szerokosc obrysu, nie calego obrazka
 const P3D_ABOX=new Map();
 function p3dAlphaBox(key){let b=P3D_ABOX.get(key);if(b)return b;const img=IMGS[key];if(!img)return [0,0,1,1];const W=96,H=Math.round(96*img.height/img.width),c=canvas(W,H),g=c.getContext('2d');g.drawImage(img,0,0,W,H);
@@ -2540,13 +2547,14 @@ function meshyEmit(root,items){const by=new Map(),M=new THREE.Matrix4(),V=new TH
  for(const it of items){const g=P3D_MGEO[it.n];if(!g)continue;const bb=g.boundingBox,gw=bb.max.x-bb.min.x||1,ab=p3dAlphaBox(it.n),s=it.W*(ab[2]-ab[0])/gw,fl=it.flip?-1:1,dx=((ab[0]+ab[2])/2-.5)*it.W*fl;
   // przod-spod modelu na linii obrazka (tam stala jego dolna krawedz)
   M.compose(V.set(it.x+dx,0,it.z-bb.max.z*s),Q,S.set(s*fl,s,s));(by.get(it.n)||by.set(it.n,[]).get(it.n)).push(M.clone())}
- for(const [n,list] of by){const im=new THREE.InstancedMesh(P3D_MGEO[n],meshyMat(n),list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=false;im.receiveShadow=true;im.frustumCulled=false;im.userData.propAsset=true;root.add(im)}}
+ for(const [n,list] of by){const im=new THREE.InstancedMesh(P3D_MGEO[n],meshyMat(n),list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=P3D_CIEN.has(n);im.receiveShadow=true;im.frustumCulled=false;im.userData.propAsset=true;root.add(im)}}
+const P3D_CIEN=new Set(P3D_LAS);
 function paint3dImg(ch,k){const e=REK3D_ON&&P3D_MAP[ch]&&P3D_MAP[ch][k];return e&&P3D_GEO[e[0]]&&IMGS[e[1]]?e:null}
 // po composeWorldProps: obrazki tych rekwizytow ustepuja modelom (miejsce i szerokosc bierzemy z obrazka)
 function paint3dFinish(w){if(!REK3D_ON||(!P3D_MAP[w.ch]&&!P3D_MMAP[w.ch]))return;const items=[],mitems=[];
- for(const {p,W} of (w.p3d||[])){const n=meshyFor(w.ch,p.k);if(n){mitems.push({n,x:p.x,z:p.y,W,flip:!!p.flip});continue}const e=paint3dImg(w.ch,p.k);if(e)items.push({e,x:p.x,z:p.y,W,flip:!!p.flip})}
+ for(const {p,W} of (w.p3d||[])){const n=meshyFor(w.ch,p.k,p);if(n){mitems.push({n,x:p.x,z:p.y,W,flip:!!p.flip});continue}const e=paint3dImg(w.ch,p.k);if(e)items.push({e,x:p.x,z:p.y,W,flip:!!p.flip})}
  w.p3d=null;
- for(const p of w.PROPS){const n=meshyFor(w.ch,p.k),e=n?null:paint3dImg(w.ch,p.k);if((!e&&!n)||p.anim||p.shrine!==undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);const m=o&&o.mesh;
+ for(const p of w.PROPS){const n=meshyFor(w.ch,p.k,p),e=n?null:paint3dImg(w.ch,p.k);if((!e&&!n)||p.anim||p.shrine!==undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);const m=o&&o.mesh;
   if(!m||!m.parent||!m.geometry||!m.geometry.parameters||m.isInstancedMesh)continue;
   const it={x:m.position.x,z:m.position.z,W:m.geometry.parameters.width*Math.abs(m.scale.x),flip:m.scale.x<0};if(n)mitems.push(Object.assign(it,{n}));else items.push(Object.assign(it,{e}));
   m.parent.remove(m);const i=w.propObjs.findIndex(q=>q.mesh===m);if(i>=0)w.propObjs.splice(i,1)}
