@@ -914,3 +914,4 @@ cache838 · Czarnobor: las 3D z 5 drzew galerii Meshy (CC0), wymieszanych; przes
 cache839 · Czarnobor: las 3D z 13 drzew i 5 krzewow (galeria Meshy CC0), iglaste osobno od lisciastych, krzewy przy drzewach; Zlotogrod: zgnile kwiaty jako suchy krzew. Nie sprawdzono: FPS u autora, zgnile kwiaty na zrzucie, pad, itch.
 cache840 · Spalona Osada i Zlotogrod: martwe drzewa 3D (galeria Meshy CC0), rozjasnione spalone. Nie sprawdzono: drzewa w Zlotogrodzie na zrzucie, FPS u autora, pad, itch.
 cache841 · Martwe drzewa 3D: tekstury przemalowane paleta malowanych drzew (braz, mech, zloto). Nie sprawdzono: Zlotogrod na zrzucie, FPS u autora, pad, itch.
+cache842 · Pauza: Porzuc noc w ramce jak Wroc do gry (przygaszony). Nie sprawdzono: pad (zaznaczenie), ekrany inne niz 16:9.

@@ -58,7 +58,7 @@
    b.addEventListener('click',()=>{KRONTAB=0;$('kronBtn')?.click()});new MutationObserver(fill).observe(title,{attributes:true,attributeFilter:['hidden','class']});fill()}}
 
  // ---------- Pauza ----------
- put($('pauseMenuBtn'),T('Porzuć noc','Abandon night'));{const q=$('pauseMenuBtn').style;q.setProperty('transform','scale(.8)','important');q.setProperty('margin-left','6vh','important');q.setProperty('opacity','.82','important')}// mniejszy i odsunięty od „Wróć do gry”
+ put($('pauseMenuBtn'),T('Porzuć noc','Abandon night'));// wygląd: ramka jak „Wróć do gry”, ciemniejsza (styl w nb-pauza-makieta)
  {const pz=$('pause'),src=$('pane-gfx'),dst=pz.querySelector('.nbp-pane[data-pane="gfx"]');
   if(src&&dst){const home=()=>{const from=pz.hidden?dst:src,to=pz.hidden?src:dst;while(from.firstChild)to.append(from.firstChild)};new MutationObserver(home).observe(pz,{attributes:true,attributeFilter:['hidden']})}}
 
@@ -1343,8 +1343,8 @@ ${O} #pause .nbp-nav>.nbq-tb{align-self:center!important;font:700 calc(15*var(--
 ${O} #pause .nbp-nav>.nbq-tb.l{order:-1!important}${O} #pause .nbp-nav>.nbq-tb.r{order:50!important}
 ${O} #pause .nbp-nav>.btnrow{order:99!important;justify-content:space-between!important;align-items:center!important}
 ${O} #pause .nbp-nav>.btnrow>.nbz-hint{flex:1!important;font:400 calc(21*var(--u))/1.3 Georgia,serif!important;color:#d8c8a6!important;text-align:left!important}
-${O} #pause .nbp-nav>.btnrow>#pauseMenuBtn{order:2!important;flex:none!important;background:none!important;border:0!important;border-image:none!important;box-shadow:none!important;min-width:0!important;padding:calc(8*var(--u)) calc(16*var(--u))!important;font:600 calc(19*var(--u))/1 Cinzel,Georgia,serif!important;letter-spacing:.06em!important;color:#b9a789!important;filter:none!important}
-${O} #pause .nbp-nav>.btnrow>#pauseMenuBtn:is(:hover,:focus-visible,.pf){color:#f0b09a!important;text-decoration:underline!important}
+${O} #pause .nbp-nav>.btnrow>#pauseMenuBtn{order:2!important;flex:none!important;margin-right:calc(28*var(--u))!important;filter:brightness(.72) saturate(.75)!important;color:#e0a48e!important;--nb-ui-idle-shadow:none}
+${O} #pause .nbp-nav>.btnrow>#pauseMenuBtn:is(:hover,:focus-visible,.pf){filter:brightness(.95) saturate(.9)!important;color:#ffbfa6!important;text-decoration:none!important}
 ${O} #pause .nbp-nav>.btnrow>#resumeBtn{order:3!important;flex:none!important}
 ${O} #pause .nbp-nav>.btnrow>.nbz-hint{order:1!important}
 ${O} #pause #skillLoadout.nbz{border:0!important;border-image:none!important;background:none!important;box-shadow:none!important;padding:0!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:calc(26*var(--u))!important;align-items:stretch!important;max-width:calc(1640*var(--u))!important;margin:0 auto!important}
