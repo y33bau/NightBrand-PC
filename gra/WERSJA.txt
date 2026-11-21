@@ -916,3 +916,4 @@ cache840 · Spalona Osada i Zlotogrod: martwe drzewa 3D (galeria Meshy CC0), roz
 cache841 · Martwe drzewa 3D: tekstury przemalowane paleta malowanych drzew (braz, mech, zloto). Nie sprawdzono: Zlotogrod na zrzucie, FPS u autora, pad, itch.
 cache842 · Pauza: Porzuc noc w ramce jak Wroc do gry (przygaszony). Nie sprawdzono: pad (zaznaczenie), ekrany inne niz 16:9.
 cache843 · Drzewa 3D z naszych malunkow (Meshy obraz->3D) we wszystkich rozdzialach; drzewa i krzewy z galerii usuniete. Nie sprawdzono: Zlotogrod na zrzucie, FPS u autora, pad, itch.
+cache844 · Drzewa z malunkow: tekstury 2048 (bylo 1024), swiety dab przygaszony. Nie sprawdzono: FPS u autora, pad, itch.

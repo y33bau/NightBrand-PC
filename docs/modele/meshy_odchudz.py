@@ -3,7 +3,7 @@
 # Wyjscie: NAZWA.glb (sama geometria: pozycje, normalne, UV, indeksy; Y w gore, spod na 0, srodek w x/z = 0)
 #          NAZWA_k.webp (kolor 1024) i NAZWA_n.webp (mapa normalnych 1024).
 # Uzycie: python3 meshy_odchudz.py WEJSCIE.glb KATALOG_WYJSCIA NAZWA
-import sys,json,struct,io,os
+import os,sys,json,struct,io,os
 import numpy as np
 from PIL import Image
 src,out,name=sys.argv[1:4];os.makedirs(out,exist_ok=True)
@@ -44,7 +44,7 @@ def img(texinfo,size,fn,q):
     im=J['images'][J['textures'][texinfo['index']]['source']];v=J['bufferViews'][im['bufferView']]
     data=B[v.get('byteOffset',0):v.get('byteOffset',0)+v['byteLength']];pic=Image.open(io.BytesIO(data)).convert('RGB').resize((size,size),Image.LANCZOS)
     pic.save(os.path.join(out,fn),quality=q,method=6);return fn
-k=img(mat.get('pbrMetallicRoughness',{}).get('baseColorTexture'),1024,name+'_k.webp',86)
+k=img(mat.get('pbrMetallicRoughness',{}).get('baseColorTexture'),int(os.environ.get('NB_TEX','1024')),name+'_k.webp',86)
 n=img(mat.get('normalTexture'),1024,name+'_n.webp',88)
 # zapis glb (sama geometria)
 blob=b'';views=[];accs=[]

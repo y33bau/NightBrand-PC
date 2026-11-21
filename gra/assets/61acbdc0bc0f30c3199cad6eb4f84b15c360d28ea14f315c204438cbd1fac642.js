@@ -2450,15 +2450,15 @@ function p3dGeo(model,key){const id=model+'|'+key;let e=P3D_UV.get(id);if(e)retu
 // 20.11.2026: modele z Meshy (Image to 3D z malunkow rekwizytow), odchudzone: geometria ~6 tys. trojkatow + kolor i mapa normalnych 1024 (narzedzia: docs/modele/meshy_odchudz.py).
 // Maja wlasna teksture, wiec bez rzutu z kamery. Gdy rekwizyt ma model z Meshy, ma on pierwszenstwo przed modelem z rzutem.
 const P3D_MESHY={
- p4_dead_oak:{g:'assets/rekwizyty/93ced40c847376dd68095b8a3c68de7815e7e09332175ebf53ff765d3158fb73.glb',k:'assets/rekwizyty/d4e36559f4c95a25329c5495a6f93a0749067407c2dbec1276510fb12b447f42.webp'},
- p4_spruce:{g:'assets/rekwizyty/ea855bba4595c93e60e15460601901467fae2350282a855593da6fa1e084966d.glb',k:'assets/rekwizyty/b074818a372f346743a86d0142857092730c4837ac8ebf62202e3df45a228ea4.webp'},
- p4_birch:{g:'assets/rekwizyty/41f0eb46bbeace2f48771537201f564b5fb8299a5b236f401204d3c91b1a9b24.glb',k:'assets/rekwizyty/3a20e3203f00d30c89b30cc79b03e583f2fa4c49603f125e494f0b6312f94b4c.webp'},
- p4_dead_spruce:{g:'assets/rekwizyty/a4ad15da7754bf5bf0db052d621c5e8a9af3510249b0c4d77418b67f437e1bcd.glb',k:'assets/rekwizyty/552c6d91fbb4843a37f3d475740517959dbac62213e53760cd7234ca50ba652b.webp'},
- p4_tall_pine:{g:'assets/rekwizyty/657e82f46188828cfd82f6061f07c3c4ea076c126223daf75b4d5c0377b8d7ee.glb',k:'assets/rekwizyty/ad85e1857ce67e5bba7051aac2e3c8013cacc6bb92635390934737e8a8650934.webp'},
- p1_dead_tree:{g:'assets/rekwizyty/19a94455a1485d4e758afb95f42b68c553309dbe2f519f47e4c426a9f4852255.glb',k:'assets/rekwizyty/edd603ad2bb8d69df08bf5b76e8c76c304a6314cfdba5309e7c029a3be1ba3e6.webp'},
- p3_dead_tree:{g:'assets/rekwizyty/4d0a79bdc4ca05b11b130fa036c44f0981ee49ca5c049c3f219ba05226c8e6b4.glb',k:'assets/rekwizyty/b3233c5ecfda58d5cf323cec5f7ffeca515e7ca9d7f0a960b85f67e6a4984921.webp'},
- p4_sacred_oak:{g:'assets/rekwizyty/f3a68122da0b8cc01e024938075bf6ce052bb5d0d596de27e4ac83ef78a54540.glb',k:'assets/rekwizyty/66b5d28755ff44fed511c423d7c104eab8eefb3ece376c5258d89082cd17fb80.webp'},
- p4_hanging_tree:{g:'assets/rekwizyty/dd57a0849f3e214ca7e1f6cd1cfd7359376cdad92cd4dc4605546f82215442c0.glb',k:'assets/rekwizyty/6e2ea3d14540852eae6ff1b088704aed249c27bbd425fc419adf64c4d7f40cf7.webp'},
+ p4_dead_oak:{g:'assets/rekwizyty/93ced40c847376dd68095b8a3c68de7815e7e09332175ebf53ff765d3158fb73.glb',k:'assets/rekwizyty/a2764645880ea286d94b5aa4989be2a9a08ea71d66f1b1c7dea077452a8606a4.webp'},
+ p4_spruce:{g:'assets/rekwizyty/ea855bba4595c93e60e15460601901467fae2350282a855593da6fa1e084966d.glb',k:'assets/rekwizyty/1116e7b980554d3fc1462c02a582def25e5ca23491c5216884bf7763af3c3897.webp'},
+ p4_birch:{g:'assets/rekwizyty/41f0eb46bbeace2f48771537201f564b5fb8299a5b236f401204d3c91b1a9b24.glb',k:'assets/rekwizyty/b3a2743a60c882b296d476cfa1aba9c43f1dd3b9c4da808088641e60e94485e4.webp'},
+ p4_dead_spruce:{g:'assets/rekwizyty/a4ad15da7754bf5bf0db052d621c5e8a9af3510249b0c4d77418b67f437e1bcd.glb',k:'assets/rekwizyty/1c9f477f245e4af1a1f5b8653729fd962110603b1effc1439a12339fcd6b6c4b.webp'},
+ p4_tall_pine:{g:'assets/rekwizyty/657e82f46188828cfd82f6061f07c3c4ea076c126223daf75b4d5c0377b8d7ee.glb',k:'assets/rekwizyty/2311e68e3567935c0461d9e3eeeecdbb485d135b55f7d64f0b22018d30ab7232.webp'},
+ p1_dead_tree:{g:'assets/rekwizyty/19a94455a1485d4e758afb95f42b68c553309dbe2f519f47e4c426a9f4852255.glb',k:'assets/rekwizyty/3985e321888e747ecfb6975d21376f26445f6d78156c70ca28d06989e8443956.webp'},
+ p3_dead_tree:{g:'assets/rekwizyty/4d0a79bdc4ca05b11b130fa036c44f0981ee49ca5c049c3f219ba05226c8e6b4.glb',k:'assets/rekwizyty/1436713560ee8d19bfb55c85752c4e60862d955149f12c0ae171275e4aa66a69.webp'},
+ p4_sacred_oak:{g:'assets/rekwizyty/f3a68122da0b8cc01e024938075bf6ce052bb5d0d596de27e4ac83ef78a54540.glb',k:'assets/rekwizyty/a3183b7ade661b239755a73ee7828bb9df02ccb5ff81902842c9214a1bf2739f.webp'},
+ p4_hanging_tree:{g:'assets/rekwizyty/dd57a0849f3e214ca7e1f6cd1cfd7359376cdad92cd4dc4605546f82215442c0.glb',k:'assets/rekwizyty/274b6d33d371f81d6876daa554317a74865af04ec76ae37788f55591f2ef68d3.webp'},
  p1_barrel:{g:'assets/rekwizyty/97fb75a8881a339304583244c0bd49e14926df213171e8cc202bc4fb7e082c3f.glb',k:'assets/rekwizyty/6378950ac708ebdb909216be2d0cba56e925981ad690d76722d081a43a700b4c.webp',n:'assets/rekwizyty/dac99927dd8a7a7a1c8a7160290faf188b6df82577f9a2ad9655f4c6071f9261.webp'},
  p1_burnt_hay:{g:'assets/rekwizyty/5ec363da5df40a8ced1bd949a78c20846762160a4eb3beaf7a867954c5158206.glb',k:'assets/rekwizyty/3d5e13469c6c7b914bd4a5a7cef84639ded47081d69ae7357e73e6cf774ec133.webp',n:'assets/rekwizyty/e274d7112a6c85989e0a2a81e624edd14da962cb4ec0fa5d58268d4126b78c1c.webp'},
  p1_covered_corpses:{g:'assets/rekwizyty/abee30f52826a1d652ad9a0da0c86679a3fd1c9df82a8821703279144e800d03.glb',k:'assets/rekwizyty/8fd031e042f4af03c66d552d333976570b6818b3df930bc660341479c99ae5d5.webp',n:'assets/rekwizyty/3439b2a9425bb251427ea1e036c2236ee6f571a7919f3ea18c9f3b7c81b9b946.webp'},
@@ -2533,7 +2533,7 @@ const P3D_MESHY={
 // las Czarnoboru: 5 drzew 3D wymieszanych po miejscu (galeria Meshy, CC0, autor Tansy)
 // drzewa 3D zrobione z naszych malunków (Meshy obraz → 3D); nazwa modelu = klucz malunku
 const P3D_LAS=['p4_dead_oak','p4_spruce','p4_birch','p4_dead_spruce','p4_tall_pine','p1_dead_tree','p3_dead_tree','p4_sacred_oak','p4_hanging_tree'];
-const P3D_TON={};
+const P3D_TON={p4_sacred_oak:[.62,.62,.6]};// święty dąb stoi w zielonym blasku: bez przygaszenia prześwietla się
 // rozdz. I: drzewa mają warianty (patrz dressSettlementsHD); głaz i paprocie zostają malunkiem
 const P3D_DRZ1=p=>{const h=groundHash(Math.floor(p.x),Math.floor(p.y)),tk=p.variant||['dead_oak','dead_spruce','dead_oak'][h%3];return tk==='dead_oak'?(h%2?'p1_dead_tree':'p4_dead_oak'):({dead_spruce:'p4_dead_spruce',spruce:'p4_spruce',birch:'p4_birch'}[tk]||null)};
 const P3D_MMAP={1:{dead_tree:P3D_DRZ1,barrel:'p1_barrel',grave_cross:'p1_grave_cross',covered_corpses:'p1_covered_corpses',burnt_hay:'p1_burnt_hay',wheel:'p1_wheel',order_banner:'p1_order_banner',tombstone:'p1_tombstone',gallows:'p1_gallows',marga_cart:'p1_marga_cart',shop_sign:'p1_shop_sign',dead_horse:'p1_dead_horse',crow_post:'p1_crow_post',well:'p1_well',stocks:'p1_stocks'},
