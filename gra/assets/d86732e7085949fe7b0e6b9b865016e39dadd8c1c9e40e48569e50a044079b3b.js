@@ -2450,26 +2450,15 @@ function p3dGeo(model,key){const id=model+'|'+key;let e=P3D_UV.get(id);if(e)retu
 // 20.11.2026: modele z Meshy (Image to 3D z malunkow rekwizytow), odchudzone: geometria ~6 tys. trojkatow + kolor i mapa normalnych 1024 (narzedzia: docs/modele/meshy_odchudz.py).
 // Maja wlasna teksture, wiec bez rzutu z kamery. Gdy rekwizyt ma model z Meshy, ma on pierwszenstwo przed modelem z rzutem.
 const P3D_MESHY={
- p4_t_oak_dark:{g:'assets/rekwizyty/4a87120954c6dc04b2533364ed341fcfff77754e0868428706cccdf5fb2b544c.glb',k:'assets/rekwizyty/e1a86b5dd670878d30058cfb5d7eb141dc1102cd60741d9c9ce0eee649949a5d.webp'},
- p4_t_oak_wide:{g:'assets/rekwizyty/e3b179b944868a855fd2be4cad69c5e83a8bd7914ea234478a14f8018bd758ef.glb',k:'assets/rekwizyty/a8fdbe056146535e40cf1e2cd905d4dd9a8dc6251c8ea6df011dc20ea7d7d0ee.webp'},
- p4_t_oak_young:{g:'assets/rekwizyty/8f57b9b1e1ff2a404986582c9d9b1a8792290a0531a242a848fe8c43f28b61bd.glb',k:'assets/rekwizyty/7891b377b87fb90a44e7d49de8cd1a7c2184c1fbea1102b16254f8109568ac58.webp'},
- p4_t_pine_weathered:{g:'assets/rekwizyty/579a3553a6eb6a40e1fd949deaea08651b2d912d566f146f16235a8b9fce1352.glb',k:'assets/rekwizyty/4475a682a4f7ef0d669b684845d53898f185147a73b7c2056f6c9dffde5a7738.webp'},
- p4_t_spruce_norway:{g:'assets/rekwizyty/68d9320f25863c3eecbca2d62867cd610694cb96e154863c11d396e9cc8a1c1b.glb',k:'assets/rekwizyty/287969380d68692e7e8ef4427e43f88e7ae357820c6064057607743699be355f.webp'},
- p4_t_bush_dark:{g:'assets/rekwizyty/6f29484d1a68f418ffd436dbdd050001ac2dd2da8164d5b51711c4a0e4f894ff.glb',k:'assets/rekwizyty/c1a5d2f0b033af3244ad48c3ec487edd3181f397d0f94d4a803a1231920f3d1e.webp'},
- p4_t_bush_dry_cotton:{g:'assets/rekwizyty/c0a54de059e9fda515907f42a02a2e68b4c1fdd54a7ecec85812959cf4bca441.glb',k:'assets/rekwizyty/26cacaed8e1f0f42c4cc7a81700dd96e02ef588680284a9008b2664f4187bc14.webp'},
- p4_t_bush_fern_lush:{g:'assets/rekwizyty/5ded78d588289d9c7424cdc44762223d7a3c97aa1813cd16dacf756c68494f79.glb',k:'assets/rekwizyty/1f61e082b4778bce23e1bfaf4a08cae8fdbe39b2cb345573fa25182c6d007cfb.webp'},
- p4_t_bush_fern:{g:'assets/rekwizyty/59d9a3869d14c81782aea424d729946ec922124b3afd4744d70748d95e89f882.glb',k:'assets/rekwizyty/369d6a129647e8029dd433ff4ae882017002a012bc8ab2b78fb7ee1cee256882.webp'},
- p4_t_bush_m5:{g:'assets/rekwizyty/6a34fd4375be818720991143bd6edf3e8ce0743ce02a5cdc0b080b7f9112a87b.glb',k:'assets/rekwizyty/94304ac46964a2cf57c23af36a5a3c9bd3d111dabe258afc426d2a0f957d9bcf.webp'},
- p1_t_broken:{g:'assets/rekwizyty/b220193da06e8fabebb19cc7869141e9cc41eec62c5d564e4fe3e3eb804c496e.glb',k:'assets/rekwizyty/5ad654d2ad380afac6e0dd63574999abc24c11a609501ca200c6afc2c293bcd2.webp',n:'assets/rekwizyty/28a75633e82e8c81ec0f9d4b8ab055bcb171184efccfc03cc5d985d871d0c710.webp'},
- p1_t_burnt_oak:{g:'assets/rekwizyty/0174b985914c0c2cae82fd9dc5b62e44629cde68e8770f2b1ceeda153119d6b9.glb',k:'assets/rekwizyty/2a9a20e4f36ec2f702856563a0161421a0787b143d3d7ac9fb7966869001d8de.webp'},
- p1_t_burnt_stumps:{g:'assets/rekwizyty/fd97495301844c894ea5eadccfd46236af85d8d0389ddf434995513fc7e397c6.glb',k:'assets/rekwizyty/22a7b5813f358c82be55669b7bdf531f21c8c65fa2714c89af66faeb2313292e.webp'},
- p1_t_dead_oak:{g:'assets/rekwizyty/d7e9a7a98d2af97ca88e0781cce54eb89fcc710cc4eed0c30cb5a2707f87fa0e.glb',k:'assets/rekwizyty/42419620feadd09f0cbcc2e274797b2cacd9b2cc6d42d9058cc24d721461f07b.webp'},
- p1_t_dying_rust:{g:'assets/rekwizyty/0dff832881fd153d52636368589b33931202a8830d18661e68965f6a01c6aca3.glb',k:'assets/rekwizyty/36fd2a95874440639cee609a9c37b1c9fb5431e564d6d89ba15eb24efb1b228c.webp',n:'assets/rekwizyty/c256538d008f909b445abb0ff88763dc0122d8a092a5ad87fe2efcb7302e4b4e.webp'},
- p4_t_oak_roots:{g:'assets/rekwizyty/099ae47d5d55a26129e2b6a63a56555d2222286e03577d42d7cf1a0f09d312fa.glb',k:'assets/rekwizyty/fcee3211c0833bbdf1d3c925b17f989a9c60db2b40105d751ade75eda840ea76.webp'},
- p4_t_leafy:{g:'assets/rekwizyty/df43a799e2b87241e5b22d5cd60a3ee87dca5827e5347e7d999b8bf367d01f88.glb',k:'assets/rekwizyty/7637a68c576092068ee6f03f2a24ab5554fd845165e4592652b2c371fc333e68.webp'},
- p4_t_birch_a:{g:'assets/rekwizyty/2dcc89c147f51b678994521c36c1f5fc1508353688b53afd121b57589f7c4926.glb',k:'assets/rekwizyty/726094c12629243ec156045e4e113c54d19221e572ca816fe26abfda246f9bff.webp'},
- p4_t_birch_b:{g:'assets/rekwizyty/62238f0a7c5f0af406cb17db8c4371d991d468e060cee74066833d6099825825.glb',k:'assets/rekwizyty/f7d9a23905e087f699283232c9dda62bf8f82d48c5ef5bfa80bd652d1f1410a2.webp'},
- p4_t_dry_rust:{g:'assets/rekwizyty/ab540d18b46570ae7f0625d55c17b2dba7f0a1b0bfde4c0479d6913ebab27744.glb',k:'assets/rekwizyty/39e5cf5f4bce47e64a606b9607c9355a9e9372618365a782acfca19905d9b44c.webp'},
+ p4_dead_oak:{g:'assets/rekwizyty/93ced40c847376dd68095b8a3c68de7815e7e09332175ebf53ff765d3158fb73.glb',k:'assets/rekwizyty/d4e36559f4c95a25329c5495a6f93a0749067407c2dbec1276510fb12b447f42.webp'},
+ p4_spruce:{g:'assets/rekwizyty/ea855bba4595c93e60e15460601901467fae2350282a855593da6fa1e084966d.glb',k:'assets/rekwizyty/b074818a372f346743a86d0142857092730c4837ac8ebf62202e3df45a228ea4.webp'},
+ p4_birch:{g:'assets/rekwizyty/41f0eb46bbeace2f48771537201f564b5fb8299a5b236f401204d3c91b1a9b24.glb',k:'assets/rekwizyty/3a20e3203f00d30c89b30cc79b03e583f2fa4c49603f125e494f0b6312f94b4c.webp'},
+ p4_dead_spruce:{g:'assets/rekwizyty/a4ad15da7754bf5bf0db052d621c5e8a9af3510249b0c4d77418b67f437e1bcd.glb',k:'assets/rekwizyty/552c6d91fbb4843a37f3d475740517959dbac62213e53760cd7234ca50ba652b.webp'},
+ p4_tall_pine:{g:'assets/rekwizyty/657e82f46188828cfd82f6061f07c3c4ea076c126223daf75b4d5c0377b8d7ee.glb',k:'assets/rekwizyty/ad85e1857ce67e5bba7051aac2e3c8013cacc6bb92635390934737e8a8650934.webp'},
+ p1_dead_tree:{g:'assets/rekwizyty/19a94455a1485d4e758afb95f42b68c553309dbe2f519f47e4c426a9f4852255.glb',k:'assets/rekwizyty/edd603ad2bb8d69df08bf5b76e8c76c304a6314cfdba5309e7c029a3be1ba3e6.webp'},
+ p3_dead_tree:{g:'assets/rekwizyty/4d0a79bdc4ca05b11b130fa036c44f0981ee49ca5c049c3f219ba05226c8e6b4.glb',k:'assets/rekwizyty/b3233c5ecfda58d5cf323cec5f7ffeca515e7ca9d7f0a960b85f67e6a4984921.webp'},
+ p4_sacred_oak:{g:'assets/rekwizyty/f3a68122da0b8cc01e024938075bf6ce052bb5d0d596de27e4ac83ef78a54540.glb',k:'assets/rekwizyty/66b5d28755ff44fed511c423d7c104eab8eefb3ece376c5258d89082cd17fb80.webp'},
+ p4_hanging_tree:{g:'assets/rekwizyty/dd57a0849f3e214ca7e1f6cd1cfd7359376cdad92cd4dc4605546f82215442c0.glb',k:'assets/rekwizyty/6e2ea3d14540852eae6ff1b088704aed249c27bbd425fc419adf64c4d7f40cf7.webp'},
  p1_barrel:{g:'assets/rekwizyty/97fb75a8881a339304583244c0bd49e14926df213171e8cc202bc4fb7e082c3f.glb',k:'assets/rekwizyty/6378950ac708ebdb909216be2d0cba56e925981ad690d76722d081a43a700b4c.webp',n:'assets/rekwizyty/dac99927dd8a7a7a1c8a7160290faf188b6df82577f9a2ad9655f4c6071f9261.webp'},
  p1_burnt_hay:{g:'assets/rekwizyty/5ec363da5df40a8ced1bd949a78c20846762160a4eb3beaf7a867954c5158206.glb',k:'assets/rekwizyty/3d5e13469c6c7b914bd4a5a7cef84639ded47081d69ae7357e73e6cf774ec133.webp',n:'assets/rekwizyty/e274d7112a6c85989e0a2a81e624edd14da962cb4ec0fa5d58268d4126b78c1c.webp'},
  p1_covered_corpses:{g:'assets/rekwizyty/abee30f52826a1d652ad9a0da0c86679a3fd1c9df82a8821703279144e800d03.glb',k:'assets/rekwizyty/8fd031e042f4af03c66d552d333976570b6818b3df930bc660341479c99ae5d5.webp',n:'assets/rekwizyty/3439b2a9425bb251427ea1e036c2236ee6f571a7919f3ea18c9f3b7c81b9b946.webp'},
@@ -2542,23 +2531,18 @@ const P3D_MESHY={
  p5_vault:{g:'assets/rekwizyty/039e41c66fe0d5630a20ef71f2b3b4ad181324cb97e646720b8ef7b839547130.glb',k:'assets/rekwizyty/0aa492b702efde2a49dff78b6879b9993481ed88661cb624f310110ad3455163.webp',n:'assets/rekwizyty/f4b602a5bc153d01d99feef785ec0b39a7c7d99dc6efc6e4762a57bcb15dde25.webp'}};
 // rozdzial -> klucz rekwizytu -> model z Meshy (nazwa = obrazek, z ktorego powstal)
 // las Czarnoboru: 5 drzew 3D wymieszanych po miejscu (galeria Meshy, CC0, autor Tansy)
-// liściaste (miejsca brzóz i martwych dębów), iglaste (miejsca świerków i sosen; z domieszką brzóz), krzewy
-const P3D_LISC=['p4_t_oak_roots','p4_t_leafy','p4_t_birch_a','p4_t_birch_b','p4_t_dry_rust','p4_t_oak_dark','p4_t_oak_wide','p4_t_oak_young'];
-const P3D_IGL=['p4_t_spruce_norway','p4_t_pine_weathered','p4_t_spruce_norway','p4_t_pine_weathered','p4_t_birch_a','p4_t_spruce_norway','p4_t_pine_weathered','p4_t_birch_b'];
-const P3D_KRZ=['p4_t_bush_dark','p4_t_bush_fern_lush','p4_t_bush_fern','p4_t_bush_m5','p4_t_bush_dark','p4_t_bush_m5'];
-const P3D_LAS=[...new Set([...P3D_LISC,...P3D_IGL])];
-// martwe drzewa 3D: Spalona Osada (spalone) i Złotogród (umierające); galeria Meshy CC0
-const P3D_MARTWE1=['p1_t_burnt_oak','p1_t_burnt_stumps','p1_t_dead_oak','p1_t_broken','p1_t_burnt_oak','p1_t_dying_rust','p1_t_dead_oak','p1_t_burnt_stumps'];
-const P3D_MARTWE3=['p1_t_dying_rust','p1_t_dead_oak','p1_t_broken','p1_t_dying_rust','p1_t_burnt_stumps'];
-// martwe drzewa: tekstury przemalowane paletą malowanych drzew (brąz, złoto); tu tylko lekka korekta
-const P3D_TON={p1_t_burnt_oak:[1.05,1,.96],p1_t_dead_oak:[1.05,1,.96],p1_t_burnt_stumps:[1,.96,.92],p1_t_broken:[1,.96,.92],p1_t_dying_rust:[1,.96,.92]};
-const P3D_MMAP={1:{dead_tree:P3D_MARTWE1,barrel:'p1_barrel',grave_cross:'p1_grave_cross',covered_corpses:'p1_covered_corpses',burnt_hay:'p1_burnt_hay',wheel:'p1_wheel',order_banner:'p1_order_banner',tombstone:'p1_tombstone',gallows:'p1_gallows',marga_cart:'p1_marga_cart',shop_sign:'p1_shop_sign',dead_horse:'p1_dead_horse',crow_post:'p1_crow_post',well:'p1_well',stocks:'p1_stocks'},
+// drzewa 3D zrobione z naszych malunków (Meshy obraz → 3D); nazwa modelu = klucz malunku
+const P3D_LAS=['p4_dead_oak','p4_spruce','p4_birch','p4_dead_spruce','p4_tall_pine','p1_dead_tree','p3_dead_tree','p4_sacred_oak','p4_hanging_tree'];
+const P3D_TON={};
+// rozdz. I: drzewa mają warianty (patrz dressSettlementsHD); głaz i paprocie zostają malunkiem
+const P3D_DRZ1=p=>{const h=groundHash(Math.floor(p.x),Math.floor(p.y)),tk=p.variant||['dead_oak','dead_spruce','dead_oak'][h%3];return tk==='dead_oak'?(h%2?'p1_dead_tree':'p4_dead_oak'):({dead_spruce:'p4_dead_spruce',spruce:'p4_spruce',birch:'p4_birch'}[tk]||null)};
+const P3D_MMAP={1:{dead_tree:P3D_DRZ1,barrel:'p1_barrel',grave_cross:'p1_grave_cross',covered_corpses:'p1_covered_corpses',burnt_hay:'p1_burnt_hay',wheel:'p1_wheel',order_banner:'p1_order_banner',tombstone:'p1_tombstone',gallows:'p1_gallows',marga_cart:'p1_marga_cart',shop_sign:'p1_shop_sign',dead_horse:'p1_dead_horse',crow_post:'p1_crow_post',well:'p1_well',stocks:'p1_stocks'},
  2:{rune_lantern:'p2_rune_lantern',pickaxe_rack:'p2_pickaxe_rack',clan_banner:'p2_clan_banner',anvil:'p2_anvil',king_statue:'p2_king_statue',black_powder:'p2_black_powder',sarcophagus:'p2_sarcophagus',chains:'p2_chains',mine_cart:'p2_mine_cart',fallen_pillar:'p2_fallen_pillar',bellows:'p2_bellows'},
- 3:{dead_tree:P3D_MARTWE3,rot_bloom:'p4_t_bush_dry_cotton',beggar_bodies:'p3_beggar_bodies',street_lantern:'p3_street_lantern',royal_banner:'p3_royal_banner',saint_king:'p3_saint_king',barrel:'p3_barrel',plague_cart:'p3_plague_cart',gibbet:'p3_gibbet',chains:'p3_chains',sarcophagus:'p3_sarcophagus',queen_fountain:'p3_queen_fountain',gallows:'p3_gallows',wheel:'p3_wheel',dead_horse:'p3_dead_horse',offering_bowl:'p3_offering_bowl'},
- 4:{birch:P3D_LISC,dead_oak:P3D_LISC,spruce:P3D_IGL,tall_pine:P3D_IGL,dead_spruce:P3D_IGL,brambles:P3D_KRZ,_krzak:P3D_KRZ,cz_bones:'p4_cz_bones',wolf_skull_bush:'p4_wolf_skull_bush',barrel:'p1_barrel',burial_mound:'p4_burial_mound',mossy_boulder:'p4_mossy_boulder',drowned_cart:'p4_drowned_cart',cz_wagon:'p4_cz_wagon',cz_tent:'p4_cz_tent',cz_sacpole:'p4_cz_sacpole',cz_firewood:'p4_cz_firewood',cz_pelts:'p4_cz_pelts',cz_beehive:'p4_cz_beehive',axe_stump:'p4_axe_stump',cz_idol:'p4_cz_idol',cz_gallows:'p4_cz_gallows',cz_wheel:'p4_cz_wheel'},5:{candelabra:'p5_candelabra',statue_a:'p5_statue_a',statue_b:'p5_statue_b',armour:'p5_armour',bench_a:'p5_bench_b',bench_b:'p5_bench_b',bookcase_a:'p5_bookcase_a',bookcase_b:'p5_bookcase_b',vault:'p5_vault',lectern:'p5_lectern',desk:'p5_desk',scale:'p5_scale',cage:'p5_cage',rack:'p5_rack',throne:'p5_throne'},6:{well:'p1_well',marga_cart:'p1_marga_cart',covered_corpses:'p1_covered_corpses',crow_post:'p1_crow_post',wheel:'p1_wheel',gallows:'p1_gallows',stocks:'p1_stocks',burnt_hay:'p1_burnt_hay',dead_horse:'p1_dead_horse',shop_sign:'p1_shop_sign'}};
+ 3:{dead_tree:'p3_dead_tree',beggar_bodies:'p3_beggar_bodies',street_lantern:'p3_street_lantern',royal_banner:'p3_royal_banner',saint_king:'p3_saint_king',barrel:'p3_barrel',plague_cart:'p3_plague_cart',gibbet:'p3_gibbet',chains:'p3_chains',sarcophagus:'p3_sarcophagus',queen_fountain:'p3_queen_fountain',gallows:'p3_gallows',wheel:'p3_wheel',dead_horse:'p3_dead_horse',offering_bowl:'p3_offering_bowl'},
+ 4:{birch:'p4_birch',dead_oak:'p4_dead_oak',spruce:'p4_spruce',tall_pine:'p4_tall_pine',dead_spruce:'p4_dead_spruce',sacred_oak:'p4_sacred_oak',hanging_tree:'p4_hanging_tree',cz_bones:'p4_cz_bones',wolf_skull_bush:'p4_wolf_skull_bush',barrel:'p1_barrel',burial_mound:'p4_burial_mound',mossy_boulder:'p4_mossy_boulder',drowned_cart:'p4_drowned_cart',cz_wagon:'p4_cz_wagon',cz_tent:'p4_cz_tent',cz_sacpole:'p4_cz_sacpole',cz_firewood:'p4_cz_firewood',cz_pelts:'p4_cz_pelts',cz_beehive:'p4_cz_beehive',axe_stump:'p4_axe_stump',cz_idol:'p4_cz_idol',cz_gallows:'p4_cz_gallows',cz_wheel:'p4_cz_wheel'},5:{candelabra:'p5_candelabra',statue_a:'p5_statue_a',statue_b:'p5_statue_b',armour:'p5_armour',bench_a:'p5_bench_b',bench_b:'p5_bench_b',bookcase_a:'p5_bookcase_a',bookcase_b:'p5_bookcase_b',vault:'p5_vault',lectern:'p5_lectern',desk:'p5_desk',scale:'p5_scale',cage:'p5_cage',rack:'p5_rack',throne:'p5_throne'},6:{well:'p1_well',marga_cart:'p1_marga_cart',covered_corpses:'p1_covered_corpses',crow_post:'p1_crow_post',wheel:'p1_wheel',gallows:'p1_gallows',stocks:'p1_stocks',burnt_hay:'p1_burnt_hay',dead_horse:'p1_dead_horse',shop_sign:'p1_shop_sign'}};
 const P3D_MGEO={};
 const P3D_MREADY=REK3D_ON?Promise.all(Object.entries(P3D_MESHY).map(([k,e])=>fetch(e.g).then(r=>r.arrayBuffer()).then(b=>{P3D_MGEO[k]=p3dParseGlb(b)}).catch(er=>quietErr('meshy '+k,er)))):Promise.resolve();
-function meshyFor(ch,k,p){let n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];if(Array.isArray(n))n=n[p?groundHash(Math.floor(p.x),Math.floor(p.y))%n.length:0];return n&&P3D_MGEO[n]?n:null}
+function meshyFor(ch,k,p){let n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];if(typeof n==='function')n=p?n(p):null;if(Array.isArray(n))n=n[p?groundHash(Math.floor(p.x),Math.floor(p.y))%n.length:0];return n&&P3D_MGEO[n]?n:null}
 const P3D_MMAT=new Map();
 function meshyMat(n){let m=P3D_MMAT.get(n);if(m)return m;const L=new THREE.TextureLoader(),e=P3D_MESHY[n],t=u=>{const x=L.load(u);x.flipY=false;x.anisotropy=4;return x};
  m=phong({map:t(e.k),normalMap:e.n?t(e.n):null,shininess:6,specular:0x101010,side:THREE.DoubleSide});const tn=P3D_TON[n]||[.92,.9,.88];m.color.setRGB(tn[0],tn[1],tn[2]);if(P3D_LAS.includes(n))cutCircle(m);P3D_MMAT.set(n,m);return m}
@@ -2572,7 +2556,7 @@ function meshyEmit(root,items){const by=new Map(),M=new THREE.Matrix4(),V=new TH
   // przod-spod modelu na linii obrazka (tam stala jego dolna krawedz)
   M.compose(V.set(it.x+dx,0,it.z-bb.max.z*s),Q,S.set(s*fl,s,s));(by.get(it.n)||by.set(it.n,[]).get(it.n)).push(M.clone())}
  for(const [n,list] of by){const im=new THREE.InstancedMesh(P3D_MGEO[n],meshyMat(n),list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=P3D_CIEN.has(n);im.receiveShadow=true;im.frustumCulled=false;im.userData.propAsset=true;root.add(im)}}
-const P3D_CIEN=new Set([...P3D_LAS,...P3D_MARTWE1,...P3D_MARTWE3]);
+const P3D_CIEN=new Set(P3D_LAS);
 function paint3dImg(ch,k){const e=REK3D_ON&&P3D_MAP[ch]&&P3D_MAP[ch][k];return e&&P3D_GEO[e[0]]&&IMGS[e[1]]?e:null}
 // po composeWorldProps: obrazki tych rekwizytow ustepuja modelom (miejsce i szerokosc bierzemy z obrazka)
 function paint3dFinish(w){if(!REK3D_ON||(!P3D_MAP[w.ch]&&!P3D_MMAP[w.ch]))return;const items=[],mitems=[];
@@ -2580,7 +2564,7 @@ function paint3dFinish(w){if(!REK3D_ON||(!P3D_MAP[w.ch]&&!P3D_MMAP[w.ch]))return
  w.p3d=null;
  for(const p of w.PROPS){const n=meshyFor(w.ch,p.k,p),e=n?null:paint3dImg(w.ch,p.k);if((!e&&!n)||p.anim||p.shrine!==undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);const m=o&&o.mesh;
   if(!m||!m.parent||!m.geometry||!m.geometry.parameters||m.isInstancedMesh)continue;
-  let tW=0;if(w.ch===1&&p.k==='dead_tree'){const tk=p.variant||['dead_oak','dead_spruce','dead_oak'][groundHash(Math.floor(p.x),Math.floor(p.y))%3];if(!['dead_oak','dead_spruce','spruce','birch'].includes(tk))continue;tW=4*(p.vscale||({spruce:1.08,birch:1}[tk]||.82))*.8}
+  let tW=0;if(w.ch===1&&p.k==='dead_tree'){const tk=p.variant||['dead_oak','dead_spruce','dead_oak'][groundHash(Math.floor(p.x),Math.floor(p.y))%3];tW=4*(p.vscale||({spruce:1.08,birch:1}[tk]||.82))}
   const it={x:m.position.x,z:m.position.z,W:tW||m.geometry.parameters.width*Math.abs(m.scale.x),flip:m.scale.x<0};if(n)mitems.push(Object.assign(it,{n}));else items.push(Object.assign(it,{e}));
   m.parent.remove(m);const i=w.propObjs.findIndex(q=>q.mesh===m);if(i>=0)w.propObjs.splice(i,1)}
  const by=new Map(),M=new THREE.Matrix4(),V=new THREE.Vector3(),Qi=new THREE.Quaternion(),S=new THREE.Vector3();
@@ -2803,11 +2787,8 @@ function buildCzarnobor(I){planGround(4);
   const byK={};for(const p of PROPS)if(OBJ[p.k])(byK[p.k]=byK[p.k]||[]).push(p);
   let saplings=0;for(const p of PROPS){if(!p.tree||!['spruce','birch'].includes(p.k)||saplings>=8||groundHash(Math.floor(p.x),Math.floor(p.y))%7!==0)continue;const x=p.x+.26,y=p.y-.3,i=Math.floor(y)*MW+Math.floor(x);if(tileAt(Math.floor(x),Math.floor(y))!==31||W.clearways.has(i))continue;(byK[p.k]||(byK[p.k]=[])).push({...p,x,y,artSmall:true});saplings++}
 
-  if(REK3D_ON)for(const k in byK)if(paint3dImg(4,k)||meshyFor(4,k)){const o=OBJ[k],las=P3D_MMAP[4][k]===P3D_LISC||P3D_MMAP[4][k]===P3D_IGL;
-   WORLDS[CH].p3d=(WORLDS[CH].p3d||[]).concat(byK[k].filter(p=>!p.artSmall).map(p=>({p,W:o[2]/16*o[4]})));
-   // las 3D: sadzonki zamieniają się w krzewy, a co trzecie drzewo dostaje krzew u stóp (tylko wygląd, bez kolizji)
-   if(las&&meshyFor(4,'_krzak'))for(const p of byK[k]){const h=groundHash(Math.floor(p.x*3),Math.floor(p.y*3));if(p.artSmall)WORLDS[CH].p3d.push({p:{x:p.x,y:p.y,k:'_krzak',flip:h%2===0},W:1.1});else if(h%3===0)WORLDS[CH].p3d.push({p:{x:p.x+(h%2?.75:-.75),y:p.y+.35,k:'_krzak',flip:h%4<2},W:.9+(h%5)*.12})}
-   delete byK[k]}
+  if(REK3D_ON)for(const k in byK)if(paint3dImg(4,k)||meshyFor(4,k)){const o=OBJ[k],W=o[2]/16*o[4];
+   WORLDS[CH].p3d=(WORLDS[CH].p3d||[]).concat(byK[k].map(p=>({p,W:p.artSmall?W*.62:W})));delete byK[k]}
   for(const k in byK){const o=OBJ[k],s=o[4],low=k==='ferns'||k==='reeds'||k==='mushrooms'||k==='brambles'||/^(wd|sp)\d+$/.test(k);
     const fy=(()=>{const img=FR[k].n.map&&FR[k].n.map.image;if(!img)return 0;propFoot(img);const R=PROP_RAWB.get(img);if(!R)return 0;const g=G2(o[2],o[3]);if(!g.boundingBox)g.computeBoundingBox();const bb=g.boundingBox,y=(bb.max.y-R.b*(bb.max.y-bb.min.y))*s*SQ;return y>.05?.01-y:0})(); // 13.11.2026: rekwizyt z pustym marginesem u dolu (np. swiety dab) nie wisi nad ziemia
     const im=instanced(G2(o[2],o[3]),FR[k].n,byK[k],p=>M4.compose(V.set(p.x,fy,p.y),Q.identity(),SC.set((p.flip?-1:1)*s*(p.artSmall?.62:1)*(p.tree?(.94+.06*Math.sin(p.x*.71+p.y*.39)):1),s*SQ*(p.artSmall?.62:1)*(k==='tall_pine'?.85:p.tree?(.94+.06*Math.sin(p.x*.71+p.y*.39)):1),s)),!low,false);im.customDistanceMaterial=FR[k].d;im.frustumCulled=false}
