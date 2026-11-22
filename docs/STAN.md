@@ -1,4 +1,4 @@
-Stan na 2026-11-22, cache 855 (opublikowane), rola agent główny
+Stan na 2026-11-22, cache 859 (opublikowane), rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,10 +6,10 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 855, opublikowane 22.11.2026 (log `docs/logi/LOG_SESJI_2026-11-22.md`, druga część) |
-| Gałęzie czekające na „publikuj” | brak (852–855 opublikowane 22.11) |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 855 |
-| Zip itch.io | `NightBrand_itch_855.zip` na pulpicie autora w `NIGHTBRAND` |
+| main | cache 859, opublikowane 22.11.2026 (log `docs/logi/LOG_SESJI_2026-11-22.md`, trzecia część) |
+| Gałęzie czekające na „publikuj” | brak (852–859 opublikowane 22.11) |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 859 |
+| Zip itch.io | `NightBrand_itch_859.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 199 MB (limit 500 MB); zip itch.io ok. 817 plików / 1000 (każdy model = 2–3 pliki) |
 
 ## Decyzje autora (najnowsze)
@@ -27,6 +27,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 856–859: zestawy 4/7, techniki ze stanami wrogów, Trudny bez premii doświadczenia, wir Tancerki z żywiołami, parowanie Kata u wszystkich postaci. Lista EN: `docs/teksty/EN_DO_ZATWIERDZENIA_2026-11-22.md`.
 - 852–855 (balans postaci, skalowanie nocy, reakcje żywiołów, Wit): Tancerka i Woskownica na żywo, odczucie rampy trudności, FPS przy około 40 wrogach, Łatwy/Trudny, czy reakcje są widoczne w walce, czas wyświetlania dłuższego tekstu przy dobiciu Wita, teksty EN.
 - 836–844 (druga partia 36 modeli, port z modelami z rozdz. I, drzewa 3D z malunków, pauza): autor obejrzał 21.11 („jest ok”). Nie sprawdzono: FPS w Czarnoborze z cieniami drzew, drzewa w Złotogrodzie, święty dąb i drzewo wisielca z bliska, pad w pauzie, itch.io.
 - 828–835 (modele 3D rekwizytów, 32 z Meshy): FPS sprawdzony przez autora 20.11 („prawie bez zmian”). Do sprawdzenia: rozmiary modeli, tył modeli, łańcuchy/wózek/proch/posągi Cytadeli (nieobejrzane na zrzutach), itch.io.
