@@ -1,4 +1,4 @@
-Stan na 2026-11-22, cache 851 (gałąź), rola agent główny
+Stan na 2026-11-22, cache 851 (opublikowane), rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,8 +6,8 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 844, opublikowane 21.11.2026 (log `docs/logi/LOG_SESJI_2026-11-21.md`) |
-| Gałęzie czekające na „publikuj” | `runda-cytadela-dolne` (851): zawiera 845–850 + oprawę Cytadeli i Dolnego Miasta; wcześniej `runda-paprocie-mapy-dzwiek` (850): zawiera 845–849 (kociołek 3D, światła ×0.7, porządki z przeglądu, szybkie poprawki grafiki i UI) + paprocie, stały układ Czarnoboru i Cytadeli, opcje dźwięku. Publikować tę jedną gałąź. |
+| main | cache 851, opublikowane 22.11.2026 (log `docs/logi/LOG_SESJI_2026-11-22.md`) |
+| Gałęzie czekające na „publikuj” | brak (851 opublikowane 22.11; log `docs/logi/LOG_SESJI_2026-11-22.md`) |
 | Kopia zapasowa | y33bau/nightbrand-backup = kopia 844 |
 | Zip itch.io | `NightBrand_itch_844.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 199 MB (limit 500 MB); zip itch.io ok. 817 plików / 1000 (każdy model = 2–3 pliki) |
