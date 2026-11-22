@@ -271,10 +271,10 @@ const FXC={};
 function fxFrames(name,row,n=4){const key=name+row;if(FXC[key])return FXC[key];const im=typeof IMGS!=='undefined'&&IMGS&&IMGS[name];if(!im)return null;const cw=name==='fx_kat'?313:256,ch=256,s2=Math.max(cw,ch),out=[];
  for(let i=0;i<n;i++){const c=document.createElement('canvas');c.width=c.height=s2;c.getContext('2d').drawImage(im,i*cw,row*ch,cw,ch,(s2-cw)/2,(s2-ch)/2,cw,ch);const t=new THREE.CanvasTexture(c);t.magFilter=t.minFilter=THREE.LinearFilter;t.generateMipmaps=false;out.push({n:new THREE.MeshBasicMaterial({map:t,transparent:true,alphaTest:.04,depthWrite:false,depthTest:false,side:THREE.DoubleSide,fog:false})})}return FXC[key]=out}
 function zfx(name,row,dur,x,y,h,size,mode,rot){const fr=fxFrames(name,row);if(!fr)return null;addVfx(fr,dur,x,y,h,size,mode||'bill',rot||0);return S.vfx[S.vfx.length-1]}
-function zabSlashFx(a,c,s,R,vs,ox=pl.x,oy=pl.y){
- if(a.kind==='h')return !!(skAdd('z_ciezki',.34,ox,oy,.13,R/16*1.1,'ground',0)||zfx('fx_zab',2,.34,ox,oy,.13,R/16*1.1,'ground',0));
- if(a.combo===4)return !!(skAdd('z_fin',.24,ox+c*R*.6,oy+s*R*.6,.6,vs*1.3,'bill',0)||zfx('fx_zab',1,.24,ox+c*R*.6,oy+s*R*.6,.6,vs*1.3,'bill',0));
- return !!(skAdd('z_lekki',.22,ox+c*R*.55,oy+s*R*.55,.6,vs*1.15,'bill',-screenAng(c,s))||zfx('fx_zab',0,.22,ox+c*R*.55,oy+s*R*.55,.6,vs*1.15,'bill',-screenAng(c,s)))}
+function zabSlashFx(a,c,s,R,vs,ox=pl.x,oy=pl.y){const tr=COMBAT_TRAIL[encLevel()[0]]||embTrail()||undefined;
+ if(a.kind==='h')return !!(skAdd('z_ciezki',.34,ox,oy,.13,R/16*1.1,'ground',0,tr)||zfx('fx_zab',2,.34,ox,oy,.13,R/16*1.1,'ground',0));
+ if(a.combo===4)return !!(skAdd('z_fin',.24,ox+c*R*.6,oy+s*R*.6,.6,vs*1.3,'bill',0,tr)||zfx('fx_zab',1,.24,ox+c*R*.6,oy+s*R*.6,.6,vs*1.3,'bill',0));
+ return !!(skAdd('z_lekki',.22,ox+c*R*.55,oy+s*R*.55,.6,vs*1.15,'bill',-screenAng(c,s),tr)||zfx('fx_zab',0,.22,ox+c*R*.55,oy+s*R*.55,.6,vs*1.15,'bill',-screenAng(c,s)))}
 function skTickCommon(dt){pl.block=false;pl.parryT=0;pl.atkHeld=false;pl.charging=false;pl.queue=false;heavyPress=false;pl.staDelay=Math.max(0,pl.staDelay-dt);for(const k of ['parryHealCd','parryCd','riposte','dance'])if(pl[k]>0)pl[k]=Math.max(0,pl[k]-dt);waveTick(dt)}
 function skPrep(){pl.block=false;pl.blockT=0;pl.parryT=0;pl.atkHeld=false;pl.charging=false;pl.queue=false;pl.comboT=0}
 function endSk(kind){const a=pl?.atk;if(!a||a.kind!==kind)return;if(kind==='hook')hookClear(a);pl.atk=null;pl.swingT=0;pl.queue=false;pl.atkHeld=false;pl.charging=false}

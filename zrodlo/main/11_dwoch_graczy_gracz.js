@@ -464,9 +464,9 @@ function weaponFloorLift(f,fr){
 function emitWeaponSlash(a,c,s,R,owner=pl,trail=COMBAT_TRAIL[encLevel()[0]]||embTrail()){
   const heavy=a.kind==='h',size=Math.min(heavy?1.25:1.05,R/16*(heavy?.48:.44)),x=owner.x+c*R*.50,y=owner.y+s*R*.50,h=heavy?1.7:1.55,rot=-screenAng(c,s);
   let f;
-  if(S.zab&&!trail&&skFrames('z_lekki')){// Zabójczyni: własne cięcia HD (bez zaklęcia ostrza; z zaklęciem zostaje kolorowe cięcie wspólne)
-    if(heavy)f=skAdd('z_ciezki',.34,owner.x,owner.y,.72,R/16*.94,'ground',0);
-    else f=skAdd(a.combo===4?'z_fin':'z_lekki',a.combo===4?.24:.22,x,y,h,size,'bill',a.combo===4?0:rot);
+  if(S.zab&&skFrames('z_lekki')){// Tancerka: własne cięcia HD; 22.11.2026: z zaklęciem ostrza te same cięcia w kolorze żywiołu (wcześniej mocny atak tracił swój wir)
+    if(heavy)f=skAdd('z_ciezki',.34,owner.x,owner.y,.72,R/16*.94,'ground',0,trail||undefined);
+    else f=skAdd(a.combo===4?'z_fin':'z_lekki',a.combo===4?.24:.22,x,y,h,size,'bill',a.combo===4?0:rot,trail||undefined);
   }else if(S.dzw){
     if(heavy){f=skAdd('ham_v',.3,x,y,.9,size*1.15,'bill',0);skAdd('ham_r',.3,owner.x+c*R*.62,owner.y+s*R*.62,.15,size*1.1,'ground',0)}
     else f=skAdd(a.combo%2?'ham_d':'ham_h',.26,x,y,h,size*1.05,'bill',rot)
