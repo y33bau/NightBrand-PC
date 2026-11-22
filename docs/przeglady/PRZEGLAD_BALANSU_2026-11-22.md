@@ -101,3 +101,23 @@ Tempo awansu (Rycerz) w kolejnych minutach:
 | Tancerka | 1939 | 2496 | 2072 |
 
 Rozrzut między przebiegami wynosi około ±10%. Tancerka była około 20% za resztą, teraz jest około 5%.
+
+## Wdrożone w 853: skalowanie nocy (zgoda autora 22.11, rola gamedev)
+- Liczba wrogów: funkcja `nightPop()` w części 10.
+  - Od startu około 20 wrogów, potem tłum rośnie przez całą noc do około 42.
+  - Wcześniej było około 5 na starcie i stałe około 34 od 3. minuty.
+- Życie zwykłych wrogów: funkcja `nightHp()` w części 13, wzór `0,6 + 2,4·(t/noc)^1,6`.
+  - Daje ×0,6 na starcie, ×0,86 w 4. minucie, ×1,39 w 8., ×2,11 w 12. i ×3,0 na koniec nocy.
+  - Wcześniej wzrost był liniowy: od ×0,8 do ×2,72.
+- Elity: czwarta pojawia się w 14:30 (w pierwszej nocy w 14:40).
+
+### Bot po zmianie (obrażenia otrzymywane na sekundę)
+
+| Minuta | 2 | 4 | 6 | 10 | 12 | 14 | 16 |
+|---|---|---|---|---|---|---|---|
+| Rycerz (853) | 7 | 9 | 12 | 26 | 24 | 33 | 33 |
+| Rycerz (852) | 8 | 15 | 18 | 23 | 25 | 25 | 24 |
+
+- Wcześniej obrażenia przestawały rosnąć od mniej więcej 9. minuty. Teraz pierwsza połowa nocy jest lżejsza, a końcówka cięższa, i ten wzór widać u wszystkich klas.
+- Poziom na koniec nocy wynosi 25–26, bez zmiany.
+- Zabójstw jest około 2150–2320, o około 5% mniej, bo wrogowie pod koniec są twardsi.
