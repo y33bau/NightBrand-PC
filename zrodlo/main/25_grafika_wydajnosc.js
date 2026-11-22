@@ -4,6 +4,31 @@ function dynOn(){return SETT.gDyn==='on'||(SETT.gDyn==='auto'&&(SETT.qmode==='au
 function nbResH(){if(GFX.res<0)return Math.max(720,Math.min(2160,Math.round(FIT.h*Math.min(GFX.dpr,window.devicePixelRatio||1))));return GFX.res||RT_H}
 function rtApply(){const w=FIT.w,h=FIT.h,port=h>w,q=Math.round(nbResH()*SETT.rscale*dynS),rw=port?q:Math.round(q*w/h),rh=port?Math.round(q*h/w):q;rt.setSize(rw,rh);postMat.uniforms.res.value.set(rw,rh)}
 function dynReset(){dynS=1;dynN=dynSlow=dynPrev=0;dynBlock=0;dynHold=8000}
+/* 22.11.2026 (wydajnosc): podzial statycznych InstancedMesh swiata na kawalki mapy.
+   three r128 nie umie pomijac pojedynczych egzemplarzy, wiec rekwizyty, drzewa i sciany (frustumCulled=false) rysowaly sie
+   w calosci co klatke, a w cieniu swiatla gracza 6 razy (Czarnobor: 13 mln trojkatow na klatke). Kawalek ma wlasna bryle
+   ograniczajaca (geometria-widok na tych samych buforach), wiec kamera i cien pomijaja to, czego nie widac. */
+const CHUNK_CS=8,CHUNK_MAX=64;
+function chunkGeoView(g,sphere){const v=new THREE.BufferGeometry();for(const k in g.attributes)v.setAttribute(k,g.attributes[k]);if(g.index)v.setIndex(g.index);for(const gr of g.groups)v.addGroup(gr.start,gr.count,gr.materialIndex);v.drawRange.start=g.drawRange.start;v.drawRange.count=g.drawRange.count;v.parameters=g.parameters;v.userData=g.userData;v.boundingSphere=sphere;if(g.morphAttributes)v.morphAttributes=g.morphAttributes;return v}
+function chunkWorld(w){if(!w||!w.group||nbParam('chunks')==='0')return;const refs=new Set();for(const v of Object.values(w)){if(v&&v.isObject3D)refs.add(v);else if(Array.isArray(v))for(const x of v)if(x&&x.isObject3D)refs.add(x)}
+ const todo=[];w.group.traverse(o=>{if(!o.isInstancedMesh||o.frustumCulled!==false||refs.has(o)||!o.parent||o.userData.noChunk||o.onBeforeRender!==THREE.Object3D.prototype.onBeforeRender||o.morphTargetInfluences)return;
+  const g=o.geometry,n=o.count;if(!g||n<4)return;const tris=(g.index?g.index.count:g.attributes.position.count)/3;if(tris*n<(o.castShadow?3000:8000))return;todo.push(o)});
+ let made=0,tot=0;const E=new THREE.Matrix4(),C=new THREE.Vector3(),S3=new THREE.Vector3();
+ for(const o of todo){const g=o.geometry;if(!g.boundingSphere)g.computeBoundingSphere();const bs=g.boundingSphere,n=o.count,A=o.instanceMatrix.array,col=o.instanceColor;
+  let xs=[],zs=[];for(let i=0;i<n;i++){xs.push(A[i*16+12]);zs.push(A[i*16+14])}
+  const spanX=Math.max(...xs)-Math.min(...xs),spanZ=Math.max(...zs)-Math.min(...zs);let cs=CHUNK_CS;while(Math.ceil((spanX+1)/cs)*Math.ceil((spanZ+1)/cs)>CHUNK_MAX)cs*=1.5;
+  const by=new Map();for(let i=0;i<n;i++){const k=Math.floor(xs[i]/cs)+','+Math.floor(zs[i]/cs);(by.get(k)||by.set(k,[]).get(k)).push(i)}
+  if(by.size<2&&n<64){/* jeden kawalek: wystarczy poprawna bryla */}
+  for(const list of by.values()){let mnx=1e9,mny=1e9,mnz=1e9,mxx=-1e9,mxy=-1e9,mxz=-1e9;const cen=[],rad=[];
+   for(const i of list){E.fromArray(A,i*16);C.copy(bs.center).applyMatrix4(E);const sc=Math.max(S3.setFromMatrixColumn(E,0).length(),S3.setFromMatrixColumn(E,1).length(),S3.setFromMatrixColumn(E,2).length()),r=bs.radius*sc;cen.push(C.clone());rad.push(r);mnx=Math.min(mnx,C.x-r);mny=Math.min(mny,C.y-r);mnz=Math.min(mnz,C.z-r);mxx=Math.max(mxx,C.x+r);mxy=Math.max(mxy,C.y+r);mxz=Math.max(mxz,C.z+r)}
+   const ctr=new THREE.Vector3((mnx+mxx)/2,(mny+mxy)/2,(mnz+mxz)/2);let R=0;cen.forEach((c,j)=>{R=Math.max(R,c.distanceTo(ctr)+rad[j])});
+   const sp=new THREE.Sphere(ctr,R*1.06+.3),m=new THREE.InstancedMesh(chunkGeoView(g,sp),o.material,list.length);
+   list.forEach((i,j)=>{for(let q=0;q<16;q++)m.instanceMatrix.array[j*16+q]=A[i*16+q]});m.instanceMatrix.needsUpdate=true;
+   if(col){const c3=new THREE.Color();list.forEach((i,j)=>{c3.fromArray(col.array,i*3);m.setColorAt(j,c3)});m.instanceColor.needsUpdate=true}
+   for(const k of ['castShadow','receiveShadow','renderOrder','customDistanceMaterial','customDepthMaterial','name','visible','matrixAutoUpdate'])m[k]=o[k];m.layers.mask=o.layers.mask;m.userData={...o.userData,chunk:true};m.position.copy(o.position);m.quaternion.copy(o.quaternion);m.scale.copy(o.scale);m.updateMatrix();
+   m.frustumCulled=true;o.parent.add(m);made++}
+  o.parent.remove(o);tot++}
+ w.chunks={meshes:tot,parts:made}}
 function dynTick(now){
   if(!dynOn()){if(dynS!==1){dynReset();rtApply()}dynPrev=0;return}
   if(document.hidden||!S||S.phase!=='play'){dynPrev=0;return}

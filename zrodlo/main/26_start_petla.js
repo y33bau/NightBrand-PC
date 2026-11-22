@@ -2316,16 +2316,16 @@ ${B}{font-size:max(11px,calc(12 * var(--hint-u) * var(--nbts,1)))!important;min-
 (()=>{if(nbParam('hudfix')==='0')return;
  const scr=$('screen'),nb=$('nbHud');if(!scr||!nb)return;const V3=new THREE.Vector3();
  const bars=[0,1].map(i=>{const e=document.createElement('div');e.className='nbx-sta nbx-sta'+(i+1);e.setAttribute('aria-hidden','true');e.innerHTML='<i></i>';scr.insertBefore(e,nb);return{e,f:e.firstChild,t:0,w:''}});
- const prevHud=hud;let lastXp=-1,xpT=0,lastCoins=-1,coinT=0;
+ const prevHud=hud;let lastXp=-1,xpT=0,lastCoins=-1,coinT=0,xpEl=null,walEl=null;
  hud=function(){prevHud();const show=scr.classList.contains('pc-hud-visible')&&!!S,now=performance.now();scr.classList.toggle('nbx-hud',scr.classList.contains('pc-hud'));
-  const w=scr.clientWidth,h=scr.clientHeight,hu=parseFloat(scr.style.getPropertyValue('--hu'))||1;
+  const [w,h]=scrSize(),hu=parseFloat(scr.style.getPropertyValue('--hu'))||1;
   for(const [i,p] of [pl,pl2].entries()){const b=bars[i];if(!show||!p||p.dead){if(b.on!==false){b.on=false;b.e.classList.remove('on')}continue}
    const r=Math.max(0,Math.min(1,(p.sta||0)/(p.staMax||1)));if(r<.995)b.t=now+650;const on=now<b.t;
    if(on){V3.set(p.x/16,0,p.y/16).project(cam);const x=Math.round((V3.x*.5+.5)*w),y=Math.round((-V3.y*.5+.5)*h+13*hu);b.e.style.transform='translate('+x+'px,'+y+'px) translate(-50%,0)';const fw=(r*100).toFixed(1)+'%';if(fw!==b.w){b.w=fw;b.f.style.width=fw}
     b.e.classList.toggle('low',r<.25);b.e.classList.toggle('no',!i&&!!SETT.flash&&$('stam').classList.contains('flash'))}
    if(on!==b.on){b.on=on;b.e.classList.toggle('on',on)}}
   if(!show)return;
-  const xp=nb.querySelector('.pch:not(.pcmp) .pch-experience'),wal=nb.querySelector('.pch:not(.pcmp) .pch-coins');
+  /* 22.11.2026: elementy z pamieci zamiast querySelector w kazdej klatce */if(!xpEl||!xpEl.isConnected)xpEl=nb.querySelector('.pch:not(.pcmp) .pch-experience');if(!walEl||!walEl.isConnected)walEl=nb.querySelector('.pch:not(.pcmp) .pch-coins');const xp=xpEl,wal=walEl;
   if(lastXp>=0&&S.xp!==lastXp&&xp){xp.classList.add('nbx-gain');xpT=now+450}if(xpT&&now>xpT&&xp){xp.classList.remove('nbx-gain');xpT=0}lastXp=S.xp;
   if(lastCoins>=0&&S.coins>lastCoins&&wal){wal.classList.add('nbx-gain');coinT=now+450}if(coinT&&now>coinT&&wal){wal.classList.remove('nbx-gain');coinT=0}lastCoins=S.coins;
  };

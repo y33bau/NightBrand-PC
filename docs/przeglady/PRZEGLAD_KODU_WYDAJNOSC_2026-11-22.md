@@ -105,3 +105,44 @@ To około 75% czasu JavaScriptu w klatce, bez samego rysowania. Eksperyment z ro
 
 ## Decyzja dla autora
 Polecana kolejność: najpierw 2 i 3 (szybkie i bezpieczne), potem 1 (największy zysk w Czarnoborze), potem 4. Po każdym kroku ten sam pomiar dla porównania.
+
+## Wdrożone w 860 (zgoda autora „rób wszystko”, rola gamedev)
+- **WAŻNE 1 i 4:** nowa funkcja `chunkWorld()` w części 25, wołana w `ensureWorld()` w części 07.
+  - Statyczne `InstancedMesh` świata (rekwizyty, drzewa, ściany, ciecze) są dzielone na kawałki mapy, po 8 pól, najwyżej 64 kawałki na rodzaj.
+  - Każdy kawałek ma własną bryłę ograniczającą: geometria-widok na tych samych buforach, więc bez dodatkowej pamięci na karcie graficznej.
+  - Kamera i cień światła gracza pomijają kawałki, których nie widać.
+  - Wyłącznik do porównań: `?chunks=0`.
+- **WAŻNE 2:** `scrRect()` i `scrSize()` w części 11.
+  - Rozmiar ekranu jest w pamięci i odświeża się przy zmianie rozmiaru okna, przy pełnym ekranie i najpóźniej co 1 s.
+  - Użycie: `edgeTick`, `ftTick` (zbędny odczyt usunięty), `mpHudTick`, `aimDir` i nakładka `hud` w części 26.
+- **WAŻNE 3:** `kbUi` pomija stałe klawisze slotów 5 i 6; przycisk resetu klawiszy działa (sprawdzone).
+- **DROBNE 8:** nakładka `hud` pamięta elementy doświadczenia i monet.
+- **Nie robione:**
+  - 5: zwalnianie światów; ryzyko dłuższego wczytywania, a zysk dotyczy tylko długich sesji;
+  - 6: upraszczanie modeli; wymaga oceny wyglądu przez autora;
+  - 7: cień co drugą klatkę; po pkt 1 zbędne;
+  - 9 i 10.
+
+### Pomiar po zmianach (te same skrypty)
+Trójkąty na klatkę z cieniami:
+
+| Rozdział | Przed | Po |
+|---|---|---|
+| I | 1,02 mln | 0,24 mln |
+| II | 0,53 mln | 0,13 mln |
+| III | 0,58 mln | 0,46 mln |
+| IV | 1,48 mln | 0,55 mln |
+| V Czarnobór | 13,06 mln | 0,50 mln |
+| VI | 0,42 mln | 0,20 mln |
+
+Liczba wywołań rysowania prawie bez zmian (na przykład V: 366 → 338).
+
+Czas JavaScriptu na klatkę (rozdział VI, około 30 wrogów, bez rysowania):
+
+| | Przed | Po |
+|---|---|---|
+| `hud` | 3,94 ms | 0,44 ms |
+| `edgeTick` | 0,88 ms | 0,09 ms |
+| Razem | ok. 6,0 ms | ok. 1,9 ms |
+
+Wygląd: zrzuty w rozdziałach I, IV i V porównane piksel po pikselu z wersją 859. Różnią się tylko deszcz, świetliki i błysk ostrza, czyli elementy losowe; rekwizyty, drzewa i cienie są takie same.

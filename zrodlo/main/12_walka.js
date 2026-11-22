@@ -16,7 +16,7 @@ const SL={regen:32,delay:.55,roll:20,blockRegen:.25,stepCost:8,
 // level-up cards in slasher mode raise the hero's attributes instead of giving skills
 const SLASH_UP=['_vit','_dex','_str','_int'];
 // direction from the hero to the mouse pointer (screen y is foreshortened by the camera tilt)
-function aimDir(){if(clock-PAD.aimT<.15)return [PAD.ax,PAD.ay];if(clock-mouseT>3)return null;V.set(pl.x/16,.9,pl.y/16).project(cam);const r=$('screen').getBoundingClientRect();
+function aimDir(){if(clock-PAD.aimT<.15)return [PAD.ax,PAD.ay];if(clock-mouseT>3)return null;V.set(pl.x/16,.9,pl.y/16).project(cam);const r=scrRect();
   const hx=(V.x+1)/2*r.width,hy=(1-V.y)/2*r.height,dx=mouseX-hx,dy=(mouseY-hy)/Math.sin(PITCH),d=Math.hypot(dx,dy);return d>4?[dx/d,dy/d]:null}
 // keyboard: lock on to the closest enemy roughly in front
 function autoAim(){let b=null,bd=1e9;for(const e of S.enemies){if(e.dead||e.rise>0||e.type==='wisp')continue;const dx=e.x-pl.x,dy=e.y-pl.y,d=Math.hypot(dx,dy);if(d>75||d<1)continue;const f=(dx*pl.fx+dy*pl.fy)/d;if(f<-.2)continue;const sc=d*(1.6-f);if(sc<bd){bd=sc;b=[dx/d,dy/d]}}return b}

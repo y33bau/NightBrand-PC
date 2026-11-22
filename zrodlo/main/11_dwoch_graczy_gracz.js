@@ -125,7 +125,7 @@ function mpHudTick(){{const h=$('hud');if(h)h.classList.toggle('mp2',!!(S&&pl2&&
   const tt=mpTotTxt(),t1='<span class="tr">'+tt+'</span>',t2=(pl2.rbF?'<span class="tr">'+(pl2.rbU?(EN?'Revival used':'Odrodzenie zużyte'):(EN?'Revival ready':'Odrodzenie gotowe'))+'</span>':'')+t1;
   if(mpEls.t1!==t1){mpEls.t1=t1;mpEls.i1.innerHTML=t1}if(mpEls.t2!==t2){mpEls.t2=t2;mpEls.info.innerHTML=t2}
   {const own=S.own||{};let h1='',h2='';for(const k in own){const o=own[k],d=SK[k];if(!d||!d.ic)continue;const c=n=>'<span title="'+d.name+'"><i data-premium-skill="'+k+'" class="ic ic-'+d.ic+'"></i>'+(n>1?'<small>'+n+'</small>':'')+'</span>';if(o[0])h1+=c(o[0]);if(o[1])h2+=c(o[1])}if(mpEls.ks1!==h1){mpEls.ks1=h1;mpEls.k1.innerHTML=h1}if(mpEls.ks2!==h2){mpEls.ks2=h2;mpEls.k2.innerHTML=h2}}
-  const r=$('screen').getBoundingClientRect();
+  const r=scrRect();
   for(const [p,el,ar] of [[pl1,mpEls.b1,mpEls.a1],[pl2,mpEls.b2,mpEls.a2]]){MPV.set(p.x/16,2.1,p.y/16).project(cam);const inView=MPV.z<1&&Math.abs(MPV.x)<1.05&&Math.abs(MPV.y)<1.05;
     el.style.display=inView?'block':'none';ar.style.display=inView?'none':'block';if(!inView){let vx=MPV.x,vy=-MPV.y;if(MPV.z>1){vx=-vx;vy=-vy}const px=vx*r.width/2,py=vy*r.height/2,t=Math.min((r.width/2-26)/Math.max(1e-3,Math.abs(px)),(r.height/2-26)/Math.max(1e-3,Math.abs(py)));ar.style.left=(r.left+r.width/2+px*t-9)+'px';ar.style.top=(r.top+r.height/2+py*t-11)+'px';ar.style.transform='rotate('+Math.atan2(py,px)+'rad)'}if(!inView)continue;el.style.left=(r.left+(MPV.x*.5+.5)*r.width)+'px';el.style.top=(r.top+(-MPV.y*.5+.5)*r.height)+'px';
     const f=p.dead?Math.min(1,(S.mpProg||0)/5):Math.max(0,p.hp)/p.max;el.firstChild.style.width=f*100+'%';el.firstChild.style.background=p.dead?'#e8c85a':(p===pl1?'#d84a4a':'#4f8fd8')}}
@@ -169,7 +169,14 @@ function ftx(text,x,y,h,kind,ent){const box=$('ft');if(!box||!S)return;if(kind!=
   FLT.act.push(f);if(ent&&kind!=='i')ent.ftI=f}
 const ftEntH=e=>.95+(e.r||5)/14;
 function ftInfo(text){if(!S||!pl)return;const n=FLT.act.filter(f=>f.pl&&FLT.tm-f.t0<.7).length;ftx(text,pl.x,pl.y,1.75+n*.95,'i');FLT.act[FLT.act.length-1].pl=true}
-function ftTick(dt){FLT.tm+=dt;const r=$('screen').getBoundingClientRect();
+/* 22.11.2026 (wydajnosc): rozmiar ekranu z pamieci. Czytanie go w kazdej klatce zaraz po zmianach HUD wymuszalo przeliczenie ukladu strony (ok. 75% czasu JS klatki). Odswiezanie: zmiana rozmiaru, pelny ekran, najpozniej co 1 s. */
+const SCRC={r:null,cw:0,ch:0,t:0,ro:null};
+function scrFresh(){const now=performance.now();if(SCRC.r&&now-SCRC.t<1000)return;const s=document.getElementById('screen');SCRC.t=now;if(!s){SCRC.r={left:0,top:0,right:innerWidth,bottom:innerHeight,width:innerWidth,height:innerHeight};SCRC.cw=innerWidth;SCRC.ch=innerHeight;return}
+ SCRC.r=s.getBoundingClientRect();SCRC.cw=s.clientWidth;SCRC.ch=s.clientHeight;if(!SCRC.ro&&typeof ResizeObserver!=='undefined'){try{SCRC.ro=new ResizeObserver(()=>{SCRC.t=0});SCRC.ro.observe(s)}catch(e){}}}
+function scrRect(){scrFresh();return SCRC.r}
+function scrSize(){scrFresh();return [SCRC.cw,SCRC.ch]}
+addEventListener('resize',()=>{SCRC.t=0});addEventListener('fullscreenchange',()=>{SCRC.t=0});addEventListener('orientationchange',()=>{SCRC.t=0});
+function ftTick(dt){FLT.tm+=dt;
   for(let i=FLT.act.length-1;i>=0;i--){const f=FLT.act[i],a=FLT.tm-f.t0;if(a>=f.life){f.el.remove();FLT.act.splice(i,1);continue}
     const k=a/f.life,e=1-(1-Math.min(1,a/.35))*(1-Math.min(1,a/.35));
     V.set((f.x+f.dx*k)/16,f.h+f.rise*(e*.6+k*.4)/16,f.y/16).project(cam);
@@ -205,7 +212,7 @@ function edgeTick(){let box=$('nbEdge');const on=!!(S&&S.phase==='play'&&!S.paus
   box.style.display='block';const T=[];
   for(const e of S.enemies){if(e.dead||e.rise>0)continue;if(e.hunt)T.push([e.x,e.y,'#ffd95a','\u25c6']);else if(e.named)T.push([e.x,e.y,'#e0555a','\u2605']);else if(bossBar(e))T.push([e.x,e.y,'#ff6a4a','!'])}
   if(S.merchant&&S.merchant.state!=='out')T.push([S.merchant.x,S.merchant.y,'#e8c25a','M']);
-  const r=$('screen').getBoundingClientRect(),V=EDG.v;let n=0;
+  const r=scrRect(),V=EDG.v;let n=0;
   for(const [x,y,col,ch] of T){if(n>=4)break;V.set(x/16,1,y/16).project(cam);if(V.z<1&&Math.abs(V.x)<.97&&Math.abs(V.y)<.95)continue;
     let el=EDG.els[n];if(!el){el=document.createElement('div');el.style.cssText='position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:#0d0b0ecc;border:2px solid #fff;box-shadow:0 0 8px #000;font:700 15px/22px Georgia,serif;text-align:center';el.innerHTML='<b></b><i style="position:absolute;left:50%;top:50%;width:0;height:0;margin:-6px 0 0 -4px;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:8px solid #fff"></i>';box.appendChild(el);EDG.els[n]=el}
     let vx=V.x,vy=-V.y;if(V.z>1){vx=-vx;vy=-vy}const px=vx*r.width/2,py=vy*r.height/2,t=Math.min((r.width/2-34)/Math.max(1e-3,Math.abs(px)),(r.height/2-34)/Math.max(1e-3,Math.abs(py))),a=Math.atan2(py,px);

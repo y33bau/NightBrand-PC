@@ -3238,7 +3238,7 @@ function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast lo
   w.zoneLight=lsrc(0xff6a1a,0,7,0,1,0,'zone');w.merchantLight=lsrc(0xffb060,1.4,6,0,1.1,0,'merchant');
   WORLDS[ch]=w;
 }
-function ensureWorld(ch){if(!groupReady(ch))return loadGroup(ch).then(()=>ensureWorld(ch));if(WORLDS[ch])return;if(ch===4&&!IMGS.cz_ground||ch===5&&!IMGS.cy_ground||ch===PORT&&!IMGS.port_atlas)throw Error((EN?'Missing graphics for act ':'Brak grafik rozdziału ')+ch);initWorld(ch);useWorld(ch);ROOT=W.group;try{[null,buildBrzeznica,buildDolne,buildStolica,buildCzarnobor,buildCytadela,buildSolneNabrzeze][ch](IMGS);fitWorldProps(W,ch);finishWorldArt(W);for(const n of W.npcs){const fr=A[n.art],m=new THREE.Mesh(geo32,fr[0].n);if(fr[0].d){m.customDistanceMaterial=fr[0].d;m.castShadow=true}ROOT.add(m);W.npcMeshes[n.id]=m}try{wallShade()}catch(e){quietErr('wallShade',e)}buildMini()}finally{ROOT=scene}}
+function ensureWorld(ch){if(!groupReady(ch))return loadGroup(ch).then(()=>ensureWorld(ch));if(WORLDS[ch])return;if(ch===4&&!IMGS.cz_ground||ch===5&&!IMGS.cy_ground||ch===PORT&&!IMGS.port_atlas)throw Error((EN?'Missing graphics for act ':'Brak grafik rozdziału ')+ch);initWorld(ch);useWorld(ch);ROOT=W.group;try{[null,buildBrzeznica,buildDolne,buildStolica,buildCzarnobor,buildCytadela,buildSolneNabrzeze][ch](IMGS);fitWorldProps(W,ch);finishWorldArt(W);try{chunkWorld(W)}catch(e){quietErr('chunkWorld',e)}for(const n of W.npcs){const fr=A[n.art],m=new THREE.Mesh(geo32,fr[0].n);if(fr[0].d){m.customDistanceMaterial=fr[0].d;m.castShadow=true}ROOT.add(m);W.npcMeshes[n.id]=m}try{wallShade()}catch(e){quietErr('wallShade',e)}buildMini()}finally{ROOT=scene}}
 function useWorld(ch){CH=ch;W=WORLDS[ch];setGrid(ch);if(A&&A.collectorC5){if(!A.collectorC0)A.collectorC0=A.collector;A.collector=ch===5?A.collectorC5:A.collectorC0}
   if(A&&A.bossC5){if(!A.boss0)A.boss0=A.boss;A.boss=ch===5?A.bossC5:A.boss0}
   ({map,PROPS,LSRC,propObjs,walls,cliffs,pillars,lavas,braziers,waters,region}=W);START=W.start;SHRINES=W.shrines;
@@ -3950,7 +3950,7 @@ function mpHudTick(){{const h=$('hud');if(h)h.classList.toggle('mp2',!!(S&&pl2&&
   const tt=mpTotTxt(),t1='<span class="tr">'+tt+'</span>',t2=(pl2.rbF?'<span class="tr">'+(pl2.rbU?(EN?'Revival used':'Odrodzenie zużyte'):(EN?'Revival ready':'Odrodzenie gotowe'))+'</span>':'')+t1;
   if(mpEls.t1!==t1){mpEls.t1=t1;mpEls.i1.innerHTML=t1}if(mpEls.t2!==t2){mpEls.t2=t2;mpEls.info.innerHTML=t2}
   {const own=S.own||{};let h1='',h2='';for(const k in own){const o=own[k],d=SK[k];if(!d||!d.ic)continue;const c=n=>'<span title="'+d.name+'"><i data-premium-skill="'+k+'" class="ic ic-'+d.ic+'"></i>'+(n>1?'<small>'+n+'</small>':'')+'</span>';if(o[0])h1+=c(o[0]);if(o[1])h2+=c(o[1])}if(mpEls.ks1!==h1){mpEls.ks1=h1;mpEls.k1.innerHTML=h1}if(mpEls.ks2!==h2){mpEls.ks2=h2;mpEls.k2.innerHTML=h2}}
-  const r=$('screen').getBoundingClientRect();
+  const r=scrRect();
   for(const [p,el,ar] of [[pl1,mpEls.b1,mpEls.a1],[pl2,mpEls.b2,mpEls.a2]]){MPV.set(p.x/16,2.1,p.y/16).project(cam);const inView=MPV.z<1&&Math.abs(MPV.x)<1.05&&Math.abs(MPV.y)<1.05;
     el.style.display=inView?'block':'none';ar.style.display=inView?'none':'block';if(!inView){let vx=MPV.x,vy=-MPV.y;if(MPV.z>1){vx=-vx;vy=-vy}const px=vx*r.width/2,py=vy*r.height/2,t=Math.min((r.width/2-26)/Math.max(1e-3,Math.abs(px)),(r.height/2-26)/Math.max(1e-3,Math.abs(py)));ar.style.left=(r.left+r.width/2+px*t-9)+'px';ar.style.top=(r.top+r.height/2+py*t-11)+'px';ar.style.transform='rotate('+Math.atan2(py,px)+'rad)'}if(!inView)continue;el.style.left=(r.left+(MPV.x*.5+.5)*r.width)+'px';el.style.top=(r.top+(-MPV.y*.5+.5)*r.height)+'px';
     const f=p.dead?Math.min(1,(S.mpProg||0)/5):Math.max(0,p.hp)/p.max;el.firstChild.style.width=f*100+'%';el.firstChild.style.background=p.dead?'#e8c85a':(p===pl1?'#d84a4a':'#4f8fd8')}}
@@ -3994,7 +3994,14 @@ function ftx(text,x,y,h,kind,ent){const box=$('ft');if(!box||!S)return;if(kind!=
   FLT.act.push(f);if(ent&&kind!=='i')ent.ftI=f}
 const ftEntH=e=>.95+(e.r||5)/14;
 function ftInfo(text){if(!S||!pl)return;const n=FLT.act.filter(f=>f.pl&&FLT.tm-f.t0<.7).length;ftx(text,pl.x,pl.y,1.75+n*.95,'i');FLT.act[FLT.act.length-1].pl=true}
-function ftTick(dt){FLT.tm+=dt;const r=$('screen').getBoundingClientRect();
+/* 22.11.2026 (wydajnosc): rozmiar ekranu z pamieci. Czytanie go w kazdej klatce zaraz po zmianach HUD wymuszalo przeliczenie ukladu strony (ok. 75% czasu JS klatki). Odswiezanie: zmiana rozmiaru, pelny ekran, najpozniej co 1 s. */
+const SCRC={r:null,cw:0,ch:0,t:0,ro:null};
+function scrFresh(){const now=performance.now();if(SCRC.r&&now-SCRC.t<1000)return;const s=document.getElementById('screen');SCRC.t=now;if(!s){SCRC.r={left:0,top:0,right:innerWidth,bottom:innerHeight,width:innerWidth,height:innerHeight};SCRC.cw=innerWidth;SCRC.ch=innerHeight;return}
+ SCRC.r=s.getBoundingClientRect();SCRC.cw=s.clientWidth;SCRC.ch=s.clientHeight;if(!SCRC.ro&&typeof ResizeObserver!=='undefined'){try{SCRC.ro=new ResizeObserver(()=>{SCRC.t=0});SCRC.ro.observe(s)}catch(e){}}}
+function scrRect(){scrFresh();return SCRC.r}
+function scrSize(){scrFresh();return [SCRC.cw,SCRC.ch]}
+addEventListener('resize',()=>{SCRC.t=0});addEventListener('fullscreenchange',()=>{SCRC.t=0});addEventListener('orientationchange',()=>{SCRC.t=0});
+function ftTick(dt){FLT.tm+=dt;
   for(let i=FLT.act.length-1;i>=0;i--){const f=FLT.act[i],a=FLT.tm-f.t0;if(a>=f.life){f.el.remove();FLT.act.splice(i,1);continue}
     const k=a/f.life,e=1-(1-Math.min(1,a/.35))*(1-Math.min(1,a/.35));
     V.set((f.x+f.dx*k)/16,f.h+f.rise*(e*.6+k*.4)/16,f.y/16).project(cam);
@@ -4030,7 +4037,7 @@ function edgeTick(){let box=$('nbEdge');const on=!!(S&&S.phase==='play'&&!S.paus
   box.style.display='block';const T=[];
   for(const e of S.enemies){if(e.dead||e.rise>0)continue;if(e.hunt)T.push([e.x,e.y,'#ffd95a','\u25c6']);else if(e.named)T.push([e.x,e.y,'#e0555a','\u2605']);else if(bossBar(e))T.push([e.x,e.y,'#ff6a4a','!'])}
   if(S.merchant&&S.merchant.state!=='out')T.push([S.merchant.x,S.merchant.y,'#e8c25a','M']);
-  const r=$('screen').getBoundingClientRect(),V=EDG.v;let n=0;
+  const r=scrRect(),V=EDG.v;let n=0;
   for(const [x,y,col,ch] of T){if(n>=4)break;V.set(x/16,1,y/16).project(cam);if(V.z<1&&Math.abs(V.x)<.97&&Math.abs(V.y)<.95)continue;
     let el=EDG.els[n];if(!el){el=document.createElement('div');el.style.cssText='position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:#0d0b0ecc;border:2px solid #fff;box-shadow:0 0 8px #000;font:700 15px/22px Georgia,serif;text-align:center';el.innerHTML='<b></b><i style="position:absolute;left:50%;top:50%;width:0;height:0;margin:-6px 0 0 -4px;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:8px solid #fff"></i>';box.appendChild(el);EDG.els[n]=el}
     let vx=V.x,vy=-V.y;if(V.z>1){vx=-vx;vy=-vy}const px=vx*r.width/2,py=vy*r.height/2,t=Math.min((r.width/2-34)/Math.max(1e-3,Math.abs(px)),(r.height/2-34)/Math.max(1e-3,Math.abs(py))),a=Math.atan2(py,px);
@@ -4332,7 +4339,7 @@ const SL={regen:32,delay:.55,roll:20,blockRegen:.25,stepCost:8,
 // level-up cards in slasher mode raise the hero's attributes instead of giving skills
 const SLASH_UP=['_vit','_dex','_str','_int'];
 // direction from the hero to the mouse pointer (screen y is foreshortened by the camera tilt)
-function aimDir(){if(clock-PAD.aimT<.15)return [PAD.ax,PAD.ay];if(clock-mouseT>3)return null;V.set(pl.x/16,.9,pl.y/16).project(cam);const r=$('screen').getBoundingClientRect();
+function aimDir(){if(clock-PAD.aimT<.15)return [PAD.ax,PAD.ay];if(clock-mouseT>3)return null;V.set(pl.x/16,.9,pl.y/16).project(cam);const r=scrRect();
   const hx=(V.x+1)/2*r.width,hy=(1-V.y)/2*r.height,dx=mouseX-hx,dy=(mouseY-hy)/Math.sin(PITCH),d=Math.hypot(dx,dy);return d>4?[dx/d,dy/d]:null}
 // keyboard: lock on to the closest enemy roughly in front
 function autoAim(){let b=null,bd=1e9;for(const e of S.enemies){if(e.dead||e.rise>0||e.type==='wisp')continue;const dx=e.x-pl.x,dy=e.y-pl.y,d=Math.hypot(dx,dy);if(d>75||d<1)continue;const f=(dx*pl.fx+dy*pl.fy)/d;if(f<-.2)continue;const sc=d*(1.6-f);if(sc<bd){bd=sc;b=[dx/d,dy/d]}}return b}
@@ -7790,7 +7797,7 @@ function kbUi(){const host=$('sub-kb');if(!host)return;let b=$('kbBind');if(!b){
   if(!$('kbCss')){const st=document.createElement('style');st.id='kbCss';st.textContent='#kbBind .kbgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45em 1.6em;margin:.6em 0}#kbBind .kbrow{display:flex;align-items:center;justify-content:space-between;gap:.8em}#kbBind .kbb{min-width:8.5em;margin:0;text-align:center;justify-content:center}#kbBind .kbb.on{outline:2px solid #e8c25a;color:#ffe2a2}@media (max-width:700px){#kbBind .kbgrid{grid-template-columns:1fr}}';document.head.appendChild(st)}
   const N=EN?{up:'Move up',down:'Move down',left:'Move left',right:'Move right',atk:'Attack (hold: heavy)',blk:'Block and parry',heavy:'Heavy attack',roll:'Dodge',s1:'Skill 1',s2:'Skill 2',s3:'Skill 3',s4:'Skill 4',talk:'Talk / use'}:{up:'Ruch w górę',down:'Ruch w dół',left:'Ruch w lewo',right:'Ruch w prawo',atk:'Cios (przytrzymaj: silny)',blk:'Blok i parowanie',heavy:'Silny atak',roll:'Unik',s1:'Umiejętność 1',s2:'Umiejętność 2',s3:'Umiejętność 3',s4:'Umiejętność 4',talk:'Rozmowa / użycie'};
   b.innerHTML=`<div class="opsep sm" aria-hidden="true"></div><h3 class="sth">${EN?'Your own keys':'Własne klawisze'}</h3><p class="figcap">${EN?'Click an action, then press the new key. Esc cancels. A key already in use swaps places. Arrow keys always move; Esc, P and the digits stay fixed. The diagram above and the hints show the default keys.':'Kliknij czynność, potem naciśnij nowy klawisz. Esc anuluje. Zajęty klawisz zamienia się miejscami. Strzałki zawsze poruszają postacią; Esc, P i cyfry są stałe. Schemat powyżej i podpowiedzi pokazują klawisze domyślne.'}</p><div class="kbgrid">`+Object.keys(KB_DEF).map(a=>`<div class="kbrow"><span>${N[a]}</span><button type="button" class="go alt kbb${KB.wait===a?' on':''}" data-a="${a}"></button></div>`).join('')+/*17.11.2026: sloty 5 i 6 maja stale klawisze*/[['G',EN?'Skill 5':'Umiejętność 5'],['6',EN?'Skill 6 (Gift of the Seal, solo)':'Umiejętność 6 (Dar pieczęci, solo)']].map(([k,n])=>`<div class="kbrow"><span>${n}</span><button type="button" class="go alt kbb kbfix" disabled title="${EN?'Fixed key':'Klawisz stały'}">${k}</button></div>`).join('')+`</div><div class="btnrow"><button type="button" class="go alt" id="kbReset">${EN?'Restore default keys':'Przywróć domyślne klawisze'}</button></div>`;
-  for(const x of b.querySelectorAll('.kbb')){const a=x.dataset.a;x.textContent=KB.wait===a?(EN?'Press a key…':'Naciśnij klawisz…'):kbName(KB.map[a]);x.addEventListener('click',()=>{KB.wait=KB.wait===a?null:a;kbUi();const n=$('kbBind').querySelector('.kbb[data-a="'+a+'"]');n&&n.focus()})}
+  for(const x of b.querySelectorAll('.kbb:not(.kbfix)')){/* 22.11.2026: bez stalych klawiszy slotow 5 i 6 (brak data-a przerywal petle i przycisk resetu nie dzialal) */const a=x.dataset.a;x.textContent=KB.wait===a?(EN?'Press a key…':'Naciśnij klawisz…'):kbName(KB.map[a]);x.addEventListener('click',()=>{KB.wait=KB.wait===a?null:a;kbUi();const n=$('kbBind').querySelector('.kbb[data-a="'+a+'"]');n&&n.focus()})}
   $('kbReset').addEventListener('click',()=>{KB.map={...KB_DEF};KB.wait=null;kbSave();kbUi()})}
 addEventListener('keydown',e=>{if(!KB.wait)return;e.preventDefault();e.stopImmediatePropagation();const k=e.key.toLowerCase(),a=KB.wait;KB.wait=null;if(k!=='escape'&&kbOk(k)&&(k!=='enter'||a==='talk')){const o=Object.keys(KB.map).find(x=>KB.map[x]===k);if(o&&o!==a)KB.map[o]=KB.map[a];KB.map[a]=k;kbSave()}kbUi();const n=$('kbBind')&&$('kbBind').querySelector('.kbb[data-a="'+a+'"]');n&&n.focus()},true);
 try{kbUi()}catch(e){quietErr('kbUi',e)}
@@ -8102,6 +8109,31 @@ function dynOn(){return SETT.gDyn==='on'||(SETT.gDyn==='auto'&&(SETT.qmode==='au
 function nbResH(){if(GFX.res<0)return Math.max(720,Math.min(2160,Math.round(FIT.h*Math.min(GFX.dpr,window.devicePixelRatio||1))));return GFX.res||RT_H}
 function rtApply(){const w=FIT.w,h=FIT.h,port=h>w,q=Math.round(nbResH()*SETT.rscale*dynS),rw=port?q:Math.round(q*w/h),rh=port?Math.round(q*h/w):q;rt.setSize(rw,rh);postMat.uniforms.res.value.set(rw,rh)}
 function dynReset(){dynS=1;dynN=dynSlow=dynPrev=0;dynBlock=0;dynHold=8000}
+/* 22.11.2026 (wydajnosc): podzial statycznych InstancedMesh swiata na kawalki mapy.
+   three r128 nie umie pomijac pojedynczych egzemplarzy, wiec rekwizyty, drzewa i sciany (frustumCulled=false) rysowaly sie
+   w calosci co klatke, a w cieniu swiatla gracza 6 razy (Czarnobor: 13 mln trojkatow na klatke). Kawalek ma wlasna bryle
+   ograniczajaca (geometria-widok na tych samych buforach), wiec kamera i cien pomijaja to, czego nie widac. */
+const CHUNK_CS=8,CHUNK_MAX=64;
+function chunkGeoView(g,sphere){const v=new THREE.BufferGeometry();for(const k in g.attributes)v.setAttribute(k,g.attributes[k]);if(g.index)v.setIndex(g.index);for(const gr of g.groups)v.addGroup(gr.start,gr.count,gr.materialIndex);v.drawRange.start=g.drawRange.start;v.drawRange.count=g.drawRange.count;v.parameters=g.parameters;v.userData=g.userData;v.boundingSphere=sphere;if(g.morphAttributes)v.morphAttributes=g.morphAttributes;return v}
+function chunkWorld(w){if(!w||!w.group||nbParam('chunks')==='0')return;const refs=new Set();for(const v of Object.values(w)){if(v&&v.isObject3D)refs.add(v);else if(Array.isArray(v))for(const x of v)if(x&&x.isObject3D)refs.add(x)}
+ const todo=[];w.group.traverse(o=>{if(!o.isInstancedMesh||o.frustumCulled!==false||refs.has(o)||!o.parent||o.userData.noChunk||o.onBeforeRender!==THREE.Object3D.prototype.onBeforeRender||o.morphTargetInfluences)return;
+  const g=o.geometry,n=o.count;if(!g||n<4)return;const tris=(g.index?g.index.count:g.attributes.position.count)/3;if(tris*n<(o.castShadow?3000:8000))return;todo.push(o)});
+ let made=0,tot=0;const E=new THREE.Matrix4(),C=new THREE.Vector3(),S3=new THREE.Vector3();
+ for(const o of todo){const g=o.geometry;if(!g.boundingSphere)g.computeBoundingSphere();const bs=g.boundingSphere,n=o.count,A=o.instanceMatrix.array,col=o.instanceColor;
+  let xs=[],zs=[];for(let i=0;i<n;i++){xs.push(A[i*16+12]);zs.push(A[i*16+14])}
+  const spanX=Math.max(...xs)-Math.min(...xs),spanZ=Math.max(...zs)-Math.min(...zs);let cs=CHUNK_CS;while(Math.ceil((spanX+1)/cs)*Math.ceil((spanZ+1)/cs)>CHUNK_MAX)cs*=1.5;
+  const by=new Map();for(let i=0;i<n;i++){const k=Math.floor(xs[i]/cs)+','+Math.floor(zs[i]/cs);(by.get(k)||by.set(k,[]).get(k)).push(i)}
+  if(by.size<2&&n<64){/* jeden kawalek: wystarczy poprawna bryla */}
+  for(const list of by.values()){let mnx=1e9,mny=1e9,mnz=1e9,mxx=-1e9,mxy=-1e9,mxz=-1e9;const cen=[],rad=[];
+   for(const i of list){E.fromArray(A,i*16);C.copy(bs.center).applyMatrix4(E);const sc=Math.max(S3.setFromMatrixColumn(E,0).length(),S3.setFromMatrixColumn(E,1).length(),S3.setFromMatrixColumn(E,2).length()),r=bs.radius*sc;cen.push(C.clone());rad.push(r);mnx=Math.min(mnx,C.x-r);mny=Math.min(mny,C.y-r);mnz=Math.min(mnz,C.z-r);mxx=Math.max(mxx,C.x+r);mxy=Math.max(mxy,C.y+r);mxz=Math.max(mxz,C.z+r)}
+   const ctr=new THREE.Vector3((mnx+mxx)/2,(mny+mxy)/2,(mnz+mxz)/2);let R=0;cen.forEach((c,j)=>{R=Math.max(R,c.distanceTo(ctr)+rad[j])});
+   const sp=new THREE.Sphere(ctr,R*1.06+.3),m=new THREE.InstancedMesh(chunkGeoView(g,sp),o.material,list.length);
+   list.forEach((i,j)=>{for(let q=0;q<16;q++)m.instanceMatrix.array[j*16+q]=A[i*16+q]});m.instanceMatrix.needsUpdate=true;
+   if(col){const c3=new THREE.Color();list.forEach((i,j)=>{c3.fromArray(col.array,i*3);m.setColorAt(j,c3)});m.instanceColor.needsUpdate=true}
+   for(const k of ['castShadow','receiveShadow','renderOrder','customDistanceMaterial','customDepthMaterial','name','visible','matrixAutoUpdate'])m[k]=o[k];m.layers.mask=o.layers.mask;m.userData={...o.userData,chunk:true};m.position.copy(o.position);m.quaternion.copy(o.quaternion);m.scale.copy(o.scale);m.updateMatrix();
+   m.frustumCulled=true;o.parent.add(m);made++}
+  o.parent.remove(o);tot++}
+ w.chunks={meshes:tot,parts:made}}
 function dynTick(now){
   if(!dynOn()){if(dynS!==1){dynReset();rtApply()}dynPrev=0;return}
   if(document.hidden||!S||S.phase!=='play'){dynPrev=0;return}
@@ -10471,16 +10503,16 @@ ${B}{font-size:max(11px,calc(12 * var(--hint-u) * var(--nbts,1)))!important;min-
 (()=>{if(nbParam('hudfix')==='0')return;
  const scr=$('screen'),nb=$('nbHud');if(!scr||!nb)return;const V3=new THREE.Vector3();
  const bars=[0,1].map(i=>{const e=document.createElement('div');e.className='nbx-sta nbx-sta'+(i+1);e.setAttribute('aria-hidden','true');e.innerHTML='<i></i>';scr.insertBefore(e,nb);return{e,f:e.firstChild,t:0,w:''}});
- const prevHud=hud;let lastXp=-1,xpT=0,lastCoins=-1,coinT=0;
+ const prevHud=hud;let lastXp=-1,xpT=0,lastCoins=-1,coinT=0,xpEl=null,walEl=null;
  hud=function(){prevHud();const show=scr.classList.contains('pc-hud-visible')&&!!S,now=performance.now();scr.classList.toggle('nbx-hud',scr.classList.contains('pc-hud'));
-  const w=scr.clientWidth,h=scr.clientHeight,hu=parseFloat(scr.style.getPropertyValue('--hu'))||1;
+  const [w,h]=scrSize(),hu=parseFloat(scr.style.getPropertyValue('--hu'))||1;
   for(const [i,p] of [pl,pl2].entries()){const b=bars[i];if(!show||!p||p.dead){if(b.on!==false){b.on=false;b.e.classList.remove('on')}continue}
    const r=Math.max(0,Math.min(1,(p.sta||0)/(p.staMax||1)));if(r<.995)b.t=now+650;const on=now<b.t;
    if(on){V3.set(p.x/16,0,p.y/16).project(cam);const x=Math.round((V3.x*.5+.5)*w),y=Math.round((-V3.y*.5+.5)*h+13*hu);b.e.style.transform='translate('+x+'px,'+y+'px) translate(-50%,0)';const fw=(r*100).toFixed(1)+'%';if(fw!==b.w){b.w=fw;b.f.style.width=fw}
     b.e.classList.toggle('low',r<.25);b.e.classList.toggle('no',!i&&!!SETT.flash&&$('stam').classList.contains('flash'))}
    if(on!==b.on){b.on=on;b.e.classList.toggle('on',on)}}
   if(!show)return;
-  const xp=nb.querySelector('.pch:not(.pcmp) .pch-experience'),wal=nb.querySelector('.pch:not(.pcmp) .pch-coins');
+  /* 22.11.2026: elementy z pamieci zamiast querySelector w kazdej klatce */if(!xpEl||!xpEl.isConnected)xpEl=nb.querySelector('.pch:not(.pcmp) .pch-experience');if(!walEl||!walEl.isConnected)walEl=nb.querySelector('.pch:not(.pcmp) .pch-coins');const xp=xpEl,wal=walEl;
   if(lastXp>=0&&S.xp!==lastXp&&xp){xp.classList.add('nbx-gain');xpT=now+450}if(xpT&&now>xpT&&xp){xp.classList.remove('nbx-gain');xpT=0}lastXp=S.xp;
   if(lastCoins>=0&&S.coins>lastCoins&&wal){wal.classList.add('nbx-gain');coinT=now+450}if(coinT&&now>coinT&&wal){wal.classList.remove('nbx-gain');coinT=0}lastCoins=S.coins;
  };
