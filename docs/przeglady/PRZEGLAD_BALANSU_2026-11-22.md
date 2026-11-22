@@ -142,3 +142,47 @@ Kod:
 Test w przeglądarce: każda z 5 reakcji wywołana ręcznie działa bez błędów; karta wyświetla się poprawnie (zrzut).
 
 Uwaga DROBNA, istniejąca wcześniej i nieruszana: opis ostrza wspierającego pokazuje „Lód: spowolnienie 15%” także na kartach Trucizny i Krwi, a podział na punkty rozcina zdanie „Bez znaków, finiszera i premii miecza”.
+
+## Symulacja rozdziałów II–VI oraz trudności Łatwy i Trudny (na 855)
+Bot jak wcześniej: Rycerz, lekkie ataki, nieśmiertelny. Liczby to obrażenia otrzymywane na sekundę.
+
+| Przebieg | 2 min | 8 min | 12 min | 16 min | Poziom | Zabójstwa |
+|---|---|---|---|---|---|---|
+| I Normalny (853) | 7 | 16 | 24 | 33 | 26 | 2324 |
+| II Normalny | 8 | 25 | 33 | 44 | 27 | 2426 |
+| III Normalny | 9 | 17 | 25 | 30 | 24 | 2408 |
+| IV Normalny | 14 | 28 | 32 | 44 | 27 | 2351 |
+| V Normalny | 12 | 26 | 44 | 49 | 30 | 3239 |
+| VI Normalny | 17 | 30 | 45 | 57 | 33 | 2771 |
+| I Łatwy | 5 | 7 | 10 | 15 | 24 | 1917 |
+| I Trudny | 11 | 26 | 23 | 31 | 28 | 2592 |
+| I Trudny, Tancerka | 16 | 29 | 41 | 58 | 27 | 2289 |
+| VI Normalny, Tancerka | 27 | 51 | 76 | 77 | 30 | 1938 |
+
+Mapowanie: w kodzie CH 6 to rozdział III, CH 3 to IV, CH 4 to V, CH 5 to VI.
+
+Wnioski:
+1. **Krzywa nocy działa we wszystkich rozdziałach.** FAKT z symulacji. W każdym rozdziale trudność rośnie od startu do końca nocy, a kolejne rozdziały są coraz cięższe (koniec nocy: od 33 w I do 57 w VI). Taki kształt jest zamierzony.
+2. **Rozdział III: bot nie kończy nocy.** Po pokonaniu Bosmana gra czeka, aż gracz otworzy przejścia i wypłynie promem (`portDepart`). To cel rozdziału, nie błąd.
+3. **Trudny w rozdziale I jest niewiele trudniejszy od Normalnego.** FAKT z symulacji, ale wyniki mają duży rozrzut. Trudny daje +15% doświadczenia i +12% wrogów, więc bohater rośnie szybciej (28 poziom zamiast 26) i część trudności się znosi. Do decyzji autora: zdjąć premię XP na Trudnym albo podnieść tam obrażenia wrogów.
+4. **Łatwy jest wyraźnie łatwy:** około połowy obrażeń z Normalnego. Bez uwag.
+5. **Tancerka w VI dostaje bardzo dużo:** 77/s przy 80 HP. Bot nie robi uników, a to jej główna obrona, więc to PRZYPUSZCZENIE do sprawdzenia na żywo.
+
+## Wdrożone w 856 (zgoda autora 22.11, rola gamedev)
+- **Zestawy stylów w dwóch krokach:** 4 karty z gałęzi dają małą premię, 7 kart pełny zestaw (wcześniej 8).
+  - Obrońca: −6% otrzymywanych obrażeń.
+  - Zabójca: szybkie ataki +6% obrażeń.
+  - Mistrz fal: fale +12% obrażeń.
+  - Na karcie pojawia się „Włącza premię zestawu!”, a w podglądzie rozwoju obie premie.
+  - Instrukcja: opis zaktualizowany.
+- **Techniki aktywne korzystają ze stanów wrogów:**
+
+  | Klasa | Technika | Warunek | Efekt |
+  |---|---|---|---|
+  | Rycerz | Wypad | zmrożony wróg | +50% obrażeń, pęknięcie spowalnia sąsiadów |
+  | Kat | Atak z doskoku | krwawiący wróg | +40% obrażeń |
+  | Tancerka | Rozszarpanie | zatruty wróg | +30% obrażeń, dłuższa trucizna |
+  | Dzwonnik | Echo Żałoby | ogłuszony wróg | +50% obrażeń |
+  | Woskownica | Odlew Skazańca | płonący wróg | +40% obrażeń, dłuższy ogień |
+
+  Kod: `SKST` i `skStatusMul()` w części 12, wywołanie w `damageEnemy()` w części 13.

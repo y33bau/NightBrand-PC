@@ -928,3 +928,4 @@ cache852 · Balans: Szklany Miecz staly mnoznik, Tancerka (4 cele, 80% HP, +5% o
 cache853 · Skalowanie nocy: od startu ~20 wrogow, tlum rosnie do ~42, zycie mobkow x0,6->x3,0 (krzywa rosnaca po polnocy), 4. elita 14:30. Na bazie 852. Nie sprawdzono: FPS u autora przy 40+ wrogach, pad, dzwiek, itch.io, Latwy/Trudny, rozdzialy II-VI na zywo
 cache854 · Reakcje zywiolow: Opary, Wrzatek, Szron, Kruche Zyly, Zakazenie + linia na karcie. EN niezatwierdzone. Na bazie 853. Nie sprawdzono: pad, dzwiek, FPS u autora, itch.io, kooperacja
 cache855 · Brat Wit: teksty wyboru (zostaw: sakiewka z kieszeni; dobij: niesluszna laska, Upior), linia po pokonaniu Upiora, zapowiedz u Margi. EN niezatwierdzone. Nie sprawdzono: pad, dzwiek, FPS u autora, itch.io
+cache856 · Zestawy 4/7, techniki aktywne ze stanami wrogow, karty ostrza wspierajacego, Izolda (skutek klamstwa), Upior: okrzyki i kwestie. EN niezatwierdzone. Nie sprawdzono: pad, dzwiek, FPS u autora, itch.io

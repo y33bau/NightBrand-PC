@@ -21,7 +21,8 @@ function aimDir(){if(clock-PAD.aimT<.15)return [PAD.ax,PAD.ay];if(clock-mouseT>3
 // keyboard: lock on to the closest enemy roughly in front
 function autoAim(){let b=null,bd=1e9;for(const e of S.enemies){if(e.dead||e.rise>0||e.type==='wisp')continue;const dx=e.x-pl.x,dy=e.y-pl.y,d=Math.hypot(dx,dy);if(d>75||d<1)continue;const f=(dx*pl.fx+dy*pl.fy)/d;if(f<-.2)continue;const sc=d*(1.6-f);if(sc<bd){bd=sc;b=[dx/d,dy/d]}}return b}
 // ---- STYLE WALKI (slasher): trzy gałęzie kart z poziomami. Osiem poziomów w jednej gałęzi daje bonus zestawu ----
-const BR={def:{n:(EN?'Defender':'Obrońca'),set:(EN?'Parry: 0.9 s of invulnerability instead of 0.7 s; +2% health (once per 2.5 s).':'Parowanie: 0,9 s nietykalności zamiast 0,7 s; +2% życia (raz na 2,5 s).')},off:{n:(EN?'Assassin':'Zabójca'),set:(EN?'Hitting a stunned enemy restores 6 stamina.':'Trafienie ogłuszonego wroga zwraca 6 staminy.')},wav:{n:(EN?'Wavemaster':'Mistrz fal'),set:(EN?'Waves deal +30% damage and apply the blade status.':'Fale +30% obrażeń i nakładają status ostrza.')}},SET_N=8;
+const BR={def:{n:(EN?'Defender':'Obrońca'),set:(EN?'Parry: 0.9 s of invulnerability instead of 0.7 s; +2% health (once per 2.5 s).':'Parowanie: 0,9 s nietykalności zamiast 0,7 s; +2% życia (raz na 2,5 s).')},off:{n:(EN?'Assassin':'Zabójca'),set:(EN?'Hitting a stunned enemy restores 6 stamina.':'Trafienie ogłuszonego wroga zwraca 6 staminy.')},wav:{n:(EN?'Wavemaster':'Mistrz fal'),set:(EN?'Waves deal +30% damage and apply the blade status.':'Fale +30% obrażeń i nakładają status ostrza.')}},SET_N=7,SET_HALF=4;/* 22.11.2026 (zgoda autora): zestaw w dwoch krokach: 4 = mala premia, 7 = pelny zestaw (bylo 8) */
+BR.def.half=(EN?'−6% damage taken.':'−6% otrzymywanych obrażeń.');BR.off.half=(EN?'Light attacks deal +6% damage.':'Szybkie ataki +6% obrażeń.');BR.wav.half=(EN?'Waves deal +12% damage.':'Fale +12% obrażeń.');
 const FALA_B=[0,.1,.2,.3,.4,.6],ZRYW_N=[0,6,4,3];// Fala Mocy: łączny bonus na poziomie; Zryw: co ile trafień
 const STY={
   garda:{br:'def',name:(EN?'Iron Guard':'Żelazna Garda'),ic:'quen',max:5,d:(EN?'Block −10% stamina per level (lvl 5: −50%).':'Blok −10% staminy za poziom (poz. 5: −50%).')},
@@ -37,7 +38,7 @@ const STY={
   cisza:{pact:1,name:(EN?'Pact of Silence':'Pakt Ciszy'),ic:'cisza',max:1,d:(EN?'+50% stamina regeneration, −20% max health.':'+50% regeneracji staminy, −20% maks. życia.')}};
 for(const k in STY){const t=STY[k];t.kind=t.pact?(EN?'Pact':'Pakt'):(EN?'Style · ':'Styl · ')+BR[t.br].n;if(t.pact)t.sub=(EN?'An edge with a price':'Przewaga z ceną');Object.assign(SK[k]=SK[k]||{},t)}
 const sk=k=>(S&&S.sk&&S.sk[k])||0;
-const brSum=br=>Object.keys(STY).filter(k=>STY[k].br===br).reduce((a,k)=>a+sk(k),0),brOn=br=>brSum(br)>=SET_N;
+const brSum=br=>Object.keys(STY).filter(k=>STY[k].br===br).reduce((a,k)=>a+sk(k),0),brOn=br=>brSum(br)>=SET_N,brHalf=br=>brSum(br)>=SET_HALF;
 const parryWin=()=>SL.parry*(S.pk.parryWin||1),RIPO_L=[1.5,1.8,2.1,2.4,2.7,3],riMul=()=>RIPO_L[Math.min(5,sk('riposta'))],blockMulX=()=>SL.blockMul*(1-.1*sk('garda'));
 // 10.11.2026 (decyzja autora): gdy riposta jest gotowa, ciężki cios Kata (ładowanie) i Zabójczyni (zamach) trafia po 0,66 s,
 // czyli w oknie 0,7 s nietykalności po parowaniu; poza ripostą czasy bez zmian (0,75 s)
@@ -57,7 +58,7 @@ function startAttack(kind,combo=0,charged=false){if(pl.atk&&SKATK.includes(pl.at
 // Parry and Aard keep their guaranteed interrupt; a heavy blow can stop a light-hit recovery.
 function slashStagger(e,seconds,heavy=false){if(e.staggerCd>0&&!heavy)return false;e.stun=Math.max(e.stun||0,seconds);e.ghoulWind=0;e.sw=0;e.staggerCd=seconds+SL.staggerGap;return true}
 function attackHit(a){const P=a.kind==='h'?SL.heavy:SL.light,R=P.range*(S.zab&&a.kind==='h'?S.pk.vortR:1)*(a.kind==='h'?(S.pk.kReach||1):1),arc=P.arc,crit=pl.riposte>0,LC=lastCombo();if(S.zab){S.zTag=a.kind==='h'?'w':a.combo===4?'x':a.slide&&a.combo===0?'s':null;S.zWhirlN=0}ftCrit=crit;ftHeavy=a.kind==='h';ftMelee=true;DSRC=crit?'r':a.kind==='h'?'h':'l';
-  let dmg=(a.kind==='h'?P.dmg:P.dmg[a.combo])*(1+.07*(S.lvl-1))*(S.str||1)*might()*encDmg(encLevel()[1]);const twinBase=dmg;if(crit)dmg*=riMul()*S.pk.ripo;if(a.kind==='l')dmg*=S.pk.light;else if(a.kind==='h')dmg*=S.pk.heavyDmg;if(a.kind==='l'&&a.combo===LC)dmg*=1+.18*sk('rytm');if(S.zab&&a.kind==='l'){if(a.combo<4)dmg*=S.pk.zLight4;if(S.zDance>0)dmg*=1+.07*((S.zDanceL||1)-1)}if(pl.dance>0){dmg*=1+.25*sk('taniec');pl.dance=0}
+  let dmg=(a.kind==='h'?P.dmg:P.dmg[a.combo])*(1+.07*(S.lvl-1))*(S.str||1)*might()*encDmg(encLevel()[1]);const twinBase=dmg;if(crit)dmg*=riMul()*S.pk.ripo;if(a.kind==='l')dmg*=S.pk.light*(brHalf('off')?1.06:1);else if(a.kind==='h')dmg*=S.pk.heavyDmg;if(a.kind==='l'&&a.combo===LC)dmg*=1+.18*sk('rytm');if(S.zab&&a.kind==='l'){if(a.combo<4)dmg*=S.pk.zLight4;if(S.zDance>0)dmg*=1+.07*((S.zDanceL||1)-1)}if(pl.dance>0){dmg*=1+.25*sk('taniec');pl.dance=0}
   if(S.dzw&&a.kind==='h')dmg+=dzwPledgeHit();
   const waveDmg=dmg*(S.dzw&&a.kind==='h'?.5:1);const ang=Math.atan2(a.dy,a.dx);let hits=0;
   const LST=[...S.enemies];if(S.zab&&a.kind==='l')LST.sort((p,q)=>Math.hypot(p.x-pl.x,p.y-pl.y)-Math.hypot(q.x-pl.x,q.y-pl.y));for(const e of LST){if(S.zab&&a.kind==='l'&&hits>=4)break;if(e.dead||e.rise>0)continue;const dx=e.x-pl.x,dy=e.y-pl.y,d=Math.hypot(dx,dy);if(d>R+e.r||!sightSword(pl.x,pl.y,e.x,e.y))continue;let df=Math.atan2(dy,dx)-ang;while(df>Math.PI)df-=2*Math.PI;while(df<-Math.PI)df+=2*Math.PI;if(d>10&&Math.abs(df)>arc)continue;
@@ -76,7 +77,7 @@ function attackHit(a){const P=a.kind==='h'?SL.heavy:SL.light,R=P.range*(S.zab&&a
   if(a.wick>0)milStrip(a.wick,ang);
   if(a.echo)dzwEcho(a,twinBase,ang)}
 // fala cięcia: nagroda za parowanie, leci przed siebie i przebija wszystkich wrogów na swojej drodze (raz każdego)
-function launchWave(a,ang,base,quiet,grp){ /* 16.11.2026 (zgoda autora): fale -10% obrazen; grp = wspolny zbior trafionych dla fal z jednej riposty */const W0=a.kind==='h'?SL.wave.h:SL.wave.l,zs=sk('fala'),W=Object.assign({},W0,{life:W0.life*(1+.15*zs),r:W0.r*(1+.15*zs),size:W0.size*(1+.08*zs),dmg:W0.dmg*(1+FALA_B[sk('fala')])*(brOn('wav')?1.3:1)}),c=Math.cos(ang),s=Math.sin(ang);{const wk=brOn('wav')?'rush':sk('fala')>=3?'wave2':'wave1',wf=skFrames(wk);if(wf)addVfx(wf,W.life,pl.x+c*14,pl.y+s*14,.6,W.size*1.05,'bill',-screenAng(c,s));else addVfx(A.fx.slash,W.life,pl.x+c*14,pl.y+s*14,.6,W.size,'bill',-screenAng(c,s))}
+function launchWave(a,ang,base,quiet,grp){ /* 16.11.2026 (zgoda autora): fale -10% obrazen; grp = wspolny zbior trafionych dla fal z jednej riposty */const W0=a.kind==='h'?SL.wave.h:SL.wave.l,zs=sk('fala'),W=Object.assign({},W0,{life:W0.life*(1+.15*zs),r:W0.r*(1+.15*zs),size:W0.size*(1+.08*zs),dmg:W0.dmg*(1+FALA_B[sk('fala')])*(brOn('wav')?1.3:1)*(brHalf('wav')?1.12:1)}),c=Math.cos(ang),s=Math.sin(ang);{const wk=brOn('wav')?'rush':sk('fala')>=3?'wave2':'wave1',wf=skFrames(wk);if(wf)addVfx(wf,W.life,pl.x+c*14,pl.y+s*14,.6,W.size*1.05,'bill',-screenAng(c,s));else addVfx(A.fx.slash,W.life,pl.x+c*14,pl.y+s*14,.6,W.size,'bill',-screenAng(c,s))}
   if(WEAPON_FX_ON){const f=S.vfx[S.vfx.length-1];f.h=1.55;f.size=Math.min(1.2,f.size*.72);f.weaponAspect=.74}
   (S.waves=S.waves||[]).push({f:S.vfx[S.vfx.length-1],x:pl.x+c*14,y:pl.y+s*14,vx:c*W.speed,vy:s*W.speed,t:W.life,r:W.r,dmg:base*W.dmg,hit:new Set(),grp});play('katana',0);shake(.12,.1);padRumble(.4,.7,160);
   if(!quiet)ftInfo((EN?'Slash wave':'Fala cięcia'))}
@@ -486,6 +487,18 @@ function rxBoil(e){/* Wrzatek: mnoznik krwawienia na plonacym wrogu (czesc 13, t
 function rxInfect(e){/* Zakazenie: przy smierci zatrutego i krwawiacego wroga */if(!S||!(e.pois>0&&e.bleed>0)||rxOn()!=='blood+venom')return;rxShow(e,'blood+venom');for(const o of rxNear(e,48)){o.pois=Math.max(o.pois||0,3);o.poisD=Math.max(o.poisD||0,e.poisD||3);o.bleed=Math.max(o.bleed||0,2);o.bleedDmg=Math.max(o.bleedDmg||0,e.bleedDmg||3)}}
 function rxCardLine(k){/* linia na karcie zywiolu: jaka reakcje da z posiadanym zywiolem */const el=ELEMENT_OF[k];if(!el||!S||sk(k))return '';const own=chosenElements().filter(v=>v!==el);if(own.length!==1||elementConflict(own[0],el))return '';const R=RX[rxKey(own[0],el)];if(!R)return '';return `<span class="rxb">${EN?'Reaction':'Reakcja'} (${ELEMENT_NAME[own[0]]} + ${ELEMENT_NAME[el]}): <b>${R.n}</b>, ${R.d}.</span>`}
 function applyEnchants(e,a,crit){applyEnchants0(e,a,crit);elementReact(e,a)}
+/* 22.11.2026 (zgoda autora): techniki aktywne korzystaja ze stanow wrogow (po jednej na klase). Teksty EN niezatwierdzone. */
+const SKST={wypad:{st:'chill',mul:1.5,n:(EN?'Shatter':'Pęknięcie'),d:(EN?'A frozen enemy shatters: +50% damage and nearby enemies slowed.':'Zmrożony wróg pęka: +50% obrażeń i spowolnienie sąsiadów.')},
+ leap:{st:'bleed',mul:1.4,n:(EN?'Butchery':'Rzeź'),d:(EN?'Landing on a bleeding enemy: +40% damage.':'Lądowanie na krwawiącym wrogu: +40% obrażeń.')},
+ rend:{st:'pois',mul:1.3,n:(EN?'Venom Cut':'Jadowite cięcie'),d:(EN?'Cuts on a poisoned enemy: +30% damage and longer poison.':'Cięcia w zatrutego wroga: +30% obrażeń i dłuższa trucizna.')},
+ zalecho:{st:'stun',mul:1.5,n:(EN?'Tremor':'Wstrząs'),d:(EN?'A stunned enemy takes +50% damage from the echo.':'Ogłuszony wróg dostaje od echa +50% obrażeń.')},
+ odlew:{st:'burn',mul:1.4,n:(EN?'Burning Wax':'Płonący wosk'),d:(EN?'A burning enemy: +40% damage and a longer fire.':'Płonący wróg: +40% obrażeń i dłuższy ogień.')}};
+for(const k in SKST)if(SK[k]){if(SK[k].lv)SK[k].lv=SK[k].lv.map(s=>s+' '+SKST[k].d);if(SK[k].d)SK[k].d+=' '+SKST[k].d}
+function skStatusMul(e,src){const k=src.slice(3),q=SKST[k];if(!q||!(e[q.st]>0))return 1;
+ if((e.skTxt||0)<clock){e.skTxt=clock+1;ftx(q.n+'!',e.x,e.y,ftEntH(e)+.6,'i')}
+ if(k==='wypad'){e.chill=0;for(const o of S.enemies)if(o!==e&&!o.dead&&Math.hypot(o.x-e.x,o.y-e.y)<40){o.chill=Math.max(o.chill||0,1.5);o.chillMul=Math.min(o.chillMul||1,.7)}for(let i=0;i<10;i++)S.parts.push({k:'e',x:e.x,y:e.y,z:rnd(6,16),vx:rnd(-70,70),vy:rnd(-40,40),vz:rnd(10,30),c:i%2?'#bfe8ff':'#ffffff',life:rnd(.3,.6)})}
+ else if(k==='rend')e.pois=Math.min(6,e.pois+.5);else if(k==='odlew')e.burn=Math.max(e.burn,3);
+ return q.mul}
 function applyEnchants0(e,a,crit){if(e.dead)return;const [k,L]=encLevel();if(!k)return;const big=encBig(e),c=ENC[k];
   if(!crit&&Math.random()>=encChance(L)*(a.kind==='h'?1.5:1))return;
   // the status itself
