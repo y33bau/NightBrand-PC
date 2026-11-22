@@ -1,6 +1,10 @@
 # Kanon fabuły i zmiany nazw po redakcji tekstów (10.11.2026)
 
-Stan: redakcja wykonana na wyciągu tekstów z wersji 561 (plik `NIGHTBRAND_teksty_PL_EN_redakcja.txt`, 246 zmienionych wpisów z 1968). **Teksty NIE są jeszcze wgrane do gry.** Do czasu wgrania kod i `SLOWNIK_EN.md` mają stare nazwy; po wgraniu trzeba poprawić słownik według tabeli na dole.
+Stan: redakcja wykonana na wyciągu tekstów z wersji 561 (plik `NIGHTBRAND_teksty_PL_EN_redakcja.txt`, 246 zmienionych wpisów z 1968). **Teksty NIE są jeszcze wgrane do gry.** Do czasu wgrania kod i słownik EN mają stare nazwy; po wgraniu trzeba poprawić słownik według tabeli na dole. (22.11.2026: osobnego pliku `SLOWNIK_EN.md` nie ma; słownik EN to `I18N_DOM` w `zrodlo/main/01_start_jezyk.js` i teksty `EN?…:…` w kodzie.)
+
+## Bohaterowie i rozdziały (stan 22.11.2026, zgodnie z AGENTS.md)
+- r **Hadræn** (Rycerz / Knight; dawniej Radan), k **Goran** (Kat / Executioner), z **Mira** (Tancerka Popiołu / Ash Dancer; dawniej Zabójczyni), d **Iwo** (Dzwonnik / Bellringer), m **Milena** (Woskownica / Candlebound).
+- Rozdziały: I Spalona Osada, II Dolne Miasto, III Solne Nabrzeże (w kodzie CH=6), IV Upadły Złotogród, V Czarnobór, VI Cytadela Wierzycieli. Numeracja w punktach kanonu niżej jest sprzed dodania Portu.
 
 Autor dał wolną rękę („ujednolić spójność fabuły"). Poniżej jeden kanon, pod który przepisano stare warstwy tekstu (STORY_INTRO, komunikaty, zakończenia nocy). Nowa warstwa (FABULA_TXT: akty, Chojrak, kwestie bossów) była wzorcem.
 
@@ -20,7 +24,7 @@ Autor dał wolną rękę („ujednolić spójność fabuły"). Poniżej jeden ka
 - Skazany Skryba trafił do kajdan za jedną pomyłkę w rachunku.
 - Rysunek dziecka: postać z czerwoną plamą na piersi (wcześniej „czerwoną ręką").
 
-## Zmiany nazw i terminów (do przeniesienia do SLOWNIK_EN.md po wgraniu)
+## Zmiany nazw i terminów (do przeniesienia do słownika EN po wgraniu)
 | PL | było EN | jest EN |
 |---|---|---|
 | Zrost | The Outgrowth | The Conjoined |

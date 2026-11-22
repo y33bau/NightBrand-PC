@@ -920,3 +920,4 @@ cache844 · Drzewa z malunkow: tekstury 2048 (bylo 1024), swiety dab przygaszony
 cache845 · Sycacy Kociolek jako model 3D z malunku (plomienie wyciete), pod nim animowany ogien. Leczenie bez zmian. Nie sprawdzono: FPS, pad, itch, kociolek w innych rozdzialach na zrzucie.
 cache846 · Kociolek 3D: bez ogniska pod garnkiem, swiatlo i poswiata slabsze o 30%. Nie sprawdzono: inne rozdzialy, FPS, pad, itch.
 cache847 · Wszystkie swiatla punktowe slabsze o 30% (autor: przeswietla). Nie sprawdzono: rozdzialy II-VI i port na zrzutach, FPS, pad, itch.
+cache848 · Porzadki po przegladzie: dopisek o slotach 5-6 pod schematami sterowania, tryb testera wlacza sie po sprawdzeniu kodu, jedna stala NB_LOKALNIE, komentarze kociolka i resztki dotyku. Nie sprawdzono: pad, dzwiek, FPS u autora, itch.io, wyglad dopisku na ekranie autora, tryb testera na zywo.

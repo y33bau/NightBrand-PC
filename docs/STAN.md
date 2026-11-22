@@ -1,4 +1,4 @@
-Stan na 2026-11-21, cache 844, rola grafik
+Stan na 2026-11-22, cache 848 (gałąź), rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -7,7 +7,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 | Co | Wartość |
 |---|---|
 | main | cache 844, opublikowane 21.11.2026 (log `docs/logi/LOG_SESJI_2026-11-21.md`) |
-| Gałęzie czekające na „publikuj” | brak |
+| Gałęzie czekające na „publikuj” | `runda-porzadki-przeglad` (848): zawiera 845–847 z `runda-kociolek-3d` (kociołek 3D bez ognia, światła ×0.7) + porządki po przeglądzie 22.11 |
 | Kopia zapasowa | y33bau/nightbrand-backup = kopia 844 |
 | Zip itch.io | `NightBrand_itch_844.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 199 MB (limit 500 MB); zip itch.io ok. 817 plików / 1000 (każdy model = 2–3 pliki) |
@@ -43,7 +43,9 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - Ogólnie: pad na nowych ekranach, kooperacja, menu po angielsku, itch.io na żywo.
 
 ## Zgłoszone autorowi, czekają na decyzję
-- Przegląd 810 (`docs/przeglady/PRZEGLAD_810_2026-11-17.md`): 5 uwag WAŻNYCH (warstwy menu, przełączniki w adresie bez `LOKALNIE`, zasada o nieistniejącym perku „Bez litości”, sloty 5 i 6 niewidoczne w Opcjach, tempo leczenia kociołków na Łatwym) i 9 drobnych.
+- Przegląd 810 (`docs/przeglady/PRZEGLAD_810_2026-11-17.md`): otwarte zostały tylko „trzy warstwy menu” (WAŻNE 1, osobna runda porządkowa) i nazwa gałęzi stylu „Zabójca” obok klasy Miry (DROBNE 13). Reszta naprawiona do 848 (przegląd `docs/przeglady/PRZEGLAD_848_2026-11-22.md`).
+- Światła ×0.7 (847) działają na lampy i ogniska, nie na księżyc i światło ogólne sceny: czy przyciemnić też je.
+- Schematy sterowania (obrazki PL/EN, klawiatura i pad): od 848 pod obrazkiem jest dopisek o slotach 5 i 6; docelowo nowe obrazki od autora.
 - Rozmowy NPC: kłamstwo Izoldy (40 monet) płaci więcej niż prawda (30 + pół paska); siła upiorów Skryby i Ottokara; wypłata warty 70 monet.
 - Przygotowanie: czy przywrócić łączny mnożnik Popiołów w „Tej nocy”.
 - `docs/PLAN_ELECTRON_WINDOWS.md` nie istnieje: napisać plan albo czekać (autor: „jeszcze poczekamy”).
@@ -59,10 +61,10 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Porządki
 - Zrobione w 812: `wydaj.py usun` (+6 nieużywanych obrazów usuniętych), `__pycache__` poza repo, historia rund w `docs/historia/`, teksty Grafiki bez podmiany w locie, `sprawdz.py` bez fałszywych uwag o module startowym.
 - Gałęzie: 100 scalonych do usunięcia czeka na zgodę (`docs/GALEZIE_DO_USUNIECIA.md`); 35 niescalonych do decyzji.
-- Obrazy schematów sterowania (PL/EN, klawiatura i pad) pokazują 4 sloty: potrzebna nowa grafika z 5. i 6. slotem (listy tekstowe już mają 1–6).
+- Obrazy schematów sterowania (PL/EN, klawiatura i pad) pokazują 4 sloty: od 848 dopisek pod obrazkiem; docelowo nowa grafika z 5. i 6. slotem.
 - Port: dodana mgiełka w powietrzu; dekoracje ogólne (`DECOR`, `NP_CFG`) celowo nie dodane (trupy, siano, trawa nie pasują do nabrzeża) – do decyzji grafika.
 - Puste `catch{}`: w menu (część 27) błędy logiki trafiają teraz do raportu błędów; reszta (zapis ustawień, dźwięk, schowek) celowo cicha.
 - Testy UI niepasujące do nowego menu (`test-przygotowanie-ui.cjs` i podobne): dostosować albo oznaczyć jako przestarzałe.
-- Kanon `teksty/KANON_FABULY_I_NAZWY_2026-11-10.md`: numeracja sprzed Portu, Radan → Hadræn, Zabójczyni → Tancerka Popiołu.
+- Kanon `teksty/KANON_FABULY_I_NAZWY_2026-11-10.md`: od 22.11 ma sekcję z imionami bohaterów i rozdziałami; numeracja fabuły nadal sprzed Portu.
 - Prompty graficzne z projektu claude.ai (`claude/PROMPTY_*`) → `docs/prompty/`.
 - Na pulpicie autora stare `TEST_*.bat` i zipy 762–809 (za zgodą).

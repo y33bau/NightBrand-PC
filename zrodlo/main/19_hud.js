@@ -32,8 +32,8 @@ function hud(){renderActiveHud();if(!S)return;drawMini(1/60);const left=S.endles
   if(S.hl&&clock-S.hl.t>3){S.hl=null;chipsDirty=true}
   if(chipsDirty){chipsDirty=false;const chip=k=>{const mx=ENCH.includes(k)&&S.mainEnchant&&S.mainEnchant!==k?3:SK[k].max||9;return`<span class="sk${S.hl&&S.hl.k===k?' hi':''}" title="${SK[k].name}"><i data-premium-skill="${k}" class="ic ic-${SK[k].ic||k}"></i><em>${'<b class="on"></b>'.repeat(S.sk[k])+'<b></b>'.repeat(Math.max(0,mx-S.sk[k]))}</em></span>`};
     $('chips').innerHTML=SLASH_SK.filter(k=>S.sk[k]).map(chip).join('')}}
-// 16.11.2026: sterowanie dotykowe usuniete (decyzja autora: gra na komputer; na telefonie tylko z padem)
-function applyTouchMode(){$('opts').classList.add('sl');$('figKb').hidden=false;
+// 16.11.2026: sterowanie dotykowe usuniete (decyzja autora: gra na komputer: klawiatura, mysz, pad); applyInputMode ustawia widok Opcji dla klawiatury
+function applyInputMode(){$('opts').classList.add('sl');$('figKb').hidden=false;
   $('warn').textContent=''}
 
 function applyStory(){$('storyTgl').checked=!STORYMODE;$('sFab').classList.toggle('on',STORYMODE);$('sArc').classList.toggle('on',!STORYMODE);$('sFab').setAttribute('aria-pressed',String(STORYMODE));$('sArc').setAttribute('aria-pressed',String(!STORYMODE));$('storyModeHint').textContent=STORYMODE?(EN?'You unlock acts one by one.':'Rozdziały odblokowujesz po kolei.'):(EN?'All acts available right away.':'Wszystkie rozdziały dostępne od razu.');}
@@ -56,8 +56,8 @@ for(const b of document.querySelectorAll('#diffSw [data-d]'))b.addEventListener(
 $('storyTgl').addEventListener('change',e=>{STORYMODE=!e.target.checked;try{localStorage.setItem('pn_story',STORYMODE?'1':'0')}catch(x){}applyStory();renderRecords()});
 applyStory();
 $('briSl').value=Math.round(SETT.bri*100);$('briSl').addEventListener('input',e=>{SETT.bri=+e.target.value/100;postMat.uniforms.bri.value=SETT.bri;try{localStorage.setItem('pn_bri',String(SETT.bri))}catch(x){}});
-addEventListener('resize',()=>{if($('title')&&!$('title').hidden)applyTouchMode()});
-applyTouchMode();
+addEventListener('resize',()=>{if($('title')&&!$('title').hidden)applyInputMode()});
+applyInputMode();
 // wyglad przyciskow Fabularny / Arcade (paczka NightBrand_PRZYCISKI_TRYBOW); logika trybu bez zmian (aria-checked ustawia syncTitleMode)
 {const st=document.createElement('style');st.textContent=`/* NightBrand: standalone, scoped appearance. No gameplay or mode-selection logic. */
 .nb-mode-select {

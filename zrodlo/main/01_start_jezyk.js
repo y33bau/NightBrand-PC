@@ -1,6 +1,7 @@
 (()=>{
 const $=id=>document.getElementById(id);
 // 17.11.2026: przełączniki w adresie (?art=0, ?pcmenu=0, ?mp=1 itd.) działają tylko u autora (127.0.0.1 / localhost / [::1] / file:); u graczy (itch.io) zawsze null = wartości domyślne
+// Narzedzia autora tylko lokalnie (decyzja 14.11.2026): JEDYNE miejsce tego warunku; czesc 27 ma alias LOKALNIE.
 const NB_LOKALNIE=location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname),nbParam=k=>NB_LOKALNIE?new URLSearchParams(location.search).get(k):null;
 // ---- język: EN/PL (pn_lang); bez zapisu domyślnie według przeglądarki. Zmiana języka przeładowuje grę ----
 const LANG=(()=>{let v=null;try{v=localStorage.getItem('pn_lang')}catch(e){}return v==='en'||v==='pl'?v:(/^pl\b/i.test(navigator.language||'')?'pl':'en')})(),EN=LANG==='en';
@@ -23,7 +24,7 @@ const TS=16,MW=104,MH=91,WW=MW*TS,WH=MH*TS,NIGHT=960,BREAK_AT=480,KAM_P=(()=>{co
   /* 18.11.2026: kamera klasyczna albo przestrzenna (Opcje > Grafika, wczytywana przy starcie gry). [pochylenie st., polowa kata widzenia st., odleglosc, szerokosc widoku wzgledem klasycznej, ograniczenia kamery przy brzegach mapy: gora, dol].
      Przestrzenna (od 18.11 domyslna; 19.11 autor: 45 st. i troche dalej): szerokosc widoku ok. 96% klasycznej, glebia ok. 116% (widac nieco wiecej pola walki niz w klasycznej). ?kamera=p|k tylko lokalnie. */
   KAMV=KAM_P?[45,14,24.5,.96,10.9,7.6]:[55,12,30,1,8.5,7.5],KAMH=KAMV[1]*Math.PI/180,PITCH=KAMV[0]*Math.PI/180,DIST=KAMV[2],
-  // the 3D scene is drawn at this height and scaled up: higher = sharper sprites; phones get a lighter setting
+  // the 3D scene is drawn at this height and scaled up: higher = sharper sprites; lower quality levels use a lighter setting
   RT_H=720;
 const P={ink:'#08070a',bone:'#d8cfb8',bone2:'#9d9584',blood:'#951518',blood2:'#560a0d',ember:'#ff6a1a',ember2:'#ffb347',st0:'#0d0c10',st1:'#1b1a1f',st2:'#24232a',st3:'#34323b',st4:'#46434e',inlay:'#5a4a22',
   pale:'#7f8a76',pale2:'#56604f',flesh1:'#4a1f1c',flesh2:'#6b2c26',bat:'#1d161b',rag1:'#3d3127'};

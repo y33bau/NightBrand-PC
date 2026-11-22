@@ -713,6 +713,7 @@ SPRITE_DATA.fxhd_0='assets/efekty/f86141e6be400f946b0ac1228df014b642838f615a1553
 (()=>{
 const $=id=>document.getElementById(id);
 // 17.11.2026: przełączniki w adresie (?art=0, ?pcmenu=0, ?mp=1 itd.) działają tylko u autora (127.0.0.1 / localhost / [::1] / file:); u graczy (itch.io) zawsze null = wartości domyślne
+// Narzedzia autora tylko lokalnie (decyzja 14.11.2026): JEDYNE miejsce tego warunku; czesc 27 ma alias LOKALNIE.
 const NB_LOKALNIE=location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname),nbParam=k=>NB_LOKALNIE?new URLSearchParams(location.search).get(k):null;
 // ---- język: EN/PL (pn_lang); bez zapisu domyślnie według przeglądarki. Zmiana języka przeładowuje grę ----
 const LANG=(()=>{let v=null;try{v=localStorage.getItem('pn_lang')}catch(e){}return v==='en'||v==='pl'?v:(/^pl\b/i.test(navigator.language||'')?'pl':'en')})(),EN=LANG==='en';
@@ -735,7 +736,7 @@ const TS=16,MW=104,MH=91,WW=MW*TS,WH=MH*TS,NIGHT=960,BREAK_AT=480,KAM_P=(()=>{co
   /* 18.11.2026: kamera klasyczna albo przestrzenna (Opcje > Grafika, wczytywana przy starcie gry). [pochylenie st., polowa kata widzenia st., odleglosc, szerokosc widoku wzgledem klasycznej, ograniczenia kamery przy brzegach mapy: gora, dol].
      Przestrzenna (od 18.11 domyslna; 19.11 autor: 45 st. i troche dalej): szerokosc widoku ok. 96% klasycznej, glebia ok. 116% (widac nieco wiecej pola walki niz w klasycznej). ?kamera=p|k tylko lokalnie. */
   KAMV=KAM_P?[45,14,24.5,.96,10.9,7.6]:[55,12,30,1,8.5,7.5],KAMH=KAMV[1]*Math.PI/180,PITCH=KAMV[0]*Math.PI/180,DIST=KAMV[2],
-  // the 3D scene is drawn at this height and scaled up: higher = sharper sprites; phones get a lighter setting
+  // the 3D scene is drawn at this height and scaled up: higher = sharper sprites; lower quality levels use a lighter setting
   RT_H=720;
 const P={ink:'#08070a',bone:'#d8cfb8',bone2:'#9d9584',blood:'#951518',blood2:'#560a0d',ember:'#ff6a1a',ember2:'#ffb347',st0:'#0d0c10',st1:'#1b1a1f',st2:'#24232a',st3:'#34323b',st4:'#46434e',inlay:'#5a4a22',
   pale:'#7f8a76',pale2:'#56604f',flesh1:'#4a1f1c',flesh2:'#6b2c26',bat:'#1d161b',rag1:'#3d3127'};
@@ -2399,8 +2400,7 @@ function buildSolneNabrzeze(I){
 // wiec z widoku gracza model wyglada jak dotychczasowy obrazek, ale ma prawdziwa bryle, cien i zaslanianie. Modele sie nie obracaja (rzut by sie rozjechal).
 // Bryla zajmuje miejsce i szerokosc obrazka; obrazek jest usuwany. Kolizje bez zmian. Brak modelu (np. jeszcze sie wczytuje) = zostaje obrazek.
 // Porownanie przed: ?rek3d=0 (tylko lokalnie).
-const REK3D_ON=!(LOKALNIE_REK3D()&&nbParam('rek3d')==='0');
-function LOKALNIE_REK3D(){try{return /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)||location.protocol==='file:'}catch(e){return false}}
+const REK3D_ON=!(NB_LOKALNIE&&nbParam('rek3d')==='0');
 const P3D_GLB={beczka:'assets/rekwizyty/9c2b288a2f3e2836e6dfe2464e2e129fd8930da48f3515b3fffce329f628bf27.glb',glaz:'assets/rekwizyty/3cb68cacf5ffaedd72fce29dbbca8db4e7ac096239e46b549c9668db387046bf.glb',
  pien:'assets/rekwizyty/8e5f9297f89c8dd2cb0b59b6d3caa9e209a8ce36c582fbef0c0471545102c94f.glb',ul:'assets/rekwizyty/c40c8201a0698d7495a80fd087edb12d31d057927dde4a668294fa2b9d78fc99.glb',
  kurhan:'assets/rekwizyty/254e774d7a66d8de38394ba9683eed3ca9380c7266d0cceba3bad13450f5f414.glb',drewno:'assets/rekwizyty/64d715a6a73520da33b3ffeb683e620406f444122867ea745a0a34188d552ba1.glb',
@@ -2450,7 +2450,7 @@ function p3dGeo(model,key){const id=model+'|'+key;let e=P3D_UV.get(id);if(e)retu
 // 20.11.2026: modele z Meshy (Image to 3D z malunkow rekwizytow), odchudzone: geometria ~6 tys. trojkatow + kolor i mapa normalnych 1024 (narzedzia: docs/modele/meshy_odchudz.py).
 // Maja wlasna teksture, wiec bez rzutu z kamery. Gdy rekwizyt ma model z Meshy, ma on pierwszenstwo przed modelem z rzutem.
 const P3D_MESHY={
- pot3d:{g:'assets/rekwizyty/fe14fda9fd4ab25a29252b1fe7279c715eeb3c216e6b3820ffcffb40f37b8170.glb',k:'assets/rekwizyty/ef2f9c37861f6a672cf0eacc48c5bd66dc44751618f2974e845d64d4d660766b.webp'},// Sycący Kociołek (z malunku, płomienie wycięte: ogień daje animacja)
+ pot3d:{g:'assets/rekwizyty/fe14fda9fd4ab25a29252b1fe7279c715eeb3c216e6b3820ffcffb40f37b8170.glb',k:'assets/rekwizyty/ef2f9c37861f6a672cf0eacc48c5bd66dc44751618f2974e845d64d4d660766b.webp'},// Sycący Kociołek (z malunku, płomienie wycięte; od 22.11 bez ognia pod garnkiem)
  p4_dead_oak:{g:'assets/rekwizyty/93ced40c847376dd68095b8a3c68de7815e7e09332175ebf53ff765d3158fb73.glb',k:'assets/rekwizyty/a2764645880ea286d94b5aa4989be2a9a08ea71d66f1b1c7dea077452a8606a4.webp'},
  p4_spruce:{g:'assets/rekwizyty/ea855bba4595c93e60e15460601901467fae2350282a855593da6fa1e084966d.glb',k:'assets/rekwizyty/1116e7b980554d3fc1462c02a582def25e5ca23491c5216884bf7763af3c3897.webp'},
  p4_birch:{g:'assets/rekwizyty/41f0eb46bbeace2f48771537201f564b5fb8299a5b236f401204d3c91b1a9b24.glb',k:'assets/rekwizyty/b3a2743a60c882b296d476cfa1aba9c43f1dd3b9c4da808088641e60e94485e4.webp'},
@@ -3736,7 +3736,8 @@ for(const [event,names] of Object.entries(SFX_SAMPLE_MAP)){
  source.onended=()=>{sfxVoices.delete(source);source.disconnect();gain.disconnect()};source.start();
  }}
 // trener (tryb testera): stan zapisywany w pn_trainer
-const TRN={on:false,god:false,ohk:false};try{const v=JSON.parse(localStorage.getItem('pn_trainer')||'{}');if(v&&v.on===true){TRN.on=true;TRN.god=v.god===true;TRN.ohk=v.ohk===true}}catch(e){quietErr('loadTrainer',e)}
+// 22.11.2026: trener wlacza sie dopiero po sprawdzeniu zapisanego kodu (czesc 23), nie po samym on:true w pamieci przegladarki
+const TRN={on:false,god:false,ohk:false,k:''};let TRN_SAVED=null;try{const v=JSON.parse(localStorage.getItem('pn_trainer')||'{}');if(v&&v.on===true&&typeof v.k==='string'&&v.k)TRN_SAVED=v}catch(e){quietErr('loadTrainer',e)}
 
 /* ============ GAME STATE ============ */
 const SK={
@@ -4039,7 +4040,7 @@ function say(t,kind='event'){if(!t)return;if(kind==='hint'&&isPort())return;if(S
 // The banner waits (and hides) while the game is paused, in a dialog, on level-up cards, in the shop or the intro.
 const MSG={show:3,gap:.45,threshold:60,perChar:.025,max:7};
 function messageDuration(text){return Math.min(MSG.max,MSG.show+Math.max(0,[...String(text)].length-MSG.threshold)*MSG.perChar)}
-// Pion (telefon): komunikaty fabularne i bossów ('story'/'boss') jadą jako pasek jednej linijki i nie zatrzymują gry; samouczek jest wyłączony.
+// Pion (wąskie, pionowe okno): komunikaty fabularne i bossów ('story'/'boss') jadą jako pasek jednej linijki i nie zatrzymują gry; samouczek jest wyłączony.
 function isPort(){const s=$('screen');return !!(s&&s.classList.contains('port'))}
 const MSG_TICK={min:6,max:16,base:2.5,perChar:.11};
 function tickDuration(text){return Math.min(MSG_TICK.max,Math.max(MSG_TICK.min,MSG_TICK.base+[...String(text)].length*MSG_TICK.perChar))}
@@ -4055,7 +4056,7 @@ function nearPowerFire(){if(!S||pl.dead||S.rebirthUsed||S.rebirth)return null;le
 function activatePowerFire(f){if(!f||!S||S.rebirth||S.rebirthUsed)return false;S.rebirth={ch:CH,x:pl.x,y:pl.y,index:f.index};play('bless',0);say((EN?'The Nourishing Cauldron remembers your Brand. Tonight you will return once. Revival costs half of the character experience earned this night. Your coins will stay where you died.':'Sycący Kociołek zapamiętuje twoje Piętno. Tej nocy powrócisz raz. Odrodzenie kosztuje połowę doświadczenia postaci otrzymanego za noc. Monety zostaną w miejscu śmierci.'));return true}
 let _fgt=null;function fireGlowTex(){if(_fgt)return _fgt;const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),gr=x.createRadialGradient(64,64,0,64,64,64);gr.addColorStop(0,'rgba(255,255,255,.6)');gr.addColorStop(.45,'rgba(255,255,255,.28)');gr.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=gr;x.fillRect(0,0,128,128);return _fgt=new THREE.CanvasTexture(c)}
 const POT_PNG='./assets/rekwizyty/00a19433f6e4d7a9436e350b567cabcf808435eba909266bde9f749922afbb93.png';let _potImg=null,_potFr=null;function potLoad(cb){if(_potFr){cb(_potFr);return}if(!_potImg){const im=_potImg=new Image();im.nbKey='pot';im.nbDensity=5;im.cbs=[];im.onload=()=>{try{_potFr=procFrame(im,0,0,im.width/5,im.height/5,'prop');cutCircle(_potFr.n)}catch(e){_potFr=null}for(const f of im.cbs)f(_potFr);im.cbs=[]};im.src=POT_PNG}_potImg.cbs.push(cb)}
-// 21.11.2026: Sycący Kociołek jako model 3D z malunku; pod nim zostaje animowany ogień (mniejszy, przed garnkiem)
+// 21.11.2026: Sycący Kociołek jako model 3D z malunku; 22.11: bez ognia pod garnkiem (decyzja autora), stary znacznik ognia zmniejszony do zera
 function potModel3d(w,o){if(typeof REK3D_ON==='undefined'||!REK3D_ON||!P3D_MGEO.pot3d)return false;const g=P3D_MGEO.pot3d;g.computeBoundingBox();const bb=g.boundingBox,sc=1.55/(bb.max.x-bb.min.x),m=new THREE.Mesh(g,meshyMat('pot3d'));
   m.scale.setScalar(sc);m.position.set(o.mesh.position.x,0,o.mesh.position.z);m.castShadow=true;m.receiveShadow=true;w.group.add(m);// bez propAsset: settleWorldProps obsługuje tylko płaskie malunki
   o.mesh.scale.set(1e-4,1e-4,1e-4);w.pot3d=true;return true}// autor 22.11: bez ogniska pod garnkiem
@@ -5909,8 +5910,8 @@ function heroBladeMat(fr,k){const key='E'+k;if(fr[key]!==undefined)return fr[key
   m.map=t1;m.emissiveMap=t2;m.needsUpdate=true;fr[key]=m;return m}catch(e){return null}}
 // 16.11.2026 (pilot): ruch z kodu na sprite'cie bohatera: oddech, kolysanie kroku, pochylenie w strone ruchu i ciosu, dopchniecie w chwili uderzenia,
 // rozciagniecie przy zrywie, przysiad po skoku i uniku. TYLKO wyglad: nie zmienia pl.x/pl.y, zasiegow, czasow ani trafien. Wylacza je opcja wstrzasow (SETT.shake); do porownania u autora ?ruch=0 (tylko lokalnie: ten sam warunek co LOKALNIE w czesci 27, tam jest w domknieciu).
-const HERO_MOTION_OFF=(location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname))&&nbParam('ruch')==='0',HERO_MOTION=new WeakMap();
-const NPC_STILL=new Set(['wolch','bartosz','wierz','dobromir','nawoj','rudna','straznik','pieczetnik','lucjan','marga','chojrak']),NPC_STILL_OFF=(location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname))&&nbParam('ruch')==='0';
+const HERO_MOTION_OFF=NB_LOKALNIE&&nbParam('ruch')==='0',HERO_MOTION=new WeakMap();
+const NPC_STILL=new Set(['wolch','bartosz','wierz','dobromir','nawoj','rudna','straznik','pieczetnik','lucjan','marga','chojrak']),NPC_STILL_OFF=NB_LOKALNIE&&nbParam('ruch')==='0';
 function heroMotion(p,mesh,hs,dt,rz0){let j=HERO_MOTION.get(p);if(!j){j={x:p.x,y:p.y,vx:0,vy:0,lean:0,px:0,py:0,sx:1,sy:1,lift:0,sq:0,st:''};HERO_MOTION.set(p,j)}
   if(HERO_MOTION_OFF||!SETT.shake||p.dead){j.x=p.x;j.y=p.y;j.vx=j.vy=j.lean=j.px=j.py=j.lift=j.sq=0;j.sx=j.sy=1;j.st='';mesh.rotation.z=rz0;return}
   if(dt>0){const dx=p.x-j.x,dy=p.y-j.y;j.x=p.x;j.y=p.y;if(Math.abs(dx)+Math.abs(dy)>48){j.vx=j.vy=0}else{const k=Math.min(1,dt*14);j.vx+=(dx/dt-j.vx)*k;j.vy+=(dy/dt-j.vy)*k}
@@ -6471,8 +6472,8 @@ function hud(){renderActiveHud();if(!S)return;drawMini(1/60);const left=S.endles
   if(S.hl&&clock-S.hl.t>3){S.hl=null;chipsDirty=true}
   if(chipsDirty){chipsDirty=false;const chip=k=>{const mx=ENCH.includes(k)&&S.mainEnchant&&S.mainEnchant!==k?3:SK[k].max||9;return`<span class="sk${S.hl&&S.hl.k===k?' hi':''}" title="${SK[k].name}"><i data-premium-skill="${k}" class="ic ic-${SK[k].ic||k}"></i><em>${'<b class="on"></b>'.repeat(S.sk[k])+'<b></b>'.repeat(Math.max(0,mx-S.sk[k]))}</em></span>`};
     $('chips').innerHTML=SLASH_SK.filter(k=>S.sk[k]).map(chip).join('')}}
-// 16.11.2026: sterowanie dotykowe usuniete (decyzja autora: gra na komputer; na telefonie tylko z padem)
-function applyTouchMode(){$('opts').classList.add('sl');$('figKb').hidden=false;
+// 16.11.2026: sterowanie dotykowe usuniete (decyzja autora: gra na komputer: klawiatura, mysz, pad); applyInputMode ustawia widok Opcji dla klawiatury
+function applyInputMode(){$('opts').classList.add('sl');$('figKb').hidden=false;
   $('warn').textContent=''}
 
 function applyStory(){$('storyTgl').checked=!STORYMODE;$('sFab').classList.toggle('on',STORYMODE);$('sArc').classList.toggle('on',!STORYMODE);$('sFab').setAttribute('aria-pressed',String(STORYMODE));$('sArc').setAttribute('aria-pressed',String(!STORYMODE));$('storyModeHint').textContent=STORYMODE?(EN?'You unlock acts one by one.':'Rozdziały odblokowujesz po kolei.'):(EN?'All acts available right away.':'Wszystkie rozdziały dostępne od razu.');}
@@ -6495,8 +6496,8 @@ for(const b of document.querySelectorAll('#diffSw [data-d]'))b.addEventListener(
 $('storyTgl').addEventListener('change',e=>{STORYMODE=!e.target.checked;try{localStorage.setItem('pn_story',STORYMODE?'1':'0')}catch(x){}applyStory();renderRecords()});
 applyStory();
 $('briSl').value=Math.round(SETT.bri*100);$('briSl').addEventListener('input',e=>{SETT.bri=+e.target.value/100;postMat.uniforms.bri.value=SETT.bri;try{localStorage.setItem('pn_bri',String(SETT.bri))}catch(x){}});
-addEventListener('resize',()=>{if($('title')&&!$('title').hidden)applyTouchMode()});
-applyTouchMode();
+addEventListener('resize',()=>{if($('title')&&!$('title').hidden)applyInputMode()});
+applyInputMode();
 // wyglad przyciskow Fabularny / Arcade (paczka NightBrand_PRZYCISKI_TRYBOW); logika trybu bez zmian (aria-checked ustawia syncTitleMode)
 {const st=document.createElement('style');st.textContent=`/* NightBrand: standalone, scoped appearance. No gameplay or mode-selection logic. */
 .nb-mode-select {
@@ -6864,7 +6865,7 @@ let startBusy=false;
 function beginRun(){if(startBusy)return;startBusy=true;uiSnd('runStart');const b=$('prepGo'),label=b.innerHTML;b.disabled=true;b.textContent=(EN?'Preparing the act…':'Przygotowywanie rozdziału…');requestAnimationFrame(()=>setTimeout(()=>{try{if(!$('prep').hidden)start(PREP.ch)}catch(e){console.error(e);toMenu();say((EN?'Failed to prepare the act. Refresh the game and try again.':'Nie udało się przygotować rozdziału. Odśwież grę i spróbuj ponownie.'))}finally{startBusy=false;b.disabled=false;b.innerHTML=label}},0))}
 function start(ch){if(!A)return;if(!groupReady(ch))return waitChapter(ch,()=>start(ch));ftClear();hbClear();$('pause').hidden=true;resetInput();if(SETT.quality==='low')for(const k of Object.keys(WORLDS))if(+k!==ch)releaseWorld(+k);ensureWorld(ch);useWorld(ch);initAudio();if(AC&&AC.state==='suspended')acResume();newGame();applyPrep();lastHud='';MUS.base=ch;for(const k of Object.keys(MUS_BUFS))musRelease(k);if(ch===1)musLoadBuf('crypt');if(ch===1&&STORY)musLoadBuf('intro');if(!(ch===1&&AUDIO_DATA.intro))musStart(ch);for(const id of ['title','end','lvl','dialog','prep'])$(id).hidden=true;$('hud').hidden=false;camTarget.set(pl.x/16,0,pl.y/16);if(ch>=1&&ch<=6)storyIntro(ch);if(ch===1&&INTRO&&AUDIO_DATA.intro)musStart('intro')}
 
-// 16.11.2026: selektory kart pada zadeklarowane tu, bo klik w trakcie ladowania (iPhone/Safari) uzywal ich przed inicjalizacja (ReferenceError PADTABS)
+// 16.11.2026: selektory kart pada zadeklarowane tu, bo klik w trakcie ladowania (Safari) uzywal ich przed inicjalizacja (ReferenceError PADTABS)
 const PADTABS='.nbp-nav>.nbp-tab,.pc-prep-tabs>.pc-prep-tab,#kapTabs>.tab,.tabs>.tab';
 const PADSUBS='.subtabs>.stab,#pauseKeys .stab';
 // ---- postać: poziom, perki i wyzwania nocy (postęp zapisany pod kluczem 's'; dawne dane Hordy 'a' są ignorowane) ----
@@ -7769,11 +7770,12 @@ function trnOpts(){const old=$('trnOpt');if(old)old.remove();
   $('repeatTut').insertAdjacentHTML('afterend',`<div id="trnOpt"><div class="opsep sm" aria-hidden="true"></div><h3 class="sth">${EN?'Tester mode':'Tryb testera'}</h3>`+
   (TRN.on?`<p class="figcap">${EN?'The trainer is unlocked: you will find it in the pause menu.':'Trener odblokowany: znajdziesz go w menu pauzy.'}</p><div class="btnrow"><button class="go alt" id="trnAsh2" type="button">${EN?'+500 Ashes':'+500 Popiołów'}</button><button class="go alt" id="trnOff" type="button">${EN?'Turn tester mode off':'Wyłącz tryb testera'}</button></div>`
   :`<div class="btnrow"><input type="password" id="trnCode" autocomplete="off" aria-label="${EN?'Tester code':'Kod testera'}" placeholder="${EN?'Tester code':'Kod testera'}" style="font:inherit;font-size:1.1em;padding:.3em .5em;min-width:0;flex:1;max-width:12em;background:#1b1416;color:var(--bone);border:1px solid #6b4b45;border-radius:.3em"><button class="go alt" id="trnBtn" type="button">${EN?'Unlock':'Odblokuj'}</button></div><p class="figcap" id="trnCap">${EN?'A trainer console for testing mechanics. Requires a code.':'Konsola trenera do testowania mechanik. Wymaga kodu.'}</p>`)+`</div>`);
-  if(TRN.on){$('trnAsh2').addEventListener('click',()=>{trnAsh();$('trnAsh2').textContent=(EN?'+500 Ashes · now ':'+500 Popiołów · masz ')+EMB.e});$('trnOff').addEventListener('click',()=>{TRN.on=TRN.god=TRN.ohk=false;trnSave();trnBuild();trnOpts()});return}
+  if(TRN.on){$('trnAsh2').addEventListener('click',()=>{trnAsh();$('trnAsh2').textContent=(EN?'+500 Ashes · now ':'+500 Popiołów · masz ')+EMB.e});$('trnOff').addEventListener('click',()=>{TRN.on=TRN.god=TRN.ohk=false;TRN.k='';trnSave();trnBuild();trnOpts()});return}
   const go=async()=>{const v=$('trnCode').value.trim().toLowerCase();if(!v)return;let h='';try{h=await trnHash(v)}catch(e){}
-    if(h===TRN_H){TRN.on=true;trnSave();trnBuild();trnOpts();play('bless',0)}else{$('trnCap').textContent=EN?'Wrong code.':'Zły kod.';play('empty',0)}};
+    if(h===TRN_H){TRN.on=true;TRN.k=v;trnSave();trnBuild();trnOpts();play('bless',0)}else{$('trnCap').textContent=EN?'Wrong code.':'Zły kod.';play('empty',0)}};
   $('trnBtn').addEventListener('click',go);$('trnCode').addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter')go()})}
 trnOpts();trnBuild();
+if(TRN_SAVED)trnHash(TRN_SAVED.k).then(h=>{if(h!==TRN_H)return;Object.assign(TRN,{on:true,k:TRN_SAVED.k,god:TRN_SAVED.god===true,ohk:TRN_SAVED.ohk===true});trnBuild();trnOpts()}).catch(e=>quietErr('trnVerify',e));
 
 let last=performance.now();
 // ---- pad Xbox (Gamepad API): ruch, walka i nawigacja po menu ----
@@ -8260,7 +8262,7 @@ ${scope} .nb-prep-class{display:flex!important;flex-direction:column;align-items
 document.head.appendChild(sheet);
 // 9.11.2026 (Claude, author's rule): text in banners and panels scales with the box it lives in.
 // Boxes grow with the window, so type grows with min(vw,vh) from the 1280x720 design size, never below it, capped per role.
-// Only landscape windows taller than 550 px; small/phone layouts keep their own tuned sizes. Selection/hover/focus rules untouched.
+// Only landscape windows taller than 550 px; small or narrow windows keep their own tuned sizes. Selection/hover/focus rules untouched.
 {const F=(px,cap=1.5)=>`clamp(${px}px,min(${+(px/12.8).toFixed(3)}vw,${+(px/7.2).toFixed(3)}vh),${Math.round(px*cap)}px)`;
  const Z='#orient'.repeat(14)+' ',K=Z+'#kap',fin=document.createElement('style');fin.id='nbFinalScale';
  fin.textContent=`@media (orientation:landscape) and (min-height:551px){
@@ -9118,7 +9120,11 @@ loadGroup('core').then(()=>{
 {const KB=EN?'assets/ui/dadca33542655c56e7c88a0c1be7394a6716a3250526dfb29db1df91c0144548.webp':'assets/ui/8d6f9789af7270abae2ecd0ed9a42e48b9466c82ccee7da597c97b51760300d0.webp',PD=EN?'assets/ui/1c380bccce9943755d604581e451da377ebaf3621aa56e9c67426c8fb8908b63.webp':'assets/ui/bfb4247af105e9a06e15632ae2b8c23925efd2f81ac29cc8ed6d8e160ed1dc69.webp';
  {const put=(box,src,alt,hide)=>{if(!box||box.querySelector('.nb-ctl-img'))return;const im=document.createElement('img');im.className='nb-ctl-img';im.src=src;im.alt=alt;im.loading='lazy';im.decoding='async';im.width=1672;im.height=941;box.prepend(im);for(const h of box.querySelectorAll(hide))h.classList.add('nb-ctl-old')};
   put($('sub-kb'),KB,EN?'Controls: keyboard and mouse':'Sterowanie: klawiatura i mysz','#figKb,#figMouse,.keys');put($('sub-pad'),PD,EN?'Controls: controller':'Sterowanie: kontroler','.fig.pad,.figcap,.keys');
+  // 22.11.2026: obrazki schematow pokazuja 4 sloty; do czasu nowych grafik dopisek o slotach 5 i 6 pod obrazkiem (EN niezatwierdzone)
+  for(const [box,txt] of [[$('sub-kb'),EN?'Skill 5: <kbd>G</kbd> · Skill 6: <kbd>6</kbd> (Gift of the Seal, solo)':'Umiejętność 5: <kbd>G</kbd> · Umiejętność 6: <kbd>6</kbd> (Dar pieczęci, solo)'],[$('sub-pad'),EN?'Skill 5: <kbd>LT+RB</kbd> · Skill 6: <kbd>LT+LS</kbd> (Gift of the Seal, solo)':'Umiejętność 5: <kbd>LT+RB</kbd> · Umiejętność 6: <kbd>LT+LS</kbd> (Dar pieczęci, solo)']]){if(!box||box.querySelector('.nb-ctl-note'))continue;const im=box.querySelector('.nb-ctl-img'),p=document.createElement('p');p.className='nb-ctl-note';p.innerHTML=txt;if(im)im.after(p);else box.prepend(p)}
   const st=document.createElement('style');st.textContent=`.nb-ctl-img{display:block;width:auto;max-width:min(100%,1400px);max-height:calc(100vh - 230px);height:auto;object-fit:contain;margin:0 auto;border-radius:4px;box-shadow:0 10px 30px #0008}
+.nb-ctl-note{text-align:center;margin:.6em auto 0;font-size:1.05em;color:var(--bone,#e8dcc8);opacity:.92}
+.nb-ctl-note kbd{font:inherit;padding:.05em .4em;border:1px solid #8a6a3a;border-radius:3px;background:#1b1416}
 .nb-ctl-old{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important}`;document.head.appendChild(st)}}
 // 13.11.2026 (wcześniej 9.11 karty z kafelkami): Opcje > Audio jako dwa klasyczne, duże suwaki na całą szerokość:
 // nazwa po lewej, suwak w środku, wartość po prawej. Suwak to ten sam .rng (pad: A chwyta, lewo/prawo zmienia).
@@ -10978,7 +10984,7 @@ html.padprio body.padnav ${S}>.nb-mode.pf{box-shadow:none!important;outline:1px 
 /* ===== EDYTOR UKŁADU MENU (?edytor=1) + wbudowany układ NB_LAYOUT_DEF ===== */
 (function(){try{
  const NB_LAYOUT_DEF={}; /* tu trafia układ zapisany przez autora: {"selektor":[x,y,skala,"ekran"]} (x,y w % szerokości okna) */
- const LSK='nbLayoutEd', LOKALNIE=location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname), EDIT=LOKALNIE&&/[?&]edytor=1/.test(location.search); /* edytor tylko u autora (serwer lokalny), na itch.io zablokowany */
+ const LSK='nbLayoutEd', LOKALNIE=NB_LOKALNIE/* jedna stala z czesci 01 */, EDIT=LOKALNIE&&/[?&]edytor=1/.test(location.search); /* edytor tylko u autora (serwer lokalny), na itch.io zablokowany */
  let L=Object.assign({},NB_LAYOUT_DEF);
  if(EDIT){try{const s=localStorage.getItem(LSK);if(s)L=JSON.parse(s)||L}catch(e){}}
  const st=document.createElement('style');st.id='nb-layout-css';document.head.append(st);

@@ -1,4 +1,4 @@
-// 16.11.2026: selektory kart pada zadeklarowane tu, bo klik w trakcie ladowania (iPhone/Safari) uzywal ich przed inicjalizacja (ReferenceError PADTABS)
+// 16.11.2026: selektory kart pada zadeklarowane tu, bo klik w trakcie ladowania (Safari) uzywal ich przed inicjalizacja (ReferenceError PADTABS)
 const PADTABS='.nbp-nav>.nbp-tab,.pc-prep-tabs>.pc-prep-tab,#kapTabs>.tab,.tabs>.tab';
 const PADSUBS='.subtabs>.stab,#pauseKeys .stab';
 // ---- postać: poziom, perki i wyzwania nocy (postęp zapisany pod kluczem 's'; dawne dane Hordy 'a' są ignorowane) ----

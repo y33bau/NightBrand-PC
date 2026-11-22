@@ -518,8 +518,7 @@ function buildSolneNabrzeze(I){
 // wiec z widoku gracza model wyglada jak dotychczasowy obrazek, ale ma prawdziwa bryle, cien i zaslanianie. Modele sie nie obracaja (rzut by sie rozjechal).
 // Bryla zajmuje miejsce i szerokosc obrazka; obrazek jest usuwany. Kolizje bez zmian. Brak modelu (np. jeszcze sie wczytuje) = zostaje obrazek.
 // Porownanie przed: ?rek3d=0 (tylko lokalnie).
-const REK3D_ON=!(LOKALNIE_REK3D()&&nbParam('rek3d')==='0');
-function LOKALNIE_REK3D(){try{return /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)||location.protocol==='file:'}catch(e){return false}}
+const REK3D_ON=!(NB_LOKALNIE&&nbParam('rek3d')==='0');
 const P3D_GLB={beczka:'assets/rekwizyty/9c2b288a2f3e2836e6dfe2464e2e129fd8930da48f3515b3fffce329f628bf27.glb',glaz:'assets/rekwizyty/3cb68cacf5ffaedd72fce29dbbca8db4e7ac096239e46b549c9668db387046bf.glb',
  pien:'assets/rekwizyty/8e5f9297f89c8dd2cb0b59b6d3caa9e209a8ce36c582fbef0c0471545102c94f.glb',ul:'assets/rekwizyty/c40c8201a0698d7495a80fd087edb12d31d057927dde4a668294fa2b9d78fc99.glb',
  kurhan:'assets/rekwizyty/254e774d7a66d8de38394ba9683eed3ca9380c7266d0cceba3bad13450f5f414.glb',drewno:'assets/rekwizyty/64d715a6a73520da33b3ffeb683e620406f444122867ea745a0a34188d552ba1.glb',
@@ -569,7 +568,7 @@ function p3dGeo(model,key){const id=model+'|'+key;let e=P3D_UV.get(id);if(e)retu
 // 20.11.2026: modele z Meshy (Image to 3D z malunkow rekwizytow), odchudzone: geometria ~6 tys. trojkatow + kolor i mapa normalnych 1024 (narzedzia: docs/modele/meshy_odchudz.py).
 // Maja wlasna teksture, wiec bez rzutu z kamery. Gdy rekwizyt ma model z Meshy, ma on pierwszenstwo przed modelem z rzutem.
 const P3D_MESHY={
- pot3d:{g:'assets/rekwizyty/fe14fda9fd4ab25a29252b1fe7279c715eeb3c216e6b3820ffcffb40f37b8170.glb',k:'assets/rekwizyty/ef2f9c37861f6a672cf0eacc48c5bd66dc44751618f2974e845d64d4d660766b.webp'},// Sycący Kociołek (z malunku, płomienie wycięte: ogień daje animacja)
+ pot3d:{g:'assets/rekwizyty/fe14fda9fd4ab25a29252b1fe7279c715eeb3c216e6b3820ffcffb40f37b8170.glb',k:'assets/rekwizyty/ef2f9c37861f6a672cf0eacc48c5bd66dc44751618f2974e845d64d4d660766b.webp'},// Sycący Kociołek (z malunku, płomienie wycięte; od 22.11 bez ognia pod garnkiem)
  p4_dead_oak:{g:'assets/rekwizyty/93ced40c847376dd68095b8a3c68de7815e7e09332175ebf53ff765d3158fb73.glb',k:'assets/rekwizyty/a2764645880ea286d94b5aa4989be2a9a08ea71d66f1b1c7dea077452a8606a4.webp'},
  p4_spruce:{g:'assets/rekwizyty/ea855bba4595c93e60e15460601901467fae2350282a855593da6fa1e084966d.glb',k:'assets/rekwizyty/1116e7b980554d3fc1462c02a582def25e5ca23491c5216884bf7763af3c3897.webp'},
  p4_birch:{g:'assets/rekwizyty/41f0eb46bbeace2f48771537201f564b5fb8299a5b236f401204d3c91b1a9b24.glb',k:'assets/rekwizyty/b3a2743a60c882b296d476cfa1aba9c43f1dd3b9c4da808088641e60e94485e4.webp'},

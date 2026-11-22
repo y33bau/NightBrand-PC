@@ -237,10 +237,11 @@ function trnOpts(){const old=$('trnOpt');if(old)old.remove();
   $('repeatTut').insertAdjacentHTML('afterend',`<div id="trnOpt"><div class="opsep sm" aria-hidden="true"></div><h3 class="sth">${EN?'Tester mode':'Tryb testera'}</h3>`+
   (TRN.on?`<p class="figcap">${EN?'The trainer is unlocked: you will find it in the pause menu.':'Trener odblokowany: znajdziesz go w menu pauzy.'}</p><div class="btnrow"><button class="go alt" id="trnAsh2" type="button">${EN?'+500 Ashes':'+500 Popiołów'}</button><button class="go alt" id="trnOff" type="button">${EN?'Turn tester mode off':'Wyłącz tryb testera'}</button></div>`
   :`<div class="btnrow"><input type="password" id="trnCode" autocomplete="off" aria-label="${EN?'Tester code':'Kod testera'}" placeholder="${EN?'Tester code':'Kod testera'}" style="font:inherit;font-size:1.1em;padding:.3em .5em;min-width:0;flex:1;max-width:12em;background:#1b1416;color:var(--bone);border:1px solid #6b4b45;border-radius:.3em"><button class="go alt" id="trnBtn" type="button">${EN?'Unlock':'Odblokuj'}</button></div><p class="figcap" id="trnCap">${EN?'A trainer console for testing mechanics. Requires a code.':'Konsola trenera do testowania mechanik. Wymaga kodu.'}</p>`)+`</div>`);
-  if(TRN.on){$('trnAsh2').addEventListener('click',()=>{trnAsh();$('trnAsh2').textContent=(EN?'+500 Ashes · now ':'+500 Popiołów · masz ')+EMB.e});$('trnOff').addEventListener('click',()=>{TRN.on=TRN.god=TRN.ohk=false;trnSave();trnBuild();trnOpts()});return}
+  if(TRN.on){$('trnAsh2').addEventListener('click',()=>{trnAsh();$('trnAsh2').textContent=(EN?'+500 Ashes · now ':'+500 Popiołów · masz ')+EMB.e});$('trnOff').addEventListener('click',()=>{TRN.on=TRN.god=TRN.ohk=false;TRN.k='';trnSave();trnBuild();trnOpts()});return}
   const go=async()=>{const v=$('trnCode').value.trim().toLowerCase();if(!v)return;let h='';try{h=await trnHash(v)}catch(e){}
-    if(h===TRN_H){TRN.on=true;trnSave();trnBuild();trnOpts();play('bless',0)}else{$('trnCap').textContent=EN?'Wrong code.':'Zły kod.';play('empty',0)}};
+    if(h===TRN_H){TRN.on=true;TRN.k=v;trnSave();trnBuild();trnOpts();play('bless',0)}else{$('trnCap').textContent=EN?'Wrong code.':'Zły kod.';play('empty',0)}};
   $('trnBtn').addEventListener('click',go);$('trnCode').addEventListener('keydown',e=>{e.stopPropagation();if(e.key==='Enter')go()})}
 trnOpts();trnBuild();
+if(TRN_SAVED)trnHash(TRN_SAVED.k).then(h=>{if(h!==TRN_H)return;Object.assign(TRN,{on:true,k:TRN_SAVED.k,god:TRN_SAVED.god===true,ohk:TRN_SAVED.ohk===true});trnBuild();trnOpts()}).catch(e=>quietErr('trnVerify',e));
 
 let last=performance.now();

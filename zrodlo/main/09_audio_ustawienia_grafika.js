@@ -143,5 +143,6 @@ for(const [event,names] of Object.entries(SFX_SAMPLE_MAP)){
  source.onended=()=>{sfxVoices.delete(source);source.disconnect();gain.disconnect()};source.start();
  }}
 // trener (tryb testera): stan zapisywany w pn_trainer
-const TRN={on:false,god:false,ohk:false};try{const v=JSON.parse(localStorage.getItem('pn_trainer')||'{}');if(v&&v.on===true){TRN.on=true;TRN.god=v.god===true;TRN.ohk=v.ohk===true}}catch(e){quietErr('loadTrainer',e)}
+// 22.11.2026: trener wlacza sie dopiero po sprawdzeniu zapisanego kodu (czesc 23), nie po samym on:true w pamieci przegladarki
+const TRN={on:false,god:false,ohk:false,k:''};let TRN_SAVED=null;try{const v=JSON.parse(localStorage.getItem('pn_trainer')||'{}');if(v&&v.on===true&&typeof v.k==='string'&&v.k)TRN_SAVED=v}catch(e){quietErr('loadTrainer',e)}
 

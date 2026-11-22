@@ -233,7 +233,7 @@ function say(t,kind='event'){if(!t)return;if(kind==='hint'&&isPort())return;if(S
 // The banner waits (and hides) while the game is paused, in a dialog, on level-up cards, in the shop or the intro.
 const MSG={show:3,gap:.45,threshold:60,perChar:.025,max:7};
 function messageDuration(text){return Math.min(MSG.max,MSG.show+Math.max(0,[...String(text)].length-MSG.threshold)*MSG.perChar)}
-// Pion (telefon): komunikaty fabularne i bossów ('story'/'boss') jadą jako pasek jednej linijki i nie zatrzymują gry; samouczek jest wyłączony.
+// Pion (wąskie, pionowe okno): komunikaty fabularne i bossów ('story'/'boss') jadą jako pasek jednej linijki i nie zatrzymują gry; samouczek jest wyłączony.
 function isPort(){const s=$('screen');return !!(s&&s.classList.contains('port'))}
 const MSG_TICK={min:6,max:16,base:2.5,perChar:.11};
 function tickDuration(text){return Math.min(MSG_TICK.max,Math.max(MSG_TICK.min,MSG_TICK.base+[...String(text)].length*MSG_TICK.perChar))}
@@ -249,7 +249,7 @@ function nearPowerFire(){if(!S||pl.dead||S.rebirthUsed||S.rebirth)return null;le
 function activatePowerFire(f){if(!f||!S||S.rebirth||S.rebirthUsed)return false;S.rebirth={ch:CH,x:pl.x,y:pl.y,index:f.index};play('bless',0);say((EN?'The Nourishing Cauldron remembers your Brand. Tonight you will return once. Revival costs half of the character experience earned this night. Your coins will stay where you died.':'Sycący Kociołek zapamiętuje twoje Piętno. Tej nocy powrócisz raz. Odrodzenie kosztuje połowę doświadczenia postaci otrzymanego za noc. Monety zostaną w miejscu śmierci.'));return true}
 let _fgt=null;function fireGlowTex(){if(_fgt)return _fgt;const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),gr=x.createRadialGradient(64,64,0,64,64,64);gr.addColorStop(0,'rgba(255,255,255,.6)');gr.addColorStop(.45,'rgba(255,255,255,.28)');gr.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=gr;x.fillRect(0,0,128,128);return _fgt=new THREE.CanvasTexture(c)}
 const POT_PNG='./assets/rekwizyty/00a19433f6e4d7a9436e350b567cabcf808435eba909266bde9f749922afbb93.png';let _potImg=null,_potFr=null;function potLoad(cb){if(_potFr){cb(_potFr);return}if(!_potImg){const im=_potImg=new Image();im.nbKey='pot';im.nbDensity=5;im.cbs=[];im.onload=()=>{try{_potFr=procFrame(im,0,0,im.width/5,im.height/5,'prop');cutCircle(_potFr.n)}catch(e){_potFr=null}for(const f of im.cbs)f(_potFr);im.cbs=[]};im.src=POT_PNG}_potImg.cbs.push(cb)}
-// 21.11.2026: Sycący Kociołek jako model 3D z malunku; pod nim zostaje animowany ogień (mniejszy, przed garnkiem)
+// 21.11.2026: Sycący Kociołek jako model 3D z malunku; 22.11: bez ognia pod garnkiem (decyzja autora), stary znacznik ognia zmniejszony do zera
 function potModel3d(w,o){if(typeof REK3D_ON==='undefined'||!REK3D_ON||!P3D_MGEO.pot3d)return false;const g=P3D_MGEO.pot3d;g.computeBoundingBox();const bb=g.boundingBox,sc=1.55/(bb.max.x-bb.min.x),m=new THREE.Mesh(g,meshyMat('pot3d'));
   m.scale.setScalar(sc);m.position.set(o.mesh.position.x,0,o.mesh.position.z);m.castShadow=true;m.receiveShadow=true;w.group.add(m);// bez propAsset: settleWorldProps obsługuje tylko płaskie malunki
   o.mesh.scale.set(1e-4,1e-4,1e-4);w.pot3d=true;return true}// autor 22.11: bez ogniska pod garnkiem

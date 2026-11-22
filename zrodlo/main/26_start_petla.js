@@ -163,7 +163,7 @@ ${scope} .nb-prep-class{display:flex!important;flex-direction:column;align-items
 document.head.appendChild(sheet);
 // 9.11.2026 (Claude, author's rule): text in banners and panels scales with the box it lives in.
 // Boxes grow with the window, so type grows with min(vw,vh) from the 1280x720 design size, never below it, capped per role.
-// Only landscape windows taller than 550 px; small/phone layouts keep their own tuned sizes. Selection/hover/focus rules untouched.
+// Only landscape windows taller than 550 px; small or narrow windows keep their own tuned sizes. Selection/hover/focus rules untouched.
 {const F=(px,cap=1.5)=>`clamp(${px}px,min(${+(px/12.8).toFixed(3)}vw,${+(px/7.2).toFixed(3)}vh),${Math.round(px*cap)}px)`;
  const Z='#orient'.repeat(14)+' ',K=Z+'#kap',fin=document.createElement('style');fin.id='nbFinalScale';
  fin.textContent=`@media (orientation:landscape) and (min-height:551px){
@@ -1021,7 +1021,11 @@ loadGroup('core').then(()=>{
 {const KB=EN?'assets/ui/dadca33542655c56e7c88a0c1be7394a6716a3250526dfb29db1df91c0144548.webp':'assets/ui/8d6f9789af7270abae2ecd0ed9a42e48b9466c82ccee7da597c97b51760300d0.webp',PD=EN?'assets/ui/1c380bccce9943755d604581e451da377ebaf3621aa56e9c67426c8fb8908b63.webp':'assets/ui/bfb4247af105e9a06e15632ae2b8c23925efd2f81ac29cc8ed6d8e160ed1dc69.webp';
  {const put=(box,src,alt,hide)=>{if(!box||box.querySelector('.nb-ctl-img'))return;const im=document.createElement('img');im.className='nb-ctl-img';im.src=src;im.alt=alt;im.loading='lazy';im.decoding='async';im.width=1672;im.height=941;box.prepend(im);for(const h of box.querySelectorAll(hide))h.classList.add('nb-ctl-old')};
   put($('sub-kb'),KB,EN?'Controls: keyboard and mouse':'Sterowanie: klawiatura i mysz','#figKb,#figMouse,.keys');put($('sub-pad'),PD,EN?'Controls: controller':'Sterowanie: kontroler','.fig.pad,.figcap,.keys');
+  // 22.11.2026: obrazki schematow pokazuja 4 sloty; do czasu nowych grafik dopisek o slotach 5 i 6 pod obrazkiem (EN niezatwierdzone)
+  for(const [box,txt] of [[$('sub-kb'),EN?'Skill 5: <kbd>G</kbd> · Skill 6: <kbd>6</kbd> (Gift of the Seal, solo)':'Umiejętność 5: <kbd>G</kbd> · Umiejętność 6: <kbd>6</kbd> (Dar pieczęci, solo)'],[$('sub-pad'),EN?'Skill 5: <kbd>LT+RB</kbd> · Skill 6: <kbd>LT+LS</kbd> (Gift of the Seal, solo)':'Umiejętność 5: <kbd>LT+RB</kbd> · Umiejętność 6: <kbd>LT+LS</kbd> (Dar pieczęci, solo)']]){if(!box||box.querySelector('.nb-ctl-note'))continue;const im=box.querySelector('.nb-ctl-img'),p=document.createElement('p');p.className='nb-ctl-note';p.innerHTML=txt;if(im)im.after(p);else box.prepend(p)}
   const st=document.createElement('style');st.textContent=`.nb-ctl-img{display:block;width:auto;max-width:min(100%,1400px);max-height:calc(100vh - 230px);height:auto;object-fit:contain;margin:0 auto;border-radius:4px;box-shadow:0 10px 30px #0008}
+.nb-ctl-note{text-align:center;margin:.6em auto 0;font-size:1.05em;color:var(--bone,#e8dcc8);opacity:.92}
+.nb-ctl-note kbd{font:inherit;padding:.05em .4em;border:1px solid #8a6a3a;border-radius:3px;background:#1b1416}
 .nb-ctl-old{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important}`;document.head.appendChild(st)}}
 // 13.11.2026 (wcześniej 9.11 karty z kafelkami): Opcje > Audio jako dwa klasyczne, duże suwaki na całą szerokość:
 // nazwa po lewej, suwak w środku, wartość po prawej. Suwak to ten sam .rng (pad: A chwyta, lewo/prawo zmienia).
