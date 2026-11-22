@@ -931,3 +931,4 @@ cache855 · Brat Wit: teksty wyboru (zostaw: sakiewka z kieszeni; dobij: nieslus
 cache856 · Zestawy 4/7, techniki aktywne ze stanami wrogow, karty ostrza wspierajacego, Izolda (skutek klamstwa), Upior: okrzyki i kwestie. EN niezatwierdzone. Nie sprawdzono: pad, dzwiek, FPS u autora, itch.io
 cache857 · Trudny: bez premii doswiadczenia (bylo +15%), opis trudnosci poprawiony. Na bazie 856. Nie sprawdzono: gra zywym graczem na Trudnym, pad, dzwiek, itch.io
 cache858 · Tancerka: wlasne ciecia i wir mocnego ataku takze z zakleciem ostrza i kosmetycznym sladem, w kolorze zywiolu. Na bazie 857. Nie sprawdzono: pad, dzwiek, FPS u autora, itch.io
+cache859 · Parowanie: efekt Kata u wszystkich postaci. Na bazie 858. Nie sprawdzono: pad, dzwiek, FPS u autora, itch.io
