@@ -794,6 +794,7 @@ aud.append(mk('div','nbp-ah',`<small>${T('USTAWIENIA DŹWIĘKU','SOUND SETTINGS'
  card(mus,T('Muzyka','Music'),T('Muzyka świata i walk z bossami.','Music of the world and boss fights.')),
  card(sfx,T('Efekty','Effects'),T('Ciosy, umiejętności i dźwięki otoczenia.','Blows, skills and ambient sounds.')));
 const more=mk('article','nbp-audio nbp-more',`<div class="nbp-al"><span>${T('Napisy','Text')}</span></div>`);more.append(lab(fts),lab(dmg));aud.append(more);
+{/* 22.11.2026: glosnosc ogolna i wyciszanie w tle takze w pauzie (wiersze ustawia czesc 27) */const mst=pbox.querySelector('.mstSl'),bgm=pbox.querySelector('.bgmTgl');if(mst&&bgm){const ex=mk('article','nbp-audio nbp-more',`<div class="nbp-al"><span>${T('Ogólne','General')}</span></div>`);ex.append(lab(mst),lab(bgm));aud.append(ex)}}
 panes.audio.append(aud);pbox.remove();
 const jr=mk('div','nbp-journal');panes.journal.append(jr);
 // 9.11.2026: pełna mapa rozdziału w pauzie (odkryte tereny, kapliczki, ogniska, kupiec, boss, zapiska, gracz)

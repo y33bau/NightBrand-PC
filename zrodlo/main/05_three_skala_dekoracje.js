@@ -134,7 +134,10 @@ function dressSettlementsHD(w){
      free=(x,y)=>{const ix=Math.floor(x),iy=Math.floor(y),i=iy*MW+ix,t=tileAt(ix,iy);if(SOLID.has(t)||VOID.has(t)||t===40||t===43||w.clearways?.has(i)||w.groundPlan.road[i])return false;
        if(w.npcs.some(a=>Math.hypot(a.x/TS-x,a.y/TS-y)<3)||w.shrines.some(s=>Math.hypot(s.x/TS-x,s.y/TS-y)<3)||Math.hypot(w.start.x/TS-x,w.start.y/TS-y)<4)return false;
        return !w.PROPS.some(a=>Math.hypot(a.x-x,a.y-y)<1.2)&&!used.some(a=>Math.hypot(a.x-x,a.y-y)<.9)};
-   for(const [fx,fy] of (w.extraFerns||[])){byK.ferns.push({x:fx+.5,y:fy+.5,f:(fx+fy)%2===0,s:.22});used.push({x:fx+.5,y:fy+.5})} // runda 316: obwodka cmentarza z edytora
+   // runda 316: obwodka cmentarza z edytora; 22.11.2026 (autor): bez rownego rzedu: przesuniecie, rozna wielkosc, czesc pol pominieta, czesc z druga paprocia (stale, z hasha pola)
+   for(const [fx,fy] of (w.extraFerns||[])){const h=k=>{let n=Math.imul(fx*7+k+31,374761393)^Math.imul(fy*13+k*3+73,668265263);n=Math.imul(n^(n>>>13),1274126177);return(((n^(n>>>16))>>>0)%1000)/1000};if(h(1)<.18)continue;
+    const put=(x,y,s,f)=>{byK.ferns.push({x,y,f,s});used.push({x,y})};put(fx+.5+(h(2)-.5)*.9,fy+.5+(h(3)-.5)*.7,.16+h(4)*.1,h(5)<.5);
+    if(h(6)<.3)put(fx+.5+(h(7)-.5)*1.6,fy+.5+(h(8)-.5)*1.4,.12+h(9)*.06,h(10)<.5)}
    let clumps=0;for(let a=0;a<6000&&clumps<(MAP1_PLANTS?0:170);a++){const cx=3+rr()*(MW-6),cy=3+rr()*(MH-6);if(!free(cx,cy))continue;const wet=near(Math.floor(cx),Math.floor(cy),45,2);clumps++;
      const n=3+((rr()*3)|0);for(let j=0;j<n;j++){const x=cx+(j?(rr()-.5)*2.4:0),y=cy+(j?(rr()-.5)*1.6:0);if(!free(x,y))continue;
        const q=rr(),k=wet?(q<.7?'reeds':'ferns'):q<.55?'ferns':q<.88?'brambles':'mushrooms';
