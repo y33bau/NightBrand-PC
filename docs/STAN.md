@@ -1,4 +1,4 @@
-Stan na 2026-11-22, cache 850 (gałąź), rola agent główny
+Stan na 2026-11-22, cache 851 (gałąź), rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -7,7 +7,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 | Co | Wartość |
 |---|---|
 | main | cache 844, opublikowane 21.11.2026 (log `docs/logi/LOG_SESJI_2026-11-21.md`) |
-| Gałęzie czekające na „publikuj” | `runda-paprocie-mapy-dzwiek` (850): zawiera 845–849 (kociołek 3D, światła ×0.7, porządki z przeglądu, szybkie poprawki grafiki i UI) + paprocie, stały układ Czarnoboru i Cytadeli, opcje dźwięku. Publikować tę jedną gałąź. |
+| Gałęzie czekające na „publikuj” | `runda-cytadela-dolne` (851): zawiera 845–850 + oprawę Cytadeli i Dolnego Miasta; wcześniej `runda-paprocie-mapy-dzwiek` (850): zawiera 845–849 (kociołek 3D, światła ×0.7, porządki z przeglądu, szybkie poprawki grafiki i UI) + paprocie, stały układ Czarnoboru i Cytadeli, opcje dźwięku. Publikować tę jedną gałąź. |
 | Kopia zapasowa | y33bau/nightbrand-backup = kopia 844 |
 | Zip itch.io | `NightBrand_itch_844.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 199 MB (limit 500 MB); zip itch.io ok. 817 plików / 1000 (każdy model = 2–3 pliki) |
@@ -44,6 +44,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 
 ## Zgłoszone autorowi, czekają na decyzję
 - Raport o grafice i UI 22.11 (Claude Docs „NightBrand: raport o stanie grafiki i UI”): w 849 zrobione szybkie poprawki; czekają rundy 2–5 (modele z malunków + port, drzewa HQ, Cytadela i Dolne Miasto, porządki UI).
+- 851: Cytadela (szachownica kancelarii drobniejsza i matowa, chodniki w kancelarii i skarbcu, sztandary przy ścianach, kandelabry przy wadze), Dolne Miasto (płyty −30%, 4 środkowe filary sali → koksowniki). Do zrobienia: druga posadzka w halach II i proste brzegi lawy (wymagają nowych tekstur lub zmiany kształtu lawy), detal ścian Cytadeli (nowa tekstura).
 - 850 (decyzje autora 22.11): Opcje → Dźwięk i pauza: głośność ogólna (`pn_master`) i „Wycisz w tle” (`pn_bgmute`, domyślnie wył.); paprocie przy cmentarzu rozrzucone; Czarnobór ze stałym ziarnem 1349 (wcześniej losowany przy każdym uruchomieniu), Cytadela i tak miała stały układ.
 - Przegląd 810 (`docs/przeglady/PRZEGLAD_810_2026-11-17.md`): otwarte zostały tylko „trzy warstwy menu” (WAŻNE 1, osobna runda porządkowa) i nazwa gałęzi stylu „Zabójca” obok klasy Miry (DROBNE 13). Reszta naprawiona do 848 (przegląd `docs/przeglady/PRZEGLAD_848_2026-11-22.md`).
 - Światła ×0.7 (847) działają na lampy i ogniska, nie na księżyc i światło ogólne sceny: czy przyciemnić też je.

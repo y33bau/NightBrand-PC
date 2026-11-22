@@ -804,6 +804,7 @@ function genDolne(){
   fill(6,41,26,7,20);fill(10,40,5,1,20);fill(23,40,5,1,20);
   for(const x of [9,15,21,27]){set(x,2,20);prop('king_statue',x+.5,2.92,[[x,2]],{flip:x>18});set(x,48,20);prop('king_statue',x+.5,48.92,[[x,48]],{flip:x>18})}// 15.11.2026: posagi po obu stronach osi patrza ku srodkowi
   for(const y of [11,15,19,28,32,36])for(const x of [10,26])set(x,y,22);
+  for(const y of [15,32])for(const x of [10,26])set(x,y,27); // 22.11.2026: srodek wielkiej sali byl ciemny (16 pol od koksownikow): 4 srodkowe filary -> koksowniki, ta sama kolizja (1 pole)
   for(let x=3;x<35;x++){set(x,23,29);set(x,24,29)}
   fill(35,1,5,GH-2,23);fill(35,22,5,4,25);
   fill(40,6,22,36,20);fill(41,13,20,2,24);fill(41,33,20,2,24);fill(48,13,5,2,20);fill(48,33,5,2,20);
@@ -1149,6 +1150,7 @@ function genCytadela(seed){
   CY.bands.forEach(([y0,y1],i)=>fill(X0,y0,WID,y1-y0+1,CY.floors[i]));
   CY.walls.forEach(([y0,y1,gaps],i)=>{fill(X0,y0,WID,y1-y0+1,78);for(const [a,b] of gaps)fill(a,y0,b-a+1,y1-y0+1,CY.floors[i+1])});
   fill(35,35,10,10,73);
+  fill(39,48,2,8,73);fill(39,25,2,8,73); // 22.11.2026: chodniki przez kancelarie i skarbiec (sama posadzka, bez kolizji)
   for(let y=3;y<=10;y++)for(let x=30;x<=50;x++)if(Math.hypot((x-40)*.8,(y-6.5)*1.1)<=3.6)set(x,y,76);
   // The prison dressing stays at the sides; no shelves, vault blocks or cells across combat lanes.
   for(const x of [9,70])fill(x,14,1,5,80);
@@ -1174,6 +1176,9 @@ function genCytadela(seed){
   P('armour',5,62,true);P('armour',74,62,true);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
   for(const [x,y] of [[27,19],[32,19],[47,19],[52,19]])P('sarcophagus',x,y,true);
   for(const [x,y] of [[29,18],[50,18],[35,15],[45,15]])P('candelabra',x,y,true); // 12.11.2026: swiatlo w krypcie
+  // 22.11.2026 (przeglad grafiki): sztandary zakonu przy polnocnych scianach sal (bez kolizji) i kandelabry przy wadze; srodek sal i pasy x16..23, x56..63 wolne
+  for(const y of [47,35,24,13])for(const x of [12,67])P('order_banner',x,y);
+  P('candelabra',36,24,true);P('candelabra',44,24,true);
   const SH=[[69,60],[10,42],[40,19]];SH.forEach(([x,y],i)=>P('healing_shrine',x,y,true,{shrine:i}));
   return{map,under,PROPS,seed,start:{x:40*TS+8,y:63*TS+8},shrines:SH.map(([x,y])=>({x:x*TS+8,y:y*TS+12})),region:cyRegion,idle:[40,58,14,6],
     npcs:(()=>{const OK=[70,71,72,73,74,75],nn=(id,name,lines,x,y)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);return{id,art:id,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines}};
@@ -1454,7 +1459,7 @@ const MAP1_SHALLOW=[[27,4],[27,5],[27,6],[27,7],[27,8],[27,9],[27,10],[27,11],[2
 const MAP1_HOUSE=[[56,58],[57,58],[58,58],[59,58],[60,58],[61,58],[62,58],[56,59],[62,59],[56,60],[62,60],[56,61],[62,61],[56,62],[62,62],[56,63],[57,63],[61,63],[62,63]];
 const MAP1_CROSS=[[70,31],[70,32],[70,33],[71,31],[71,32],[71,33],[72,31],[72,32],[72,33],[73,31],[73,32],[74,31],[74,32],[74,33],[75,31],[75,32],[75,33],[76,31],[76,32],[76,33]],MAP1_TOMB=[[73,33]],MAP1_FERNS=[[69,30],[69,31],[69,32],[69,33],[70,30],[71,30],[72,30],[73,30],[74,30],[75,30],[76,30],[77,30],[77,31],[77,32],[77,33]];
 // 15.11.2026 (runda mapy-wygladzenie): org = bitmaska tekstur bez regularnego wzoru (anty-powtarzanie obrotem), crisp = posadzki o ostrej krawedzi (deski, sale zakonu), warp = zasieg falowania granic w kaflach
-const CC0_FLOORS={1:{names:['dirt2','cracks','charcoal','ground1','ash','moss1','lava','deski'],tint:[1,.97,.92],org:119,crisp:128,warp:.9},2:{names:['ground1','blackrock','charcoal'],tint:[.84,.88,.96],org:6,crisp:0,warp:.45},3:{names:['zl_place','zl_street','zl_moss'],tint:[1,.96,.88],org:0,crisp:0,warp:.45},4:{names:['mud','dirt3','leaves','darkrock','forestmoss'],tint:[.9,.96,.88],org:31,crisp:0,warp:1.1},5:{names:['c5_dziedziniec','c5_marmur','c5_archiwum','c5_skarbiec','c5_loch','c5_pieczec','c5_atrament','c5_dywan'],scale:[2,4,4,2.5,2,4,8,8],gain:[1,1.38,1,1.12,1,1.1,1,1],tint:[.86,.84,.83],org:2,crisp:255,warp:0},9:{names:['ground2','ground1'],tint:[.73,.75,.81],org:1,crisp:0,warp:.6}};
+const CC0_FLOORS={1:{names:['dirt2','cracks','charcoal','ground1','ash','moss1','lava','deski'],tint:[1,.97,.92],org:119,crisp:128,warp:.9},2:{names:['ground1','blackrock','charcoal'],tint:[.84,.88,.96],org:6,crisp:0,warp:.45},3:{names:['zl_place','zl_street','zl_moss'],tint:[1,.96,.88],org:0,crisp:0,warp:.45},4:{names:['mud','dirt3','leaves','darkrock','forestmoss'],tint:[.9,.96,.88],org:31,crisp:0,warp:1.1},5:{names:['c5_dziedziniec','c5_marmur','c5_archiwum','c5_skarbiec','c5_loch','c5_pieczec','c5_atrament','c5_dywan'],scale:[2,4,2.4,2.5,2,4,8,8],gain:[1,1.38,.86,1.12,1,1.1,1,1]/* 22.11.2026: szachownica kancelarii (c5_archiwum) drobniejsza i bardziej matowa */,tint:[.86,.84,.83],org:2,crisp:255,warp:0},9:{names:['ground2','ground1'],tint:[.73,.75,.81],org:1,crisp:0,warp:.6}};
 function cc0FloorCells(info,ch){const cells=info.cells.slice(),plan=W.groundPlan;if(!plan)return cells;
  const burns=W.PROPS.filter(p=>p.fire||/debris_fire|burnt_hay|furnace|brazier/.test(p.k||''));
  // extra CC0 floors (folder 'skille claude'): ash around the burned houses, moss patches, mossy cobbles in the slums, moss in the forest
@@ -1496,7 +1501,7 @@ function groundMaterial(m){const info=m.map&&m.map.userData&&m.map.userData.grou
   const cc0Cells=cc0?cc0FloorCells(info,groundChapter):info.cells;if(cc0)cc0FloorOverlay(m.map,info,cc0Cells);
   const cc0Uniforms=cc0?cc0.names.slice(0,cc0Count).map((_,i)=>'uniform sampler2D nbCC'+i+';').join('\n'):'';
   // glebia: w Dolnym Miescie wzor posadzki 2x gestszy, zeby plyty pasowaly do skali postaci (?depth=0 = stara skala)
-  const ccS=groundChapter===2&&DEPTH_ON?'3.5':groundChapter===3?'5.':groundChapter===5?'8.':'12.'; // 15.11.2026: plyty II i bruk III w skali postaci (wczesniej kamien wielkosci bohatera) // 13.11.2026: mniejsze plyty w siedzibie zakonu
+  const ccS=groundChapter===2&&DEPTH_ON?'2.45'/* 22.11.2026: plyty II o 30% mniejsze (byly szerokosci bohatera) */:groundChapter===3?'5.':groundChapter===5?'8.':'12.'; // 15.11.2026: plyty II i bruk III w skali postaci (wczesniej kamien wielkosci bohatera) // 13.11.2026: mniejsze plyty w siedzibie zakonu
   const cc0Sample=cc0?cc0.names.slice(0,cc0Count).map((_,i)=>{const S=cc0.scale?cc0.scale[i].toFixed(2):ccS;return 'if(id<'+(i+.5).toFixed(1)+'){\n#ifdef NB_STABLE_GRAD\nreturn texture2DGradEXT(nbCC'+i+',p/'+S+',dx/'+S+',dy/'+S+').rgb;\n#else\nreturn texture2D(nbCC'+i+',p/'+S+').rgb;\n#endif\n}'}).join('\n'):'';
   m.bumpMap=null;m.bumpScale=0;delete m.userData.surfaceDetail;
   m.groundAtlas=surfaceTex(groundPadded(info.image));m.groundCoarse=surfaceTex(groundCoarse(info.image));

@@ -59,6 +59,7 @@ function genDolne(){
   fill(6,41,26,7,20);fill(10,40,5,1,20);fill(23,40,5,1,20);
   for(const x of [9,15,21,27]){set(x,2,20);prop('king_statue',x+.5,2.92,[[x,2]],{flip:x>18});set(x,48,20);prop('king_statue',x+.5,48.92,[[x,48]],{flip:x>18})}// 15.11.2026: posagi po obu stronach osi patrza ku srodkowi
   for(const y of [11,15,19,28,32,36])for(const x of [10,26])set(x,y,22);
+  for(const y of [15,32])for(const x of [10,26])set(x,y,27); // 22.11.2026: srodek wielkiej sali byl ciemny (16 pol od koksownikow): 4 srodkowe filary -> koksowniki, ta sama kolizja (1 pole)
   for(let x=3;x<35;x++){set(x,23,29);set(x,24,29)}
   fill(35,1,5,GH-2,23);fill(35,22,5,4,25);
   fill(40,6,22,36,20);fill(41,13,20,2,24);fill(41,33,20,2,24);fill(48,13,5,2,20);fill(48,33,5,2,20);
@@ -404,6 +405,7 @@ function genCytadela(seed){
   CY.bands.forEach(([y0,y1],i)=>fill(X0,y0,WID,y1-y0+1,CY.floors[i]));
   CY.walls.forEach(([y0,y1,gaps],i)=>{fill(X0,y0,WID,y1-y0+1,78);for(const [a,b] of gaps)fill(a,y0,b-a+1,y1-y0+1,CY.floors[i+1])});
   fill(35,35,10,10,73);
+  fill(39,48,2,8,73);fill(39,25,2,8,73); // 22.11.2026: chodniki przez kancelarie i skarbiec (sama posadzka, bez kolizji)
   for(let y=3;y<=10;y++)for(let x=30;x<=50;x++)if(Math.hypot((x-40)*.8,(y-6.5)*1.1)<=3.6)set(x,y,76);
   // The prison dressing stays at the sides; no shelves, vault blocks or cells across combat lanes.
   for(const x of [9,70])fill(x,14,1,5,80);
@@ -429,6 +431,9 @@ function genCytadela(seed){
   P('armour',5,62,true);P('armour',74,62,true);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
   for(const [x,y] of [[27,19],[32,19],[47,19],[52,19]])P('sarcophagus',x,y,true);
   for(const [x,y] of [[29,18],[50,18],[35,15],[45,15]])P('candelabra',x,y,true); // 12.11.2026: swiatlo w krypcie
+  // 22.11.2026 (przeglad grafiki): sztandary zakonu przy polnocnych scianach sal (bez kolizji) i kandelabry przy wadze; srodek sal i pasy x16..23, x56..63 wolne
+  for(const y of [47,35,24,13])for(const x of [12,67])P('order_banner',x,y);
+  P('candelabra',36,24,true);P('candelabra',44,24,true);
   const SH=[[69,60],[10,42],[40,19]];SH.forEach(([x,y],i)=>P('healing_shrine',x,y,true,{shrine:i}));
   return{map,under,PROPS,seed,start:{x:40*TS+8,y:63*TS+8},shrines:SH.map(([x,y])=>({x:x*TS+8,y:y*TS+12})),region:cyRegion,idle:[40,58,14,6],
     npcs:(()=>{const OK=[70,71,72,73,74,75],nn=(id,name,lines,x,y)=>{const [X,Y]=freeNear(map,PROPS,OK,x,y);return{id,art:id,name,x:(X+.5)*TS,y:(Y+.4)*TS,lines}};
