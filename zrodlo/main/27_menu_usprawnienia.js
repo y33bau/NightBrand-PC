@@ -1278,7 +1278,7 @@ ${O} :is(#opts,#pause) .nbq-f kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,se
  content.prepend(box);const L=box.querySelector('.nbq-l');
  box.style.setProperty('--nbq-rama',"url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp')");
  const foot=document.createElement('div');foot.className='nbq-f';opts.append(foot);
- for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb '+c;b.textContent=t;c==='l'?tabsEl.prepend(b):tabsEl.append(b)}
+ for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb nb-padonly '+c;b.textContent=t;c==='l'?tabsEl.prepend(b):tabsEl.append(b)}
  let tab='',rows=[],akt=null;
  const curTab=()=>{const t=opts.querySelector('.tabs>.tab.on');return t?t.dataset.tab:'gfx'};
  const chBtns=g=>[...g.querySelectorAll('button')].filter(b=>!b.hidden);
@@ -1399,7 +1399,7 @@ ${O} #pause #skillLoadout.nbz>h2,${O} #pause #skillLoadout.nbz>p:not(.loadout-st
 `;document.head.append(st);
  // LB/RB przy zakladkach i podpowiedz w stopce
  const nav=pause.querySelector('.nbp-nav');
- if(nav){for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb '+c;b.textContent=t;nav.append(b)}
+ if(nav){for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb nb-padonly '+c;b.textContent=t;nav.append(b)}
   const br=nav.querySelector(':scope>.btnrow');if(br){const h=document.createElement('span');h.className='nbz-hint';br.prepend(h)}}
  const hint=()=>{const h=pause.querySelector('.nbz-hint');if(!h)return;const on=!el.closest('.nbp-pane')?.hidden&&!el.hidden;h.textContent=on?T('Techniki miecza i zaklęcia ostrza działają poza slotami.','Sword techniques and blade spells work outside slots.'):''};
  let pod=null;
@@ -1491,7 +1491,7 @@ ${O} #manual .nbq-f,${O} #opts .nbq-f{display:flex!important;justify-content:cen
 ${O} #manual .nbq-f>span{display:flex!important;align-items:center!important;gap:calc(14*var(--u))!important}
 ${O} #manual .nbq-f kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-radius:calc(4*var(--u))!important;padding:calc(6*var(--u)) calc(9*var(--u))!important;background:rgba(0,0,0,.5)!important}
 `;document.head.append(st);
- const odznaki=()=>{/* LB/RB dopiero po manInit: manInit nie buduje zakladek, gdy #manTabs ma juz dzieci */if(!tabs.querySelector('.tab')||tabs.querySelector('.nbq-tb'))return;for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb '+c;b.textContent=t;c==='l'?tabs.prepend(b):tabs.append(b)}};
+ const odznaki=()=>{/* LB/RB dopiero po manInit: manInit nie buduje zakladek, gdy #manTabs ma juz dzieci */if(!tabs.querySelector('.tab')||tabs.querySelector('.nbq-tb'))return;for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb nb-padonly '+c;b.textContent=t;c==='l'?tabs.prepend(b):tabs.append(b)}};
  const P=document.createElement('div');P.className='nbm-p';P.innerHTML='<div class="nbm-pi"></div><div class="nbm-pg"></div><div class="nbm-pt"><span class="nbm-pk"></span><span class="nbm-pn"></span><span class="nbm-pd"></span><div class="nbm-ks"></div><button type="button" class="nbm-go"></button></div>';lay.append(P);
  const foot=document.createElement('div');foot.className='nbq-f';man.append(foot);
  P.querySelector('.nbm-go').addEventListener('click',()=>{const b=$('trainBtn');if(b)b.click()});
@@ -1595,7 +1595,7 @@ ${O} #kap .nbq-f kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important
  const stopka=()=>{const pad=document.body.classList.contains('padnav');foot.innerHTML=pad?`<span><kbd>LB / RB</kbd>${T('Zakładki','Tabs')}</span><span><kbd>A</kbd>${T('Wybierz','Select')}</span><span><kbd>B</kbd>${T('Wróć','Back')}</span>`:`<span><kbd>Q / E</kbd>${T('Zakładki','Tabs')}</span><span><kbd>Enter</kbd>${T('Wybierz','Select')}</span><span><kbd>Esc</kbd>${T('Wróć','Back')}</span>`};
  const heroOf=txt=>{try{for(const c of ['r','k','z','d','m'])if(HEROES[c]&&txt.includes(HEROES[c].n))return c}catch(e){quietErr('menu:heroOf',e)}return null};
  function wspolne(){const tb=$('kapTabs');if(!tb)return null;for(const b of tb.querySelectorAll('.tab')){const n=b.firstChild;if(n&&n.nodeType===3&&/^\d+\.\s/.test(n.data))n.data=n.data.replace(/^\d+\.\s/,'')}
-  if(!tb.querySelector('.nbq-tb'))for(const [c,t] of [['l','LB'],['r','RB']]){const s=document.createElement('span');s.className='nbq-tb '+c;s.textContent=t;tb.append(s)}
+  if(!tb.querySelector('.nbq-tb'))for(const [c,t,k] of [['l','LB','Q'],['r','RB','E']]){const s=document.createElement('span');s.className='nbq-tb '+c;s.innerHTML='<i class="nb-kk">'+k+'</i><i class="nb-kp">'+t+'</i>';tb.append(s)}
   const on=tb.querySelector('.tab.on');const L=$('kapList');if(L)L.dataset.nbh=on?on.textContent.replace(/(NOWE|NEW)$/,'').trim():'';stopka();return tb}
  function kaplica(){const tb=wspolne();if(!tb)return;kap.classList.add('nbk-kap');kap.classList.toggle('nbk3',tb.querySelectorAll('.tab').length===3);
   const L=$('kapList'),D=$('kapDet');D.style.setProperty('--nbk-img',`url('${POSAG}')`);
@@ -1820,6 +1820,24 @@ ${B} :is(#nbP,#nbW) button.nbd:is(:focus-visible,.pf){outline:none!important;box
 ${B} #kap #kapList:not(.nbk-beasts):has(>.m2k-row:is(:focus-visible,.pf))>.m2k-row:hover:not(.on,:focus-visible,.pf){background:rgba(30,24,22,.5)!important;box-shadow:none!important}${B} #kap.nbk-kap #kapList:not(.nbk-beasts):has(>.m2k-row:is(:focus-visible,.pf))>.m2k-row.lk:hover:not(.on,:focus-visible,.pf){background:rgba(20,16,15,.45)!important}/* nawigacja klawiatura/padem: wiersz pod mysza nie swieci drugi raz */
 ${B} :is(#nbP,#nbW) button.nbd:not(:disabled):is(:hover,:focus-visible,.pf){filter:brightness(1.28) saturate(1.15) drop-shadow(0 0 calc(10*var(--u)) rgba(255,130,50,.75))!important;color:#fff0d8!important;text-shadow:0 0 calc(12*var(--u)) rgba(255,150,60,.9)!important}`;
  document.head.append(st)}catch(e){quietErr('baneryBezRamki',e)}})();
+// ===== 22.11.2026: poprawki z przegladu grafiki i UI (runda grafika-szybkie) =====
+// kule HUD pod oknami, znaczki zakladek wg urzadzenia, sygnal przewijania list, chip EN w Przygotowaniu, kontrast trybu w menu
+(()=>{try{const O='#orient'.repeat(300),st=document.createElement('style');st.id='nb-przeglad-2211';
+ st.textContent=`
+body:has(:is(#pause,#shop,#lvl,#opts):not([hidden])) ${O} .pch-orb{visibility:hidden!important}
+body:has(:is(#title,#kap,#manual,#prep,#end):not([hidden])) ${O} #nbHud .pch{visibility:hidden!important}
+body:not(.padnav) ${O} .nbq-tb.nb-padonly{display:none!important}
+body:not(.padnav) ${O} #nbW .nwlr{visibility:hidden!important}
+${O} .nbq-tb i{font-style:normal!important}
+body.padnav ${O} .nbq-tb .nb-kk,body:not(.padnav) ${O} .nbq-tb .nb-kp{display:none!important}
+${O} :is(#nbP .ls,#kapList,#opts .nbq-l,#kbBind).nb-more{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 46px),rgba(0,0,0,.15))!important;mask-image:linear-gradient(to bottom,#000 calc(100% - 46px),rgba(0,0,0,.15))!important}
+${O} #nbP .n3{flex-wrap:wrap!important;row-gap:4px!important}
+${O} .pc-mode-note{color:rgba(222,206,172,.96)!important}
+${O} .pcg-mode:not(.on){opacity:.74!important}`;
+ document.head.append(st);
+ const L='#nbP .ls,#kapList,#opts .nbq-l,#kbBind';
+ setInterval(()=>{for(const e of document.querySelectorAll(L)){if(!e.offsetParent)continue;e.classList.toggle('nb-more',e.scrollHeight>e.clientHeight+12&&e.scrollTop+e.clientHeight<e.scrollHeight-8)}},300);
+}catch(e){quietErr('przeglad2211',e)}})();
 requestAnimationFrame(frame);
 })();
 

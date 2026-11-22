@@ -881,8 +881,8 @@ function genSolneNabrzeze(){
  // the Order's blockade on the salt square
  port('order_banner',28,26,true);port('order_banner',35,26,true);port('order_banner',26,10,true);port('order_banner',38,10,true);
  port('gallows',24,34,true);port('marga_cart',40,34,true);port('covered_corpses',38,35,false);port('covered_corpses',26,33,false,{flip:true});
- port('marga_cart',50,30,true,{flip:true});port('well',27,30,true);port('crow_post',43,36,true);/* 15.11.2026: z wody (44,36) na nabrzeze, w wodzie gra rysowala wokol pola czarna krawedz nabrzeza */port('crow_post',21,12,true);port('stocks',35,33,true);port('burnt_hay',57,28,false);port('dead_horse',46,33,false);
- port('shop_sign',24,30,false);port('wheel',37,30,false);port('wheel',9,30,false,{flip:true});
+ port('marga_cart',50,30,true,{flip:true});port('well',27,30,true);port('crow_post',43,36,true);/* 15.11.2026: z wody (44,36) na nabrzeze, w wodzie gra rysowala wokol pola czarna krawedz nabrzeza */port('crow_post',21,12,true);port('stocks',35,33,true);port('burnt_hay',57,28,false);port('dead_horse',46,33,true);/* 22.11: kolizja jak w rozdz. I */
+ port('shop_sign',24,30,true);port('wheel',37,30,false);port('wheel',9,30,false,{flip:true});
  prop('shrine',16.5,28.92,[[16,28]],{port:true,shrine:0});prop('shrine',50.5,25.92,[[50,25]],{port:true,shrine:1});
  return {map,under,PROPS,clearways,roofs:[],start:{x:32*TS,y:49*TS+8},
  shrines:[{x:16*TS+8,y:29*TS+8},{x:50*TS+8,y:26*TS+8}],region:()=>'port',idle:[32,24,10,9],
@@ -1157,7 +1157,7 @@ function genCytadela(seed){
   for(const [x,y] of [[11,59],[68,59],[11,43],[68,43],[11,19],[68,19],[32,8],[47,8]])set(x,y,27);
   const P=(k,x,y,solid=false,extra)=>prop(k,x+.5,y+.92,solid===true?[[x,y]]:solid||[],extra);
   // Keep both north/south lanes (x16..23 and x56..63) and the middle of every hall open.
-  P('armour',8,59);P('armour',72,59);// 15.11.2026: szubienica, studnia, wozy i stojak z dziedzinca usuniete (decyzja autora: tylko duze obiekty przy scianach)
+  P('armour',8,59,true);P('armour',72,59,true);/* 22.11: zbroje z kolizja (bohater przez nie przechodzil) */// 15.11.2026: szubienica, studnia, wozy i stojak z dziedzinca usuniete (decyzja autora: tylko duze obiekty przy scianach)
   // Runda 286: meble i poswiecenia przy scianach (polnocna sciana kazdej sali, boki), srodek sal pusty; bez ksiazek na posadzce
   for(const x of [28,33])P('bookcase_a',x,47,true);for(const x of [46,51])P('bookcase_b',x,47,true);P('lectern',40,47,true);
   P('bookcase_a',6,50,true);P('bookcase_b',73,50,true);P('desk',6,53,true);
@@ -1171,7 +1171,7 @@ function genCytadela(seed){
   // 12.11.2026: dziedziniec ubrany po bokach (wozy, stojaki, sztandary przy bramach, paleniska), krypta z sarkofagami i kośćmi; pasy x16..23 i x56..63 oraz środek wolne
   for(const [x,y] of [[13,59],[26,59],[53,59],[66,59],[31,61],[49,61],[26,15],[53,15],[5,20],[74,20]])set(x,y,27);
   for(const x of [14,25,54,65])P('order_banner',x,58);
-  P('armour',5,62);P('armour',74,62);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
+  P('armour',5,62,true);P('armour',74,62,true);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
   for(const [x,y] of [[27,19],[32,19],[47,19],[52,19]])P('sarcophagus',x,y,true);
   for(const [x,y] of [[29,18],[50,18],[35,15],[45,15]])P('candelabra',x,y,true); // 12.11.2026: swiatlo w krypcie
   const SH=[[69,60],[10,42],[40,19]];SH.forEach(([x,y],i)=>P('healing_shrine',x,y,true,{shrine:i}));
@@ -1266,7 +1266,7 @@ const ATM={1:CH1_ART_ON?{amb:0x707784,ai:.98,hs:0x8999ae,hg:0x302622,hi:.46,fog:
   2:{amb:0x5c5269,ai:.98,hs:0x5c6380,hg:0x25120c,hi:.5,fog:0x0c0910,fd:.013,clear:0x040307,mi:.18,mc:0xb6bbd5,cold:0xdce1ff,warm:0xffe5c9},
   3:{amb:0x6b6076,ai:.7,hs:0xb59a6a,hg:0x2b1921,hi:.32,fog:0x19121a,fd:.009,clear:0x0c080d,mi:.26,mc:0xc7cbe9,cold:0xe2defb,warm:0xffedcf},
   9:{amb:0x55546e,ai:.94,hs:0x566181,hg:0x1d1217,hi:.48,fog:0x090912,fd:.015,clear:0x030309,mi:.12,mc:0xaab9df,cold:0xd9e3ff,warm:0xffead7},
-  5:{amb:0x5e586e,ai:1.05,hs:0x74728e,hg:0x28141b,hi:.5,fog:0x0e0b15,fd:.013,clear:0x05030a,mi:.18,mc:0xc8bedf,cold:0xe5ddff,warm:0xffe5d9},
+  5:{amb:0x5e586e,ai:1.21/*22.11: +15% (korytarze za ciemne po x0.7 lamp)*/,hs:0x74728e,hg:0x28141b,hi:.575,fog:0x0e0b15,fd:.013,clear:0x05030a,mi:.18,mc:0xc8bedf,cold:0xe5ddff,warm:0xffe5d9},
   4:{amb:0x556d70,ai:.9,hs:0x799cac,hg:0x19251d,hi:.42,fog:0x0b161a,fd:.011,clear:0x040a0d,mi:.25,mc:0xb3d8df,cold:0xd6f2f3,warm:0xffedcf}};
 // 10.11.2026: paleta rozdziału w obrazie końcowym: [barwa cieni], [barwa świateł], nasycenie, kontrast
 const GRADE={1:[[.90,.98,1.12],[1.14,1.02,.86],1.16,1.05],2:[[.98,.95,1.04],[1.15,.99,.82],1.10,1.06],3:[[.93,1.02,.93],[1.12,1.05,.84],1.06,1.05],4:[[.88,1.03,1.0],[.98,1.05,1.03],1.04,1.06],5:[[.93,.96,1.10],[1.07,1.02,.95],.94,1.09],9:[[.92,1.0,1.07],[1.05,1.02,.95],.96,1.05]};
@@ -1277,7 +1277,7 @@ if(ART_ON){
   2:{amb:0x68646f,ai:.98,hs:0x737b8c,hg:0x2c211c,hi:.5,fog:0x101019,fd:.011,clear:0x06050a,mi:.21,mc:0xbcc8d7,cold:0xe3e7ef,warm:0xf5dfbd},
   3:{amb:0x777078,ai:.76,hs:0xb09d7d,hg:0x302527,hi:.36,fog:0x181519,fd:.0085,clear:0x0c0a0e,mi:.25,mc:0xd0cfdd,cold:0xe8e4ee,warm:0xf4e4c7},
   4:{amb:0x657673,ai:.94,hs:0x8ea8ad,hg:0x202a24,hi:.44,fog:0x101b1b,fd:.010,clear:0x070d0d,mi:.25,mc:0xc1d9d7,cold:0xe0efea,warm:0xe9e7d2},
-  5:{amb:0x70707b,ai:1.03,hs:0x9297aa,hg:0x28232b,hi:.5,fog:0x14131c,fd:.011,clear:0x08070d,mi:.22,mc:0xcbd0e2,cold:0xe8e7f1,warm:0xeee0d0},
+  5:{amb:0x70707b,ai:1.18/*22.11: +15%*/,hs:0x9297aa,hg:0x28232b,hi:.575,fog:0x14131c,fd:.011,clear:0x08070d,mi:.22,mc:0xcbd0e2,cold:0xe8e7f1,warm:0xeee0d0},
   9:{amb:0x656972,ai:.96,hs:0x798694,hg:0x202027,hi:.46,fog:0x11151d,fd:.0125,clear:0x06080e,mi:.17,mc:0xb7c8de,cold:0xe0e9f2,warm:0xecdfcc}
  });
  Object.assign(GRADE,{
@@ -1845,7 +1845,7 @@ function buildRoofs(w){if(!w.roofs||!w.group)return;const rm=[];
  for(const r of w.roofs){const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
   const m=new THREE.Mesh(roofGeo(W,D,rise),new THREE.MeshLambertMaterial({color:0x4a382c,transparent:true,opacity:1,side:THREE.DoubleSide,vertexColors:true}));
   m.position.set(r.x+r.w/2,1.9,r.y+r.h/2);m.castShadow=false;m.receiveShadow=false;m.renderOrder=3;w.group.add(m);r.mesh=m;r.a=1;rm.push(r)}
- roofImg(im=>{const hdIm=CH===1?(IMGS.p1_roof_burnt||IMGS.rf_lupek):null;if(hdIm)im=hdIm;const hd=!!hdIm;const t=new THREE.Texture(im);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=hd?8:4;t.needsUpdate=true;for(const r of rm){r.mesh.material.map=t;r.mesh.material.color.setHex(hd?0xe4d4c8:0xd8c8bc);r.mesh.material.needsUpdate=true}})}
+ roofImg(im=>{const hdIm=CH===1?(IMGS.p1_roof_burnt||IMGS.rf_lupek):null;if(hdIm)im=hdIm;const hd=!!hdIm;const t=new THREE.Texture(im);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=hd?8:4;t.needsUpdate=true;for(const r of rm){r.mesh.material.map=t;if(hd&&CH===1)r.mesh.material.color.setRGB(2.15,1.9,1.7);/* 22.11.2026: tekstura zgliszczy srednio 34/255 = czarna plyta; rozjasnienie ok. 2x, cieply odcien */else r.mesh.material.color.setHex(hd?0xe4d4c8:0xd8c8bc);r.mesh.material.needsUpdate=true}})}
 const ROOF_PNG='./assets/tekstury/517905a0e4feadfa5ba42b536be2720a1d736e68e81eba922eedcc53d16acee0.png';let _roofIm=null,_roofCbs=[];function roofImg(cb){if(_roofIm&&_roofIm.complete&&_roofIm.naturalWidth){cb(_roofIm);return}_roofCbs.push(cb);if(_roofIm)return;_roofIm=new Image();_roofIm.onload=()=>{const l=_roofCbs;_roofCbs=[];for(const f of l)f(_roofIm)};_roofIm.src=ROOF_PNG}
 let roofT=0;
 function roofTick(){const rs=W&&W.roofs;if(!rs||!S)return;const ps=[pl1||pl,pl2].filter(p=>p&&!p.dead),dt=Math.min(.1,Math.max(0,clock-roofT));roofT=clock;
@@ -2537,10 +2537,12 @@ const P3D_LAS=['p4_dead_oak','p4_spruce','p4_birch','p4_dead_spruce','p4_tall_pi
 const P3D_TON={p4_sacred_oak:[.62,.62,.6]};// święty dąb stoi w zielonym blasku: bez przygaszenia prześwietla się
 // rozdz. I: drzewa mają warianty (patrz dressSettlementsHD); głaz i paprocie zostają malunkiem
 const P3D_DRZ1=p=>{const h=groundHash(Math.floor(p.x),Math.floor(p.y)),tk=p.variant||['dead_oak','dead_spruce','dead_oak'][h%3];return tk==='dead_oak'?(h%2?'p1_dead_tree':'p4_dead_oak'):({dead_spruce:'p4_dead_spruce',spruce:'p4_spruce',birch:'p4_birch'}[tk]||null)};
-const P3D_MMAP={1:{dead_tree:P3D_DRZ1,barrel:'p1_barrel',grave_cross:'p1_grave_cross',covered_corpses:'p1_covered_corpses',burnt_hay:'p1_burnt_hay',wheel:'p1_wheel',order_banner:'p1_order_banner',tombstone:'p1_tombstone',gallows:'p1_gallows',marga_cart:'p1_marga_cart',shop_sign:'p1_shop_sign',dead_horse:'p1_dead_horse',crow_post:'p1_crow_post',well:'p1_well',stocks:'p1_stocks'},
- 2:{rune_lantern:'p2_rune_lantern',pickaxe_rack:'p2_pickaxe_rack',clan_banner:'p2_clan_banner',anvil:'p2_anvil',king_statue:'p2_king_statue',black_powder:'p2_black_powder',sarcophagus:'p2_sarcophagus',chains:'p2_chains',mine_cart:'p2_mine_cart',fallen_pillar:'p2_fallen_pillar',bellows:'p2_bellows'},
- 3:{dead_tree:'p3_dead_tree',beggar_bodies:'p3_beggar_bodies',street_lantern:'p3_street_lantern',royal_banner:'p3_royal_banner',saint_king:'p3_saint_king',barrel:'p3_barrel',plague_cart:'p3_plague_cart',gibbet:'p3_gibbet',chains:'p3_chains',sarcophagus:'p3_sarcophagus',queen_fountain:'p3_queen_fountain',gallows:'p3_gallows',wheel:'p3_wheel',dead_horse:'p3_dead_horse',offering_bowl:'p3_offering_bowl'},
- 4:{birch:'p4_birch',dead_oak:'p4_dead_oak',spruce:'p4_spruce',tall_pine:'p4_tall_pine',dead_spruce:'p4_dead_spruce',sacred_oak:'p4_sacred_oak',hanging_tree:'p4_hanging_tree',cz_bones:'p4_cz_bones',wolf_skull_bush:'p4_wolf_skull_bush',barrel:'p1_barrel',burial_mound:'p4_burial_mound',mossy_boulder:'p4_mossy_boulder',drowned_cart:'p4_drowned_cart',cz_wagon:'p4_cz_wagon',cz_tent:'p4_cz_tent',cz_sacpole:'p4_cz_sacpole',cz_firewood:'p4_cz_firewood',cz_pelts:'p4_cz_pelts',cz_beehive:'p4_cz_beehive',axe_stump:'p4_axe_stump',cz_idol:'p4_cz_idol',cz_gallows:'p4_cz_gallows',cz_wheel:'p4_cz_wheel'},5:{candelabra:'p5_candelabra',statue_a:'p5_statue_a',statue_b:'p5_statue_b',armour:'p5_armour',bench_a:'p5_bench_b',bench_b:'p5_bench_b',bookcase_a:'p5_bookcase_a',bookcase_b:'p5_bookcase_b',vault:'p5_vault',lectern:'p5_lectern',desk:'p5_desk',scale:'p5_scale',cage:'p5_cage',rack:'p5_rack',throne:'p5_throne'},6:{well:'p1_well',marga_cart:'p1_marga_cart',covered_corpses:'p1_covered_corpses',crow_post:'p1_crow_post',wheel:'p1_wheel',gallows:'p1_gallows',stocks:'p1_stocks',burnt_hay:'p1_burnt_hay',dead_horse:'p1_dead_horse',shop_sign:'p1_shop_sign'}};
+// 22.11.2026 (przeglad grafiki): do czasu przerobki z malunku wracaja obrazki 2D: zwloki (I, port), sztandar klanu i przewrocona kolumna (II),
+// ciala zebrakow i latarnia (IV/CH3), klatka (VI/CH5). Modele zostaja w P3D_MESHY; powrot = dopisanie klucza tutaj.
+const P3D_MMAP={1:{dead_tree:P3D_DRZ1,barrel:'p1_barrel',grave_cross:'p1_grave_cross',burnt_hay:'p1_burnt_hay',wheel:'p1_wheel',order_banner:'p1_order_banner',tombstone:'p1_tombstone',gallows:'p1_gallows',marga_cart:'p1_marga_cart',shop_sign:'p1_shop_sign',dead_horse:'p1_dead_horse',crow_post:'p1_crow_post',well:'p1_well',stocks:'p1_stocks'},
+ 2:{rune_lantern:'p2_rune_lantern',pickaxe_rack:'p2_pickaxe_rack',anvil:'p2_anvil',king_statue:'p2_king_statue',black_powder:'p2_black_powder',sarcophagus:'p2_sarcophagus',chains:'p2_chains',mine_cart:'p2_mine_cart',bellows:'p2_bellows'},
+ 3:{dead_tree:'p3_dead_tree',royal_banner:'p3_royal_banner',saint_king:'p3_saint_king',barrel:'p3_barrel',plague_cart:'p3_plague_cart',gibbet:'p3_gibbet',chains:'p3_chains',sarcophagus:'p3_sarcophagus',queen_fountain:'p3_queen_fountain',gallows:'p3_gallows',wheel:'p3_wheel',dead_horse:'p3_dead_horse',offering_bowl:'p3_offering_bowl'},
+ 4:{birch:'p4_birch',dead_oak:'p4_dead_oak',spruce:'p4_spruce',tall_pine:'p4_tall_pine',dead_spruce:'p4_dead_spruce',sacred_oak:'p4_sacred_oak',hanging_tree:'p4_hanging_tree',cz_bones:'p4_cz_bones',wolf_skull_bush:'p4_wolf_skull_bush',barrel:'p1_barrel',burial_mound:'p4_burial_mound',mossy_boulder:'p4_mossy_boulder',drowned_cart:'p4_drowned_cart',cz_wagon:'p4_cz_wagon',cz_tent:'p4_cz_tent',cz_sacpole:'p4_cz_sacpole',cz_firewood:'p4_cz_firewood',cz_pelts:'p4_cz_pelts',cz_beehive:'p4_cz_beehive',axe_stump:'p4_axe_stump',cz_idol:'p4_cz_idol',cz_gallows:'p4_cz_gallows',cz_wheel:'p4_cz_wheel'},5:{candelabra:'p5_candelabra',statue_a:'p5_statue_a',statue_b:'p5_statue_b',armour:'p5_armour',bench_a:'p5_bench_b',bench_b:'p5_bench_b',bookcase_a:'p5_bookcase_a',bookcase_b:'p5_bookcase_b',vault:'p5_vault',lectern:'p5_lectern',desk:'p5_desk',scale:'p5_scale',rack:'p5_rack',throne:'p5_throne'},6:{well:'p1_well',marga_cart:'p1_marga_cart',crow_post:'p1_crow_post',wheel:'p1_wheel',gallows:'p1_gallows',stocks:'p1_stocks',burnt_hay:'p1_burnt_hay',dead_horse:'p1_dead_horse',shop_sign:'p1_shop_sign'}};
 const P3D_MGEO={};
 const P3D_MREADY=REK3D_ON?Promise.all(Object.entries(P3D_MESHY).map(([k,e])=>fetch(e.g).then(r=>r.arrayBuffer()).then(b=>{P3D_MGEO[k]=p3dParseGlb(b)}).catch(er=>quietErr('meshy '+k,er)))):Promise.resolve();
 function meshyFor(ch,k,p){let n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];if(typeof n==='function')n=p?n(p):null;if(Array.isArray(n))n=n[p?groundHash(Math.floor(p.x),Math.floor(p.y))%n.length:0];return n&&P3D_MGEO[n]?n:null}
@@ -2552,10 +2554,12 @@ const P3D_ABOX=new Map();
 function p3dAlphaBox(key){let b=P3D_ABOX.get(key);if(b)return b;const img=IMGS[key];if(!img)return [0,0,1,1];const W=96,H=Math.round(96*img.height/img.width),c=canvas(W,H),g=c.getContext('2d');g.drawImage(img,0,0,W,H);
  const px=g.getImageData(0,0,W,H).data;let x0=W,y0=H,x1=0,y1=0;for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(px[(y*W+x)*4+3]>128){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
  b=x1<x0?[0,0,1,1]:[x0/W,y0/H,(x1+1)/W,(y1+1)/H];P3D_ABOX.set(key,b);return b}
+// 22.11.2026 (przeglad grafiki): modele mniejsze lub nizsze niz ich obrazki 2D: [skala calosci, dodatkowa skala wysokosci]
+const P3D_SKALA={p2_anvil:[1.3,1],p2_black_powder:[1.3,1],p1_grave_cross:[1.2,1],p1_order_banner:[1.2,1],p1_well:[1,1.25]};
 function meshyEmit(root,items){const by=new Map(),M=new THREE.Matrix4(),V=new THREE.Vector3(),Q=new THREE.Quaternion(),S=new THREE.Vector3();
  for(const it of items){const g=P3D_MGEO[it.n];if(!g)continue;const bb=g.boundingBox,gw=bb.max.x-bb.min.x||1,ab=p3dAlphaBox(it.n),s=it.W*(ab[2]-ab[0])/gw,fl=it.flip?-1:1,dx=((ab[0]+ab[2])/2-.5)*it.W*fl;
   // przod-spod modelu na linii obrazka (tam stala jego dolna krawedz)
-  M.compose(V.set(it.x+dx,0,it.z-bb.max.z*s),Q,S.set(s*fl,s,s));(by.get(it.n)||by.set(it.n,[]).get(it.n)).push(M.clone())}
+  const sk=P3D_SKALA[it.n],sc=sk?s*sk[0]:s;M.compose(V.set(it.x+dx,0,it.z-bb.max.z*sc),Q,S.set(sc*fl,sc*(sk?sk[1]:1),sc));(by.get(it.n)||by.set(it.n,[]).get(it.n)).push(M.clone())}
  for(const [n,list] of by){const im=new THREE.InstancedMesh(P3D_MGEO[n],meshyMat(n),list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=P3D_CIEN.has(n);im.receiveShadow=true;im.frustumCulled=false;im.userData.propAsset=true;root.add(im)}}
 const P3D_CIEN=new Set(P3D_LAS);
 function paint3dImg(ch,k){const e=REK3D_ON&&P3D_MAP[ch]&&P3D_MAP[ch][k];return e&&P3D_GEO[e[0]]&&IMGS[e[1]]?e:null}
@@ -5469,7 +5473,7 @@ function cardDesc(k,d){let t=d.d;if(!d.pact&&!brOn(d.br)&&brSum(d.br)+1>=SET_N)t
 // przed → po: jedna liczba zamiast opisu
 const FXL={garda:[(EN?'Block cost':'Koszt bloku'),L=>Math.round(100*(1-.1*L))+'%'],riposta:[(EN?'Riposte multiplier':'Mnożnik riposty'),L=>'×'+RIPO_L[Math.min(5,L)].toFixed(1).replace('.',',')],odzysk:[(EN?'Stamina returned on parry':'Zwrot staminy po parowaniu'),L=>10*L],
   ostrze:[(EN?'Light attack cost':'Koszt szybkiego ataku'),L=>Math.round(100*(1-.08*L))+'%'],rytm:[(EN?'Last combo hit':'Ostatni cios combo'),L=>'+'+18*L+'%'],buty:[(EN?'Movement speed':'Prędkość ruchu'),L=>'+'+10*L+'%'],taniec:[(EN?'Dodge cost':'Koszt uniku'),L=>Math.round(100*(1-.12*L))+'%'],
-  fala:[(EN?'Wave damage / range':'Obrażenia / zasięg fal'),L=>'+'+Math.round(FALA_B[L]*100)+'% / +'+15*L+'%'],echo:[(EN?'Waves after parry':'Fale po parowaniu'),L=>L<1?1:L===1?2:3],zryw:[(EN?'Wave every … hits':'Fala co … trafień'),L=>L<1?'—':ZRYW_N[L]]};
+  fala:[(EN?'Wave damage / range':'Obrażenia / zasięg fal'),L=>'+'+Math.round(FALA_B[L]*100)+'% / +'+15*L+'%'],echo:[(EN?'Waves after parry':'Fale po parowaniu'),L=>L<1?1:L===1?2:3],zryw:[(EN?'Wave from light hits':'Fala z szybkiego ataku'),L=>L<1?(EN?'none':'brak'):(EN?'every '+ZRYW_N[L]+(ZRYW_N[L]===3?'rd':'th')+' hit':'co '+ZRYW_N[L]+'. trafienie')]/* 22.11: bylo „Fala co … trafień — → 6” (EN niezatwierdzone) */};
 const FXPACT={szklo:[(EN?'+50% damage':'+50% obrażeń'),(EN?'enemies +30% damage':'wrogowie +30% obrażeń')],cisza:[(EN?'+50% stamina regeneration':'+50% regeneracji staminy'),(EN?'−20% health':'−20% życia')]};
 function fxPair(k,l){const T=STY[k];if(T&&!T.pact&&FXL[k]){const f=FXL[k];return[f[0],f[1](l),f[1](l+1)]}
   if(k==='_vit')return[(EN?'Max health':'Maks. życie'),Math.round(pl.max),Math.round(pl.max+15)];if(k==='_dex')return[(EN?'Max stamina':'Maks. stamina'),Math.round(pl.staMax),Math.round(pl.staMax+15)];if(k==='_int')return[(EN?'Max mana':'Maks. mana'),Math.round(pl.manaMax),Math.round(pl.manaMax+15)];
@@ -7522,7 +7526,7 @@ function renderKron(){$('kapH').textContent=EN?'Chronicle':'Kronika';$('kapE').t
     else{const c=r.stat,C1=c.toUpperCase(),top=Object.entries(META.sku).filter(([k])=>k[0]===c&&SK[k.slice(2)]).sort((a,b)=>b[1]-a[1]).slice(0,5);
       body=tb(tr(EN?'Nights played':'Rozegrane noce',f(Math.max(st['n'+C1],st[{r:'winR',k:'winK',z:'winZ',d:'winD',m:'winM'}[c]])))+tr(EN?'Nights won':'Wygrane noce',f(st[{r:'winR',k:'winK',z:'winZ',d:'winD',m:'winM'}[c]]))+tr(EN?'Play time':'Czas gry',hms(st['t'+C1]))+tr(EN?'Medals':'Medale',CAMPAIGN.filter(ch=>medalOf(c,ch)).length+'/6'))+`<p class="m2k-d"><b>${EN?'Favourite skills':'Ulubione umiejętności'}</b><br>${top.length?top.map(([k,n])=>SK[k.slice(2)].name+' <small>×'+n+'</small>').join('<br>'):(EN?'No data yet.':'Jeszcze brak danych.')}</p>`+note}}
   else if(r.named){const q=r.named;body=r.kills?`<p class="m2k-d nbk-lore">${q.d}</p><p class="m2k-d">${EN?'Defeated':'Pokonana'}: <b>${r.kills}</b> · ${ENAME[q.type]}</p><p>${EN?'✓ First defeat: +'+NAMED_ASH+' Ashes earned':'✓ Pierwsze pokonanie: zdobyto '+NAMED_ASH+' Popiołów'}</p>`:`<p class="m2k-d">${EN?'A named elite of act '+CHR[q.ch-1]+'. Sometimes an elite steps out of the dark with a name of its own: defeat it to learn its story.':'Elita z imieniem z rozdziału '+CHR[q.ch-1]+'. Czasem z mroku wychodzi elita z własnym imieniem: pokonaj ją, by poznać jej historię.'}</p><p>${EN?'First defeat':'Pierwsze pokonanie'}: <b>+${NAMED_ASH} ${EN?'Ashes':'Popiołów'}</b></p>`}
-  else body=r.kills?`${BEAST_D[r.beast]?'<p class="m2k-d nbk-lore">'+BEAST_D[r.beast]+'</p>':''}<p class="m2k-d">${EN?'Killed so far':'Zabici do tej pory'}: <b>${r.kills}</b></p><p>${r.kills>=50?(EN?'✓ 50 killed: +10 Ashes earned':'✓ 50 zabitych: zdobyto 10 Popiołów'):(EN?'At 50 killed: +10 Ashes':'Przy 50 zabitych: +10 Popiołów')+' ('+r.kills+'/50)'}</p>`:`<p class="m2k-d">${EN?'You have not met this creature yet. Discover enemies on your journeys: each first kill adds a card here.':'Tej istoty jeszcze nie spotkałeś. Odkrywaj przeciwników podczas wypraw: każde pierwsze zabójstwo dodaje tu kartę.'}</p>`;
+  else body=r.kills?`${BEAST_D[r.beast]?'<p class="m2k-d nbk-lore">'+BEAST_D[r.beast]+'</p>':''}<p class="m2k-d">${EN?'Killed so far':'Zabici do tej pory'}: <b>${r.kills}</b></p><p>${r.kills>=50?(EN?'✓ 50 killed: +10 Ashes earned':'✓ 50 zabitych: zdobyto 10 Popiołów'):(EN?'At 50 killed: +10 Ashes':'Przy 50 zabitych: +10 Popiołów')+' ('+r.kills+'/50)'}</p>`:`<p class="m2k-d">${EN?'You have not met this creature yet. Discover enemies on your journeys: each first kill adds a card here.':'Tej istoty jeszcze nie spotkałeś. Odkrywaj przeciwników podczas wypraw: każde pierwsze zabójstwo dodaje tu kartę.'}</p><p class="m2k-d">${EN?'First appears in act':'Pojawia się od rozdziału'} <b>${chRoman(beastCh(r.beast))}</b></p>`;/* 22.11: wskazowka rozdzialu (EN niezatwierdzone) */
   // 8.11.2026 (UI audit D): action pinned to the bottom of the panel, only the description scrolls
   D.innerHTML=`<div class="nbk-scroll"><div class="m2k-head" id="kapHd"></div>${body}</div>${btn}`;$('kapHd').textContent=r.n;
   // Chronicle scrolling, type and action placement are owned by nbUiSystem.
@@ -11874,7 +11878,7 @@ ${O} :is(#opts,#pause) .nbq-f kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,se
  content.prepend(box);const L=box.querySelector('.nbq-l');
  box.style.setProperty('--nbq-rama',"url('assets/ui/39a90a0a3c0dbb394918eb030fde7ca5dd7ae13e8d2fbaa161b3b2020a22841b.webp')");
  const foot=document.createElement('div');foot.className='nbq-f';opts.append(foot);
- for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb '+c;b.textContent=t;c==='l'?tabsEl.prepend(b):tabsEl.append(b)}
+ for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb nb-padonly '+c;b.textContent=t;c==='l'?tabsEl.prepend(b):tabsEl.append(b)}
  let tab='',rows=[],akt=null;
  const curTab=()=>{const t=opts.querySelector('.tabs>.tab.on');return t?t.dataset.tab:'gfx'};
  const chBtns=g=>[...g.querySelectorAll('button')].filter(b=>!b.hidden);
@@ -11995,7 +11999,7 @@ ${O} #pause #skillLoadout.nbz>h2,${O} #pause #skillLoadout.nbz>p:not(.loadout-st
 `;document.head.append(st);
  // LB/RB przy zakladkach i podpowiedz w stopce
  const nav=pause.querySelector('.nbp-nav');
- if(nav){for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb '+c;b.textContent=t;nav.append(b)}
+ if(nav){for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb nb-padonly '+c;b.textContent=t;nav.append(b)}
   const br=nav.querySelector(':scope>.btnrow');if(br){const h=document.createElement('span');h.className='nbz-hint';br.prepend(h)}}
  const hint=()=>{const h=pause.querySelector('.nbz-hint');if(!h)return;const on=!el.closest('.nbp-pane')?.hidden&&!el.hidden;h.textContent=on?T('Techniki miecza i zaklęcia ostrza działają poza slotami.','Sword techniques and blade spells work outside slots.'):''};
  let pod=null;
@@ -12087,7 +12091,7 @@ ${O} #manual .nbq-f,${O} #opts .nbq-f{display:flex!important;justify-content:cen
 ${O} #manual .nbq-f>span{display:flex!important;align-items:center!important;gap:calc(14*var(--u))!important}
 ${O} #manual .nbq-f kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important;color:#e6d2ab!important;border:1px solid rgba(201,160,100,.6)!important;border-radius:calc(4*var(--u))!important;padding:calc(6*var(--u)) calc(9*var(--u))!important;background:rgba(0,0,0,.5)!important}
 `;document.head.append(st);
- const odznaki=()=>{/* LB/RB dopiero po manInit: manInit nie buduje zakladek, gdy #manTabs ma juz dzieci */if(!tabs.querySelector('.tab')||tabs.querySelector('.nbq-tb'))return;for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb '+c;b.textContent=t;c==='l'?tabs.prepend(b):tabs.append(b)}};
+ const odznaki=()=>{/* LB/RB dopiero po manInit: manInit nie buduje zakladek, gdy #manTabs ma juz dzieci */if(!tabs.querySelector('.tab')||tabs.querySelector('.nbq-tb'))return;for(const [c,t] of [['l','LB'],['r','RB']]){const b=document.createElement('span');b.className='nbq-tb nb-padonly '+c;b.textContent=t;c==='l'?tabs.prepend(b):tabs.append(b)}};
  const P=document.createElement('div');P.className='nbm-p';P.innerHTML='<div class="nbm-pi"></div><div class="nbm-pg"></div><div class="nbm-pt"><span class="nbm-pk"></span><span class="nbm-pn"></span><span class="nbm-pd"></span><div class="nbm-ks"></div><button type="button" class="nbm-go"></button></div>';lay.append(P);
  const foot=document.createElement('div');foot.className='nbq-f';man.append(foot);
  P.querySelector('.nbm-go').addEventListener('click',()=>{const b=$('trainBtn');if(b)b.click()});
@@ -12191,7 +12195,7 @@ ${O} #kap .nbq-f kbd{font:700 calc(15*var(--u))/1 Cinzel,Georgia,serif!important
  const stopka=()=>{const pad=document.body.classList.contains('padnav');foot.innerHTML=pad?`<span><kbd>LB / RB</kbd>${T('Zakładki','Tabs')}</span><span><kbd>A</kbd>${T('Wybierz','Select')}</span><span><kbd>B</kbd>${T('Wróć','Back')}</span>`:`<span><kbd>Q / E</kbd>${T('Zakładki','Tabs')}</span><span><kbd>Enter</kbd>${T('Wybierz','Select')}</span><span><kbd>Esc</kbd>${T('Wróć','Back')}</span>`};
  const heroOf=txt=>{try{for(const c of ['r','k','z','d','m'])if(HEROES[c]&&txt.includes(HEROES[c].n))return c}catch(e){quietErr('menu:heroOf',e)}return null};
  function wspolne(){const tb=$('kapTabs');if(!tb)return null;for(const b of tb.querySelectorAll('.tab')){const n=b.firstChild;if(n&&n.nodeType===3&&/^\d+\.\s/.test(n.data))n.data=n.data.replace(/^\d+\.\s/,'')}
-  if(!tb.querySelector('.nbq-tb'))for(const [c,t] of [['l','LB'],['r','RB']]){const s=document.createElement('span');s.className='nbq-tb '+c;s.textContent=t;tb.append(s)}
+  if(!tb.querySelector('.nbq-tb'))for(const [c,t,k] of [['l','LB','Q'],['r','RB','E']]){const s=document.createElement('span');s.className='nbq-tb '+c;s.innerHTML='<i class="nb-kk">'+k+'</i><i class="nb-kp">'+t+'</i>';tb.append(s)}
   const on=tb.querySelector('.tab.on');const L=$('kapList');if(L)L.dataset.nbh=on?on.textContent.replace(/(NOWE|NEW)$/,'').trim():'';stopka();return tb}
  function kaplica(){const tb=wspolne();if(!tb)return;kap.classList.add('nbk-kap');kap.classList.toggle('nbk3',tb.querySelectorAll('.tab').length===3);
   const L=$('kapList'),D=$('kapDet');D.style.setProperty('--nbk-img',`url('${POSAG}')`);
@@ -12416,6 +12420,24 @@ ${B} :is(#nbP,#nbW) button.nbd:is(:focus-visible,.pf){outline:none!important;box
 ${B} #kap #kapList:not(.nbk-beasts):has(>.m2k-row:is(:focus-visible,.pf))>.m2k-row:hover:not(.on,:focus-visible,.pf){background:rgba(30,24,22,.5)!important;box-shadow:none!important}${B} #kap.nbk-kap #kapList:not(.nbk-beasts):has(>.m2k-row:is(:focus-visible,.pf))>.m2k-row.lk:hover:not(.on,:focus-visible,.pf){background:rgba(20,16,15,.45)!important}/* nawigacja klawiatura/padem: wiersz pod mysza nie swieci drugi raz */
 ${B} :is(#nbP,#nbW) button.nbd:not(:disabled):is(:hover,:focus-visible,.pf){filter:brightness(1.28) saturate(1.15) drop-shadow(0 0 calc(10*var(--u)) rgba(255,130,50,.75))!important;color:#fff0d8!important;text-shadow:0 0 calc(12*var(--u)) rgba(255,150,60,.9)!important}`;
  document.head.append(st)}catch(e){quietErr('baneryBezRamki',e)}})();
+// ===== 22.11.2026: poprawki z przegladu grafiki i UI (runda grafika-szybkie) =====
+// kule HUD pod oknami, znaczki zakladek wg urzadzenia, sygnal przewijania list, chip EN w Przygotowaniu, kontrast trybu w menu
+(()=>{try{const O='#orient'.repeat(300),st=document.createElement('style');st.id='nb-przeglad-2211';
+ st.textContent=`
+body:has(:is(#pause,#shop,#lvl,#opts):not([hidden])) ${O} .pch-orb{visibility:hidden!important}
+body:has(:is(#title,#kap,#manual,#prep,#end):not([hidden])) ${O} #nbHud .pch{visibility:hidden!important}
+body:not(.padnav) ${O} .nbq-tb.nb-padonly{display:none!important}
+body:not(.padnav) ${O} #nbW .nwlr{visibility:hidden!important}
+${O} .nbq-tb i{font-style:normal!important}
+body.padnav ${O} .nbq-tb .nb-kk,body:not(.padnav) ${O} .nbq-tb .nb-kp{display:none!important}
+${O} :is(#nbP .ls,#kapList,#opts .nbq-l,#kbBind).nb-more{-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 46px),rgba(0,0,0,.15))!important;mask-image:linear-gradient(to bottom,#000 calc(100% - 46px),rgba(0,0,0,.15))!important}
+${O} #nbP .n3{flex-wrap:wrap!important;row-gap:4px!important}
+${O} .pc-mode-note{color:rgba(222,206,172,.96)!important}
+${O} .pcg-mode:not(.on){opacity:.74!important}`;
+ document.head.append(st);
+ const L='#nbP .ls,#kapList,#opts .nbq-l,#kbBind';
+ setInterval(()=>{for(const e of document.querySelectorAll(L)){if(!e.offsetParent)continue;e.classList.toggle('nb-more',e.scrollHeight>e.clientHeight+12&&e.scrollTop+e.clientHeight<e.scrollHeight-8)}},300);
+}catch(e){quietErr('przeglad2211',e)}})();
 requestAnimationFrame(frame);
 })();
 

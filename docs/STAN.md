@@ -1,4 +1,4 @@
-Stan na 2026-11-22, cache 848 (gałąź), rola agent główny
+Stan na 2026-11-22, cache 849 (gałąź), rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -7,7 +7,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 | Co | Wartość |
 |---|---|
 | main | cache 844, opublikowane 21.11.2026 (log `docs/logi/LOG_SESJI_2026-11-21.md`) |
-| Gałęzie czekające na „publikuj” | `runda-porzadki-przeglad` (848): zawiera 845–847 z `runda-kociolek-3d` (kociołek 3D bez ognia, światła ×0.7) + porządki po przeglądzie 22.11 |
+| Gałęzie czekające na „publikuj” | `runda-grafika-szybkie` (849): zawiera wszystko z `runda-porzadki-przeglad` (848) i `runda-kociolek-3d` (845–847) + szybkie poprawki grafiki i UI z przeglądu 22.11. Publikować tę jedną gałąź. |
 | Kopia zapasowa | y33bau/nightbrand-backup = kopia 844 |
 | Zip itch.io | `NightBrand_itch_844.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 199 MB (limit 500 MB); zip itch.io ok. 817 plików / 1000 (każdy model = 2–3 pliki) |
@@ -43,6 +43,10 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - Ogólnie: pad na nowych ekranach, kooperacja, menu po angielsku, itch.io na żywo.
 
 ## Zgłoszone autorowi, czekają na decyzję
+- Raport o grafice i UI 22.11 (Claude Docs „NightBrand: raport o stanie grafiki i UI”): w 849 zrobione szybkie poprawki; czekają rundy 2–5 (modele z malunków + port, drzewa HQ, Cytadela i Dolne Miasto, porządki UI).
+- Opcje → Dźwięk mają tylko 2 ustawienia (pusty panel): czy dodać głośność ogólną i wyciszanie w tle (nowe funkcje dźwięku).
+- Paprocie w rzędzie przy cmentarzu (rozdz. I) to układ autora z edytora map (runda 316): zostawić czy rozrzucić.
+- Las Czarnoboru i układ Cytadeli są losowane co noc (`WORLD_SEEDS`): celowo, bez zmian.
 - Przegląd 810 (`docs/przeglady/PRZEGLAD_810_2026-11-17.md`): otwarte zostały tylko „trzy warstwy menu” (WAŻNE 1, osobna runda porządkowa) i nazwa gałęzi stylu „Zabójca” obok klasy Miry (DROBNE 13). Reszta naprawiona do 848 (przegląd `docs/przeglady/PRZEGLAD_848_2026-11-22.md`).
 - Światła ×0.7 (847) działają na lampy i ogniska, nie na księżyc i światło ogólne sceny: czy przyciemnić też je.
 - Schematy sterowania (obrazki PL/EN, klawiatura i pad): od 848 pod obrazkiem jest dopisek o slotach 5 i 6; docelowo nowe obrazki od autora.

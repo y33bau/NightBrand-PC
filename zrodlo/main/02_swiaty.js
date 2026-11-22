@@ -136,8 +136,8 @@ function genSolneNabrzeze(){
  // the Order's blockade on the salt square
  port('order_banner',28,26,true);port('order_banner',35,26,true);port('order_banner',26,10,true);port('order_banner',38,10,true);
  port('gallows',24,34,true);port('marga_cart',40,34,true);port('covered_corpses',38,35,false);port('covered_corpses',26,33,false,{flip:true});
- port('marga_cart',50,30,true,{flip:true});port('well',27,30,true);port('crow_post',43,36,true);/* 15.11.2026: z wody (44,36) na nabrzeze, w wodzie gra rysowala wokol pola czarna krawedz nabrzeza */port('crow_post',21,12,true);port('stocks',35,33,true);port('burnt_hay',57,28,false);port('dead_horse',46,33,false);
- port('shop_sign',24,30,false);port('wheel',37,30,false);port('wheel',9,30,false,{flip:true});
+ port('marga_cart',50,30,true,{flip:true});port('well',27,30,true);port('crow_post',43,36,true);/* 15.11.2026: z wody (44,36) na nabrzeze, w wodzie gra rysowala wokol pola czarna krawedz nabrzeza */port('crow_post',21,12,true);port('stocks',35,33,true);port('burnt_hay',57,28,false);port('dead_horse',46,33,true);/* 22.11: kolizja jak w rozdz. I */
+ port('shop_sign',24,30,true);port('wheel',37,30,false);port('wheel',9,30,false,{flip:true});
  prop('shrine',16.5,28.92,[[16,28]],{port:true,shrine:0});prop('shrine',50.5,25.92,[[50,25]],{port:true,shrine:1});
  return {map,under,PROPS,clearways,roofs:[],start:{x:32*TS,y:49*TS+8},
  shrines:[{x:16*TS+8,y:29*TS+8},{x:50*TS+8,y:26*TS+8}],region:()=>'port',idle:[32,24,10,9],
@@ -412,7 +412,7 @@ function genCytadela(seed){
   for(const [x,y] of [[11,59],[68,59],[11,43],[68,43],[11,19],[68,19],[32,8],[47,8]])set(x,y,27);
   const P=(k,x,y,solid=false,extra)=>prop(k,x+.5,y+.92,solid===true?[[x,y]]:solid||[],extra);
   // Keep both north/south lanes (x16..23 and x56..63) and the middle of every hall open.
-  P('armour',8,59);P('armour',72,59);// 15.11.2026: szubienica, studnia, wozy i stojak z dziedzinca usuniete (decyzja autora: tylko duze obiekty przy scianach)
+  P('armour',8,59,true);P('armour',72,59,true);/* 22.11: zbroje z kolizja (bohater przez nie przechodzil) */// 15.11.2026: szubienica, studnia, wozy i stojak z dziedzinca usuniete (decyzja autora: tylko duze obiekty przy scianach)
   // Runda 286: meble i poswiecenia przy scianach (polnocna sciana kazdej sali, boki), srodek sal pusty; bez ksiazek na posadzce
   for(const x of [28,33])P('bookcase_a',x,47,true);for(const x of [46,51])P('bookcase_b',x,47,true);P('lectern',40,47,true);
   P('bookcase_a',6,50,true);P('bookcase_b',73,50,true);P('desk',6,53,true);
@@ -426,7 +426,7 @@ function genCytadela(seed){
   // 12.11.2026: dziedziniec ubrany po bokach (wozy, stojaki, sztandary przy bramach, paleniska), krypta z sarkofagami i kośćmi; pasy x16..23 i x56..63 oraz środek wolne
   for(const [x,y] of [[13,59],[26,59],[53,59],[66,59],[31,61],[49,61],[26,15],[53,15],[5,20],[74,20]])set(x,y,27);
   for(const x of [14,25,54,65])P('order_banner',x,58);
-  P('armour',5,62);P('armour',74,62);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
+  P('armour',5,62,true);P('armour',74,62,true);P('bench_a',31,66,[[30,66],[31,66]]);P('bench_a',49,66,[[48,66],[49,66]]);
   for(const [x,y] of [[27,19],[32,19],[47,19],[52,19]])P('sarcophagus',x,y,true);
   for(const [x,y] of [[29,18],[50,18],[35,15],[45,15]])P('candelabra',x,y,true); // 12.11.2026: swiatlo w krypcie
   const SH=[[69,60],[10,42],[40,19]];SH.forEach(([x,y],i)=>P('healing_shrine',x,y,true,{shrine:i}));

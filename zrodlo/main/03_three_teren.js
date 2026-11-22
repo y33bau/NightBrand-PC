@@ -27,7 +27,7 @@ const ATM={1:CH1_ART_ON?{amb:0x707784,ai:.98,hs:0x8999ae,hg:0x302622,hi:.46,fog:
   2:{amb:0x5c5269,ai:.98,hs:0x5c6380,hg:0x25120c,hi:.5,fog:0x0c0910,fd:.013,clear:0x040307,mi:.18,mc:0xb6bbd5,cold:0xdce1ff,warm:0xffe5c9},
   3:{amb:0x6b6076,ai:.7,hs:0xb59a6a,hg:0x2b1921,hi:.32,fog:0x19121a,fd:.009,clear:0x0c080d,mi:.26,mc:0xc7cbe9,cold:0xe2defb,warm:0xffedcf},
   9:{amb:0x55546e,ai:.94,hs:0x566181,hg:0x1d1217,hi:.48,fog:0x090912,fd:.015,clear:0x030309,mi:.12,mc:0xaab9df,cold:0xd9e3ff,warm:0xffead7},
-  5:{amb:0x5e586e,ai:1.05,hs:0x74728e,hg:0x28141b,hi:.5,fog:0x0e0b15,fd:.013,clear:0x05030a,mi:.18,mc:0xc8bedf,cold:0xe5ddff,warm:0xffe5d9},
+  5:{amb:0x5e586e,ai:1.21/*22.11: +15% (korytarze za ciemne po x0.7 lamp)*/,hs:0x74728e,hg:0x28141b,hi:.575,fog:0x0e0b15,fd:.013,clear:0x05030a,mi:.18,mc:0xc8bedf,cold:0xe5ddff,warm:0xffe5d9},
   4:{amb:0x556d70,ai:.9,hs:0x799cac,hg:0x19251d,hi:.42,fog:0x0b161a,fd:.011,clear:0x040a0d,mi:.25,mc:0xb3d8df,cold:0xd6f2f3,warm:0xffedcf}};
 // 10.11.2026: paleta rozdziału w obrazie końcowym: [barwa cieni], [barwa świateł], nasycenie, kontrast
 const GRADE={1:[[.90,.98,1.12],[1.14,1.02,.86],1.16,1.05],2:[[.98,.95,1.04],[1.15,.99,.82],1.10,1.06],3:[[.93,1.02,.93],[1.12,1.05,.84],1.06,1.05],4:[[.88,1.03,1.0],[.98,1.05,1.03],1.04,1.06],5:[[.93,.96,1.10],[1.07,1.02,.95],.94,1.09],9:[[.92,1.0,1.07],[1.05,1.02,.95],.96,1.05]};
@@ -38,7 +38,7 @@ if(ART_ON){
   2:{amb:0x68646f,ai:.98,hs:0x737b8c,hg:0x2c211c,hi:.5,fog:0x101019,fd:.011,clear:0x06050a,mi:.21,mc:0xbcc8d7,cold:0xe3e7ef,warm:0xf5dfbd},
   3:{amb:0x777078,ai:.76,hs:0xb09d7d,hg:0x302527,hi:.36,fog:0x181519,fd:.0085,clear:0x0c0a0e,mi:.25,mc:0xd0cfdd,cold:0xe8e4ee,warm:0xf4e4c7},
   4:{amb:0x657673,ai:.94,hs:0x8ea8ad,hg:0x202a24,hi:.44,fog:0x101b1b,fd:.010,clear:0x070d0d,mi:.25,mc:0xc1d9d7,cold:0xe0efea,warm:0xe9e7d2},
-  5:{amb:0x70707b,ai:1.03,hs:0x9297aa,hg:0x28232b,hi:.5,fog:0x14131c,fd:.011,clear:0x08070d,mi:.22,mc:0xcbd0e2,cold:0xe8e7f1,warm:0xeee0d0},
+  5:{amb:0x70707b,ai:1.18/*22.11: +15%*/,hs:0x9297aa,hg:0x28232b,hi:.575,fog:0x14131c,fd:.011,clear:0x08070d,mi:.22,mc:0xcbd0e2,cold:0xe8e7f1,warm:0xeee0d0},
   9:{amb:0x656972,ai:.96,hs:0x798694,hg:0x202027,hi:.46,fog:0x11151d,fd:.0125,clear:0x06080e,mi:.17,mc:0xb7c8de,cold:0xe0e9f2,warm:0xecdfcc}
  });
  Object.assign(GRADE,{
