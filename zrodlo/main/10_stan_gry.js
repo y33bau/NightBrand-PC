@@ -19,7 +19,7 @@ const MOB_MUL=1.232;// +10% wrogów (runda: pojedynki bossów), 15.11.2026: doda
 // 15.11.2026: Napór: 15 s z 1,5x wiecej wrogow o 45% zycia, w 4:00 i 12:00 (w polowie kazdej czesci nocy); konczy go elitarny wrog
 const SURGE=[240,720],SURGE_LEN=15;function surgeOn(){return !!S&&!S.dg&&!S.endless&&!S.train&&SURGE.some(a=>S.t>=a&&S.t<a+SURGE_LEN)}
 const DF={e:{hp:.75,dmg:.7,en:.8,xp:1,coin:.9,pot:200,n:(EN?'Easy':'Łatwy')},n:{hp:1,dmg:1,en:1,xp:1,coin:1,pot:150,n:(EN?'Normal':'Normalny')},h:{hp:1.25,dmg:1.2,en:1.12,xp:1/* 22.11.2026 (zgoda autora): bez premii XP, bo znosila trudnosc (bylo 1.15) */,coin:1.15,pot:100,n:(EN?'Hard':'Trudny')}};let DIFFK='n';try{const q=localStorage.getItem('pn_diff');if(DF[q])DIFFK=q}catch(e){}
-const ENEMY_CAP=100,ENEMY_RAMP=.32,ENEMY_HP_T=300;let ENEMY_DMG=.8*DF[DIFFK].dmg;
+const ENEMY_CAP=100;let ENEMY_DMG=.8*DF[DIFFK].dmg;
 // from hero level 20 the night gets 10% more enemies at once (limit raised too)
 const LATE_LVL=20,LATE_MUL=1.1;
 const THARM_LINES=[(EN?'Who is there? Step into the light. It has been long since I saw anyone in the forge who casts a shadow.':'Kto tam? Podejdź do światła. Dawno już nie widziałem w kuźni kogoś, kto rzuca cień.'),(EN?'The runes warned us not to dig deeper. Something slept beneath the lava. Each of us woke it a little.':'Runy ostrzegały, żeby nie kuć głębiej. Pod lawą coś spało. Każdy z nas po trochu je budził.'),(EN?'My brothers are still hammering at the vein. They have no eyes left, and the pick still finds its mark. Do not stand in their way.':'Moi bracia dalej tłuką w żyłę. Oczu już nie mają, a kilof wciąż trafia. Nie stój im na drodze.'),(EN?'My hammer is lost. But my hands are still warm. Give me yours.':'Młot mi przepadł. Ale dłonie mam jeszcze ciepłe. Daj swoje.')];
@@ -62,6 +62,6 @@ function breakPoise(e,amount){if(e.dead||e.inv>0||e.trans>0)return;e.poise=(e.po
 
 // chapter IV: kills needed next to each standing stone, and when the dead rise from the barrows
 const STONE_N=6,DZIADY_AT=540;
-const XP_BASE=5,XP_GROW=1.05,xpNeed=l=>Math.ceil(XP_BASE*l*Math.pow(XP_GROW,l-1));
+/* 23.11.2026 (zgoda autora): wolniejszy awans (ok. 20 poziomow na noc zamiast 26, 8 zamiast 10 w pierwsze 3 min), mocniejszy poziom (+9% obrazen zamiast +7%) */const LVL_DMG=.09,lvlMul=()=>1+LVL_DMG*(((S&&S.lvl)||1)-1);const XP_BASE=7,XP_GROW=1.075,xpNeed=l=>Math.ceil(XP_BASE*l*Math.pow(XP_GROW,l-1));
 let STORY=true;// fabuła jest zawsze włączona (przełącznik usunięty)
 let S=null,pl=null,pl1=null,pl2=null,mesh2=null;const keys={};let rollPress=false,talkPress=false;const tj={x:0,y:0};

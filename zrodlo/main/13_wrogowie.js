@@ -86,7 +86,7 @@ function guardFeedback(kind,nx,ny,projectile){let dx=-nx,dy=-ny,d=Math.hypot(dx,
 function hitSpark(e,nx,ny){const length=Math.hypot(nx,ny)||1,dx=nx/length,dy=ny/length,armour=steelEnemy(e),amplitude=BIG.has(e.type)?.35:e.type==='collector'?.55:ftHeavy?1.3:ftCrit?1.1:.75;
   if(!emitCombatEffect(ftHeavy?'heavy':'light',e.x-dx*Math.min(e.r*.55,5),e.y-dy*Math.min(e.r*.55,5),ftHeavy?1.35:.9,0,armour?'steel':'flesh'))contactSparks(e.x-dx*Math.min(e.r*.55,5),e.y-dy*Math.min(e.r*.55,5),dx,dy,armour?'steel':'flesh',ftCrit?8:ftHeavy?6:4);
   const life=COMBAT_POLISH_ON?(ftHeavy?.23:.18):.15,power=COMBAT_POLISH_ON?amplitude*(armour?2.1:2.8):amplitude;e.visualHit={t:life,life,dx,dy,amplitude:power,heavy:ftHeavy};}
-function damageEnemy(e,dmg,nx,ny,kb=1,src){if(e.dead||e.trans>0||e.inv>0)return false;if(TRN.ohk)dmg=Math.max(dmg,e.hp+1);if(e.hookMark>0)dmg*=1.25;if(src&&src.startsWith('sk:'))dmg*=skStatusMul(e,src);if(e.type==='shieldman'&&ftMelee&&!ftHeavy&&!ftCrit&&!(e.stun>0))dmg*=.5;// tarcza: lekkie ciecia zadaja polowe; ciezki atak, krytyk i ogluszenie po paradzie przebijaja
+function damageEnemy(e,dmg,nx,ny,kb=1,src){if(e.dead||e.trans>0||e.inv>0)return false;if(TRN.ohk)dmg=Math.max(dmg,e.hp+1);if(e.hookMark>0)dmg*=1.25;if(src&&src.startsWith('sk:'))dmg*=skStatusMul(e,src);if(e.type==='shieldman'&&ftMelee&&!ftHeavy&&!ftCrit&&!(e.stun>0))dmg*=.5;if(e.affix==='pancerz'&&ftMelee&&!ftHeavy&&!ftCrit&&!(e.stun>0))dmg*=.55;// tarcza: lekkie ciecia zadaja polowe; ciezki atak, krytyk i ogluszenie po paradzie przebijaja
   if(S.zab&&e.mini&&e.fhT==null)e.fhT=S.t;if(dmg>=.5&&Math.hypot(e.x-pl.x,e.y-pl.y)<190)ftx(dmg,e.x,e.y,ftEntH(e),ftCrit?'c':'d',e);// Kat: Guillotine perk finishes regular enemies; hit counter for 'One Verdict'
   if(S.pk.kExec&&ftHeavy&&ftMelee&&!e.mini&&!BIG.has(e.type)&&e.type!=='collector'&&e.hp-dmg>0&&e.hp-dmg<e.max*.35)dmg=e.hp;
   e.hN=(e.hN||0)+1;S.dealt=(S.dealt||0)+dmg;if(src!=='trn'){const sk=typeof src==='string'&&src.slice(0,3)==='sk:'?src.slice(3):'',D=S.dsrc||(S.dsrc={}),k=src==='parry'?'p':src==='dot'?'d':sk?'s':DSRC||'s';D[k]=(D[k]||0)+dmg;if(sk){const Q=S.dsk||(S.dsk={});Q[sk]=(Q[sk]||0)+dmg}}if(dmg>(S.bigHit||0))S.bigHit=dmg;e.hp-=dmg;if(!e.ph2&&e.hp>0&&e.hp<=e.max*.5&&!e.mini&&(BIG.has(e.type)||e.type==='collector'||e.type==='boginka'))bossPhase2(e);e.flash=ftCrit?.17:ftHeavy?.12:.08;if(ftMelee&&dmg>=.5)hitSpark(e,nx,ny);else if(COMBAT_POLISH_ON&&dmg>=.5&&src!=='dot'&&src!=='trn'){const len=Math.hypot(nx,ny)||1;e.visualHit={t:.17,life:.17,dx:nx/len,dy:ny/len,amplitude:BIG.has(e.type)?.3:1.2,heavy:false}}if(e.type==='collector'&&!(e.hurtCd>0)&&dmg>=20){e.hurtA=.3;e.hurtCd=2.5}const k=(BIG.has(e.type)?.05:e.type==='collector'?.15:(e.type==='warden'||e.type==='knight'||e.type==='rotknight'||e.type==='wight'||e.type==='bies'||e.type==='boginka'||e.type==='marauder'||e.type==='cursed'||e.type==='arbiter')?.35:1)*110*kb;if(e.frozen<=0){e.vx+=nx*k;e.vy+=ny*k}
@@ -107,7 +107,7 @@ function bossPhase2(e){e.ph2=1;if(e.spd)e.spd*=1.2;if(e.dmg)e.dmg*=1.15;e.flash=
   ftInfo(EN?'Second phase!':'Druga faza!');say((ENAME[e.type]||(EN?'The boss':'Boss'))+(EN?' flies into a rage.':' wpada w szał.'),'event');
   const pool=S.enemies.filter(x=>!x.dead&&!x.mini&&!BIG.has(x.type)&&x.type!=='collector'&&x.type!=='boginka'&&x.type!=='glizzard'),t=pool.length?pool[0].type:null;
   if(t)for(const s of [-1,1]){try{const a=spawnEnemy(t,e.x+s*34,e.y+8);if(a)a.rise=Math.max(a.rise||0,.6)}catch(err){quietErr('bossAdd',err)}}}
-function killEnemy(e,nx,ny){if(e.mini||BIG.has(e.type)){S.hitstop=Math.max(S.hitstop||0,.1);shake(.3,.22)}if(bossBar(e)){slowMo(1.4,.22);shockAt(e.x,e.y,1)}else if(e.mini){slowMo(.5,.45);shockAt(e.x,e.y,.55)}swordOnKill(e);try{rxInfect(e)}catch(_){}e.dead=true;nb3dKill(e);S.kills++;S.streak=(S.streak||0)+1;if(S.streak>(S.bestStreak||0))S.bestStreak=S.streak;metaKill(e);
+function killEnemy(e,nx,ny){if(e.mini||BIG.has(e.type)){S.hitstop=Math.max(S.hitstop||0,.1);shake(.3,.22)}if(bossBar(e)){slowMo(1.4,.22);shockAt(e.x,e.y,1)}else if(e.mini){slowMo(.5,.45);shockAt(e.x,e.y,.55)}swordOnKill(e);try{rxInfect(e)}catch(_){}try{affixDeath(e)}catch(_){}e.dead=true;nb3dKill(e);S.kills++;S.streak=(S.streak||0)+1;if(S.streak>(S.bestStreak||0))S.bestStreak=S.streak;metaKill(e);
   // 8.11.2026 execution: slow motion + camera push-in + extra blood on the killing blow of an elite or a boss
   if(ftMelee&&!pl.dead&&(e.mini||BIG.has(e.type)||e.type==='collector'||e.type==='boginka'||e.type==='glizzard')){S.exec=BIG.has(e.type)||e.type==='collector'||e.type==='boginka'||e.type==='glizzard'?1.1:.75;S.execX=e.x;S.execY=e.y;blood(e.x,e.y,BIG.has(e.type)?42:26,e.x-pl.x,e.y-pl.y,1.6);play('hitH',0);padRumble(1,.8,260)}if(S.zab){if(S.zTag==='x')S.zCrossK++;else if(S.zTag==='s')S.zSlideK++;else if(S.zTag==='w')S.zWhirlN++;if(e.mini&&e.fhT!=null&&S.t-e.fhT<=15)S.zEliteFast=1}if(e.mini&&S.eliteLoot){dropPick('c',e.x+rnd(-6,6),e.y+rnd(-4,4),25);dropPick('h',e.x+rnd(-8,8),e.y+rnd(-4,4))}if(e.mini){S.eliteK=1;S.eliteN=(S.eliteN||0)+1;if(S.t-(e.bornT??-99)<=20)S.eliteFast=1}if(ftHeavy&&ftMelee)S.hvK=(S.hvK||0)+1;
   if(S.mil&&e.mini&&ftHeavy&&ftMelee&&pl.atk&&pl.atk.wick>=MIL.wick.max)S.mEliteK=(S.mEliteK||0)+1;
@@ -435,7 +435,7 @@ function updEprojX(dt){S.enemyShotCd=Math.max(0,(S.enemyShotCd||0)-dt);for(let i
   {const G=S.swordGuardian;if(!gone&&G&&!G.gone&&Math.hypot(G.x-f.x,G.y-f.y)<SL.guard.r+3){golemHurt(G,enemyDamage(f.dm||(f.bolt?6:7),SL.projDiv));gone=true}}
   if(!gone&&!pl.dead&&Math.hypot(pl.x-f.x,pl.y-f.y)<8){const sp=Math.hypot(f.vx,f.vy)||1,nx=f.vx/sp,ny=f.vy/sp;
     if(pl.block&&pl.inv<=0&&-(pl.fx*nx+pl.fy*ny)>.3&&pl.blockT<parryWin()){onParry();pl.parryT=.45;S.hitstop=.12;padRumble(.6,.3,140);guardFeedback('parry',nx,ny,f);shake(.15,.15);ftInfo((EN?'Deflected!':'Odbicie!'));
-      const tg=nearestFoe(f.x,f.y);if(tg){f.ref=1;f.tgt=tg;f.spd=Math.max(240,sp*1.4);f.dmg=SL.light.dmg[0]*(1+.07*(S.lvl-1))*(S.str||1)*might()*riMul();f.life=5;f.x=pl.x;f.y=pl.y;if(f.vfe){f.vfe.t=f.vfe.dur;f.vfe=null}}}
+      const tg=nearestFoe(f.x,f.y);if(tg){f.ref=1;f.tgt=tg;f.spd=Math.max(240,sp*1.4);f.dmg=SL.light.dmg[0]*lvlMul()*(S.str||1)*might()*riMul();f.life=5;f.x=pl.x;f.y=pl.y;if(f.vfe){f.vfe.t=f.vfe.dur;f.vfe=null}}}
     else hurtPlayer(enemyDamage(f.dm||(f.bolt?6:7),SL.projDiv),nx,ny,f.source||(f.bolt?'night':'fire'));gone=!f.ref}
   if(gone&&f.bolt){if(f.vfe)f.vfe.t=f.vfe.dur;if(f.source&&(f.source.type==='xbow'||f.source.type==='scribe'))skAdd('boltHit',.3,f.x,f.y,.5,.7,'bill');for(let k=0;k<5;k++)S.parts.push({k:'d',x:f.x,y:f.y,z:8,vx:rnd(-30,30),vy:rnd(-15,15),vz:rnd(5,20),c:'#9d9584',life:.3});S.eproj.splice(i,1);continue}
   if(gone&&f.sau){mustardSplash(f.x,f.y,1);if(f.mesh)scene.remove(f.mesh);S.eproj.splice(i,1);continue}
@@ -458,7 +458,28 @@ function navDir(e){const D=NAV.d;if(!D)return null;const ex=Math.floor(e.x/TS),e
   for(const [ox,oy] of NAV8){const nx=ex+ox,ny=ey+oy;if(nx<0||ny<0||nx>=MW||ny>=MH)continue;const v=D[ny*MW+nx];if(v<0||v>=best)continue;if(ox&&oy&&(D[ey*MW+nx]<0||D[ny*MW+ex]<0))continue;best=v;bx=ox;by=oy}
   if(!bx&&!by)return null;const cx=(ex+bx+.5)*TS-e.x,cy=(ey+by+.5)*TS-e.y,l=Math.hypot(cx,cy)||1;return [cx/l,cy/l]}
 function sight(x0,y0,x1,y1){const n=Math.ceil(Math.hypot(x1-x0,y1-y0)/8);for(let i=1;i<n;i++)if(solidAt(x0+(x1-x0)*i/n,y0+(y1-y0)*i/n))return false;return true}
-function spawnTick(dt){
+function spawnTick(dt){const n0=S?S.enemies.length:0;spawnTick0(dt);try{champRoll(n0)}catch(e){quietErr('champ',e)}}
+/* 23.11.2026 (zgoda autora): cechy elit i czempioni. Kazda elita dostaje jedna ceche; po polnocy czesc zwyklych wrogow
+   wychodzi jako czempion (2-7% nowych, najwyzej 3 naraz): wiecej zycia, bordowa poswiata, nazwa z cecha nad glowa.
+   Cechy: Pancerz (szybkie ciosy -45%, silne, krytyki i ogluszenie przebijaja), Szal (szybszy i mocniejszy),
+   Wezwanie (co 9 s przyzywa dwoch wrogow), Wybuch (po smierci wybucha po 0,9 s ostrzezenia). EN niezatwierdzone. */
+const AFX={pancerz:{n:(EN?'Armoured':'Pancerz'),c:'#8fb8ff'},szal:{n:(EN?'Enraged':'Szał'),c:'#ff5a6a'},wezwanie:{n:(EN?'Summoner':'Wezwanie'),c:'#c08cff'},wybuch:{n:(EN?'Volatile':'Wybuch'),c:'#ff9a3a'}};
+function setAffix(e,k){k=k||Object.keys(AFX)[(Math.random()*4)|0];e.affix=k;if(k==='szal'){e.spd*=1.3;e.dmg*=1.15}if(k==='wezwanie')e.sumT=4;return e}
+function champRoll(n0){if(!S||S.t<BREAK_AT||S.dg||S.train||S.stage==='break')return;let alive=0;for(const o of S.enemies)if(o.champ&&!o.dead)alive++;if(alive>=3)return;
+ const p=.02+.05*Math.min(1,(S.t-BREAK_AT)/(NIGHT-BREAK_AT));for(let i=n0;i<S.enemies.length&&alive<3;i++){const e=S.enemies[i];if(!e||e.dead||e.mini||e.champ||e.named||BIG.has(e.type)||['collector','boginka','wisp','bat','paperrat','courtraven','glizzard'].includes(e.type))continue;if(Math.random()>=p)continue;
+  e.champ=true;e.hp*=2.2;e.max*=2.2;e.dmg*=1.25;e.xp*=3;e.s=(e.s||1)*1.12;setAffix(e);alive++}}
+function affixDeath(e){if(e.affix!=='wybuch')return;(S.blasts||(S.blasts=[])).push({x:e.x,y:e.y,t:.9,r:44,dmg:enemyDamage(e.dmg*1.8),e:0});ftx(AFX.wybuch.n+'!',e.x,e.y,ftEntH(e)+.6,'i')}
+function affixTick(dt){if(!S)return;
+ for(const e of S.enemies){if(e.affix!=='wezwanie'||e.dead||e.rise>0)continue;e.sumT-=dt;if(e.sumT>0)continue;e.sumT=9;let alive=0;const pool=[];for(const o of S.enemies)if(!o.dead&&o.type!=='wisp'){alive++;if(!o.mini&&!o.champ&&!BIG.has(o.type)&&o.type!=='collector'&&o.type!=='boginka'&&o.type!=='bat')pool.push(o.type)}
+  if(alive>spawnTarget()+6)continue;const ty=pool.length?pool[(Math.random()*pool.length)|0]:e.type;for(let k=0;k<2;k++){const a=Math.random()*6.283,x=e.x+Math.cos(a)*22,y=e.y+Math.sin(a)*14;if(solidAt(x,y))continue;try{spawnEnemy(ty,x,y,{rise:1})}catch(_){}}
+  ftx(AFX.wezwanie.n+'!',e.x,e.y,ftEntH(e)+.6,'i');for(let i=0;i<14;i++){const an=Math.random()*6.283;S.parts.push({k:'e',x:e.x,y:e.y,z:rnd(4,14),vx:Math.cos(an)*rnd(30,70),vy:Math.sin(an)*rnd(20,45),vz:rnd(6,20),c:AFX.wezwanie.c,life:rnd(.35,.7)})}}
+ const B=S.blasts;if(!B||!B.length)return;for(let i=B.length-1;i>=0;i--){const b=B[i];b.t-=dt;b.e-=dt;
+  if(b.e<=0&&b.t>0){b.e=.07;for(let k=0;k<14;k++){const a=k/14*6.283+Math.random()*.2;S.parts.push({k:'e',x:b.x+Math.cos(a)*b.r,y:b.y+Math.sin(a)*b.r*.62,z:2,vx:0,vy:0,vz:rnd(4,12),c:k%2?AFX.wybuch.c:'#ffd08a',life:.16})}}
+  if(b.t<=0){B.splice(i,1);shake(.16,.45);try{play('fire',.04)}catch(_){}for(let k=0;k<34;k++){const a=Math.random()*6.283,sp=rnd(40,120);S.parts.push({k:'e',x:b.x,y:b.y,z:rnd(4,16),vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.62,vz:rnd(10,40),c:k%3?AFX.wybuch.c:'#fff1c0',life:rnd(.3,.65)})}
+   if(!pl.dead&&Math.hypot((pl.x-b.x),(pl.y-b.y)*1.6)<b.r){const d=Math.hypot(pl.x-b.x,pl.y-b.y)||1;hurtPlayer(b.dmg,(pl.x-b.x)/d,(pl.y-b.y)/d)}
+   if(pl2&&!pl2.dead&&Math.hypot((pl2.x-b.x),(pl2.y-b.y)*1.6)<b.r){const d=Math.hypot(pl2.x-b.x,pl2.y-b.y)||1;try{asP2(()=>hurtPlayer(b.dmg,(pl.x-b.x)/d,(pl.y-b.y)/d))}catch(_){}}}}}
+
+function spawnTick0(dt){
   if(pl.dead||S.phase!=='play'||S.opening||S.stage==='break'||S.dg||S.train)return;
   if(!S.endless)for(let i=0;i<SURGE.length;i++)if(S.t>=SURGE[i]&&S.t<SURGE[i]+SURGE_LEN&&!((S.surgeMask||0)&1<<i)){S.surgeMask=(S.surgeMask||0)|1<<i;S.spawnT=0;shake(.12,.5);say(EN?'Onslaught! The dead pour in from every side.':'Napór! Martwi napierają ze wszystkich stron.')}
   S.spawnT-=dt;if(S.spawnT>0)return;S.spawnT=.5;
@@ -504,7 +525,7 @@ function pickNamed(){if(S.namedDone)return null;const l=NAMED_ALL.filter(r=>r.ch
 function miniTick(){const n=S?S.miniN||0:0,ts=S&&S.firstNight?ELITE.timesFirst:ELITE.times;if(!S||!(S.t>=(n<ts.length?ts[n]:S.endless?ts[ts.length-1]+150*(n-ts.length+1):1e9))||pl.dead||S.dg||S.stage==='break'||S.opening)return;
   const type=ELITE.type[CH]||'knight';if(!A[type])return;S.miniN=n+1;S.miniDone=true;
   const p=ringSpot(150,230)||ringSpot(90,300)||[pl.x+110,pl.y],e=spawnEnemy(type,p[0],p[1],{rise:1,mini:true,bornT:S.t});
-  const hm=S.firstNight?2.8:ELITE.hp;e.hp*=hm;e.max*=hm;e.dmg*=S.firstNight?1.4:ELITE.dmg;e.xp*=hm;e.s=1.2;play('bossGrowl',0);shake(.15,.6);const nd=pickNamed();if(nd){S.namedDone=1;e.named=nd.id;e.nmN=nd.n;e.s=1.28;padRumble(.7,.4,380);say((EN?nd.n+' steps out of the dark. This one has a name.':nd.n+' wychodzi z mroku. Ten ma imię.'))}else say((EN?'An elite emerges from the dark in a crimson glow.':'Z mroku wychodzi elita w bordowej poświacie.'))}
+  const hm=S.firstNight?2.8:ELITE.hp;e.hp*=hm;e.max*=hm;e.dmg*=S.firstNight?1.4:ELITE.dmg;e.xp*=hm;e.s=1.2;setAffix(e);play('bossGrowl',0);shake(.15,.6);const nd=pickNamed();if(nd){S.namedDone=1;e.named=nd.id;e.nmN=nd.n;e.s=1.28;padRumble(.7,.4,380);say((EN?nd.n+' steps out of the dark. This one has a name.':nd.n+' wychodzi z mroku. Ten ma imię.'))}else say((EN?'An elite emerges from the dark in a crimson glow.':'Z mroku wychodzi elita w bordowej poświacie.'))}
 // Rozdzial III, Solne Nabrzeze: zdarzenia nocy (rozmowy NPC maja wlasne kwestie w 02_swiaty.js)
 function portEvents(){
   const ev=(k,c,fn)=>{if(c&&!S.ev.has(k)){S.ev.add(k);fn()}};

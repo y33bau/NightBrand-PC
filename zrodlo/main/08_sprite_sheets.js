@@ -174,7 +174,7 @@ function buildAnims(imgs,group="all"){
   if(group==='hero'){const an={heroD:imgs.hero_d?mkHeroD():null};fixHeroD(an.heroD,imgs);return an}
   const anims={
     ...(has("core")?{
-    // slasher mode: the hero keeps the greatsword drawn (S1: idle and walk in three directions)
+    // the hero keeps the greatsword drawn (S1: idle and walk in three directions)
     ...(imgs.hero_d?{heroD:mkHeroD()}:{}),
     dwarf:{walk:row(od,2),attack:row(od,3,0,2),death:row(od,3,2,4)},
     possessed:{walk:row(vu,0),attack:row(vu,1,0,2),death:row(vu,1,2,4)},

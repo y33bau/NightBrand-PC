@@ -31,7 +31,7 @@ function hud(){renderActiveHud();if(!S)return;drawMini(1/60);const left=S.endles
     const h=b.join('<br>');if(h!==lastBuffs){lastBuffs=h;$('buffs').innerHTML=h}}
   if(S.hl&&clock-S.hl.t>3){S.hl=null;chipsDirty=true}
   if(chipsDirty){chipsDirty=false;const chip=k=>{const mx=ENCH.includes(k)&&S.mainEnchant&&S.mainEnchant!==k?3:SK[k].max||9;return`<span class="sk${S.hl&&S.hl.k===k?' hi':''}" title="${SK[k].name}"><i data-premium-skill="${k}" class="ic ic-${SK[k].ic||k}"></i><em>${'<b class="on"></b>'.repeat(S.sk[k])+'<b></b>'.repeat(Math.max(0,mx-S.sk[k]))}</em></span>`};
-    $('chips').innerHTML=SLASH_SK.filter(k=>S.sk[k]).map(chip).join('')}}
+    $('chips').innerHTML=LEVEL_SK.filter(k=>S.sk[k]).map(chip).join('')}}
 // 16.11.2026: sterowanie dotykowe usuniete (decyzja autora: gra na komputer: klawiatura, mysz, pad); applyInputMode ustawia widok Opcji dla klawiatury
 function applyInputMode(){$('opts').classList.add('sl');$('figKb').hidden=false;
   $('warn').textContent=''}

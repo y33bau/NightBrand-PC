@@ -107,3 +107,14 @@ Bez nowych tekstów: zmienił się tylko układ.
 | Wyczucie chwili: W jednej nocy trafiaj 25 razy techniką aktywną wroga pod wpływem jej stanu. | Sense of Timing: In one night, hit 25 times with an active technique an enemy under its status. |
 
 „Act” czy „chapter”: w EN gra mówi „act” w ponad 60 miejscach (wybór rozdziału, „Act II”, osiągnięcia, Instrukcja) i „chapter” w 44. Ujednolicenie czeka na decyzję autora; jedną zmianą da się przestawić wszystko w obie strony.
+
+## 13. Rzadkie karty i cechy elit (wersja 863)
+| PL | EN |
+|---|---|
+| Rzadka · +2 poziomy (znaczek na karcie) | Rare · +2 levels |
+| Rzadka karta: +2 (napis po wyborze) | Rare card: +2 |
+| Pancerz | Armoured |
+| Szał | Enraged |
+| Wezwanie | Summoner |
+| Wybuch | Volatile |
+| Nad wrogiem: „Elita: Rycerz · Pancerz”, „Opętany · Szał” | "Elite: Knight · Armoured", "Possessed · Enraged" |

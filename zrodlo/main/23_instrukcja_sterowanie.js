@@ -163,7 +163,7 @@ scrEl.addEventListener('mousemove',e=>{const r=scrEl.getBoundingClientRect();mou
 // The game follows the device: landscape or portrait, never turned by code. It fills the whole window by widening
 // the view: at least the old 16:9 picture height is visible in landscape; in portrait the visible width equals that
 // height and the extra room goes up and down. Wider than 2.4:1 (ultrawide) gets thin side bars instead.
-var ROT=false;// fit() can run before this line, so its numbers are literals: max aspect 2.4, base vertical FOV 24°
+// fit() can run before this line, so its numbers are literals: max aspect 2.4, base vertical FOV 24°
 function lp(x,y){return [x,y]}
 function lrect(el){return el.getBoundingClientRect()}
 function fit(){const st=$('stage'),r=st.getBoundingClientRect();let w=Math.max(1,Math.floor(r.width)),h=Math.max(1,Math.floor(r.height));if(w/h>2.4)w=Math.floor(h*2.4);const s=Math.min(w/320,h/180),port=h>w;

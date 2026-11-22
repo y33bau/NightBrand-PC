@@ -223,8 +223,8 @@ function hbTick(){const box=$('hbs');if(!box)return;
   for(const [e,el] of HB)if(e==='guard'||e==='guard2'?!S||!(e==='guard'?S.swordGuardian:pl2?.actives?.swordGuardian):(e.dead||!S||!S.enemies.includes(e))){el.remove();HB.delete(e)}
   if(!S)return;
   for(const e of S.enemies){if(e.dead||e.rise>0||BIG.has(e.type)||e.type==='collector'||e.type==='glizzard'||e.type==='boginka'||e.type==='wisp'||e.type==='bat')continue;
-    const elite=e.mini||(e.max>=90&&e.hp<e.max)||((e.type==='debtor'||e.type==='wraith')&&Math.hypot(e.x-pl.x,e.y-pl.y)<130);if(!elite)continue;
-    let el=HB.get(e);if(!el){el=document.createElement('div');el.className='hb'+(e.mini?' m':'');el.innerHTML='<b></b><i><u></u></i>';el.firstChild.textContent=e.named?'★ '+e.nmN:(e.mini?(EN?'Elite: ':'Elita: '):'')+(ENAME[e.type]||(EN?'Enemy':'Wróg'));box.appendChild(el);HB.set(e,el)}
+    const elite=e.mini||e.champ||(e.max>=90&&e.hp<e.max)||((e.type==='debtor'||e.type==='wraith')&&Math.hypot(e.x-pl.x,e.y-pl.y)<130);if(!elite)continue;
+    let el=HB.get(e);if(!el){el=document.createElement('div');el.className='hb'+(e.mini?' m':'');el.innerHTML='<b></b><i><u></u></i>';el.firstChild.textContent=(e.named?'★ '+e.nmN:(e.mini?(EN?'Elite: ':'Elita: '):'')+(ENAME[e.type]||(EN?'Enemy':'Wróg')))+(e.affix&&AFX[e.affix]?' · '+AFX[e.affix].n:'');if(e.affix&&AFX[e.affix]){el.classList.add('afx');el.style.setProperty('--afx',AFX[e.affix].c)}box.appendChild(el);HB.set(e,el)}
     V.set(e.x/16,ftEntH(e)+.45,e.y/16).project(cam);
     el.style.left=((V.x+1)/2*100)+'%';el.style.top=((1-V.y)/2*100)+'%';el.lastChild.firstChild.style.width=Math.max(0,e.hp/e.max*100)+'%'}
   for(const [guardKey,g] of [['guard',S.swordGuardian],['guard2',pl2?.actives?.swordGuardian]]){if(g&&!g.gone){let el=HB.get(guardKey);if(!el){el=document.createElement('div');el.className='hb gd';el.innerHTML='<i><u></u></i>';el.setAttribute('role','progressbar');el.setAttribute('aria-label',(EN?'Golem health':'Życie golema'));el.setAttribute('aria-valuemin','0');box.appendChild(el);HB.set(guardKey,el)}guardianBarAnchor(g);el.style.left=((V.x+1)/2*100)+'%';el.style.top='calc('+((1-V.y)/2*100)+'% - 7px)';el.setAttribute('aria-valuemax',Math.ceil(g.max));el.setAttribute('aria-valuenow',Math.max(0,Math.ceil(g.hp)));el.lastChild.firstChild.style.width=Math.max(0,Math.min(100,g.hp/g.max*100))+'%'}}}
@@ -314,7 +314,7 @@ function setChoiceButtons(opts){const row=$('witChoices'),ids=['witLeave','witKi
 function offerChoice(n){const c=NPC_CHOICE[n.id],o=c.opts(n);S.witChoice=true;S.choiceOpts=o;$('witChoices').hidden=false;document.querySelector('#dialog .next').hidden=true;$('dlgTxt').textContent=c.ask(n);setChoiceButtons(o);resetInput();$('witLeave').focus()}
 function chooseNpc(i){if(!S||!S.witChoice||!S.dialog||!S.choiceOpts?.[i])return;const n=S.dialog,k=S.choiceOpts[i].k;S.witChoice=false;S.choiceOpts=null;$('witChoices').hidden=true;document.querySelector('#dialog .next').hidden=false;resetInput();S.choiceMade=k;S.dlg=NL(n).length-1;advanceDialog();S.choiceMade=null}
 // co klatkę: odroczone skutki wyborów (upiory, elita Rudnej, wartę Ottokara, chorągiew Heriego)
-function questTick(dt){if(!S||S.phase!=='play')return;
+function questTick(dt){if(!S||S.phase!=='play')return;try{affixTick(dt)}catch(e){quietErr('affixTick',e)}
   /* 22.11.2026: skutek klamstwa wobec Izoldy (EN niezatwierdzone) */
   if(S.izoldaT&&S.t>=S.izoldaT&&!pl.dead){S.izoldaT=0;say(EN?'By the well lie a snuffed candle and Isolda\'s cloak. She went out to look for her husband in a night full of the dead. Your lie gave her hope for the length of one street.':'Przy studni leży zgaszona świeca i płaszcz Izoldy. Poszła szukać męża w noc pełną martwych. Twoje kłamstwo dało jej nadzieję na długość jednej ulicy.')}
   /* 22.11.2026: Upior rachunkow nie walczy w milczeniu */

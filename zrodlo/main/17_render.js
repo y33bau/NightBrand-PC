@@ -24,21 +24,12 @@ function heroFrameV2(D){const MI=S&&S.mil&&D.mil?D.mil:null,fd=()=>Math.abs(pl.f
   if(pl.hurtT>0)return ix(D.hurt,(.22-pl.hurtT)/.22*2);
   return null}
 // enchant colour on the sword itself: the grey pixels on the sword side of every hero frame get the spell colour (per frame, built once, so it turns with the sprite)
-const BLADE_TINT={venom:[150,255,70],fireblade:[255,122,30],iceblade:[110,200,255],bloodblade:[225,10,18]};
+
 // krew: brazowa animacja uderzenia z arkusza zamieniona w krwista czerwien (jedna kopia przy starcie; reszta arkusza bez zmian)
 function bloodFix(img,y0,hh){try{const w=img.width,h=img.height,c=canvas(w,h),g=c.getContext('2d');g.drawImage(img,0,0);const id=g.getImageData(0,y0,w,hh),d=id.data;
   for(let i=0;i<d.length;i+=4){if(d[i+3]===0)continue;const v=Math.min(1,Math.max(d[i],d[i+1],d[i+2])/255*1.9+.10);d[i]=215*v+10;d[i+1]=14*v;d[i+2]=18*v}
   g.putImageData(id,0,y0);return c}catch(e){return img}}
-function heroBladeMat(fr,k){const key='E'+k;if(fr[key]!==undefined)return fr[key];fr[key]=null;try{const n=fr.n,mi=n&&n.map&&n.map.image,ei=n&&n.emissiveMap&&n.emissiveMap.image,T=BLADE_TINT[k];if(!mi||!ei||!T)return null;
-  const w=mi.width,h=mi.height,cv=canvas(w,h),g=cv.getContext('2d');g.drawImage(mi,0,0);const id=g.getImageData(0,0,w,h),d=id.data;let x0=w,x1=-1;
-  for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(d[(y*w+x)*4+3]>0){if(x<x0)x0=x;if(x>x1)x1=x}
-  if(x1<0)return null;const lim=x0+.55*(x1-x0+1),hit=[];
-  for(let y=0;y<h;y++)for(let x=Math.ceil(lim);x<w;x++){const i=(y*w+x)*4;if(d[i+3]===0)continue;const r=d[i],gg=d[i+1],b=d[i+2],mx=Math.max(r,gg,b),mn=Math.min(r,gg,b);
-    if(mx>=95&&mx-mn<45){const l=(r+gg+b)/765;d[i]=r*.2+Math.min(255,T[0]*(.5+.7*l))*.8;d[i+1]=gg*.2+Math.min(255,T[1]*(.5+.7*l))*.8;d[i+2]=b*.2+Math.min(255,T[2]*(.5+.7*l))*.8;hit.push(i)}}
-  if(!hit.length)return null;g.putImageData(id,0,0);
-  const ec=canvas(w,h),eg=ec.getContext('2d');eg.drawImage(ei,0,0);const ed=eg.getImageData(0,0,w,h);for(const i of hit){ed.data[i]=T[0]*.6;ed.data[i+1]=T[1]*.6;ed.data[i+2]=T[2]*.6}eg.putImageData(ed,0,0);
-  const m=n.clone(),t1=texFrom(cv),t2=texFrom(ec);for(const p of ['minFilter','magFilter','generateMipmaps'])if(n.map[p]!==undefined)t1[p]=n.map[p];for(const p of ['minFilter','magFilter','generateMipmaps'])if(n.emissiveMap[p]!==undefined)t2[p]=n.emissiveMap[p];
-  m.map=t1;m.emissiveMap=t2;m.needsUpdate=true;fr[key]=m;return m}catch(e){return null}}
+/* 23.11.2026: usunieto nieuzywana heroBladeMat (zaklecie ostrza nie barwi sprite'a od 14.11.2026) */
 // 16.11.2026 (pilot): ruch z kodu na sprite'cie bohatera: oddech, kolysanie kroku, pochylenie w strone ruchu i ciosu, dopchniecie w chwili uderzenia,
 // rozciagniecie przy zrywie, przysiad po skoku i uniku. TYLKO wyglad: nie zmienia pl.x/pl.y, zasiegow, czasow ani trafien. Wylacza je opcja wstrzasow (SETT.shake); do porownania u autora ?ruch=0 (tylko lokalnie: ten sam warunek co LOKALNIE w czesci 27, tam jest w domknieciu).
 const HERO_MOTION_OFF=NB_LOKALNIE&&nbParam('ruch')==='0',HERO_MOTION=new WeakMap();
@@ -210,7 +201,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{stIconsTick
       else if(e.atkA>0||e.leap>0)fr=at(an.attack,.35-Math.max(0,e.atkA),6,false);
       else fr=at(an.walk,e.walk+e.ph,e.type==='warden'?5:7);
       const redW=e.sw>0&&e.red;if(redW&&Math.random()<dt*20)S.parts.push({k:'e',x:e.x+rnd(-4,4),y:e.y,z:rnd(8,26),vx:rnd(-8,8),vy:0,vz:rnd(10,30),c:warningColor(),life:.3});
-      setFrame(e.mesh,fr,attackCue(e)||(e.flash>0&&SETT.flash?(COMBAT_POLISH_ON?'impact':'f'):e.frozen>0?'i':statusTint(e)||(e.hunt?(((clock*4)|0)%2?'f':'b'):e.mini?'b':'n')));
+      setFrame(e.mesh,fr,attackCue(e)||(e.flash>0&&SETT.flash?(COMBAT_POLISH_ON?'impact':'f'):e.frozen>0?'i':statusTint(e)||(e.hunt?(((clock*4)|0)%2?'f':'b'):(e.mini||e.champ)?'b':'n')));
       if(e.mini&&Math.random()<dt*12)S.parts.push({k:'e',x:e.x+rnd(-5,5),y:e.y+rnd(-2,2),z:rnd(4,22),vx:rnd(-6,6),vy:0,vz:rnd(8,22),c:Math.random()<.5?'#8a1226':'#d02a44',life:rnd(.4,.8)});
       const y=e.type==='bat'?.85+Math.sin(clock*8+e.ph)*.12:e.type==='courtraven'?.55+Math.sin(clock*7+e.ph)*.12:e.type==='wraith'?.3+Math.sin(clock*2.5+e.ph)*.1:e.type==='zmora'?.25+Math.sin(clock*2.5+e.ph)*.1:e.type==='wisp'?.35+Math.sin(clock*3+e.ph)*.12:(e.rise>0&&e.type!=='glizzard'?-e.rise*(BIG.has(e.type)?3:2):0)+(e.lh||0)+(e.type==='strzyga'&&!e.phase?.35+Math.sin(clock*2)*.1:0)+((CH===1||CH===2)&&!BIG.has(e.type)&&e.type!=='bat'&&e.type!=='collector'&&e.type!=='glizzard'?.1:0);
       const js=e.portArt?e.portArt.scale:e.type==='glizzard'?1.3:e.type==='collector'?(CH===5&&A.collectorC5?1:1.25):e.type==='beast'?(A.beast.sheet?(e.enraged?1.32:1.15):(e.enraged?1.5:1.3)):e.type==='monk'?1.08:e.type==='cumlin'?1.2:e.type==='leszy'?1.25:e.type==='strzyga'?(e.phase===2?1.25:1.2):e.type==='bies'?1.15:e.type==='boginka'?1.1:e.type==='bookgolem'?1.2:e.type==='executioner'?1.1:e.type==='paperrat'?.85:1,hop=0;
