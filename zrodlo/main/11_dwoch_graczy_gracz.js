@@ -405,7 +405,7 @@ function blood(x,y,n,nx,ny,spread=1){const hd=sprayBloodHD(x,y,n,nx,ny,spread);c
 function decalAt(cv,x,y,a=1){if(bloodHD.ready&&DEC.spray?.includes(cv)){stampBloodHD(x,y,18,11);return}dg.globalAlpha=a;dg.drawImage(cv,Math.round(x-16),Math.round(y-16));dg.globalAlpha=1;decalDirty=true}
 function pool(x,y,w,h){if(stampBloodHD(x,y,w,h))return;if(DEC.pool){decalAt(DEC.pool[w<14?0:w<19?1:w<30?2:3],x,y);return}x=Math.round(x);y=Math.round(y);dg.fillStyle=P.blood2;dg.fillRect(x-w/2,y-h/2+1,w,h-2);dg.fillStyle=P.blood;dg.fillRect(x-w/4,y-1,w/2,2);decalDirty=true}
 function heal(n){if(pl.dead||pl.hp>=pl.max)return 0;const h=Math.min(n,pl.max-pl.hp);pl.hp+=h;return h}
-const might=()=>(1+.1*(S.whet||0))*(S.fury>0?1.2:1)*(S.pk?S.pk.dmg:1);
+const might=()=>(S.glass||1)*(1+.1*(S.whet||0))*(S.fury>0?1.2:1)*(S.pk?S.pk.dmg:1);
 function spriteMesh(geo){const m=new THREE.Mesh(geo,A.fx.slash[0].n);scene.add(m);return m}
 function addVfx(anim,dur,x,y,h,size,mode,rot=0,flip=1){const m=spriteMesh(geoC);m.renderOrder=6;setFrame(m,anim[0]);const f={mesh:m,anim,t:0,dur,x,y,h,size,mode,rot,flip};polishMagic(f,anim._magicKind);if(anim._sc)f.size*=anim._sc;S.vfx.push(f);return m}
 // Combat presentation only: never changes AI, hitboxes, rewards or gameplay RNG.
