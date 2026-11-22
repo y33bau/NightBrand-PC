@@ -1824,6 +1824,7 @@ ${B} :is(#nbP,#nbW) button.nbd:not(:disabled):is(:hover,:focus-visible,.pf){filt
 // kule HUD pod oknami, znaczki zakladek wg urzadzenia, sygnal przewijania list, chip EN w Przygotowaniu, kontrast trybu w menu
 (()=>{try{const O='#orient'.repeat(300),st=document.createElement('style');st.id='nb-przeglad-2211';
  st.textContent=`
+${O} #cards .card .rxb{display:block;margin:.35em 0 .1em;font-size:.86em;line-height:1.3;color:#f0c987;text-shadow:0 1px 2px #000}${O} #cards .card .rxb b{color:#ffe2a6}/* 22.11.2026: linia reakcji zywiolow na karcie */
 body:has(:is(#pause,#shop,#lvl,#opts):not([hidden])) ${O} .pch-orb{visibility:hidden!important}
 body:has(:is(#title,#kap,#manual,#prep,#end):not([hidden])) ${O} #nbHud .pch{visibility:hidden!important}
 body:not(.padnav) ${O} .nbq-tb.nb-padonly{display:none!important}

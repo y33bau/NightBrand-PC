@@ -121,3 +121,24 @@ Rozrzut między przebiegami wynosi około ±10%. Tancerka była około 20% za re
 - Wcześniej obrażenia przestawały rosnąć od mniej więcej 9. minuty. Teraz pierwsza połowa nocy jest lżejsza, a końcówka cięższa, i ten wzór widać u wszystkich klas.
 - Poziom na koniec nocy wynosi 25–26, bez zmiany.
 - Zabójstw jest około 2150–2320, o około 5% mniej, bo wrogowie pod koniec są twardsi.
+
+## Wdrożone w 854: reakcje żywiołów (zgoda autora 22.11, rola gamedev)
+Para żywiołów gracza (najwyżej 2; ogień i lód się wykluczają) daje jeden efekt łączony:
+
+| Para | Reakcja | Działanie |
+|---|---|---|
+| Ogień + Trucizna | Opary | Płonący i zatruty wróg wybucha chmurą; sąsiedzi w promieniu 46 dostają truciznę. Odnowienie 3 s na wroga. |
+| Ogień + Krew | Wrzątek | Krwawienie na płonącym wrogu ×1,5. |
+| Lód + Trucizna | Szron | Zatruty i schłodzony wróg ma spowolnienie wydłużone do 5 s (raz na wroga). |
+| Lód + Krew | Kruche Żyły | Silny cios w schłodzonego, krwawiącego wroga: reszta krwawienia ×1,5 od razu, a sąsiedzi w promieniu 40 dostają krwawienie. Odnowienie 2 s. |
+| Trucizna + Krew | Zakażenie | Śmierć zatrutego i krwawiącego wroga przenosi oba efekty na sąsiadów w promieniu 48. |
+
+Kod:
+- część 12: `RX`, `elementReact()`, `rxBoil()`, `rxInfect()`, `rxCardLine()`; `applyEnchants()` woła teraz `applyEnchants0()` i `elementReact()`;
+- część 13: tik krwawienia i `killEnemy()`;
+- część 14: linia „Reakcja (X + Y): …” na karcie drugiego żywiołu zastępuje „Łączy się z 1 innym żywiołem”;
+- część 27: styl `.rxb`.
+
+Test w przeglądarce: każda z 5 reakcji wywołana ręcznie działa bez błędów; karta wyświetla się poprawnie (zrzut).
+
+Uwaga DROBNA, istniejąca wcześniej i nieruszana: opis ostrza wspierającego pokazuje „Lód: spowolnienie 15%” także na kartach Trucizny i Krwi, a podział na punkty rozcina zdanie „Bez znaków, finiszera i premii miecza”.
