@@ -3776,7 +3776,7 @@ const BOSS_HP_MUL=1.5,BOSS_SPD_MUL=1.1;// bossowie finałowi: życie x1,5, szybk
 const MOB_MUL=1.232;// +10% wrogów (runda: pojedynki bossów), 15.11.2026: dodatkowo +12% (noc 16 min, zgoda autora)
 // 15.11.2026: Napór: 15 s z 1,5x wiecej wrogow o 45% zycia, w 4:00 i 12:00 (w polowie kazdej czesci nocy); konczy go elitarny wrog
 const SURGE=[240,720],SURGE_LEN=15;function surgeOn(){return !!S&&!S.dg&&!S.endless&&!S.train&&SURGE.some(a=>S.t>=a&&S.t<a+SURGE_LEN)}
-const DF={e:{hp:.75,dmg:.7,en:.8,xp:1,coin:.9,pot:200,n:(EN?'Easy':'Łatwy')},n:{hp:1,dmg:1,en:1,xp:1,coin:1,pot:150,n:(EN?'Normal':'Normalny')},h:{hp:1.25,dmg:1.2,en:1.12,xp:1.15,coin:1.15,pot:100,n:(EN?'Hard':'Trudny')}};let DIFFK='n';try{const q=localStorage.getItem('pn_diff');if(DF[q])DIFFK=q}catch(e){}
+const DF={e:{hp:.75,dmg:.7,en:.8,xp:1,coin:.9,pot:200,n:(EN?'Easy':'Łatwy')},n:{hp:1,dmg:1,en:1,xp:1,coin:1,pot:150,n:(EN?'Normal':'Normalny')},h:{hp:1.25,dmg:1.2,en:1.12,xp:1/* 22.11.2026 (zgoda autora): bez premii XP, bo znosila trudnosc (bylo 1.15) */,coin:1.15,pot:100,n:(EN?'Hard':'Trudny')}};let DIFFK='n';try{const q=localStorage.getItem('pn_diff');if(DF[q])DIFFK=q}catch(e){}
 const ENEMY_CAP=100,ENEMY_RAMP=.32,ENEMY_HP_T=300;let ENEMY_DMG=.8*DF[DIFFK].dmg;
 // from hero level 20 the night gets 10% more enemies at once (limit raised too)
 const LATE_LVL=20,LATE_MUL=1.1;
@@ -6537,10 +6537,10 @@ $('sFab').addEventListener('click',()=>{$('storyTgl').checked=false;$('storyTgl'
 // 14.11.2026: opis poziomów zgodny z liczbami w DF (10_stan_gry.js) i Popiołami (22_postac_zapis_ustawienia.js, mnożnik .8/1/1.3)
 const DIFFCAP=EN?{e:['A calm start.',[['Enemies','−20% count, −25% health, −30% damage'],['Rewards','experience unchanged, coins −10%, Ashes −20%'],['Cauldrons','heal faster (12% health/s) and hold 33% more']],'First 3 minutes of each night: 10% fewer enemies. Act I starts more gently.'],
  n:['Balanced play, as designed.',[['Enemies','standard'],['Rewards','standard'],['Cauldrons','standard']]],
- h:['For the battle-hardened.',[['Enemies','+12% count, +25% health, +20% damage'],['Rewards','experience +15%, coins +15%, Ashes +30%'],['Cauldrons','heal slower (8% health/s) and hold 33% less']]]}
+ h:['For the battle-hardened.',[['Enemies','+12% count, +25% health, +20% damage'],['Rewards','coins +15%, Ashes +30%'],['Cauldrons','heal slower (8% health/s) and hold 33% less']]]}
 :{e:['Spokojny początek.',[['Wrogowie','−20% liczby, −25% życia, −30% obrażeń'],['Nagrody','doświadczenie bez zmian, monety −10%, Popioły −20%'],['Kociołki','leczą szybciej (12% życia/s) i mają o 33% większy zapas']],'Pierwsze 3 minuty każdej nocy: o 10% mniej wrogów. Rozdział I zaczyna się łagodniej.'],
  n:['Zrównoważona rozgrywka, tak jak ją zaprojektowano.',[['Wrogowie','bez zmian'],['Nagrody','bez zmian'],['Kociołki','bez zmian']]],
- h:['Dla zaprawionych w boju.',[['Wrogowie','+12% liczby, +25% życia, +20% obrażeń'],['Nagrody','doświadczenie +15%, monety +15%, Popioły +30%'],['Kociołki','leczą wolniej (8% życia/s) i mają o 33% mniejszy zapas']]]};
+ h:['Dla zaprawionych w boju.',[['Wrogowie','+12% liczby, +25% życia, +20% obrażeń'],['Nagrody','monety +15%, Popioły +30%'],['Kociołki','leczą wolniej (8% życia/s) i mają o 33% mniejszy zapas']]]};
 // 14.11.2026: nienachalna podpowiedź o poziomach trudności na ekranie przygotowania (prośba autora)
 const DIFFHINT=EN?'Every difficulty gives you a fair chance to see the whole game through. Normal is already a real challenge, and there is no shame in starting on Easy. You can change it before every night.':'Każdy poziom trudności daje uczciwą szansę przejścia całej gry. Normalny to już prawdziwe wyzwanie, a start na Łatwym to żaden wstyd. Trudność zmienisz przed każdą nocą.';
 function applyDiff(){for(const b of document.querySelectorAll('#diffSw [data-d]'))b.classList.toggle('on',b.dataset.d===DIFFK);{const c=$('diffCap'),d=DIFFCAP[DIFFK],el=(t,css,x)=>{const e=document.createElement('span');e.style.cssText='display:block;'+css;if(x!=null)e.textContent=x;t.appendChild(e);return e};c.textContent='';

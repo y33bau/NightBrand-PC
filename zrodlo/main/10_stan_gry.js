@@ -18,7 +18,7 @@ const BOSS_HP_MUL=1.5,BOSS_SPD_MUL=1.1;// bossowie finałowi: życie x1,5, szybk
 const MOB_MUL=1.232;// +10% wrogów (runda: pojedynki bossów), 15.11.2026: dodatkowo +12% (noc 16 min, zgoda autora)
 // 15.11.2026: Napór: 15 s z 1,5x wiecej wrogow o 45% zycia, w 4:00 i 12:00 (w polowie kazdej czesci nocy); konczy go elitarny wrog
 const SURGE=[240,720],SURGE_LEN=15;function surgeOn(){return !!S&&!S.dg&&!S.endless&&!S.train&&SURGE.some(a=>S.t>=a&&S.t<a+SURGE_LEN)}
-const DF={e:{hp:.75,dmg:.7,en:.8,xp:1,coin:.9,pot:200,n:(EN?'Easy':'Łatwy')},n:{hp:1,dmg:1,en:1,xp:1,coin:1,pot:150,n:(EN?'Normal':'Normalny')},h:{hp:1.25,dmg:1.2,en:1.12,xp:1.15,coin:1.15,pot:100,n:(EN?'Hard':'Trudny')}};let DIFFK='n';try{const q=localStorage.getItem('pn_diff');if(DF[q])DIFFK=q}catch(e){}
+const DF={e:{hp:.75,dmg:.7,en:.8,xp:1,coin:.9,pot:200,n:(EN?'Easy':'Łatwy')},n:{hp:1,dmg:1,en:1,xp:1,coin:1,pot:150,n:(EN?'Normal':'Normalny')},h:{hp:1.25,dmg:1.2,en:1.12,xp:1/* 22.11.2026 (zgoda autora): bez premii XP, bo znosila trudnosc (bylo 1.15) */,coin:1.15,pot:100,n:(EN?'Hard':'Trudny')}};let DIFFK='n';try{const q=localStorage.getItem('pn_diff');if(DF[q])DIFFK=q}catch(e){}
 const ENEMY_CAP=100,ENEMY_RAMP=.32,ENEMY_HP_T=300;let ENEMY_DMG=.8*DF[DIFFK].dmg;
 // from hero level 20 the night gets 10% more enemies at once (limit raised too)
 const LATE_LVL=20,LATE_MUL=1.1;

@@ -186,3 +186,10 @@ Wnioski:
   | Woskownica | Odlew Skazańca | płonący wróg | +40% obrażeń, dłuższy ogień |
 
   Kod: `SKST` i `skStatusMul()` w części 12, wywołanie w `damageEnemy()` w części 13.
+
+## Wdrożone w 857: Trudny bez premii doświadczenia
+- `DF.h.xp` zmienione z 1,15 na 1; z opisu trudności usunięto „doświadczenie +15%”.
+- Bot, rozdział I, dwa przebiegi na trudność:
+  - Trudny: poziom 27, zabójstwa 2503 i 2567, obrażenia/s w 14. minucie 26 i 31;
+  - Normalny: poziom 25–26, zabójstwa 2167 i 2377, obrażenia/s 22 i 32.
+- Różnica w bocie nadal jest mała. Trudny daje więcej wrogów, a więc też więcej doświadczenia. Bot zabija prawie wszystko od razu, więc +25% życia wrogów prawie go nie spowalnia; człowiek odczuje to bardziej. Do sprawdzenia na żywo, zanim ruszymy obrażenia.
