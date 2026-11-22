@@ -78,3 +78,26 @@ Tempo awansu (Rycerz) w kolejnych minutach:
 - Rozdziały II–VI i trudności inne niż Normal.
 - Kooperacja, pad, dźwięk, FPS u autora, itch.io.
 - Czas walki z bossem (pomiar w bocie był niewiarygodny).
+
+## Wdrożone w 852 (zgoda autora 22.11, rola gamedev)
+- Szklany Miecz: stały mnożnik ×1,5 w `might()` (`S.glass`), niezależny od kolejności kart.
+- Tancerka:
+  - lekki cios trafia do 4 wrogów (było 3);
+  - HP 80% bazowego (było 75%);
+  - przyjmowane obrażenia ×1,05 (było ×1,1);
+  - lekkie ciosy [14,15,14,15,26] (było [13,14,13,14,24]).
+- Woskownica: lekkie ciosy [17,18,28] (było [16,17,26]).
+- XP z podnoszenia: ×1,02, jak w `awardXp` (decyzja z 15.11 nie była naniesiona na tę ścieżkę).
+- Tempa awansu i wzrostu wrogów nie ruszano: zmiana XP w bocie nie dała widocznej różnicy, a wolniejszy awans utrudniłby końcówkę.
+
+### Bot po zmianach (dwa przebiegi, zabójstwa)
+
+| Klasa | Przed | Po, 1. przebieg | Po, 2. przebieg |
+|---|---|---|---|
+| Rycerz | 2358 | 2350 | 2429 |
+| Kat | 2485 | 2332 | 2378 |
+| Dzwonnik | 2400 | 2501 | 2398 |
+| Woskownica | 2385 | 2279 | 2252 |
+| Tancerka | 1939 | 2496 | 2072 |
+
+Rozrzut między przebiegami wynosi około ±10%. Tancerka była około 20% za resztą, teraz jest około 5%.
