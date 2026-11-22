@@ -90,3 +90,20 @@ Do decyzji: w EN gra używa raz „act”, raz „chapter” (13 i 44 wystąpien
 | (Ottokar, przybycie) „Wziąłeś z cudzej sakiewki. Należność wraca z twojej.” | "You took from another man's purse. The debt is repaid from yours." |
 | (Skryba, pokonanie) Na ziemi zostaje kartka z nazwiskiem Skryby, przekreślona. Tym razem rachunek zamknąłeś ty. | On the ground lies a page with the Scribe's name, crossed out. This time the account was closed by you. |
 | (Ottokar, pokonanie) „Wyrównane. Hrabia też kiedyś zapłaci. Nie dziś.” | "Settled. The count will pay one day as well. Not tonight." |
+
+## 11. Pauza: pytanie o porzucenie nocy (wersja 861)
+Bez nowych tekstów: zmienił się tylko układ.
+
+## 12. Podpowiedzi, podsumowanie i osiągnięcia (wersja 862)
+| PL | EN |
+|---|---|
+| Reakcja żywiołów: Dwa żywioły ostrza połączyły się. Każda para ma własną reakcję: pokazuje ją karta drugiego żywiołu. | Elemental reaction: Your two blade elements combined. Every pair has its own reaction: the card of the second element shows which. |
+| Zestaw stylu: 4 karty z jednej gałęzi stylu włączają małą premię, 7 pełny zestaw. Podgląd w rozwoju przy awansie. | Style set: 4 cards from one style branch switch on a small bonus, 7 the full set. Check it in the build view when levelling up. |
+| Technika i stan: Techniki aktywne biją mocniej we wrogów pod wpływem stanu: zmrożonych, płonących, zatrutych, krwawiących lub ogłuszonych. | Technique and status: Active techniques hit harder on enemies under a status: frozen, burning, poisoned, bleeding or stunned. |
+| Reakcje N · Techniki na stan N (podsumowanie nocy) | Reactions N · Techniques on a status N |
+| Alchemia popiołu: Wywołaj każdą z 5 reakcji żywiołów. | Ash Alchemy: Trigger each of the 5 elemental reactions. |
+| Wrzący kocioł: Wywołaj 50 reakcji żywiołów w jednej nocy. | Boiling Cauldron: Trigger 50 elemental reactions in one night. |
+| Mistrz stylu: Skompletuj pełny zestaw stylu (7 kart z jednej gałęzi). | Master of Style: Complete a full style set (7 cards from one branch). |
+| Wyczucie chwili: W jednej nocy trafiaj 25 razy techniką aktywną wroga pod wpływem jej stanu. | Sense of Timing: In one night, hit 25 times with an active technique an enemy under its status. |
+
+„Act” czy „chapter”: w EN gra mówi „act” w ponad 60 miejscach (wybór rozdziału, „Act II”, osiągnięcia, Instrukcja) i „chapter” w 44. Ujednolicenie czeka na decyzję autora; jedną zmianą da się przestawić wszystko w obie strony.

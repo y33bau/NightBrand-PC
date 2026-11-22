@@ -10,7 +10,7 @@ const dir=process.argv[2]||'.',chs=(process.argv[3]||'1').split(',').map(Number)
  for(const n of chs){
   const p=await (await b.newContext({viewport:{width:800,height:450}})).newPage(),errs=[];
   p.on('pageerror',e=>errs.push(String(e).slice(0,160)));p.on('console',m=>{if(m.type()==='error')errs.push('console:'+m.text().slice(0,140))});
-  await p.addInitScript(sd=>{try{localStorage.setItem('pn_lang','pl');localStorage.setItem('pn_story','0');for(const k in sd)localStorage.setItem(k,sd[k])}catch(e){}},JSON.parse(process.env.NB_SEED||'{}'));
+  await p.addInitScript(sd=>{try{localStorage.setItem('pn_lang','pl');localStorage.setItem('pn_story','0');for(const k in sd)localStorage.setItem(k,sd[k])}catch(e){}},JSON.parse(process.env.NB_SEED||'{"pn_powitanie":"0"}'));
   let st='OK';
   try{
    await p.goto('http://localhost:'+port+'/index.html');

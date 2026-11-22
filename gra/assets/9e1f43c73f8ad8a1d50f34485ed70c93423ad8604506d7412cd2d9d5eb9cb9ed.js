@@ -4801,7 +4801,7 @@ const RX={'fire+venom':{n:(EN?'Fumes':'Opary'),d:(EN?'a burning, poisoned enemy 
 const rxKey=(a,b)=>[a,b].sort().join('+');
 function rxOn(){if(!S)return null;const o=chosenElements();return o.length>=2?rxKey(o[0],o[1]):null}
 function rxNear(e,r){return S.enemies.filter(o=>o!==e&&!o.dead&&!(o.rise>0)&&Math.hypot(o.x-e.x,o.y-e.y)<r)}
-function rxShow(e,k){if((e.rxShown||0)>clock)return;e.rxShown=clock+1.5;const R=RX[k];ftx(R.n+'!',e.x,e.y,ftEntH(e)+.75,'i');for(let i=0;i<16;i++){const an=Math.random()*6.283,sp=rnd(30,85);S.parts.push({k:'e',x:e.x,y:e.y,z:rnd(6,18),vx:Math.cos(an)*sp,vy:Math.sin(an)*sp*.6,vz:rnd(8,26),c:i%3?R.c:'#fff2c8',life:rnd(.35,.7)})}}
+function rxShow(e,k){if((e.rxShown||0)>clock)return;e.rxShown=clock+1.5;S.rxN=(S.rxN||0)+1;S.rxLast=S.t;try{if(!META.rx)META.rx={};if(!META.rx[k]){META.rx[k]=1;saveMeta()}}catch(_){}const R=RX[k];ftx(R.n+'!',e.x,e.y,ftEntH(e)+.75,'i');for(let i=0;i<16;i++){const an=Math.random()*6.283,sp=rnd(30,85);S.parts.push({k:'e',x:e.x,y:e.y,z:rnd(6,18),vx:Math.cos(an)*sp,vy:Math.sin(an)*sp*.6,vz:rnd(8,26),c:i%3?R.c:'#fff2c8',life:rnd(.35,.7)})}}
 function elementReact(e,a){if(!e||e.dead||!S)return;const k=rxOn();if(!k)return;
  if(k==='fire+venom'&&e.burn>0&&e.pois>0&&!((e.rxCd||0)>clock)){e.rxCd=clock+3;rxShow(e,k);play('fire',.05);for(const o of rxNear(e,46)){o.pois=Math.max(o.pois||0,3);o.poisD=Math.max(o.poisD||0,(e.poisD||3)*.8)}}
  else if(k==='ice+venom'&&e.chill>0&&e.pois>0&&!e.rxSz){e.rxSz=1;e.chill=Math.max(e.chill,5);rxShow(e,k)}
@@ -4817,7 +4817,7 @@ const SKST={wypad:{st:'chill',mul:1.5,n:(EN?'Shatter':'Pęknięcie'),d:(EN?'A fr
  zalecho:{st:'stun',mul:1.5,n:(EN?'Tremor':'Wstrząs'),d:(EN?'A stunned enemy takes +50% damage from the echo.':'Ogłuszony wróg dostaje od echa +50% obrażeń.')},
  odlew:{st:'burn',mul:1.4,n:(EN?'Burning Wax':'Płonący wosk'),d:(EN?'A burning enemy: +40% damage and a longer fire.':'Płonący wróg: +40% obrażeń i dłuższy ogień.')}};
 for(const k in SKST)if(SK[k]){if(SK[k].lv)SK[k].lv=SK[k].lv.map(s=>s+' '+SKST[k].d);if(SK[k].d)SK[k].d+=' '+SKST[k].d}
-function skStatusMul(e,src){const k=src.slice(3),q=SKST[k];if(!q||!(e[q.st]>0))return 1;
+function skStatusMul(e,src){const k=src.slice(3),q=SKST[k];if(!q||!(e[q.st]>0))return 1;S.skstN=(S.skstN||0)+1;
  if((e.skTxt||0)<clock){e.skTxt=clock+1;ftx(q.n+'!',e.x,e.y,ftEntH(e)+.6,'i')}
  if(k==='wypad'){e.chill=0;for(const o of S.enemies)if(o!==e&&!o.dead&&Math.hypot(o.x-e.x,o.y-e.y)<40){o.chill=Math.max(o.chill||0,1.5);o.chillMul=Math.min(o.chillMul||1,.7)}for(let i=0;i<10;i++)S.parts.push({k:'e',x:e.x,y:e.y,z:rnd(6,16),vx:rnd(-70,70),vy:rnd(-40,40),vz:rnd(10,30),c:i%2?'#bfe8ff':'#ffffff',life:rnd(.3,.6)})}
  else if(k==='rend')e.pois=Math.min(6,e.pois+.5);else if(k==='odlew')e.burn=Math.max(e.burn,3);
@@ -6031,7 +6031,25 @@ function syncThreatRings(){
   }
   COMBAT_WARN.marks.count=mark;COMBAT_WARN.marks.instanceMatrix.needsUpdate=true;if(COMBAT_WARN.marks.instanceColor)COMBAT_WARN.marks.instanceColor.needsUpdate=true;
 }
-function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;if(!S){heroMarks[0].visible=false;heroMarks[1].visible=false}try{ambTick(dt);shockTick(dt)}catch(e){quietErr('amb',e)}if(!S)syncThreatRings();
+/* 22.11.2026: ikonki stanow nad wrogami (ogien, lod, trucizna, krwawienie, oglusznie). Czytelnosc bez polegania na samym kolorze.
+   Jeden InstancedMesh na rodzaj stanu (5 wywolan rysowania), ikonki zwrocone do kamery. */
+const STI={K:['burn','chill','pois','bleed','stun'],C:{burn:'#ff8a2a',chill:'#9fdcff',pois:'#9be05a',bleed:'#ff4a5e',stun:'#f4d872'},M:null,MAX:96,Q:null};
+function stIconTex(k){const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d'),col=STI.C[k];
+ g.beginPath();g.arc(32,32,27,0,6.2832);g.fillStyle='rgba(12,9,9,.82)';g.fill();g.lineWidth=3.5;g.strokeStyle=col;g.stroke();
+ g.fillStyle=col;g.strokeStyle=col;g.lineCap='round';g.lineJoin='round';
+ if(k==='burn'){g.beginPath();g.moveTo(32,13);g.bezierCurveTo(44,26,46,34,43,41);g.bezierCurveTo(40,49,24,49,21,41);g.bezierCurveTo(18,33,24,28,26,22);g.bezierCurveTo(28,28,30,30,33,31);g.bezierCurveTo(33,25,32,19,32,13);g.fill();g.fillStyle='#ffe7a6';g.beginPath();g.arc(32,40,5,0,6.2832);g.fill()}
+ else if(k==='chill'){g.lineWidth=3.6;for(let i=0;i<3;i++){const a=i*Math.PI/3,dx=Math.cos(a)*16,dy=Math.sin(a)*16;g.beginPath();g.moveTo(32-dx,32-dy);g.lineTo(32+dx,32+dy);g.stroke();for(const s of [-1,1]){const bx=32+dx*.6*s,by=32+dy*.6*s,a2=a+Math.PI/2;g.beginPath();g.moveTo(bx,by);g.lineTo(bx+(Math.cos(a)*s*-.45+Math.cos(a2)*.55)*7,by+(Math.sin(a)*s*-.45+Math.sin(a2)*.55)*7);g.moveTo(bx,by);g.lineTo(bx+(Math.cos(a)*s*-.45-Math.cos(a2)*.55)*7,by+(Math.sin(a)*s*-.45-Math.sin(a2)*.55)*7);g.stroke()}}}
+ else if(k==='pois'){for(const [x,y,r] of [[25,37,8],[39,33,6.5],[31,22,5]]){g.beginPath();g.arc(x,y,r,0,6.2832);g.fill()}g.fillStyle='rgba(12,9,9,.6)';g.beginPath();g.arc(23,35,2.6,0,6.2832);g.fill()}
+ else if(k==='bleed'){g.beginPath();g.moveTo(32,12);g.bezierCurveTo(40,24,45,31,45,38);g.bezierCurveTo(45,46,39,51,32,51);g.bezierCurveTo(25,51,19,46,19,38);g.bezierCurveTo(19,31,24,24,32,12);g.fill();g.fillStyle='rgba(255,220,220,.55)';g.beginPath();g.arc(27,38,3,0,6.2832);g.fill()}
+ else{g.beginPath();for(let i=0;i<10;i++){const r=i%2?7.5:17,a=-Math.PI/2+i*Math.PI/5;g.lineTo(32+Math.cos(a)*r,33+Math.sin(a)*r)}g.closePath();g.fill()}
+ const t=new THREE.CanvasTexture(c);t.minFilter=THREE.LinearMipmapLinearFilter;t.magFilter=THREE.LinearFilter;return t}
+function stIconsInit(){if(STI.M)return;STI.M={};const geo=new THREE.PlaneGeometry(1,1);for(const k of STI.K){const m=new THREE.InstancedMesh(geo,new THREE.MeshBasicMaterial({map:stIconTex(k),transparent:true,depthTest:false,depthWrite:false,fog:false,toneMapped:false}),STI.MAX);m.frustumCulled=false;m.renderOrder=46;m.count=0;m.userData.noChunk=true;scene.add(m);STI.M[k]=m}STI.Q={m:new THREE.Matrix4(),p:new THREE.Vector3(),s:new THREE.Vector3(),r:new THREE.Vector3()}}
+function stIconsTick(){if(typeof scene==='undefined'||!cam)return;if(!S||S.phase!=='play'||SETT.stIcons===false){if(STI.M)for(const k of STI.K)STI.M[k].count=0;return}stIconsInit();const n={burn:0,chill:0,pois:0,bleed:0,stun:0},Q=STI.Q,sz=.3,gap=.34;
+ Q.r.set(1,0,0).applyQuaternion(cam.quaternion);Q.s.set(sz,sz,sz);
+ for(const e of S.enemies){if(e.dead||e.rise>0||e.type==='wisp'||e.hp<=0)continue;const on=[];if(e.burn>0)on.push('burn');if(e.chill>0)on.push('chill');if(e.pois>0)on.push('pois');if(e.bleed>0)on.push('bleed');if(e.stun>0)on.push('stun');if(!on.length)continue;
+  const h=ftEntH(e)+.32;for(let j=0;j<on.length;j++){const k=on[j];if(n[k]>=STI.MAX)continue;const off=(j-(on.length-1)/2)*gap;Q.p.set(e.x/16,h,e.y/16).addScaledVector(Q.r,off);Q.m.compose(Q.p,cam.quaternion,Q.s);STI.M[k].setMatrixAt(n[k]++,Q.m)}}
+ for(const k of STI.K){const m=STI.M[k];m.count=n[k];if(n[k])m.instanceMatrix.needsUpdate=true}}
+function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{stIconsTick()}catch(e){quietErr('stIcons',e)}if(!S){heroMarks[0].visible=false;heroMarks[1].visible=false}try{ambTick(dt);shockTick(dt)}catch(e){quietErr('amb',e)}if(!S)syncThreatRings();
   let tx,tz;
   if(S){const cp=pl.dead&&pl2&&!pl2.dead?pl2:pl;tx=cp.x/16;tz=cp.y/16}else{idleA+=dt*.08;const I=W.idle;tx=I[0]+Math.sin(idleA)*I[2];tz=I[1]+Math.cos(idleA*.7)*I[3]}
   if(S&&depthOn()){if(S&&NB3D_ON&&SETT.shake){const cp=pl.dead&&pl2&&!pl2.dead?pl2:pl,mv=cp&&cp.moving&&!(cp.roll>0);NB3D_FX.lead.x+=((mv?(cp.fx||0)*1.3:0)-NB3D_FX.lead.x)*Math.min(1,dt*1.4);NB3D_FX.lead.y+=((mv?(cp.fy||0)*.9:0)-NB3D_FX.lead.y)*Math.min(1,dt*1.4);tx+=NB3D_FX.lead.x;tz+=NB3D_FX.lead.y}else NB3D_FX.lead.set(0,0);
@@ -7256,7 +7274,7 @@ const OFIARY=[
  {id:'tarcza',c:90,n:EN?'Ash Ward':'Tarcza',d:EN?'Once this night a deadly blow leaves you with 1 health (solo; not with Last Chance).':'Raz tej nocy śmiertelny cios zostawia 1 punkt życia (solo; nie z Ostatnią szansą).',off:()=>embU('lastch')>0,fx:k=>{S.lastCh=!pl2}}];
 PREP.ofiara=null;
 const ofiaraOk=o=>!!o&&EMB.e>=o.c&&!(o.off&&o.off());
-function applyPrep(){applyHeroSkin();const k=S.pk=PK0();applyChar(k);S.hitsT=0;S.parries=0;S.cEarn=0;S.chal=null;S.eliteN=0;S.bigHit=0;S.streak=0;S.bestStreak=0;S.eliteFast=0;S.staZero=0;S.lateDodge=0;S.hvK=0;S.lowK=0;S.miniN=0;S.zCombo=0;S.zHits=0;S.zT=0;S.zFull=0;S.zFullBest=0;S.zWin=0;S.zRipo=0;S.zDodgeOk=0;S.zWasRoll=0;S.zDance=0;S.zCrossK=0;S.zSlideK=0;S.zWhirlBest=0;S.zHold=0;S.zEliteFast=0;S.zGood=0;const q=prog();
+function applyPrep(){applyHeroSkin();const k=S.pk=PK0();applyChar(k);S.hitsT=0;S.parries=0;S.rxN=0;S.skstN=0;S.cEarn=0;S.chal=null;S.eliteN=0;S.bigHit=0;S.streak=0;S.bestStreak=0;S.eliteFast=0;S.staZero=0;S.lateDodge=0;S.hvK=0;S.lowK=0;S.miniN=0;S.zCombo=0;S.zHits=0;S.zT=0;S.zFull=0;S.zFullBest=0;S.zWin=0;S.zRipo=0;S.zDodgeOk=0;S.zWasRoll=0;S.zDance=0;S.zCrossK=0;S.zSlideK=0;S.zWhirlBest=0;S.zHold=0;S.zEliteFast=0;S.zGood=0;const q=prog();
   for(const id of PREP.perks){const d=PERKS.find(p=>p.id===id);if(d&&perkOk(d,q))d.fx(k)}
   applyEmbers(k);if(k.zMag)S.magnet=(S.magnet||0)+k.zMag;if(k.zeroCoins)S.coins=0;else if(q.bank){S.coins+=q.bank;q.bank=0;saveProg()}pl.hp=pl.max;pl.staMax=pl.staMax||100;pl.sta=pl.staMax;const c=chalList().find(c=>c.id===PREP.chal);if(c&&!(c.id==='z_pogarda'&&k.noHold))S.chal={c,done:false};metaPrep(k);{const o=OFIARY.find(x=>x.id===PREP.ofiara);S.ofiara=null;if(ofiaraOk(o)){EMB.e-=o.c;saveEmb();o.fx(k);S.ofiara=o.id}PREP.ofiara=null}S.perkIds=PREP.perks.slice();PREP.perks=[];PREP.chal=null}
 function chTick(){ravenTick();const h=$('chal');if(!h||!S)return;const ch=S.chal;if(!ch){if(!h.hidden)h.hidden=true;return}
@@ -7300,7 +7318,7 @@ function endGame(won){try{clearNoteMesh()}catch(e){}$('activeSkillHud').hidden=t
    const DS=S.dsrc||{},dsT=Object.values(DS).reduce((a,b)=>a+b,0),dsN={l:EN?'Light attacks':'Szybkie ataki',h:EN?'Heavy attacks':'Silne ataki',r:EN?'Ripostes':'Riposty',s:EN?'Skills':'Umiejętności',d:EN?'Fire, poison, bleed':'Ogień, trucizna, krew',p:EN?'Deflected shots':'Odbite pociski'};
    const dsH=dsT>0?`<h4 class="nbs-h">${EN?'Damage sources':'Źródła obrażeń'}</h4><div class="nbs-ds">`+Object.keys(dsN).filter(k=>DS[k]>0).sort((a,b)=>DS[b]-DS[a]).map(k=>{const p=Math.round(100*DS[k]/dsT);return `<div class="nbs-dr"><span>${dsN[k]}</span><u><s style="width:${Math.max(2,p)}%"></s></u><b>${p}%</b></div>`}).join('')+'</div>':'';
    const dsK=(()=>{const Q=S.dsk||{},ks=Object.keys(Q).filter(k=>Q[k]>0&&dsT>0).sort((a,b)=>Q[b]-Q[a]).slice(0,3);if(!ks.length)return '';const nm=k=>k==='wave'?(EN?'Blade waves':'Fale ostrza'):(SK[k]&&SK[k].name)||k;return '<p class="nbs-dk">'+esc((EN?'Strongest skills: ':'Najmocniejsze umiejętności: ')+ks.map(k=>nm(k)+' '+Math.max(1,Math.round(100*Q[k]/dsT))+'%').join(' · '))+'</p>'})();
-   const meta=[(EN?'Night level ':'Poziom nocy ')+S.lvl,(EN?'Coins ':'Monety ')+fmt(S.coins||0),(EN?'Difficulty: ':'Trudność: ')+DF[DIFFK].n].join(' · ');
+   const meta=[(EN?'Night level ':'Poziom nocy ')+S.lvl,(EN?'Coins ':'Monety ')+fmt(S.coins||0),(EN?'Difficulty: ':'Trudność: ')+DF[DIFFK].n,...(S.rxN?[(EN?'Reactions ':'Reakcje ')+fmt(S.rxN)]:[]),...(S.skstN?[(EN?'Techniques on a status ':'Techniki na stan ')+fmt(S.skstN)]:[])].join(' · ');/* 22.11.2026: reakcje zywiolow i techniki na stan */
    $('endStats').innerHTML=`<div class="nbs"><div class="nbs-grid">${tiles}</div><p class="nbs-meta">${esc(meta)}</p><p class="nbs-sub">${EN?'Streak = kills in a row without being hit.':'Seria = zabójstwa z rzędu bez otrzymania ciosu.'}</p>${dsH}${dsK}${wide.map(x=>'<p class="nbs-cause">'+esc(x)+'</p>').join('')}${!won&&pl.dead&&S.deathCause?'<p class="nbs-tip">'+esc(deathTip(S.deathSrc||'night'))+'</p>':''}${rw.length?`<h4 class="nbs-h">${EN?'Rewards':'Nagrody'}</h4><ul class="nbs-rw">${rw.map(x=>'<li>'+esc(x.replace(/^Razem (\d+)$/,'Popioły w sakwie: $1').replace(/^Total (\d+)$/,'Ashes owned: $1'))+'</li>').join('')}</ul>`:''}</div>`;endCss();$('endStats2').textContent='';$('endXp').textContent=''}if(won&&C===5&&!inDg&&STORYMODE)showFinale();else showEndBox()}
 function endCss(){if($('nbEndCss'))return;const F=(px,cap=1.45)=>`clamp(${px}px,min(${+(px/12.8).toFixed(3)}vw,${+(px/7.2).toFixed(3)}vh),${Math.round(px*cap)}px)`,Z='#orient'.repeat(14)+' #end ',st=document.createElement('style');st.id='nbEndCss';
  st.textContent=`${Z}.nbs{display:block;text-align:center}
@@ -7476,7 +7494,12 @@ const KRON=[
  ['zbroja1',EN?'New Armour':'Nowa zbroja',EN?'Unlock your first armour set.':'Odblokuj pierwszą zbroję.',20,()=>EMBU.some(d=>d.id.startsWith('arm_')&&embU(d.id))],
  ['zbroja4',EN?'Full Armoury':'Pełna zbrojownia',EN?'Unlock all 4 armour sets of one character.':'Odblokuj wszystkie 4 zbroje jednej postaci.',60,()=>[...'rkzdm'].some(c=>ARM_V.every(v=>embU('arm_'+c+'_'+v)))],
  ['popiol5k',EN?'Mound of Ashes':'Kopiec popiołu',EN?'Gather 5,000 Ashes in total.':'Zbierz łącznie 5000 Popiołów.',50,()=>META.st.ash>=5000],
- ['noce50',EN?'Night Owl':'Nocny marek',EN?'Play 50 nights.':'Rozegraj 50 nocy.',40,()=>META.st.nights>=50]];
+ ['noce50',EN?'Night Owl':'Nocny marek',EN?'Play 50 nights.':'Rozegraj 50 nocy.',40,()=>META.st.nights>=50],
+ /* 22.11.2026: osiagniecia nowych mechanik (EN niezatwierdzone) */
+ ['reakcje5',EN?'Ash Alchemy':'Alchemia popiołu',EN?'Trigger each of the 5 elemental reactions.':'Wywołaj każdą z 5 reakcji żywiołów.',40,()=>Object.keys(META.rx||{}).length>=5],
+ ['reakcje50',EN?'Boiling Cauldron':'Wrzący kocioł',EN?'Trigger 50 elemental reactions in one night.':'Wywołaj 50 reakcji żywiołów w jednej nocy.',30,x=>!!x&&(S.rxN||0)>=50],
+ ['zestaw7',EN?'Master of Style':'Mistrz stylu',EN?'Complete a full style set (7 cards from one branch).':'Skompletuj pełny zestaw stylu (7 kart z jednej gałęzi).',30,x=>!!x&&['def','off','wav'].some(b=>brOn(b))],
+ ['stany25',EN?'Sense of Timing':'Wyczucie chwili',EN?'In one night, hit 25 times with an active technique an enemy under its status.':'W jednej nocy trafiaj 25 razy techniką aktywną wroga pod wpływem jej stanu.',30,x=>!!x&&(S.skstN||0)>=25]];
 function kronCheck(x){const got=[];for(const [id,n,d,ash,v] of KRON){if(META.kr[id])continue;let ok=false;try{ok=!!v(x)}catch(e){quietErr('kron:'+id,e)}if(ok){META.kr[id]=1;EMB.e+=ash;got.push(n+' (+'+ash+')')}}
   for(const r of NAMED_ALL)if(META.nm[r.id]&&!META.kr['nm_'+r.id]){META.kr['nm_'+r.id]=1;EMB.e+=NAMED_ASH;got.push((EN?'Named elite: ':'Elita z imieniem: ')+r.n+' (+'+NAMED_ASH+')')}
   for(const t in META.kills)if(ENAME[t]&&META.kills[t]>=50&&!META.kr['b50_'+t]){META.kr['b50_'+t]=1;EMB.e+=10;got.push((EN?'Bestiary: ':'Bestiariusz: ')+ENAME[t]+' ×50 (+10)')}
@@ -8044,7 +8067,7 @@ function finishTutorial(){try{localStorage.setItem(tutorialKey(),'1');localStora
 // ---- Samouczek 14.11.2026: porady sterowane tym, co robi gracz (nie zegarem). Jedna naraz, znika po wykonaniu.
 // Każda porada: when() = kiedy ją pokazać, done() = gracz już to zrobił (wtedy znika albo w ogóle się nie pokaże), max = po ilu sekundach odpuszcza.
 // Ukończone porady pamięta 'pn_tut_h'; po rdzeniu (ruch…silny) ustawiany jest dawny znacznik 'pn_tut_s' (S.firstNight).
-const TUT_CORE=['ruch','atak','unik','blok','parowanie','silny'],TUT_IDS=[...TUT_CORE,'karty','slot','marga'];
+const TUT_CORE=['ruch','atak','unik','blok','parowanie','silny'],TUT_IDS=[...TUT_CORE,'karty','slot','marga','reakcja','zestaw','technika'];/* 22.11.2026: podpowiedzi nowych mechanik, raz */
 const TUT={sid:null,cur:null,shown:0,gap:0,x0:null,ok:null,hv:0,blocks:0,gPrev:0};
 function tutLoad(){if(TUT.ok)return TUT.ok;let a=null;try{a=JSON.parse(localStorage.getItem('pn_tut_h')||'null')}catch(e){}if(!Array.isArray(a))a=tutorialDone()?[...TUT_IDS]:[];return TUT.ok=new Set(a.filter(k=>TUT_IDS.includes(k)))}
 function tutMark(id){const ok=tutLoad();if(ok.has(id))return;ok.add(id);try{localStorage.setItem('pn_tut_h',JSON.stringify([...ok]));if(TUT_CORE.every(k=>ok.has(k)))localStorage.setItem(tutorialKey(),'1')}catch(e){}}
@@ -8060,6 +8083,9 @@ function tutList(){const pd=PAD.on,key=a=>kbName(KB.map[a]),ok=tutLoad(),fin=id=
  {id:'parowanie',keys:pd?['LB']:[EN?'RMB':'PPM',key('blk')],name:EN?'Parry':'Parowanie',text:EN?'Press block just before the blow lands. The enemy flashes bright as a warning.':'Wciśnij blok tuż przed trafieniem. Wróg błyska jasno, gdy bierze zamach.',max:30,when:()=>fin('blok')&&(TUT.blocks>=2||S.t>100),done:()=>(S.parries||0)>0},
  {id:'silny',keys:pd?['RB']:[key('heavy')],name:EN?'Heavy attack':'Silny atak',text:(EN?'Slower, stronger, breaks shields. Best right after a parry.':'Wolniejszy, mocniejszy, przebija tarcze. Najlepszy tuż po parowaniu.'),max:25,when:()=>fin('parowanie')||S.t>130,done:()=>TUT.hv>0},
  {id:'slot',keys:!slotKey?[]:[slotKey],name:sk0&&SK[sk0]?SK[sk0].name:(EN?'Skill':'Umiejętność'),text:(EN?'Use your new skill. You can rearrange slots in the pause menu.':'Użyj nowej umiejętności. Sloty zmienisz w pauzie.'),max:25,when:()=>!!sk0&&TUT_CORE.slice(0,2).every(fin),done:()=>((S.actions.skill||0)+(S.actions.shot||0))>0},
+ {id:'reakcja',keys:[],name:EN?'Elemental reaction':'Reakcja żywiołów',text:EN?'Your two blade elements combined. Every pair has its own reaction: the card of the second element shows which.':'Dwa żywioły ostrza połączyły się. Każda para ma własną reakcję: pokazuje ją karta drugiego żywiołu.',max:7,when:()=>(S.rxN||0)>0&&S.t-(S.rxLast||-99)<20,done:()=>false},
+ {id:'zestaw',keys:[],name:EN?'Style set':'Zestaw stylu',text:EN?'4 cards from one style branch switch on a small bonus, 7 the full set. Check it in the build view when levelling up.':'4 karty z jednej gałęzi stylu włączają małą premię, 7 pełny zestaw. Podgląd w rozwoju przy awansie.',max:7,when:()=>['def','off','wav'].some(b=>brHalf(b)),done:()=>false},
+ {id:'technika',keys:[],name:EN?'Technique and status':'Technika i stan',text:EN?'Active techniques hit harder on enemies under a status: frozen, burning, poisoned, bleeding or stunned.':'Techniki aktywne biją mocniej we wrogów pod wpływem stanu: zmrożonych, płonących, zatrutych, krwawiących lub ogłuszonych.',max:7,when:()=>(S.skstN||0)>0,done:()=>false},
  {id:'marga',keys:pd?['Y']:[key('talk')],name:'Marga',text:EN?'Walk up to the merchant and spend your coins on upgrades.':'Podejdź do kupcowej i wydaj monety na ulepszenia.',max:25,when:()=>!!(S.merchant&&!S.merchant.dg&&S.merchant.state==='here'),done:()=>!S.merchant||Object.keys(S.bought||{}).length>0}];}
 function tutShow(q){const t=$('tutText');t.textContent='';for(const k of q.keys){const b=document.createElement('kbd');b.textContent=k;t.appendChild(b)}const n=document.createElement('b');n.textContent=q.name;const d=document.createElement('span');d.className='tut-d';d.textContent=q.text;t.append(n,d);const c=$('pcTutCount');if(c)c.textContent=''}
 function tutTick(dt){const h=$('tut'),off=()=>{$('tutSkip').hidden=true;h.classList.remove('on')};if(!HINTS_ENABLED||S.dg||S.train||STORYINTRO_ACTIVE()||isPort()){off();return}

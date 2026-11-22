@@ -478,7 +478,7 @@ const RX={'fire+venom':{n:(EN?'Fumes':'Opary'),d:(EN?'a burning, poisoned enemy 
 const rxKey=(a,b)=>[a,b].sort().join('+');
 function rxOn(){if(!S)return null;const o=chosenElements();return o.length>=2?rxKey(o[0],o[1]):null}
 function rxNear(e,r){return S.enemies.filter(o=>o!==e&&!o.dead&&!(o.rise>0)&&Math.hypot(o.x-e.x,o.y-e.y)<r)}
-function rxShow(e,k){if((e.rxShown||0)>clock)return;e.rxShown=clock+1.5;const R=RX[k];ftx(R.n+'!',e.x,e.y,ftEntH(e)+.75,'i');for(let i=0;i<16;i++){const an=Math.random()*6.283,sp=rnd(30,85);S.parts.push({k:'e',x:e.x,y:e.y,z:rnd(6,18),vx:Math.cos(an)*sp,vy:Math.sin(an)*sp*.6,vz:rnd(8,26),c:i%3?R.c:'#fff2c8',life:rnd(.35,.7)})}}
+function rxShow(e,k){if((e.rxShown||0)>clock)return;e.rxShown=clock+1.5;S.rxN=(S.rxN||0)+1;S.rxLast=S.t;try{if(!META.rx)META.rx={};if(!META.rx[k]){META.rx[k]=1;saveMeta()}}catch(_){}const R=RX[k];ftx(R.n+'!',e.x,e.y,ftEntH(e)+.75,'i');for(let i=0;i<16;i++){const an=Math.random()*6.283,sp=rnd(30,85);S.parts.push({k:'e',x:e.x,y:e.y,z:rnd(6,18),vx:Math.cos(an)*sp,vy:Math.sin(an)*sp*.6,vz:rnd(8,26),c:i%3?R.c:'#fff2c8',life:rnd(.35,.7)})}}
 function elementReact(e,a){if(!e||e.dead||!S)return;const k=rxOn();if(!k)return;
  if(k==='fire+venom'&&e.burn>0&&e.pois>0&&!((e.rxCd||0)>clock)){e.rxCd=clock+3;rxShow(e,k);play('fire',.05);for(const o of rxNear(e,46)){o.pois=Math.max(o.pois||0,3);o.poisD=Math.max(o.poisD||0,(e.poisD||3)*.8)}}
  else if(k==='ice+venom'&&e.chill>0&&e.pois>0&&!e.rxSz){e.rxSz=1;e.chill=Math.max(e.chill,5);rxShow(e,k)}
@@ -494,7 +494,7 @@ const SKST={wypad:{st:'chill',mul:1.5,n:(EN?'Shatter':'Pęknięcie'),d:(EN?'A fr
  zalecho:{st:'stun',mul:1.5,n:(EN?'Tremor':'Wstrząs'),d:(EN?'A stunned enemy takes +50% damage from the echo.':'Ogłuszony wróg dostaje od echa +50% obrażeń.')},
  odlew:{st:'burn',mul:1.4,n:(EN?'Burning Wax':'Płonący wosk'),d:(EN?'A burning enemy: +40% damage and a longer fire.':'Płonący wróg: +40% obrażeń i dłuższy ogień.')}};
 for(const k in SKST)if(SK[k]){if(SK[k].lv)SK[k].lv=SK[k].lv.map(s=>s+' '+SKST[k].d);if(SK[k].d)SK[k].d+=' '+SKST[k].d}
-function skStatusMul(e,src){const k=src.slice(3),q=SKST[k];if(!q||!(e[q.st]>0))return 1;
+function skStatusMul(e,src){const k=src.slice(3),q=SKST[k];if(!q||!(e[q.st]>0))return 1;S.skstN=(S.skstN||0)+1;
  if((e.skTxt||0)<clock){e.skTxt=clock+1;ftx(q.n+'!',e.x,e.y,ftEntH(e)+.6,'i')}
  if(k==='wypad'){e.chill=0;for(const o of S.enemies)if(o!==e&&!o.dead&&Math.hypot(o.x-e.x,o.y-e.y)<40){o.chill=Math.max(o.chill||0,1.5);o.chillMul=Math.min(o.chillMul||1,.7)}for(let i=0;i<10;i++)S.parts.push({k:'e',x:e.x,y:e.y,z:rnd(6,16),vx:rnd(-70,70),vy:rnd(-40,40),vz:rnd(10,30),c:i%2?'#bfe8ff':'#ffffff',life:rnd(.3,.6)})}
  else if(k==='rend')e.pois=Math.min(6,e.pois+.5);else if(k==='odlew')e.burn=Math.max(e.burn,3);

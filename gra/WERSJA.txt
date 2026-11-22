@@ -934,3 +934,4 @@ cache858 · Tancerka: wlasne ciecia i wir mocnego ataku takze z zakleciem ostrza
 cache859 · Parowanie: efekt Kata u wszystkich postaci. Na bazie 858. Nie sprawdzono: pad, dzwiek, FPS u autora, itch.io
 cache860 · Wydajnosc: rekwizyty, drzewa i sciany dzielone na kawalki mapy (pomijane poza kadrem i poza zasiegiem cienia), rozmiar ekranu z pamieci zamiast odczytu co klatke, poprawiony reset klawiszy. Nie sprawdzono: FPS u autora, pad, dzwiek, itch.io
 cache861 · Pauza: pytanie Porzucic noc? w ukladzie dolnego paska (przyciski w tych samych miejscach), ochrona przed podwojnym kliknieciem. Na bazie 860. Nie sprawdzono: pad, inne proporcje ekranu, EN, itch.io
+cache862 · Ikonki stanow nad wrogami, podpowiedzi nowych mechanik (reakcje, zestawy, techniki), reakcje i techniki w podsumowaniu nocy, 4 nowe osiagniecia w Kronice. Test dymny I-VI OK, audyt pada bez bledow strony. Nie sprawdzono: prawdziwy pad, dzwiek, FPS u autora, itch.io; EN niezatwierdzone
