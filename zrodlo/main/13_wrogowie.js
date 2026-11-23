@@ -186,7 +186,7 @@ function stepEnemyAI(e,dt){
   const T=enemyTarget(e,dt),dx=T.x-e.x,dy=T.y-e.y,d=Math.hypot(dx,dy)||1;
   if(Math.hypot(pl.x-e.x,pl.y-e.y)>480&&!BIG.has(e.type)&&e.type!=='wisp'&&e.type!=='boginka'){const p=ringSpot();if(p){e.x=p[0];e.y=p[1]}return}
   if(Math.abs(dx)>1)e.s=dx>0?1:-1;
-  if(pl.dead)return;if(e.ghoulWind>0){e.ghoulWind-=dt;if(e.ghoulWind<=0){e.leap=.3;e.lhit=0;e.atkA=.3;e.lx=e.ghoulDX*82;e.ly=e.ghoulDY*82}return}
+  if(pl.dead)return;if(e.ghoulWind>0){e.ghoulWind-=dt;if(e.ghoulWind<=0){const v=e.lspd||82;e.leap=.3;e.lhit=0;e.atkA=.3;e.lx=e.ghoulDX*v;e.ly=e.ghoulDY*v}return}
   if(e.type==='collector'){e.stealCd=(e.stealCd||0)-dt;e.drain=(e.drain||0)-dt;e.hurtA=(e.hurtA||0)-dt;e.hurtCd=(e.hurtCd||0)-dt;e.tauntA=(e.tauntA||0)-dt;e.tauntCd=(e.tauntCd===undefined?4:e.tauntCd)-dt;
     if(e.tauntCd<=0&&e.stolen>0&&d>90){e.tauntCd=rnd(6,9);e.tauntA=1}
     if(e.stealWind>0){e.stealWind-=dt;if(e.stealWind<=0&&d<e.r+15){S.attacker=e;const hit=hitT(e,enemyDamage(12,0),dx/d,dy/d);S.attacker=null;if(hit){const n=Math.min(S.coins,Math.max(3,Math.floor(S.coins*.15)));S.coins-=n;e.stolen+=n;if(n)ftInfo('−'+n+(EN?' coins':' monet'))}}}
@@ -238,7 +238,7 @@ function stepEnemyAI(e,dt){
     e.slamT-=dt;if(e.slamT<=0&&d<80){e.slamT=e.ph2?2.4:3.4;e.slamF=.8;e.atkT=.8;play('bossGrowl',0);return}
   }
   let sp=e.spd*(e.chill>0?e.chillMul||.6:1);if(e.type==='madman'){sp*=.4+1.1*Math.abs(Math.sin(e.walk*4.3+e.ph));e.side=Math.sin(clock*2+e.ph)>0?1:-1}if(e.type==='dwarf'||e.type==='possessed')sp*=.65+.6*Math.abs(Math.sin(e.walk*3));
-  if(e.type==='ghoul'||e.type==='hound'||e.type==='wolf'||e.type==='goat'||e.type==='strzygon'||e.type==='paperrat'){e.lcd-=dt;if(e.leap>0){e.leap-=dt;moveBox(e,e.lx*dt,e.ly*dt,4,3);e.walk+=dt*2;if(!e.lhit&&d<e.r+9){e.lhit=1;S.attacker=e;hitT(e,enemyDamage(e.dmg*SL.enemyHit,SL.dmgDiv),dx/d,dy/d);S.attacker=null}return}if(d<52&&d>22&&e.lcd<=0){if(e.type==='ghoul'&&CH===1){e.ghoulWind=.35;e.ghoulDX=dx/d;e.ghoulDY=dy/d;e.lcd=4.5+Math.random()*1.7;telegraph(e);return}e.leap=.3;e.lhit=0;e.atkA=.3;e.lx=dx/d*105;e.ly=dy/d*105;e.lcd=3.2+Math.random()*1.5;return}}
+  if(e.type==='ghoul'||e.type==='hound'||e.type==='wolf'||e.type==='goat'||e.type==='strzygon'||e.type==='paperrat'){e.lcd-=dt;if(e.leap>0){e.leap-=dt;moveBox(e,e.lx*dt,e.ly*dt,4,3);e.walk+=dt*2;if(!e.lhit&&d<e.r+9){e.lhit=1;S.attacker=e;hitT(e,enemyDamage(e.dmg*SL.enemyHit,SL.dmgDiv),dx/d,dy/d);S.attacker=null;e.leap=0}/* 23.11.2026 (runda 864): doskok konczy sie na trafieniu (bez przelatywania przez gracza), po nim chwila odsloniecia zamiast natychmiastowego drugiego ciosu */if(e.leap<=0){e.leap=0;e.recov=Math.max(e.recov||0,.6);e.acd=Math.max(e.acd||0,1)}return}if(d<52&&d>22&&e.lcd<=0){/* doskok zawsze z zamachem (podswietlenie ostrzezenia) i najwyzej 2 naraz w calej sforze */let n=0;for(const o of S.enemies)if(!o.dead&&(o.ghoulWind>0||o.leap>0))n++;if(n>=2){e.lcd=.4+Math.random()*.6}else{const g1=e.type==='ghoul'&&CH===1;e.ghoulWind=g1?.35:.32;e.ghoulDX=dx/d;e.ghoulDY=dy/d;e.lspd=g1?82:105;e.lcd=g1?4.5+Math.random()*1.7:3.2+Math.random()*1.5;telegraph(e);e.atkA=0;return}}}/* zamach bez klatki ataku: jedna animacja skoku zamiast dwoch */
   let mx=dx/d,my=dy/d;
   if(!fly&&T===pl&&d>18){e.navT=(e.navT||0)-dt;if(e.navT<=0){e.navT=.25+Math.random()*.1;e.navOn=!sight(e.x,e.y,pl.x,pl.y)}if(e.navOn){const nd=navDir(e);if(nd){mx=nd[0];my=nd[1]}}}
   if(fly){const w=Math.sin(clock*5+e.ph)*1.2,c=Math.cos(w),s=Math.sin(w);[mx,my]=[mx*c-my*s,mx*s+my*c]}
