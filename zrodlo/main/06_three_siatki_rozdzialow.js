@@ -272,7 +272,7 @@ function portRopeRail(ground,wood){
 function portKit(kind,gx,bx,bz,bw,bd,ao){
  const N=(k,sc,col,o)=>worldSurfN(cutaway(phong(Object.assign({color:col},o||{}))),k,sc,1.9,2);
  const oak=N('tsn1_dab_portowy',1.3,0xd0c4b8),oakD=N('tsn1_dab_portowy',.9,0x8a7a6c),plaster=N('tgm1_tynk_wapienny',1.7,0xeee8dc),stone=N('tgm2_mur_kamienny',1.2,0xd8d2c8),
-  stoneD=N('tgm2_mur_kamienny',.9,0xa8a096),tiles=N('tgm3_dachowka_gliniana',1.1,0xd4c4b6,{side:THREE.DoubleSide}),ropeM=N('tsn2_konopie_skrecane',.7,0xe0d8cc),
+  stoneD=N('tm03_ciosy',.9,0xa8a096),tiles=N('tgm3_dachowka_gliniana',1.1,0xd4c4b6,{side:THREE.DoubleSide}),ropeM=N('tsn2_konopie_skrecane',.7,0xe0d8cc),
   copper=N('tzl1_miedz_patynowana',1.4,0xf4f8f6,{side:THREE.DoubleSide,specular:0x5a7a70,shininess:24}),glassL=cutaway(phong({color:0x1a120a,emissive:0x8a4a14})),glassD=cutaway(phong({color:0x10141a,specular:0x555555,shininess:50})),
   iron=cutaway(phong({color:0x34302c,specular:0x333333,shininess:30})),salt=cutaway(phong({color:0xe8e4da})),gold=cutaway(phong({color:0xb08a40,emissive:0x2a1c06,specular:0x806020,shininess:30}));
  const g=new THREE.Group(),cover=new THREE.Group();ROOT.add(g);
@@ -959,7 +959,7 @@ function cutCircle(mat){mat.onBeforeCompile=sh=>{sh.uniforms.uCut=CUT;sh.uniform
    Kazda bryla budowana w ukladzie lokalnym (front = +z) i obracana wg ZL_NOWE; tekstury autora: tynk wapienny, mur kamienny, dachowka, miedz, stare zlocenie. */
 function zlNoweBuild(){const WR=W;
  const M=(k,sc,col,o)=>worldSurfN(cutCircle(phong(Object.assign({color:col},o||{}))),k,sc,1.9,1);/* 23.11.2026 (autor: obklej mocniej): mocniejsza wypuklosc */
- const plaster=M('tgm1_tynk_wapienny',1.7,0xf0e8dc),stone=M('tgm2_mur_kamienny',1.3,0xe0d8cc),stoneD=M('tgm2_mur_kamienny',1.0,0xb0a698),
+ const plaster=M('tgm1_tynk_wapienny',1.7,0xf0e8dc),stone=M('tgm2_mur_kamienny',1.3,0xe0d8cc),stoneD=M('tm03_ciosy',1.0,0xb0a698),
   tiles=M('tgm3_dachowka_gliniana',1.1,0xd8c8ba,{side:THREE.DoubleSide}),copper=M('tzl1_miedz_patynowana',1.5,0xf4f8f6,{side:THREE.DoubleSide,specular:0x5a7a70,shininess:26}),
   gold=M('tzl2_zloto_patynowane',1.2,0xa09078,{specular:0x3a3020,shininess:14}),wood=M('t2_belka',1.2,0x8c7c6c),
   glassL=cutCircle(phong({color:0x17120e,emissive:0x6a3c12,specular:0x333333,shininess:40})),glassD=cutCircle(phong({color:0x121418,specular:0x444444,shininess:50})),
