@@ -800,7 +800,8 @@ if(R7_ON){Object.assign(P3D_MESHY,{r8_natura_03_jezyny:{g:'assets/rekwizyty/c913
 function r7Decor(w){if(!R7_ON||!REK3D_ON||!w||!w.PROPS)return;const P=w.PROPS,it=[];
  const free=(x,y)=>{const t=w.map&&w.map[Math.floor(y)*MW+Math.floor(x)];return t!==undefined&&!SOLID.has(t)&&!(typeof VOID!=='undefined'&&VOID.has(t))&&!P.some(p=>Math.hypot(p.x-x,p.y-y)<.6)&&!it.some(q=>Math.hypot(q.x-x,q.z-y)<.5)};
  const put=(n,x,y,W,flip,blk)=>{if(!P3D_MGEO[n]||!free(x,y))return;it.push({n,x,z:y,W,flip:!!flip});if(blk){const i=Math.floor(y-.3)*MW+Math.floor(x),rd=w.groundPlan&&w.groundPlan.road&&w.groundPlan.road[i];if(!rd&&!SOLID.has(w.map[i])){if(w.under)w.under[i]=w.map[i];w.map[i]=31}}},near=(k,fn)=>{for(const p of P)if(p.k===k)fn(p)};
- if(w.ch===5){near('desk',p=>{put('r8_krzeslo',p.x-1.2,p.y+.2,.65,0,1);put('r8_ksiegi',p.x+1.3,p.y+.3,.8);put('r8_kalamarz',p.x+1.1,p.y+1,.36);put('r8_zwoj',p.x+1.8,p.y+1,.7)});
+ if(w.ch===5){/* 883: kosze ognisk Zakonu dostaja kolizje jak pozostale kosze (wczesniej mozna bylo przez nie przejsc) */for(const p of P)if(p.k==='order_bonfire'){const i=Math.floor(p.y)*MW+Math.floor(p.x),rd=w.groundPlan&&w.groundPlan.road&&w.groundPlan.road[i];if(!rd&&!SOLID.has(w.map[i])){if(w.under)w.under[i]=w.map[i];w.map[i]=31}}
+  near('desk',p=>{put('r8_krzeslo',p.x-1.2,p.y+.2,.65,0,1);put('r8_ksiegi',p.x+1.3,p.y+.3,.8);put('r8_kalamarz',p.x+1.1,p.y+1,.36);put('r8_zwoj',p.x+1.8,p.y+1,.7)});
   near('lectern',p=>{put('r8_ksiegi',p.x+1.1,p.y+.3,.8,1);put('r8_zwoj',p.x-1.1,p.y+.4,.7,1)});
   near('scale',p=>{put('r8_zloto',p.x-1.4,p.y+.4,1);put('r8_sakiewka',p.x+1.2,p.y+.5,.5);put('r8_kielich',p.x+1.2,p.y+1.2,.26)});
   near('vault',p=>{put('r8_zloto',p.x+1.5,p.y+.6,.95,1);put('r8_sakiewka',p.x-1.4,p.y+.6,.5,1)});
@@ -1228,7 +1229,7 @@ function buildStolica(I){planGround(3);
   if(ZLN.length&&typeof OSADA_TX!=='undefined')zlNoweBuild();
   // golden domes wrapped in the Z2 dome texture
   let goldT=texFrom(tcut(ZW,2,3),true);goldT.repeat.set(8,2);if(I.rf_goldm){goldT=wallTex(I.rf_goldm).clone();goldT.needsUpdate=true;goldT.repeat.set(5,2)}
-  const goldM=cutCircle(phong({map:goldT,specular:0xb08a40,shininess:22,emissive:0x1a1004}));
+  const goldM=cutCircle(phong({map:goldT,color:0x9a8a72,specular:0x7a6438,shininess:16,emissive:0x0a0602})/* 883: przygaszone (jaskrawsze od reszty miasta) */);
   const drumT=texFrom(tcut(ZW,3,2),true);drumT.repeat.set(8,1);const drumM=cutCircle(phong({map:drumT}));
   // 15.11.2026 (punkt centralny): tylko bazylika lsni czystym zlotem; kopuly kamienic, palacu i kaplicy sa zasniedziale, wiec glowna kopula jest jedynym jasnym akcentem mapy
   const agedM=typeof OSADA_TX!=='undefined'&&nbParam('kopuly')!=='0'?worldSurfN(cutCircle(phong({color:0x9c8e74,specular:0x3a3020,shininess:12})),'tzl2_zloto_patynowane',1.4,1):cutCircle(phong({map:goldT,color:0x857a68,specular:0x3a3020,shininess:9}));// 23.11.2026: tekstura autora (stare zlocenie), przygaszona wzgledem bazyliki

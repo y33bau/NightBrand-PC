@@ -247,7 +247,10 @@ function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast lo
    if(M3[i]===31&&!P3.some(q=>Math.floor(q.y)===y&&Math.abs(q.x-(x+.5))<1.2)){let v=U3&&U3[i];if(!v||v===31||v===27||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=M3[(y+b)*MW+x+a];if(!SOLID.has(t)&&t!==27&&t!==24&&t!==54){v=t;break}}}M3[i]=v||20}}}
   if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}
   // 15.11.2026 (prosba autora): wejscie do krypty wysrodkowane w przeswicie miedzy chatami (o 1 pole w prawo), razem z kolizja
-  if(ch===1){const cs=w.PROPS.find(p=>p.k==='crypt_stairs');if(cs&&Math.abs(cs.x-76.4)<.3){const y=Math.floor(cs.y),L=y*MW+Math.floor(cs.x)-4,R=y*MW+Math.floor(cs.x)+2;if(w.map[L]===31){w.map[L]=(w.under&&w.under[L])||41}if(w.map[R]!==31&&!SOLID.has(w.map[R])){if(w.under)w.under[R]=w.map[R];w.map[R]=31}cs.x+=1}}
+  if(ch===1){const cs=w.PROPS.find(p=>p.k==='crypt_stairs');if(cs&&Math.abs(cs.x-76.4)<.3){const y=Math.floor(cs.y),L=y*MW+Math.floor(cs.x)-4,R=y*MW+Math.floor(cs.x)+2;if(w.map[L]===31){w.map[L]=(w.under&&w.under[L])||41}if(w.map[R]!==31&&!SOLID.has(w.map[R])){if(w.under)w.under[R]=w.map[R];w.map[R]=31}cs.x+=1;/* 23.11.2026 (883): po przesunieciu schodow dwa pola na lewo od obrazka zostawaly zablokowane (niewidzialna sciana) */for(const dx of [-4,-3]){const i=y*MW+Math.floor(cs.x)+dx;if(w.map[i]===31)w.map[i]=(w.under&&w.under[i])||41}}}
+  /* 23.11.2026 (883): po przeskalowaniu mapy kolizje bram, tronu i posagow byly szersze niz obrazek (niewidzialne sciany po bokach); zostaja tylko pola pod obrazkiem */
+  for(const p of w.PROPS){const keep=p.k==='gate'?(x=>Math.abs(x+.5-p.x)<2):p.k==='throne'?(x=>Math.abs(x-Math.floor(p.x))<=2):/^statue_[ab]$/.test(p.k)?(x=>Math.abs(x-Math.floor(p.x))<=1):null;if(!keep)continue;
+   const gy=Math.floor(p.y);for(let x=Math.floor(p.x)-6;x<=Math.floor(p.x)+6;x++){const i=gy*MW+x;if(w.map[i]===31&&!keep(x)&&!w.PROPS.some(q=>q!==p&&Math.abs(q.x-(x+.5))<1&&Math.floor(q.y)===gy))w.map[i]=(w.under&&w.under[i])||41}}
   if(ch===2)layoutPatch2(w);
   if(ch===1&&nbParam('chojrak')!=='0')chojrakHouse(w);if(ch===1&&nbParam('sklepmarga')!=='0')margaHouse(w);
   scene.add(w.group);

@@ -2926,7 +2926,8 @@ if(R7_ON){Object.assign(P3D_MESHY,{r8_natura_03_jezyny:{g:'assets/rekwizyty/c913
 function r7Decor(w){if(!R7_ON||!REK3D_ON||!w||!w.PROPS)return;const P=w.PROPS,it=[];
  const free=(x,y)=>{const t=w.map&&w.map[Math.floor(y)*MW+Math.floor(x)];return t!==undefined&&!SOLID.has(t)&&!(typeof VOID!=='undefined'&&VOID.has(t))&&!P.some(p=>Math.hypot(p.x-x,p.y-y)<.6)&&!it.some(q=>Math.hypot(q.x-x,q.z-y)<.5)};
  const put=(n,x,y,W,flip,blk)=>{if(!P3D_MGEO[n]||!free(x,y))return;it.push({n,x,z:y,W,flip:!!flip});if(blk){const i=Math.floor(y-.3)*MW+Math.floor(x),rd=w.groundPlan&&w.groundPlan.road&&w.groundPlan.road[i];if(!rd&&!SOLID.has(w.map[i])){if(w.under)w.under[i]=w.map[i];w.map[i]=31}}},near=(k,fn)=>{for(const p of P)if(p.k===k)fn(p)};
- if(w.ch===5){near('desk',p=>{put('r8_krzeslo',p.x-1.2,p.y+.2,.65,0,1);put('r8_ksiegi',p.x+1.3,p.y+.3,.8);put('r8_kalamarz',p.x+1.1,p.y+1,.36);put('r8_zwoj',p.x+1.8,p.y+1,.7)});
+ if(w.ch===5){/* 883: kosze ognisk Zakonu dostaja kolizje jak pozostale kosze (wczesniej mozna bylo przez nie przejsc) */for(const p of P)if(p.k==='order_bonfire'){const i=Math.floor(p.y)*MW+Math.floor(p.x),rd=w.groundPlan&&w.groundPlan.road&&w.groundPlan.road[i];if(!rd&&!SOLID.has(w.map[i])){if(w.under)w.under[i]=w.map[i];w.map[i]=31}}
+  near('desk',p=>{put('r8_krzeslo',p.x-1.2,p.y+.2,.65,0,1);put('r8_ksiegi',p.x+1.3,p.y+.3,.8);put('r8_kalamarz',p.x+1.1,p.y+1,.36);put('r8_zwoj',p.x+1.8,p.y+1,.7)});
   near('lectern',p=>{put('r8_ksiegi',p.x+1.1,p.y+.3,.8,1);put('r8_zwoj',p.x-1.1,p.y+.4,.7,1)});
   near('scale',p=>{put('r8_zloto',p.x-1.4,p.y+.4,1);put('r8_sakiewka',p.x+1.2,p.y+.5,.5);put('r8_kielich',p.x+1.2,p.y+1.2,.26)});
   near('vault',p=>{put('r8_zloto',p.x+1.5,p.y+.6,.95,1);put('r8_sakiewka',p.x-1.4,p.y+.6,.5,1)});
@@ -3354,7 +3355,7 @@ function buildStolica(I){planGround(3);
   if(ZLN.length&&typeof OSADA_TX!=='undefined')zlNoweBuild();
   // golden domes wrapped in the Z2 dome texture
   let goldT=texFrom(tcut(ZW,2,3),true);goldT.repeat.set(8,2);if(I.rf_goldm){goldT=wallTex(I.rf_goldm).clone();goldT.needsUpdate=true;goldT.repeat.set(5,2)}
-  const goldM=cutCircle(phong({map:goldT,specular:0xb08a40,shininess:22,emissive:0x1a1004}));
+  const goldM=cutCircle(phong({map:goldT,color:0x9a8a72,specular:0x7a6438,shininess:16,emissive:0x0a0602})/* 883: przygaszone (jaskrawsze od reszty miasta) */);
   const drumT=texFrom(tcut(ZW,3,2),true);drumT.repeat.set(8,1);const drumM=cutCircle(phong({map:drumT}));
   // 15.11.2026 (punkt centralny): tylko bazylika lsni czystym zlotem; kopuly kamienic, palacu i kaplicy sa zasniedziale, wiec glowna kopula jest jedynym jasnym akcentem mapy
   const agedM=typeof OSADA_TX!=='undefined'&&nbParam('kopuly')!=='0'?worldSurfN(cutCircle(phong({color:0x9c8e74,specular:0x3a3020,shininess:12})),'tzl2_zloto_patynowane',1.4,1):cutCircle(phong({map:goldT,color:0x857a68,specular:0x3a3020,shininess:9}));// 23.11.2026: tekstura autora (stare zlocenie), przygaszona wzgledem bazyliki
@@ -3926,7 +3927,10 @@ function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast lo
    if(M3[i]===31&&!P3.some(q=>Math.floor(q.y)===y&&Math.abs(q.x-(x+.5))<1.2)){let v=U3&&U3[i];if(!v||v===31||v===27||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=M3[(y+b)*MW+x+a];if(!SOLID.has(t)&&t!==27&&t!==24&&t!==54){v=t;break}}}M3[i]=v||20}}}
   if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}
   // 15.11.2026 (prosba autora): wejscie do krypty wysrodkowane w przeswicie miedzy chatami (o 1 pole w prawo), razem z kolizja
-  if(ch===1){const cs=w.PROPS.find(p=>p.k==='crypt_stairs');if(cs&&Math.abs(cs.x-76.4)<.3){const y=Math.floor(cs.y),L=y*MW+Math.floor(cs.x)-4,R=y*MW+Math.floor(cs.x)+2;if(w.map[L]===31){w.map[L]=(w.under&&w.under[L])||41}if(w.map[R]!==31&&!SOLID.has(w.map[R])){if(w.under)w.under[R]=w.map[R];w.map[R]=31}cs.x+=1}}
+  if(ch===1){const cs=w.PROPS.find(p=>p.k==='crypt_stairs');if(cs&&Math.abs(cs.x-76.4)<.3){const y=Math.floor(cs.y),L=y*MW+Math.floor(cs.x)-4,R=y*MW+Math.floor(cs.x)+2;if(w.map[L]===31){w.map[L]=(w.under&&w.under[L])||41}if(w.map[R]!==31&&!SOLID.has(w.map[R])){if(w.under)w.under[R]=w.map[R];w.map[R]=31}cs.x+=1;/* 23.11.2026 (883): po przesunieciu schodow dwa pola na lewo od obrazka zostawaly zablokowane (niewidzialna sciana) */for(const dx of [-4,-3]){const i=y*MW+Math.floor(cs.x)+dx;if(w.map[i]===31)w.map[i]=(w.under&&w.under[i])||41}}}
+  /* 23.11.2026 (883): po przeskalowaniu mapy kolizje bram, tronu i posagow byly szersze niz obrazek (niewidzialne sciany po bokach); zostaja tylko pola pod obrazkiem */
+  for(const p of w.PROPS){const keep=p.k==='gate'?(x=>Math.abs(x+.5-p.x)<2):p.k==='throne'?(x=>Math.abs(x-Math.floor(p.x))<=2):/^statue_[ab]$/.test(p.k)?(x=>Math.abs(x-Math.floor(p.x))<=1):null;if(!keep)continue;
+   const gy=Math.floor(p.y);for(let x=Math.floor(p.x)-6;x<=Math.floor(p.x)+6;x++){const i=gy*MW+x;if(w.map[i]===31&&!keep(x)&&!w.PROPS.some(q=>q!==p&&Math.abs(q.x-(x+.5))<1&&Math.floor(q.y)===gy))w.map[i]=(w.under&&w.under[i])||41}}
   if(ch===2)layoutPatch2(w);
   if(ch===1&&nbParam('chojrak')!=='0')chojrakHouse(w);if(ch===1&&nbParam('sklepmarga')!=='0')margaHouse(w);
   scene.add(w.group);
@@ -11085,7 +11089,7 @@ ${menus} :is(.tab,.stab,.nbp-tab,.pc-prep-tab):hover:not(.on):not([aria-pressed=
   text(coRevive,mpTotTxt());
  }
  const oldHud=hud;let key='',buffKey='',scaleKey='';
- hud=function(){oldHud();const on=enabled&&innerWidth>=innerHeight*1.3,/* 15.11.2026: gra tylko na PC, nowy HUD takze przy ekranie dotykowym (laptop, Steam Deck) */coop=!!(S&&pl2&&S.phase==='play');scr.classList.toggle('pc-hud',on);scr.classList.toggle('pc-coop',on&&coop);const gainHome=on?(coop?coWallet:wallet):night;if(gain&&gain.parentElement!==gainHome)gainHome.append(gain);const show=on&&!!S&&S.phase==='play'&&!S.paused&&!S.choosing&&!S.shop&&!S.dialog&&!S.intro&&!S.notice&&(coop||!pl.dead);root.hidden=!show||coop;co.hidden=!show||!coop;scr.classList.toggle('pc-hud-visible',show);if(!show)return;
+ hud=function(){oldHud();const on=enabled,/* 883 (autor): nowy HUD przy kazdych proporcjach okna; stary (sprzed PC) tylko przez ?pchud=0 *//* 15.11.2026: gra tylko na PC, nowy HUD takze przy ekranie dotykowym (laptop, Steam Deck) */coop=!!(S&&pl2&&S.phase==='play');scr.classList.toggle('pc-hud',on);scr.classList.toggle('pc-coop',on&&coop);const gainHome=on?(coop?coWallet:wallet):night;if(gain&&gain.parentElement!==gainHome)gainHome.append(gain);const show=on&&!!S&&S.phase==='play'&&!S.paused&&!S.choosing&&!S.shop&&!S.dialog&&!S.intro&&!S.notice&&(coop||!pl.dead);root.hidden=!show||coop;co.hidden=!show||!coop;scr.classList.toggle('pc-hud-visible',show);if(!show)return;
   const sk=innerWidth+'x'+innerHeight;if(sk!==scaleKey){scaleKey=sk;const r=scr.getBoundingClientRect();scr.style.setProperty('--hu',(Math.min(r.width/1040,r.height/577)*.7/* 16.11.2026: HUD PC o 30% mniejszy; 0.6 = o 40% */).toFixed(4)+'px')}
   if(coop){coopHud();return}
   text(health.querySelector('strong'),meter(health,pl.hp,pl.max||1));text(mana.querySelector('strong'),meter(mana,pl.mana||0,pl.manaMax||SL.mana.max));
