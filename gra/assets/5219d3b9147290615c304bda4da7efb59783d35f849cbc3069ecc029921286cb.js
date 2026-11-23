@@ -1605,6 +1605,17 @@ function worldSurf(mat,img,scale,kind){mat.map=wallTex(img);mat.emissiveMap=null
     sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWW;varying vec3 vWN;').replace('#include <project_vertex>','#include <project_vertex>\nvec4 wwp=vec4(transformed,1.0);\n#ifdef USE_INSTANCING\nwwp=instanceMatrix*wwp;\n#endif\nvWW=(modelMatrix*wwp).xyz;vWN=normalize(mat3(modelMatrix)*objectNormal);');
     sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vWW;varying vec3 vWN;').replace('#include <map_fragment>','vec2 wuv=abs(vWN.y)>.5?vWW.xz:(abs(vWN.x)>.5?vec2(vWW.z,vWW.y):vec2(vWW.x,vWW.y));vec4 sampledDiffuseColor=texture2D(map,wuv/'+scale.toFixed(2)+');diffuseColor*=sampledDiffuseColor;')};
   mat.customProgramCacheKey=()=>'nbws'+kind+scale;return mat}
+/* 23.11.2026 (runda 869): tekstury Osady od autora (ChatGPT, kafelkujace) z mapa wypuklosci (normal mapa liczona z jasnosci).
+   Mapowanie jak worldSurf (wspolrzedne swiata), dodatkowo normalna zaburzana z normal mapy: pekniecia, szpary i kamienie lapia swiatlo ognisk. */
+const OSADA_TX={"t1_bale":["assets/tekstury/2c9f35c7a538c56ee9432b84d1b60af0f9a83e316d8338da90c3ce1544726c6b.webp","assets/tekstury/671955c448fa17fd2c30bc2d772cf731adea2f49b7de3cd5092b0b8887d6456e.webp"],"t2_belka":["assets/tekstury/61145e2bd5289f172b6b854411e17f9f55b4ecbb7581cc5164877acc89cfd6d7.webp","assets/tekstury/1164aadb35207f12807844e563feb6bbc27963118e3ae40da45d98d6845c37b0.webp"],"t3_poszycie":["assets/tekstury/245b59670ba9eedeaf48bc550a55cd7b1a3e576e63f9a5bd1b7056f980404d35.webp","assets/tekstury/ac5e27500105480abf207e5c40c3fbe91efb712b6e1c13b5ac9b942160e061c0.webp"],"t4_podmurowka":["assets/tekstury/c79861c2e29ce1156c4a338b1d87c33f485c8823a125dd845b75a906447d0932.webp","assets/tekstury/410f4155525cd00e88e6e4fb97dcd27eaf8e28f55ae1b44887bcf0422213468a.webp"],"t5_podloga":["assets/tekstury/09e91cfa71e0096732d0c4d7147b66b057e1ba2c20f9314d49381f350e461830.webp","assets/tekstury/71bb24e31dcf2a92a59be53ca50f7466cdd70829aad9db5933ece155f692b90a.webp"],"t6_dachowka":["assets/tekstury/40b3642aff786b5a639c7eb54064c8ae4326e3194e99268ea8d2949151784e69.webp","assets/tekstury/cdc86566f8dcedd8bdda8103ba6fc00572d8f1019d0ec13d081b6816a1dd7636.webp"]};
+const _otx=new Map();function osadaTex(u){let t=_otx.get(u);if(!t){t=new THREE.TextureLoader().load(u);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());_otx.set(u,t)}return t}
+function worldSurfN(mat,key,scale,str){const e=OSADA_TX[key];mat.map=osadaTex(e[0]);mat.emissiveMap=null;mat.bumpMap=null;const nt=osadaTex(e[1]),prev=mat.onBeforeCompile,sc=scale.toFixed(2),st=(str||1).toFixed(2);
+  mat.onBeforeCompile=sh=>{if(prev)prev.call(mat,sh);sh.uniforms.uNrm={value:nt};
+    sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWW;varying vec3 vWN;').replace('#include <project_vertex>','#include <project_vertex>\nvec4 wwp=vec4(transformed,1.0);\n#ifdef USE_INSTANCING\nwwp=instanceMatrix*wwp;\n#endif\nvWW=(modelMatrix*wwp).xyz;vWN=normalize(mat3(modelMatrix)*objectNormal);');
+    sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vWW;varying vec3 vWN;uniform sampler2D uNrm;')
+     .replace('#include <map_fragment>','vec3 nW0=normalize(vWN);vec2 wuv=abs(nW0.y)>.5?vWW.xz:(abs(nW0.x)>.5?vec2(vWW.z,vWW.y):vec2(vWW.x,vWW.y));wuv/='+sc+';vec4 sampledDiffuseColor=texture2D(map,wuv);diffuseColor*=sampledDiffuseColor;')
+     .replace('#include <normal_fragment_maps>','#include <normal_fragment_maps>\n{vec3 T,B;if(abs(nW0.y)>.5){T=vec3(1.,0.,0.);B=vec3(0.,0.,-sign(nW0.y));}else if(abs(nW0.x)>.5){T=vec3(0.,0.,-sign(nW0.x));B=vec3(0.,1.,0.);}else{T=vec3(sign(nW0.z),0.,0.);B=vec3(0.,1.,0.);}vec3 tn=texture2D(uNrm,wuv).xyz*2.-1.;tn.xy*='+st+';vec3 pw=normalize(T*tn.x+B*tn.y+nW0*max(tn.z,.2));normal=normalize((viewMatrix*vec4(pw,0.)).xyz);}')};
+  mat.customProgramCacheKey=()=>'nbwsn'+sc+st+(prev?'c'+String(prev).length:'');return mat}
 const M4=new THREE.Matrix4(),Q=new THREE.Quaternion(),V=new THREE.Vector3(),SC=new THREE.Vector3(1,1,1),UP=new THREE.Vector3(0,1,0);
 let ROOT=scene;
 function instanced(geo,mat,list,fn,cast=true,recv=true){const im=new THREE.InstancedMesh(geo,mat,Math.max(1,list.length));list.forEach((p,i)=>{fn(p);im.setMatrixAt(i,M4)});im.count=list.length;im.castShadow=cast;im.receiveShadow=recv;ROOT.add(im);return im}
@@ -1861,40 +1872,44 @@ function roofGeo(W,D,rise){const ax=W>=D,L=ax?W:D,T=ax?D:W,hT=T/2,sl=Math.hypot(
 const BURNT_TEX={beam:null,roof:null};
 function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[2]===48).map(([x,y])=>y*MW+x));
  const wood=BURNT_TEX.beam||IMGS.wl_palecap||IMGS.wl_chata,roofIm=BURNT_TEX.roof||IMGS.p1_roof_burnt||IMGS.wl_chata;
- const postM=worldSurf(cutaway(phong({color:0x8c7868})),wood,1.3,'a');
+ const NT=typeof OSADA_TX!=='undefined',postM=NT?worldSurfN(cutaway(phong({color:0xe8dcd0})),'t2_belka',1.3,1.2):worldSurf(cutaway(phong({color:0x8c7868})),wood,1.3,'a');
  const box=new THREE.BoxGeometry(1,1,1).toNonIndexed(),M=new THREE.Matrix4(),Q=new THREE.Quaternion(),E=new THREE.Euler(),Vs=new THREE.Vector3(),Vp=new THREE.Vector3();
  const acc=()=>({p:[],n:[]}),put=(a,geo,px,py,pz,sx,sy,sz,rx,ry,rz)=>{E.set(rx||0,ry||0,rz||0);Q.setFromEuler(E);M.compose(Vp.set(px,py,pz),Q,Vs.set(sx,sy,sz));
    const g=geo.clone().applyMatrix4(M),P=g.attributes.position.array,N=g.attributes.normal.array;for(let i=0;i<P.length;i++){a.p.push(P[i]);a.n.push(N[i])}g.dispose()};
  const mesh=(a,mat)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(a.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(a.n,3));const m=new THREE.Mesh(g,mat);m.castShadow=true;m.receiveShadow=true;w.group.add(m);return m};
- const posts=acc();
+ const posts=acc(),floors=acc(),margaR=rs.reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null);
  for(const r of rs){const h=(i=>{const x=Math.sin((r.x*12.9898+r.y*78.233+i*37.7))*43758.5453;return x-Math.floor(x)});let hi=0;const rnd=()=>h(hi++);
+  const marga=r===margaR&&r.w/r.h>1.6;
   const alongX=r.w>=r.h,L=alongX?r.w:r.h,D=alongX?r.h:r.w,cx=r.x+r.w/2,cz=r.y+r.h/2,eave=1.9,rise=Math.min(2.3,D*.34),ov=.35,half=D/2+ov,slope=Math.atan2(rise,half),sl=Math.hypot(half,rise);
   // dla osi wzdluz Z zamieniamy x<->z przy skladaniu
   const P=(a,u,y,v,su,sy,sv,rU,rY,rV)=>alongX?put(a,box,cx+u,y,cz+v,su,sy,sv,rV||0,rY||0,rU||0):put(a,box,cx+v,y,cz+u,sv,sy,su,rU||0,rY||0,-(rV||0));
   const roof=acc(),wood_=acc();
   // kalenica (czasem przelamana) i platwie na scianach
-  const ridgeBreak=rnd()<.45?(rnd()-.5)*L*.5:null;
+  const ridgeBreak=!marga&&rnd()<.45?(rnd()-.5)*L*.5:null;
   if(ridgeBreak===null)P(wood_,0,eave+rise,0,L+.5,.24,.24);else{const a=(L+.5)/2+ridgeBreak;P(wood_,-(L+.5)/2+a/2,eave+rise,0,a-.3,.24,.24);P(wood_,(L+.5)/2-((L+.5)-a)/2+.2,eave+rise-.45,0,(L+.5)-a-.6,.22,.22,0,0,.0)}
   for(const s of [-1,1])P(wood_,0,eave+.08,s*(D/2-.15),L+.3,.2,.26);
   // krokwie co ok. 1.15, czesc brakuje, czesc skrocona
-  const n=Math.max(3,Math.round(L/1.15));for(let i=0;i<=n;i++){const u=-L/2+.2+i*(L-.4)/n;for(const s of [-1,1]){const k=rnd();if(k<.22)continue;const len=k<.4?sl*(.45+rnd()*.3):sl,mid=len/2;
+  const n=Math.max(3,Math.round(L/1.15));for(let i=0;i<=n;i++){const u=-L/2+.2+i*(L-.4)/n;for(const s of [-1,1]){const k=marga?1:rnd();if(k<.22)continue;const len=k<.4?sl*(.45+rnd()*.3):sl,mid=len/2;
     // od okapu w gore
     const vy=eave+Math.sin(slope)*mid,vv=s*(half-Math.cos(slope)*mid);P(wood_,u,vy,vv,.17,.17,len,0,0,s*slope)}}
   // resztki poszycia: odcinki wzdluz kalenicy, na obu polaciach osobno, ok. 40% zostaje (przy szczytach czesciej)
   const seg=Math.max(2,Math.round(L/2.2));for(let i=0;i<seg;i++){const u0=-L/2-.25+i*(L+.5)/seg,ul=(L+.5)/seg,edge=i===0||i===seg-1;
-   for(const s of [-1,1]){if(rnd()>(edge?.55:.28))continue;const part=.45+rnd()*.55,len=sl*part,mid=sl-len/2;// od kalenicy w dol
-    const vy=eave+Math.sin(slope)*(sl-mid)+.1,vv=s*(half-Math.cos(slope)*(sl-mid));P(roof,u0+ul/2,vy,vv,ul*(.8+rnd()*.15),.05,len,0,0,s*slope)}}
+   for(const s of [-1,1]){if(!marga&&rnd()>(edge?.55:.28))continue;const part=marga?1:.45+rnd()*.55,len=sl*part,mid=sl-len/2;// od kalenicy w dol
+    const vy=eave+Math.sin(slope)*(sl-mid)+.1,vv=s*(half-Math.cos(slope)*(sl-mid));P(roof,u0+ul/2,vy,vv,marga?ul*1.03:ul*(.8+rnd()*.15),.05,len,0,0,s*slope)}}
   // zawalone belki w srodku
-  for(let i=0;i<2+(rnd()<.5?1:0);i++){const len=1.6+rnd()*2.2,u=(rnd()-.5)*(L-2.5),v=(rnd()-.5)*(D-2.5);P(wood_,u,.22+rnd()*.25,v,len,.2,.2,0,(rnd()-.5)*2.4,(rnd()-.5)*.35)}
+  if(!marga)for(let i=0;i<2+(rnd()<.5?1:0);i++){const len=1.6+rnd()*2.2,u=(rnd()-.5)*(L-2.5),v=(rnd()-.5)*(D-2.5);P(wood_,u,.22+rnd()*.25,v,len,.2,.2,0,(rnd()-.5)*2.4,(rnd()-.5)*.35)}
+  // podloga z desek pod popiolem (wnetrze bez scian)
+  if(NT&&!marga)put(floors,box,cx,.012,cz,r.w-2,.02,r.h-2);
   // slupy narozne (wyzsze od scian, zweglone szczyty) i rama drzwi
   for(const [ux,vz] of [[-1,-1],[1,-1],[-1,1],[1,1]])P(posts,ux*(L/2-.2),1.15+rnd()*.15,vz*(D/2-.2),.34,2.3+rnd()*.3,.34);
   for(const yy of [r.y,r.y+r.h-1]){let a=-1;for(let x=r.x;x<=r.x+r.w;x++){const open=x<r.x+r.w&&!wall.has(yy*MW+x)&&wall.has(yy*MW+r.x)===true||false;const isOpen=x<r.x+r.w&&!wall.has(yy*MW+x);
     if(isOpen&&a<0)a=x;if((!isOpen||x===r.x+r.w)&&a>=0){const b=x;if(b-a>=2&&b-a<=6&&a>r.x&&b<r.x+r.w){const zz=yy+.5;for(const xx of [a,b])put(posts,box,xx,1.05,zz,.26,2.1,.32);if(rnd()<.7)put(posts,box,(a+b)/2,2.05,zz,b-a+.5,.24,.3)}a=-1}}}
-  const fadeR=phong({color:0xffffff,transparent:true,opacity:1,side:THREE.DoubleSide});const roofM=worldSurf(fadeR,BURNT_TEX.roof?roofIm:wood,BURNT_TEX.roof?2.4:.9,'a');roofM.color.setHex(BURNT_TEX.roof?0xffffff:0x9a8474);/* poszycie: gonty z drewna (do czasu tekstury t3_poszycie) */
-  const woodM=worldSurf(phong({color:0x8c7868,transparent:true,opacity:1}),wood,1.3,'a');
+  const fadeR=phong({color:0xffffff,transparent:true,opacity:1,side:THREE.DoubleSide,alphaTest:marga?0:.5});
+  const roofM=NT?worldSurfN(fadeR,marga?'t6_dachowka':'t3_poszycie',marga?2.2:2.6,1.2):worldSurf(fadeR,wood,.9,'a');roofM.color.setHex(NT?(marga?0xf0e4dc:0xfff4ec):0x9a8474);/* poszycie: gonty z dziurami, dom Margi: dachowka */
+  const woodM=NT?worldSurfN(phong({color:0xe8dcd0,transparent:true,opacity:1}),'t2_belka',1.3,1.2):worldSurf(phong({color:0x8c7868,transparent:true,opacity:1}),wood,1.3,'a');
   const g=new THREE.Group();g.add(mesh(wood_,woodM));if(roof.p.length)g.add(mesh(roof,roofM));w.group.add(g);
   r.mats=[woodM,roofM];r.mesh=g;r.a=1}
- if(posts.p.length)mesh(posts,postM)}
+ if(posts.p.length)mesh(posts,postM);if(floors.p.length){const f=mesh(floors,worldSurfN(phong({color:0x8c847c}),'t5_podloga',2.6,1.1));f.castShadow=false}}
 function buildRoofs(w){if(!w.roofs||!w.group)return;if(w.ch===1&&IMGS.wl_palecap&&nbParam('spalone')!=='0'){burntHouses(w);return}const rm=[];
  for(const r of w.roofs){if(r.tri)continue;/* 23.11.2026: dom z modelu ma wlasny dach */const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
   const m=new THREE.Mesh(roofGeo(W,D,rise),new THREE.MeshLambertMaterial({color:0x4a382c,transparent:true,opacity:1,side:THREE.DoubleSide,vertexColors:true}));
@@ -2685,8 +2700,11 @@ function buildBrzeznica(I){
   const gP=[[],[]],gH=[[],[],[],[]];
   for(const [x,y,t] of walls){if(t===48)gH[(x*7+y*3)%4].push([x,y]);else gP[(x+y)&1].push([x,y])}
   gP.forEach((list,i)=>{if(!list.length)return;const side=HD1?worldSurf(cutaway(phong({color:i?0xd4ccc4:0xc8c0b8})),I.wl_palisada,3,'a'):cutaway(phong({map:pal[i]}));depthWall(palGeo,side,1);instanced(palGeo,[side,side,capMat,capMat,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))});
-  const houseCap=I.p1_roof_burnt?worldSurf(cutaway(phong({color:0xffffff})),I.p1_roof_burnt,2.5,'a'):capMat;
-  gH.forEach((list,i)=>{if(!list.length)return;const side=HD1?worldSurf(cutaway(phong({color:[0xd0c4b8,0xc8bcb0,0xd4c8bc,0xccc0b4][i]})),I.wl_chata,3,'a'):cutaway(phong({map:logs[i]}));depthWall(houseGeo,side,1);instanced(houseGeo,[side,side,houseCap,houseCap,side,side],list,([x,y])=>{/* 23.11.2026: nierowne, nadpalone korony scian (narozniki i otwory pelne) */const k=Math.sin(x*12.9898+y*78.233)*43758.5453,f=k-Math.floor(k),n=(dx,dy)=>tileAt(x+dx,y+dy)===48,corner=(n(1,0)||n(-1,0))&&(n(0,1)||n(0,-1)),edgeOpen=!n(1,0)&&!n(-1,0)||!n(0,1)&&!n(0,-1);const s=corner||nbParam('spalone')==='0'?1:f<.38?.5+f*.9:f<.6?.86:1;return M4.makeScale(1,s,1).setPosition(x+.5,0,y+.5)})});
+  const OS=nbParam('spalone')!=='0',margaR=(W.roofs||[]).reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null),inMarga=(x,y)=>margaR&&margaR.w/margaR.h>1.6&&x>=margaR.x&&x<margaR.x+margaR.w&&y>=margaR.y&&y<margaR.y+margaR.h;
+  const houseCap=OS?worldSurfN(cutaway(phong({color:0xd8ccc0})),'t2_belka',1.4,1):I.p1_roof_burnt?worldSurf(cutaway(phong({color:0xffffff})),I.p1_roof_burnt,2.5,'a'):capMat;
+  /* 23.11.2026: podmurowka z kamienia pod scianami domow (tekstura autora) */
+  if(OS){const all=gH.flat();if(all.length){const fg=new THREE.BoxGeometry(1.08,.42,1.08);fg.translate(0,.21,0);instanced(fg,worldSurfN(cutaway(phong({color:0xe0d6cc})),'t4_podmurowka',2.2,1.2),all,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))}}
+  gH.forEach((list,i)=>{if(!list.length)return;const side=OS?worldSurfN(cutaway(phong({color:[0xfff4ea,0xf4eae0,0xfff8f0,0xece2d8][i]})),'t1_bale',2.1,1.1):HD1?worldSurf(cutaway(phong({color:[0xd0c4b8,0xc8bcb0,0xd4c8bc,0xccc0b4][i]})),I.wl_chata,3,'a'):cutaway(phong({map:logs[i]}));depthWall(houseGeo,side,1);instanced(houseGeo,[side,side,houseCap,houseCap,side,side],list,([x,y])=>{/* 23.11.2026: nierowne, nadpalone korony scian (narozniki i otwory pelne) */const k=Math.sin(x*12.9898+y*78.233)*43758.5453,f=k-Math.floor(k),n=(dx,dy)=>tileAt(x+dx,y+dy)===48,corner=(n(1,0)||n(-1,0))&&(n(0,1)||n(0,-1)),edgeOpen=!n(1,0)&&!n(-1,0)||!n(0,1)&&!n(0,-1);const s=corner||!OS||inMarga(x,y)?1:f<.38?.5+f*.9:f<.6?.86:1;return M4.makeScale(1,s,1).setPosition(x+.5,0,y+.5)})});
   // stagnant pond (row 5 animated)
   waterFrames=[0,1,2,3].map(i=>tcut(F,i,5));
   const wGeo=new THREE.PlaneGeometry(1,1);wGeo.rotateX(-Math.PI/2);
