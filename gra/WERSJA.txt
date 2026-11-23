@@ -962,3 +962,5 @@ cache886 · 886: arkusze 49 bohaterow powiekszone 2x (Real-ESRGAN, 2048x3072), p
 cache887 · 887: ostrosc tekstur modeli 3D i drzew pod katem: anizotropia z ustawien jakosci (Ultra 16, Wysoka 8, wczesniej stale 4) (nie sprawdzono: wyglad w grze, FPS u autora, pad, itch.io)
 cache888 · tekstury 83 modeli 3D powiekszone 2x (Real-ESRGAN, 2048); nie sprawdzono: wyglad w grze, pamiec GPU, pad, itch.io
 cache889 · modele rodzin z bryl Blendera wylaczone (wracaja malowane ogniska, stosy, kolumna, jezyny; znika wystroj 882-884); nie sprawdzono: wyglad w grze, pad, itch.io
+cache890 · wystroj z rodzin (menhiry, lawy itd.) przywrocony; ogniska, stosy, kosze, zlamana kolumna, jezyny malowane; nie sprawdzono: wyglad w grze, pad, itch.io
+cache891 · przywrocone wszystkie modele rodzin jak w 888 (menhiry, lawy, czaszki, jezyny, ogniska, kolumny); nie sprawdzono: wyglad w grze, pad, itch.io
