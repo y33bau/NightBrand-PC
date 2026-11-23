@@ -33,7 +33,7 @@ let haloGeo=null;const haloMat=new THREE.MeshBasicMaterial({map:groundGlowTex,tr
 const HALO_KINDS=['fire','shrine','rune','npc','stone','merchant','rot'];
 const PROP_FEET=new WeakMap();
 const PROP_RAWB=new WeakMap(); // surowy dol nieprzezroczystej czesci sprite'a (ulamek wysokosci od gory)
-function propFoot(image){if(PROP_FEET.has(image))return PROP_FEET.get(image);if(!image.getContext)return null;const W=image.width,H=image.height,d=image.getContext('2d').getImageData(0,0,W,H).data;let bottom=-1,top=-1;const w=new Float32Array(H);for(let y=0;y<H;y++){let c=0;for(let x=0;x<W;x++)if(d[(y*W+x)*4+3]>=128)c++;w[y]=c;if(c){bottom=y;if(top<0)top=y}}
+function propFoot(image){if(!image)return null;/* 23.11.2026: tekstura jeszcze bez obrazka (wczytywana w tle) */if(PROP_FEET.has(image))return PROP_FEET.get(image);if(!image.getContext)return null;const W=image.width,H=image.height,d=image.getContext('2d').getImageData(0,0,W,H).data;let bottom=-1,top=-1;const w=new Float32Array(H);for(let y=0;y<H;y++){let c=0;for(let x=0;x<W;x++)if(d[(y*W+x)*4+3]>=128)c++;w[y]=c;if(c){bottom=y;if(top<0)top=y}}
  let foot=bottom<0?null:(bottom+1)/H;if(foot!==null)PROP_RAWB.set(image,{b:foot,t:top/H});
  // runda 301: rekwizyt z okragla podstawa (kopczyk, cokol, tarcza ziemi) stoi srodkiem podstawy na ziemi, nie jej przednia krawedzia: kotwica w najszerszym wierszu dolnych 22% (cien i styk z podlozem wypadaja u pnia); korpus musi byc wyraznie wezszy od podstawy
  if(foot!==null){const lo=Math.max(top,bottom-Math.floor(.22*H));if(bottom-lo>=12){let pr=lo;for(let y=lo;y<=bottom;y++)if(w[y]>w[pr])pr=y;const dd=bottom-pr;let mn=1e9;for(let y=Math.max(top,pr-Math.floor(.3*H));y<=Math.max(top+1,pr-Math.floor(.04*H));y++)if(w[y]>0&&w[y]<mn)mn=w[y];
@@ -163,7 +163,7 @@ function roofGeo(W,D,rise){const ax=W>=D,L=ax?W:D,T=ax?D:W,hT=T/2,sl=Math.hypot(
  {const rw=.11,ry=rise-rw*rise/hT+.03,rt=rise+.05;for(const sg of[-1,1]){const A=[-L/2,sg*rw,ry,0,0,.2],B=[L/2,sg*rw,ry,L,0,.2],Cc=[L/2,0,rt,L,.2,.3],E=[-L/2,0,rt,0,.2,.3];for(const q of[A,B,Cc,A,Cc,E])vx(...q)}}
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(P),3));g.setAttribute('uv',new THREE.BufferAttribute(new Float32Array(U),2));g.setAttribute('color',new THREE.BufferAttribute(new Float32Array(C),3));g.computeVertexNormals();return g}
 function buildRoofs(w){if(!w.roofs||!w.group)return;const rm=[];
- for(const r of w.roofs){const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
+ for(const r of w.roofs){if(r.tri)continue;/* 23.11.2026: dom z modelu ma wlasny dach */const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
   const m=new THREE.Mesh(roofGeo(W,D,rise),new THREE.MeshLambertMaterial({color:0x4a382c,transparent:true,opacity:1,side:THREE.DoubleSide,vertexColors:true}));
   m.position.set(r.x+r.w/2,1.9,r.y+r.h/2);m.castShadow=false;m.receiveShadow=false;m.renderOrder=3;w.group.add(m);r.mesh=m;r.a=1;rm.push(r)}
  roofImg(im=>{const hdIm=CH===1?(IMGS.p1_roof_burnt||IMGS.rf_lupek):null;if(hdIm)im=hdIm;const hd=!!hdIm;const t=new THREE.Texture(im);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=hd?8:4;t.needsUpdate=true;for(const r of rm){r.mesh.material.map=t;if(hd&&CH===1)r.mesh.material.color.setRGB(2.15,1.9,1.7);/* 22.11.2026: tekstura zgliszczy srednio 34/255 = czarna plyta; rozjasnienie ok. 2x, cieply odcien */else r.mesh.material.color.setHex(hd?0xe4d4c8:0xd8c8bc);r.mesh.material.needsUpdate=true}})}

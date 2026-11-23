@@ -1592,6 +1592,11 @@ const CUT={value:new THREE.Vector3(-99,0,-99)};
 function cutaway(mat){mat.onBeforeCompile=sh=>{sh.uniforms.uCut=CUT;
   sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vCut;').replace('#include <project_vertex>','#include <project_vertex>\nvec4 cwp=vec4(transformed,1.0);\n#ifdef USE_INSTANCING\ncwp=instanceMatrix*cwp;\n#endif\nvCut=(modelMatrix*cwp).xyz;');
   sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vCut;uniform vec3 uCut;').replace('void main() {','void main() {\nvec2 cd=vCut.xz-uCut.xz;if(cd.y>0.3&&cd.y<12.0&&(abs(cd.x)<2.4||cd.y>2.2)&&vCut.y>0.8){float k=mod(floor(gl_FragCoord.x)+floor(gl_FragCoord.y),2.0);if(vCut.y>1.5||k<1.0)discard;}')};return mat}
+// 23.11.2026 (runda 868): wezsze wyciecie dla duzych modeli domow: tylko pas przed bohaterem (inaczej caly rzad domow na poludniu tracilby dachy)
+function cutawayHouse(mat){mat.onBeforeCompile=sh=>{sh.uniforms.uCut=CUT;
+  sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vCut;').replace('#include <project_vertex>','#include <project_vertex>\nvec4 cwp=vec4(transformed,1.0);\n#ifdef USE_INSTANCING\ncwp=instanceMatrix*cwp;\n#endif\nvCut=(modelMatrix*cwp).xyz;');
+  sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vCut;uniform vec3 uCut;').replace('void main() {','void main() {\nvec2 cd=vCut.xz-uCut.xz;if(cd.y>-0.6&&cd.y<14.0&&abs(cd.x)<3.4-max(cd.y,0.0)*0.08&&vCut.y>0.8){float k=mod(floor(gl_FragCoord.x)+floor(gl_FragCoord.y),2.0);if(vCut.y>1.5||k<1.0)discard;}')};
+ mat.customProgramCacheKey=()=>'cutHouse';return mat}
 const WALLTEX=new Map();
 function wallTex(img){let t=WALLTEX.get(img);if(!t){t=new THREE.Texture(img);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.magFilter=THREE.LinearFilter;t.minFilter=THREE.LinearMipmapLinearFilter;t.generateMipmaps=true;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());t.needsUpdate=true;WALLTEX.set(img,t)}return t}
 // ściana/dach z kafelkującej tekstury HD próbkowanej po współrzędnych świata (boki: x/z + wysokość, góra: x/z), bez rozciągania na pojedynczy kafel
@@ -1720,7 +1725,7 @@ let haloGeo=null;const haloMat=new THREE.MeshBasicMaterial({map:groundGlowTex,tr
 const HALO_KINDS=['fire','shrine','rune','npc','stone','merchant','rot'];
 const PROP_FEET=new WeakMap();
 const PROP_RAWB=new WeakMap(); // surowy dol nieprzezroczystej czesci sprite'a (ulamek wysokosci od gory)
-function propFoot(image){if(PROP_FEET.has(image))return PROP_FEET.get(image);if(!image.getContext)return null;const W=image.width,H=image.height,d=image.getContext('2d').getImageData(0,0,W,H).data;let bottom=-1,top=-1;const w=new Float32Array(H);for(let y=0;y<H;y++){let c=0;for(let x=0;x<W;x++)if(d[(y*W+x)*4+3]>=128)c++;w[y]=c;if(c){bottom=y;if(top<0)top=y}}
+function propFoot(image){if(!image)return null;/* 23.11.2026: tekstura jeszcze bez obrazka (wczytywana w tle) */if(PROP_FEET.has(image))return PROP_FEET.get(image);if(!image.getContext)return null;const W=image.width,H=image.height,d=image.getContext('2d').getImageData(0,0,W,H).data;let bottom=-1,top=-1;const w=new Float32Array(H);for(let y=0;y<H;y++){let c=0;for(let x=0;x<W;x++)if(d[(y*W+x)*4+3]>=128)c++;w[y]=c;if(c){bottom=y;if(top<0)top=y}}
  let foot=bottom<0?null:(bottom+1)/H;if(foot!==null)PROP_RAWB.set(image,{b:foot,t:top/H});
  // runda 301: rekwizyt z okragla podstawa (kopczyk, cokol, tarcza ziemi) stoi srodkiem podstawy na ziemi, nie jej przednia krawedzia: kotwica w najszerszym wierszu dolnych 22% (cien i styk z podlozem wypadaja u pnia); korpus musi byc wyraznie wezszy od podstawy
  if(foot!==null){const lo=Math.max(top,bottom-Math.floor(.22*H));if(bottom-lo>=12){let pr=lo;for(let y=lo;y<=bottom;y++)if(w[y]>w[pr])pr=y;const dd=bottom-pr;let mn=1e9;for(let y=Math.max(top,pr-Math.floor(.3*H));y<=Math.max(top+1,pr-Math.floor(.04*H));y++)if(w[y]>0&&w[y]<mn)mn=w[y];
@@ -1850,7 +1855,7 @@ function roofGeo(W,D,rise){const ax=W>=D,L=ax?W:D,T=ax?D:W,hT=T/2,sl=Math.hypot(
  {const rw=.11,ry=rise-rw*rise/hT+.03,rt=rise+.05;for(const sg of[-1,1]){const A=[-L/2,sg*rw,ry,0,0,.2],B=[L/2,sg*rw,ry,L,0,.2],Cc=[L/2,0,rt,L,.2,.3],E=[-L/2,0,rt,0,.2,.3];for(const q of[A,B,Cc,A,Cc,E])vx(...q)}}
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(P),3));g.setAttribute('uv',new THREE.BufferAttribute(new Float32Array(U),2));g.setAttribute('color',new THREE.BufferAttribute(new Float32Array(C),3));g.computeVertexNormals();return g}
 function buildRoofs(w){if(!w.roofs||!w.group)return;const rm=[];
- for(const r of w.roofs){const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
+ for(const r of w.roofs){if(r.tri)continue;/* 23.11.2026: dom z modelu ma wlasny dach */const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
   const m=new THREE.Mesh(roofGeo(W,D,rise),new THREE.MeshLambertMaterial({color:0x4a382c,transparent:true,opacity:1,side:THREE.DoubleSide,vertexColors:true}));
   m.position.set(r.x+r.w/2,1.9,r.y+r.h/2);m.castShadow=false;m.receiveShadow=false;m.renderOrder=3;w.group.add(m);r.mesh=m;r.a=1;rm.push(r)}
  roofImg(im=>{const hdIm=CH===1?(IMGS.p1_roof_burnt||IMGS.rf_lupek):null;if(hdIm)im=hdIm;const hd=!!hdIm;const t=new THREE.Texture(im);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=hd?8:4;t.needsUpdate=true;for(const r of rm){r.mesh.material.map=t;if(hd&&CH===1)r.mesh.material.color.setRGB(2.15,1.9,1.7);/* 22.11.2026: tekstura zgliszczy srednio 34/255 = czarna plyta; rozjasnienie ok. 2x, cieply odcien */else r.mesh.material.color.setHex(hd?0xe4d4c8:0xd8c8bc);r.mesh.material.needsUpdate=true}})}
@@ -2018,6 +2023,7 @@ const PORT_SHIP=[52,8.7,14.4],PORT_FERRY_ART=[32.5,7.9,8.6,6.4];
 const PORT3D_ON=nbParam('port3d')!=='0';
 // 18.11.2026: zuraw zostaje malowanym obrazkiem (decyzja autora: obrazek ladniejszy od bryly)
 // 19.11.2026: worki z sola tez wracaja do obrazka (bryly wygladaly jak blade kule)
+const PORT_TRI={winch:'kolowrot',cargo:'ladunek',salt:'worki_soli',bollard:'pacholek_cumowniczy',skrzynia:'skrzynia',beczka_ryby:'beczka_ryb',pacholek:'pacholek',pale:'pale',siec:'siec',kotwica:'kotwica',malze:'malze',ikra:'ikra',deski:'deski',wiecierz:'wiecierz',wrak:'wrak'};// 23.11.2026: modele TripoSG (lodz, prom, zuraw bez zmian)
 const PORT3D_KEYS=new Set(['cargo','skrzynia','beczka_ryby','bollard','pacholek','winch','pale','lodz']);
 function port3dKit(){
  const kit=new Map(),M=new THREE.Matrix4(),E=new THREE.Euler(),Qk=new THREE.Quaternion(),Pv=new THREE.Vector3(),Sv=new THREE.Vector3();
@@ -2274,6 +2280,10 @@ function buildSolneNabrzeze(I){
    W.LSRC.push({col:0xffcaaa,base:.7,dist:5,x:left+.1,y:1.5,z:cz,kind:'fire',ph:0});
    continue;
   }
+  {/* 23.11.2026 (runda 868): szopy, kantor i karczma z modeli TripoSG (malunki ChatGPT); swiatla okien zostaja */const tn=kind==='office'?'celnica':kind==='inn'?'tawerna':kind==='shed'?(x<30?'szopa_sieciarska':'magazyn_soli'):null;
+   if(tn&&triReady(tn)){triHouse(ROOT,tn,bx,bz,bw,bd,'s',kind==='shed'?4.4:kind==='office'?5.8:5);ao(cx,cz,bw*1.45+1,bd*1.45+1);
+    if(kind!=='shed')for(const side of [-1,1])W.LSRC.push({col:0xffb866,base:.75,dist:4.6,x:cx+side*bw*.32,y:1.5,z:front+.7,kind:'fire',ph:cx+side});
+    continue}}
   const wall=kind==='shed'?plankW:plasterW;
   part(foot,cx,.25,cz,bw+.1,.5,bd+.1);
   part(grime,cx,.42,cz,bw+.03,.84,bd+.03);part(grime2,cx,.8,cz,bw+.05,1.6,bd+.05);
@@ -2375,6 +2385,7 @@ function buildSolneNabrzeze(I){
  const R={well:[32,32,32,32],stocks:[64,32,32,32],shrine:[96,32,32,32],gallows:[0,64,64,32],wheel:[64,96,32,32],barrel:[96,96,32,32],marga_cart:[0,128,64,32],crow_post:[64,128,32,32],covered_corpses:[96,128,32,32],order_banner:[32,160,32,32],burnt_hay:[64,160,32,32],dead_horse:[96,160,32,32],shop_sign:[0,0,32,32]};
  const PF={};for(const k in R)PF[k]=I['p1_'+k]?procFrame(I['p1_'+k],0,0,R[k][2],R[k][3],'prop'):procFrame(I.br_props,R[k][0],R[k][1],R[k][2],R[k][3],'prop');
  for(const p of PROPS){
+  {/* 23.11.2026 (runda 868): rekwizyty portu z modeli TripoSG */const tn=PORT_TRI[p.k];if(tn&&triReady(tn)){const h=Math.sin(p.x*91.7+p.y*47.3)*43758.5453,hr=h-Math.floor(h),fixed=p.k==='winch';if(triProp(ROOT,tn,p.x,p.y,PORT_PROP_SIZE[p.k][0],fixed?0:(hr-.5)*.7,p.flip))continue}}
   if(P3&&PORT3D_KEYS.has(p.k)){const h=P3.hash(p.x,p.y),fixed=p.k==='winch';P3.MODEL[p.k](P3.K.at(p.x,p.y-.42,(p.flip?Math.PI:0)+(fixed?0:(h-.5)*.7)),h);continue}
   if(frames[p.k]){const [w,h]=PORT_PROP_SIZE[p.k],m=sprite(frames[p.k],p.x,p.y,w,h,p.flip);m.userData.propAsset=true;const o={mesh:m,frames:[frames[p.k]],fps:0,ph:0,kind:'static'};propObjs.push(o);p.obj=o;continue}
   const fr=p.shrine!==undefined?PF.shrine:PF[p.k];if(!fr)continue;
@@ -2553,6 +2564,32 @@ const P3D_MMAP={1:{dead_tree:P3D_DRZ1,barrel:'p1_barrel',grave_cross:'p1_grave_c
  4:{birch:'p4_birch',dead_oak:'p4_dead_oak',spruce:'p4_spruce',tall_pine:'p4_tall_pine',dead_spruce:'p4_dead_spruce',sacred_oak:'p4_sacred_oak',hanging_tree:'p4_hanging_tree',cz_bones:'p4_cz_bones',wolf_skull_bush:'p4_wolf_skull_bush',barrel:'p1_barrel',burial_mound:'p4_burial_mound',mossy_boulder:'p4_mossy_boulder',drowned_cart:'p4_drowned_cart',cz_wagon:'p4_cz_wagon',cz_tent:'p4_cz_tent',cz_sacpole:'p4_cz_sacpole',cz_firewood:'p4_cz_firewood',cz_pelts:'p4_cz_pelts',cz_beehive:'p4_cz_beehive',axe_stump:'p4_axe_stump',cz_idol:'p4_cz_idol',cz_gallows:'p4_cz_gallows',cz_wheel:'p4_cz_wheel'},5:{candelabra:'p5_candelabra',statue_a:'p5_statue_a',statue_b:'p5_statue_b',armour:'p5_armour',bench_a:'p5_bench_b',bench_b:'p5_bench_b',bookcase_a:'p5_bookcase_a',bookcase_b:'p5_bookcase_b',vault:'p5_vault',lectern:'p5_lectern',desk:'p5_desk',scale:'p5_scale',rack:'p5_rack',throne:'p5_throne'},6:{well:'p1_well',marga_cart:'p1_marga_cart',crow_post:'p1_crow_post',wheel:'p1_wheel',gallows:'p1_gallows',stocks:'p1_stocks',burnt_hay:'p1_burnt_hay',dead_horse:'p1_dead_horse',shop_sign:'p1_shop_sign'}};
 const P3D_MGEO={};
 const P3D_MREADY=REK3D_ON?Promise.all(Object.entries(P3D_MESHY).map(([k,e])=>fetch(e.g).then(r=>r.arrayBuffer()).then(b=>{P3D_MGEO[k]=p3dParseGlb(b)}).catch(er=>quietErr('meshy '+k,er)))):Promise.resolve();
+/* 23.11.2026 (runda 868, zgoda autora): bryly TripoSG (darmowe, MIT) z tekstura wypalona z malunkow (rekwizyty portu z gry, domy z ChatGPT).
+   Wypalanie: docs/modele/triposg_bake.py. Domy w porcie (szopy, kantor, karczma) i w Osadzie (spalone chaty, dom Margi) oraz rekwizyty portu.
+   Porownanie przed: ?tri3d=0 (tylko lokalnie). */
+const TRI3D_ON=REK3D_ON&&nbParam('tri3d')!=='0';
+const P3D_TRI={"beczka_ryb":{"g":"assets/rekwizyty/3027b785898b03081240b1a318b1d742ad501a36fac32abccdcf2bfaa05232a1.glb","k":"assets/rekwizyty/aef676f02e2bb45483787c1db92f01d12df131da925ebb44f2e64c8f6715bcb5.webp"},"celnica":{"g":"assets/rekwizyty/b6c1ecd22308ca0bec3b81e06b895ea82ed47c4f270d07dcde8413f8d942a25c.glb","k":"assets/rekwizyty/175c4b9ccb888617d758ae4f4420fb45e46f655c76c40680da8eed634075d59a.webp"},"chata_drewno_kamien":{"g":"assets/rekwizyty/ea90766ee454725e1ad2ea537a124aaba9f724615a09a7c998276ba2a4c386fa.glb","k":"assets/rekwizyty/c8a7d240ede3cccdcea4869fff2876c97e5d5ddfb0d3618749c204135bc06927.webp"},"deski":{"g":"assets/rekwizyty/0f0b758d90647ec472e4ff4e285db5032da13a41f8f0efc1037631547af54388.glb","k":"assets/rekwizyty/9da96c35d0dee556a080c7f84f3210269d885c33f8f31a2860919e02cb9b38dd.webp"},"ikra":{"g":"assets/rekwizyty/c7fea7ac188d382e7715175ca524334d0503de723276649c614e222fc7a10ccd.glb","k":"assets/rekwizyty/1015d8c156ebd17bafc81ebd01bf41bda7ba7660b71257b06040edfc09038368.webp"},"kamienny_budynek_lupek":{"g":"assets/rekwizyty/bd5f15aa48757c31a5df413eaf1774464c60c1f0a9eb7251733601e6ed728048.glb","k":"assets/rekwizyty/9a872439dc6a11a23c2b0fe0ed5ac6c84f765590e21d837c8cf823aedbc0a573.webp"},"kolowrot":{"g":"assets/rekwizyty/1f329cbd7750e3ed1a92817a3195083656c9ccb33e6dd00b3e1dfa80ee3b2298.glb","k":"assets/rekwizyty/de8b249efde4cd62599fc419874f0541d7707516823231ac44a26d5abaa2260d.webp"},"kotwica":{"g":"assets/rekwizyty/403e287f3b11b844ac08621d2f846d99af6e3e207074dce0c2d9fc373090bc3c.glb","k":"assets/rekwizyty/bc53e35cd7a905268d0260280049dc0ebc87aa59464a9ded09b5e916c0065807.webp"},"ladunek":{"g":"assets/rekwizyty/c15e71fa7b6ead0dade76919a3dd1514faf24a198830c84d343c92382a45128d.glb","k":"assets/rekwizyty/fc62c7cb893768ff2db29ea65121159222e96279056693a5e524d22fea87b7e5.webp"},"magazyn_soli":{"g":"assets/rekwizyty/fc1e363b4f494558987d01a6cf7a7eb3eddd4c8b9a59cd22eb458ea693485114.glb","k":"assets/rekwizyty/52c26841d977768b87d877459e15dd4174c02557cdbff8143420aa4f728779f5.webp"},"malze":{"g":"assets/rekwizyty/efe91076a2ea17a971410a35bbaec2c95080ebfbb493d699efdcbb17d61cc059.glb","k":"assets/rekwizyty/12c9d33d68f4cb566a6e2c66839f3efd7a465e0a501f31321ceb35aba9a39788.webp"},"pacholek":{"g":"assets/rekwizyty/60e9903526e6a09d39b978bab1da65a14cfeea56f64f6d12a72cafa386b6bba9.glb","k":"assets/rekwizyty/31290504b5e56224f56dc41ea8ef0fe806ab0ec643942f7261631baef922cba6.webp"},"pacholek_cumowniczy":{"g":"assets/rekwizyty/7eef8fc6260468a3e3bc6bf7614f580ca2813795c1e8529f00df7df7a2f123c4.glb","k":"assets/rekwizyty/77f269c74c55d480681533b21cf6a228564a56ff3066448243986b1b8359e2c1.webp"},"pale":{"g":"assets/rekwizyty/be8c911ecb025ea8da6ef723d47680629c1ab8df689b47fe17103acb1fde414a.glb","k":"assets/rekwizyty/4dc9b89738c9578fb531fcdef4d9fee10e340b6578644918f8ae6c04085bfa0d.webp"},"siec":{"g":"assets/rekwizyty/3e7f4e7cdac751ef411a38e78ff35c97b41c73b7984f1b7ab648f188a9d9e2fb.glb","k":"assets/rekwizyty/5d39fd6dbe3be267661f79272b3365f2710b83bbdaa8afb39a0a78f138f47f5b.webp"},"sklep_margi":{"g":"assets/rekwizyty/6c216c54dd06da8981ee0094b58cc6c72beb78a83a0a8188f6fe9c828fcd9b8c.glb","k":"assets/rekwizyty/deb17720f70051564bd41c96134d08f8e786495dfeec080c9b07b5520e8c9386.webp"},"skrzynia":{"g":"assets/rekwizyty/526424d8d345ce305d042303ecf8a24571997b2a6d68fb1186b6aeff47b5c41c.glb","k":"assets/rekwizyty/f031a7020559cb511ce8064781dde7dd6fb949a36a2fd07a4f055ee0ea194ef5.webp"},"spalona_chata":{"g":"assets/rekwizyty/ad801b9153c54642999fecf5f8594b88d84e221ac3d1f5c5e470a49c84ebe3dc.glb","k":"assets/rekwizyty/5f00a56ac4c2d11375828d0519c10ae7e4189bf232c1bd406da1975e2ab8ba8d.webp"},"szopa_sieciarska":{"g":"assets/rekwizyty/940a6e2b6a84ae861b70efbeeb1674d1665597409ef7c6db39edd9e7ffcac454.glb","k":"assets/rekwizyty/1e850be528e280a16b48dd48649d3d28d9c9312bb6aac76a06e725c6760b6e95.webp"},"tawerna":{"g":"assets/rekwizyty/e3933d7e6cd22fd831a0da6b075b14ef3de646908c54aae4e06e29ac7877a7b6.glb","k":"assets/rekwizyty/b4bda37f9fa43b0a53406aa4eca39b15f4c059d358740f99eb41b04e6f8e49db.webp"},"wiecierz":{"g":"assets/rekwizyty/ee1c862d20786dad5b52f5853fe892b902d0bb8e2957d2a647c50a54588456fd.glb","k":"assets/rekwizyty/f731111040fc92cfc52960d764a8f43e821aa0542cb3dec2542daa2ccd067f62.webp"},"worki_soli":{"g":"assets/rekwizyty/a20322a2bcb6092fcff29946dee2ff245a56713b6300f753ac7ed30d44ae729d.glb","k":"assets/rekwizyty/e3250898f57215074e787c9f41109a13a4bcbbf55e581ebed7bea6c30df3eeca.webp"},"wrak":{"g":"assets/rekwizyty/71873960e44e0e7c1123893f68de63c0c4662deb08ca630c48ae85b5b1fa094b.glb","k":"assets/rekwizyty/186858d6dd7b2a15675a7e040199991b14afcad63b06c458fc77f90ebbbdf636.webp"},"zweglona_chata_krokwie":{"g":"assets/rekwizyty/77c98604fc73a561141ab1bcf85b521a858914efcdc4143b735f362589fe4268.glb","k":"assets/rekwizyty/11fd45b33d1ee841db82d0f23c6113b8b350bd45523725b9d523556a6086ddaa.webp"},"zweglona_stodola":{"g":"assets/rekwizyty/ba0d48048cd332e884861595697dd5f500880ca7cdbc5079e10fa859b3654c6c.glb","k":"assets/rekwizyty/20b28c47c1dbc709874a9c34e8513a7543cf76d254952d05f348230865b4ad8b.webp"},"zweglone_ruiny_chaty":{"g":"assets/rekwizyty/96e85124bf95bbb801bd21769b8b8c972e178df37504270de0d62d9d6dc10110.glb","k":"assets/rekwizyty/2b33b9867f0dff4a99491f7e91f1240dc52c5e1e717bb4491db52618844c8e3d.webp"}};
+const P3D_TGEO={},P3D_TMAT=new Map();
+const P3D_TLOAD={};for(const [k,e] of Object.entries(P3D_TRI))P3D_TLOAD[k]=TRI3D_ON?fetch(e.g).then(r=>r.arrayBuffer()).then(b=>{P3D_TGEO[k]=p3dParseGlb(b)}).catch(er=>quietErr('tri '+k,er)):Promise.resolve();
+// domy Osady sa potrzebne juz w tle menu (swiat rozdzialu I budowany przy starcie): start czeka na nie najwyzej 6 s
+const TRI_CH1=['spalona_chata','zweglona_chata_krokwie','zweglone_ruiny_chaty','sklep_margi'];
+const P3D_TREADY1=Promise.race([Promise.all(TRI_CH1.map(k=>P3D_TLOAD[k])),new Promise(r=>setTimeout(r,6000))]);
+function triReady(n){return TRI3D_ON&&!!P3D_TGEO[n]}
+// cut: sciany i dachy znikaja przed bohaterem (cutaway), jak dotychczasowe sciany domow
+function triMat(n,cut,tone){const id=n+(cut?'|c':'');let m=P3D_TMAT.get(id);if(m)return m;const x=new THREE.TextureLoader().load(P3D_TRI[n].k);x.flipY=false;x.anisotropy=4;
+ m=phong({map:x,shininess:4,specular:0x080808,side:THREE.DoubleSide});const t=tone||.9;m.color.setRGB(t,t*.98,t*.96);if(cut)cutawayHouse(m);P3D_TMAT.set(id,m);return m}
+// jeden model: srodek podstawy w (cx,cz), skale osi, obrot wokol pionu
+function triMesh(n,cx,cz,sx,sy,sz,ry,cut,tone){const g=P3D_TGEO[n],bb=g.boundingBox,m=new THREE.Mesh(g,triMat(n,cut,tone));
+ m.scale.set(sx,sy,sz);m.rotation.y=ry||0;const ox=(bb.min.x+bb.max.x)/2,oz=(bb.min.z+bb.max.z)/2,c=Math.cos(ry||0),s=Math.sin(ry||0),px=ox*sx,pz=oz*sz;
+ m.position.set(cx-(px*c+pz*s),-bb.min.y*sy,cz-(-px*s+pz*c));m.castShadow=true;m.receiveShadow=true;return m}
+// dom na prostokacie kafli: obrot (0/90/180/270) wg drzwi, skala do obrysu; hk = wysokosc w jednostkach swiata (albo ulamek, gdy <2)
+function triHouse(root,n,x0,z0,w,d,door,hk,flip,tone){const g=P3D_TGEO[n];if(!g)return null;const bb=g.boundingBox,ex=bb.max.x-bb.min.x,ez=bb.max.z-bb.min.z,ey=bb.max.y-bb.min.y;
+ let ry={s:0,n:Math.PI,e:Math.PI/2,w:-Math.PI/2}[door]||0;const side=Math.abs(Math.sin(ry))>.5,fx=side?ez:ex,fz=side?ex:ez;
+ const sx=w/fx,sz=d/fz,sy=hk>2?hk/ey:Math.sqrt(sx*sz)*(hk||.8);/* hk>2: wysokosc domu w jednostkach swiata */const m=triMesh(n,x0+w/2,z0+d/2,(side?sz:sx)*(flip?-1:1),sy,side?sx:sz,ry,true,tone);root.add(m);return m}
+// rekwizyty: szerokosc obiektu = szerokosc obrazka x wypelnienie malunku; przod-spod na linii obrazka
+const TRI_FILL={pale:.74,pacholek_cumowniczy:.7,ladunek:.85,pacholek:.85};
+function triProp(root,n,x,z,W,ry,flip){const g=P3D_TGEO[n];if(!g)return false;const bb=g.boundingBox,ex=bb.max.x-bb.min.x||1,s=W*(TRI_FILL[n]||.88)/ex;
+ const m=triMesh(n,x,z-(bb.max.z-bb.min.z)*s/2,s*(flip?-1:1),s,s,ry,false);m.castShadow=true;m.userData.propAsset=true;root.add(m);return true}
 function meshyFor(ch,k,p){let n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];if(typeof n==='function')n=p?n(p):null;if(Array.isArray(n))n=n[p?groundHash(Math.floor(p.x),Math.floor(p.y))%n.length:0];return n&&P3D_MGEO[n]?n:null}
 const P3D_MMAT=new Map();
 function meshyMat(n){let m=P3D_MMAT.get(n);if(m)return m;const L=new THREE.TextureLoader(),e=P3D_MESHY[n],t=u=>{const x=L.load(u);x.flipY=false;x.anisotropy=4;return x};
@@ -2586,6 +2623,23 @@ function paint3dFinish(w){if(!REK3D_ON||(!P3D_MAP[w.ch]&&!P3D_MMAP[w.ch]))return
   M.compose(V.set(it.x+dx-G.cx*s*(it.flip?-1:1),0,it.z-G.zf*s),Qi,S.set(it.flip?-s:s,s,s));(by.get(G)||by.set(G,[]).get(G)).push(M.clone())}
  for(const [G,list] of by){const im=new THREE.InstancedMesh(G.g,G.m,list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=false;im.receiveShadow=true;im.frustumCulled=false;im.userData.propAsset=true;w.group.add(im)}
  if(mitems.length)meshyEmit(w.group,mitems)}
+/* 23.11.2026 (runda 868): domy Osady z modeli TripoSG na prostokatach dachow (W.roofs), stary dach tych domow nie powstaje.
+   Kolizje zostaja na kaflach; model tylko je okrywa. Drzwi: strona obrysu z najmniejsza liczba scian. Dom Margi (najszerszy, przy cmentarzu): sklep_margi. */
+function triHouses1(walls){const out={list:[],skip:new Set(),low:new Set()};if(!TRI3D_ON||!W.roofs)return out;
+ const wall=new Set(walls.filter(w=>w[2]===48).map(([x,y])=>y*MW+x));
+ const hs=W.roofs.filter(r=>r.w>=5&&r.h>=4).map(r=>{let nS=0,nN=0;for(let x=r.x;x<r.x+r.w;x++){if(wall.has((r.y+r.h-1)*MW+x))nS++;if(wall.has(r.y*MW+x))nN++}return {r,door:nS<=nN?'s':'n'}});
+ hs.sort((a,b)=>a.r.y-b.r.y||a.r.x-b.r.x);
+ const marga=hs.reduce((b,h)=>(!b||h.r.w/h.r.h>b.r.w/b.r.h)?h:b,null);let k=0;
+ const CYC=[['spalona_chata',0],['zweglona_chata_krokwie',0],['zweglone_ruiny_chaty',0],['spalona_chata',1],['zweglona_chata_krokwie',1],['zweglone_ruiny_chaty',1]];
+ for(const h of hs){const r=h.r;let n,flip=0,door=h.door,hk=4.8;
+  let x0=r.x,w=r.w;
+  if(h===marga&&r.w/r.h>1.6){/* dom Margi: sklep przodem do placu w srodku obrysu, po bokach zostaja nizsze sciany przybudowek bez dachu */n='sklep_margi';door='s';hk=5.2;const g=P3D_TGEO[n];
+   if(g){const bb=g.boundingBox,ex=bb.max.x-bb.min.x,ez=bb.max.z-bb.min.z,sz=r.h/ez;w=Math.min(r.w,Math.round(ex*Math.min(r.w/ex,sz*1.35)));x0=r.x+Math.round((r.w-w)/2)}}
+  else{[n,flip]=CYC[k++%CYC.length]}
+  if(!P3D_TGEO[n])continue;
+  out.list.push({n,x0,z0:r.y,w,d:r.h,door,hk,flip:!!flip});r.tri=true;
+  for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)(x>=x0&&x<x0+w?out.skip:out.low).add(y*MW+x)}
+ return out}
 function buildBrzeznica(I){
   const F=I.br_ground,Wl=I.br_walls,r=rng(77);planGround(1);
   const fc=canvas(WW,WH),fg=fc.getContext('2d');
@@ -2607,7 +2661,11 @@ function buildBrzeznica(I){
   const pal=[0,1].map(i=>stackTex(Wl,[[i*3,7],[i*3+1,7],[i*3+2,7]]));
   const logs=[0,1,2,3].map(i=>stackTex(Wl,[[(i*2)%8,1],[(i*3+1)%8,0],[(i*5+2)%8,2]]));
   const gP=[[],[]],gH=[[],[],[],[]];
-  for(const [x,y,t] of walls){if(t===48)gH[(x*7+y*3)%4].push([x,y]);else gP[(x+y)&1].push([x,y])}
+  const TH=triHouses1(walls);
+  const gLow=[];for(const [x,y,t] of walls){if(t===48){if(TH.skip.has(y*MW+x))continue;if(TH.low.has(y*MW+x)){gLow.push([x,y]);continue}gH[(x*7+y*3)%4].push([x,y])}else gP[(x+y)&1].push([x,y])}
+  for(const h of TH.list)triHouse(ROOT,h.n,h.x0,h.z0,h.w,h.d,h.door,h.hk,h.flip,.86);
+  /* przybudowki domu Margi: niskie resztki scian z kamienia (kolizja bez zmian) */
+  if(gLow.length){const lowGeo=new THREE.BoxGeometry(1,.62,1);lowGeo.translate(0,.31,0);const lm=HD1?worldSurf(cutaway(phong({color:0xa89c90})),I.wl_chata,3,'a'):cutaway(phong({map:logs[0]}));instanced(lowGeo,lm,gLow,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))}
   gP.forEach((list,i)=>{if(!list.length)return;const side=HD1?worldSurf(cutaway(phong({color:i?0xd4ccc4:0xc8c0b8})),I.wl_palisada,3,'a'):cutaway(phong({map:pal[i]}));depthWall(palGeo,side,1);instanced(palGeo,[side,side,capMat,capMat,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))});
   const houseCap=I.p1_roof_burnt?worldSurf(cutaway(phong({color:0xffffff})),I.p1_roof_burnt,2.5,'a'):capMat;
   gH.forEach((list,i)=>{if(!list.length)return;const side=HD1?worldSurf(cutaway(phong({color:[0xd0c4b8,0xc8bcb0,0xd4c8bc,0xccc0b4][i]})),I.wl_chata,3,'a'):cutaway(phong({map:logs[i]}));depthWall(houseGeo,side,1);instanced(houseGeo,[side,side,houseCap,houseCap,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))});
@@ -9260,7 +9318,7 @@ function pumpImages(){while(imageWorkers<2){const g=GROUP_ORDER.find(g=>{const s
 function loadGroup(ch,watch){const g=typeof ch==='string'?ch:groupFor(ch),st=GROUP_STATE[g];if(st.ready)return Promise.resolve();st.error=false;st.enabled=true;if(watch)st.watchers.add(watch);const p=new Promise((resolve,reject)=>st.waiters.push({resolve,reject}));const i=GROUP_ORDER.indexOf(g);if(g!=='core'){GROUP_ORDER.splice(i,1);GROUP_ORDER.splice(1,0,g)}refreshGroup(g);finishGroup(g);pumpImages();return p.finally(()=>{if(watch)st.watchers.delete(watch)})}
 function waitChapter(ch,action,button){if(groupReady(ch))return action();const focused=document.activeElement,b=focused?.matches('#againBtn,#nextBtn,#prepGo')?focused:button||$('prepGo');if(b.nbWait)return b.nbWait;const label=b.innerHTML;b.nbWait=loadGroup(ch,t=>{b.textContent=t}).then(()=>{b.innerHTML=label;return action()},()=>{b.textContent=(EN?'Error — click to retry':'Błąd — kliknij, aby ponowić')}).finally(()=>{b.nbWait=null});return b.nbWait}
 for(const g of GROUP_ORDER)GROUP_STATE[g]={keys:Object.keys(SPRITE_DATA).filter(k=>!/_fallback$/.test(k)&&!/^intro[1-6]$/.test(k)&&SPRITE_GROUPS[k].includes(g)&& (g==='core'||!SPRITE_GROUPS[k].includes('core'))),loading:new Set(),watchers:new Set(),waiters:[],ready:false,error:false,enabled:false};
-loadGroup('core').then(()=>{
+Promise.all([loadGroup('core'),P3D_TREADY1]).then(()=>{
   A=buildAnims(imgs,'core');IMGS=imgs;tintAnims(A);try{trnFill()}catch(e){quietErr('trnFill',e)}initCombatEffects();initWhirlVisuals();decals(imgs);
   ensureWorld(1);
   ROOT=scene;useWorld(1);

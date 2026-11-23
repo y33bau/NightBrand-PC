@@ -46,3 +46,4 @@ Stan na 2026-11-23, cache 864, rola gamedev.
   - `kenney_blast` (eksplozja Wybuchu): `explosion_crunch_001`
 - CC0 nie wymaga podpisu; zapis tylko po to, by wiedzieć, skąd plik.
 - Cache 866, te same lustra Kenney (CC0): `kenney_armor` (cios w Pancerz): `impact_metal_heavy_001`, obniżony; `kenney_summon` (Wezwanie): `slime_000`, obniżony; `kenney_deflect` (odbity pocisk trafia): `impact_plate_heavy_003`. Szał używa istniejącego ryku `creature_roar_02`.
+- Cache 868, modele 3D domów i rekwizytów portu: bryły z TripoSG (VAST-AI, licencja MIT, wygenerowane lokalnie u autora na RTX 4070 SUPER), tekstury wypalone z malunków (`docs/modele/triposg_bake.py`): rekwizyty portu z malunków gry, domy z obrazów ChatGPT zamówionych przez autora (napis na szyldzie Margi zamalowany). Pliki w `assets/rekwizyty/`, tabela `P3D_TRI` w części 06.

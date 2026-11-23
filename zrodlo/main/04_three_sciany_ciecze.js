@@ -3,6 +3,11 @@ const CUT={value:new THREE.Vector3(-99,0,-99)};
 function cutaway(mat){mat.onBeforeCompile=sh=>{sh.uniforms.uCut=CUT;
   sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vCut;').replace('#include <project_vertex>','#include <project_vertex>\nvec4 cwp=vec4(transformed,1.0);\n#ifdef USE_INSTANCING\ncwp=instanceMatrix*cwp;\n#endif\nvCut=(modelMatrix*cwp).xyz;');
   sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vCut;uniform vec3 uCut;').replace('void main() {','void main() {\nvec2 cd=vCut.xz-uCut.xz;if(cd.y>0.3&&cd.y<12.0&&(abs(cd.x)<2.4||cd.y>2.2)&&vCut.y>0.8){float k=mod(floor(gl_FragCoord.x)+floor(gl_FragCoord.y),2.0);if(vCut.y>1.5||k<1.0)discard;}')};return mat}
+// 23.11.2026 (runda 868): wezsze wyciecie dla duzych modeli domow: tylko pas przed bohaterem (inaczej caly rzad domow na poludniu tracilby dachy)
+function cutawayHouse(mat){mat.onBeforeCompile=sh=>{sh.uniforms.uCut=CUT;
+  sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vCut;').replace('#include <project_vertex>','#include <project_vertex>\nvec4 cwp=vec4(transformed,1.0);\n#ifdef USE_INSTANCING\ncwp=instanceMatrix*cwp;\n#endif\nvCut=(modelMatrix*cwp).xyz;');
+  sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vCut;uniform vec3 uCut;').replace('void main() {','void main() {\nvec2 cd=vCut.xz-uCut.xz;if(cd.y>-0.6&&cd.y<14.0&&abs(cd.x)<3.4-max(cd.y,0.0)*0.08&&vCut.y>0.8){float k=mod(floor(gl_FragCoord.x)+floor(gl_FragCoord.y),2.0);if(vCut.y>1.5||k<1.0)discard;}')};
+ mat.customProgramCacheKey=()=>'cutHouse';return mat}
 const WALLTEX=new Map();
 function wallTex(img){let t=WALLTEX.get(img);if(!t){t=new THREE.Texture(img);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.magFilter=THREE.LinearFilter;t.minFilter=THREE.LinearMipmapLinearFilter;t.generateMipmaps=true;t.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());t.needsUpdate=true;WALLTEX.set(img,t)}return t}
 // ściana/dach z kafelkującej tekstury HD próbkowanej po współrzędnych świata (boki: x/z + wysokość, góra: x/z), bez rozciągania na pojedynczy kafel
