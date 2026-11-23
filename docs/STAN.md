@@ -1,4 +1,4 @@
-Stan na 2026-11-22, cache 859 (opublikowane), rola agent główny
+Stan na 2026-11-22, cache 863 (opublikowane), rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,13 +6,14 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 859, opublikowane 22.11.2026 (log `docs/logi/LOG_SESJI_2026-11-22.md`, trzecia część) |
-| Gałęzie czekające na „publikuj” | brak (852–859 opublikowane 22.11) |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 859 |
-| Zip itch.io | `NightBrand_itch_859.zip` na pulpicie autora w `NIGHTBRAND` |
+| main | cache 863, opublikowane 23.11.2026 (log `docs/logi/LOG_SESJI_2026-11-23.md`) |
+| Gałęzie czekające na „publikuj” | brak (860–863 opublikowane 23.11) |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 863 |
+| Zip itch.io | `NightBrand_itch_863.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 199 MB (limit 500 MB); zip itch.io ok. 817 plików / 1000 (każdy model = 2–3 pliki) |
 
 ## Decyzje autora (najnowsze)
+- 23.11: teksty EN z listy `docs/teksty/EN_DO_ZATWIERDZENIA_2026-11-22.md` zatwierdzone (sekcje 1–13); „act” czy „chapter” nadal do decyzji. Zgoda na: rzadkie karty i wolniejszy awans, cechy elit i czempionów, zwalnianie światów, sprzątanie kodu (863).
 - 22.11: zgoda na zmiany balansu. Noc ma rosnąć naturalnie: od startu dużo łatwych wrogów, po północy coraz trudniej (853). Reakcje żywiołów (854). Dobicie Wita to niesłuszna łaska dla mordercy (855).
 - 21.11: drzewa robimy TYLKO z naszych malunków (Meshy obraz → 3D); modele z galerii i z opisu tekstowego „jak z innej bajki”. Wszystkie drzewa (Czarnobór, Spalona Osada, Złotogród) to modele z malunków (`P3D_LAS`, `P3D_DRZ1` w części 06), tekstury 2048. Następnie: drzewa w wysokiej jakości (`z_malunkow_hq`), potem kociołki i port tą samą metodą (paczka obrazków dla Code).
 - 21.11: „Porzuć noc” w pauzie jako przycisk w ramce jak „Wróć do gry” (przygaszony).
@@ -27,6 +28,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 860–863: płynność (Czarnobór, Złotogród), pauza (pytanie o porzucenie nocy), ikonki stanów, podpowiedzi, rzadkie karty i tempo awansu (ok. 20 poziomów na noc), czempioni z cechami (Wezwanie, Wybuch w tłumie), powrót do rozdziału po zmianie.
 - 856–859: zestawy 4/7, techniki ze stanami wrogów, Trudny bez premii doświadczenia, wir Tancerki z żywiołami, parowanie Kata u wszystkich postaci. Lista EN: `docs/teksty/EN_DO_ZATWIERDZENIA_2026-11-22.md`.
 - 852–855 (balans postaci, skalowanie nocy, reakcje żywiołów, Wit): Tancerka i Woskownica na żywo, odczucie rampy trudności, FPS przy około 40 wrogach, Łatwy/Trudny, czy reakcje są widoczne w walce, czas wyświetlania dłuższego tekstu przy dobiciu Wita, teksty EN.
 - 836–844 (druga partia 36 modeli, port z modelami z rozdz. I, drzewa 3D z malunków, pauza): autor obejrzał 21.11 („jest ok”). Nie sprawdzono: FPS w Czarnoborze z cieniami drzew, drzewa w Złotogrodzie, święty dąb i drzewo wisielca z bliska, pad w pauzie, itch.io.

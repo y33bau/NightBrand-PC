@@ -1,6 +1,8 @@
 Stan na 2026-11-22, cache 856 (runda), rola agent główny
 
 # Teksty EN do zatwierdzenia
+
+**ZATWIERDZONE przez autora 23.11.2026 (01:00), wszystkie sekcje 1–13.** „Act” i „chapter” zostają jak są, dopóki autor nie zdecyduje inaczej.
 Wszystkie teksty angielskie, które napisał agent i których autor jeszcze nie zatwierdził. Przy każdym możesz napisać „OK” albo podać swoją wersję.
 
 ## 1. Kamera (18.11, wersja 815)
