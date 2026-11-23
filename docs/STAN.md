@@ -1,4 +1,4 @@
-Stan na 2026-11-23, cache 884 (opublikowane), rola agent główny
+Stan na 2026-11-23, cache 885 (opublikowane), rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,11 +6,11 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 884 (commit 60b0666), opublikowane 23.11.2026 (log `docs/logi/LOG_SESJI_2026-11-23.md`) |
-| Gałęzie czekające na „publikuj” | brak (876–884 opublikowane 23.11) |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 884 |
-| Zip itch.io | `NightBrand_itch_884.zip` na pulpicie autora w `NIGHTBRAND` |
-| Rozmiar gra/ | ok. 222 MB (limit 500 MB); zip itch.io 928 plików / 1000 (każdy model = 2–3 pliki) |
+| main | cache 885 (commit 3073119), opublikowane 23.11.2026 (log `docs/logi/LOG_SESJI_2026-11-23.md`) |
+| Gałęzie czekające na „publikuj” | brak (876–885 opublikowane 23.11) |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 885 |
+| Zip itch.io | `NightBrand_itch_885.zip` na pulpicie autora w `NIGHTBRAND` |
+| Rozmiar gra/ | ok. 219 MB (limit 500 MB); zip itch.io 873 pliki / 1000 (każdy model = 2–3 pliki) |
 
 ## Decyzje autora (najnowsze)
 - 23.11: ZASADA – usterki znalezione przy sprawdzaniu naprawiać od razu, bez pytania (balans i publikacja nadal za zgodą). Nowe obiekty na mapach: rola grafik (+ koncepciarz do propozycji). Wystrój z propozycji 1–4 wdrożony (884); magazyn portu bez kolizji; nowy HUD w każdym oknie.
@@ -35,6 +35,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 885: usunięte obrazki pod modelami – modele powinny wyglądać i stać jak w 884 (porównane w przeglądarce).
 - 883–884: brak niewidzialnych kolizji, HUD w oknie, wystrój Osady, Dolnego Miasta, Czarnoboru i Cytadeli, magazyn portu.
 - 881–882: wystrój Cytadeli i Czarnoboru, kolizje pali i krzesła, port po usunięciu modeli domów TripoSG (porównanie lokalnie `?rodziny=0`).
 - 880: stosy, kosze z ogniem, palenisko, kolumny (porównanie lokalnie `?rodziny=0`), FPS w Cytadeli, prześwietlenie modeli przy lampach.
