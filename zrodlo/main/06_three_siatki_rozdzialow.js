@@ -778,8 +778,27 @@ const P3D_MMAP={1:{dead_tree:P3D_DRZ1,barrel:'p1_barrel',grave_cross:'p1_grave_c
  2:{rune_lantern:'p2_rune_lantern',pickaxe_rack:'p2_pickaxe_rack',anvil:'p2_anvil',king_statue:'p2_king_statue',black_powder:'p2_black_powder',sarcophagus:'p2_sarcophagus',chains:'p2_chains',mine_cart:'p2_mine_cart',bellows:'p2_bellows'},
  3:{dead_tree:'p3_dead_tree',royal_banner:'p3_royal_banner',saint_king:'p3_saint_king',barrel:'p3_barrel',plague_cart:'p3_plague_cart',gibbet:'p3_gibbet',chains:'p3_chains',sarcophagus:'p3_sarcophagus',queen_fountain:'p3_queen_fountain',gallows:'p3_gallows',wheel:'p3_wheel',dead_horse:'p3_dead_horse',offering_bowl:'p3_offering_bowl'},
  4:{birch:'p4_birch',dead_oak:'p4_dead_oak',spruce:'p4_spruce',tall_pine:'p4_tall_pine',dead_spruce:'p4_dead_spruce',sacred_oak:'p4_sacred_oak',hanging_tree:'p4_hanging_tree',cz_bones:'p4_cz_bones',wolf_skull_bush:'p4_wolf_skull_bush',barrel:'p1_barrel',burial_mound:'p4_burial_mound',mossy_boulder:'p4_mossy_boulder',drowned_cart:'p4_drowned_cart',cz_wagon:'p4_cz_wagon',cz_tent:'p4_cz_tent',cz_sacpole:'p4_cz_sacpole',cz_firewood:'p4_cz_firewood',cz_pelts:'p4_cz_pelts',cz_beehive:'p4_cz_beehive',axe_stump:'p4_axe_stump',cz_idol:'p4_cz_idol',cz_gallows:'p4_cz_gallows',cz_wheel:'p4_cz_wheel'},5:{candelabra:'p5_candelabra',statue_a:'p5_statue_a',statue_b:'p5_statue_b',armour:'p5_armour',bench_a:'p5_bench_b',bench_b:'p5_bench_b',bookcase_a:'p5_bookcase_a',bookcase_b:'p5_bookcase_b',vault:'p5_vault',lectern:'p5_lectern',desk:'p5_desk',scale:'p5_scale',rack:'p5_rack',throne:'p5_throne'},6:{well:'p1_well',marga_cart:'p1_marga_cart',crow_post:'p1_crow_post',wheel:'p1_wheel',gallows:'p1_gallows',stocks:'p1_stocks',burnt_hay:'p1_burnt_hay',dead_horse:'p1_dead_horse',shop_sign:'p1_shop_sign'}};
+/* 23.11.2026 (880, decyzja autora: rodziny modeli, partia7 faza 1): neutralne modele (szara tekstura) + mnoznik koloru wariantu.
+   b = model bazowy, t = kolor wariantu, img = obrazek rekwizytu (obrys i szerokosc), fl = plomien z kodu [wysokosc wzgledna, rozmiar wzgledny do szerokosci].
+   Zrodla: ~/Desktop/NIGHTBRAND/meshy/partia7_rodziny (ZRODLA.txt). Porownanie: ?rodziny=0 (tylko lokalnie). */
+const R7_ON=nbParam('rodziny')!=='0';
+if(R7_ON){Object.assign(P3D_MESHY,{r7_kolumna_01_prosta:{g:'assets/rekwizyty/259120a0186f92f80ee3076fdf91c9bcc2988e910b1f1fa88ae7083bc9126ba6.glb',k:'assets/rekwizyty/5f08410c6291654e13782a5a4d8dd00ca281492a92ff728e732c75d3c025b114.webp'}, r7_kolumna_02_zlamana:{g:'assets/rekwizyty/6ec6c5119cfc0d4bcb2f0846899061d47706acc0b323579cc7816af235588dec.glb',k:'assets/rekwizyty/ff7141ae229e7d886fa8436a721cac8056a3a112e3dc79180eb8b912786c3960.webp'}, r7_kolumna_03_filar:{g:'assets/rekwizyty/4e10f5bbe4e5dfd50a45c4af52567b86297dc4f9089c2859e0eeed6301b9f2fe.glb',k:'assets/rekwizyty/f58c8a3ef618c36769bb2d2181b89cf34e570954450b0fa9c96c7b6f0b73d11c.webp'}, r7_ognisko_03_stos:{g:'assets/rekwizyty/56b5e27a011c327988c1854a8677ab3c58239f0cdae39171b134a955196b5cc0.glb',k:'assets/rekwizyty/d201657e5d8eaab76e1fe9df748554718e32b5d941e3bf39ee20c6796e31df0d.webp'}, r7_ognisko_01_kamienne:{g:'assets/rekwizyty/dbc613f8765c4d0cae492cfe484544b9fc568899aea3ac4bd53b93ee7424d678.glb',k:'assets/rekwizyty/ef044c941dd04e965c90ffc10bc04d2042a5142bcd04a981a8860cd02d60e822.webp'},
+  r7_ognisko_02_kosz:{g:'assets/rekwizyty/b81b0efa2caa681cbc6419f8f9d46ffde734aa22cfe5de6d1153090c621b1c0e.glb',k:'assets/rekwizyty/6ef25f9d872bfa6ca0cbb3ba4edcd0b201cf895f6fbb3d6ddc73125bc05fc179.webp'},r7_kosz5:{b:'r7_ognisko_02_kosz',t:[.42,.4,.38],fl:[.9,1.0]},r7_kosz5z:{b:'r7_ognisko_02_kosz',t:[.42,.4,.38],fl:[.9,1.0],ab:[.3,0,.7,1]},
+  r7_kol_lez2:{b:'r7_kolumna_02_zlamana',t:[.5,.48,.46],img:'p2_fallen_pillar'},r7_kol_a:{b:'r7_kolumna_01_prosta',t:[.7,.68,.64]},r7_kol_b:{b:'r7_kolumna_03_filar',t:[.68,.65,.61]},
+  r7_stos1:{b:'r7_ognisko_03_stos',t:[.72,.62,.52],img:'p1_order_bonfire',fl:[.8,.62]},r7_stos3:{b:'r7_ognisko_03_stos',t:[.7,.62,.54],img:'p3_pyre_0',fl:[.8,.62]},
+  r7_ognisko4:{b:'r7_ognisko_01_kamienne',t:[.5,.48,.45],fl:[.12,.55]}});
+ Object.assign(P3D_MMAP[1],{order_bonfire:'r7_stos1'});Object.assign(P3D_MMAP[2],{fallen_pillar:'r7_kol_lez2'});Object.assign(P3D_MMAP[3],{pyre:'r7_stos3'});
+ Object.assign(P3D_MMAP[4],{cz_fire:'r7_ognisko4'});Object.assign(P3D_MMAP[5],{order_bonfire:'r7_kosz5z'})}
+// plomien z kodu (pionowa plaszczyzna zwrocona do kamery, szum przesuwany w gore, addytywnie); czas: NB_WIN_T
+let NB_FLAME_M=null;
+function flameMat(){if(NB_FLAME_M)return NB_FLAME_M;NB_FLAME_M=new THREE.ShaderMaterial({uniforms:{uT:NB_WIN_T},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,
+  vertexShader:'varying vec2 vUv;varying float vPh;void main(){vUv=uv;vPh=fract(sin(dot(modelMatrix[3].xyz,vec3(12.99,78.23,37.71)))*43758.55);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+  fragmentShader:'uniform float uT;varying vec2 vUv;varying float vPh;float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1.,0.)),f.x),mix(h(i+vec2(0.,1.)),h(i+vec2(1.,1.)),f.x),f.y);}'+
+  'void main(){vec2 p=vUv;float t=uT*1.7+vPh*10.;float q=n(vec2(p.x*4.,p.y*3.-t*2.3))*.6+n(vec2(p.x*9.,p.y*6.-t*3.6))*.4;float w=(1.-p.y)*.4+.05;float dx=abs(p.x-.5+(q-.5)*.22*p.y);'+
+  'float s=smoothstep(w,w*.3,dx)*smoothstep(0.,.1,p.y)*(1.-smoothstep(.45,.95,p.y+(q-.5)*.4));float f=s*(.6+.65*q);vec3 c=mix(vec3(.85,.16,.02),vec3(1.,.52,.08),smoothstep(.2,.6,f));c=mix(c,vec3(1.,.88,.5),smoothstep(.7,1.05,f));gl_FragColor=vec4(c*f*1.5,f);}'});return NB_FLAME_M}
+function addFlame(root,x,y,z,size){const m=new THREE.Mesh(new THREE.PlaneGeometry(size*.75,size),flameMat());m.position.set(x,y+size*.42,z+.04);m.rotation.x=-.45;m.renderOrder=5;m.frustumCulled=false;root.add(m);return m}
 const P3D_MGEO={};
-const P3D_MREADY=REK3D_ON?Promise.all(Object.entries(P3D_MESHY).map(([k,e])=>fetch(e.g).then(r=>r.arrayBuffer()).then(b=>{P3D_MGEO[k]=p3dParseGlb(b)}).catch(er=>quietErr('meshy '+k,er)))):Promise.resolve();
+const P3D_MREADY=(REK3D_ON?Promise.all(Object.entries(P3D_MESHY).filter(([k,e])=>!e.b).map(([k,e])=>fetch(e.g).then(r=>r.arrayBuffer()).then(b=>{P3D_MGEO[k]=p3dParseGlb(b)}).catch(er=>quietErr('meshy '+k,er)))):Promise.resolve()).then(()=>{for(const [k,e] of Object.entries(P3D_MESHY))if(e.b&&P3D_MGEO[e.b])P3D_MGEO[k]=P3D_MGEO[e.b]});
 /* 23.11.2026 (runda 868, zgoda autora): bryly TripoSG (darmowe, MIT) z tekstura wypalona z malunkow (rekwizyty portu z gry, domy z ChatGPT).
    Wypalanie: docs/modele/triposg_bake.py. Domy w porcie (szopy, kantor, karczma) oraz rekwizyty portu. Domy Osady z modeli wycofane (autor 23.11): zamiast nich spalone domy z kodu (05).
    Porownanie przed: ?tri3d=0 (tylko lokalnie). */
@@ -806,19 +825,19 @@ function triProp(root,n,x,z,W,ry,flip){const g=P3D_TGEO[n];if(!g)return false;co
  const m=triMesh(n,x,z-(bb.max.z-bb.min.z)*s/2,s*(flip?-1:1),s,s,ry,false);m.castShadow=true;m.userData.propAsset=true;root.add(m);return true}
 function meshyFor(ch,k,p){let n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];if(typeof n==='function')n=p?n(p):null;if(Array.isArray(n))n=n[p?groundHash(Math.floor(p.x),Math.floor(p.y))%n.length:0];return n&&P3D_MGEO[n]?n:null}
 const P3D_MMAT=new Map();
-function meshyMat(n){let m=P3D_MMAT.get(n);if(m)return m;const L=new THREE.TextureLoader(),e=P3D_MESHY[n],t=u=>{const x=L.load(u);x.flipY=false;x.anisotropy=4;return x};
- m=phong({map:t(e.k),normalMap:e.n?t(e.n):null,shininess:6,specular:0x101010,side:THREE.DoubleSide});const tn=P3D_TON[n]||[.92,.9,.88];m.color.setRGB(tn[0],tn[1],tn[2]);if(P3D_LAS.includes(n))cutCircle(m);P3D_MMAT.set(n,m);return m}
+function meshyMat(n){let m=P3D_MMAT.get(n);if(m)return m;const L=new THREE.TextureLoader(),e0=P3D_MESHY[n],e=e0.b?P3D_MESHY[e0.b]:e0,t=u=>{const x=L.load(u);x.flipY=false;x.anisotropy=4;return x};
+ m=phong({map:t(e.k),normalMap:e.n?t(e.n):null,shininess:6,specular:0x101010,side:THREE.DoubleSide});const tn=e0.t||P3D_TON[n]||[.92,.9,.88];m.color.setRGB(tn[0],tn[1],tn[2]);if(P3D_LAS.includes(n))cutCircle(m);P3D_MMAT.set(n,m);return m}
 // szerokosc i srodek obrysu malunku (ulamki obrazka): model dostaje szerokosc obrysu, nie calego obrazka
 const P3D_ABOX=new Map();
 function p3dAlphaBox(key){let b=P3D_ABOX.get(key);if(b)return b;const img=IMGS[key];if(!img)return [0,0,1,1];const W=96,H=Math.round(96*img.height/img.width),c=canvas(W,H),g=c.getContext('2d');g.drawImage(img,0,0,W,H);
  const px=g.getImageData(0,0,W,H).data;let x0=W,y0=H,x1=0,y1=0;for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(px[(y*W+x)*4+3]>128){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
  b=x1<x0?[0,0,1,1]:[x0/W,y0/H,(x1+1)/W,(y1+1)/H];P3D_ABOX.set(key,b);return b}
 // 22.11.2026 (przeglad grafiki): modele mniejsze lub nizsze niz ich obrazki 2D: [skala calosci, dodatkowa skala wysokosci]
-const P3D_SKALA={p2_anvil:[1.3,1],p2_black_powder:[1.3,1],p1_grave_cross:[1.2,1],p1_order_banner:[1.2,1],p1_well:[1,1.25]};
+const P3D_SKALA={r7_stos1:[2,1],r7_stos3:[2,1],r7_kosz5z:[1.35,1],p2_anvil:[1.3,1],p2_black_powder:[1.3,1],p1_grave_cross:[1.2,1],p1_order_banner:[1.2,1],p1_well:[1,1.25]};
 function meshyEmit(root,items){const by=new Map(),M=new THREE.Matrix4(),V=new THREE.Vector3(),Q=new THREE.Quaternion(),S=new THREE.Vector3();
- for(const it of items){const g=P3D_MGEO[it.n];if(!g)continue;const bb=g.boundingBox,gw=bb.max.x-bb.min.x||1,ab=p3dAlphaBox(it.n),s=it.W*(ab[2]-ab[0])/gw,fl=it.flip?-1:1,dx=((ab[0]+ab[2])/2-.5)*it.W*fl;
+ for(const it of items){const g=P3D_MGEO[it.n];if(!g)continue;const bb=g.boundingBox,gw=bb.max.x-bb.min.x||1,me=P3D_MESHY[it.n]||{},ab=it.ab||me.ab||p3dAlphaBox(me.img||it.n),s=it.W*(ab[2]-ab[0])/gw,fl=it.flip?-1:1,dx=((ab[0]+ab[2])/2-.5)*it.W*fl;
   // przod-spod modelu na linii obrazka (tam stala jego dolna krawedz)
-  const sk=P3D_SKALA[it.n],sc=sk?s*sk[0]:s;M.compose(V.set(it.x+dx,0,it.z-bb.max.z*sc),Q,S.set(sc*fl,sc*(sk?sk[1]:1),sc));(by.get(it.n)||by.set(it.n,[]).get(it.n)).push(M.clone())}
+  const sk=P3D_SKALA[it.n],sc=sk?s*sk[0]:s;M.compose(V.set(it.x+dx,0,it.z-bb.max.z*sc),Q,S.set(sc*fl,sc*(sk?sk[1]:1),sc));if(me.fl)addFlame(root,it.x+dx,(bb.max.y-bb.min.y)*sc*me.fl[0],it.z-bb.max.z*sc,(bb.max.x-bb.min.x)*sc*me.fl[1]);(by.get(it.n)||by.set(it.n,[]).get(it.n)).push(M.clone())}
  for(const [n,list] of by){const im=new THREE.InstancedMesh(P3D_MGEO[n],meshyMat(n),list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=P3D_CIEN.has(n);im.receiveShadow=true;im.frustumCulled=false;im.userData.propAsset=true;root.add(im)}}
 const P3D_CIEN=new Set(P3D_LAS);
 function paint3dImg(ch,k){const e=REK3D_ON&&P3D_MAP[ch]&&P3D_MAP[ch][k];return e&&P3D_GEO[e[0]]&&IMGS[e[1]]?e:null}
@@ -826,7 +845,7 @@ function paint3dImg(ch,k){const e=REK3D_ON&&P3D_MAP[ch]&&P3D_MAP[ch][k];return e
 function paint3dFinish(w){if(!REK3D_ON||(!P3D_MAP[w.ch]&&!P3D_MMAP[w.ch]))return;const items=[],mitems=[];
  for(const {p,W} of (w.p3d||[])){const n=meshyFor(w.ch,p.k,p);if(n){mitems.push({n,x:p.x,z:p.y,W,flip:!!p.flip});continue}const e=paint3dImg(w.ch,p.k);if(e)items.push({e,x:p.x,z:p.y,W,flip:!!p.flip})}
  w.p3d=null;
- for(const p of w.PROPS){const n=meshyFor(w.ch,p.k,p),e=n?null:paint3dImg(w.ch,p.k);if((!e&&!n)||p.anim||p.shrine!==undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);const m=o&&o.mesh;
+ for(const p of w.PROPS){const n=meshyFor(w.ch,p.k,p),e=n?null:paint3dImg(w.ch,p.k);if((!e&&!n)||(p.anim&&!(n&&P3D_MESHY[n].fl))||p.shrine!==undefined)continue;const o=p.obj||w.propObjs.find(o=>Math.abs(o.mesh.position.x-p.x)<.001&&Math.abs(o.mesh.position.z-p.y)<.001);const m=o&&o.mesh;
   if(!m||!m.parent||!m.geometry||!m.geometry.parameters||m.isInstancedMesh)continue;
   let tW=0;if(w.ch===1&&p.k==='dead_tree'){const tk=p.variant||['dead_oak','dead_spruce','dead_oak'][groundHash(Math.floor(p.x),Math.floor(p.y))%3];tW=4*(p.vscale||({spruce:1.08,birch:1}[tk]||.82))}
   const it={x:m.position.x,z:m.position.z,W:tW||m.geometry.parameters.width*Math.abs(m.scale.x),flip:m.scale.x<0};if(n)mitems.push(Object.assign(it,{n}));else items.push(Object.assign(it,{e}));
@@ -1426,11 +1445,12 @@ function buildCytadela(I){planGround(5);
     const geos={},G2=(w,h)=>{const k=w+'x'+h;if(!geos[k]){const g=new THREE.PlaneGeometry(w/16,h/16).translate(0,h/32-2/16,0),n=g.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6);geos[k]=g}return geos[k]};
     const FR={};for(const k in OBJ){const o=OBJ[k];FR[k]=I['p5_'+k]?procFrame(I['p5_'+k],0,0,o[2],o[3],'prop'):procFrame(BG,o[0],o[1],o[2],o[3],'prop');cutCircle(FR[k].n)}
     const putObj=(k,x,y,flip)=>{const o=OBJ[k],s=o[4],m=new THREE.Mesh(G2(o[2],o[3]),FR[k].n);m.customDistanceMaterial=FR[k].d;m.userData.propAsset=true;m.castShadow=true;m.position.set(x,0,y);m.scale.set(flip?-s:s,s*SQ,s);ROOT.add(m);return m};
-    pillars.forEach(([x,y],i)=>putObj((x*3+y)%2?'pillar_a':'pillar_b',x+.5,y+.92,false));
+    {const pm=[];pillars.forEach(([x,y],i)=>{const k=(x*3+y)%2?'pillar_a':'pillar_b',n=k==='pillar_a'?'r7_kol_a':'r7_kol_b';if(R7_ON&&REK3D_ON&&P3D_MGEO[n]){const o=OBJ[k];pm.push({n,x:x+.5,z:y+.92,W:o[2]/16*o[4],ab:IMGS['p5_'+k]?p3dAlphaBox('p5_'+k):[.3,0,.7,1]})}else putObj(k,x+.5,y+.92,false)});if(pm.length)meshyEmit(ROOT,pm)}
     // 13.11.2026: koksownik z nowych klatek p2_brazier (wyrownana podstawa) zamiast dwoch roznych rysunkow z arkusza
     const BZ=[0,1,2,3].map(i=>I['p2_brazier_'+i]?procFrame(I['p2_brazier_'+i],0,0,64,64,'prop'):null),BZok=BZ.every(Boolean);
     if(BZok){BZ.forEach(f=>cutCircle(f.n));OBJ.brazier_0[4]=.52}
-    for(const [x,y] of braziers){const fr=BZok?BZ:[FR.brazier_0,FR.brazier_1],m=putObj('brazier_0',x+.5,y+.92,false);if(BZok){m.material=BZ[0].n;m.customDistanceMaterial=BZ[0].d}propObjs.push({mesh:m,frames:fr,fps:BZok?6:5,ph:Math.random()*3})}
+    const bzm=[];for(const [x,y] of braziers){if(R7_ON&&REK3D_ON&&P3D_MGEO.r7_kosz5){const o=OBJ.brazier_0;bzm.push({n:'r7_kosz5',x:x+.5,z:y+.92,W:o[2]/16*o[4],ab:IMGS.p2_brazier_0?p3dAlphaBox('p2_brazier_0'):[.25,0,.75,1]});continue}
+     const fr=BZok?BZ:[FR.brazier_0,FR.brazier_1],m=putObj('brazier_0',x+.5,y+.92,false);if(BZok){m.material=BZ[0].n;m.customDistanceMaterial=BZ[0].d}propObjs.push({mesh:m,frames:fr,fps:BZok?6:5,ph:Math.random()*3})}if(bzm.length)meshyEmit(ROOT,bzm);
     for(const p of PROPS)if(OBJ[p.k]){const artKey=p.k==='bench_a'?'bench_b':p.k;const m=putObj(artKey,p.x,p.y,!!p.flip);p.obj={mesh:m}}
   }
   // K4 small props, 32 px cells; the healing shrine still comes from the Lower City sheet
