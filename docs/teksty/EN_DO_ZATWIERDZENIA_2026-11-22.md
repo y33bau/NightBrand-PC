@@ -120,3 +120,8 @@ Bez nowych tekstów: zmienił się tylko układ.
 | Wezwanie | Summoner |
 | Wybuch | Volatile |
 | Nad wrogiem: „Elita: Rycerz · Pancerz”, „Opętany · Szał” | "Elite: Knight · Armoured", "Possessed · Enraged" |
+
+
+## Decyzje 23.11.2026
+- „Act” zamiast „chapter” we wszystkich widocznych tekstach EN. Sprawdzone w kodzie 866: gra już tak mówi; „chapter” występuje tylko w nazwach zmiennych i komentarzach.
+- Zatwierdzone podpowiedzi cech czempionów (runda 866): Armoured, Enraged, Summoner, Volatile.

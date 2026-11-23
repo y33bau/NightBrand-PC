@@ -13,7 +13,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 | Rozmiar gra/ | ok. 199 MB (limit 500 MB); zip itch.io ok. 817 plików / 1000 (każdy model = 2–3 pliki) |
 
 ## Decyzje autora (najnowsze)
-- 23.11: teksty EN z listy `docs/teksty/EN_DO_ZATWIERDZENIA_2026-11-22.md` zatwierdzone (sekcje 1–13); „act” czy „chapter” nadal do decyzji. Zgoda na: rzadkie karty i wolniejszy awans, cechy elit i czempionów, zwalnianie światów, sprzątanie kodu (863).
+- 23.11: teksty EN z listy `docs/teksty/EN_DO_ZATWIERDZENIA_2026-11-22.md` zatwierdzone (sekcje 1–13). W EN rozdział = „act” (decyzja autora 23.11; widoczne teksty już tak mówią, „chapter” zostało tylko w komentarzach kodu). Podpowiedzi cech czempionów (866) zatwierdzone. Zgoda na: rzadkie karty i wolniejszy awans, cechy elit i czempionów, zwalnianie światów, sprzątanie kodu (863).
 - 22.11: zgoda na zmiany balansu. Noc ma rosnąć naturalnie: od startu dużo łatwych wrogów, po północy coraz trudniej (853). Reakcje żywiołów (854). Dobicie Wita to niesłuszna łaska dla mordercy (855).
 - 21.11: drzewa robimy TYLKO z naszych malunków (Meshy obraz → 3D); modele z galerii i z opisu tekstowego „jak z innej bajki”. Wszystkie drzewa (Czarnobór, Spalona Osada, Złotogród) to modele z malunków (`P3D_LAS`, `P3D_DRZ1` w części 06), tekstury 2048. Następnie: drzewa w wysokiej jakości (`z_malunkow_hq`), potem kociołki i port tą samą metodą (paczka obrazków dla Code).
 - 21.11: „Porzuć noc” w pauzie jako przycisk w ramce jak „Wróć do gry” (przygaszony).
@@ -28,7 +28,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
-- 866: goście z innych rozdziałów w falach (tabela `GUEST`, część 13), ghule w I–II później i rzadziej na starcie, podpowiedzi cech czempionów (EN niezatwierdzone), dźwięki: Pancerz, Wezwanie, Szał, odbity pocisk.
+- 866: goście z innych rozdziałów w falach (tabela `GUEST`, część 13), ghule w I–II później i rzadziej na starcie, podpowiedzi cech czempionów (EN zatwierdzone 23.11), dźwięki: Pancerz, Wezwanie, Szał, odbity pocisk.
 - 864–865: podsumowanie nocy bez przewijania, krąg Wybuchu, rzadsi czempioni (do 4%), Wybuch ×1,3, 5 nowych dźwięków Kenney CC0 (odsłuch!), doskok wilków/ghuli/ogarów z zamachem i bez ciosu zaraz po skoku.
 - 860–863: płynność (Czarnobór, Złotogród), pauza (pytanie o porzucenie nocy), ikonki stanów, podpowiedzi, rzadkie karty i tempo awansu (ok. 20 poziomów na noc), czempioni z cechami (Wezwanie, Wybuch w tłumie), powrót do rozdziału po zmianie.
 - 856–859: zestawy 4/7, techniki ze stanami wrogów, Trudny bez premii doświadczenia, wir Tancerki z żywiołami, parowanie Kata u wszystkich postaci. Lista EN: `docs/teksty/EN_DO_ZATWIERDZENIA_2026-11-22.md`.
