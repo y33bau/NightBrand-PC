@@ -81,6 +81,8 @@ function syncThreatRings(){
   const players=[pl,pl2].filter(p=>p&&!p.dead);if(!players.length)players.push(pl);const distance=e=>Math.min(...players.map(p=>Math.min(Math.hypot(e.x-p.x,e.y-p.y),e.mode==='up'||e.mode==='root'?Math.hypot(e.tx-p.x,e.ty-p.y):Infinity)));
   const list=S.enemies.filter(e=>!e.dead&&e.rise<=0&&distance(e)<360).sort((a,b)=>((BIG.has(b.type)||b.type==='collector')?3:b.mini?2:1)-((BIG.has(a.type)||a.type==='collector')?3:a.mini?2:1)||distance(a)-distance(b));
   let area=0,mark=0;const d=COMBAT_WARN.dummy;
+  /* 23.11.2026: Wybuch czempiona: krag na ziemi w ksztalcie strefy obrazen (elipsa jak w trafieniu), pulsuje szybciej przed detonacja */
+  for(const b of (S.blasts||[])){if(area>=8)break;const f=COMBAT_WARN.areas[area++],k=Math.max(0,Math.min(1,b.t/.9)),pu=.5+.5*Math.sin(clock*(14+(1-k)*26));f.mesh.visible=f.back.visible=true;for(const m of [f.mesh,f.back]){m.position.set(b.x/16,.07,b.y/16);m.scale.set(b.r/16,1,b.r/16/1.6)}f.mesh.material.color.set(SETT.contrast?'#ffe270':'#ff9a3a');f.mesh.material.opacity=.6+.38*pu;f.back.material.opacity=.72}
   for(const e of list){const cue=attackCue(e);let radius=0,x=e.x,y=e.y;
     if(e.type==='collector')radius=56;else if(cue){if(e.atkT>0)radius=54;else if(e.mode==='root'){radius=32;x=e.tx;y=e.ty}else if(e.mode==='up'){radius=e.type==='beast'?70:62;x=e.tx;y=e.ty}}
     const idle=e.type==='collector'&&!cue;

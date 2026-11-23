@@ -477,7 +477,7 @@ const RX={'fire+venom':{n:(EN?'Fumes':'Opary'),d:(EN?'a burning, poisoned enemy 
 const rxKey=(a,b)=>[a,b].sort().join('+');
 function rxOn(){if(!S)return null;const o=chosenElements();return o.length>=2?rxKey(o[0],o[1]):null}
 function rxNear(e,r){return S.enemies.filter(o=>o!==e&&!o.dead&&!(o.rise>0)&&Math.hypot(o.x-e.x,o.y-e.y)<r)}
-function rxShow(e,k){if((e.rxShown||0)>clock)return;e.rxShown=clock+1.5;S.rxN=(S.rxN||0)+1;S.rxLast=S.t;try{if(!META.rx)META.rx={};if(!META.rx[k]){META.rx[k]=1;saveMeta()}}catch(_){}const R=RX[k];ftx(R.n+'!',e.x,e.y,ftEntH(e)+.75,'i');for(let i=0;i<16;i++){const an=Math.random()*6.283,sp=rnd(30,85);S.parts.push({k:'e',x:e.x,y:e.y,z:rnd(6,18),vx:Math.cos(an)*sp,vy:Math.sin(an)*sp*.6,vz:rnd(8,26),c:i%3?R.c:'#fff2c8',life:rnd(.35,.7)})}}
+function rxShow(e,k){if((e.rxShown||0)>clock)return;e.rxShown=clock+1.5;S.rxN=(S.rxN||0)+1;S.rxLast=S.t;try{if(!META.rx)META.rx={};if(!META.rx[k]){META.rx[k]=1;saveMeta()}}catch(_){}const R=RX[k];try{play('rx',.12)}catch(_){}ftx(R.n+'!',e.x,e.y,ftEntH(e)+.75,'i');for(let i=0;i<16;i++){const an=Math.random()*6.283,sp=rnd(30,85);S.parts.push({k:'e',x:e.x,y:e.y,z:rnd(6,18),vx:Math.cos(an)*sp,vy:Math.sin(an)*sp*.6,vz:rnd(8,26),c:i%3?R.c:'#fff2c8',life:rnd(.35,.7)})}}
 function elementReact(e,a){if(!e||e.dead||!S)return;const k=rxOn();if(!k)return;
  if(k==='fire+venom'&&e.burn>0&&e.pois>0&&!((e.rxCd||0)>clock)){e.rxCd=clock+3;rxShow(e,k);play('fire',.05);for(const o of rxNear(e,46)){o.pois=Math.max(o.pois||0,3);o.poisD=Math.max(o.poisD||0,(e.poisD||3)*.8)}}
  else if(k==='ice+venom'&&e.chill>0&&e.pois>0&&!e.rxSz){e.rxSz=1;e.chill=Math.max(e.chill,5);rxShow(e,k)}

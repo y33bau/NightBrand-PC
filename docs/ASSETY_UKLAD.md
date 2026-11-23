@@ -34,3 +34,14 @@ Lista dozwolonych plików `gra/.gitignore` dopuszcza podfoldery kategorii. Nowy 
 
 ## Uwaga: jednorazowe ponowne pobranie
 Zmiana ścieżek zmienia adresy wszystkich plików, więc pierwsza aktualizacja gry u każdego gracza pobiera całość od nowa (ok. 130 MB). Dotyczy tylko tej jednej zmiany.
+
+## Źródła dźwięków (licencje)
+Stan na 2026-11-23, cache 864, rola gamedev.
+- Wcześniejsze efekty: Kenney (CC0, od cache 674) i paczki CC0 z prefiksem `Owlish/…` oraz `Sword …`, `Fireball …` itd. (nazwy w `SFX_SAMPLES`, część 08).
+- Cache 864, Kenney (CC0 1.0, https://kenney.nl), pobrane z lustrzanych repozytoriów GitHub z plikiem LICENSE CC0: `Boyquotes/kenney-sci-fi-sounds-for-godot`, `Boyquotes/kenney-impact-sounds-for-godot`. Przycięte, znormalizowane (ffmpeg, mono 44,1 kHz, 96 kb/s):
+  - `kenney_rx` (reakcja żywiołów): `force_field_000`
+  - `kenney_rare` (rzadka karta): `impact_bell_heavy_001`
+  - `kenney_champ` (pojawienie się czempiona): `low_frequency_explosion_001` + `impact_plate_heavy_000`, obniżone
+  - `kenney_blastwarn` (lont Wybuchu): `thruster_fire_001`, narastające
+  - `kenney_blast` (eksplozja Wybuchu): `explosion_crunch_001`
+- CC0 nie wymaga podpisu; zapis tylko po to, by wiedzieć, skąd plik.

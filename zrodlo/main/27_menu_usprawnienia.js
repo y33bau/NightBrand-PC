@@ -1832,6 +1832,20 @@ ${B} :is(#nbP,#nbW) button.nbd:not(:disabled):is(:hover,:focus-visible,.pf){filt
 (()=>{try{const O='#orient'.repeat(300),st=document.createElement('style');st.id='nb-przeglad-2211';
  st.textContent=`
 ${O} #cards .card .rxb{display:block;margin:.35em 0 .1em;font-size:.86em;line-height:1.3;color:#f0c987;text-shadow:0 1px 2px #000}${O} #cards .card .rxb b{color:#ffe2a6}/* 22.11.2026: linia reakcji zywiolow na karcie */${O} #cards .card.rare{position:relative;box-shadow:0 0 0 2px #b98cff,0 0 22px #8a52ffaa,inset 0 0 26px #6a38c444!important}${O} #cards .card.rare .rareb{position:absolute;top:-.85em;left:50%;transform:translateX(-50%);z-index:3;white-space:nowrap;padding:.18em .8em;border:1px solid #c9a2ff;border-radius:999px;background:linear-gradient(#3a2160,#1d1030);color:#f0dcff;font:700 .74em/1.2 Georgia,serif;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 0 10px #8a52ff99}/* 23.11.2026: rzadka karta */${O} #hbs .hb.afx b{color:var(--afx)!important;text-shadow:0 1px 2px #000,0 0 6px var(--afx)!important}/* 23.11.2026: nazwa elity i czempiona z cecha */${O} #lvBuild .seg i.half{box-shadow:3px 0 0 -1px #e2b44a}/* 22.11.2026: znacznik premii zestawu (4) */
+${O} #end .endbox{width:min(100%,calc(1240 * var(--pc-u)))!important;max-width:100%!important}
+${O} #end .nbs-grid{grid-template-columns:repeat(8,minmax(0,1fr))!important}
+${O} #end .nbs-t small{font-size:calc(13 * var(--pc-u))!important;line-height:1.2!important}
+${O} #end .nbs-cols.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+${O} #end .nbs-cols .nbs-c>.nbs-h:first-child,${O} #end .nbs-cols .nbs-c>.nbs-cause:first-child{margin-top:calc(4 * var(--pc-u))!important}
+${O} #end .nbs-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 calc(28 * var(--pc-u));align-items:start;text-align:left}/* 23.11.2026: podsumowanie nocy w dwoch kolumnach, bez przewijania */
+${O} #end .nbs-cols .nbs-ds{grid-template-columns:minmax(0,1fr)!important}
+${O} #end .nbs-cols .nbs-rw{grid-template-columns:minmax(0,1fr)!important}
+${O} #end .nbs-cols .nbs-dk{text-align:left!important}
+${O} #end .nbs-cols .nbs-cause{display:block!important;margin:calc(10 * var(--pc-u)) 0 0!important}
+${O} #end .nbs-cols .nbs-tip{margin:calc(6 * var(--pc-u)) 0 0!important;max-width:none!important}
+${O} #end .nbs-grid{margin:calc(4 * var(--pc-u)) 0 calc(6 * var(--pc-u))!important;padding:calc(8 * var(--pc-u)) calc(16 * var(--pc-u))!important}
+${O} #end .nbs-t{padding:calc(6 * var(--pc-u)) calc(8 * var(--pc-u))!important}
+${O} #end .nbs-t b{font-size:calc(30 * var(--pc-u))!important;line-height:1.1!important}
 body:has(:is(#pause,#shop,#lvl,#opts):not([hidden])) ${O} .pch-orb{visibility:hidden!important}
 body:has(:is(#title,#kap,#manual,#prep,#end):not([hidden])) ${O} #nbHud .pch{visibility:hidden!important}
 body:not(.padnav) ${O} .nbq-tb.nb-padonly{display:none!important}
