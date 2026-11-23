@@ -144,7 +144,7 @@ function enemyBody(e){return !e.dead&&e.rise<=0&&e.type!=='wisp'&&e.mode!=='merg
 const contactGap=e=>e.r+(BIG.has(e.type)?4:['drowner','zmora','wraith'].includes(e.type)?6:8);
 function playerBodyBlocked(x,y,ox,oy){if(!S||!pl||pl.dead||pl.roll>0)return false;
   for(const e of S.enemies){if(!enemyBody(e))continue;const r=contactGap(e),next=Math.hypot(x-e.x,y-e.y),before=Math.hypot(ox-e.x,oy-e.y);if(next<r-.01&&next<before-.001)return true}return false}
-function moveBox(o,dx,dy,hw,hh,passBodies=false){const free=(x,y)=>!boxSolid(x,y,hw,hh)&&(o!==pl||passBodies||!playerBodyBlocked(x,y,o.x,o.y));if(dx){const nx=o.x+dx;if(free(nx,o.y))o.x=nx}if(dy){const ny=o.y+dy;if(free(o.x,ny))o.y=ny}}
+function moveBox(o,dx,dy,hw,hh,passBodies=false){const mob=W&&W.heroOnly&&o!==pl&&o!==pl1&&o!==pl2,free=(x,y)=>!boxSolid(x,y,hw,hh)&&(o!==pl||passBodies||!playerBodyBlocked(x,y,o.x,o.y))&&!(mob&&(heroOnlyAt(x-hw,y-hh)||heroOnlyAt(x+hw,y-hh)||heroOnlyAt(x-hw,y)||heroOnlyAt(x+hw,y)));if(dx){const nx=o.x+dx;if(free(nx,o.y))o.x=nx}if(dy){const ny=o.y+dy;if(free(o.x,ny))o.y=ny}}
 function keepEnemyDistance(e,ox=e.x,oy=e.y){if(!pl||pl.dead||pl.roll>0||!enemyBody(e))return;
   const gap=contactGap(e),vx=e.x-ox,vy=e.y-oy,px=ox-pl.x,py=oy-pl.y,a=vx*vx+vy*vy,b=2*(px*vx+py*vy),c=px*px+py*py-gap*gap;
   // Clip a movement segment at the hero's body, including a fast leap or charge.

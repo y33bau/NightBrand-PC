@@ -830,7 +830,7 @@ function cutCircle(mat){mat.onBeforeCompile=sh=>{sh.uniforms.uCut=CUT;sh.uniform
 // Chapter III meshes: reuses the Lower City stone and village ground, adds golden domes, lit windows and rot
 /* 23.11.2026 (autor: nowe moduly Zlotogrodu): waska kamienica z podcieniem, narozna kamienica ze schodami, kamienica z wykuszem, mala kaplica.
    Kazda bryla budowana w ukladzie lokalnym (front = +z) i obracana wg ZL_NOWE; tekstury autora: tynk wapienny, mur kamienny, dachowka, miedz, stare zlocenie. */
-function zlNoweBuild(){
+function zlNoweBuild(){const WR=W;
  const M=(k,sc,col,o)=>worldSurfN(cutCircle(phong(Object.assign({color:col},o||{}))),k,sc,1);
  const plaster=M('tgm1_tynk_wapienny',2.6,0xe6ddd0),stone=M('tgm2_mur_kamienny',1.5,0xd4ccc0),stoneD=M('tgm2_mur_kamienny',1.1,0xa89e92),
   tiles=M('tgm3_dachowka_gliniana',1.3,0xc4b4a6,{side:THREE.DoubleSide}),copper=M('tzl1_miedz_patynowana',1.5,0xf4f8f6,{side:THREE.DoubleSide,specular:0x5a7a70,shininess:26}),
@@ -838,9 +838,13 @@ function zlNoweBuild(){
   glassL=cutCircle(phong({color:0x17120e,emissive:0x6a3c12,specular:0x333333,shininess:40})),glassD=cutCircle(phong({color:0x121418,specular:0x444444,shininess:50})),
   iron=cutCircle(phong({color:0x34302c,specular:0x222222,shininess:20}));
  let rs=7;const rnd=()=>(rs=(rs*16807)%2147483647)/2147483647;
- for(const [gx,gy,gw,gh,kind,face] of ZL_NOWE){
-  const B=SR({x:gx,y:gy,w:gw,h:gh}),side=face==='E'||face==='W',W=side?B.h:B.w,D=side?B.w:B.h;
-  const grp=new THREE.Group();grp.position.set(B.x+B.w/2,0,B.y+B.h/2);grp.rotation.y={S:0,E:Math.PI/2,N:Math.PI,W:-Math.PI/2}[face]||0;ROOT.add(grp);
+ // 23.11.2026 (autor: spojnosc budynkow): stare kamienice (HOUSES) skladane tym samym zestawem co nowe; na domach z kopula plaski taras pod beben
+ const LIST=ZL_NOWE.map(B=>[...B,{}]).concat(HOUSES.map((B,i)=>[...B,'kamienica','S',{dome:DOMES.some(([x,z,r,k])=>k==='h'&&x>B[0]&&x<B[0]+B[2]&&z>B[1]&&z<B[1]+B[3]),door:![2,5,6].includes(i)}]));
+ if(W.heriHouse){const h=W.heriHouse;LIST.push([h.x,h.y,h.w,h.h,'heri','S',{world:1,door:h.door}])}
+ const grps=[];
+ for(const [gx,gy,gw,gh,kind,face,opt] of LIST){
+  const B=opt.world?{x:gx,y:gy,w:gw,h:gh}:SR({x:gx,y:gy,w:gw,h:gh}),side=face==='E'||face==='W',W=side?B.h:B.w,D=side?B.w:B.h;
+  const grp=new THREE.Group();grp.position.set(B.x+B.w/2,0,B.y+B.h/2);grp.rotation.y={S:0,E:Math.PI/2,N:Math.PI,W:-Math.PI/2}[face]||0;ROOT.add(grp);grps.push(grp);if(['wykusz','podcien','naroznik'].includes(kind))grp.scale.y=.75;
   const add=(g,m,x,y,z,ry)=>{const o=new THREE.Mesh(g,m);o.position.set(x,y,z);if(ry)o.rotation.y=ry;o.castShadow=o.receiveShadow=true;grp.add(o);return o};
   const box=(w,h,d,m,x,y0,z,ry)=>add(new THREE.BoxGeometry(w,h,d),m,x,y0+h/2,z,ry);
   // okno: kamienna opaska + szyba (czesc swieci cieplo); ry obraca na sciane boczna
@@ -859,14 +863,46 @@ function zlNoweBuild(){
    const gg=new THREE.BufferGeometry();gg.setAttribute('position',new THREE.Float32BufferAttribute(t,3));gg.computeVertexNormals();const gm=add(gg,wallM,0,0,0);gm.material=wallM;
    const ridge=new THREE.Mesh(new THREE.BoxGeometry(alongZ?.16:L*2,.14,alongZ?L*2:.16),stoneD);ridge.position.y=base+rise+.04;grp.add(ridge)};
   // dach czterospadowy (naroznik)
-  const hip=(w,d,base,rise,roofM,oh=.32)=>{const a=w/2+oh,b=d/2+oh,k=Math.max(0,a-b),pts=[],tri=(p,q,r)=>pts.push(...p,...q,...r),T=base+rise,dy=oh*rise/Math.min(w,d)*2,y0=base-dy;
+  const hip=(w,d,base,rise,roofM,oh=.32)=>{const sw=d>w;if(sw){const t=w;w=d;d=t}const a=w/2+oh,b=d/2+oh,k=Math.max(0,a-b),pts=[],tri=(p,q,r)=>pts.push(...p,...q,...r),T=base+rise,dy=oh*rise/Math.min(w,d)*2,y0=base-dy;
    const r0=[-k,T,0],r1=[k,T,0],c=[[-a,y0,-b],[a,y0,-b],[a,y0,b],[-a,y0,b]];
    tri(r0,c[3],c[2]);tri(r0,c[2],r1);tri(r1,c[1],c[0]);tri(r1,c[0],r0);tri(r1,c[2],c[1]);tri(r0,c[0],c[3]);
-   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));g.computeVertexNormals();add(g,roofM,0,0,0)};
+   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));g.computeVertexNormals();const hm=add(g,roofM,0,0,0);if(sw)hm.rotation.y=Math.PI/2;return hm};
   function otri(arr){return(p,q,r,want)=>{const ux=q[0]-p[0],uy=q[1]-p[1],uz=q[2]-p[2],vx=r[0]-p[0],vy=r[1]-p[1],vz=r[2]-p[2],nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx;
    if(nx*want[0]+ny*want[1]+nz*want[2]<0)arr.push(...p,...r,...q);else arr.push(...p,...q,...r)}}
   const cornice=(w,d,y)=>box(w+.24,.2,d+.24,stoneD,0,y,0);
-  if(kind==='wykusz'){// kamienica z wykuszem: okap do ulicy, wykusz na pietrze nad chodnikiem
+  if(kind==='kamienica'){const E=4.6;box(W,.9,D,stone,0,0,0);box(W-.1,E-.9,D-.1,plaster,0,.9,0);cornice(W,D,E-.1);
+   for(const sx of [-1,1])for(const sz of [-1,1])for(let i=0;i<5;i++){const big=i%2===0;box(big?.6:.42,.4,big?.42:.6,stoneD,sx*(W/2-.17),1.0+i*.72,sz*(D/2-.17))}
+   const faceW=(len,pos,ry,front)=>{const k=Math.max(2,Math.round(len/1.8));for(let i=0;i<k;i++){const t=-len/2+len*(i+.5)/k;
+     if(i>0){const [px,pz]=pos(-len/2+len*i/k,.04);box(.32,E-1.0,.12,stoneD,px,.9,pz,ry)}
+     for(const y of [1.85,3.35]){if(front&&opt.door&&y<2.5&&Math.abs(t)<len/k*.6)continue;const [wx,wz]=pos(t,0);win(wx,y,wz,ry,.55,.92)}}};
+   faceW(W,(t,o)=>[t,D/2+o-.02],0,true);faceW(W,(t,o)=>[-t,-D/2-o+.02],Math.PI,false);faceW(D,(t,o)=>[W/2+o-.02,-t],Math.PI/2,false);faceW(D,(t,o)=>[-W/2-o+.02,t],-Math.PI/2,false);
+   if(opt.door)door(0,D/2-.02,0,1.1,2.0);
+   if(opt.dome){box(W+.1,.25,D+.1,stoneD,0,E,0);for(const [w2,d2,x,z] of [[W,.28,0,D/2-.14],[W,.28,0,-D/2+.14],[.28,D,W/2-.14,0],[.28,D,-W/2+.14,0]]){box(w2,.5,d2,plaster,x,E+.25,z);box(w2+.06,.09,d2+.06,stoneD,x,E+.75,z)}}
+   else hip(W,D,E+.05,2.3,tiles);
+  }else if(kind==='heri'){/* dom Heriego: kamien + tynk, waskie drzwi od frontu, dach znika, gdy bohater jest blisko */
+   const Hw=3.4,dl=opt.door[0]+.5-(B.x+B.w/2),wl=(w,d,x,z)=>{box(w,1.1,d,stone,x,0,z);box(w-.04,Hw-1.1,d-.04,plaster,x,1.1,z);box(w+.08,.18,d+.08,stoneD,x,Hw,z)};
+   wl(W,1,0,-D/2+.5);wl(1,D-2,-W/2+.5,0);wl(1,D-2,W/2-.5,0);const L1=dl-.5+W/2,L2=W/2-dl-.5;if(L1>.05)wl(L1,1,-W/2+L1/2,D/2-.5);if(L2>.05)wl(L2,1,W/2-L2/2,D/2-.5);
+   box(1,Hw-2.3,1,plaster,dl,2.3,D/2-.5);box(1.08,.18,1.08,stoneD,dl,Hw,D/2-.5);for(const sg of [-1,1])box(.2,2.3,1.04,stoneD,dl+sg*.41,0,D/2-.5);
+   add(new THREE.TorusGeometry(.33,.09,6,12,Math.PI),stoneD,dl,1.98,D/2+.02);box(.16,.24,.14,stoneD,dl,2.26,D/2+.05);box(.95,.08,.5,stoneD,dl,0,D/2+.22);
+   box(.06,2.0,.6,wood,dl-.29,0,D/2-1.32);add(new THREE.TorusGeometry(.05,.015,4,8),iron,dl-.25,1.0,D/2-1.5,Math.PI/2);
+   for(const [x,z,ry] of [[-W/2+1.9,D/2-.02,0],[W/2-1.8,D/2-.02,0],[W/2-.02,0,Math.PI/2],[-W/2+.02,0,-Math.PI/2]])win(x,2.0,z,ry,.55,.85);
+   box(.05,.05,.45,iron,dl+.85,2.45,D/2+.22);box(.03,.22,.03,iron,dl+.85,2.25,D/2+.43);add(new THREE.BoxGeometry(.2,.28,.2),glassL,dl+.85,2.05,D/2+.43);box(.24,.05,.24,iron,dl+.85,2.2,D/2+.43);
+   const red=cutCircle(phong({color:0x7a1e1a,side:THREE.DoubleSide}));box(.72,1.35,.04,red,dl-1.35,1.1,D/2+.05);box(.86,.05,.05,gold,dl-1.35,2.47,D/2+.08);add(new THREE.CylinderGeometry(.17,.17,.03,14),gold,dl-1.35,1.95,D/2+.09).rotation.x=Math.PI/2;
+   for(let i=0;i<3;i++)add(new THREE.ConeGeometry(.12,.22,3),red,dl-1.35-.24+i*.24,1.0,D/2+.05).rotation.x=Math.PI;
+   /* wnetrze: palenisko, prycza, stol, stojak z bronia */
+   box(1.5,1.25,.55,stoneD,2.6,0,-D/2+1.27);box(.8,.6,.2,cutCircle(phong({color:0x120806,emissive:0x5a1e06})),2.6,.1,-D/2+1.5);box(1.7,.12,.65,stoneD,2.6,1.25,-D/2+1.27);
+   box(1.8,.3,.8,wood,.2,0,-D/2+1.45);box(1.6,.1,.65,red,.2,.3,-D/2+1.45);
+   box(1.0,.06,.62,wood,2.4,.74,.5);for(const [lx,lz] of [[-.42,-.24],[.42,-.24],[-.42,.24],[.42,.24]])box(.07,.74,.07,wood,2.4+lx,0,.5+lz);box(.4,.45,.4,wood,1.6,0,.6);
+   box(.08,1.7,.08,wood,-W/2+1.2,0,-.2);box(.08,1.7,.08,wood,-W/2+1.2,0,.9);box(.08,.08,1.2,wood,-W/2+1.2,1.4,.35);
+   for(let i=0;i<3;i++){add(new THREE.CylinderGeometry(.03,.03,2.0,6),wood,-W/2+1.25,1.0,-.05+i*.35);add(new THREE.ConeGeometry(.06,.25,4),iron,-W/2+1.25,2.1,-.05+i*.35)}
+   add(new THREE.CylinderGeometry(.36,.36,.06,16),red,-W/2+1.13,.75,.35).rotation.z=Math.PI/2;
+   /* dach osobno (przezroczysty, znika przy bohaterze) */
+   const T=o=>{const m=o;m.transparent=true;m.opacity=1;return m},rTile=T(worldSurfN(cutCircle(phong({color:0xc4b4a6,side:THREE.DoubleSide})),'tgm3_dachowka_gliniana',1.3,1)),
+    rCop=T(worldSurfN(cutCircle(phong({color:0xf4f8f6,side:THREE.DoubleSide,specular:0x5a7a70,shininess:26})),'tzl1_miedz_patynowana',1.5,1)),rSt=T(worldSurfN(cutCircle(phong({color:0xa89e92})),'tgm2_mur_kamienny',1.1,1));
+   const g0=grp.children.length;hip(W+.1,D+.1,Hw+.12,2.1,rTile);box(.7,1.3,.7,rSt,2.6,Hw+.8,-D/2+1.27);add(new THREE.CylinderGeometry(.5,.55,.6,8),rSt,-.6,Hw+2.0,0);add(new THREE.ConeGeometry(.62,.9,8),rCop,-.6,Hw+2.75,0);add(new THREE.SphereGeometry(.07,8,6),gold,-.6,Hw+3.25,0);
+   const roofG=new THREE.Group();roofG.position.copy(grp.position);ROOT.add(roofG);for(const o of grp.children.slice(g0))roofG.add(o);
+   WR.roofs=(WR.roofs||[]).concat([{x:B.x-2.5,y:B.y-2.5,w:B.w+5,h:B.h+4.5,mesh:roofG,mats:[rTile,rCop,rSt],a:1}]);
+  }else if(kind==='wykusz'){// kamienica z wykuszem: okap do ulicy, wykusz na pietrze nad chodnikiem
    box(W,.9,D,stone,0,0,0);box(W-.1,5.2,D-.1,plaster,0,.9,0);cornice(W,D,6.0);gable(W,D,6.2,2.3,false,tiles,plaster);
    door(-W/4,D/2-.04);win(W/4,1.55,D/2-.02,0);const ox=.7,ow=2.3,od=.85;
    for(const y of [3.1,4.7])win(-W/2+1.05,y,D/2-.02,0);for(const y of [3.1,4.7])for(const x of [-W/2+1.05,0,W/2-1.05])win(x,y,-D/2+.02,Math.PI);
@@ -915,6 +951,11 @@ function zlNoweBuild(){
    const B2=bt+1.26;add(new THREE.LatheGeometry(pts,16),copper,0,B2,bz);add(new THREE.CylinderGeometry(.025,.025,.5,6),gold,0,B2+1.74,bz);add(new THREE.BoxGeometry(.3,.045,.045),gold,0,B2+1.84,bz);add(new THREE.SphereGeometry(.07,8,6),gold,0,B2+1.59,bz);
   }
  }
+ /* scalenie statycznych brył po materiale: setki okien i detali w kilkanaście siatek */
+ ROOT.updateMatrixWorld(true);const inv=new THREE.Matrix4().copy(ROOT.matrixWorld).invert(),mm=new THREE.Matrix4(),byM=new Map();
+ for(const g of grps){g.traverse(o=>{if(!o.isMesh)return;const geo=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();if(!geo.attributes.normal)geo.computeVertexNormals();geo.applyMatrix4(mm.multiplyMatrices(inv,o.matrixWorld));
+   let e=byM.get(o.material);if(!e){e={p:[],n:[]};byM.set(o.material,e)}const P=geo.attributes.position.array,N=geo.attributes.normal.array;for(let i=0;i<P.length;i++){e.p.push(P[i]);e.n.push(N[i])}geo.dispose()});ROOT.remove(g)}
+ for(const [mat,e] of byM){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(e.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(e.n,3));const m=new THREE.Mesh(g,mat);m.castShadow=m.receiveShadow=true;ROOT.add(m)}
 }
 function buildStolica(I){planGround(3);
   const r=rng(313),fc=canvas(WW,WH),fg=fc.getContext('2d'),ZG=I.zl_ground,ZW=I.zl_walls,ZP=I.zl_props;
@@ -951,7 +992,7 @@ function buildStolica(I){planGround(3);
     if(trim&&depthOn(3)&&I.wl_cap){const lg=new THREE.BoxGeometry(1.14,.24,1.14);lg.translate(0,h-.1,0);instanced(lg,worldSurf(cutCircle(phong({color:0xe4dccb})),I.wl_cap,2.2,'c'),list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5));const pg=new THREE.BoxGeometry(1.1,.42,1.1);pg.translate(0,.21,0);instanced(pg,worldSurf(cutCircle(phong({color:0x8f887c})),I.wl_cap,2.2,'c'),list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))}};
   const inB=(B,x,y)=>x>=B.x&&x<B.x+B.w&&y>=B.y&&y<B.y+B.h;
   const G={outer:[[],[]],house:[[],[],[],[]],cath:[[],[]],palace:[],chapel:[],mon:[[],[]],shack:[[],[]]};
-  const ZLN=nbParam('zlnowe')!=='0'?ZL_NOWE.map(B=>SR({x:B[0],y:B[1],w:B[2],h:B[3]})):[];// 23.11.2026: pola nowych modulow rysuje zlNoweBuild
+  const ZLN=nbParam('zlnowe')!=='0'&&typeof OSADA_TX!=='undefined'?ZL_NOWE.concat(HOUSES).map(B=>SR({x:B[0],y:B[1],w:B[2],h:B[3]})):[];if(W.heriHouse)ZLN.push(W.heriHouse);// 23.11.2026: pola nowych modulow rysuje zlNoweBuild
   for(const [x,y,t] of walls){
     if(ZLN.some(B=>inB(B,x,y)))continue;
     if(t===21)G.outer[(x+y)&1].push([x,y]);
@@ -1005,7 +1046,7 @@ function buildStolica(I){planGround(3);
     for(let i=0;i<8;i++){const a=i*Math.PI/4,w=new THREE.Mesh(new THREE.PlaneGeometry(rad*.07,rad*.18),winM);w.position.set(x+Math.sin(a)*rad*.172,base+rad*.45+rad*.77+rad*.21,z+Math.cos(a)*rad*.172);w.rotation.y=a;parts.push(w)}
     parts.push(lan,lcap);for(const m of parts){m.castShadow=true;m.receiveShadow=true;ROOT.add(m)}};
   const newDomes=nbParam('kopuly')!=='0';let di=0;
-  for(const [x,z,rad,k] of DOMES){const base={c:4,h:3.2,s:3,p:4.5}[k];if(!newDomes||k==='c'){dome(MP(x),MP(z),rad*MK,base,k);continue}
+  for(const [x,z,rad,k] of DOMES){const base={c:4,h:ZLN.length&&typeof OSADA_TX!=='undefined'?4.85:3.2,s:3,p:4.5}[k];if(!newDomes||k==='c'){dome(MP(x),MP(z),rad*MK,base,k);continue}
    (k==='s'||(k==='h'&&di++%2===0)?onion:ribbed)(MP(x),MP(z),rad*MK,base)}
   // slate pyramid roofs and thatched shacks
   const slT=texFrom(tcut(ZW,1,4),true);slT.repeat.set(3,2);
@@ -1019,9 +1060,9 @@ function buildStolica(I){planGround(3);
     const endMat=I.wl_town?worldSurf(cutCircle(phong({color:0xc4bba9})),I.wl_town,5,'c'):cutCircle(phong({color:0x675e50})),em=new THREE.Mesh(roofGeo([f,a,d,b,e,c],[[0,0],[depth/4,0],[depth/8,rise/4],[0,0],[depth/4,0],[depth/8,rise/4]]),endMat);em.position.copy(roof.position);em.rotation.copy(roof.rotation);em.castShadow=em.receiveShadow=true;ROOT.add(em);
     const rg=new THREE.CylinderGeometry(.16,.16,length+.08,10,1,true,0,Math.PI),uv=rg.attributes.uv;for(let i=0;i<uv.count;i++){const cu=uv.getX(i),cv=uv.getY(i);uv.setXY(i,cv*(length+.08)/4,cu)}uv.needsUpdate=true;rg.rotateZ(Math.PI/2);
     const ridge=new THREE.Mesh(rg,roofMat('p3_roof_ridge'));ridge.position.copy(roof.position);ridge.position.y+=rise-.025;ridge.rotation.copy(roof.rotation);ridge.castShadow=ridge.receiveShadow=true;ROOT.add(ridge)};
-  if(I.p3_roof_tile&&I.p3_roof_tile_gold&&I.p3_roof_ridge)HOUSES.forEach((B,i)=>gable(B,[1,3,6].includes(i)?'p3_roof_tile_gold':'p3_roof_tile'));
+  if(I.p3_roof_tile&&I.p3_roof_tile_gold&&I.p3_roof_ridge&&!(ZLN.length&&typeof OSADA_TX!=='undefined'))HOUSES.forEach((B,i)=>gable(B,[1,3,6].includes(i)?'p3_roof_tile_gold':'p3_roof_tile'));
   else for(const B of [[3,3,7,6],[3,12,7,6],[13,22,7,5],[55,3,6,7]]){const {x,y,w,h}=SR({x:B[0],y:B[1],w:B[2],h:B[3]});const m=new THREE.Mesh(pyr,slate);m.scale.set(w,2.2,h);m.position.set(x+w/2,3.2+1.1,y+h/2);m.castShadow=true;m.receiveShadow=true;ROOT.add(m)}
-  for(const B of SHACKS){if(I.p3_roof_shack&&I.p3_roof_ridge){gable(B,'p3_roof_shack',2.8,1.3);continue}const {x,y,w,h}=SR({x:B[0],y:B[1],w:B[2],h:B[3]});const m=new THREE.Mesh(pyr,thatch);m.scale.set(w+.3,1.5,h+.3);m.position.set(x+w/2,2.8+.75,y+h/2);m.castShadow=true;m.receiveShadow=true;ROOT.add(m)}
+  for(const B of SHACKS){if(W.heriClear&&W.heriClear.includes(SHACKS.indexOf(B)))continue;if(I.p3_roof_shack&&I.p3_roof_ridge){gable(B,'p3_roof_shack',2.8,1.3);continue}const {x,y,w,h}=SR({x:B[0],y:B[1],w:B[2],h:B[3]});const m=new THREE.Mesh(pyr,thatch);m.scale.set(w+.3,1.5,h+.3);m.position.set(x+w/2,2.8+.75,y+h/2);m.castShadow=true;m.receiveShadow=true;ROOT.add(m)}
   // cloister pillars of the fire monastery
   let pilT=texFrom(tcut(ZW,0,2),true);pilT.repeat.set(2,3);let stoneT=texFrom(tcut(ZG,1,0),true);
   if(I.wl_kolumna){const mk=(im,rx,ry)=>{const t=new THREE.Texture(im);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.magFilter=THREE.LinearFilter;t.minFilter=THREE.LinearMipmapLinearFilter;t.generateMipmaps=true;t.repeat.set(rx,ry);t.needsUpdate=true;return t};pilT=mk(I.wl_kolumna,2,3);stoneT=mk(I.wl_kolumna,.5,.25)}

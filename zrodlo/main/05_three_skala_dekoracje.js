@@ -167,6 +167,51 @@ function roofGeo(W,D,rise){const ax=W>=D,L=ax?W:D,T=ax?D:W,hT=T/2,sl=Math.hypot(
    slupy narozne, rama drzwi, zawalone belki w srodku. Wiezba i poszycie znikaja, gdy bohater jest w srodku (jak stary dach).
    Tekstury: wl_palecap (drewno), p1_roof_burnt (poszycie); BURNT_TEX pozwala podmienic na nowe (t2_belka, t3_poszycie). ?spalone=0 = stary dach. */
 const BURNT_TEX={beam:null,roof:null};
+/* 23.11.2026 (autor: sklep Margi ma wygladac jak sklep): daszek w pasy nad wejsciem na dwoch slupkach, szyld z czaszka na wysiegniku,
+   lada z towarem za wejsciem, regal z towarem pod tylna sciana, skrzynie i beczki przy scianie, latarnie pod daszkiem. Bez kolizji (tylko oprawa). */
+function margaShop(r,wall,put,box,acc,mesh){
+ const fy=r.y+r.h-1;let ox0=-1,ox1=-1;for(let x=r.x+1;x<r.x+r.w-1;x++)if(!wall.has(fy*MW+x)){if(ox0<0)ox0=x;ox1=x}
+ if(ox0<0){ox0=Math.floor(r.x+r.w/2)-2;ox1=ox0+4}
+ const z0=r.y+r.h,xa=ox0,xb=ox1+1,cx=(xa+xb)/2,span=xb-xa,zi=r.y+1.9;
+ const cyl=new THREE.CylinderGeometry(.5,.5,1,10).toNonIndexed(),sph=new THREE.SphereGeometry(.5,10,7).toNonIndexed();
+ const A={wood:acc(),dark:acc(),clA:acc(),clB:acc(),bone:acc(),glass:acc(),glassR:acc(),fl:acc(),gold:acc(),iron:acc(),lamp:acc()};
+ // daszek: slupki, belka, pasy plotna od sciany do belki, falbana
+ const zp=z0+1.45,hp=1.62,hw=1.98;
+ for(const x of [xa+.12,xb-.12]){put(A.wood,box,x,hp/2,zp,.16,hp,.16);put(A.dark,box,x,.06,zp,.26,.12,.26)}
+ put(A.wood,box,cx,hp+.05,zp,span+.1,.14,.14);
+ const n=Math.max(4,Math.round(span/.5)),ln=Math.hypot(zp-z0,hw-hp),ang=Math.atan2(hw-hp,zp-z0);
+ for(let i=0;i<n;i++){const x=xa+(i+.5)*span/n;put(i%2?A.clB:A.clA,box,x,(hw+hp)/2+.08,(z0+zp)/2,span/n+.005,.03,ln+.12,ang,0,0);
+  put(i%2?A.clB:A.clA,box,x,hp-.04,zp+.08,span/n+.005,.22,.025)}
+ // latarnie pod daszkiem
+ for(const x of [cx-span*.3,cx+span*.3]){put(A.iron,cyl,x,hp-.2,zp-.08,.02,.36,.02);put(A.iron,box,x,hp-.4,zp-.08,.2,.04,.2);put(A.lamp,box,x,hp-.56,zp-.08,.16,.26,.16);put(A.iron,box,x,hp-.71,zp-.08,.2,.04,.2)}
+ // szyld na wysiegniku przy prawym slupku: deska z czaszka i skrzyzowanymi koscmi
+ const sx=xb+.55,sy=1.3;put(A.iron,box,xb+.3,hp-.02,zp,.75,.05,.05);for(const d of [-.28,.28])put(A.iron,cyl,sx+d,hp-.15,zp,.015,.26,.015);
+ put(A.dark,box,sx,sy-.02,zp,.86,.5,.06);put(A.wood,box,sx,sy,zp+.01,.76,.4,.06);
+ put(A.bone,sph,sx,sy+.04,zp+.07,.17,.17,.1);put(A.dark,box,sx-.04,sy+.05,zp+.12,.04,.04,.02);put(A.dark,box,sx+.04,sy+.05,zp+.12,.04,.04,.02);
+ for(const a of [.7,-.7])put(A.bone,cyl,sx,sy-.06,zp+.06,.025,.42,.025,0,0,a);
+ // lada za wejsciem z towarem
+ const zc=z0-1.25,cl=span-.8;put(A.wood,box,cx,.42,zc,cl,.84,.5);put(A.dark,box,cx,.87,zc,cl+.14,.06,.62);
+ const goods=(px,pz,y,k)=>{if(k===0){put(A.bone,sph,px,y+.1,pz,.2,.18,.18);put(A.bone,box,px,y+.03,pz+.05,.1,.06,.08)}
+  else if(k===1){put(A.glass,cyl,px,y+.13,pz,.14,.26,.14);put(A.dark,cyl,px,y+.28,pz,.09,.05,.09)}
+  else if(k===2){put(A.glassR,sph,px,y+.08,pz,.15,.15,.15);put(A.dark,cyl,px,y+.18,pz,.04,.08,.04)}
+  else if(k===3){for(let j=0;j<4;j++)put(A.gold,cyl,px+(j%2)*.03,y+.015+j*.03,pz,.12,.025,.12)}
+  else if(k===4){put(A.bone,cyl,px,y+.05,pz,.04,.4,.04,0,0,Math.PI/2);put(A.bone,cyl,px+.05,y+.09,pz+.03,.035,.36,.035,0,.5,Math.PI/2)}
+  else{put(A.bone,cyl,px,y+.1,pz,.05,.2,.05);put(A.fl,sph,px,y+.24,pz,.05,.08,.05)}};
+ for(let i=0;i<7;i++)goods(cx-cl/2+.35+i*(cl-.7)/6,zc+(i%2?.08:-.08),.9,[0,1,5,3,2,4,1][i]);
+ // regal pod tylna sciana
+ const rw=Math.min(6,r.w-5);for(const x of [cx-rw/2,cx+rw/2,cx])put(A.wood,box,x,.95,zi,.1,1.9,.38);
+ for(const y of [.45,1.0,1.55])put(A.wood,box,cx,y,zi,rw+.1,.05,.42);
+ let k=0;for(const y of [.47,1.02,1.57])for(let i=0;i<8;i++){const px=cx-rw/2+.4+i*(rw-.8)/7;if((i+k)%5===4)continue;goods(px,zi,y,(i*3+k)%6)}k++;
+ // skrzynie, beczki i kosz z koscmi przy scianie, z obu stron wejscia
+ const crate=(x,z,s,rot)=>{put(A.wood,box,x,s/2,z,s,s,s,0,rot,0);put(A.dark,box,x,s+.01,z,s+.03,.03,.1,0,rot,0)};
+ const barrel=(x,z)=>{put(A.wood,cyl,x,.42,z,.5,.84,.5);for(const y of [.15,.69])put(A.iron,cyl,x,y,z,.52,.05,.52)};
+ crate(xa-.9,z0+.45,.6,.2);crate(xa-.85,z0+.45,.42,-.3);put(A.wood,box,xa-.85,.6+.21,z0+.45,.42,.42,.42,0,-.3,0);barrel(xa-1.7,z0+.5);
+ barrel(xb+1.0,z0+.48);crate(xb+1.8,z0+.5,.55,.5);put(A.dark,cyl,xb+1.0,.86,z0+.48,.46,.04,.46);goods(xb+1.0,z0+.48,.88,0);goods(xb+.92,z0+.4,.88,4);
+ const M=(c,o)=>cutaway(phong(Object.assign({color:c},o||{})));
+ const mats={wood:worldSurfN(cutaway(phong({color:0xe0d4c8})),'t2_belka',1.1,1),dark:M(0x4a3c32),clA:M(0x5a221c,{side:THREE.DoubleSide}),clB:M(0x7e7260,{side:THREE.DoubleSide}),
+  bone:M(0xd8cab0,{specular:0x222018,shininess:8}),glass:M(0x223a2c,{emissive:0x0e3a1c,specular:0x88aa99,shininess:60}),glassR:M(0x3a1414,{emissive:0x4a0e0a,specular:0xaa8888,shininess:60}),
+  fl:phong({color:0xffe0a0,emissive:0xffa040}),gold:M(0xb89040,{emissive:0x2a1c06,specular:0x806020,shininess:30}),iron:M(0x2e2a28,{specular:0x222222,shininess:20}),lamp:phong({color:0xffd090,emissive:0xd07020})};
+ for(const key in A)if(A[key].p.length)mesh(A[key],mats[key])}
 function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[2]===48).map(([x,y])=>y*MW+x));
  const wood=BURNT_TEX.beam||IMGS.wl_palecap||IMGS.wl_chata,roofIm=BURNT_TEX.roof||IMGS.p1_roof_burnt||IMGS.wl_chata;
  const NT=typeof OSADA_TX!=='undefined',postM=NT?worldSurfN(cutaway(phong({color:0xe8dcd0})),'t2_belka',1.3,1.2):worldSurf(cutaway(phong({color:0x8c7868})),wood,1.3,'a');
@@ -205,9 +250,10 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
   const woodM=NT?worldSurfN(phong({color:0xe8dcd0,transparent:true,opacity:1}),'t2_belka',1.3,1.2):worldSurf(phong({color:0x8c7868,transparent:true,opacity:1}),wood,1.3,'a');
   const g=new THREE.Group();g.add(mesh(wood_,woodM));if(roof.p.length)g.add(mesh(roof,roofM));w.group.add(g);
   r.mats=[woodM,roofM];r.mesh=g;r.a=1}
+ if(margaR&&margaR.w/margaR.h>1.6&&NT&&nbParam('sklep')!=='0')margaShop(margaR,wall,put,box,acc,mesh);// 23.11.2026 (autor: sklep bardziej sklepowy)
  if(posts.p.length)mesh(posts,postM);if(floors.p.length){const f=mesh(floors,worldSurfN(phong({color:0x8c847c}),'t5_podloga',2.6,1.1));f.castShadow=false}}
 function buildRoofs(w){if(!w.roofs||!w.group)return;if(w.ch===1&&IMGS.wl_palecap&&nbParam('spalone')!=='0'){burntHouses(w);return}const rm=[];
- for(const r of w.roofs){if(r.tri)continue;/* 23.11.2026: dom z modelu ma wlasny dach */const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
+ for(const r of w.roofs){if(r.tri||r.mesh)continue;/* 23.11.2026: dom z modelu ma wlasny dach */const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
   const m=new THREE.Mesh(roofGeo(W,D,rise),new THREE.MeshLambertMaterial({color:0x4a382c,transparent:true,opacity:1,side:THREE.DoubleSide,vertexColors:true}));
   m.position.set(r.x+r.w/2,1.9,r.y+r.h/2);m.castShadow=false;m.receiveShadow=false;m.renderOrder=3;w.group.add(m);r.mesh=m;r.a=1;rm.push(r)}
  roofImg(im=>{const hdIm=CH===1?(IMGS.p1_roof_burnt||IMGS.rf_lupek):null;if(hdIm)im=hdIm;const hd=!!hdIm;const t=new THREE.Texture(im);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=hd?8:4;t.needsUpdate=true;for(const r of rm){r.mesh.material.map=t;if(hd&&CH===1)r.mesh.material.color.setRGB(2.15,1.9,1.7);/* 22.11.2026: tekstura zgliszczy srednio 34/255 = czarna plyta; rozjasnienie ok. 2x, cieply odcien */else r.mesh.material.color.setHex(hd?0xe4d4c8:0xd8c8bc);r.mesh.material.needsUpdate=true}})}

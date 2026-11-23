@@ -37,7 +37,7 @@ function portEnemyArt(key){
  portSkins.set(key,skin);return skin;
 }
 /* 22.11.2026 (zgoda autora): zycie mobkow rosnie wolno na poczatku i coraz szybciej po polnocy: x0,6 -> x0,86 (4 min) -> x1,39 (8) -> x2,11 (12) -> x3,0 (16) */function nightHp(){return .6+2.4*Math.pow(Math.min(S.t,NIGHT)/NIGHT,1.6)}
-function spawnEnemy(type,x,y,extra){if((type==='xbow'||type==='monk')&&S.enemies.reduce((n,o)=>n+(!o.dead&&(o.type==='xbow'||o.type==='monk')?1:0),0)>=2)type=type==='monk'?'madman':'bandit';// max 2 strzelców naraz; reszta walczy w zwarciu
+function spawnEnemy(type,x,y,extra){if(W&&W.heriHouse&&heroOnlyAt(x,y)){const d=W.heriHouse.door;x=(d[0]+.5)*TS;y=(d[1]+1.7)*TS}if((type==='xbow'||type==='monk')&&S.enemies.reduce((n,o)=>n+(!o.dead&&(o.type==='xbow'||o.type==='monk')?1:0),0)>=2)type=type==='monk'?'madman':'bandit';// max 2 strzelców naraz; reszta walczy w zwarciu
   const T=ET[type],mul=(BIG.has(type)||type==='collector'?1:nightHp()*(surgeOn()?.45:1))/* 15.11.2026: wzrost zycia liczony od ulamka nocy (koniec nocy = jak dawniej), mobki -20%, w Naporze slabsze */*S.pk.ehp*DF[DIFFK].hp*chapterHp(type);
   const e=Object.assign({type,x,y,hp:T.hp*mul,max:T.hp*mul,spd:T.spd*rnd(.9,1.1),r:T.r,dmg:T.dmg,xp:T.xp,vx:0,vy:0,flash:0,walk:Math.random()*5,s:1,ph:Math.random()*9,leap:0,lcd:2,side:Math.random()<.5?1:-1,
     frozen:0,bleed:0,bleedT:0,rise:type==='bat'?0:.5,atkA:0,slamT:4,atkT:0,dead:false},extra||{});
@@ -163,6 +163,7 @@ function updEnemy(e,dt){
   if(d>.001){e.contactNX=dx/d;e.contactNY=dy/d}
   const lock=attackCue(e)!==null&&e.mode!=='up',mode=e.mode;
   stepEnemyAI(e,dt);
+  if(W.heroOnly&&heroOnlyAt(e.x,e.y)&&!heroOnlyAt(ox,oy)){e.x=ox;e.y=oy}
   if(lock&&!e.dead&&e.mode===mode){e.x=ox;e.y=oy}
   keepEnemyDistance(e,ox,oy);keepGolemDistance(e);
 }
@@ -446,12 +447,12 @@ function sightSword(x0,y0,x1,y1){const n=Math.ceil(Math.hypot(x1-x0,y1-y0)/8);fo
 // Wróg, który nie widzi bohatera przez ścianę, idzie po niej: wychodzi z domów drzwiami i obchodzi przeszkody.
 const NAV={d:null,q:null,t:0};
 function navUpdate(dt){NAV.t-=dt;if(NAV.t>0||!pl)return;NAV.t=.35;const n=MW*MH;if(!NAV.d||NAV.d.length!==n){NAV.d=new Int16Array(n);NAV.q=new Int32Array(n)}
-  const D=NAV.d,Q=NAV.q,tx=Math.floor(pl.x/TS),ty=Math.floor(pl.y/TS);D.fill(-1);if(tx<0||ty<0||tx>=MW||ty>=MH)return;let h=0,t=0;D[ty*MW+tx]=0;Q[t++]=ty*MW+tx;
+  const D=NAV.d,Q=NAV.q,tx=Math.floor(pl.x/TS),ty=Math.floor(pl.y/TS);D.fill(-1);if(tx<0||ty<0||tx>=MW||ty>=MH)return;const HO=W.heroOnly,pin=!!HO&&HO.has(ty*MW+tx);let h=0,t=0;D[ty*MW+tx]=0;Q[t++]=ty*MW+tx;
   while(h<t){const c=Q[h++],cx=c%MW,cy=(c/MW)|0,v=D[c]+1;
-    if(cx>0&&D[c-1]<0&&!SOLID.has(tileAt(cx-1,cy))){D[c-1]=v;Q[t++]=c-1}
-    if(cx<MW-1&&D[c+1]<0&&!SOLID.has(tileAt(cx+1,cy))){D[c+1]=v;Q[t++]=c+1}
-    if(cy>0&&D[c-MW]<0&&!SOLID.has(tileAt(cx,cy-1))){D[c-MW]=v;Q[t++]=c-MW}
-    if(cy<MH-1&&D[c+MW]<0&&!SOLID.has(tileAt(cx,cy+1))){D[c+MW]=v;Q[t++]=c+MW}}}
+    if(cx>0&&D[c-1]<0&&!SOLID.has(tileAt(cx-1,cy))&&!(HO&&!pin&&HO.has(c-1))){D[c-1]=v;Q[t++]=c-1}
+    if(cx<MW-1&&D[c+1]<0&&!SOLID.has(tileAt(cx+1,cy))&&!(HO&&!pin&&HO.has(c+1))){D[c+1]=v;Q[t++]=c+1}
+    if(cy>0&&D[c-MW]<0&&!SOLID.has(tileAt(cx,cy-1))&&!(HO&&!pin&&HO.has(c-MW))){D[c-MW]=v;Q[t++]=c-MW}
+    if(cy<MH-1&&D[c+MW]<0&&!SOLID.has(tileAt(cx,cy+1))&&!(HO&&!pin&&HO.has(c+MW))){D[c+MW]=v;Q[t++]=c+MW}}}
 function navReach(x,y){const D=NAV.d;if(!D)return true;const tx=Math.floor(x/TS),ty=Math.floor(y/TS);return tx>=0&&ty>=0&&tx<MW&&ty<MH&&D[ty*MW+tx]>=0}
 const NAV8=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
 function navDir(e){const D=NAV.d;if(!D)return null;const ex=Math.floor(e.x/TS),ey=Math.floor(e.y/TS);if(ex<0||ey<0||ex>=MW||ey>=MH)return null;const here=D[ey*MW+ex];if(here<=0)return null;let best=here,bx=0,by=0;

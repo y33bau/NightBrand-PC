@@ -187,12 +187,22 @@ function chojrakSpot(w){const st=w.start,bad=t=>SOLID.has(t)||VOID.has(t)||t===2
   const cx=Math.floor(st.x/TS),cy=Math.floor(st.y/TS);
   for(let r=4;r<=10;r++)for(let k=0;k<8*r;k++){const a=k/(8*r)*Math.PI*2+r,X=Math.round(cx+Math.cos(a)*r),Y=Math.round(cy+Math.sin(a)*r);if(open(X,Y)&&!(w.clearways&&w.clearways.has(Y*MW+X)))return[(X+.5)*TS,(Y+.4)*TS]}
   return null}
+// 23.11.2026 (autor): dom Heriego w slumsach Zlotogrodu. Mury dookola, jedno waskie wejscie od frontu (poludnie); do srodka wchodzi tylko bohater (W.heroOnly)
+function heriHouse(w){const n=w.npcs.find(q=>q.id==='heri');if(!n)return;const hx=Math.floor(n.x/TS),hy=Math.floor(n.y/TS);
+ const x0=hx-3,y0=hy-1,x1=hx+6,y1=hy+3,dx=hx+2;if(x0<1||y0<1||x1>=MW-1||y1>=MH-1)return;const ho=new Set();
+ for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const i=y*MW+x,ring=x===x0||x===x1||y===y0||y===y1,door=x===dx&&y===y1;
+  if(ring&&!door){w.map[i]=58;if(w.under)w.under[i]=0}else{w.map[i]=56;if(w.under)w.under[i]=0;ho.add(i)}}
+ for(let k=w.PROPS.length-1;k>=0;k--){const p=w.PROPS[k];if(p.x>=x0-.3&&p.x<x1+1.3&&p.y>=y0&&p.y<y1+1.95)w.PROPS.splice(k,1)}
+ if(w.clearways)for(const i of ho)w.clearways.delete(i);
+ /* buda przed fasada zaslaniala front domu: znika (kafle na bloto slumsow, bez dachu w buildStolica) */
+ w.heriClear=[];SHACKS.forEach((B,k)=>{const R=SR({x:B[0],y:B[1],w:B[2],h:B[3]});if(R.x<=x1+1&&R.x+R.w>=x0-1&&R.y<=y1+3&&R.y+R.h>y1){w.heriClear.push(k);for(let y=R.y;y<R.y+R.h;y++)for(let x=R.x;x<R.x+R.w;x++){const i=y*MW+x;if(w.map[i]===59)w.map[i]=53}}});
+ w.heroOnly=ho;w.heriHouse={x:x0,y:y0,w:x1-x0+1,h:y1-y0+1,door:[dx,y1]}}
 function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast losowania przy kazdym uruchomieniu; Czarnobor: ziarno 1349 (z 12 sprawdzonych: ciemny las, malo wysokich sosen), Cytadela: ziarno nie zmienia ukladu. Powrot do losowania: (Math.random()*2147483647)|0 */if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefined)WORLD_SEEDS[ch]=1349;
   const w=upscaleWorld(ch===1?genBrzeznica():ch===2?genDolne():ch===3?genStolica():ch===9?genDungeon((Math.random()*2147483647)|0):ch===PORT?genSolneNabrzeze():ch===5?genCytadela(WORLD_SEEDS[ch]):genCzarnobor(WORLD_SEEDS[ch]));if(ch<4)enrich(w,ch);
   if(ch===9)w.rooms=w.rooms.map(R=>Object.assign(SR(R),{k:R.k}));
   Object.assign(w,{ch,group:new THREE.Group(),propObjs:[],npcMeshes:{},walls:[],cliffs:[],pillars:[],lavas:[],braziers:[],waters:[],rots:[],shallow:[],LSRC:[]});
   if(ch>=2&&ch<=6){const sp=chojrakSpot(w);if(sp)w.npcs.push({id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:sp[0],y:sp[1],lines:[]})}
-  for(const n of w.npcs)if(n.solid)w.map[n.solid[1]*MW+n.solid[0]]=31;if(ch===4){deepMarsh(w);clearNpcTrees(w)}if(ch===1)clearCryptSurrounds(w);if(ch>=1&&ch<=5){thinFires(w);decorFill(w,ch)}
+  for(const n of w.npcs)if(n.solid)w.map[n.solid[1]*MW+n.solid[0]]=31;if(ch===4){deepMarsh(w);clearNpcTrees(w)}if(ch===1)clearCryptSurrounds(w);if(ch>=1&&ch<=5){thinFires(w);decorFill(w,ch)}if(ch===3&&nbParam('heri')!=='0')heriHouse(w);
   // 15.11.2026 (decyzja autora): z calej gry znikaja lewitujace kosci krasnoluda, uciete schodki z koscmi (nachodzily na sarkofagi) i lewitujace deski w porcie; zaden nie mial kolizji
   for(let k=w.PROPS.length-1;k>=0;k--){const q=w.PROPS[k].k;if(q==='dwarf_bones'||q==='doorway_bones'||(ch===PORT&&q==='deski'))w.PROPS.splice(k,1)}
   // runda 215: bez ognisk (koksowników) tuż przy lawie w rozdz. II

@@ -753,6 +753,8 @@ let CH=2,W=null,map,PROPS,START,SHRINES,region,walls,cliffs,pillars,lavas,brazie
 const WORLDS={},WORLD_SEEDS={};
 const tileAt=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?21:map[y*MW+x];
 const solidAt=(px,py)=>SOLID.has(tileAt(Math.floor(px/TS),Math.floor(py/TS)));
+// 23.11.2026 (autor: do Heriego wchodzi tylko bohater): kafle W.heroOnly sa zamkniete dla wrogow i przywolancow
+const heroOnlyAt=(px,py)=>{const h=W&&W.heroOnly;return !!h&&h.has(Math.floor(py/TS)*MW+Math.floor(px/TS))};
 // nearest spot whose 3x3 surroundings are walkable (codes in ok) and free of props; used to place NPCs
 function freeNear(map,PROPS,ok,x,y){for(let r=0;r<12;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;const X=x+dx,Y=y+dy;let good=X>2&&Y>2&&X<GW-3&&Y<GH-3;
   for(let j=-1;j<=1&&good;j++)for(let i=-1;i<=1;i++)if(!ok.includes(map[(Y+j)*GW+X+i])){good=false;break}
@@ -1876,6 +1878,51 @@ function roofGeo(W,D,rise){const ax=W>=D,L=ax?W:D,T=ax?D:W,hT=T/2,sl=Math.hypot(
    slupy narozne, rama drzwi, zawalone belki w srodku. Wiezba i poszycie znikaja, gdy bohater jest w srodku (jak stary dach).
    Tekstury: wl_palecap (drewno), p1_roof_burnt (poszycie); BURNT_TEX pozwala podmienic na nowe (t2_belka, t3_poszycie). ?spalone=0 = stary dach. */
 const BURNT_TEX={beam:null,roof:null};
+/* 23.11.2026 (autor: sklep Margi ma wygladac jak sklep): daszek w pasy nad wejsciem na dwoch slupkach, szyld z czaszka na wysiegniku,
+   lada z towarem za wejsciem, regal z towarem pod tylna sciana, skrzynie i beczki przy scianie, latarnie pod daszkiem. Bez kolizji (tylko oprawa). */
+function margaShop(r,wall,put,box,acc,mesh){
+ const fy=r.y+r.h-1;let ox0=-1,ox1=-1;for(let x=r.x+1;x<r.x+r.w-1;x++)if(!wall.has(fy*MW+x)){if(ox0<0)ox0=x;ox1=x}
+ if(ox0<0){ox0=Math.floor(r.x+r.w/2)-2;ox1=ox0+4}
+ const z0=r.y+r.h,xa=ox0,xb=ox1+1,cx=(xa+xb)/2,span=xb-xa,zi=r.y+1.9;
+ const cyl=new THREE.CylinderGeometry(.5,.5,1,10).toNonIndexed(),sph=new THREE.SphereGeometry(.5,10,7).toNonIndexed();
+ const A={wood:acc(),dark:acc(),clA:acc(),clB:acc(),bone:acc(),glass:acc(),glassR:acc(),fl:acc(),gold:acc(),iron:acc(),lamp:acc()};
+ // daszek: slupki, belka, pasy plotna od sciany do belki, falbana
+ const zp=z0+1.45,hp=1.62,hw=1.98;
+ for(const x of [xa+.12,xb-.12]){put(A.wood,box,x,hp/2,zp,.16,hp,.16);put(A.dark,box,x,.06,zp,.26,.12,.26)}
+ put(A.wood,box,cx,hp+.05,zp,span+.1,.14,.14);
+ const n=Math.max(4,Math.round(span/.5)),ln=Math.hypot(zp-z0,hw-hp),ang=Math.atan2(hw-hp,zp-z0);
+ for(let i=0;i<n;i++){const x=xa+(i+.5)*span/n;put(i%2?A.clB:A.clA,box,x,(hw+hp)/2+.08,(z0+zp)/2,span/n+.005,.03,ln+.12,ang,0,0);
+  put(i%2?A.clB:A.clA,box,x,hp-.04,zp+.08,span/n+.005,.22,.025)}
+ // latarnie pod daszkiem
+ for(const x of [cx-span*.3,cx+span*.3]){put(A.iron,cyl,x,hp-.2,zp-.08,.02,.36,.02);put(A.iron,box,x,hp-.4,zp-.08,.2,.04,.2);put(A.lamp,box,x,hp-.56,zp-.08,.16,.26,.16);put(A.iron,box,x,hp-.71,zp-.08,.2,.04,.2)}
+ // szyld na wysiegniku przy prawym slupku: deska z czaszka i skrzyzowanymi koscmi
+ const sx=xb+.55,sy=1.3;put(A.iron,box,xb+.3,hp-.02,zp,.75,.05,.05);for(const d of [-.28,.28])put(A.iron,cyl,sx+d,hp-.15,zp,.015,.26,.015);
+ put(A.dark,box,sx,sy-.02,zp,.86,.5,.06);put(A.wood,box,sx,sy,zp+.01,.76,.4,.06);
+ put(A.bone,sph,sx,sy+.04,zp+.07,.17,.17,.1);put(A.dark,box,sx-.04,sy+.05,zp+.12,.04,.04,.02);put(A.dark,box,sx+.04,sy+.05,zp+.12,.04,.04,.02);
+ for(const a of [.7,-.7])put(A.bone,cyl,sx,sy-.06,zp+.06,.025,.42,.025,0,0,a);
+ // lada za wejsciem z towarem
+ const zc=z0-1.25,cl=span-.8;put(A.wood,box,cx,.42,zc,cl,.84,.5);put(A.dark,box,cx,.87,zc,cl+.14,.06,.62);
+ const goods=(px,pz,y,k)=>{if(k===0){put(A.bone,sph,px,y+.1,pz,.2,.18,.18);put(A.bone,box,px,y+.03,pz+.05,.1,.06,.08)}
+  else if(k===1){put(A.glass,cyl,px,y+.13,pz,.14,.26,.14);put(A.dark,cyl,px,y+.28,pz,.09,.05,.09)}
+  else if(k===2){put(A.glassR,sph,px,y+.08,pz,.15,.15,.15);put(A.dark,cyl,px,y+.18,pz,.04,.08,.04)}
+  else if(k===3){for(let j=0;j<4;j++)put(A.gold,cyl,px+(j%2)*.03,y+.015+j*.03,pz,.12,.025,.12)}
+  else if(k===4){put(A.bone,cyl,px,y+.05,pz,.04,.4,.04,0,0,Math.PI/2);put(A.bone,cyl,px+.05,y+.09,pz+.03,.035,.36,.035,0,.5,Math.PI/2)}
+  else{put(A.bone,cyl,px,y+.1,pz,.05,.2,.05);put(A.fl,sph,px,y+.24,pz,.05,.08,.05)}};
+ for(let i=0;i<7;i++)goods(cx-cl/2+.35+i*(cl-.7)/6,zc+(i%2?.08:-.08),.9,[0,1,5,3,2,4,1][i]);
+ // regal pod tylna sciana
+ const rw=Math.min(6,r.w-5);for(const x of [cx-rw/2,cx+rw/2,cx])put(A.wood,box,x,.95,zi,.1,1.9,.38);
+ for(const y of [.45,1.0,1.55])put(A.wood,box,cx,y,zi,rw+.1,.05,.42);
+ let k=0;for(const y of [.47,1.02,1.57])for(let i=0;i<8;i++){const px=cx-rw/2+.4+i*(rw-.8)/7;if((i+k)%5===4)continue;goods(px,zi,y,(i*3+k)%6)}k++;
+ // skrzynie, beczki i kosz z koscmi przy scianie, z obu stron wejscia
+ const crate=(x,z,s,rot)=>{put(A.wood,box,x,s/2,z,s,s,s,0,rot,0);put(A.dark,box,x,s+.01,z,s+.03,.03,.1,0,rot,0)};
+ const barrel=(x,z)=>{put(A.wood,cyl,x,.42,z,.5,.84,.5);for(const y of [.15,.69])put(A.iron,cyl,x,y,z,.52,.05,.52)};
+ crate(xa-.9,z0+.45,.6,.2);crate(xa-.85,z0+.45,.42,-.3);put(A.wood,box,xa-.85,.6+.21,z0+.45,.42,.42,.42,0,-.3,0);barrel(xa-1.7,z0+.5);
+ barrel(xb+1.0,z0+.48);crate(xb+1.8,z0+.5,.55,.5);put(A.dark,cyl,xb+1.0,.86,z0+.48,.46,.04,.46);goods(xb+1.0,z0+.48,.88,0);goods(xb+.92,z0+.4,.88,4);
+ const M=(c,o)=>cutaway(phong(Object.assign({color:c},o||{})));
+ const mats={wood:worldSurfN(cutaway(phong({color:0xe0d4c8})),'t2_belka',1.1,1),dark:M(0x4a3c32),clA:M(0x5a221c,{side:THREE.DoubleSide}),clB:M(0x7e7260,{side:THREE.DoubleSide}),
+  bone:M(0xd8cab0,{specular:0x222018,shininess:8}),glass:M(0x223a2c,{emissive:0x0e3a1c,specular:0x88aa99,shininess:60}),glassR:M(0x3a1414,{emissive:0x4a0e0a,specular:0xaa8888,shininess:60}),
+  fl:phong({color:0xffe0a0,emissive:0xffa040}),gold:M(0xb89040,{emissive:0x2a1c06,specular:0x806020,shininess:30}),iron:M(0x2e2a28,{specular:0x222222,shininess:20}),lamp:phong({color:0xffd090,emissive:0xd07020})};
+ for(const key in A)if(A[key].p.length)mesh(A[key],mats[key])}
 function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[2]===48).map(([x,y])=>y*MW+x));
  const wood=BURNT_TEX.beam||IMGS.wl_palecap||IMGS.wl_chata,roofIm=BURNT_TEX.roof||IMGS.p1_roof_burnt||IMGS.wl_chata;
  const NT=typeof OSADA_TX!=='undefined',postM=NT?worldSurfN(cutaway(phong({color:0xe8dcd0})),'t2_belka',1.3,1.2):worldSurf(cutaway(phong({color:0x8c7868})),wood,1.3,'a');
@@ -1914,9 +1961,10 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
   const woodM=NT?worldSurfN(phong({color:0xe8dcd0,transparent:true,opacity:1}),'t2_belka',1.3,1.2):worldSurf(phong({color:0x8c7868,transparent:true,opacity:1}),wood,1.3,'a');
   const g=new THREE.Group();g.add(mesh(wood_,woodM));if(roof.p.length)g.add(mesh(roof,roofM));w.group.add(g);
   r.mats=[woodM,roofM];r.mesh=g;r.a=1}
+ if(margaR&&margaR.w/margaR.h>1.6&&NT&&nbParam('sklep')!=='0')margaShop(margaR,wall,put,box,acc,mesh);// 23.11.2026 (autor: sklep bardziej sklepowy)
  if(posts.p.length)mesh(posts,postM);if(floors.p.length){const f=mesh(floors,worldSurfN(phong({color:0x8c847c}),'t5_podloga',2.6,1.1));f.castShadow=false}}
 function buildRoofs(w){if(!w.roofs||!w.group)return;if(w.ch===1&&IMGS.wl_palecap&&nbParam('spalone')!=='0'){burntHouses(w);return}const rm=[];
- for(const r of w.roofs){if(r.tri)continue;/* 23.11.2026: dom z modelu ma wlasny dach */const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
+ for(const r of w.roofs){if(r.tri||r.mesh)continue;/* 23.11.2026: dom z modelu ma wlasny dach */const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
   const m=new THREE.Mesh(roofGeo(W,D,rise),new THREE.MeshLambertMaterial({color:0x4a382c,transparent:true,opacity:1,side:THREE.DoubleSide,vertexColors:true}));
   m.position.set(r.x+r.w/2,1.9,r.y+r.h/2);m.castShadow=false;m.receiveShadow=false;m.renderOrder=3;w.group.add(m);r.mesh=m;r.a=1;rm.push(r)}
  roofImg(im=>{const hdIm=CH===1?(IMGS.p1_roof_burnt||IMGS.rf_lupek):null;if(hdIm)im=hdIm;const hd=!!hdIm;const t=new THREE.Texture(im);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=hd?8:4;t.needsUpdate=true;for(const r of rm){r.mesh.material.map=t;if(hd&&CH===1)r.mesh.material.color.setRGB(2.15,1.9,1.7);/* 22.11.2026: tekstura zgliszczy srednio 34/255 = czarna plyta; rozjasnienie ok. 2x, cieply odcien */else r.mesh.material.color.setHex(hd?0xe4d4c8:0xd8c8bc);r.mesh.material.needsUpdate=true}})}
@@ -2786,7 +2834,7 @@ function cutCircle(mat){mat.onBeforeCompile=sh=>{sh.uniforms.uCut=CUT;sh.uniform
 // Chapter III meshes: reuses the Lower City stone and village ground, adds golden domes, lit windows and rot
 /* 23.11.2026 (autor: nowe moduly Zlotogrodu): waska kamienica z podcieniem, narozna kamienica ze schodami, kamienica z wykuszem, mala kaplica.
    Kazda bryla budowana w ukladzie lokalnym (front = +z) i obracana wg ZL_NOWE; tekstury autora: tynk wapienny, mur kamienny, dachowka, miedz, stare zlocenie. */
-function zlNoweBuild(){
+function zlNoweBuild(){const WR=W;
  const M=(k,sc,col,o)=>worldSurfN(cutCircle(phong(Object.assign({color:col},o||{}))),k,sc,1);
  const plaster=M('tgm1_tynk_wapienny',2.6,0xe6ddd0),stone=M('tgm2_mur_kamienny',1.5,0xd4ccc0),stoneD=M('tgm2_mur_kamienny',1.1,0xa89e92),
   tiles=M('tgm3_dachowka_gliniana',1.3,0xc4b4a6,{side:THREE.DoubleSide}),copper=M('tzl1_miedz_patynowana',1.5,0xf4f8f6,{side:THREE.DoubleSide,specular:0x5a7a70,shininess:26}),
@@ -2794,9 +2842,13 @@ function zlNoweBuild(){
   glassL=cutCircle(phong({color:0x17120e,emissive:0x6a3c12,specular:0x333333,shininess:40})),glassD=cutCircle(phong({color:0x121418,specular:0x444444,shininess:50})),
   iron=cutCircle(phong({color:0x34302c,specular:0x222222,shininess:20}));
  let rs=7;const rnd=()=>(rs=(rs*16807)%2147483647)/2147483647;
- for(const [gx,gy,gw,gh,kind,face] of ZL_NOWE){
-  const B=SR({x:gx,y:gy,w:gw,h:gh}),side=face==='E'||face==='W',W=side?B.h:B.w,D=side?B.w:B.h;
-  const grp=new THREE.Group();grp.position.set(B.x+B.w/2,0,B.y+B.h/2);grp.rotation.y={S:0,E:Math.PI/2,N:Math.PI,W:-Math.PI/2}[face]||0;ROOT.add(grp);
+ // 23.11.2026 (autor: spojnosc budynkow): stare kamienice (HOUSES) skladane tym samym zestawem co nowe; na domach z kopula plaski taras pod beben
+ const LIST=ZL_NOWE.map(B=>[...B,{}]).concat(HOUSES.map((B,i)=>[...B,'kamienica','S',{dome:DOMES.some(([x,z,r,k])=>k==='h'&&x>B[0]&&x<B[0]+B[2]&&z>B[1]&&z<B[1]+B[3]),door:![2,5,6].includes(i)}]));
+ if(W.heriHouse){const h=W.heriHouse;LIST.push([h.x,h.y,h.w,h.h,'heri','S',{world:1,door:h.door}])}
+ const grps=[];
+ for(const [gx,gy,gw,gh,kind,face,opt] of LIST){
+  const B=opt.world?{x:gx,y:gy,w:gw,h:gh}:SR({x:gx,y:gy,w:gw,h:gh}),side=face==='E'||face==='W',W=side?B.h:B.w,D=side?B.w:B.h;
+  const grp=new THREE.Group();grp.position.set(B.x+B.w/2,0,B.y+B.h/2);grp.rotation.y={S:0,E:Math.PI/2,N:Math.PI,W:-Math.PI/2}[face]||0;ROOT.add(grp);grps.push(grp);if(['wykusz','podcien','naroznik'].includes(kind))grp.scale.y=.75;
   const add=(g,m,x,y,z,ry)=>{const o=new THREE.Mesh(g,m);o.position.set(x,y,z);if(ry)o.rotation.y=ry;o.castShadow=o.receiveShadow=true;grp.add(o);return o};
   const box=(w,h,d,m,x,y0,z,ry)=>add(new THREE.BoxGeometry(w,h,d),m,x,y0+h/2,z,ry);
   // okno: kamienna opaska + szyba (czesc swieci cieplo); ry obraca na sciane boczna
@@ -2815,14 +2867,46 @@ function zlNoweBuild(){
    const gg=new THREE.BufferGeometry();gg.setAttribute('position',new THREE.Float32BufferAttribute(t,3));gg.computeVertexNormals();const gm=add(gg,wallM,0,0,0);gm.material=wallM;
    const ridge=new THREE.Mesh(new THREE.BoxGeometry(alongZ?.16:L*2,.14,alongZ?L*2:.16),stoneD);ridge.position.y=base+rise+.04;grp.add(ridge)};
   // dach czterospadowy (naroznik)
-  const hip=(w,d,base,rise,roofM,oh=.32)=>{const a=w/2+oh,b=d/2+oh,k=Math.max(0,a-b),pts=[],tri=(p,q,r)=>pts.push(...p,...q,...r),T=base+rise,dy=oh*rise/Math.min(w,d)*2,y0=base-dy;
+  const hip=(w,d,base,rise,roofM,oh=.32)=>{const sw=d>w;if(sw){const t=w;w=d;d=t}const a=w/2+oh,b=d/2+oh,k=Math.max(0,a-b),pts=[],tri=(p,q,r)=>pts.push(...p,...q,...r),T=base+rise,dy=oh*rise/Math.min(w,d)*2,y0=base-dy;
    const r0=[-k,T,0],r1=[k,T,0],c=[[-a,y0,-b],[a,y0,-b],[a,y0,b],[-a,y0,b]];
    tri(r0,c[3],c[2]);tri(r0,c[2],r1);tri(r1,c[1],c[0]);tri(r1,c[0],r0);tri(r1,c[2],c[1]);tri(r0,c[0],c[3]);
-   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));g.computeVertexNormals();add(g,roofM,0,0,0)};
+   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));g.computeVertexNormals();const hm=add(g,roofM,0,0,0);if(sw)hm.rotation.y=Math.PI/2;return hm};
   function otri(arr){return(p,q,r,want)=>{const ux=q[0]-p[0],uy=q[1]-p[1],uz=q[2]-p[2],vx=r[0]-p[0],vy=r[1]-p[1],vz=r[2]-p[2],nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx;
    if(nx*want[0]+ny*want[1]+nz*want[2]<0)arr.push(...p,...r,...q);else arr.push(...p,...q,...r)}}
   const cornice=(w,d,y)=>box(w+.24,.2,d+.24,stoneD,0,y,0);
-  if(kind==='wykusz'){// kamienica z wykuszem: okap do ulicy, wykusz na pietrze nad chodnikiem
+  if(kind==='kamienica'){const E=4.6;box(W,.9,D,stone,0,0,0);box(W-.1,E-.9,D-.1,plaster,0,.9,0);cornice(W,D,E-.1);
+   for(const sx of [-1,1])for(const sz of [-1,1])for(let i=0;i<5;i++){const big=i%2===0;box(big?.6:.42,.4,big?.42:.6,stoneD,sx*(W/2-.17),1.0+i*.72,sz*(D/2-.17))}
+   const faceW=(len,pos,ry,front)=>{const k=Math.max(2,Math.round(len/1.8));for(let i=0;i<k;i++){const t=-len/2+len*(i+.5)/k;
+     if(i>0){const [px,pz]=pos(-len/2+len*i/k,.04);box(.32,E-1.0,.12,stoneD,px,.9,pz,ry)}
+     for(const y of [1.85,3.35]){if(front&&opt.door&&y<2.5&&Math.abs(t)<len/k*.6)continue;const [wx,wz]=pos(t,0);win(wx,y,wz,ry,.55,.92)}}};
+   faceW(W,(t,o)=>[t,D/2+o-.02],0,true);faceW(W,(t,o)=>[-t,-D/2-o+.02],Math.PI,false);faceW(D,(t,o)=>[W/2+o-.02,-t],Math.PI/2,false);faceW(D,(t,o)=>[-W/2-o+.02,t],-Math.PI/2,false);
+   if(opt.door)door(0,D/2-.02,0,1.1,2.0);
+   if(opt.dome){box(W+.1,.25,D+.1,stoneD,0,E,0);for(const [w2,d2,x,z] of [[W,.28,0,D/2-.14],[W,.28,0,-D/2+.14],[.28,D,W/2-.14,0],[.28,D,-W/2+.14,0]]){box(w2,.5,d2,plaster,x,E+.25,z);box(w2+.06,.09,d2+.06,stoneD,x,E+.75,z)}}
+   else hip(W,D,E+.05,2.3,tiles);
+  }else if(kind==='heri'){/* dom Heriego: kamien + tynk, waskie drzwi od frontu, dach znika, gdy bohater jest blisko */
+   const Hw=3.4,dl=opt.door[0]+.5-(B.x+B.w/2),wl=(w,d,x,z)=>{box(w,1.1,d,stone,x,0,z);box(w-.04,Hw-1.1,d-.04,plaster,x,1.1,z);box(w+.08,.18,d+.08,stoneD,x,Hw,z)};
+   wl(W,1,0,-D/2+.5);wl(1,D-2,-W/2+.5,0);wl(1,D-2,W/2-.5,0);const L1=dl-.5+W/2,L2=W/2-dl-.5;if(L1>.05)wl(L1,1,-W/2+L1/2,D/2-.5);if(L2>.05)wl(L2,1,W/2-L2/2,D/2-.5);
+   box(1,Hw-2.3,1,plaster,dl,2.3,D/2-.5);box(1.08,.18,1.08,stoneD,dl,Hw,D/2-.5);for(const sg of [-1,1])box(.2,2.3,1.04,stoneD,dl+sg*.41,0,D/2-.5);
+   add(new THREE.TorusGeometry(.33,.09,6,12,Math.PI),stoneD,dl,1.98,D/2+.02);box(.16,.24,.14,stoneD,dl,2.26,D/2+.05);box(.95,.08,.5,stoneD,dl,0,D/2+.22);
+   box(.06,2.0,.6,wood,dl-.29,0,D/2-1.32);add(new THREE.TorusGeometry(.05,.015,4,8),iron,dl-.25,1.0,D/2-1.5,Math.PI/2);
+   for(const [x,z,ry] of [[-W/2+1.9,D/2-.02,0],[W/2-1.8,D/2-.02,0],[W/2-.02,0,Math.PI/2],[-W/2+.02,0,-Math.PI/2]])win(x,2.0,z,ry,.55,.85);
+   box(.05,.05,.45,iron,dl+.85,2.45,D/2+.22);box(.03,.22,.03,iron,dl+.85,2.25,D/2+.43);add(new THREE.BoxGeometry(.2,.28,.2),glassL,dl+.85,2.05,D/2+.43);box(.24,.05,.24,iron,dl+.85,2.2,D/2+.43);
+   const red=cutCircle(phong({color:0x7a1e1a,side:THREE.DoubleSide}));box(.72,1.35,.04,red,dl-1.35,1.1,D/2+.05);box(.86,.05,.05,gold,dl-1.35,2.47,D/2+.08);add(new THREE.CylinderGeometry(.17,.17,.03,14),gold,dl-1.35,1.95,D/2+.09).rotation.x=Math.PI/2;
+   for(let i=0;i<3;i++)add(new THREE.ConeGeometry(.12,.22,3),red,dl-1.35-.24+i*.24,1.0,D/2+.05).rotation.x=Math.PI;
+   /* wnetrze: palenisko, prycza, stol, stojak z bronia */
+   box(1.5,1.25,.55,stoneD,2.6,0,-D/2+1.27);box(.8,.6,.2,cutCircle(phong({color:0x120806,emissive:0x5a1e06})),2.6,.1,-D/2+1.5);box(1.7,.12,.65,stoneD,2.6,1.25,-D/2+1.27);
+   box(1.8,.3,.8,wood,.2,0,-D/2+1.45);box(1.6,.1,.65,red,.2,.3,-D/2+1.45);
+   box(1.0,.06,.62,wood,2.4,.74,.5);for(const [lx,lz] of [[-.42,-.24],[.42,-.24],[-.42,.24],[.42,.24]])box(.07,.74,.07,wood,2.4+lx,0,.5+lz);box(.4,.45,.4,wood,1.6,0,.6);
+   box(.08,1.7,.08,wood,-W/2+1.2,0,-.2);box(.08,1.7,.08,wood,-W/2+1.2,0,.9);box(.08,.08,1.2,wood,-W/2+1.2,1.4,.35);
+   for(let i=0;i<3;i++){add(new THREE.CylinderGeometry(.03,.03,2.0,6),wood,-W/2+1.25,1.0,-.05+i*.35);add(new THREE.ConeGeometry(.06,.25,4),iron,-W/2+1.25,2.1,-.05+i*.35)}
+   add(new THREE.CylinderGeometry(.36,.36,.06,16),red,-W/2+1.13,.75,.35).rotation.z=Math.PI/2;
+   /* dach osobno (przezroczysty, znika przy bohaterze) */
+   const T=o=>{const m=o;m.transparent=true;m.opacity=1;return m},rTile=T(worldSurfN(cutCircle(phong({color:0xc4b4a6,side:THREE.DoubleSide})),'tgm3_dachowka_gliniana',1.3,1)),
+    rCop=T(worldSurfN(cutCircle(phong({color:0xf4f8f6,side:THREE.DoubleSide,specular:0x5a7a70,shininess:26})),'tzl1_miedz_patynowana',1.5,1)),rSt=T(worldSurfN(cutCircle(phong({color:0xa89e92})),'tgm2_mur_kamienny',1.1,1));
+   const g0=grp.children.length;hip(W+.1,D+.1,Hw+.12,2.1,rTile);box(.7,1.3,.7,rSt,2.6,Hw+.8,-D/2+1.27);add(new THREE.CylinderGeometry(.5,.55,.6,8),rSt,-.6,Hw+2.0,0);add(new THREE.ConeGeometry(.62,.9,8),rCop,-.6,Hw+2.75,0);add(new THREE.SphereGeometry(.07,8,6),gold,-.6,Hw+3.25,0);
+   const roofG=new THREE.Group();roofG.position.copy(grp.position);ROOT.add(roofG);for(const o of grp.children.slice(g0))roofG.add(o);
+   WR.roofs=(WR.roofs||[]).concat([{x:B.x-2.5,y:B.y-2.5,w:B.w+5,h:B.h+4.5,mesh:roofG,mats:[rTile,rCop,rSt],a:1}]);
+  }else if(kind==='wykusz'){// kamienica z wykuszem: okap do ulicy, wykusz na pietrze nad chodnikiem
    box(W,.9,D,stone,0,0,0);box(W-.1,5.2,D-.1,plaster,0,.9,0);cornice(W,D,6.0);gable(W,D,6.2,2.3,false,tiles,plaster);
    door(-W/4,D/2-.04);win(W/4,1.55,D/2-.02,0);const ox=.7,ow=2.3,od=.85;
    for(const y of [3.1,4.7])win(-W/2+1.05,y,D/2-.02,0);for(const y of [3.1,4.7])for(const x of [-W/2+1.05,0,W/2-1.05])win(x,y,-D/2+.02,Math.PI);
@@ -2871,6 +2955,11 @@ function zlNoweBuild(){
    const B2=bt+1.26;add(new THREE.LatheGeometry(pts,16),copper,0,B2,bz);add(new THREE.CylinderGeometry(.025,.025,.5,6),gold,0,B2+1.74,bz);add(new THREE.BoxGeometry(.3,.045,.045),gold,0,B2+1.84,bz);add(new THREE.SphereGeometry(.07,8,6),gold,0,B2+1.59,bz);
   }
  }
+ /* scalenie statycznych brył po materiale: setki okien i detali w kilkanaście siatek */
+ ROOT.updateMatrixWorld(true);const inv=new THREE.Matrix4().copy(ROOT.matrixWorld).invert(),mm=new THREE.Matrix4(),byM=new Map();
+ for(const g of grps){g.traverse(o=>{if(!o.isMesh)return;const geo=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();if(!geo.attributes.normal)geo.computeVertexNormals();geo.applyMatrix4(mm.multiplyMatrices(inv,o.matrixWorld));
+   let e=byM.get(o.material);if(!e){e={p:[],n:[]};byM.set(o.material,e)}const P=geo.attributes.position.array,N=geo.attributes.normal.array;for(let i=0;i<P.length;i++){e.p.push(P[i]);e.n.push(N[i])}geo.dispose()});ROOT.remove(g)}
+ for(const [mat,e] of byM){const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(e.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(e.n,3));const m=new THREE.Mesh(g,mat);m.castShadow=m.receiveShadow=true;ROOT.add(m)}
 }
 function buildStolica(I){planGround(3);
   const r=rng(313),fc=canvas(WW,WH),fg=fc.getContext('2d'),ZG=I.zl_ground,ZW=I.zl_walls,ZP=I.zl_props;
@@ -2907,7 +2996,7 @@ function buildStolica(I){planGround(3);
     if(trim&&depthOn(3)&&I.wl_cap){const lg=new THREE.BoxGeometry(1.14,.24,1.14);lg.translate(0,h-.1,0);instanced(lg,worldSurf(cutCircle(phong({color:0xe4dccb})),I.wl_cap,2.2,'c'),list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5));const pg=new THREE.BoxGeometry(1.1,.42,1.1);pg.translate(0,.21,0);instanced(pg,worldSurf(cutCircle(phong({color:0x8f887c})),I.wl_cap,2.2,'c'),list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))}};
   const inB=(B,x,y)=>x>=B.x&&x<B.x+B.w&&y>=B.y&&y<B.y+B.h;
   const G={outer:[[],[]],house:[[],[],[],[]],cath:[[],[]],palace:[],chapel:[],mon:[[],[]],shack:[[],[]]};
-  const ZLN=nbParam('zlnowe')!=='0'?ZL_NOWE.map(B=>SR({x:B[0],y:B[1],w:B[2],h:B[3]})):[];// 23.11.2026: pola nowych modulow rysuje zlNoweBuild
+  const ZLN=nbParam('zlnowe')!=='0'&&typeof OSADA_TX!=='undefined'?ZL_NOWE.concat(HOUSES).map(B=>SR({x:B[0],y:B[1],w:B[2],h:B[3]})):[];if(W.heriHouse)ZLN.push(W.heriHouse);// 23.11.2026: pola nowych modulow rysuje zlNoweBuild
   for(const [x,y,t] of walls){
     if(ZLN.some(B=>inB(B,x,y)))continue;
     if(t===21)G.outer[(x+y)&1].push([x,y]);
@@ -2961,7 +3050,7 @@ function buildStolica(I){planGround(3);
     for(let i=0;i<8;i++){const a=i*Math.PI/4,w=new THREE.Mesh(new THREE.PlaneGeometry(rad*.07,rad*.18),winM);w.position.set(x+Math.sin(a)*rad*.172,base+rad*.45+rad*.77+rad*.21,z+Math.cos(a)*rad*.172);w.rotation.y=a;parts.push(w)}
     parts.push(lan,lcap);for(const m of parts){m.castShadow=true;m.receiveShadow=true;ROOT.add(m)}};
   const newDomes=nbParam('kopuly')!=='0';let di=0;
-  for(const [x,z,rad,k] of DOMES){const base={c:4,h:3.2,s:3,p:4.5}[k];if(!newDomes||k==='c'){dome(MP(x),MP(z),rad*MK,base,k);continue}
+  for(const [x,z,rad,k] of DOMES){const base={c:4,h:ZLN.length&&typeof OSADA_TX!=='undefined'?4.85:3.2,s:3,p:4.5}[k];if(!newDomes||k==='c'){dome(MP(x),MP(z),rad*MK,base,k);continue}
    (k==='s'||(k==='h'&&di++%2===0)?onion:ribbed)(MP(x),MP(z),rad*MK,base)}
   // slate pyramid roofs and thatched shacks
   const slT=texFrom(tcut(ZW,1,4),true);slT.repeat.set(3,2);
@@ -2975,9 +3064,9 @@ function buildStolica(I){planGround(3);
     const endMat=I.wl_town?worldSurf(cutCircle(phong({color:0xc4bba9})),I.wl_town,5,'c'):cutCircle(phong({color:0x675e50})),em=new THREE.Mesh(roofGeo([f,a,d,b,e,c],[[0,0],[depth/4,0],[depth/8,rise/4],[0,0],[depth/4,0],[depth/8,rise/4]]),endMat);em.position.copy(roof.position);em.rotation.copy(roof.rotation);em.castShadow=em.receiveShadow=true;ROOT.add(em);
     const rg=new THREE.CylinderGeometry(.16,.16,length+.08,10,1,true,0,Math.PI),uv=rg.attributes.uv;for(let i=0;i<uv.count;i++){const cu=uv.getX(i),cv=uv.getY(i);uv.setXY(i,cv*(length+.08)/4,cu)}uv.needsUpdate=true;rg.rotateZ(Math.PI/2);
     const ridge=new THREE.Mesh(rg,roofMat('p3_roof_ridge'));ridge.position.copy(roof.position);ridge.position.y+=rise-.025;ridge.rotation.copy(roof.rotation);ridge.castShadow=ridge.receiveShadow=true;ROOT.add(ridge)};
-  if(I.p3_roof_tile&&I.p3_roof_tile_gold&&I.p3_roof_ridge)HOUSES.forEach((B,i)=>gable(B,[1,3,6].includes(i)?'p3_roof_tile_gold':'p3_roof_tile'));
+  if(I.p3_roof_tile&&I.p3_roof_tile_gold&&I.p3_roof_ridge&&!(ZLN.length&&typeof OSADA_TX!=='undefined'))HOUSES.forEach((B,i)=>gable(B,[1,3,6].includes(i)?'p3_roof_tile_gold':'p3_roof_tile'));
   else for(const B of [[3,3,7,6],[3,12,7,6],[13,22,7,5],[55,3,6,7]]){const {x,y,w,h}=SR({x:B[0],y:B[1],w:B[2],h:B[3]});const m=new THREE.Mesh(pyr,slate);m.scale.set(w,2.2,h);m.position.set(x+w/2,3.2+1.1,y+h/2);m.castShadow=true;m.receiveShadow=true;ROOT.add(m)}
-  for(const B of SHACKS){if(I.p3_roof_shack&&I.p3_roof_ridge){gable(B,'p3_roof_shack',2.8,1.3);continue}const {x,y,w,h}=SR({x:B[0],y:B[1],w:B[2],h:B[3]});const m=new THREE.Mesh(pyr,thatch);m.scale.set(w+.3,1.5,h+.3);m.position.set(x+w/2,2.8+.75,y+h/2);m.castShadow=true;m.receiveShadow=true;ROOT.add(m)}
+  for(const B of SHACKS){if(W.heriClear&&W.heriClear.includes(SHACKS.indexOf(B)))continue;if(I.p3_roof_shack&&I.p3_roof_ridge){gable(B,'p3_roof_shack',2.8,1.3);continue}const {x,y,w,h}=SR({x:B[0],y:B[1],w:B[2],h:B[3]});const m=new THREE.Mesh(pyr,thatch);m.scale.set(w+.3,1.5,h+.3);m.position.set(x+w/2,2.8+.75,y+h/2);m.castShadow=true;m.receiveShadow=true;ROOT.add(m)}
   // cloister pillars of the fire monastery
   let pilT=texFrom(tcut(ZW,0,2),true);pilT.repeat.set(2,3);let stoneT=texFrom(tcut(ZG,1,0),true);
   if(I.wl_kolumna){const mk=(im,rx,ry)=>{const t=new THREE.Texture(im);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.magFilter=THREE.LinearFilter;t.minFilter=THREE.LinearMipmapLinearFilter;t.generateMipmaps=true;t.repeat.set(rx,ry);t.needsUpdate=true;return t};pilT=mk(I.wl_kolumna,2,3);stoneT=mk(I.wl_kolumna,.5,.25)}
@@ -3437,12 +3526,22 @@ function chojrakSpot(w){const st=w.start,bad=t=>SOLID.has(t)||VOID.has(t)||t===2
   const cx=Math.floor(st.x/TS),cy=Math.floor(st.y/TS);
   for(let r=4;r<=10;r++)for(let k=0;k<8*r;k++){const a=k/(8*r)*Math.PI*2+r,X=Math.round(cx+Math.cos(a)*r),Y=Math.round(cy+Math.sin(a)*r);if(open(X,Y)&&!(w.clearways&&w.clearways.has(Y*MW+X)))return[(X+.5)*TS,(Y+.4)*TS]}
   return null}
+// 23.11.2026 (autor): dom Heriego w slumsach Zlotogrodu. Mury dookola, jedno waskie wejscie od frontu (poludnie); do srodka wchodzi tylko bohater (W.heroOnly)
+function heriHouse(w){const n=w.npcs.find(q=>q.id==='heri');if(!n)return;const hx=Math.floor(n.x/TS),hy=Math.floor(n.y/TS);
+ const x0=hx-3,y0=hy-1,x1=hx+6,y1=hy+3,dx=hx+2;if(x0<1||y0<1||x1>=MW-1||y1>=MH-1)return;const ho=new Set();
+ for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const i=y*MW+x,ring=x===x0||x===x1||y===y0||y===y1,door=x===dx&&y===y1;
+  if(ring&&!door){w.map[i]=58;if(w.under)w.under[i]=0}else{w.map[i]=56;if(w.under)w.under[i]=0;ho.add(i)}}
+ for(let k=w.PROPS.length-1;k>=0;k--){const p=w.PROPS[k];if(p.x>=x0-.3&&p.x<x1+1.3&&p.y>=y0&&p.y<y1+1.95)w.PROPS.splice(k,1)}
+ if(w.clearways)for(const i of ho)w.clearways.delete(i);
+ /* buda przed fasada zaslaniala front domu: znika (kafle na bloto slumsow, bez dachu w buildStolica) */
+ w.heriClear=[];SHACKS.forEach((B,k)=>{const R=SR({x:B[0],y:B[1],w:B[2],h:B[3]});if(R.x<=x1+1&&R.x+R.w>=x0-1&&R.y<=y1+3&&R.y+R.h>y1){w.heriClear.push(k);for(let y=R.y;y<R.y+R.h;y++)for(let x=R.x;x<R.x+R.w;x++){const i=y*MW+x;if(w.map[i]===59)w.map[i]=53}}});
+ w.heroOnly=ho;w.heriHouse={x:x0,y:y0,w:x1-x0+1,h:y1-y0+1,door:[dx,y1]}}
 function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast losowania przy kazdym uruchomieniu; Czarnobor: ziarno 1349 (z 12 sprawdzonych: ciemny las, malo wysokich sosen), Cytadela: ziarno nie zmienia ukladu. Powrot do losowania: (Math.random()*2147483647)|0 */if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefined)WORLD_SEEDS[ch]=1349;
   const w=upscaleWorld(ch===1?genBrzeznica():ch===2?genDolne():ch===3?genStolica():ch===9?genDungeon((Math.random()*2147483647)|0):ch===PORT?genSolneNabrzeze():ch===5?genCytadela(WORLD_SEEDS[ch]):genCzarnobor(WORLD_SEEDS[ch]));if(ch<4)enrich(w,ch);
   if(ch===9)w.rooms=w.rooms.map(R=>Object.assign(SR(R),{k:R.k}));
   Object.assign(w,{ch,group:new THREE.Group(),propObjs:[],npcMeshes:{},walls:[],cliffs:[],pillars:[],lavas:[],braziers:[],waters:[],rots:[],shallow:[],LSRC:[]});
   if(ch>=2&&ch<=6){const sp=chojrakSpot(w);if(sp)w.npcs.push({id:'chojrak',art:'chojrak',name:(EN?'Chojrak, Lapsed Paladin':'Chojrak, paladyn bez Zakonu'),x:sp[0],y:sp[1],lines:[]})}
-  for(const n of w.npcs)if(n.solid)w.map[n.solid[1]*MW+n.solid[0]]=31;if(ch===4){deepMarsh(w);clearNpcTrees(w)}if(ch===1)clearCryptSurrounds(w);if(ch>=1&&ch<=5){thinFires(w);decorFill(w,ch)}
+  for(const n of w.npcs)if(n.solid)w.map[n.solid[1]*MW+n.solid[0]]=31;if(ch===4){deepMarsh(w);clearNpcTrees(w)}if(ch===1)clearCryptSurrounds(w);if(ch>=1&&ch<=5){thinFires(w);decorFill(w,ch)}if(ch===3&&nbParam('heri')!=='0')heriHouse(w);
   // 15.11.2026 (decyzja autora): z calej gry znikaja lewitujace kosci krasnoluda, uciete schodki z koscmi (nachodzily na sarkofagi) i lewitujace deski w porcie; zaden nie mial kolizji
   for(let k=w.PROPS.length-1;k>=0;k--){const q=w.PROPS[k].k;if(q==='dwarf_bones'||q==='doorway_bones'||(ch===PORT&&q==='deski'))w.PROPS.splice(k,1)}
   // runda 215: bez ognisk (koksowników) tuż przy lawie w rozdz. II
@@ -4269,7 +4368,7 @@ function enemyBody(e){return !e.dead&&e.rise<=0&&e.type!=='wisp'&&e.mode!=='merg
 const contactGap=e=>e.r+(BIG.has(e.type)?4:['drowner','zmora','wraith'].includes(e.type)?6:8);
 function playerBodyBlocked(x,y,ox,oy){if(!S||!pl||pl.dead||pl.roll>0)return false;
   for(const e of S.enemies){if(!enemyBody(e))continue;const r=contactGap(e),next=Math.hypot(x-e.x,y-e.y),before=Math.hypot(ox-e.x,oy-e.y);if(next<r-.01&&next<before-.001)return true}return false}
-function moveBox(o,dx,dy,hw,hh,passBodies=false){const free=(x,y)=>!boxSolid(x,y,hw,hh)&&(o!==pl||passBodies||!playerBodyBlocked(x,y,o.x,o.y));if(dx){const nx=o.x+dx;if(free(nx,o.y))o.x=nx}if(dy){const ny=o.y+dy;if(free(o.x,ny))o.y=ny}}
+function moveBox(o,dx,dy,hw,hh,passBodies=false){const mob=W&&W.heroOnly&&o!==pl&&o!==pl1&&o!==pl2,free=(x,y)=>!boxSolid(x,y,hw,hh)&&(o!==pl||passBodies||!playerBodyBlocked(x,y,o.x,o.y))&&!(mob&&(heroOnlyAt(x-hw,y-hh)||heroOnlyAt(x+hw,y-hh)||heroOnlyAt(x-hw,y)||heroOnlyAt(x+hw,y)));if(dx){const nx=o.x+dx;if(free(nx,o.y))o.x=nx}if(dy){const ny=o.y+dy;if(free(o.x,ny))o.y=ny}}
 function keepEnemyDistance(e,ox=e.x,oy=e.y){if(!pl||pl.dead||pl.roll>0||!enemyBody(e))return;
   const gap=contactGap(e),vx=e.x-ox,vy=e.y-oy,px=ox-pl.x,py=oy-pl.y,a=vx*vx+vy*vy,b=2*(px*vx+py*vy),c=px*px+py*py-gap*gap;
   // Clip a movement segment at the hero's body, including a fast leap or charge.
@@ -5235,7 +5334,7 @@ function portEnemyArt(key){
  portSkins.set(key,skin);return skin;
 }
 /* 22.11.2026 (zgoda autora): zycie mobkow rosnie wolno na poczatku i coraz szybciej po polnocy: x0,6 -> x0,86 (4 min) -> x1,39 (8) -> x2,11 (12) -> x3,0 (16) */function nightHp(){return .6+2.4*Math.pow(Math.min(S.t,NIGHT)/NIGHT,1.6)}
-function spawnEnemy(type,x,y,extra){if((type==='xbow'||type==='monk')&&S.enemies.reduce((n,o)=>n+(!o.dead&&(o.type==='xbow'||o.type==='monk')?1:0),0)>=2)type=type==='monk'?'madman':'bandit';// max 2 strzelców naraz; reszta walczy w zwarciu
+function spawnEnemy(type,x,y,extra){if(W&&W.heriHouse&&heroOnlyAt(x,y)){const d=W.heriHouse.door;x=(d[0]+.5)*TS;y=(d[1]+1.7)*TS}if((type==='xbow'||type==='monk')&&S.enemies.reduce((n,o)=>n+(!o.dead&&(o.type==='xbow'||o.type==='monk')?1:0),0)>=2)type=type==='monk'?'madman':'bandit';// max 2 strzelców naraz; reszta walczy w zwarciu
   const T=ET[type],mul=(BIG.has(type)||type==='collector'?1:nightHp()*(surgeOn()?.45:1))/* 15.11.2026: wzrost zycia liczony od ulamka nocy (koniec nocy = jak dawniej), mobki -20%, w Naporze slabsze */*S.pk.ehp*DF[DIFFK].hp*chapterHp(type);
   const e=Object.assign({type,x,y,hp:T.hp*mul,max:T.hp*mul,spd:T.spd*rnd(.9,1.1),r:T.r,dmg:T.dmg,xp:T.xp,vx:0,vy:0,flash:0,walk:Math.random()*5,s:1,ph:Math.random()*9,leap:0,lcd:2,side:Math.random()<.5?1:-1,
     frozen:0,bleed:0,bleedT:0,rise:type==='bat'?0:.5,atkA:0,slamT:4,atkT:0,dead:false},extra||{});
@@ -5361,6 +5460,7 @@ function updEnemy(e,dt){
   if(d>.001){e.contactNX=dx/d;e.contactNY=dy/d}
   const lock=attackCue(e)!==null&&e.mode!=='up',mode=e.mode;
   stepEnemyAI(e,dt);
+  if(W.heroOnly&&heroOnlyAt(e.x,e.y)&&!heroOnlyAt(ox,oy)){e.x=ox;e.y=oy}
   if(lock&&!e.dead&&e.mode===mode){e.x=ox;e.y=oy}
   keepEnemyDistance(e,ox,oy);keepGolemDistance(e);
 }
@@ -5644,12 +5744,12 @@ function sightSword(x0,y0,x1,y1){const n=Math.ceil(Math.hypot(x1-x0,y1-y0)/8);fo
 // Wróg, który nie widzi bohatera przez ścianę, idzie po niej: wychodzi z domów drzwiami i obchodzi przeszkody.
 const NAV={d:null,q:null,t:0};
 function navUpdate(dt){NAV.t-=dt;if(NAV.t>0||!pl)return;NAV.t=.35;const n=MW*MH;if(!NAV.d||NAV.d.length!==n){NAV.d=new Int16Array(n);NAV.q=new Int32Array(n)}
-  const D=NAV.d,Q=NAV.q,tx=Math.floor(pl.x/TS),ty=Math.floor(pl.y/TS);D.fill(-1);if(tx<0||ty<0||tx>=MW||ty>=MH)return;let h=0,t=0;D[ty*MW+tx]=0;Q[t++]=ty*MW+tx;
+  const D=NAV.d,Q=NAV.q,tx=Math.floor(pl.x/TS),ty=Math.floor(pl.y/TS);D.fill(-1);if(tx<0||ty<0||tx>=MW||ty>=MH)return;const HO=W.heroOnly,pin=!!HO&&HO.has(ty*MW+tx);let h=0,t=0;D[ty*MW+tx]=0;Q[t++]=ty*MW+tx;
   while(h<t){const c=Q[h++],cx=c%MW,cy=(c/MW)|0,v=D[c]+1;
-    if(cx>0&&D[c-1]<0&&!SOLID.has(tileAt(cx-1,cy))){D[c-1]=v;Q[t++]=c-1}
-    if(cx<MW-1&&D[c+1]<0&&!SOLID.has(tileAt(cx+1,cy))){D[c+1]=v;Q[t++]=c+1}
-    if(cy>0&&D[c-MW]<0&&!SOLID.has(tileAt(cx,cy-1))){D[c-MW]=v;Q[t++]=c-MW}
-    if(cy<MH-1&&D[c+MW]<0&&!SOLID.has(tileAt(cx,cy+1))){D[c+MW]=v;Q[t++]=c+MW}}}
+    if(cx>0&&D[c-1]<0&&!SOLID.has(tileAt(cx-1,cy))&&!(HO&&!pin&&HO.has(c-1))){D[c-1]=v;Q[t++]=c-1}
+    if(cx<MW-1&&D[c+1]<0&&!SOLID.has(tileAt(cx+1,cy))&&!(HO&&!pin&&HO.has(c+1))){D[c+1]=v;Q[t++]=c+1}
+    if(cy>0&&D[c-MW]<0&&!SOLID.has(tileAt(cx,cy-1))&&!(HO&&!pin&&HO.has(c-MW))){D[c-MW]=v;Q[t++]=c-MW}
+    if(cy<MH-1&&D[c+MW]<0&&!SOLID.has(tileAt(cx,cy+1))&&!(HO&&!pin&&HO.has(c+MW))){D[c+MW]=v;Q[t++]=c+MW}}}
 function navReach(x,y){const D=NAV.d;if(!D)return true;const tx=Math.floor(x/TS),ty=Math.floor(y/TS);return tx>=0&&ty>=0&&tx<MW&&ty<MH&&D[ty*MW+tx]>=0}
 const NAV8=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
 function navDir(e){const D=NAV.d;if(!D)return null;const ex=Math.floor(e.x/TS),ey=Math.floor(e.y/TS);if(ex<0||ey<0||ex>=MW||ey>=MH)return null;const here=D[ey*MW+ex];if(here<=0)return null;let best=here,bx=0,by=0;
