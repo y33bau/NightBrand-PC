@@ -1,4 +1,4 @@
-Stan na 2026-11-23, cache 866 (opublikowane), rola agent główny
+Stan na 2026-11-23, cache 875 (opublikowane), rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,13 +6,14 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 866, opublikowane 23.11.2026 (log `docs/logi/LOG_SESJI_2026-11-23.md`) |
-| Gałęzie czekające na „publikuj” | brak (864–866 opublikowane 23.11) |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 866 |
-| Zip itch.io | `NightBrand_itch_866.zip` na pulpicie autora w `NIGHTBRAND` |
-| Rozmiar gra/ | ok. 199 MB (limit 500 MB); zip itch.io ok. 817 plików / 1000 (każdy model = 2–3 pliki) |
+| main | cache 875 (commit 0f3cb2e), opublikowane 23.11.2026 (log `docs/logi/LOG_SESJI_2026-11-23.md`) |
+| Gałęzie czekające na „publikuj” | brak (867–875 opublikowane 23.11) |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 875 |
+| Zip itch.io | `NightBrand_itch_875.zip` na pulpicie autora w `NIGHTBRAND` |
+| Rozmiar gra/ | ok. 225 MB (limit 500 MB); zip itch.io 890 plików / 1000 (każdy model = 2–3 pliki) |
 
 ## Decyzje autora (najnowsze)
+- 23.11: publikacja 867–875. Zgoda na balans sklepu Margi: przed północą za Popioły (połowa ceny w monetach, min. 5), 60 s na noc, zegar stoi w sklepie. Domy Osady z modeli TripoSG odrzucone („Dramat”); budynki robimy z kodu i tekstur autora.
 - 23.11: teksty EN z listy `docs/teksty/EN_DO_ZATWIERDZENIA_2026-11-22.md` zatwierdzone (sekcje 1–13). W EN rozdział = „act” (decyzja autora 23.11; widoczne teksty już tak mówią, „chapter” zostało tylko w komentarzach kodu). Podpowiedzi cech czempionów (866) zatwierdzone. Zgoda na: rzadkie karty i wolniejszy awans, cechy elit i czempionów, zwalnianie światów, sprzątanie kodu (863).
 - 22.11: zgoda na zmiany balansu. Noc ma rosnąć naturalnie: od startu dużo łatwych wrogów, po północy coraz trudniej (853). Reakcje żywiołów (854). Dobicie Wita to niesłuszna łaska dla mordercy (855).
 - 21.11: drzewa robimy TYLKO z naszych malunków (Meshy obraz → 3D); modele z galerii i z opisu tekstowego „jak z innej bajki”. Wszystkie drzewa (Czarnobór, Spalona Osada, Złotogród) to modele z malunków (`P3D_LAS`, `P3D_DRZ1` w części 06), tekstury 2048. Następnie: drzewa w wysokiej jakości (`z_malunkow_hq`), potem kociołki i port tą samą metodą (paczka obrazków dla Code).
@@ -28,6 +29,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 867–875 (oprawa budynków, tekstury autora, schronienia, sklep Margi za Popioły): pełna noc z zakupami za Popioły, walka pod drzwiami schronień, FPS w Złotogrodzie i porcie, przycinka przy pierwszym wejściu na mapę (kompilacja shaderów), teksty EN sklepu i schronień (niezatwierdzone).
 - 866: goście z innych rozdziałów w falach (tabela `GUEST`, część 13), ghule w I–II później i rzadziej na starcie, podpowiedzi cech czempionów (EN zatwierdzone 23.11), dźwięki: Pancerz, Wezwanie, Szał, odbity pocisk.
 - 864–865: podsumowanie nocy bez przewijania, krąg Wybuchu, rzadsi czempioni (do 4%), Wybuch ×1,3, 5 nowych dźwięków Kenney CC0 (odsłuch!), doskok wilków/ghuli/ogarów z zamachem i bez ciosu zaraz po skoku.
 - 860–863: płynność (Czarnobór, Złotogród), pauza (pytanie o porzucenie nocy), ikonki stanów, podpowiedzi, rzadkie karty i tempo awansu (ok. 20 poziomów na noc), czempioni z cechami (Wezwanie, Wybuch w tłumie), powrót do rozdziału po zmianie.
@@ -50,6 +52,10 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - Ogólnie: pad na nowych ekranach, kooperacja, menu po angielsku, itch.io na żywo.
 
 ## Zgłoszone autorowi, czekają na decyzję
+- Domy Heriego i Chojraka: można w nich przeczekać całą noc. Propozycja: 60 s, potem potwory wracają pod drzwi.
+- Ceny sklepu Margi w Popiołach (10–30) po teście autora.
+- Modele TripoSG portu nieużywane przy `portKit` (zapas pod `?portnowe=0`): zostawić czy usunąć (`wydaj.py usun`).
+- Malowane tekstury z Claude Code (`ZLECENIE_DLA_CODE_TEKSTURY.md`): folder `NOWE MODELE\Tekstury_malowane` jeszcze nie istnieje.
 - Raport o grafice i UI 22.11 (Claude Docs „NightBrand: raport o stanie grafiki i UI”): w 849 zrobione szybkie poprawki; czekają rundy 2–5 (modele z malunków + port, drzewa HQ, Cytadela i Dolne Miasto, porządki UI).
 - 851: Cytadela (szachownica kancelarii drobniejsza i matowa, chodniki w kancelarii i skarbcu, sztandary przy ścianach, kandelabry przy wadze), Dolne Miasto (płyty −30%, 4 środkowe filary sali → koksowniki). Do zrobienia: druga posadzka w halach II i proste brzegi lawy (wymagają nowych tekstur lub zmiany kształtu lawy), detal ścian Cytadeli (nowa tekstura).
 - 850 (decyzje autora 22.11): Opcje → Dźwięk i pauza: głośność ogólna (`pn_master`) i „Wycisz w tle” (`pn_bgmute`, domyślnie wył.); paprocie przy cmentarzu rozrzucone; Czarnobór ze stałym ziarnem 1349 (wcześniej losowany przy każdym uruchomieniu), Cytadela i tak miała stały układ.
