@@ -45,3 +45,4 @@ Stan na 2026-11-23, cache 864, rola gamedev.
   - `kenney_blastwarn` (lont Wybuchu): `thruster_fire_001`, narastające
   - `kenney_blast` (eksplozja Wybuchu): `explosion_crunch_001`
 - CC0 nie wymaga podpisu; zapis tylko po to, by wiedzieć, skąd plik.
+- Cache 866, te same lustra Kenney (CC0): `kenney_armor` (cios w Pancerz): `impact_metal_heavy_001`, obniżony; `kenney_summon` (Wezwanie): `slime_000`, obniżony; `kenney_deflect` (odbity pocisk trafia): `impact_plate_heavy_003`. Szał używa istniejącego ryku `creature_roar_02`.

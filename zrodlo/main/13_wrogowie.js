@@ -86,7 +86,7 @@ function guardFeedback(kind,nx,ny,projectile){let dx=-nx,dy=-ny,d=Math.hypot(dx,
 function hitSpark(e,nx,ny){const length=Math.hypot(nx,ny)||1,dx=nx/length,dy=ny/length,armour=steelEnemy(e),amplitude=BIG.has(e.type)?.35:e.type==='collector'?.55:ftHeavy?1.3:ftCrit?1.1:.75;
   if(!emitCombatEffect(ftHeavy?'heavy':'light',e.x-dx*Math.min(e.r*.55,5),e.y-dy*Math.min(e.r*.55,5),ftHeavy?1.35:.9,0,armour?'steel':'flesh'))contactSparks(e.x-dx*Math.min(e.r*.55,5),e.y-dy*Math.min(e.r*.55,5),dx,dy,armour?'steel':'flesh',ftCrit?8:ftHeavy?6:4);
   const life=COMBAT_POLISH_ON?(ftHeavy?.23:.18):.15,power=COMBAT_POLISH_ON?amplitude*(armour?2.1:2.8):amplitude;e.visualHit={t:life,life,dx,dy,amplitude:power,heavy:ftHeavy};}
-function damageEnemy(e,dmg,nx,ny,kb=1,src){if(e.dead||e.trans>0||e.inv>0)return false;if(TRN.ohk)dmg=Math.max(dmg,e.hp+1);if(e.hookMark>0)dmg*=1.25;if(src&&src.startsWith('sk:'))dmg*=skStatusMul(e,src);if(e.type==='shieldman'&&ftMelee&&!ftHeavy&&!ftCrit&&!(e.stun>0))dmg*=.5;if(e.affix==='pancerz'&&ftMelee&&!ftHeavy&&!ftCrit&&!(e.stun>0))dmg*=.55;// tarcza: lekkie ciecia zadaja polowe; ciezki atak, krytyk i ogluszenie po paradzie przebijaja
+function damageEnemy(e,dmg,nx,ny,kb=1,src){if(e.dead||e.trans>0||e.inv>0)return false;if(TRN.ohk)dmg=Math.max(dmg,e.hp+1);if(e.hookMark>0)dmg*=1.25;if(src&&src.startsWith('sk:'))dmg*=skStatusMul(e,src);if(e.type==='shieldman'&&ftMelee&&!ftHeavy&&!ftCrit&&!(e.stun>0))dmg*=.5;if(e.affix==='pancerz'&&ftMelee&&!ftHeavy&&!ftCrit&&!(e.stun>0)){dmg*=.55;try{play('afxArmor',.18)}catch(_){}};// tarcza: lekkie ciecia zadaja polowe; ciezki atak, krytyk i ogluszenie po paradzie przebijaja
   if(S.zab&&e.mini&&e.fhT==null)e.fhT=S.t;if(dmg>=.5&&Math.hypot(e.x-pl.x,e.y-pl.y)<190)ftx(dmg,e.x,e.y,ftEntH(e),ftCrit?'c':'d',e);// Kat: Guillotine perk finishes regular enemies; hit counter for 'One Verdict'
   if(S.pk.kExec&&ftHeavy&&ftMelee&&!e.mini&&!BIG.has(e.type)&&e.type!=='collector'&&e.hp-dmg>0&&e.hp-dmg<e.max*.35)dmg=e.hp;
   e.hN=(e.hN||0)+1;S.dealt=(S.dealt||0)+dmg;if(src!=='trn'){const sk=typeof src==='string'&&src.slice(0,3)==='sk:'?src.slice(3):'',D=S.dsrc||(S.dsrc={}),k=src==='parry'?'p':src==='dot'?'d':sk?'s':DSRC||'s';D[k]=(D[k]||0)+dmg;if(sk){const Q=S.dsk||(S.dsk={});Q[sk]=(Q[sk]||0)+dmg}}if(dmg>(S.bigHit||0))S.bigHit=dmg;e.hp-=dmg;if(!e.ph2&&e.hp>0&&e.hp<=e.max*.5&&!e.mini&&(BIG.has(e.type)||e.type==='collector'||e.type==='boginka'))bossPhase2(e);e.flash=ftCrit?.17:ftHeavy?.12:.08;if(ftMelee&&dmg>=.5)hitSpark(e,nx,ny);else if(COMBAT_POLISH_ON&&dmg>=.5&&src!=='dot'&&src!=='trn'){const len=Math.hypot(nx,ny)||1;e.visualHit={t:.17,life:.17,dx:nx/len,dy:ny/len,amplitude:BIG.has(e.type)?.3:1.2,heavy:false}}if(e.type==='collector'&&!(e.hurtCd>0)&&dmg>=20){e.hurtA=.3;e.hurtCd=2.5}const k=(BIG.has(e.type)?.05:e.type==='collector'?.15:(e.type==='warden'||e.type==='knight'||e.type==='rotknight'||e.type==='wight'||e.type==='bies'||e.type==='boginka'||e.type==='marauder'||e.type==='cursed'||e.type==='arbiter')?.35:1)*110*kb;if(e.frozen<=0){e.vx+=nx*k;e.vy+=ny*k}
@@ -430,7 +430,7 @@ function updEprojX(dt){S.enemyShotCd=Math.max(0,(S.enemyShotCd||0)-dt);for(let i
   let gone=f.life<=0||solidAt(f.x,f.y);
   if(f.ref){let e=f.tgt;if(!e||e.dead||!S.enemies.includes(e))e=f.tgt=nearestFoe(f.x,f.y);gone=!e;
     if(e){const dx=e.x-f.x,dy=e.y-f.y,d=Math.hypot(dx,dy)||1;f.vx=dx/d*f.spd;f.vy=dy/d*f.spd;f.life=Math.max(f.life,.2);if(f.vfe)f.vfe.rot=-screenAng(f.vx,f.vy);
-      if(d<(e.r||6)+5){const oM=ftMelee,oC=ftCrit;ftMelee=false;ftCrit=true;try{damageEnemy(e,f.dmg,dx/d,dy/d,.6,'parry')}finally{ftMelee=oM;ftCrit=oC}gone=true}}
+      if(d<(e.r||6)+5){const oM=ftMelee,oC=ftCrit;ftMelee=false;ftCrit=true;try{damageEnemy(e,f.dmg,dx/d,dy/d,.6,'parry')}finally{ftMelee=oM;ftCrit=oC}try{play('deflectHit',.06)}catch(_){}gone=true}}
     if(!gone)continue}
   {const G=S.swordGuardian;if(!gone&&G&&!G.gone&&Math.hypot(G.x-f.x,G.y-f.y)<SL.guard.r+3){golemHurt(G,enemyDamage(f.dm||(f.bolt?6:7),SL.projDiv));gone=true}}
   if(!gone&&!pl.dead&&Math.hypot(pl.x-f.x,pl.y-f.y)<8){const sp=Math.hypot(f.vx,f.vy)||1,nx=f.vx/sp,ny=f.vy/sp;
@@ -458,6 +458,9 @@ function navDir(e){const D=NAV.d;if(!D)return null;const ex=Math.floor(e.x/TS),e
   for(const [ox,oy] of NAV8){const nx=ex+ox,ny=ey+oy;if(nx<0||ny<0||nx>=MW||ny>=MH)continue;const v=D[ny*MW+nx];if(v<0||v>=best)continue;if(ox&&oy&&(D[ey*MW+nx]<0||D[ny*MW+ex]<0))continue;best=v;bx=ox;by=oy}
   if(!bx&&!by)return null;const cx=(ex+bx+.5)*TS-e.x,cy=(ey+by+.5)*TS-e.y,l=Math.hypot(cx,cy)||1;return [cx/l,cy/l]}
 function sight(x0,y0,x1,y1){const n=Math.ceil(Math.hypot(x1-x0,y1-y0)/8);for(let i=1;i<n;i++)if(solidAt(x0+(x1-x0)*i/n,y0+(y1-y0)*i/n))return false;return true}
+/* 23.11.2026 (runda 866, zgoda autora): goscie, czyli potwory z innych rozdzialow wplatane w fale (typ, szansa na jedno miejsce, od sekundy nocy). Port ma wlasne skorki zalogi, wiec bez gosci. */
+const GUEST={1:[['madman',.06,60],['dwarf',.04,200]],2:[['possessed',.07,0],['militia',.05,120]],3:[['ghoul',.05,60],['shieldman',.05,90],['monk',.04,150]],4:[['possessed',.05,20],['ghoul',.05,60],['gravedigger',.04,150]],5:[['knight',.05,90],['rotknight',.04,150],['marauder',.04,200]]};
+function guestType(t){if(!S||S.dg||S.train)return null;for(const [k,c,from] of GUEST[CH]||[])if(t>=from&&Math.random()<c&&A[k]&&ET[k])return k;return null}
 function spawnTick(dt){const n0=S?S.enemies.length:0;spawnTick0(dt);try{champRoll(n0)}catch(e){quietErr('champ',e)}}
 /* 23.11.2026 (zgoda autora): cechy elit i czempioni. Kazda elita dostaje jedna ceche; po polnocy czesc zwyklych wrogow
    wychodzi jako czempion (2-7% nowych, najwyzej 3 naraz): wiecej zycia, bordowa poswiata, nazwa z cecha nad glowa.
@@ -467,12 +470,12 @@ const AFX={pancerz:{n:(EN?'Armoured':'Pancerz'),c:'#8fb8ff'},szal:{n:(EN?'Enrage
 function setAffix(e,k){k=k||Object.keys(AFX)[(Math.random()*4)|0];e.affix=k;if(k==='szal'){e.spd*=1.3;e.dmg*=1.15}if(k==='wezwanie')e.sumT=4;return e}
 function champRoll(n0){if(!S||S.t<BREAK_AT||S.dg||S.train||S.stage==='break')return;let alive=0;for(const o of S.enemies)if(o.champ&&!o.dead)alive++;if(alive>=3)return;
  const p=.02+.02*Math.min(1,(S.t-BREAK_AT)/(NIGHT-BREAK_AT));for(let i=n0;i<S.enemies.length&&alive<3;i++){const e=S.enemies[i];if(!e||e.dead||e.mini||e.champ||e.named||BIG.has(e.type)||['collector','boginka','wisp','bat','paperrat','courtraven','glizzard'].includes(e.type))continue;if(Math.random()>=p)continue;
-  e.champ=true;e.hp*=2.2;e.max*=2.2;e.dmg*=1.25;e.xp*=3;e.s=(e.s||1)*1.12;setAffix(e);alive++;try{play('champ',1.2)}catch(_){}}}
+  e.champ=true;e.hp*=2.2;e.max*=2.2;e.dmg*=1.25;e.xp*=3;e.s=(e.s||1)*1.12;setAffix(e);alive++;try{play('champ',1.2);if(e.affix==='szal')play('afxRage',.8)}catch(_){}}}
 function affixDeath(e){if(e.affix!=='wybuch')return;(S.blasts||(S.blasts=[])).push({x:e.x,y:e.y,t:.9,r:44,dmg:enemyDamage(e.dmg*1.3),e:0});try{play('blastWarn',.1)}catch(_){}ftx(AFX.wybuch.n+'!',e.x,e.y,ftEntH(e)+.6,'i')}
 function affixTick(dt){if(!S)return;
  for(const e of S.enemies){if(e.affix!=='wezwanie'||e.dead||e.rise>0)continue;e.sumT-=dt;if(e.sumT>0)continue;e.sumT=9;let alive=0;const pool=[];for(const o of S.enemies)if(!o.dead&&o.type!=='wisp'){alive++;if(!o.mini&&!o.champ&&!BIG.has(o.type)&&o.type!=='collector'&&o.type!=='boginka'&&o.type!=='bat')pool.push(o.type)}
   if(alive>spawnTarget()+6)continue;const ty=pool.length?pool[(Math.random()*pool.length)|0]:e.type;for(let k=0;k<2;k++){const a=Math.random()*6.283,x=e.x+Math.cos(a)*22,y=e.y+Math.sin(a)*14;if(solidAt(x,y))continue;try{spawnEnemy(ty,x,y,{rise:1})}catch(_){}}
-  ftx(AFX.wezwanie.n+'!',e.x,e.y,ftEntH(e)+.6,'i');for(let i=0;i<14;i++){const an=Math.random()*6.283;S.parts.push({k:'e',x:e.x,y:e.y,z:rnd(4,14),vx:Math.cos(an)*rnd(30,70),vy:Math.sin(an)*rnd(20,45),vz:rnd(6,20),c:AFX.wezwanie.c,life:rnd(.35,.7)})}}
+  ftx(AFX.wezwanie.n+'!',e.x,e.y,ftEntH(e)+.6,'i');try{play('afxSummon',.3)}catch(_){}for(let i=0;i<14;i++){const an=Math.random()*6.283;S.parts.push({k:'e',x:e.x,y:e.y,z:rnd(4,14),vx:Math.cos(an)*rnd(30,70),vy:Math.sin(an)*rnd(20,45),vz:rnd(6,20),c:AFX.wezwanie.c,life:rnd(.35,.7)})}}
  const B=S.blasts;if(!B||!B.length)return;for(let i=B.length-1;i>=0;i--){const b=B[i];b.t-=dt;b.e-=dt;
   if(b.e<=0&&b.t>0){b.e=.07;for(let k=0;k<14;k++){const a=k/14*6.283+Math.random()*.2;S.parts.push({k:'e',x:b.x+Math.cos(a)*b.r,y:b.y+Math.sin(a)*b.r*.62,z:2,vx:0,vy:0,vz:rnd(4,12),c:k%2?AFX.wybuch.c:'#ffd08a',life:.16})}}
   if(b.t<=0){B.splice(i,1);shake(.16,.45);try{play('blast',.06)}catch(_){}for(let k=0;k<34;k++){const a=Math.random()*6.283,sp=rnd(40,120);S.parts.push({k:'e',x:b.x,y:b.y,z:rnd(4,16),vx:Math.cos(a)*sp,vy:Math.sin(a)*sp*.62,vz:rnd(10,40),c:k%3?AFX.wybuch.c:'#fff1c0',life:rnd(.3,.65)})}
@@ -486,8 +489,10 @@ function spawnTick0(dt){
   const target=spawnTarget();// will-o'-wisps sit far away on the marsh and must not take up places in the cap
   let n=Math.min(5,Math.floor(target-S.enemies.filter(e=>e.type!=='wisp').length));
   while(n-->0){const p=ringSpot()||ringSpot(170,260);if(!p)continue;const r=Math.random(),t=S.t;
+    if(CH!==5&&CH!==PORT){const g=guestType(t);if(g){spawnEnemy(g,p[0],p[1]);continue}}
     if(CH===5){if(!sight(p[0],p[1],pl.x,pl.y)){const q=ringSpot(150,230);if(!q||!sight(q[0],q[1],pl.x,pl.y))continue;p[0]=q[0];p[1]=q[1]}
       if(t<12){n=0;continue}
+      {const g=guestType(t);if(g){spawnEnemy(g,p[0],p[1]);continue}}
       const rg=W.region(Math.floor(p[0]/TS),Math.floor(p[1]/TS));
       const T={dziedziniec:[['guard',38,0],['condemned',24,0],['courtraven',18,20],['judge',12,45],['cursed',12,90]],kancelaria:[['scribe',25,30],['paperrat',32,0],['guard',20,0],['judge',10,70],['arbiter',9,110],['bookgolem',12,150]],
         sala:[['executioner',12,120],['guard',28,0],['judge',15,60],['scribe',14,30],['condemned',21,0],['cursed',10,100]],skarbiec:[['wraith',42,55],['courtraven',20,20],['guard',24,0],['arbiter',14,100]],
@@ -509,7 +514,8 @@ function spawnTick0(dt){
       {const q=Math.random();spawnEnemy(t>50&&r<.22?(t>150&&q<.34?'marauder':t>90&&q<.67?'gravedigger':'militia'):t>70&&r<.42?'rotknight':t>35&&r<.62?'hound':'madman',p[0],p[1])}continue}
     if(t>25&&r<.11){for(let i=0;i<3;i++)spawnEnemy('bat',p[0]+rnd(-10,10),p[1]+rnd(-8,8));n-=2;continue}
     if(t>45&&Math.random()<.14){spawnEnemy('shieldman',p[0],p[1]);continue}
-    if(CH===1)spawnEnemy(t>110&&r<.25?'knight':t>50&&r<.5?'ghoul':'possessed',p[0],p[1]);else spawnEnemy(t>70&&r<.25?'warden':t>35&&r<.5?'ghoul':'dwarf',p[0],p[1])}
+    /* 23.11.2026: lagodniejszy start I i II: ghule pozniej i najpierw rzadziej (25% -> 50% do ok. 7. minuty) */const gh=.25+.25*Math.min(1,Math.max(0,t-70)/360);
+    if(CH===1)spawnEnemy(t>110&&r<.25?'knight':t>70&&r<gh?'ghoul':'possessed',p[0],p[1]);else spawnEnemy(t>70&&r<.25?'warden':t>55&&r<gh?'ghoul':'dwarf',p[0],p[1])}
 }
 // ---- elity: 4 na noc (4:15, 10:00, 12:15 i 14:30; w pierwszej nocy nieco później), zwykły wróg z rozdziału, bordowa poświata ----
 const ELITE={times:[255,600,735,870],timesFirst:[270,620,750,880],/* 22.11.2026: czwarta elita w koncowce *//* 15.11.2026: noc 16 min; pierwszy i ostatni konczy Napor */t:180,hp:3.5,dmg:1.65,type:{1:'knight',2:'warden',3:'rotknight',4:'bandit',5:'executioner',6:'knight'}};

@@ -81,6 +81,10 @@ const SFX={
  rare:()=>{bell(392,1.1,.06,0,.4);bell(588,.9,.035,.12,.4)},
  champ:()=>{voice(70,40,.9,.16,'sawtooth',260,.2);noise(.6,180,1,.1,'lowpass',60,.15)},
  blastWarn:()=>{noise(.85,900,.8,.05,'bandpass',3200,.1)},
+ afxArmor:()=>{bell(1250,.12,.03,0,.05);noise(.05,2600,2,.06,'bandpass',1400)},
+ afxSummon:()=>{voice(90,55,.6,.1,'sawtooth',300,.2);noise(.4,500,1,.06,'lowpass',150,.2)},
+ afxRage:()=>{voice(150,70,.6,.13,'sawtooth',700,.15,8,5)},
+ deflectHit:()=>{noise(.08,2200,2,.12,'bandpass',800);bell(700,.18,.03,0,.1)},
  blast:()=>{noise(.9,600,1,.22,'lowpass',70,.2);tone(90,35,.5,.14,'triangle')},
  bossGrowl:()=>{voice(58,30,1.5,.22,'sawtooth',320,.25,9,4);voice(116,52,1.3,.08,'square',500,.2,7,6);noise(1.1,200,1,.1,'lowpass',60,.1)},
  slam:()=>{noise(.7,500,.7,.55,'lowpass',35,.25);tone(62,22,.55,.42,'sine');noise(.12,2500,1,.2,'bandpass',500)},
@@ -134,7 +138,9 @@ const SFX_MIX={roll:[.5,.035,2,2],ui:[.315,.06,2,3],navtick:[.14,.03,1,3],empty:
  buy:[.6,.08,2,3],shopIn:[.6,.3,1,3],equip:[.55,.08,1,3],runStart:[.7,.5,1,3],card:[.6,.15,1,3],reroll:[.5,.1,1,3],doorIn:[.65,.5,1,3],doorOut:[.6,.5,1,3],
  step:[.11,.15,1,0],note:[.6,.3,1,2],purse:[.6,.15,2,1],
  // 23.11.2026 (runda 864): Kenney CC0 (Sci-fi Sounds, Impact Sounds): reakcja zywiolow, rzadka karta, czempion, Wybuch (lont i eksplozja)
- rx:[.42,.14,2,1],rare:[.6,.5,1,3],champ:[.55,1.2,1,2],blastWarn:[.5,.12,2,2],blast:[.75,.08,2,2]};
+ rx:[.42,.14,2,1],rare:[.6,.5,1,3],champ:[.55,1.2,1,2],blastWarn:[.5,.12,2,2],blast:[.75,.08,2,2],
+ // 23.11.2026 (runda 866): cechy czempionow i odbity pocisk
+ afxArmor:[.4,.18,1,1],afxSummon:[.55,.4,1,2],afxRage:[.6,.8,1,2],deflectHit:[.6,.06,2,2]};
 const sfxPlayedAt={};
 for(const [event,names] of Object.entries(SFX_SAMPLE_MAP)){
  const fallback=SFX[event];SFX[event]=()=>{
