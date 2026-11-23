@@ -961,3 +961,4 @@ cache885 · 885: sprzatanie - 76 obrazkow rekwizytow pod modelami usunietych (ob
 cache886 · 886: arkusze 49 bohaterow powiekszone 2x (Real-ESRGAN, 2048x3072), przelacznik ?bohx2=0 (nie sprawdzono: wyglad w grze, pamiec, pad, itch.io; knight_lunge bez zmiany)
 cache887 · 887: ostrosc tekstur modeli 3D i drzew pod katem: anizotropia z ustawien jakosci (Ultra 16, Wysoka 8, wczesniej stale 4) (nie sprawdzono: wyglad w grze, FPS u autora, pad, itch.io)
 cache888 · tekstury 83 modeli 3D powiekszone 2x (Real-ESRGAN, 2048); nie sprawdzono: wyglad w grze, pamiec GPU, pad, itch.io
+cache889 · modele rodzin z bryl Blendera wylaczone (wracaja malowane ogniska, stosy, kolumna, jezyny; znika wystroj 882-884); nie sprawdzono: wyglad w grze, pad, itch.io
