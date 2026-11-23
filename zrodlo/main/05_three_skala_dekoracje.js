@@ -208,7 +208,7 @@ function margaShop(r,wall,put,box,acc,mesh){
  crate(xa-.9,z0+.45,.6,.2);crate(xa-.85,z0+.45,.42,-.3);put(A.wood,box,xa-.85,.6+.21,z0+.45,.42,.42,.42,0,-.3,0);barrel(xa-1.7,z0+.5);
  barrel(xb+1.0,z0+.48);crate(xb+1.8,z0+.5,.55,.5);put(A.dark,cyl,xb+1.0,.86,z0+.48,.46,.04,.46);goods(xb+1.0,z0+.48,.88,0);goods(xb+.92,z0+.4,.88,4);
  const M=(c,o)=>cutaway(phong(Object.assign({color:c},o||{})));
- const mats={wood:worldSurfN(cutaway(phong({color:0xe0d4c8})),'t2_belka',1.1,1),dark:M(0x4a3c32),clA:M(0x5a221c,{side:THREE.DoubleSide}),clB:M(0x7e7260,{side:THREE.DoubleSide}),
+ const mats={wood:worldSurfN(cutaway(phong({color:0xe0d4c8})),'t2_belka',1.1,1),dark:M(0x4a3c32),clA:M(0x3e1612,{side:THREE.DoubleSide}),clB:M(0x4e463c,{side:THREE.DoubleSide}),
   bone:M(0xd8cab0,{specular:0x222018,shininess:8}),glass:M(0x223a2c,{emissive:0x0e3a1c,specular:0x88aa99,shininess:60}),glassR:M(0x3a1414,{emissive:0x4a0e0a,specular:0xaa8888,shininess:60}),
   fl:phong({color:0xffe0a0,emissive:0xffa040}),gold:M(0xb89040,{emissive:0x2a1c06,specular:0x806020,shininess:30}),iron:M(0x2e2a28,{specular:0x222222,shininess:20}),lamp:phong({color:0xffd090,emissive:0xd07020})};
  for(const key in A)if(A[key].p.length)mesh(A[key],mats[key])}
@@ -219,8 +219,8 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
  const acc=()=>({p:[],n:[]}),put=(a,geo,px,py,pz,sx,sy,sz,rx,ry,rz)=>{E.set(rx||0,ry||0,rz||0);Q.setFromEuler(E);M.compose(Vp.set(px,py,pz),Q,Vs.set(sx,sy,sz));
    const g=geo.clone().applyMatrix4(M),P=g.attributes.position.array,N=g.attributes.normal.array;for(let i=0;i<P.length;i++){a.p.push(P[i]);a.n.push(N[i])}g.dispose()};
  const mesh=(a,mat)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(a.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(a.n,3));const m=new THREE.Mesh(g,mat);m.castShadow=true;m.receiveShadow=true;w.group.add(m);return m};
- const posts=acc(),floors=acc(),margaR=rs.reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null);
- for(const r of rs){const h=(i=>{const x=Math.sin((r.x*12.9898+r.y*78.233+i*37.7))*43758.5453;return x-Math.floor(x)});let hi=0;const rnd=()=>h(hi++);
+ const holes=acc(),glow=acc(),chim=acc(),cyl=new THREE.CylinderGeometry(.5,.5,1,8).toNonIndexed(),posts=acc(),floors=acc(),margaR=rs.reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null);
+ for(const r of rs){if(r.chata)continue;const h=(i=>{const x=Math.sin((r.x*12.9898+r.y*78.233+i*37.7))*43758.5453;return x-Math.floor(x)});let hi=0;const rnd=()=>h(hi++);
   const marga=r===margaR&&r.w/r.h>1.6;
   const alongX=r.w>=r.h,L=alongX?r.w:r.h,D=alongX?r.h:r.w,cx=r.x+r.w/2,cz=r.y+r.h/2,eave=1.9,rise=Math.min(2.3,D*.34),ov=.35,half=D/2+ov,slope=Math.atan2(rise,half),sl=Math.hypot(half,rise);
   // dla osi wzdluz Z zamieniamy x<->z przy skladaniu
@@ -245,12 +245,25 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
   for(const [ux,vz] of [[-1,-1],[1,-1],[-1,1],[1,1]])P(posts,ux*(L/2-.2),1.15+rnd()*.15,vz*(D/2-.2),.34,2.3+rnd()*.3,.34);
   for(const yy of [r.y,r.y+r.h-1]){let a=-1;for(let x=r.x;x<=r.x+r.w;x++){const open=x<r.x+r.w&&!wall.has(yy*MW+x)&&wall.has(yy*MW+r.x)===true||false;const isOpen=x<r.x+r.w&&!wall.has(yy*MW+x);
     if(isOpen&&a<0)a=x;if((!isOpen||x===r.x+r.w)&&a>=0){const b=x;if(b-a>=2&&b-a<=6&&a>r.x&&b<r.x+r.w){const zz=yy+.5;for(const xx of [a,b])put(posts,box,xx,1.05,zz,.26,2.1,.32);if(rnd()<.7)put(posts,box,(a+b)/2,2.05,zz,b-a+.5,.24,.3)}a=-1}}}
+  /* 23.11.2026 (autor: domy Osady w nowym standardzie): okna z ramami i okiennicami w pelnych odcinkach scian, wystajace konce bali na narozach, murowane kominy */
+  if(NT&&nbParam('osada2')!=='0'){const full=(x,y)=>{if(marga)return true;const k=Math.sin(x*12.9898+y*78.233)*43758.5453,f=k-Math.floor(k);return f>=.38};
+   const sides=[{n:r.w,at:i=>[r.x+i,r.y],face:(i)=>[r.x+i+.5,r.y-.03],ry:0,out:-1},{n:r.w,at:i=>[r.x+i,r.y+r.h-1],face:i=>[r.x+i+.5,r.y+r.h+.03],ry:0,out:1},
+    {n:r.h,at:i=>[r.x,r.y+i],face:i=>[r.x-.03,r.y+i+.5],ry:Math.PI/2,out:-1},{n:r.h,at:i=>[r.x+r.w-1,r.y+i],face:i=>[r.x+r.w+.03,r.y+i+.5],ry:Math.PI/2,out:1}];
+   for(const S of sides){let run=0;for(let i=2;i<S.n-2;i++){const [tx,ty]=S.at(i),ok=wall.has(ty*MW+tx)&&full(tx,ty);run=ok?run+1:0;if(!ok||run%3!==2)continue;
+     const [px,pz]=S.face(i),a=S.ry,ax=Math.cos(a),az=-Math.sin(a),o=S.out,ox=S.ry?o:0,oz=S.ry?0:o,y=1.18;
+     put(holes,box,px,y,pz,.62,.56,.06,0,a,0);if(rnd()<.35)put(glow,box,px-ox*.02,y,pz-oz*.02,.5,.44,.04,0,a,0);
+     for(const sy of [-1,1])put(posts,box,px+ox*.03,y+sy*.33,pz+oz*.03,.86,.1,.14,0,a,0);for(const sx of [-1,1])put(posts,box,px+ax*sx*.38+ox*.03,y,pz+az*sx*.38+oz*.03,.1,.76,.14,0,a,0);
+     if(rnd()<.75){const sx=rnd()<.5?-1:1,hang=rnd()<.3;put(posts,box,px+ax*sx*.62+ox*.12,y-(hang?.12:0),pz+az*sx*.62+oz*.12,.3,.62,.04,0,a+sx*o*(hang?.5:1.2),hang?sx*.4:0)}}}
+   for(const [cx0,cz0,sx,sz] of [[r.x,r.y,-1,-1],[r.x+r.w,r.y,1,-1],[r.x,r.y+r.h,-1,1],[r.x+r.w,r.y+r.h,1,1]])for(let i=0;i<6;i++){const y=.6+i*.22;
+     if(i%2)put(posts,cyl,cx0+sx*.16,y,cz0-sz*.5,.24,.62,.24,0,0,Math.PI/2);else put(posts,cyl,cx0-sx*.5,y,cz0+sz*.16,.24,.62,.24,Math.PI/2,0,0)}
+   if(!marga&&rnd()<.6){const east=rnd()<.5,tx=east?r.x+r.w-1:r.x,ty=r.y+Math.floor(r.h/2);if(wall.has(ty*MW+tx)){const H=eave+rise+.9;put(chim,box,tx+.5,H/2,ty+.5,1.0,H,1.0);put(chim,box,tx+.5,H+.08,ty+.5,1.2,.16,1.2);put(holes,box,tx+.5,H+.17,ty+.5,.55,.04,.55)}}}
   const fadeR=phong({color:0xffffff,transparent:true,opacity:1,side:THREE.DoubleSide,alphaTest:marga?0:.5});
   const roofM=NT?worldSurfN(fadeR,burn,marga?2.6:3.6,1.2):worldSurf(fadeR,wood,.9,'a');roofM.color.setHex(NT?(marga?0xf0e4dc:0xfff4ec):0x9a8474);/* poszycie: gonty z dziurami, dom Margi: dachowka */
   const woodM=NT?worldSurfN(phong({color:0xe8dcd0,transparent:true,opacity:1}),'t2_belka',1.3,1.2):worldSurf(phong({color:0x8c7868,transparent:true,opacity:1}),wood,1.3,'a');
   const g=new THREE.Group();g.add(mesh(wood_,woodM));if(roof.p.length)g.add(mesh(roof,roofM));w.group.add(g);
   r.mats=[woodM,roofM];r.mesh=g;r.a=1}
  if(margaR&&margaR.w/margaR.h>1.6&&NT&&nbParam('sklep')!=='0')margaShop(margaR,wall,put,box,acc,mesh);// 23.11.2026 (autor: sklep bardziej sklepowy)
+ if(holes.p.length)mesh(holes,cutaway(phong({color:0x0e0b09})));if(glow.p.length)mesh(glow,phong({color:0x1a0a04,emissive:0x5a1c06}));if(chim.p.length)mesh(chim,worldSurfN(cutaway(phong({color:0xb8aca4})),'t4_podmurowka',1.6,1.2));
  if(posts.p.length)mesh(posts,postM);if(floors.p.length){const f=mesh(floors,worldSurfN(phong({color:0x8c847c}),'t5_podloga',2.6,1.1));f.castShadow=false}}
 function buildRoofs(w){if(!w.roofs||!w.group)return;if(w.ch===1&&IMGS.wl_palecap&&nbParam('spalone')!=='0'){burntHouses(w);return}const rm=[];
  for(const r of w.roofs){if(r.tri||r.mesh)continue;/* 23.11.2026: dom z modelu ma wlasny dach */const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
@@ -260,7 +273,7 @@ function buildRoofs(w){if(!w.roofs||!w.group)return;if(w.ch===1&&IMGS.wl_palecap
 const ROOF_PNG='./assets/tekstury/517905a0e4feadfa5ba42b536be2720a1d736e68e81eba922eedcc53d16acee0.png';let _roofIm=null,_roofCbs=[];function roofImg(cb){if(_roofIm&&_roofIm.complete&&_roofIm.naturalWidth){cb(_roofIm);return}_roofCbs.push(cb);if(_roofIm)return;_roofIm=new Image();_roofIm.onload=()=>{const l=_roofCbs;_roofCbs=[];for(const f of l)f(_roofIm)};_roofIm.src=ROOF_PNG}
 let roofT=0;
 function roofTick(){const rs=W&&W.roofs;if(!rs||!S)return;const ps=[pl1||pl,pl2].filter(p=>p&&!p.dead),dt=Math.min(.1,Math.max(0,clock-roofT));roofT=clock;
- for(const r of rs){if(!r.mesh)continue;let inside=false;for(const p of ps){const tx=p.x/16,ty=p.y/16;if(tx>r.x-.3&&tx<r.x+r.w+.3&&ty>r.y-.3&&ty<r.y+r.h+.3){inside=true;break}}
+ for(const r of rs){if(!r.mesh)continue;let inside=false;const pd=r.pad||.3;for(const p of ps){const tx=p.x/16,ty=p.y/16;if(tx>r.x-pd&&tx<r.x+r.w+pd&&ty>r.y-pd&&ty<r.y+r.h+pd){inside=true;break}}
   r.a+=((inside?0:1)-r.a)*Math.min(1,dt*7);if(r.mats)for(const m of r.mats)m.opacity=r.a;else r.mesh.material.opacity=r.a;r.mesh.visible=r.a>.02}}
 
 // Ciemna ziemia za krawedzia mapy zamiast pustego tla (rozdzial I, ?depth=0 wylacza).
