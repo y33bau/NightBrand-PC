@@ -189,28 +189,42 @@ function margaShop(r,wall,put,box,acc,mesh){
  put(A.dark,box,sx,sy-.02,zp,.86,.5,.06);put(A.wood,box,sx,sy,zp+.01,.76,.4,.06);
  put(A.bone,sph,sx,sy+.04,zp+.07,.17,.17,.1);put(A.dark,box,sx-.04,sy+.05,zp+.12,.04,.04,.02);put(A.dark,box,sx+.04,sy+.05,zp+.12,.04,.04,.02);
  for(const a of [.7,-.7])put(A.bone,cyl,sx,sy-.06,zp+.06,.025,.42,.025,0,0,a);
- // lada za wejsciem z towarem
- const zc=z0-2.7,cl=Math.min(span+1,r.w-6);put(A.wood,box,cx,.42,zc,cl,.84,.5);put(A.dark,box,cx,.87,zc,cl+.14,.06,.62);/* lada w glebi izby, z bocznymi ramionami do tylu */
- for(const sx of [-1,1]){put(A.wood,box,cx+sx*(cl/2-.25),.42,zc-.7,.5,.84,.9);put(A.dark,box,cx+sx*(cl/2-.25),.87,zc-.7,.62,.06,1.02)}
+ // lada za wejsciem z towarem (uklad sprzed 879)
+ const zc=z0-2.7,cl=Math.min(span+1,r.w-6);if(!r.shopU){put(A.wood,box,cx,.42,zc,cl,.84,.5);put(A.dark,box,cx,.87,zc,cl+.14,.06,.62);/* lada w glebi izby, z bocznymi ramionami do tylu */
+ for(const sx of [-1,1]){put(A.wood,box,cx+sx*(cl/2-.25),.42,zc-.7,.5,.84,.9);put(A.dark,box,cx+sx*(cl/2-.25),.87,zc-.7,.62,.06,1.02)}}
  const goods=(px,pz,y,k)=>{if(k===0){put(A.bone,sph,px,y+.1,pz,.2,.18,.18);put(A.bone,box,px,y+.03,pz+.05,.1,.06,.08)}
   else if(k===1){put(A.glass,cyl,px,y+.13,pz,.14,.26,.14);put(A.dark,cyl,px,y+.28,pz,.09,.05,.09)}
   else if(k===2){put(A.glassR,sph,px,y+.08,pz,.15,.15,.15);put(A.dark,cyl,px,y+.18,pz,.04,.08,.04)}
   else if(k===3){for(let j=0;j<4;j++)put(A.gold,cyl,px+(j%2)*.03,y+.015+j*.03,pz,.12,.025,.12)}
   else if(k===4){put(A.bone,cyl,px,y+.05,pz,.04,.4,.04,0,0,Math.PI/2);put(A.bone,cyl,px+.05,y+.09,pz+.03,.035,.36,.035,0,.5,Math.PI/2)}
   else{put(A.bone,cyl,px,y+.1,pz,.05,.2,.05);put(A.fl,sph,px,y+.24,pz,.05,.08,.05)}};
- for(let i=0;i<7;i++)goods(cx-cl/2+.35+i*(cl-.7)/6,zc+(i%2?.08:-.08),.9,[0,1,5,3,2,4,1][i]);
+ if(!r.shopU)for(let i=0;i<7;i++)goods(cx-cl/2+.35+i*(cl-.7)/6,zc+(i%2?.08:-.08),.9,[0,1,5,3,2,4,1][i]);
  // regal pod tylna sciana
  const rw=Math.min(6,r.w-5);for(const x of [cx-rw/2,cx+rw/2,cx])put(A.wood,box,x,.95,zi,.1,1.9,.38);
  for(const y of [.45,1.0,1.55])put(A.wood,box,cx,y,zi,rw+.1,.05,.42);
  let k=0;for(const y of [.47,1.02,1.57])for(let i=0;i<8;i++){const px=cx-rw/2+.4+i*(rw-.8)/7;if((i+k)%5===4)continue;goods(px,zi,y,(i*3+k)%6)}k++;
  // powiekszona izba: stoly z towarem po bokach regalu, beczki w rogach
- if(r.marga)for(const sx of [-1,1]){const tx=cx+sx*(rw/2+2.1),tz=r.y+3.0;put(A.wood,box,tx,.78,tz,1.6,.08,.9);for(const [a2,b2] of [[-.7,-.38],[.7,-.38],[-.7,.38],[.7,.38]])put(A.wood,box,tx+a2,.38,tz+b2,.08,.76,.08);
-  for(let i=0;i<5;i++)goods(tx-.6+i*.3,tz+(i%2?.18:-.18),.82,(i*2+(sx>0?1:0))%6);put(A.wood,cyl,r.x+1.7+(sx>0?r.w-3.4:0),.42,r.y+1.7,.6,.84,.6);put(A.iron,cyl,r.x+1.7+(sx>0?r.w-3.4:0),.69,r.y+1.7,.62,.05,.62)}
+ if(r.marga&&!r.shopU)for(const sx of [-1,1]){const tx=cx+sx*(rw/2+2.1),tz=r.y+3.0;put(A.wood,box,tx,.78,tz,1.6,.08,.9);for(const [a2,b2] of [[-.7,-.38],[.7,-.38],[-.7,.38],[.7,.38]])put(A.wood,box,tx+a2,.38,tz+b2,.08,.76,.08);
+  for(let i=0;i<5;i++)goods(tx-.6+i*.3,tz+(i%2?.18:-.18),.82,(i*2+(sx>0?1:0))%6);if(!r.shopU){put(A.wood,cyl,r.x+1.7+(sx>0?r.w-3.4:0),.42,r.y+1.7,.6,.84,.6);put(A.iron,cyl,r.x+1.7+(sx>0?r.w-3.4:0),.69,r.y+1.7,.62,.05,.62)}}
  // skrzynie, beczki i kosz z koscmi przy scianie, z obu stron wejscia
  const crate=(x,z,s,rot)=>{put(A.wood,box,x,s/2,z,s,s,s,0,rot,0);put(A.dark,box,x,s+.01,z,s+.03,.03,.1,0,rot,0)};
  const barrel=(x,z)=>{put(A.wood,cyl,x,.42,z,.5,.84,.5);for(const y of [.15,.69])put(A.iron,cyl,x,y,z,.52,.05,.52)};
  crate(xa-.9,z0+.45,.6,.2);crate(xa-.85,z0+.45,.42,-.3);put(A.wood,box,xa-.85,.6+.21,z0+.45,.42,.42,.42,0,-.3,0);barrel(xa-1.7,z0+.5);
  barrel(xb+1.0,z0+.48);crate(xb+1.8,z0+.5,.55,.5);put(A.dark,cyl,xb+1.0,.86,z0+.48,.46,.04,.46);goods(xb+1.0,z0+.48,.88,0);goods(xb+.92,z0+.4,.88,4);
+ if(r.shopU){/* 23.11.2026 (879, autor): lada w ksztalcie U przed regalem (Marga w srodku), regaly i szafki przy scianach, beczki i skrzynie w przednich rogach */
+  const Q=r.shopU,zf=Q.cz+.45,zb=r.y+2.05,xl=Q.x0+.5,xr=Q.x1+.5,L=xr-xl+.6,lz=zf-zb,zm=(zb+zf)/2;
+  put(A.wood,box,Q.cx,.42,zf,L,.84,.6);put(A.dark,box,Q.cx,.87,zf,L+.14,.06,.72);put(A.dark,box,Q.cx,.08,zf+.31,L,.16,.03);
+  for(const ax of [xl,xr]){put(A.wood,box,ax,.42,zm,.6,.84,lz);put(A.dark,box,ax,.87,zm,.72,.06,lz+.12)}
+  for(let i=0;i<9;i++)goods(xl+.35+i*(L-1.3)/8,zf+(i%2?.1:-.1),.9,[0,1,5,3,2,4,1,3,0][i]);
+  for(const ax of [xl,xr])for(let i=0;i<2;i++)goods(ax+(i?.08:-.08),zb+.5+i*.7,.9,(i+(ax>Q.cx?2:4))%6);
+  const wallShelf=(xw,dir,za,zb2)=>{const Ls=zb2-za,zs=(za+zb2)/2,xf=xw+dir*.23;for(const z of [za,zb2,zs])put(A.wood,box,xf,.95,z,.44,1.9,.1);put(A.dark,box,xw+dir*.03,.95,zs,.05,1.9,Ls);
+   for(const y of [.45,1.0,1.55])put(A.wood,box,xf,y,zs,.48,.05,Ls+.1);let q=0;for(const y of [.47,1.02,1.57]){for(let i=0;i<5;i++){if((i+q)%4===3)continue;goods(xf,za+.3+i*(Ls-.6)/4,y,(i*2+q+(dir>0?1:3))%6)}q++}};
+  const zs0=Q.cz+.1,zs1=Math.min(Q.cz+2.9,r.y+r.h-3.1);if(zs1-zs0>1)for(const [xw,dir] of [[r.x+1,1],[r.x+r.w-1,-1]])wallShelf(xw,dir,zs0,zs1);
+  const cab=(x,z,w)=>{put(A.wood,box,x,.5,z,w,1.0,.5);put(A.dark,box,x,1.02,z,w+.1,.05,.58);put(A.dark,box,x,.5,z+.26,.03,.9,.02);
+   for(let i=0;i<4;i++)goods(x-w/2+.25+i*(w-.5)/3,z,1.05,[1,2,1,5][i]);put(A.wood,box,x,1.65,z-.1,w,.05,.3);for(let i=0;i<3;i++)goods(x-w/2+.35+i*(w-.7)/2,z-.1,1.68,[0,3,0][i])};
+  cab(r.x+2.05,r.y+1.3,1.8);cab(r.x+r.w-2.05,r.y+1.3,1.8);
+  const fz=r.y+r.h-2.0;barrel(r.x+1.6,fz);barrel(r.x+2.4,fz+.15);put(A.wood,cyl,r.x+1.65,.3,fz-.9,.55,.6,.55);goods(r.x+1.65,fz-.9,.6,4);goods(r.x+1.6,fz-.85,.62,0);
+  crate(r.x+r.w-1.6,fz,.7,.15);crate(r.x+r.w-1.6,fz-.85,.55,-.2);put(A.wood,box,r.x+r.w-1.6,.7+.25,fz,.5,.5,.5,0,.4,0);barrel(r.x+r.w-2.5,fz+.1);goods(r.x+r.w-1.6,fz,1.2,3)}
  const M=(c,o)=>cutaway(phong(Object.assign({color:c},o||{})));
  const mats={wood:worldSurfN(cutaway(phong({color:0xe0d4c8})),'t2_belka',1.1,1),dark:M(0x4a3c32),clA:new THREE.MeshBasicMaterial({color:0x5a1c16,side:THREE.DoubleSide}),clB:new THREE.MeshBasicMaterial({color:0x6c6252,side:THREE.DoubleSide})/* plotno bez swiatla: swiatlo bohatera tuz nad daszkiem przepalalo kolory */,
   bone:M(0xd8cab0,{specular:0x222018,shininess:8}),glass:M(0x223a2c,{emissive:0x0e3a1c,specular:0x88aa99,shininess:60}),glassR:M(0x3a1414,{emissive:0x4a0e0a,specular:0xaa8888,shininess:60}),

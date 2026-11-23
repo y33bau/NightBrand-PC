@@ -1343,7 +1343,7 @@ function planOtherGround(ch){if(W.groundPlan)return W.groundPlan;if(W.seed===und
     rows[i]=row;
   }
   // Walkable door mouths/bridges and all interactions become explicit destinations.
-  const targets=[{name:'entry',x:W.start.x/TS,y:W.start.y/TS,rank:3},...W.npcs.filter(n=>!n.lure).map(n=>({name:n.id,x:n.x/TS,y:n.y/TS,rank:1})),...W.shrines.map((n,i)=>({name:'shrine'+i,x:n.x/TS,y:n.y/TS,rank:1}))];
+  const targets=[{name:'entry',x:W.start.x/TS,y:W.start.y/TS,rank:3},...W.npcs.filter(n=>!n.lure).map(n=>({name:n.id,x:(n.approach?n.approach[0]:n.x)/TS,y:(n.approach?n.approach[1]:n.y)/TS,rank:1})),...W.shrines.map((n,i)=>({name:'shrine'+i,x:n.x/TS,y:n.y/TS,rank:1}))];
   if(ch===9)for(const R of W.rooms)targets.push({name:'room-'+R.k,x:R.x+R.w/2,y:R.y+R.h/2,rank:2});
   if(ch===2)for(const [x,y] of [[34,24],[41,24],[50,13],[50,33],[51,24],[18,24],[50,48]])targets.push({name:'bridge-door-'+x+'-'+y,x:MP(x),y:MP(y),rank:2});
   if(ch===3)for(const [x,y] of [[32,28],[11,24],[44,22],[51,32],[32,47],[32,10]])targets.push({name:'gate-square-'+x+'-'+y,x:MP(x),y:MP(y),rank:2});
@@ -1409,7 +1409,7 @@ function planGround(ch){if(ch!==1)return groundPatterns(ch,planOtherGround(ch));
     if(!interior(i)&&(vertical||horizontal||plaza)){road[i]=3;rows[i]=4;zone[i]=6;direction[i]=vertical?1:0}
   }
   // All destinations come from existing interactions/doors; BFS finds an approach to the road.
-  const targets=[...W.npcs.filter(n=>!n.lure).map(n=>({name:n.id,x:n.x/TS,y:n.y/TS,rank:1})),...W.shrines.map((n,i)=>({name:'shrine'+i,x:n.x/TS,y:n.y/TS,rank:1}))];
+  const targets=[...W.npcs.filter(n=>!n.lure).map(n=>({name:n.id,x:(n.approach?n.approach[0]:n.x)/TS,y:(n.approach?n.approach[1]:n.y)/TS,rank:1})),...W.shrines.map((n,i)=>({name:'shrine'+i,x:n.x/TS,y:n.y/TS,rank:1}))];
   if(W.crypt)targets.push({name:'crypt',x:W.crypt.x/TS,y:W.crypt.y/TS,rank:1});
   for(const [x,y] of [[10,12],[22,11],[42,12],[54,12],[10,37],[21,40],[42,40],[54,42],[17,20]])targets.push({name:'door-'+x+'-'+y,x:MP(x),y:MP(y),rank:2});
   targets.push({name:'boss-barn',x:MP(12),y:MP(20),rank:2});
@@ -1992,28 +1992,42 @@ function margaShop(r,wall,put,box,acc,mesh){
  put(A.dark,box,sx,sy-.02,zp,.86,.5,.06);put(A.wood,box,sx,sy,zp+.01,.76,.4,.06);
  put(A.bone,sph,sx,sy+.04,zp+.07,.17,.17,.1);put(A.dark,box,sx-.04,sy+.05,zp+.12,.04,.04,.02);put(A.dark,box,sx+.04,sy+.05,zp+.12,.04,.04,.02);
  for(const a of [.7,-.7])put(A.bone,cyl,sx,sy-.06,zp+.06,.025,.42,.025,0,0,a);
- // lada za wejsciem z towarem
- const zc=z0-2.7,cl=Math.min(span+1,r.w-6);put(A.wood,box,cx,.42,zc,cl,.84,.5);put(A.dark,box,cx,.87,zc,cl+.14,.06,.62);/* lada w glebi izby, z bocznymi ramionami do tylu */
- for(const sx of [-1,1]){put(A.wood,box,cx+sx*(cl/2-.25),.42,zc-.7,.5,.84,.9);put(A.dark,box,cx+sx*(cl/2-.25),.87,zc-.7,.62,.06,1.02)}
+ // lada za wejsciem z towarem (uklad sprzed 879)
+ const zc=z0-2.7,cl=Math.min(span+1,r.w-6);if(!r.shopU){put(A.wood,box,cx,.42,zc,cl,.84,.5);put(A.dark,box,cx,.87,zc,cl+.14,.06,.62);/* lada w glebi izby, z bocznymi ramionami do tylu */
+ for(const sx of [-1,1]){put(A.wood,box,cx+sx*(cl/2-.25),.42,zc-.7,.5,.84,.9);put(A.dark,box,cx+sx*(cl/2-.25),.87,zc-.7,.62,.06,1.02)}}
  const goods=(px,pz,y,k)=>{if(k===0){put(A.bone,sph,px,y+.1,pz,.2,.18,.18);put(A.bone,box,px,y+.03,pz+.05,.1,.06,.08)}
   else if(k===1){put(A.glass,cyl,px,y+.13,pz,.14,.26,.14);put(A.dark,cyl,px,y+.28,pz,.09,.05,.09)}
   else if(k===2){put(A.glassR,sph,px,y+.08,pz,.15,.15,.15);put(A.dark,cyl,px,y+.18,pz,.04,.08,.04)}
   else if(k===3){for(let j=0;j<4;j++)put(A.gold,cyl,px+(j%2)*.03,y+.015+j*.03,pz,.12,.025,.12)}
   else if(k===4){put(A.bone,cyl,px,y+.05,pz,.04,.4,.04,0,0,Math.PI/2);put(A.bone,cyl,px+.05,y+.09,pz+.03,.035,.36,.035,0,.5,Math.PI/2)}
   else{put(A.bone,cyl,px,y+.1,pz,.05,.2,.05);put(A.fl,sph,px,y+.24,pz,.05,.08,.05)}};
- for(let i=0;i<7;i++)goods(cx-cl/2+.35+i*(cl-.7)/6,zc+(i%2?.08:-.08),.9,[0,1,5,3,2,4,1][i]);
+ if(!r.shopU)for(let i=0;i<7;i++)goods(cx-cl/2+.35+i*(cl-.7)/6,zc+(i%2?.08:-.08),.9,[0,1,5,3,2,4,1][i]);
  // regal pod tylna sciana
  const rw=Math.min(6,r.w-5);for(const x of [cx-rw/2,cx+rw/2,cx])put(A.wood,box,x,.95,zi,.1,1.9,.38);
  for(const y of [.45,1.0,1.55])put(A.wood,box,cx,y,zi,rw+.1,.05,.42);
  let k=0;for(const y of [.47,1.02,1.57])for(let i=0;i<8;i++){const px=cx-rw/2+.4+i*(rw-.8)/7;if((i+k)%5===4)continue;goods(px,zi,y,(i*3+k)%6)}k++;
  // powiekszona izba: stoly z towarem po bokach regalu, beczki w rogach
- if(r.marga)for(const sx of [-1,1]){const tx=cx+sx*(rw/2+2.1),tz=r.y+3.0;put(A.wood,box,tx,.78,tz,1.6,.08,.9);for(const [a2,b2] of [[-.7,-.38],[.7,-.38],[-.7,.38],[.7,.38]])put(A.wood,box,tx+a2,.38,tz+b2,.08,.76,.08);
-  for(let i=0;i<5;i++)goods(tx-.6+i*.3,tz+(i%2?.18:-.18),.82,(i*2+(sx>0?1:0))%6);put(A.wood,cyl,r.x+1.7+(sx>0?r.w-3.4:0),.42,r.y+1.7,.6,.84,.6);put(A.iron,cyl,r.x+1.7+(sx>0?r.w-3.4:0),.69,r.y+1.7,.62,.05,.62)}
+ if(r.marga&&!r.shopU)for(const sx of [-1,1]){const tx=cx+sx*(rw/2+2.1),tz=r.y+3.0;put(A.wood,box,tx,.78,tz,1.6,.08,.9);for(const [a2,b2] of [[-.7,-.38],[.7,-.38],[-.7,.38],[.7,.38]])put(A.wood,box,tx+a2,.38,tz+b2,.08,.76,.08);
+  for(let i=0;i<5;i++)goods(tx-.6+i*.3,tz+(i%2?.18:-.18),.82,(i*2+(sx>0?1:0))%6);if(!r.shopU){put(A.wood,cyl,r.x+1.7+(sx>0?r.w-3.4:0),.42,r.y+1.7,.6,.84,.6);put(A.iron,cyl,r.x+1.7+(sx>0?r.w-3.4:0),.69,r.y+1.7,.62,.05,.62)}}
  // skrzynie, beczki i kosz z koscmi przy scianie, z obu stron wejscia
  const crate=(x,z,s,rot)=>{put(A.wood,box,x,s/2,z,s,s,s,0,rot,0);put(A.dark,box,x,s+.01,z,s+.03,.03,.1,0,rot,0)};
  const barrel=(x,z)=>{put(A.wood,cyl,x,.42,z,.5,.84,.5);for(const y of [.15,.69])put(A.iron,cyl,x,y,z,.52,.05,.52)};
  crate(xa-.9,z0+.45,.6,.2);crate(xa-.85,z0+.45,.42,-.3);put(A.wood,box,xa-.85,.6+.21,z0+.45,.42,.42,.42,0,-.3,0);barrel(xa-1.7,z0+.5);
  barrel(xb+1.0,z0+.48);crate(xb+1.8,z0+.5,.55,.5);put(A.dark,cyl,xb+1.0,.86,z0+.48,.46,.04,.46);goods(xb+1.0,z0+.48,.88,0);goods(xb+.92,z0+.4,.88,4);
+ if(r.shopU){/* 23.11.2026 (879, autor): lada w ksztalcie U przed regalem (Marga w srodku), regaly i szafki przy scianach, beczki i skrzynie w przednich rogach */
+  const Q=r.shopU,zf=Q.cz+.45,zb=r.y+2.05,xl=Q.x0+.5,xr=Q.x1+.5,L=xr-xl+.6,lz=zf-zb,zm=(zb+zf)/2;
+  put(A.wood,box,Q.cx,.42,zf,L,.84,.6);put(A.dark,box,Q.cx,.87,zf,L+.14,.06,.72);put(A.dark,box,Q.cx,.08,zf+.31,L,.16,.03);
+  for(const ax of [xl,xr]){put(A.wood,box,ax,.42,zm,.6,.84,lz);put(A.dark,box,ax,.87,zm,.72,.06,lz+.12)}
+  for(let i=0;i<9;i++)goods(xl+.35+i*(L-1.3)/8,zf+(i%2?.1:-.1),.9,[0,1,5,3,2,4,1,3,0][i]);
+  for(const ax of [xl,xr])for(let i=0;i<2;i++)goods(ax+(i?.08:-.08),zb+.5+i*.7,.9,(i+(ax>Q.cx?2:4))%6);
+  const wallShelf=(xw,dir,za,zb2)=>{const Ls=zb2-za,zs=(za+zb2)/2,xf=xw+dir*.23;for(const z of [za,zb2,zs])put(A.wood,box,xf,.95,z,.44,1.9,.1);put(A.dark,box,xw+dir*.03,.95,zs,.05,1.9,Ls);
+   for(const y of [.45,1.0,1.55])put(A.wood,box,xf,y,zs,.48,.05,Ls+.1);let q=0;for(const y of [.47,1.02,1.57]){for(let i=0;i<5;i++){if((i+q)%4===3)continue;goods(xf,za+.3+i*(Ls-.6)/4,y,(i*2+q+(dir>0?1:3))%6)}q++}};
+  const zs0=Q.cz+.1,zs1=Math.min(Q.cz+2.9,r.y+r.h-3.1);if(zs1-zs0>1)for(const [xw,dir] of [[r.x+1,1],[r.x+r.w-1,-1]])wallShelf(xw,dir,zs0,zs1);
+  const cab=(x,z,w)=>{put(A.wood,box,x,.5,z,w,1.0,.5);put(A.dark,box,x,1.02,z,w+.1,.05,.58);put(A.dark,box,x,.5,z+.26,.03,.9,.02);
+   for(let i=0;i<4;i++)goods(x-w/2+.25+i*(w-.5)/3,z,1.05,[1,2,1,5][i]);put(A.wood,box,x,1.65,z-.1,w,.05,.3);for(let i=0;i<3;i++)goods(x-w/2+.35+i*(w-.7)/2,z-.1,1.68,[0,3,0][i])};
+  cab(r.x+2.05,r.y+1.3,1.8);cab(r.x+r.w-2.05,r.y+1.3,1.8);
+  const fz=r.y+r.h-2.0;barrel(r.x+1.6,fz);barrel(r.x+2.4,fz+.15);put(A.wood,cyl,r.x+1.65,.3,fz-.9,.55,.6,.55);goods(r.x+1.65,fz-.9,.6,4);goods(r.x+1.6,fz-.85,.62,0);
+  crate(r.x+r.w-1.6,fz,.7,.15);crate(r.x+r.w-1.6,fz-.85,.55,-.2);put(A.wood,box,r.x+r.w-1.6,.7+.25,fz,.5,.5,.5,0,.4,0);barrel(r.x+r.w-2.5,fz+.1);goods(r.x+r.w-1.6,fz,1.2,3)}
  const M=(c,o)=>cutaway(phong(Object.assign({color:c},o||{})));
  const mats={wood:worldSurfN(cutaway(phong({color:0xe0d4c8})),'t2_belka',1.1,1),dark:M(0x4a3c32),clA:new THREE.MeshBasicMaterial({color:0x5a1c16,side:THREE.DoubleSide}),clB:new THREE.MeshBasicMaterial({color:0x6c6252,side:THREE.DoubleSide})/* plotno bez swiatla: swiatlo bohatera tuz nad daszkiem przepalalo kolory */,
   bone:M(0xd8cab0,{specular:0x222018,shininess:8}),glass:M(0x223a2c,{emissive:0x0e3a1c,specular:0x88aa99,shininess:60}),glassR:M(0x3a1414,{emissive:0x4a0e0a,specular:0xaa8888,shininess:60}),
@@ -3828,7 +3842,13 @@ function margaHouse(w){if(!w.roofs||!w.roofs.length)return;const r=w.roofs.reduc
  for(let y=y0;y<=y1;y++)for(let x=r.x;x<r.x+r.w;x++){const i=y*MW+x,ring=x===r.x||x===r.x+r.w-1||y===y0||y===y1,front=y===y1&&x>=best[0]&&x<best[1];
   if(ring&&!front)w.map[i]=48;else{w.map[i]=fl;if(w.under)w.under[i]=0;ho.add(i)}}
  if(w.clearways)for(const i of ho)w.clearways.delete(i);
- r.y=y0;r.h+=ext;r.marga=true;addShelter(w,{x:r.x,y:r.y,w:r.w,h:r.h,door:[Math.floor((best[0]+best[1])/2),y1],tiles:ho,kind:'shop'})}
+ r.y=y0;r.h+=ext;r.marga=true;addShelter(w,{x:r.x,y:r.y,w:r.w,h:r.h,door:[Math.floor((best[0]+best[1])/2),y1],tiles:ho,kind:'shop'});
+ /* 23.11.2026 (879, autor): Marga za lada w ksztalcie U tuz przed regalem; regal, lada i regaly przy bocznych scianach blokuja przejscie (kafel 31, podloga zostaje). ?lada=0 = uklad sprzed 879 */
+ if(nbParam('lada')!=='0'){const cx=(best[0]+best[1])/2,rw=Math.min(6,r.w-5),x0=Math.floor(cx-rw/2-.9),x1=Math.ceil(cx+rw/2+.9)-1,cz=Math.min(y0+4,y1-3);
+  const blk=(x,y)=>{if(x<=r.x||x>=r.x+r.w-1||y<=y0||y>=y1)return;const i=y*MW+x;w.map[i]=31;if(w.under)w.under[i]=fl};
+  for(let x=x0;x<=x1;x++)blk(x,cz);for(const x of [x0,x1])for(let y=y0+2;y<cz;y++)blk(x,y);for(let x=Math.floor(cx-rw/2);x<Math.ceil(cx+rw/2);x++)blk(x,y0+1);for(const x of [r.x+1,r.x+2,r.x+r.w-3,r.x+r.w-2])blk(x,y0+1);
+  for(let y=cz;y<=Math.min(cz+2,y1-3);y++){blk(r.x+1,y);blk(r.x+r.w-2,y)}
+  r.shopU={cx,rw,x0,x1,cz};n.x=cx*TS;n.y=(y0+3)*TS;n.talkR=50;n.approach=[cx*TS,(cz+1.5)*TS];w.margaSpot=[n.x,n.y]}}
 function heriHouse(w){const n=w.npcs.find(q=>q.id==='heri');if(!n)return;const hx=Math.floor(n.x/TS),hy=Math.floor(n.y/TS);
  const x0=hx-3,y0=hy-1,x1=hx+6,y1=hy+3,dx=hx+2;if(x0<1||y0<1||x1>=MW-1||y1>=MH-1)return;const ho=new Set();
  for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const i=y*MW+x,ring=x===x0||x===x1||y===y0||y===y1,door=x===dx&&y===y1;
@@ -6371,7 +6391,7 @@ function pick(i){if(!S||!S.choosing)return;const k=S.choices[i];if(!k)return;con
   if(S.sk[k]===(rare?2:1))S.cd[k]=.3;
   if(HINTS_ENABLED&&sk(k)===(rare?2:1)&&(NEW_SWORD_SK.includes(k)||ENCH.includes(k))){const nm=SK[k].name;let text;if(ENCH.includes(k))text=nm+': '+(S.mainEnchant===k?(EN?'main blade, up to lvl 10':'główne ostrze, do 10 poz.'):(EN?'support blade, max lvl 3':'ostrze wspierające, maks. 3 poz.'))+' '+elementalSummary();else if(ACTIVE_SK.includes(k)){const c=ACTIVE_CFG[k],at=S.activeSlots.indexOf(k);text=nm+(at>=0?(EN?' → slot ':' → slot ')+[KB.map.s1,KB.map.s2,KB.map.s3,KB.map.s4].map(kbName)[at]:(EN?' → reserve (equip in the pause menu)':' → rezerwa (wyposaż w pauzie)'))+' · '+c.cost+' '+activeResourceName(k)+(EN?', cooldown ':', odnowienie ')+String(c.wait(1)).replace('.',',')+' s.'}else text=nm+': '+SK[k].lv[0];say(text,'hint')}if(k[0]!=='_'){S.own=S.own||{};(S.own[k]=S.own[k]||[0,0])[P2T?1:0]+=rare?2:1}if(pl2)S.mpTurn=3-(S.mpTurn||1);S.pendLv--;chipsDirty=true;if(S.pendLv>0){openLevelUp();return}S.choosing=false;lvHide();S.hitstop=Math.max(S.hitstop||0,LV_FREEZE);LVCLOSED=performance.now()}
 const npcTalk=n=>{const s=S.npc[n.id]?.state;return s==='alive'||s==='offered'||(n.id==='chojrak'&&s==='talked')};
-function nearNpc(){if(!S||pl.dead)return null;for(const n of W.npcs){if(n.lure||!npcTalk(n))continue;if(Math.hypot(pl.x-n.x,pl.y-n.y)<30)return n}return null}
+function nearNpc(){if(!S||pl.dead)return null;for(const n of W.npcs){if(n.lure||!npcTalk(n))continue;if(Math.hypot(pl.x-n.x,pl.y-n.y)<(n.talkR||30))return n}return null}
 const chojPages=mode=>FTX((STORYMODE?'chojrak.story.act'+CH:'chojrak.arcade')+'.'+(mode==='repeat'?'repeat':'first'));
 const WIT_ECHO={elder:{spared:(EN?'Is Wit still sitting there? Good. Let him sit.':'Wit jeszcze siedzi? To dobrze. Niech siedzi.'),dead:(EN?'I saw what came for him. Pages in the air. Do not look me in the eye.':'Widziałem, co po niego przyszło. Kartki w powietrzu. Nie patrz mi w oczy.')},
   nawoj:{spared:(EN?'From the hill you can hear somebody counting. It matches my list.':'Z wzgórza słychać, jak ktoś liczy. Zgadza się z moją listą.'),dead:(EN?'They added one more name to the list. Not mine, not yours. Not yet.':'Dopisali jedno imię do listy. Nie moje, nie twoje. Jeszcze.')}};
@@ -6509,7 +6529,7 @@ const SHOP=[
   {id:'magnet',name:(EN?'Lodestone':'Kamień przyciągania'),d:(EN?'+40% pickup range for coins and hearts.':'+40% zasięgu zbierania monet i serc.'),cost:25}];
 const price=it=>Math.round(it.cost*Math.pow(it.g||1.35,S.bought[it.id]||0)*(1-(S.disc||0))*(S.pk&&S.pk.shopMul||1));
 function dissolveAll(msg){for(const e of S.enemies){scene.remove(e.mesh);for(let i=0;i<8;i++)S.parts.push({k:'d',x:e.x,y:e.y,z:rnd(0,14),vx:rnd(-7,7),vy:0,vz:rnd(12,30),c:P.bone2,life:2})}S.enemies=[];if(msg)say(msg)}
-function startBreak(){/* 15.11.2026: kociolki odnawiaja zapas na druga polowe nocy */if(!S.dg&&!S.endless&&S.pot&&Object.keys(S.pot).length){S.pot={};ftInfo(EN?'The cauldrons are full again.':'Kociołki napełniły się na nowo.')}if(S.pk&&S.pk.noShop&&!S.dg){S.stage='p2';dissolveAll(null);say(EN?'Curse of the Empty Stall: Marga does not come tonight. The night goes on.':'Klątwa Pustego kramu: Marga tej nocy nie przychodzi. Noc trwa dalej.');if(S.pendLv>0)openLevelUp();return}S.stage='break';dissolveAll(null);let spot=CH===1?[1427,549]:null;for(let i=0;i<30&&!spot;i++){const a=Math.random()*Math.PI*2,x=pl.x+Math.cos(a)*44,y=pl.y+Math.sin(a)*30;if(!boxSolid(x,y,6,3))spot=[x,y]}
+function startBreak(){/* 15.11.2026: kociolki odnawiaja zapas na druga polowe nocy */if(!S.dg&&!S.endless&&S.pot&&Object.keys(S.pot).length){S.pot={};ftInfo(EN?'The cauldrons are full again.':'Kociołki napełniły się na nowo.')}if(S.pk&&S.pk.noShop&&!S.dg){S.stage='p2';dissolveAll(null);say(EN?'Curse of the Empty Stall: Marga does not come tonight. The night goes on.':'Klątwa Pustego kramu: Marga tej nocy nie przychodzi. Noc trwa dalej.');if(S.pendLv>0)openLevelUp();return}S.stage='break';dissolveAll(null);let spot=CH===1?(W.margaSpot?[W.margaSpot[0],W.margaSpot[1]]:[1427,549]):null;for(let i=0;i<30&&!spot;i++){const a=Math.random()*Math.PI*2,x=pl.x+Math.cos(a)*44,y=pl.y+Math.sin(a)*30;if(!boxSolid(x,y,6,3))spot=[x,y]}
     spot=spot||[pl.x+20,pl.y];S.merchant={x:spot[0],y:spot[1],state:'in',t:1,wait:120};play('bless',0);
     for(let i=0;i<26;i++)S.parts.push({k:'a',x:spot[0]+rnd(-8,8),y:spot[1],z:rnd(0,20),vx:rnd(-8,8),vy:0,vz:rnd(8,20),c:'#3d4a3a',life:rnd(1,2)});
     setTimeout(()=>{if(S&&S.merchant&&S.merchant.state==='here'||S&&S.merchant&&S.merchant.state==='in')say((EN?'Marga sets up her stall. You have two minutes to trade.':'Marga rozkłada kram. Masz dwie minuty na handel.'))},2500)}
@@ -6550,7 +6570,7 @@ function stageTick(dt){if(CH===PORT)solneTick();if(CH===1&&W.shelters)margaShopT
     {const fb=spawnEnemy(bt,p[0],p[1],{rise:1.6,hp,max:hp});if(fb&&fb.spd)fb.spd*=BOSS_SPD_MUL}play('rise',0);play('bossGrowl',0);shake(.3,1);if(CH===1)S.flash=1;
     say(CH===PORT?(EN?'The knock of an oaken leg. Harbour Master Radogost steps onto the pier, hook in hand.':'Stuk dębowej nogi. Bosman Radogost wychodzi na pomost z hakiem w ręku.'):CH===5?(EN?'The seal in the Throne Room cracks. The Creditor rises.':'Pęka pieczęć w Sali Tronowej. Wierzyciel wstaje.'):CH===4?(bt==='strzyga'?(EN?'Ravens take flight from Bleak Peak. Mother Striga, Queen of the Barrows, rises from her barrow.':'Kruki zrywają się z Łysej Góry. Z kurhanu wstaje Strzyga Matka, Królowa Kurhanów.'):(EN?'The ground on Bleak Peak splits. Fused bodies rise from beneath the barrow.':'Ziemia na Łysej Górze pęka. Spod kurhanu podnoszą się złączone ciała.')):CH===1?(EN?'The charred granary beams all move at once. The Conjoined rises.':'Zwęglone belki spichlerza ruszają się naraz. Wstaje Zrost.'):CH===2?(A.cumlin?(EN?'Cumlin, the Possessed Dwarf King, steps out from behind the Great Scales, the seals in him glowing.':'Zza Wielkiej Wagi wychodzi Cumlin, Opętany Król Krasnoludów. Żarzą się w nim pieczęcie.'):(EN?'From the chasm by the Great Scales rises a body overgrown with stone.':'Z przepaści przy Wielkiej Wadze podnosi się ciało obrośnięte kamieniem.')):(EN?'The basilica bells ring by themselves. Above the rooftops Morhad, Beast of a Thousand Slaughters, spreads his wings.':'Dzwony bazyliki biją same. Nad dachami rozkłada skrzydła Morhad, Bestia Tysiąca Rzezi.'));bossSay(bt==='cumlin'?'cumlin':bt==='beast'?'morhad':CH===5?'creditor':CH===1?'outgrowth':null,'intro')}
 }
-function nearMerchant(){const m=S&&S.merchant;return m&&m.state==='here'&&!pl.dead&&Math.hypot(pl.x-m.x,pl.y-m.y)<34?m:null}
+function nearMerchant(){const m=S&&S.merchant;return m&&m.state==='here'&&!pl.dead&&Math.hypot(pl.x-m.x,pl.y-m.y)<(CH===1&&W.margaSpot&&!m.dg?50:34)?m:null}
 function leaveMerchant(){const m=S.merchant;if(!m||m.state==='out')return;m.state='out';m.t=1;for(let i=0;i<26;i++)S.parts.push({k:'a',x:m.x+rnd(-8,8),y:m.y,z:rnd(0,20),vx:rnd(-8,8),vy:0,vz:rnd(8,20),c:'#3d4a3a',life:rnd(1,2)})}
 /* 23.11.2026 (autor): sklep Margi w Osadzie przed polnoca za Popioly. Cena = polowa ceny w monetach (z tym samym wzrostem po kazdym zakupie i tymi samymi limitami na noc),
    najmniej 5. Przy ok. 60-100 Popiolach z jednej nocy: Serce 22, Oselka 18, Amulet 30, Zwoj 20, Wywar 10, Kamien 12; ulepszenie stale w obozie kosztuje 50/120/250. */

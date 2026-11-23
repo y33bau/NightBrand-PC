@@ -89,7 +89,7 @@ function planOtherGround(ch){if(W.groundPlan)return W.groundPlan;if(W.seed===und
     rows[i]=row;
   }
   // Walkable door mouths/bridges and all interactions become explicit destinations.
-  const targets=[{name:'entry',x:W.start.x/TS,y:W.start.y/TS,rank:3},...W.npcs.filter(n=>!n.lure).map(n=>({name:n.id,x:n.x/TS,y:n.y/TS,rank:1})),...W.shrines.map((n,i)=>({name:'shrine'+i,x:n.x/TS,y:n.y/TS,rank:1}))];
+  const targets=[{name:'entry',x:W.start.x/TS,y:W.start.y/TS,rank:3},...W.npcs.filter(n=>!n.lure).map(n=>({name:n.id,x:(n.approach?n.approach[0]:n.x)/TS,y:(n.approach?n.approach[1]:n.y)/TS,rank:1})),...W.shrines.map((n,i)=>({name:'shrine'+i,x:n.x/TS,y:n.y/TS,rank:1}))];
   if(ch===9)for(const R of W.rooms)targets.push({name:'room-'+R.k,x:R.x+R.w/2,y:R.y+R.h/2,rank:2});
   if(ch===2)for(const [x,y] of [[34,24],[41,24],[50,13],[50,33],[51,24],[18,24],[50,48]])targets.push({name:'bridge-door-'+x+'-'+y,x:MP(x),y:MP(y),rank:2});
   if(ch===3)for(const [x,y] of [[32,28],[11,24],[44,22],[51,32],[32,47],[32,10]])targets.push({name:'gate-square-'+x+'-'+y,x:MP(x),y:MP(y),rank:2});
@@ -155,7 +155,7 @@ function planGround(ch){if(ch!==1)return groundPatterns(ch,planOtherGround(ch));
     if(!interior(i)&&(vertical||horizontal||plaza)){road[i]=3;rows[i]=4;zone[i]=6;direction[i]=vertical?1:0}
   }
   // All destinations come from existing interactions/doors; BFS finds an approach to the road.
-  const targets=[...W.npcs.filter(n=>!n.lure).map(n=>({name:n.id,x:n.x/TS,y:n.y/TS,rank:1})),...W.shrines.map((n,i)=>({name:'shrine'+i,x:n.x/TS,y:n.y/TS,rank:1}))];
+  const targets=[...W.npcs.filter(n=>!n.lure).map(n=>({name:n.id,x:(n.approach?n.approach[0]:n.x)/TS,y:(n.approach?n.approach[1]:n.y)/TS,rank:1})),...W.shrines.map((n,i)=>({name:'shrine'+i,x:n.x/TS,y:n.y/TS,rank:1}))];
   if(W.crypt)targets.push({name:'crypt',x:W.crypt.x/TS,y:W.crypt.y/TS,rank:1});
   for(const [x,y] of [[10,12],[22,11],[42,12],[54,12],[10,37],[21,40],[42,40],[54,42],[17,20]])targets.push({name:'door-'+x+'-'+y,x:MP(x),y:MP(y),rank:2});
   targets.push({name:'boss-barn',x:MP(12),y:MP(20),rank:2});

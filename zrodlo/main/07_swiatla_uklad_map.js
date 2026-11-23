@@ -199,7 +199,13 @@ function margaHouse(w){if(!w.roofs||!w.roofs.length)return;const r=w.roofs.reduc
  for(let y=y0;y<=y1;y++)for(let x=r.x;x<r.x+r.w;x++){const i=y*MW+x,ring=x===r.x||x===r.x+r.w-1||y===y0||y===y1,front=y===y1&&x>=best[0]&&x<best[1];
   if(ring&&!front)w.map[i]=48;else{w.map[i]=fl;if(w.under)w.under[i]=0;ho.add(i)}}
  if(w.clearways)for(const i of ho)w.clearways.delete(i);
- r.y=y0;r.h+=ext;r.marga=true;addShelter(w,{x:r.x,y:r.y,w:r.w,h:r.h,door:[Math.floor((best[0]+best[1])/2),y1],tiles:ho,kind:'shop'})}
+ r.y=y0;r.h+=ext;r.marga=true;addShelter(w,{x:r.x,y:r.y,w:r.w,h:r.h,door:[Math.floor((best[0]+best[1])/2),y1],tiles:ho,kind:'shop'});
+ /* 23.11.2026 (879, autor): Marga za lada w ksztalcie U tuz przed regalem; regal, lada i regaly przy bocznych scianach blokuja przejscie (kafel 31, podloga zostaje). ?lada=0 = uklad sprzed 879 */
+ if(nbParam('lada')!=='0'){const cx=(best[0]+best[1])/2,rw=Math.min(6,r.w-5),x0=Math.floor(cx-rw/2-.9),x1=Math.ceil(cx+rw/2+.9)-1,cz=Math.min(y0+4,y1-3);
+  const blk=(x,y)=>{if(x<=r.x||x>=r.x+r.w-1||y<=y0||y>=y1)return;const i=y*MW+x;w.map[i]=31;if(w.under)w.under[i]=fl};
+  for(let x=x0;x<=x1;x++)blk(x,cz);for(const x of [x0,x1])for(let y=y0+2;y<cz;y++)blk(x,y);for(let x=Math.floor(cx-rw/2);x<Math.ceil(cx+rw/2);x++)blk(x,y0+1);for(const x of [r.x+1,r.x+2,r.x+r.w-3,r.x+r.w-2])blk(x,y0+1);
+  for(let y=cz;y<=Math.min(cz+2,y1-3);y++){blk(r.x+1,y);blk(r.x+r.w-2,y)}
+  r.shopU={cx,rw,x0,x1,cz};n.x=cx*TS;n.y=(y0+3)*TS;n.talkR=50;n.approach=[cx*TS,(cz+1.5)*TS];w.margaSpot=[n.x,n.y]}}
 function heriHouse(w){const n=w.npcs.find(q=>q.id==='heri');if(!n)return;const hx=Math.floor(n.x/TS),hy=Math.floor(n.y/TS);
  const x0=hx-3,y0=hy-1,x1=hx+6,y1=hy+3,dx=hx+2;if(x0<1||y0<1||x1>=MW-1||y1>=MH-1)return;const ho=new Set();
  for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const i=y*MW+x,ring=x===x0||x===x1||y===y0||y===y1,door=x===dx&&y===y1;

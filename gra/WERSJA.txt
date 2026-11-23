@@ -951,3 +951,4 @@ cache875 · Obrazkowy styl budynkow (nasycenie, kontrast, pociagniecia pedzla, c
 cache876 · 876: limit 60 s na noc w domu Heriego i chacie Chojraka, potem wypchniecie i drzwi zamkniete (nie sprawdzono: pad, dzwiek, FPS u autora, itch.io, EN niezatwierdzone)
 cache877 · 877: malowane bezszwowe tekstury budynkow (12 materialow, wybor autora), ciosy na gzymsach i cokolach Zlotogrodu, ?malowane=0 porownanie; nie sprawdzono: FPS u autora, pad, dzwiek, itch.io
 cache878 · 878: shader szyb (okna ciemne i ze swiatlem, witraze, rozety), poswiata okien na murze, ?okna=0 porownanie; nie sprawdzono: FPS u autora, pad, dzwiek, itch.io
+cache879 · 879: sklep Margi - Marga za lada w ksztalcie U przed regalem, regaly i szafki przy scianach, lada i regaly blokuja przejscie, rozmowa zza lady (zasieg 50), kram po polnocy w tym samym miejscu; ?lada=0 porownanie; nie sprawdzono: pad, dzwiek, FPS u autora, itch.io
