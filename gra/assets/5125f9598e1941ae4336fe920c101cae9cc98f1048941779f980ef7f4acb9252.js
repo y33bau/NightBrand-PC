@@ -2050,7 +2050,8 @@ function decals(I){const dec=row=>[0,1,2,3].map(i=>{const cv=canvas(32,32);cv.ge
 
 // Chapter II meshes: M4 floor, M5 walls, M6 props, M8 transitions
 // 15.11.2026: malowany punkt centralny mapy (obraz z przezroczystoscia) jako stojacy rekwizyt: pionowa plaszczyzna rozciagnieta o SQ jak inne rekwizyty, normalne jak w rekwizytach rozdz. IV
-function nbLandmark(url,o){const tex=new THREE.TextureLoader().load(url);tex.anisotropy=4;const h=o.w*o.aspect,g=new THREE.PlaneGeometry(o.w,h).translate(0,h/2,0),n=g.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6);
+function nbAniso(){const m=renderer.capabilities.getMaxAnisotropy?renderer.capabilities.getMaxAnisotropy():4;return Math.max(1,Math.min(m,Math.max(4,GFX.aniso||4)))}
+function nbLandmark(url,o){const tex=new THREE.TextureLoader().load(url);tex.anisotropy=nbAniso();const h=o.w*o.aspect,g=new THREE.PlaneGeometry(o.w,h).translate(0,h/2,0),n=g.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6);
  const mat=(o.wrap||(m=>m))(phong({map:tex,alphaTest:.42,side:THREE.DoubleSide,emissive:o.em||0x000000,emissiveMap:o.em?tex:null}));const m=new THREE.Mesh(g,mat);m.scale.y=SQ;m.position.set(o.x,o.base,o.z);m.renderOrder=2;ROOT.add(m);return m}
 function buildDolne(I){planGround(2);
   const F=I.dm_floor,Wl=I.dm_walls,r=rng(99);
@@ -2618,7 +2619,7 @@ function buildSolneNabrzeze(I){
  const ironwork=phong({color:0x22211e,shininess:10}),lanternGlass=new THREE.MeshBasicMaterial({color:0xe0913f}),lanterns=[];// 15.11.2026: szklo przygaszone (bylo prawie biale), zelazo jak kute
  // 15.11.2026: malowana latarnia (rekwizyt Zlotogrodu) z przygaszonym zloceniem, jak kute zelazo portu; stara latarnia z klockow tylko bez tego obrazu
  const lampImg=I.p3_street_lantern,lampW=2.05;let lampMat=null,lampGeo=null;
- if(lampImg){const t=new THREE.Texture(lampImg);t.needsUpdate=true;t.anisotropy=4;lampMat=phong({map:t,alphaTest:.4,color:0x9c9ca4,side:THREE.DoubleSide});lampGeo=new THREE.PlaneGeometry(lampW,lampW).translate(0,lampW/2,0);const n=lampGeo.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6)}
+ if(lampImg){const t=new THREE.Texture(lampImg);t.needsUpdate=true;t.anisotropy=nbAniso();lampMat=phong({map:t,alphaTest:.4,color:0x9c9ca4,side:THREE.DoubleSide});lampGeo=new THREE.PlaneGeometry(lampW,lampW).translate(0,lampW/2,0);const n=lampGeo.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6)}
  for(const [sx,sy,dir] of PORT_LAMPS){
   const x=sx,z=MP(sy),west=dir<0;if(!land(ground(Math.floor(x),Math.floor(z))))continue;
   if(lampMat){const m=new THREE.Mesh(lampGeo,lampMat);m.scale.y=SQ;if(west)m.scale.x=-1;m.position.set(x,0,z);ROOT.add(m);ao(x,z,.8,.8);W.LSRC.push({col:0xffbb79,base:.9,dist:5.3,x:x+dir*lampW*.17,y:lampW*.62*SQ,z:z+.1,kind:'fire',ph:sx*.71});continue}
@@ -2892,7 +2893,7 @@ const P3D_TLOAD={};for(const [k,e] of Object.entries(P3D_TRI))P3D_TLOAD[k]=TRI3D
 
 function triReady(n){return TRI3D_ON&&!!P3D_TGEO[n]}
 // cut: sciany i dachy znikaja przed bohaterem (cutaway), jak dotychczasowe sciany domow
-function triMat(n,cut,tone){const id=n+(cut?'|c':'');let m=P3D_TMAT.get(id);if(m)return m;const x=new THREE.TextureLoader().load(P3D_TRI[n].k);x.flipY=false;x.anisotropy=4;
+function triMat(n,cut,tone){const id=n+(cut?'|c':'');let m=P3D_TMAT.get(id);if(m)return m;const x=new THREE.TextureLoader().load(P3D_TRI[n].k);x.flipY=false;x.anisotropy=nbAniso();
  m=phong({map:x,shininess:4,specular:0x080808,side:THREE.DoubleSide});const t=tone||.9;m.color.setRGB(t,t*.98,t*.96);if(cut)cutawayHouse(m);P3D_TMAT.set(id,m);return m}
 // jeden model: srodek podstawy w (cx,cz), skale osi, obrot wokol pionu
 function triMesh(n,cx,cz,sx,sy,sz,ry,cut,tone){const g=P3D_TGEO[n],bb=g.boundingBox,m=new THREE.Mesh(g,triMat(n,cut,tone));
@@ -2908,7 +2909,7 @@ function triProp(root,n,x,z,W,ry,flip){const g=P3D_TGEO[n];if(!g)return false;co
  const m=triMesh(n,x,z-(bb.max.z-bb.min.z)*s/2,s*(flip?-1:1),s,s,ry,false);m.castShadow=true;m.userData.propAsset=true;root.add(m);return true}
 function meshyFor(ch,k,p){let n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];if(typeof n==='function')n=p?n(p):null;if(Array.isArray(n))n=n[p?groundHash(Math.floor(p.x),Math.floor(p.y))%n.length:0];return n&&P3D_MGEO[n]?n:null}
 const P3D_MMAT=new Map();
-function meshyMat(n){let m=P3D_MMAT.get(n);if(m)return m;const L=new THREE.TextureLoader(),e0=P3D_MESHY[n],e=e0.b?P3D_MESHY[e0.b]:e0,t=u=>{const x=L.load(u);x.flipY=false;x.anisotropy=4;return x};
+function meshyMat(n){let m=P3D_MMAT.get(n);if(m)return m;const L=new THREE.TextureLoader(),e0=P3D_MESHY[n],e=e0.b?P3D_MESHY[e0.b]:e0,t=u=>{const x=L.load(u);x.flipY=false;x.anisotropy=nbAniso();return x};
  m=phong({map:t(e.k),normalMap:e.n?t(e.n):null,shininess:6,specular:0x101010,side:THREE.DoubleSide});const tn=e0.t||P3D_TON[n]||[.92,.9,.88];m.color.setRGB(tn[0],tn[1],tn[2]);if(P3D_LAS.includes(n))cutCircle(m);P3D_MMAT.set(n,m);return m}
 // szerokosc i srodek obrysu malunku (ulamki obrazka): model dostaje szerokosc obrysu, nie calego obrazka
 const P3D_ABOX=new Map();
@@ -4322,7 +4323,7 @@ let dynS=1,dynN=0,dynSlow=0,dynPrev=0,dynBlock=0,dynHold=8000,dynUpT=0,dynMin=1e
 // Runda 309: tekstury ziemi 2048 px (powiekszone Real-ESRGAN), pobierane dopiero przy wlaczeniu (Ultra albo przelacznik); klucz = nazwa obrazu z IMGS
 const HD_TEX={"cc0_ash":"assets/tekstury/5118a73dc051461831a7ec6849e8252ffe8dbb59550ab487cd54743ea9bab01e.webp","cc0_blackrock":"assets/tekstury/fa68ce09d94814fc9f1210db166712cf89ba57f999352bc3a63f082d1a4b784c.webp","cc0_charcoal":"assets/tekstury/9a3a981e012c1389ca8cc99da2e7ce7207d4a358eeda4941ab20951e1e18277f.webp","cc0_cracks":"assets/tekstury/65539f806640d93b275f593e69ad4b88d3943e12b35afa36f068b4cbcdad37f3.webp","cc0_darkrock":"assets/tekstury/dd6c90379c1bfbd65a18dd4bc7558abf6d07d1a503cc61935054883aab9ea034.webp","cc0_deski":"assets/tekstury/128c08a55828210e58b651ea27d5f6ad2da2701d75ec7846f699d52cae16b319.webp","cc0_dirt2":"assets/tekstury/306e8fcf61c811a1e339bc1d5f75b6425229836d186edbd3bef77388d89664c6.webp","cc0_dirt3":"assets/tekstury/727e1104e3cc10a78070062925f6da05117271d6590660fada9213a8d0c019cf.webp","cc0_forestmoss":"assets/tekstury/af61fa84c04b16c222106029c6d52d3b6cc6db64239a660ce551d5ab8f723abf.webp","cc0_ground1":"assets/tekstury/a4270839a1096193c3ce3dc8fb2d986220cdf7abf973d87bd313716c0048589c.webp","cc0_ground2":"assets/tekstury/c82e6e215e6388da0597c82a80b8270fa5567cb1b201e6b60a23c76d76cd1081.webp","cc0_leaves":"assets/tekstury/326121aa341243cebe25304f4f4197b01cb2b5d3811545e179e7fb4f89770ed4.webp","cc0_moss1":"assets/tekstury/eea3ac29fefc677a880c1c65b78304c5ab556246a94024c5bd945ccee057d12e.webp","cc0_mud":"assets/tekstury/1d6401e33794ecc7ad47603637bd66400e67b3589939e636bb6aba7fa36ad9ca.webp","cc0_zl_moss":"assets/tekstury/fe7538557374cd93e15752591c2e8b7f35c94bcb7418252a8e8ca6b8baea8fc9.webp","cc0_zl_place":"assets/tekstury/5a2a739d1c3f3faa3bc93a16e9392538abe93466a18b3c7e8e508613c112c0ec.webp","cc0_zl_street":"assets/tekstury/dc2682873abe84e63272b66f641d3b37ba42c168157be5432eb8439ca6b9aba3.webp"},HDREG=[],HDIMG={};
 // graphics presets (Runda 306): shadow 0/1/2 (off/normal/high), lights = dynamic point lights, fx 0/1/2 (none/standard/high glow+blur), parts = particle multiplier, res = scene height (0 = automatic), aniso = texture filtering
-const GPRE={/* 19.11.2026: ostrzejszy obraz (autor): Wysoka 1080 linii zamiast 720, Ultra natywna rozdzielczosc ekranu (res -1); gdy gra klatkuje, dynamiczne skalowanie samo obniza */ultra:{shadow:2,lights:10,fx:2,parts:1.5,res:-1,aniso:16,dpr:2,hdTex:1},high:{shadow:1,lights:10,fx:1,parts:1,res:1080,aniso:4,dpr:1.5,hdTex:0},mid:{shadow:0,lights:4,fx:0,parts:.5,res:540,aniso:1,dpr:1,hdTex:0},min:{shadow:0,lights:4,fx:0,parts:.5,res:540,aniso:1,dpr:1,hdTex:0}};
+const GPRE={/* 19.11.2026: ostrzejszy obraz (autor): Wysoka 1080 linii zamiast 720, Ultra natywna rozdzielczosc ekranu (res -1); gdy gra klatkuje, dynamiczne skalowanie samo obniza */ultra:{shadow:2,lights:10,fx:2,parts:1.5,res:-1,aniso:16,dpr:2,hdTex:1},high:{shadow:1,lights:10,fx:1,parts:1,res:1080,aniso:8,dpr:1.5,hdTex:0},mid:{shadow:0,lights:4,fx:0,parts:.5,res:540,aniso:1,dpr:1,hdTex:0},min:{shadow:0,lights:4,fx:0,parts:.5,res:540,aniso:1,dpr:1,hdTex:0}};
 const GFX={shadow:1,lights:10,fx:1,parts:1,res:1080,aniso:4,dpr:1.5,hdTex:0};
 function gfxResolve(){const m=SETT.qmode==='auto'?(SETT.quality==='high'?'high':'mid'):SETT.qmode,p=GPRE[m]||GPRE.high;for(const [k,o] of [['shadow','gShadow'],['lights','gLights'],['fx','gFx'],['parts','gParts'],['res','gRes'],['dpr','gDpr'],['hdTex','gTex']])GFX[k]=SETT[o]==='auto'?p[k]:SETT[o];GFX.aniso=p.aniso}
 function isRecord(x){return !!x&&typeof x==='object'&&!Array.isArray(x)}

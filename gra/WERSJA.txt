@@ -959,3 +959,4 @@ cache883 · 883: sprzatanie - niewidzialne kolizje (krypta, bramy, tron, posag),
 cache884 · 884: wystroj z propozycji koncepciarza - Osada (lawy, taborety, beczulki), Dolne Miasto (wozek, misy), Czarnobor (krag menhirow, nowe pnie), Cytadela (ksiegi przy regalach); magazyn portu bez kolizji skrzyn i beczek; nie sprawdzono: FPS u autora, pad, dzwiek, itch.io
 cache885 · 885: sprzatanie - 76 obrazkow rekwizytow pod modelami usunietych (obrysy wpisane do kodu, P3D_ABOX_FIX); modele na wszystkich mapach w tym samym miejscu i skali co w 884 (porownane); nie sprawdzono: FPS u autora, pad, dzwiek, itch.io
 cache886 · 886: arkusze 49 bohaterow powiekszone 2x (Real-ESRGAN, 2048x3072), przelacznik ?bohx2=0 (nie sprawdzono: wyglad w grze, pamiec, pad, itch.io; knight_lunge bez zmiany)
+cache887 · 887: ostrosc tekstur modeli 3D i drzew pod katem: anizotropia z ustawien jakosci (Ultra 16, Wysoka 8, wczesniej stale 4) (nie sprawdzono: wyglad w grze, FPS u autora, pad, itch.io)
