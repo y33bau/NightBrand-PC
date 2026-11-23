@@ -1,4 +1,4 @@
-Stan na 2026-11-22, cache 863 (opublikowane), rola agent główny
+Stan na 2026-11-23, cache 865 (opublikowane), rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,10 +6,10 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 863, opublikowane 23.11.2026 (log `docs/logi/LOG_SESJI_2026-11-23.md`) |
-| Gałęzie czekające na „publikuj” | brak (860–863 opublikowane 23.11) |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 863 |
-| Zip itch.io | `NightBrand_itch_863.zip` na pulpicie autora w `NIGHTBRAND` |
+| main | cache 865, opublikowane 23.11.2026 (log `docs/logi/LOG_SESJI_2026-11-23.md`) |
+| Gałęzie czekające na „publikuj” | brak (864–865 opublikowane 23.11) |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 865 |
+| Zip itch.io | `NightBrand_itch_865.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 199 MB (limit 500 MB); zip itch.io ok. 817 plików / 1000 (każdy model = 2–3 pliki) |
 
 ## Decyzje autora (najnowsze)
@@ -28,6 +28,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 864–865: podsumowanie nocy bez przewijania, krąg Wybuchu, rzadsi czempioni (do 4%), Wybuch ×1,3, 5 nowych dźwięków Kenney CC0 (odsłuch!), doskok wilków/ghuli/ogarów z zamachem i bez ciosu zaraz po skoku.
 - 860–863: płynność (Czarnobór, Złotogród), pauza (pytanie o porzucenie nocy), ikonki stanów, podpowiedzi, rzadkie karty i tempo awansu (ok. 20 poziomów na noc), czempioni z cechami (Wezwanie, Wybuch w tłumie), powrót do rozdziału po zmianie.
 - 856–859: zestawy 4/7, techniki ze stanami wrogów, Trudny bez premii doświadczenia, wir Tancerki z żywiołami, parowanie Kata u wszystkich postaci. Lista EN: `docs/teksty/EN_DO_ZATWIERDZENIA_2026-11-22.md`.
 - 852–855 (balans postaci, skalowanie nocy, reakcje żywiołów, Wit): Tancerka i Woskownica na żywo, odczucie rampy trudności, FPS przy około 40 wrogach, Łatwy/Trudny, czy reakcje są widoczne w walce, czas wyświetlania dłuższego tekstu przy dobiciu Wita, teksty EN.
