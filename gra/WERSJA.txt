@@ -964,3 +964,4 @@ cache888 · tekstury 83 modeli 3D powiekszone 2x (Real-ESRGAN, 2048); nie sprawd
 cache889 · modele rodzin z bryl Blendera wylaczone (wracaja malowane ogniska, stosy, kolumna, jezyny; znika wystroj 882-884); nie sprawdzono: wyglad w grze, pad, itch.io
 cache890 · wystroj z rodzin (menhiry, lawy itd.) przywrocony; ogniska, stosy, kosze, zlamana kolumna, jezyny malowane; nie sprawdzono: wyglad w grze, pad, itch.io
 cache891 · przywrocone wszystkie modele rodzin jak w 888 (menhiry, lawy, czaszki, jezyny, ogniska, kolumny); nie sprawdzono: wyglad w grze, pad, itch.io
+cache892 · przywrocone obiekty sprzed rodzin z Blendera (ogniska Zakonu, stosy z obrazkami, kosze, ogniska Czarnoboru, kolumna z Meshy, kolumny Cytadeli, jezyny); wystroj 882-884 zostaje; nie sprawdzono: wyglad w grze, pad, itch.io
