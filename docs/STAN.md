@@ -1,4 +1,4 @@
-Stan na 2026-11-23, cache 879 (opublikowane), rola agent główny
+Stan na 2026-11-23, cache 880 (opublikowane), rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,13 +6,14 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 879 (commit 6cf624c), opublikowane 23.11.2026 (log `docs/logi/LOG_SESJI_2026-11-23.md`) |
-| Gałęzie czekające na „publikuj” | brak (876–879 opublikowane 23.11) |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 879 |
-| Zip itch.io | `NightBrand_itch_879.zip` na pulpicie autora w `NIGHTBRAND` |
-| Rozmiar gra/ | ok. 227 MB (limit 500 MB); zip itch.io 910 plików / 1000 (każdy model = 2–3 pliki) |
+| main | cache 880 (commit 7f9a2ec), opublikowane 23.11.2026 (log `docs/logi/LOG_SESJI_2026-11-23.md`) |
+| Gałęzie czekające na „publikuj” | brak (876–880 opublikowane 23.11) |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 880 |
+| Zip itch.io | `NightBrand_itch_880.zip` na pulpicie autora w `NIGHTBRAND` |
+| Rozmiar gra/ | ok. 229 MB (limit 500 MB); zip itch.io 922 pliki / 1000 (każdy model = 2–3 pliki) |
 
 ## Decyzje autora (najnowsze)
+- 23.11: rodziny modeli 3D (neutralne modele + kolor z kodu), faza 1 w grze (880); faza 2 dopiero po zgodzie autora (zostało ok. 70 plików w zipie).
 - 23.11: sklep Margi według szkicu autora (879): Marga za ladą U przed regałem, regały i rzeczy przy ścianach.
 - 23.11: okna i witraże z shaderem (878, druga wersja propozycji: wnęka, stare szkło, światło na murze, gotycki witraż).
 - 23.11: dom Heriego i chata Chojraka: 60 s schronienia na noc, jak u Margi (876). Malowane tekstury budynków: polecane warianty (877, „Bierz polecane”).
@@ -32,6 +33,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 880: stosy, kosze z ogniem, palenisko, kolumny (porównanie lokalnie `?rodziny=0`), FPS w Cytadeli, prześwietlenie modeli przy lampach.
 - 879: sklep Margi (porównanie lokalnie `?lada=0`): rozmowa zza lady, kram po północy, pad.
 - 878: okna i witraże (porównanie lokalnie `?okna=0`), FPS w Złotogrodzie, przycinka przy pierwszym wejściu na mapę.
 - 876–877: wypchnięcie z domu Heriego i chaty Chojraka po 60 s; nowe tekstury budynków w Złotogrodzie, Osadzie, porcie i Czarnoborze (porównanie lokalnie `?malowane=0`), FPS, teksty EN schronienia (niezatwierdzone).
