@@ -220,10 +220,11 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
  const wood=BURNT_TEX.beam||IMGS.wl_palecap||IMGS.wl_chata,roofIm=BURNT_TEX.roof||IMGS.p1_roof_burnt||IMGS.wl_chata;
  const NT=typeof OSADA_TX!=='undefined',postM=NT?worldSurfN(cutaway(phong({color:0xe8dcd0})),'t2_belka',1.3,1.9,3):worldSurf(cutaway(phong({color:0x8c7868})),wood,1.3,'a');
  const box=new THREE.BoxGeometry(1,1,1).toNonIndexed(),M=new THREE.Matrix4(),Q=new THREE.Quaternion(),E=new THREE.Euler(),Vs=new THREE.Vector3(),Vp=new THREE.Vector3();
- const acc=()=>({p:[],n:[]}),put=(a,geo,px,py,pz,sx,sy,sz,rx,ry,rz)=>{E.set(rx||0,ry||0,rz||0);Q.setFromEuler(E);M.compose(Vp.set(px,py,pz),Q,Vs.set(sx,sy,sz));
-   const g=geo.clone().applyMatrix4(M),P=g.attributes.position.array,N=g.attributes.normal.array;for(let i=0;i<P.length;i++){a.p.push(P[i]);a.n.push(N[i])}g.dispose()};
- const mesh=(a,mat)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(a.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(a.n,3));const m=new THREE.Mesh(g,mat);m.castShadow=true;m.receiveShadow=true;w.group.add(m);return m};
- const holes=acc(),glow=acc(),chim=acc(),cyl=new THREE.CylinderGeometry(.5,.5,1,8).toNonIndexed(),posts=acc(),floors=acc(),margaR=rs.find(r=>r.marga)||rs.reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null);
+ const acc=w=>({p:[],n:[],u:w?[]:null,s:w?[]:null}),put=(a,geo,px,py,pz,sx,sy,sz,rx,ry,rz)=>{E.set(rx||0,ry||0,rz||0);Q.setFromEuler(E);M.compose(Vp.set(px,py,pz),Q,Vs.set(sx,sy,sz));
+   const g=geo.clone().applyMatrix4(M),P=g.attributes.position.array,N=g.attributes.normal.array;for(let i=0;i<P.length;i++){a.p.push(P[i]);a.n.push(N[i])}
+   if(a.u){const U=g.attributes.uv.array,k=Math.sin(px*12.9898+pz*78.233+py*4.1)*43758.5453,sd=.01+.98*(k-Math.floor(k));for(let i=0;i<U.length;i++)a.u.push(U[i]);for(let i=0;i<P.length/3;i++)a.s.push(sd)}g.dispose()};
+ const mesh=(a,mat)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(a.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(a.n,3));if(a.u&&a.u.length){g.setAttribute('uv',new THREE.Float32BufferAttribute(a.u,2));g.setAttribute('nbSeed',new THREE.Float32BufferAttribute(a.s,1))}const m=new THREE.Mesh(g,mat);m.castShadow=true;m.receiveShadow=true;w.group.add(m);return m};
+ const holes=acc(1),glow=acc(1),spillA=acc(1),plane=new THREE.PlaneGeometry(1,1).toNonIndexed(),chim=acc(),cyl=new THREE.CylinderGeometry(.5,.5,1,8).toNonIndexed(),posts=acc(),floors=acc(),margaR=rs.find(r=>r.marga)||rs.reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null);
  for(const r of rs){if(r.chata)continue;const h=(i=>{const x=Math.sin((r.x*12.9898+r.y*78.233+i*37.7))*43758.5453;return x-Math.floor(x)});let hi=0;const rnd=()=>h(hi++);
   const marga=r===margaR&&(r.marga||r.w/r.h>1.6);
   const alongX=r.w>=r.h,L=alongX?r.w:r.h,D=alongX?r.h:r.w,cx=r.x+r.w/2,cz=r.y+r.h/2,eave=NT&&nbParam('osada2')!=='0'?2.4:1.9,rise=Math.min(2.3,D*.34),ov=.35,half=D/2+ov,slope=Math.atan2(rise,half),sl=Math.hypot(half,rise);
@@ -255,7 +256,7 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
     {n:r.h,at:i=>[r.x,r.y+i],face:i=>[r.x-.03,r.y+i+.5],ry:Math.PI/2,out:-1},{n:r.h,at:i=>[r.x+r.w-1,r.y+i],face:i=>[r.x+r.w+.03,r.y+i+.5],ry:Math.PI/2,out:1}];
    for(const S of sides){let run=0;for(let i=2;i<S.n-2;i++){const [tx,ty]=S.at(i),ok=wall.has(ty*MW+tx)&&full(tx,ty);run=ok?run+1:0;if(!ok||run%3!==2)continue;
      const [px,pz]=S.face(i),a=S.ry,ax=Math.cos(a),az=-Math.sin(a),o=S.out,ox=S.ry?o:0,oz=S.ry?0:o,y=eave*.56;
-     put(holes,box,px,y,pz,.62,.56,.06,0,a,0);if(rnd()<.35)put(glow,box,px-ox*.02,y,pz-oz*.02,.5,.44,.04,0,a,0);
+     put(holes,box,px,y,pz,.62,.56,.06,0,a,0);if(rnd()<.35){put(glow,box,px-ox*.02,y,pz-oz*.02,.5,.44,.04,0,a,0);if(NB_WIN)put(spillA,plane,px+ox*.1,y-.12,pz+oz*.1,1.45,1.25,1,0,a,0)}
      for(const sy of [-1,1])put(posts,box,px+ox*.03,y+sy*.33,pz+oz*.03,.86,.1,.14,0,a,0);for(const sx of [-1,1])put(posts,box,px+ax*sx*.38+ox*.03,y,pz+az*sx*.38+oz*.03,.1,.76,.14,0,a,0);
      if(rnd()<.75){const sx=rnd()<.5?-1:1,hang=rnd()<.3;put(posts,box,px+ax*sx*.62+ox*.12,y-(hang?.12:0),pz+az*sx*.62+oz*.12,.3,.62,.04,0,a+sx*o*(hang?.5:1.2),hang?sx*.4:0)}}}
    for(const [cx0,cz0,sx,sz] of [[r.x,r.y,-1,-1],[r.x+r.w,r.y,1,-1],[r.x,r.y+r.h,-1,1],[r.x+r.w,r.y+r.h,1,1]])for(let i=0;i<(eave>2?8:6);i++){const y=.6+i*.22;
@@ -267,7 +268,7 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
   const g=new THREE.Group();g.add(mesh(wood_,woodM));if(roof.p.length)g.add(mesh(roof,roofM));w.group.add(g);
   r.mats=[woodM,roofM];r.mesh=g;r.a=1}
  if(margaR&&(margaR.marga||margaR.w/margaR.h>1.6)&&NT&&nbParam('sklep')!=='0')margaShop(margaR,wall,put,box,acc,mesh);// 23.11.2026 (autor: sklep bardziej sklepowy)
- if(holes.p.length)mesh(holes,cutaway(phong({color:0x0e0b09})));if(glow.p.length)mesh(glow,phong({color:0x1a0a04,emissive:0x5a1c06}));if(chim.p.length)mesh(chim,worldSurfN(cutaway(phong({color:0xb8aca4})),'t4_podmurowka',1.6,1.9,3));
+ if(holes.p.length)mesh(holes,winGlass(cutaway(phong({color:0x0e0b09})),0,2));if(glow.p.length)mesh(glow,winGlass(phong({color:0x1a0a04,emissive:0x5a1c06}),1,2));if(spillA.p.length)mesh(spillA,winSpillMat()).castShadow=false;if(chim.p.length)mesh(chim,worldSurfN(cutaway(phong({color:0xb8aca4})),'t4_podmurowka',1.6,1.9,3));
  if(posts.p.length)mesh(posts,postM);if(floors.p.length){const f=mesh(floors,worldSurfN(phong({color:0x8c847c}),'t5_podloga',2.6,1.1));f.castShadow=false}}
 function buildRoofs(w){if(!w.roofs||!w.group)return;if(w.ch===1&&IMGS.wl_palecap&&nbParam('spalone')!=='0'){burntHouses(w);return}const rm=[];
  for(const r of w.roofs){if(r.tri||r.mesh)continue;/* 23.11.2026: dom z modelu ma wlasny dach */const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);

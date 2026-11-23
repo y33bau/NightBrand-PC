@@ -37,6 +37,79 @@ const nbWeather=wk=>wk?`{float wk=${wk.toFixed(1)};bool wall=abs(nW0.y)<.5;float
   if(wk>2.5){float so=smoothstep(.7,2.4,vWW.y)*(.45+.55*nbF(vec2(al*1.3,vWW.y*.8)));c=mix(c,c*vec3(.22,.2,.19),so*.8);}}
  else{float ms=smoothstep(.55,.85,nbF(vWW.xz*.45));c=mix(c,c*vec3(.62,.66,.48),ms*(.25+.12*wk));if(wk>2.5)c=mix(c,c*vec3(.35,.32,.3),nbF(vWW.xz*.8)*.5);}
  diffuseColor.rgb=c;}`:'';
+// 23.11.2026 (878, decyzja autora: okna i witraze): shader szyb. Tryby: 0 okno ciemne (odbicie nieba, refleksy, zaslona, brud),
+// 1 okno ze swiatlem (lampa we wnetrzu, podswietlona zaslona, szprosy pod swiatlo, migotanie), 2 witraz (bordiura, medalion, olow),
+// 3 rozeta (czworolist, zloty srodek). Detale gasna, gdy okno jest male na ekranie (lod). ?okna=0 = stare plaskie szyby.
+// Ziarno okna: atrybut nbSeed (siatki scalone) albo polozenie siatki (modelMatrix). Czas: NB_WIN_T (17_render).
+const NB_WIN=nbParam('okna')!=='0',NB_WIN_T={value:0};
+const NB_WIN_GLSL=`
+float wh(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float wn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(wh(i),wh(i+vec2(1.,0.)),f.x),mix(wh(i+vec2(0.,1.)),wh(i+vec2(1.,1.)),f.x),f.y);}
+float wf(vec2 p){return wn(p)*.5+wn(p*2.03)*.25+wn(p*4.1)*.25;}
+vec3 wvor(vec2 p){vec2 g=floor(p);float d1=9.,d2=9.,id=0.;for(int j=-1;j<=1;j++)for(int i=-1;i<=1;i++){vec2 c=g+vec2(float(i),float(j));vec2 q=c+.15+.7*vec2(wh(c),wh(c+7.3));float d=length(p-q);if(d<d1){d2=d1;d1=d;id=wh(c+3.1);}else if(d<d2)d2=d;}return vec3(d1,d2-d1,id);}
+vec3 wglass(vec2 p,float sc,vec3 col,float lod){vec3 v=wvor(p*sc);vec3 c=col*(.72+.4*wf(vec2(p.x*6.+v.z*10.,p.y*2.)))*(1.08-.35*min(v.x,1.));float lw=mix(.16,.06,lod);c*=smoothstep(lw*.6,lw,v.y);c=mix(c,c*.62,(1.-smoothstep(lw,lw*1.7,v.y))*lod);return c;}
+vec3 wpal(float h,vec3 tint){return h<.6?tint:h<.75?vec3(.42,.2,.52):h<.88?vec3(.18,.46,.24):vec3(.64,.12,.1);}
+vec4 nbWin(vec2 uv,float sd,float mode,float R,float t){
+ float lod=1.-smoothstep(.012,.045,max(fwidth(uv.x),fwidth(uv.y)));
+ float u=uv.x,v=1.-uv.y;
+ if(mode<1.5){
+  vec2 pg=vec2(u*2.,v*R),pi=floor(pg),pl=fract(pg);
+  float e=min(min(u,1.-u),min(v,1.-v)),mw=mix(.05,.028,lod),mu=step(abs(u-.5),mw),mv=step(.5-mw*R*.55,abs(fract(v*R+.5)-.5))*step(.06,e);
+  float pe=min(min(pl.x,1.-pl.x),min(pl.y,1.-pl.y));
+  if(mode<.5){
+   if(e<.03)return vec4(.03,.025,.02,1.);if(mu+mv>0.)return vec4(.07,.06,.05,1.);
+   float wu=u+lod*(.012*sin(v*38.+sd*20.)+.007*sin(v*97.+pi.x*2.)),wv=v+lod*.01*sin(u*33.+pi.y*1.7);
+   vec3 c=mix(vec3(.36,.43,.56),vec3(.08,.09,.12),smoothstep(-.15,1.1,wv));float off=(wh(pi+sd*13.)-.5)*.3;
+   c=mix(c,vec3(.5,.55,.66),(1.-smoothstep(0.,.055,abs(wu*.7+wv-.5-off)))*.38);
+   c=mix(c,vec3(.36,.4,.48),(1.-smoothstep(0.,.016,abs(wu*.7+wv-.68-off)))*.28*lod);
+   if(wh(pi+sd*7.+1.)>.72){float d=length(pl-vec2(.62,.38));c+=vec3(1.,.62,.3)*exp(-d*d*90.)*.35;}
+   float cu=wh(vec2(sd,3.))>.5?1.-u:u;if(cu<.34){float fo=.6+.4*cos(cu*70.+sin(v*5.)*1.5);c=mix(c,vec3(.16,.12,.1)*fo,.4*smoothstep(.34,.22,cu));}
+   c*=.6+.4*smoothstep(0.,.2,pe);c*=1.+(wf(vec2(u,v)*7.+sd*10.)-.5)*.3*lod;
+   if(fract(sd*7.)<.3&&pi==vec2(1.,1.)&&abs(pl.x-.25-.45*pl.y)<.01*lod)c+=vec3(.25,.27,.3);
+   return vec4(c*1.1,.15);}
+  float fl=.88+.08*sin(t*6.3+sd*40.)+.04*sin(t*15.1+sd*70.);
+  if(e<.03)return vec4(vec3(.03,.015,.008)*fl,1.);if(mu+mv>0.)return vec4(vec3(.1,.055,.028)*fl,1.);
+  float lx=.3+.35*wh(vec2(sd,1.)),gl=exp(-((u-lx)*(u-lx)*4.+(v-.82)*(v-.82)*2.4))*fl;
+  vec3 c=mix(vec3(.17,.08,.035),vec3(.93,.64,.33),gl*.92);c*=.5+.5*smoothstep(0.,.55,v);
+  if(wh(vec2(sd,2.))>.35&&u>.6&&u<.9&&v>.32)c*=mix(1.,.5,lod);if(v>.88)c*=.72;
+  float side=wh(vec2(sd,5.))>.5?1.-u:u,ed=.26+.035*sin(v*11.+sd*9.),cm=smoothstep(ed+.03,ed-.02,side);
+  vec3 fab=vec3(.82,.36,.15)*(.6+.3*cos(side*80.+sin(v*6.)*2.)*lod)*fl*.85;c=mix(c,fab,.85*cm);
+  c*=(.9+.12*wf(vec2(u*8.,v*15.+sd*9.))*lod)*(.92+.12*wh(pi+sd*3.));c*=.78+.22*smoothstep(0.,.15,pe);
+  c*=mix(vec3(1.),vec3(1.05,.9,.72),wh(vec2(sd,8.)));float m=max(c.r,max(c.g,c.b));if(m>.85)c*=.85/m;
+  return vec4(c*.82,.1);}
+ float pu=(.9+.06*sin(t*1.3+sd*20.)+.04*sin(t*3.7))*1.35;
+ if(mode<2.5){
+  vec2 P=vec2((u-.5)*2.,(1.-v)*R);float de=min(1.-abs(P.x),min(P.y,R-P.y));
+  float gl=(.62+.38*exp(-(P.x*P.x*.9+pow(P.y/R-.55,2.)*2.5)))*pu;
+  if(de<.07)return vec4(.02,.018,.016,1.);
+  if(de<.3){float k=mod(floor(P.y*3.)+(P.x>0.?1.:0.),2.);return vec4(wglass(P,4.,k>.5?vec3(.64,.12,.1):vec3(.12,.24,.62),lod)*gl*1.05,.1);}
+  float my=R*.5,md=length(P-vec2(0.,my));
+  if(abs(md-.6)<mix(.08,.045,lod))return vec4(.02,.018,.016,1.);
+  if(md<.6){if(md<.24)return vec4(wglass(P,6.,vec3(.78,.58,.14),lod)*gl*1.2,.1);float a=atan(P.y-my,P.x);return vec4(wglass(P,3.5,mod(floor((a+3.2)*1.6),2.)>.5?vec3(.64,.12,.1):vec3(.18,.46,.24),lod)*gl,.1);}
+  if(abs(P.y-R*.22)<.035*lod||abs(P.y-R*.8)<.035*lod)return vec4(.02,.018,.016,1.);
+  vec3 vv=wvor(P*1.6);return vec4(wglass(P,1.6,wpal(fract(vv.z*1.618),uWTint),lod)*gl,.1);}
+ vec2 P=(uv-.5)*2.;float r=length(P);float gl=(.75+.25*(1.-r))*pu;
+ if(r>.9)return vec4(.02,.018,.016,1.);
+ if(abs(r-.24)<.05)return vec4(.02,.018,.016,1.);if(r<.24)return vec4(wglass(P,5.,vec3(.78,.58,.14),lod)*gl*1.2,.1);
+ float best=9.;vec2 F[4];F[0]=vec2(0.,.45);F[1]=vec2(0.,-.45);F[2]=vec2(.45,0.);F[3]=vec2(-.45,0.);float fi=0.;
+ for(int i=0;i<4;i++){float d=length(P-F[i]);if(d<best){best=d;fi=float(i);}}
+ if(best<.47){if(best>.42)return vec4(.02,.018,.016,1.);return vec4(wglass(P,4.,mod(fi,2.)>.5?vec3(.64,.12,.1):uWTint,lod)*gl,.1);}
+ float a=atan(P.y,P.x);return vec4(wglass(P,3.,mod(floor((a+3.2)*1.9),2.)>.5?vec3(.78,.58,.14):uWTint*.8,lod)*gl,.1);}
+`;
+// mode: 0 ciemne, 1 swiatlo, 2 witraz, 3 rozeta; R: liczba rzedow szybek (tryby 0-1) albo wysokosc/polszerokosc witraza (tryb 2)
+function winGlass(mat,mode,R,tint){if(!NB_WIN)return mat;const prev=mat.onBeforeCompile,th=tint===undefined?0x1e3c9e:tint,tk=tint===undefined?1:1.3,tc=[(th>>16&255)/255*tk,(th>>8&255)/255*tk,(th&255)/255*tk];R=R||3;mat.userData.nbWin=1;
+  mat.onBeforeCompile=sh=>{if(prev)prev.call(mat,sh);sh.uniforms.uWT=NB_WIN_T;sh.uniforms.uWTint={value:new THREE.Vector3(tc[0],tc[1],tc[2])};
+   sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nattribute float nbSeed;varying vec2 vWUv;varying float vWS;')
+    .replace('#include <project_vertex>','#include <project_vertex>\nvWUv=uv;vWS=nbSeed>0.?nbSeed:fract(sin(dot(modelMatrix[3].xyz,vec3(12.99,78.23,37.71)))*43758.55);');
+   sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec2 vWUv;varying float vWS;uniform float uWT;uniform vec3 uWTint;'+NB_WIN_GLSL)
+    .replace('#include <emissivemap_fragment>','#include <emissivemap_fragment>\n{vec4 wc=nbWin(vWUv,vWS,'+mode.toFixed(1)+','+R.toFixed(2)+',uWT);vec3 lc=pow(max(wc.rgb,vec3(0.)),vec3(2.2));totalEmissiveRadiance=lc;diffuseColor.rgb*=wc.a;}')};
+  mat.customProgramCacheKey=()=>'nbwin'+mode+'r'+R+(prev?'c'+String(prev).length:'');return mat}
+// cieple swiatlo okna na murze (plaszczyzna z gradientem, addytywnie)
+let NB_SPILL=null;
+function winSpillMat(){if(NB_SPILL)return NB_SPILL;const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d'),gr=g.createRadialGradient(32,36,2,32,36,31);
+  gr.addColorStop(0,'rgba(255,170,90,1)');gr.addColorStop(.45,'rgba(255,140,60,.35)');gr.addColorStop(1,'rgba(255,120,40,0)');g.fillStyle=gr;g.fillRect(0,0,64,64);
+  const tx=new THREE.CanvasTexture(c);tx.colorSpace=THREE.SRGBColorSpace;
+  NB_SPILL=cutaway(new THREE.MeshBasicMaterial({map:tx,transparent:true,opacity:.7,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,depthWrite:false}));NB_SPILL.userData.nbWin=1;return NB_SPILL}
 function worldSurfN(mat,key,scale,str,wk){const e=OSADA_TX[key];wk=wk||0;mat.map=osadaTex(e[0]);mat.emissiveMap=null;mat.bumpMap=null;const nt=osadaTex(e[1]),prev=mat.onBeforeCompile,sc=scale.toFixed(2),st=(str||1).toFixed(2);
   mat.onBeforeCompile=sh=>{if(prev)prev.call(mat,sh);sh.uniforms.uNrm={value:nt};
     sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWW;varying vec3 vWN;').replace('#include <project_vertex>','#include <project_vertex>\nvec4 wwp=vec4(transformed,1.0);\n#ifdef USE_INSTANCING\nwwp=instanceMatrix*wwp;\n#endif\nvWW=(modelMatrix*wwp).xyz;vWN=normalize(mat3(modelMatrix)*objectNormal);');

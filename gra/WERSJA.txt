@@ -950,3 +950,4 @@ cache874 · Styl gry na budynkach (patyna: przebarwienia, zacieki, brud i mech p
 cache875 · Obrazkowy styl budynkow (nasycenie, kontrast, pociagniecia pedzla, cieple i chlodne plamy); sklep Margi: powiekszony, tylko dla bohatera, przed polnoca za Popioly (zegar stoi, lacznie 60 s), o polnocy kram za monety; daszek bez przepalen. Nie sprawdzono: pad, dzwiek, FPS u autora, itch.io, pelna noc z zakupami za Popioly
 cache876 · 876: limit 60 s na noc w domu Heriego i chacie Chojraka, potem wypchniecie i drzwi zamkniete (nie sprawdzono: pad, dzwiek, FPS u autora, itch.io, EN niezatwierdzone)
 cache877 · 877: malowane bezszwowe tekstury budynkow (12 materialow, wybor autora), ciosy na gzymsach i cokolach Zlotogrodu, ?malowane=0 porownanie; nie sprawdzono: FPS u autora, pad, dzwiek, itch.io
+cache878 · 878: shader szyb (okna ciemne i ze swiatlem, witraze, rozety), poswiata okien na murze, ?okna=0 porownanie; nie sprawdzono: FPS u autora, pad, dzwiek, itch.io
