@@ -7,7 +7,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 | Co | Wartość |
 |---|---|
 | main | cache 875 (commit 0f3cb2e), opublikowane 23.11.2026 (log `docs/logi/LOG_SESJI_2026-11-23.md`) |
-| Gałęzie czekające na „publikuj” | brak (867–875 opublikowane 23.11) |
+| Gałęzie czekające na „publikuj” | `runda-876` (cache 876: limit 60 s w domach Heriego i Chojraka) |
 | Kopia zapasowa | y33bau/nightbrand-backup = kopia 875 |
 | Zip itch.io | `NightBrand_itch_875.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 225 MB (limit 500 MB); zip itch.io 890 plików / 1000 (każdy model = 2–3 pliki) |

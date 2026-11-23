@@ -33,7 +33,7 @@ function solneTick(){
  if(st.bossDead&&!st.open.every(Boolean)&&!st.told2){st.told2=true;say((EN?'The Harbour Master is dead. The ferry is still held by a chain.':'Bosman nie żyje. Prom jeszcze trzyma łańcuch.'))}
 }
 
-function stageTick(dt){if(CH===PORT)solneTick();if(CH===1&&W.shelters)margaShopTick(dt);
+function stageTick(dt){if(CH===PORT)solneTick();if(CH===1&&W.shelters)margaShopTick(dt);if(W.shelters)shelterTick(dt);
   if(S.stage==='p1'&&S.t>=BREAK_AT&&!S.dg&&!S.endless){S.stage='collector';S.collT=2.5;dissolveAll((EN?'Midnight. The dead retreat into the darkness.':'Północ. Martwi cofają się w ciemność.'))}
   const m=S.merchant;
   if(m){if(m.state==='in'){m.t-=dt*1.5;if(m.t<=0)m.state='here'}
@@ -61,6 +61,15 @@ function margaShopTick(dt){const sh=W.shelters&&W.shelters.find(s=>s.kind==='sho
   if(S.inShop){S.shopT=Math.max(0,S.shopT-dt);if(!S.shopIn){S.shopIn=1;say(EN?`Marga's shop. The night's clock stands still while you are inside: ${Math.ceil(S.shopT)} s left in total. She takes Ashes.`:`Sklep Margi. Gdy jesteś w środku, zegar nocy stoi: zostało łącznie ${Math.ceil(S.shopT)} s. Marga bierze Popioły.`)}}else S.shopIn=0;
   if(sh.closed)for(const p of [pl1||pl,pl2])if(inside(p)){p.x=(sh.door[0]+.5)*TS;p.y=(sh.door[1]+1.8)*TS;if(!S.shopOut){S.shopOut=1;say(S.stage==='p1'?(EN?'Marga pushes you over the threshold. Your minute is up.':'Marga wypycha cię za próg. Twoja minuta minęła.'):(EN?'Marga bars the door. She will trade again at the stall.':'Marga zamyka drzwi. Handluje dalej tylko przy kramie.'))}}
   if(!sh.closed)S.shopOut=0}
+/* 23.11.2026 (autor: „60 s jak u Margi”): dom Heriego i chata Chojraka chronia lacznie 60 s na noc (osobno kazdy dom), zegar nocy idzie dalej.
+   Po wyczerpaniu: bohater wypchniety za prog, drzwi zamkniete do konca nocy. Porownanie: ?schronlimit=0 (bez limitu). */
+const SHELTER_T=60,SHELTER_OFF=nbParam('schronlimit')==='0';
+function shelterTick(dt){S.shelLeft=-1;if(SHELTER_OFF||S.dg)return;const T=S.shelT||(S.shelT={});
+  for(const sh of W.shelters){if(sh.kind==='shop')continue;if(T[sh.kind]===undefined)T[sh.kind]=SHELTER_T;
+    const inside=p=>p&&!p.dead&&shelterAt(p.x,p.y)===sh,inn=inside(pl1||pl)||inside(pl2);
+    if(inn&&T[sh.kind]>0){T[sh.kind]=Math.max(0,T[sh.kind]-dt);S.shelLeft=T[sh.kind]}
+    sh.closed=T[sh.kind]<=0;
+    if(sh.closed)for(const p of [pl1||pl,pl2])if(inside(p)){p.x=(sh.door[0]+.5)*TS;p.y=(sh.door[1]+1.8)*TS;if(!(S.shelOut&&S.shelOut[sh.kind])){(S.shelOut||(S.shelOut={}))[sh.kind]=1;say(EN?'The roof will shelter you no longer. The night returns to the door.':'Dach nie osłoni cię dłużej. Noc wraca pod drzwi.')}}}}
 function ashShopUiTick(dt){if(!S.inShop)return;S.shopT=Math.max(0,S.shopT-dt);if(S.shopT<=0){closeShop();return}const kk=document.querySelector('#shop .kicker');if(kk)kk.textContent=EN?`Before midnight · the clock stands still · ${Math.ceil(S.shopT)} s`:`Przed północą · zegar stoi · ${Math.ceil(S.shopT)} s`}
 function shopMaxed(it){return it.id==='amulet'&&pl.staMax>=180||!!it.lim&&(S.bought[it.id]||0)>=it.lim}
 const heartHp=()=>Math.round(20*(S&&S.pk&&S.pk.hpMul||1));
