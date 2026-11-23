@@ -1854,7 +1854,48 @@ function roofGeo(W,D,rise){const ax=W>=D,L=ax?W:D,T=ax?D:W,hT=T/2,sl=Math.hypot(
  for(const e of[-1,1]){vx(e*L/2,-hT,0,0,0,.5);vx(e*L/2,hT,0,T,0,.62);vx(e*L/2,0,rise,T/2,rise,.72)}
  {const rw=.11,ry=rise-rw*rise/hT+.03,rt=rise+.05;for(const sg of[-1,1]){const A=[-L/2,sg*rw,ry,0,0,.2],B=[L/2,sg*rw,ry,L,0,.2],Cc=[L/2,0,rt,L,.2,.3],E=[-L/2,0,rt,0,.2,.3];for(const q of[A,B,Cc,A,Cc,E])vx(...q)}}
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(P),3));g.setAttribute('uv',new THREE.BufferAttribute(new Float32Array(U),2));g.setAttribute('color',new THREE.BufferAttribute(new Float32Array(C),3));g.computeVertexNormals();return g}
-function buildRoofs(w){if(!w.roofs||!w.group)return;const rm=[];
+/* 23.11.2026 (runda 869, autor: domy z modeli w Osadzie wycofane, "ladne domy z obecnych tekstur"):
+   spalone domy z kodu na prostokatach dachow: zweglona wiezba (kalenica, platwie, krokwie, czesc brakuje), resztki poszycia,
+   slupy narozne, rama drzwi, zawalone belki w srodku. Wiezba i poszycie znikaja, gdy bohater jest w srodku (jak stary dach).
+   Tekstury: wl_palecap (drewno), p1_roof_burnt (poszycie); BURNT_TEX pozwala podmienic na nowe (t2_belka, t3_poszycie). ?spalone=0 = stary dach. */
+const BURNT_TEX={beam:null,roof:null};
+function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[2]===48).map(([x,y])=>y*MW+x));
+ const wood=BURNT_TEX.beam||IMGS.wl_palecap||IMGS.wl_chata,roofIm=BURNT_TEX.roof||IMGS.p1_roof_burnt||IMGS.wl_chata;
+ const postM=worldSurf(cutaway(phong({color:0x8c7868})),wood,1.3,'a');
+ const box=new THREE.BoxGeometry(1,1,1).toNonIndexed(),M=new THREE.Matrix4(),Q=new THREE.Quaternion(),E=new THREE.Euler(),Vs=new THREE.Vector3(),Vp=new THREE.Vector3();
+ const acc=()=>({p:[],n:[]}),put=(a,geo,px,py,pz,sx,sy,sz,rx,ry,rz)=>{E.set(rx||0,ry||0,rz||0);Q.setFromEuler(E);M.compose(Vp.set(px,py,pz),Q,Vs.set(sx,sy,sz));
+   const g=geo.clone().applyMatrix4(M),P=g.attributes.position.array,N=g.attributes.normal.array;for(let i=0;i<P.length;i++){a.p.push(P[i]);a.n.push(N[i])}g.dispose()};
+ const mesh=(a,mat)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(a.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(a.n,3));const m=new THREE.Mesh(g,mat);m.castShadow=true;m.receiveShadow=true;w.group.add(m);return m};
+ const posts=acc();
+ for(const r of rs){const h=(i=>{const x=Math.sin((r.x*12.9898+r.y*78.233+i*37.7))*43758.5453;return x-Math.floor(x)});let hi=0;const rnd=()=>h(hi++);
+  const alongX=r.w>=r.h,L=alongX?r.w:r.h,D=alongX?r.h:r.w,cx=r.x+r.w/2,cz=r.y+r.h/2,eave=1.9,rise=Math.min(2.3,D*.34),ov=.35,half=D/2+ov,slope=Math.atan2(rise,half),sl=Math.hypot(half,rise);
+  // dla osi wzdluz Z zamieniamy x<->z przy skladaniu
+  const P=(a,u,y,v,su,sy,sv,rU,rY,rV)=>alongX?put(a,box,cx+u,y,cz+v,su,sy,sv,rV||0,rY||0,rU||0):put(a,box,cx+v,y,cz+u,sv,sy,su,rU||0,rY||0,-(rV||0));
+  const roof=acc(),wood_=acc();
+  // kalenica (czasem przelamana) i platwie na scianach
+  const ridgeBreak=rnd()<.45?(rnd()-.5)*L*.5:null;
+  if(ridgeBreak===null)P(wood_,0,eave+rise,0,L+.5,.24,.24);else{const a=(L+.5)/2+ridgeBreak;P(wood_,-(L+.5)/2+a/2,eave+rise,0,a-.3,.24,.24);P(wood_,(L+.5)/2-((L+.5)-a)/2+.2,eave+rise-.45,0,(L+.5)-a-.6,.22,.22,0,0,.0)}
+  for(const s of [-1,1])P(wood_,0,eave+.08,s*(D/2-.15),L+.3,.2,.26);
+  // krokwie co ok. 1.15, czesc brakuje, czesc skrocona
+  const n=Math.max(3,Math.round(L/1.15));for(let i=0;i<=n;i++){const u=-L/2+.2+i*(L-.4)/n;for(const s of [-1,1]){const k=rnd();if(k<.22)continue;const len=k<.4?sl*(.45+rnd()*.3):sl,mid=len/2;
+    // od okapu w gore
+    const vy=eave+Math.sin(slope)*mid,vv=s*(half-Math.cos(slope)*mid);P(wood_,u,vy,vv,.17,.17,len,0,0,s*slope)}}
+  // resztki poszycia: odcinki wzdluz kalenicy, na obu polaciach osobno, ok. 40% zostaje (przy szczytach czesciej)
+  const seg=Math.max(2,Math.round(L/2.2));for(let i=0;i<seg;i++){const u0=-L/2-.25+i*(L+.5)/seg,ul=(L+.5)/seg,edge=i===0||i===seg-1;
+   for(const s of [-1,1]){if(rnd()>(edge?.55:.28))continue;const part=.45+rnd()*.55,len=sl*part,mid=sl-len/2;// od kalenicy w dol
+    const vy=eave+Math.sin(slope)*(sl-mid)+.1,vv=s*(half-Math.cos(slope)*(sl-mid));P(roof,u0+ul/2,vy,vv,ul*(.8+rnd()*.15),.05,len,0,0,s*slope)}}
+  // zawalone belki w srodku
+  for(let i=0;i<2+(rnd()<.5?1:0);i++){const len=1.6+rnd()*2.2,u=(rnd()-.5)*(L-2.5),v=(rnd()-.5)*(D-2.5);P(wood_,u,.22+rnd()*.25,v,len,.2,.2,0,(rnd()-.5)*2.4,(rnd()-.5)*.35)}
+  // slupy narozne (wyzsze od scian, zweglone szczyty) i rama drzwi
+  for(const [ux,vz] of [[-1,-1],[1,-1],[-1,1],[1,1]])P(posts,ux*(L/2-.2),1.15+rnd()*.15,vz*(D/2-.2),.34,2.3+rnd()*.3,.34);
+  for(const yy of [r.y,r.y+r.h-1]){let a=-1;for(let x=r.x;x<=r.x+r.w;x++){const open=x<r.x+r.w&&!wall.has(yy*MW+x)&&wall.has(yy*MW+r.x)===true||false;const isOpen=x<r.x+r.w&&!wall.has(yy*MW+x);
+    if(isOpen&&a<0)a=x;if((!isOpen||x===r.x+r.w)&&a>=0){const b=x;if(b-a>=2&&b-a<=6&&a>r.x&&b<r.x+r.w){const zz=yy+.5;for(const xx of [a,b])put(posts,box,xx,1.05,zz,.26,2.1,.32);if(rnd()<.7)put(posts,box,(a+b)/2,2.05,zz,b-a+.5,.24,.3)}a=-1}}}
+  const fadeR=phong({color:0xffffff,transparent:true,opacity:1,side:THREE.DoubleSide});const roofM=worldSurf(fadeR,BURNT_TEX.roof?roofIm:wood,BURNT_TEX.roof?2.4:.9,'a');roofM.color.setHex(BURNT_TEX.roof?0xffffff:0x9a8474);/* poszycie: gonty z drewna (do czasu tekstury t3_poszycie) */
+  const woodM=worldSurf(phong({color:0x8c7868,transparent:true,opacity:1}),wood,1.3,'a');
+  const g=new THREE.Group();g.add(mesh(wood_,woodM));if(roof.p.length)g.add(mesh(roof,roofM));w.group.add(g);
+  r.mats=[woodM,roofM];r.mesh=g;r.a=1}
+ if(posts.p.length)mesh(posts,postM)}
+function buildRoofs(w){if(!w.roofs||!w.group)return;if(w.ch===1&&IMGS.wl_palecap&&nbParam('spalone')!=='0'){burntHouses(w);return}const rm=[];
  for(const r of w.roofs){if(r.tri)continue;/* 23.11.2026: dom z modelu ma wlasny dach */const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
   const m=new THREE.Mesh(roofGeo(W,D,rise),new THREE.MeshLambertMaterial({color:0x4a382c,transparent:true,opacity:1,side:THREE.DoubleSide,vertexColors:true}));
   m.position.set(r.x+r.w/2,1.9,r.y+r.h/2);m.castShadow=false;m.receiveShadow=false;m.renderOrder=3;w.group.add(m);r.mesh=m;r.a=1;rm.push(r)}
@@ -1863,7 +1904,7 @@ const ROOF_PNG='./assets/tekstury/517905a0e4feadfa5ba42b536be2720a1d736e68e81eba
 let roofT=0;
 function roofTick(){const rs=W&&W.roofs;if(!rs||!S)return;const ps=[pl1||pl,pl2].filter(p=>p&&!p.dead),dt=Math.min(.1,Math.max(0,clock-roofT));roofT=clock;
  for(const r of rs){if(!r.mesh)continue;let inside=false;for(const p of ps){const tx=p.x/16,ty=p.y/16;if(tx>r.x-.3&&tx<r.x+r.w+.3&&ty>r.y-.3&&ty<r.y+r.h+.3){inside=true;break}}
-  r.a+=((inside?0:1)-r.a)*Math.min(1,dt*7);r.mesh.material.opacity=r.a;r.mesh.visible=r.a>.02}}
+  r.a+=((inside?0:1)-r.a)*Math.min(1,dt*7);if(r.mats)for(const m of r.mats)m.opacity=r.a;else r.mesh.material.opacity=r.a;r.mesh.visible=r.a>.02}}
 
 // Ciemna ziemia za krawedzia mapy zamiast pustego tla (rozdzial I, ?depth=0 wylacza).
 function depthApron(w){const m=new THREE.Mesh(new THREE.PlaneGeometry(MW+260,MH+260).rotateX(-Math.PI/2),new THREE.MeshLambertMaterial({color:depthOn(w.ch)[6]}));m.position.set(MW/2,-9.8,MH/2);m.castShadow=false;m.receiveShadow=false;m.userData.depthApron=true;w.group.add(m)}
@@ -2565,15 +2606,13 @@ const P3D_MMAP={1:{dead_tree:P3D_DRZ1,barrel:'p1_barrel',grave_cross:'p1_grave_c
 const P3D_MGEO={};
 const P3D_MREADY=REK3D_ON?Promise.all(Object.entries(P3D_MESHY).map(([k,e])=>fetch(e.g).then(r=>r.arrayBuffer()).then(b=>{P3D_MGEO[k]=p3dParseGlb(b)}).catch(er=>quietErr('meshy '+k,er)))):Promise.resolve();
 /* 23.11.2026 (runda 868, zgoda autora): bryly TripoSG (darmowe, MIT) z tekstura wypalona z malunkow (rekwizyty portu z gry, domy z ChatGPT).
-   Wypalanie: docs/modele/triposg_bake.py. Domy w porcie (szopy, kantor, karczma) i w Osadzie (spalone chaty, dom Margi) oraz rekwizyty portu.
+   Wypalanie: docs/modele/triposg_bake.py. Domy w porcie (szopy, kantor, karczma) oraz rekwizyty portu. Domy Osady z modeli wycofane (autor 23.11): zamiast nich spalone domy z kodu (05).
    Porownanie przed: ?tri3d=0 (tylko lokalnie). */
 const TRI3D_ON=REK3D_ON&&nbParam('tri3d')!=='0';
-const P3D_TRI={"beczka_ryb":{"g":"assets/rekwizyty/3027b785898b03081240b1a318b1d742ad501a36fac32abccdcf2bfaa05232a1.glb","k":"assets/rekwizyty/aef676f02e2bb45483787c1db92f01d12df131da925ebb44f2e64c8f6715bcb5.webp"},"celnica":{"g":"assets/rekwizyty/b6c1ecd22308ca0bec3b81e06b895ea82ed47c4f270d07dcde8413f8d942a25c.glb","k":"assets/rekwizyty/175c4b9ccb888617d758ae4f4420fb45e46f655c76c40680da8eed634075d59a.webp"},"chata_drewno_kamien":{"g":"assets/rekwizyty/ea90766ee454725e1ad2ea537a124aaba9f724615a09a7c998276ba2a4c386fa.glb","k":"assets/rekwizyty/c8a7d240ede3cccdcea4869fff2876c97e5d5ddfb0d3618749c204135bc06927.webp"},"deski":{"g":"assets/rekwizyty/0f0b758d90647ec472e4ff4e285db5032da13a41f8f0efc1037631547af54388.glb","k":"assets/rekwizyty/9da96c35d0dee556a080c7f84f3210269d885c33f8f31a2860919e02cb9b38dd.webp"},"ikra":{"g":"assets/rekwizyty/c7fea7ac188d382e7715175ca524334d0503de723276649c614e222fc7a10ccd.glb","k":"assets/rekwizyty/1015d8c156ebd17bafc81ebd01bf41bda7ba7660b71257b06040edfc09038368.webp"},"kamienny_budynek_lupek":{"g":"assets/rekwizyty/bd5f15aa48757c31a5df413eaf1774464c60c1f0a9eb7251733601e6ed728048.glb","k":"assets/rekwizyty/9a872439dc6a11a23c2b0fe0ed5ac6c84f765590e21d837c8cf823aedbc0a573.webp"},"kolowrot":{"g":"assets/rekwizyty/1f329cbd7750e3ed1a92817a3195083656c9ccb33e6dd00b3e1dfa80ee3b2298.glb","k":"assets/rekwizyty/de8b249efde4cd62599fc419874f0541d7707516823231ac44a26d5abaa2260d.webp"},"kotwica":{"g":"assets/rekwizyty/403e287f3b11b844ac08621d2f846d99af6e3e207074dce0c2d9fc373090bc3c.glb","k":"assets/rekwizyty/bc53e35cd7a905268d0260280049dc0ebc87aa59464a9ded09b5e916c0065807.webp"},"ladunek":{"g":"assets/rekwizyty/c15e71fa7b6ead0dade76919a3dd1514faf24a198830c84d343c92382a45128d.glb","k":"assets/rekwizyty/fc62c7cb893768ff2db29ea65121159222e96279056693a5e524d22fea87b7e5.webp"},"magazyn_soli":{"g":"assets/rekwizyty/fc1e363b4f494558987d01a6cf7a7eb3eddd4c8b9a59cd22eb458ea693485114.glb","k":"assets/rekwizyty/52c26841d977768b87d877459e15dd4174c02557cdbff8143420aa4f728779f5.webp"},"malze":{"g":"assets/rekwizyty/efe91076a2ea17a971410a35bbaec2c95080ebfbb493d699efdcbb17d61cc059.glb","k":"assets/rekwizyty/12c9d33d68f4cb566a6e2c66839f3efd7a465e0a501f31321ceb35aba9a39788.webp"},"pacholek":{"g":"assets/rekwizyty/60e9903526e6a09d39b978bab1da65a14cfeea56f64f6d12a72cafa386b6bba9.glb","k":"assets/rekwizyty/31290504b5e56224f56dc41ea8ef0fe806ab0ec643942f7261631baef922cba6.webp"},"pacholek_cumowniczy":{"g":"assets/rekwizyty/7eef8fc6260468a3e3bc6bf7614f580ca2813795c1e8529f00df7df7a2f123c4.glb","k":"assets/rekwizyty/77f269c74c55d480681533b21cf6a228564a56ff3066448243986b1b8359e2c1.webp"},"pale":{"g":"assets/rekwizyty/be8c911ecb025ea8da6ef723d47680629c1ab8df689b47fe17103acb1fde414a.glb","k":"assets/rekwizyty/4dc9b89738c9578fb531fcdef4d9fee10e340b6578644918f8ae6c04085bfa0d.webp"},"siec":{"g":"assets/rekwizyty/3e7f4e7cdac751ef411a38e78ff35c97b41c73b7984f1b7ab648f188a9d9e2fb.glb","k":"assets/rekwizyty/5d39fd6dbe3be267661f79272b3365f2710b83bbdaa8afb39a0a78f138f47f5b.webp"},"sklep_margi":{"g":"assets/rekwizyty/6c216c54dd06da8981ee0094b58cc6c72beb78a83a0a8188f6fe9c828fcd9b8c.glb","k":"assets/rekwizyty/deb17720f70051564bd41c96134d08f8e786495dfeec080c9b07b5520e8c9386.webp"},"skrzynia":{"g":"assets/rekwizyty/526424d8d345ce305d042303ecf8a24571997b2a6d68fb1186b6aeff47b5c41c.glb","k":"assets/rekwizyty/f031a7020559cb511ce8064781dde7dd6fb949a36a2fd07a4f055ee0ea194ef5.webp"},"spalona_chata":{"g":"assets/rekwizyty/ad801b9153c54642999fecf5f8594b88d84e221ac3d1f5c5e470a49c84ebe3dc.glb","k":"assets/rekwizyty/5f00a56ac4c2d11375828d0519c10ae7e4189bf232c1bd406da1975e2ab8ba8d.webp"},"szopa_sieciarska":{"g":"assets/rekwizyty/940a6e2b6a84ae861b70efbeeb1674d1665597409ef7c6db39edd9e7ffcac454.glb","k":"assets/rekwizyty/1e850be528e280a16b48dd48649d3d28d9c9312bb6aac76a06e725c6760b6e95.webp"},"tawerna":{"g":"assets/rekwizyty/e3933d7e6cd22fd831a0da6b075b14ef3de646908c54aae4e06e29ac7877a7b6.glb","k":"assets/rekwizyty/b4bda37f9fa43b0a53406aa4eca39b15f4c059d358740f99eb41b04e6f8e49db.webp"},"wiecierz":{"g":"assets/rekwizyty/ee1c862d20786dad5b52f5853fe892b902d0bb8e2957d2a647c50a54588456fd.glb","k":"assets/rekwizyty/f731111040fc92cfc52960d764a8f43e821aa0542cb3dec2542daa2ccd067f62.webp"},"worki_soli":{"g":"assets/rekwizyty/a20322a2bcb6092fcff29946dee2ff245a56713b6300f753ac7ed30d44ae729d.glb","k":"assets/rekwizyty/e3250898f57215074e787c9f41109a13a4bcbbf55e581ebed7bea6c30df3eeca.webp"},"wrak":{"g":"assets/rekwizyty/71873960e44e0e7c1123893f68de63c0c4662deb08ca630c48ae85b5b1fa094b.glb","k":"assets/rekwizyty/186858d6dd7b2a15675a7e040199991b14afcad63b06c458fc77f90ebbbdf636.webp"},"zweglona_chata_krokwie":{"g":"assets/rekwizyty/77c98604fc73a561141ab1bcf85b521a858914efcdc4143b735f362589fe4268.glb","k":"assets/rekwizyty/11fd45b33d1ee841db82d0f23c6113b8b350bd45523725b9d523556a6086ddaa.webp"},"zweglona_stodola":{"g":"assets/rekwizyty/ba0d48048cd332e884861595697dd5f500880ca7cdbc5079e10fa859b3654c6c.glb","k":"assets/rekwizyty/20b28c47c1dbc709874a9c34e8513a7543cf76d254952d05f348230865b4ad8b.webp"},"zweglone_ruiny_chaty":{"g":"assets/rekwizyty/96e85124bf95bbb801bd21769b8b8c972e178df37504270de0d62d9d6dc10110.glb","k":"assets/rekwizyty/2b33b9867f0dff4a99491f7e91f1240dc52c5e1e717bb4491db52618844c8e3d.webp"}};
+const P3D_TRI={"beczka_ryb":{"g":"assets/rekwizyty/3027b785898b03081240b1a318b1d742ad501a36fac32abccdcf2bfaa05232a1.glb","k":"assets/rekwizyty/aef676f02e2bb45483787c1db92f01d12df131da925ebb44f2e64c8f6715bcb5.webp"},"celnica":{"g":"assets/rekwizyty/b6c1ecd22308ca0bec3b81e06b895ea82ed47c4f270d07dcde8413f8d942a25c.glb","k":"assets/rekwizyty/175c4b9ccb888617d758ae4f4420fb45e46f655c76c40680da8eed634075d59a.webp"},"deski":{"g":"assets/rekwizyty/0f0b758d90647ec472e4ff4e285db5032da13a41f8f0efc1037631547af54388.glb","k":"assets/rekwizyty/9da96c35d0dee556a080c7f84f3210269d885c33f8f31a2860919e02cb9b38dd.webp"},"ikra":{"g":"assets/rekwizyty/c7fea7ac188d382e7715175ca524334d0503de723276649c614e222fc7a10ccd.glb","k":"assets/rekwizyty/1015d8c156ebd17bafc81ebd01bf41bda7ba7660b71257b06040edfc09038368.webp"},"kolowrot":{"g":"assets/rekwizyty/1f329cbd7750e3ed1a92817a3195083656c9ccb33e6dd00b3e1dfa80ee3b2298.glb","k":"assets/rekwizyty/de8b249efde4cd62599fc419874f0541d7707516823231ac44a26d5abaa2260d.webp"},"kotwica":{"g":"assets/rekwizyty/403e287f3b11b844ac08621d2f846d99af6e3e207074dce0c2d9fc373090bc3c.glb","k":"assets/rekwizyty/bc53e35cd7a905268d0260280049dc0ebc87aa59464a9ded09b5e916c0065807.webp"},"ladunek":{"g":"assets/rekwizyty/c15e71fa7b6ead0dade76919a3dd1514faf24a198830c84d343c92382a45128d.glb","k":"assets/rekwizyty/fc62c7cb893768ff2db29ea65121159222e96279056693a5e524d22fea87b7e5.webp"},"magazyn_soli":{"g":"assets/rekwizyty/fc1e363b4f494558987d01a6cf7a7eb3eddd4c8b9a59cd22eb458ea693485114.glb","k":"assets/rekwizyty/52c26841d977768b87d877459e15dd4174c02557cdbff8143420aa4f728779f5.webp"},"malze":{"g":"assets/rekwizyty/efe91076a2ea17a971410a35bbaec2c95080ebfbb493d699efdcbb17d61cc059.glb","k":"assets/rekwizyty/12c9d33d68f4cb566a6e2c66839f3efd7a465e0a501f31321ceb35aba9a39788.webp"},"pacholek":{"g":"assets/rekwizyty/60e9903526e6a09d39b978bab1da65a14cfeea56f64f6d12a72cafa386b6bba9.glb","k":"assets/rekwizyty/31290504b5e56224f56dc41ea8ef0fe806ab0ec643942f7261631baef922cba6.webp"},"pacholek_cumowniczy":{"g":"assets/rekwizyty/7eef8fc6260468a3e3bc6bf7614f580ca2813795c1e8529f00df7df7a2f123c4.glb","k":"assets/rekwizyty/77f269c74c55d480681533b21cf6a228564a56ff3066448243986b1b8359e2c1.webp"},"pale":{"g":"assets/rekwizyty/be8c911ecb025ea8da6ef723d47680629c1ab8df689b47fe17103acb1fde414a.glb","k":"assets/rekwizyty/4dc9b89738c9578fb531fcdef4d9fee10e340b6578644918f8ae6c04085bfa0d.webp"},"siec":{"g":"assets/rekwizyty/3e7f4e7cdac751ef411a38e78ff35c97b41c73b7984f1b7ab648f188a9d9e2fb.glb","k":"assets/rekwizyty/5d39fd6dbe3be267661f79272b3365f2710b83bbdaa8afb39a0a78f138f47f5b.webp"},"skrzynia":{"g":"assets/rekwizyty/526424d8d345ce305d042303ecf8a24571997b2a6d68fb1186b6aeff47b5c41c.glb","k":"assets/rekwizyty/f031a7020559cb511ce8064781dde7dd6fb949a36a2fd07a4f055ee0ea194ef5.webp"},"szopa_sieciarska":{"g":"assets/rekwizyty/940a6e2b6a84ae861b70efbeeb1674d1665597409ef7c6db39edd9e7ffcac454.glb","k":"assets/rekwizyty/1e850be528e280a16b48dd48649d3d28d9c9312bb6aac76a06e725c6760b6e95.webp"},"tawerna":{"g":"assets/rekwizyty/e3933d7e6cd22fd831a0da6b075b14ef3de646908c54aae4e06e29ac7877a7b6.glb","k":"assets/rekwizyty/b4bda37f9fa43b0a53406aa4eca39b15f4c059d358740f99eb41b04e6f8e49db.webp"},"wiecierz":{"g":"assets/rekwizyty/ee1c862d20786dad5b52f5853fe892b902d0bb8e2957d2a647c50a54588456fd.glb","k":"assets/rekwizyty/f731111040fc92cfc52960d764a8f43e821aa0542cb3dec2542daa2ccd067f62.webp"},"worki_soli":{"g":"assets/rekwizyty/a20322a2bcb6092fcff29946dee2ff245a56713b6300f753ac7ed30d44ae729d.glb","k":"assets/rekwizyty/e3250898f57215074e787c9f41109a13a4bcbbf55e581ebed7bea6c30df3eeca.webp"},"wrak":{"g":"assets/rekwizyty/71873960e44e0e7c1123893f68de63c0c4662deb08ca630c48ae85b5b1fa094b.glb","k":"assets/rekwizyty/186858d6dd7b2a15675a7e040199991b14afcad63b06c458fc77f90ebbbdf636.webp"}};
 const P3D_TGEO={},P3D_TMAT=new Map();
 const P3D_TLOAD={};for(const [k,e] of Object.entries(P3D_TRI))P3D_TLOAD[k]=TRI3D_ON?fetch(e.g).then(r=>r.arrayBuffer()).then(b=>{P3D_TGEO[k]=p3dParseGlb(b)}).catch(er=>quietErr('tri '+k,er)):Promise.resolve();
-// domy Osady sa potrzebne juz w tle menu (swiat rozdzialu I budowany przy starcie): start czeka na nie najwyzej 6 s
-const TRI_CH1=['spalona_chata','zweglona_chata_krokwie','zweglone_ruiny_chaty','sklep_margi'];
-const P3D_TREADY1=Promise.race([Promise.all(TRI_CH1.map(k=>P3D_TLOAD[k])),new Promise(r=>setTimeout(r,6000))]);
+
 function triReady(n){return TRI3D_ON&&!!P3D_TGEO[n]}
 // cut: sciany i dachy znikaja przed bohaterem (cutaway), jak dotychczasowe sciany domow
 function triMat(n,cut,tone){const id=n+(cut?'|c':'');let m=P3D_TMAT.get(id);if(m)return m;const x=new THREE.TextureLoader().load(P3D_TRI[n].k);x.flipY=false;x.anisotropy=4;
@@ -2623,23 +2662,6 @@ function paint3dFinish(w){if(!REK3D_ON||(!P3D_MAP[w.ch]&&!P3D_MMAP[w.ch]))return
   M.compose(V.set(it.x+dx-G.cx*s*(it.flip?-1:1),0,it.z-G.zf*s),Qi,S.set(it.flip?-s:s,s,s));(by.get(G)||by.set(G,[]).get(G)).push(M.clone())}
  for(const [G,list] of by){const im=new THREE.InstancedMesh(G.g,G.m,list.length);list.forEach((m,i)=>im.setMatrixAt(i,m));im.castShadow=false;im.receiveShadow=true;im.frustumCulled=false;im.userData.propAsset=true;w.group.add(im)}
  if(mitems.length)meshyEmit(w.group,mitems)}
-/* 23.11.2026 (runda 868): domy Osady z modeli TripoSG na prostokatach dachow (W.roofs), stary dach tych domow nie powstaje.
-   Kolizje zostaja na kaflach; model tylko je okrywa. Drzwi: strona obrysu z najmniejsza liczba scian. Dom Margi (najszerszy, przy cmentarzu): sklep_margi. */
-function triHouses1(walls){const out={list:[],skip:new Set(),low:new Set()};if(!TRI3D_ON||!W.roofs)return out;
- const wall=new Set(walls.filter(w=>w[2]===48).map(([x,y])=>y*MW+x));
- const hs=W.roofs.filter(r=>r.w>=5&&r.h>=4).map(r=>{let nS=0,nN=0;for(let x=r.x;x<r.x+r.w;x++){if(wall.has((r.y+r.h-1)*MW+x))nS++;if(wall.has(r.y*MW+x))nN++}return {r,door:nS<=nN?'s':'n'}});
- hs.sort((a,b)=>a.r.y-b.r.y||a.r.x-b.r.x);
- const marga=hs.reduce((b,h)=>(!b||h.r.w/h.r.h>b.r.w/b.r.h)?h:b,null);let k=0;
- const CYC=[['spalona_chata',0],['zweglona_chata_krokwie',0],['zweglone_ruiny_chaty',0],['spalona_chata',1],['zweglona_chata_krokwie',1],['zweglone_ruiny_chaty',1]];
- for(const h of hs){const r=h.r;let n,flip=0,door=h.door,hk=4.8;
-  let x0=r.x,w=r.w;
-  if(h===marga&&r.w/r.h>1.6){/* dom Margi: sklep przodem do placu w srodku obrysu, po bokach zostaja nizsze sciany przybudowek bez dachu */n='sklep_margi';door='s';hk=5.2;const g=P3D_TGEO[n];
-   if(g){const bb=g.boundingBox,ex=bb.max.x-bb.min.x,ez=bb.max.z-bb.min.z,sz=r.h/ez;w=Math.min(r.w,Math.round(ex*Math.min(r.w/ex,sz*1.35)));x0=r.x+Math.round((r.w-w)/2)}}
-  else{[n,flip]=CYC[k++%CYC.length]}
-  if(!P3D_TGEO[n])continue;
-  out.list.push({n,x0,z0:r.y,w,d:r.h,door,hk,flip:!!flip});r.tri=true;
-  for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)(x>=x0&&x<x0+w?out.skip:out.low).add(y*MW+x)}
- return out}
 function buildBrzeznica(I){
   const F=I.br_ground,Wl=I.br_walls,r=rng(77);planGround(1);
   const fc=canvas(WW,WH),fg=fc.getContext('2d');
@@ -2661,14 +2683,10 @@ function buildBrzeznica(I){
   const pal=[0,1].map(i=>stackTex(Wl,[[i*3,7],[i*3+1,7],[i*3+2,7]]));
   const logs=[0,1,2,3].map(i=>stackTex(Wl,[[(i*2)%8,1],[(i*3+1)%8,0],[(i*5+2)%8,2]]));
   const gP=[[],[]],gH=[[],[],[],[]];
-  const TH=triHouses1(walls);
-  const gLow=[];for(const [x,y,t] of walls){if(t===48){if(TH.skip.has(y*MW+x))continue;if(TH.low.has(y*MW+x)){gLow.push([x,y]);continue}gH[(x*7+y*3)%4].push([x,y])}else gP[(x+y)&1].push([x,y])}
-  for(const h of TH.list)triHouse(ROOT,h.n,h.x0,h.z0,h.w,h.d,h.door,h.hk,h.flip,.86);
-  /* przybudowki domu Margi: niskie resztki scian z kamienia (kolizja bez zmian) */
-  if(gLow.length){const lowGeo=new THREE.BoxGeometry(1,.62,1);lowGeo.translate(0,.31,0);const lm=HD1?worldSurf(cutaway(phong({color:0xa89c90})),I.wl_chata,3,'a'):cutaway(phong({map:logs[0]}));instanced(lowGeo,lm,gLow,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))}
+  for(const [x,y,t] of walls){if(t===48)gH[(x*7+y*3)%4].push([x,y]);else gP[(x+y)&1].push([x,y])}
   gP.forEach((list,i)=>{if(!list.length)return;const side=HD1?worldSurf(cutaway(phong({color:i?0xd4ccc4:0xc8c0b8})),I.wl_palisada,3,'a'):cutaway(phong({map:pal[i]}));depthWall(palGeo,side,1);instanced(palGeo,[side,side,capMat,capMat,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))});
   const houseCap=I.p1_roof_burnt?worldSurf(cutaway(phong({color:0xffffff})),I.p1_roof_burnt,2.5,'a'):capMat;
-  gH.forEach((list,i)=>{if(!list.length)return;const side=HD1?worldSurf(cutaway(phong({color:[0xd0c4b8,0xc8bcb0,0xd4c8bc,0xccc0b4][i]})),I.wl_chata,3,'a'):cutaway(phong({map:logs[i]}));depthWall(houseGeo,side,1);instanced(houseGeo,[side,side,houseCap,houseCap,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))});
+  gH.forEach((list,i)=>{if(!list.length)return;const side=HD1?worldSurf(cutaway(phong({color:[0xd0c4b8,0xc8bcb0,0xd4c8bc,0xccc0b4][i]})),I.wl_chata,3,'a'):cutaway(phong({map:logs[i]}));depthWall(houseGeo,side,1);instanced(houseGeo,[side,side,houseCap,houseCap,side,side],list,([x,y])=>{/* 23.11.2026: nierowne, nadpalone korony scian (narozniki i otwory pelne) */const k=Math.sin(x*12.9898+y*78.233)*43758.5453,f=k-Math.floor(k),n=(dx,dy)=>tileAt(x+dx,y+dy)===48,corner=(n(1,0)||n(-1,0))&&(n(0,1)||n(0,-1)),edgeOpen=!n(1,0)&&!n(-1,0)||!n(0,1)&&!n(0,-1);const s=corner||nbParam('spalone')==='0'?1:f<.38?.5+f*.9:f<.6?.86:1;return M4.makeScale(1,s,1).setPosition(x+.5,0,y+.5)})});
   // stagnant pond (row 5 animated)
   waterFrames=[0,1,2,3].map(i=>tcut(F,i,5));
   const wGeo=new THREE.PlaneGeometry(1,1);wGeo.rotateX(-Math.PI/2);
@@ -9318,7 +9336,7 @@ function pumpImages(){while(imageWorkers<2){const g=GROUP_ORDER.find(g=>{const s
 function loadGroup(ch,watch){const g=typeof ch==='string'?ch:groupFor(ch),st=GROUP_STATE[g];if(st.ready)return Promise.resolve();st.error=false;st.enabled=true;if(watch)st.watchers.add(watch);const p=new Promise((resolve,reject)=>st.waiters.push({resolve,reject}));const i=GROUP_ORDER.indexOf(g);if(g!=='core'){GROUP_ORDER.splice(i,1);GROUP_ORDER.splice(1,0,g)}refreshGroup(g);finishGroup(g);pumpImages();return p.finally(()=>{if(watch)st.watchers.delete(watch)})}
 function waitChapter(ch,action,button){if(groupReady(ch))return action();const focused=document.activeElement,b=focused?.matches('#againBtn,#nextBtn,#prepGo')?focused:button||$('prepGo');if(b.nbWait)return b.nbWait;const label=b.innerHTML;b.nbWait=loadGroup(ch,t=>{b.textContent=t}).then(()=>{b.innerHTML=label;return action()},()=>{b.textContent=(EN?'Error — click to retry':'Błąd — kliknij, aby ponowić')}).finally(()=>{b.nbWait=null});return b.nbWait}
 for(const g of GROUP_ORDER)GROUP_STATE[g]={keys:Object.keys(SPRITE_DATA).filter(k=>!/_fallback$/.test(k)&&!/^intro[1-6]$/.test(k)&&SPRITE_GROUPS[k].includes(g)&& (g==='core'||!SPRITE_GROUPS[k].includes('core'))),loading:new Set(),watchers:new Set(),waiters:[],ready:false,error:false,enabled:false};
-Promise.all([loadGroup('core'),P3D_TREADY1]).then(()=>{
+loadGroup('core').then(()=>{
   A=buildAnims(imgs,'core');IMGS=imgs;tintAnims(A);try{trnFill()}catch(e){quietErr('trnFill',e)}initCombatEffects();initWhirlVisuals();decals(imgs);
   ensureWorld(1);
   ROOT=scene;useWorld(1);

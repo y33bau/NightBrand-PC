@@ -162,7 +162,48 @@ function roofGeo(W,D,rise){const ax=W>=D,L=ax?W:D,T=ax?D:W,hT=T/2,sl=Math.hypot(
  for(const e of[-1,1]){vx(e*L/2,-hT,0,0,0,.5);vx(e*L/2,hT,0,T,0,.62);vx(e*L/2,0,rise,T/2,rise,.72)}
  {const rw=.11,ry=rise-rw*rise/hT+.03,rt=rise+.05;for(const sg of[-1,1]){const A=[-L/2,sg*rw,ry,0,0,.2],B=[L/2,sg*rw,ry,L,0,.2],Cc=[L/2,0,rt,L,.2,.3],E=[-L/2,0,rt,0,.2,.3];for(const q of[A,B,Cc,A,Cc,E])vx(...q)}}
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(P),3));g.setAttribute('uv',new THREE.BufferAttribute(new Float32Array(U),2));g.setAttribute('color',new THREE.BufferAttribute(new Float32Array(C),3));g.computeVertexNormals();return g}
-function buildRoofs(w){if(!w.roofs||!w.group)return;const rm=[];
+/* 23.11.2026 (runda 869, autor: domy z modeli w Osadzie wycofane, "ladne domy z obecnych tekstur"):
+   spalone domy z kodu na prostokatach dachow: zweglona wiezba (kalenica, platwie, krokwie, czesc brakuje), resztki poszycia,
+   slupy narozne, rama drzwi, zawalone belki w srodku. Wiezba i poszycie znikaja, gdy bohater jest w srodku (jak stary dach).
+   Tekstury: wl_palecap (drewno), p1_roof_burnt (poszycie); BURNT_TEX pozwala podmienic na nowe (t2_belka, t3_poszycie). ?spalone=0 = stary dach. */
+const BURNT_TEX={beam:null,roof:null};
+function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[2]===48).map(([x,y])=>y*MW+x));
+ const wood=BURNT_TEX.beam||IMGS.wl_palecap||IMGS.wl_chata,roofIm=BURNT_TEX.roof||IMGS.p1_roof_burnt||IMGS.wl_chata;
+ const postM=worldSurf(cutaway(phong({color:0x8c7868})),wood,1.3,'a');
+ const box=new THREE.BoxGeometry(1,1,1).toNonIndexed(),M=new THREE.Matrix4(),Q=new THREE.Quaternion(),E=new THREE.Euler(),Vs=new THREE.Vector3(),Vp=new THREE.Vector3();
+ const acc=()=>({p:[],n:[]}),put=(a,geo,px,py,pz,sx,sy,sz,rx,ry,rz)=>{E.set(rx||0,ry||0,rz||0);Q.setFromEuler(E);M.compose(Vp.set(px,py,pz),Q,Vs.set(sx,sy,sz));
+   const g=geo.clone().applyMatrix4(M),P=g.attributes.position.array,N=g.attributes.normal.array;for(let i=0;i<P.length;i++){a.p.push(P[i]);a.n.push(N[i])}g.dispose()};
+ const mesh=(a,mat)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(a.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(a.n,3));const m=new THREE.Mesh(g,mat);m.castShadow=true;m.receiveShadow=true;w.group.add(m);return m};
+ const posts=acc();
+ for(const r of rs){const h=(i=>{const x=Math.sin((r.x*12.9898+r.y*78.233+i*37.7))*43758.5453;return x-Math.floor(x)});let hi=0;const rnd=()=>h(hi++);
+  const alongX=r.w>=r.h,L=alongX?r.w:r.h,D=alongX?r.h:r.w,cx=r.x+r.w/2,cz=r.y+r.h/2,eave=1.9,rise=Math.min(2.3,D*.34),ov=.35,half=D/2+ov,slope=Math.atan2(rise,half),sl=Math.hypot(half,rise);
+  // dla osi wzdluz Z zamieniamy x<->z przy skladaniu
+  const P=(a,u,y,v,su,sy,sv,rU,rY,rV)=>alongX?put(a,box,cx+u,y,cz+v,su,sy,sv,rV||0,rY||0,rU||0):put(a,box,cx+v,y,cz+u,sv,sy,su,rU||0,rY||0,-(rV||0));
+  const roof=acc(),wood_=acc();
+  // kalenica (czasem przelamana) i platwie na scianach
+  const ridgeBreak=rnd()<.45?(rnd()-.5)*L*.5:null;
+  if(ridgeBreak===null)P(wood_,0,eave+rise,0,L+.5,.24,.24);else{const a=(L+.5)/2+ridgeBreak;P(wood_,-(L+.5)/2+a/2,eave+rise,0,a-.3,.24,.24);P(wood_,(L+.5)/2-((L+.5)-a)/2+.2,eave+rise-.45,0,(L+.5)-a-.6,.22,.22,0,0,.0)}
+  for(const s of [-1,1])P(wood_,0,eave+.08,s*(D/2-.15),L+.3,.2,.26);
+  // krokwie co ok. 1.15, czesc brakuje, czesc skrocona
+  const n=Math.max(3,Math.round(L/1.15));for(let i=0;i<=n;i++){const u=-L/2+.2+i*(L-.4)/n;for(const s of [-1,1]){const k=rnd();if(k<.22)continue;const len=k<.4?sl*(.45+rnd()*.3):sl,mid=len/2;
+    // od okapu w gore
+    const vy=eave+Math.sin(slope)*mid,vv=s*(half-Math.cos(slope)*mid);P(wood_,u,vy,vv,.17,.17,len,0,0,s*slope)}}
+  // resztki poszycia: odcinki wzdluz kalenicy, na obu polaciach osobno, ok. 40% zostaje (przy szczytach czesciej)
+  const seg=Math.max(2,Math.round(L/2.2));for(let i=0;i<seg;i++){const u0=-L/2-.25+i*(L+.5)/seg,ul=(L+.5)/seg,edge=i===0||i===seg-1;
+   for(const s of [-1,1]){if(rnd()>(edge?.55:.28))continue;const part=.45+rnd()*.55,len=sl*part,mid=sl-len/2;// od kalenicy w dol
+    const vy=eave+Math.sin(slope)*(sl-mid)+.1,vv=s*(half-Math.cos(slope)*(sl-mid));P(roof,u0+ul/2,vy,vv,ul*(.8+rnd()*.15),.05,len,0,0,s*slope)}}
+  // zawalone belki w srodku
+  for(let i=0;i<2+(rnd()<.5?1:0);i++){const len=1.6+rnd()*2.2,u=(rnd()-.5)*(L-2.5),v=(rnd()-.5)*(D-2.5);P(wood_,u,.22+rnd()*.25,v,len,.2,.2,0,(rnd()-.5)*2.4,(rnd()-.5)*.35)}
+  // slupy narozne (wyzsze od scian, zweglone szczyty) i rama drzwi
+  for(const [ux,vz] of [[-1,-1],[1,-1],[-1,1],[1,1]])P(posts,ux*(L/2-.2),1.15+rnd()*.15,vz*(D/2-.2),.34,2.3+rnd()*.3,.34);
+  for(const yy of [r.y,r.y+r.h-1]){let a=-1;for(let x=r.x;x<=r.x+r.w;x++){const open=x<r.x+r.w&&!wall.has(yy*MW+x)&&wall.has(yy*MW+r.x)===true||false;const isOpen=x<r.x+r.w&&!wall.has(yy*MW+x);
+    if(isOpen&&a<0)a=x;if((!isOpen||x===r.x+r.w)&&a>=0){const b=x;if(b-a>=2&&b-a<=6&&a>r.x&&b<r.x+r.w){const zz=yy+.5;for(const xx of [a,b])put(posts,box,xx,1.05,zz,.26,2.1,.32);if(rnd()<.7)put(posts,box,(a+b)/2,2.05,zz,b-a+.5,.24,.3)}a=-1}}}
+  const fadeR=phong({color:0xffffff,transparent:true,opacity:1,side:THREE.DoubleSide});const roofM=worldSurf(fadeR,BURNT_TEX.roof?roofIm:wood,BURNT_TEX.roof?2.4:.9,'a');roofM.color.setHex(BURNT_TEX.roof?0xffffff:0x9a8474);/* poszycie: gonty z drewna (do czasu tekstury t3_poszycie) */
+  const woodM=worldSurf(phong({color:0x8c7868,transparent:true,opacity:1}),wood,1.3,'a');
+  const g=new THREE.Group();g.add(mesh(wood_,woodM));if(roof.p.length)g.add(mesh(roof,roofM));w.group.add(g);
+  r.mats=[woodM,roofM];r.mesh=g;r.a=1}
+ if(posts.p.length)mesh(posts,postM)}
+function buildRoofs(w){if(!w.roofs||!w.group)return;if(w.ch===1&&IMGS.wl_palecap&&nbParam('spalone')!=='0'){burntHouses(w);return}const rm=[];
  for(const r of w.roofs){if(r.tri)continue;/* 23.11.2026: dom z modelu ma wlasny dach */const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
   const m=new THREE.Mesh(roofGeo(W,D,rise),new THREE.MeshLambertMaterial({color:0x4a382c,transparent:true,opacity:1,side:THREE.DoubleSide,vertexColors:true}));
   m.position.set(r.x+r.w/2,1.9,r.y+r.h/2);m.castShadow=false;m.receiveShadow=false;m.renderOrder=3;w.group.add(m);r.mesh=m;r.a=1;rm.push(r)}
@@ -171,7 +212,7 @@ const ROOF_PNG='./assets/tekstury/517905a0e4feadfa5ba42b536be2720a1d736e68e81eba
 let roofT=0;
 function roofTick(){const rs=W&&W.roofs;if(!rs||!S)return;const ps=[pl1||pl,pl2].filter(p=>p&&!p.dead),dt=Math.min(.1,Math.max(0,clock-roofT));roofT=clock;
  for(const r of rs){if(!r.mesh)continue;let inside=false;for(const p of ps){const tx=p.x/16,ty=p.y/16;if(tx>r.x-.3&&tx<r.x+r.w+.3&&ty>r.y-.3&&ty<r.y+r.h+.3){inside=true;break}}
-  r.a+=((inside?0:1)-r.a)*Math.min(1,dt*7);r.mesh.material.opacity=r.a;r.mesh.visible=r.a>.02}}
+  r.a+=((inside?0:1)-r.a)*Math.min(1,dt*7);if(r.mats)for(const m of r.mats)m.opacity=r.a;else r.mesh.material.opacity=r.a;r.mesh.visible=r.a>.02}}
 
 // Ciemna ziemia za krawedzia mapy zamiast pustego tla (rozdzial I, ?depth=0 wylacza).
 function depthApron(w){const m=new THREE.Mesh(new THREE.PlaneGeometry(MW+260,MH+260).rotateX(-Math.PI/2),new THREE.MeshLambertMaterial({color:depthOn(w.ch)[6]}));m.position.set(MW/2,-9.8,MH/2);m.castShadow=false;m.receiveShadow=false;m.userData.depthApron=true;w.group.add(m)}
