@@ -1,6 +1,7 @@
 // Chapter II meshes: M4 floor, M5 walls, M6 props, M8 transitions
 // 15.11.2026: malowany punkt centralny mapy (obraz z przezroczystoscia) jako stojacy rekwizyt: pionowa plaszczyzna rozciagnieta o SQ jak inne rekwizyty, normalne jak w rekwizytach rozdz. IV
-function nbLandmark(url,o){const tex=new THREE.TextureLoader().load(url);tex.anisotropy=4;const h=o.w*o.aspect,g=new THREE.PlaneGeometry(o.w,h).translate(0,h/2,0),n=g.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6);
+function nbAniso(){const m=renderer.capabilities.getMaxAnisotropy?renderer.capabilities.getMaxAnisotropy():4;return Math.max(1,Math.min(m,Math.max(4,GFX.aniso||4)))}
+function nbLandmark(url,o){const tex=new THREE.TextureLoader().load(url);tex.anisotropy=nbAniso();const h=o.w*o.aspect,g=new THREE.PlaneGeometry(o.w,h).translate(0,h/2,0),n=g.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6);
  const mat=(o.wrap||(m=>m))(phong({map:tex,alphaTest:.42,side:THREE.DoubleSide,emissive:o.em||0x000000,emissiveMap:o.em?tex:null}));const m=new THREE.Mesh(g,mat);m.scale.y=SQ;m.position.set(o.x,o.base,o.z);m.renderOrder=2;ROOT.add(m);return m}
 function buildDolne(I){planGround(2);
   const F=I.dm_floor,Wl=I.dm_walls,r=rng(99);
@@ -568,7 +569,7 @@ function buildSolneNabrzeze(I){
  const ironwork=phong({color:0x22211e,shininess:10}),lanternGlass=new THREE.MeshBasicMaterial({color:0xe0913f}),lanterns=[];// 15.11.2026: szklo przygaszone (bylo prawie biale), zelazo jak kute
  // 15.11.2026: malowana latarnia (rekwizyt Zlotogrodu) z przygaszonym zloceniem, jak kute zelazo portu; stara latarnia z klockow tylko bez tego obrazu
  const lampImg=I.p3_street_lantern,lampW=2.05;let lampMat=null,lampGeo=null;
- if(lampImg){const t=new THREE.Texture(lampImg);t.needsUpdate=true;t.anisotropy=4;lampMat=phong({map:t,alphaTest:.4,color:0x9c9ca4,side:THREE.DoubleSide});lampGeo=new THREE.PlaneGeometry(lampW,lampW).translate(0,lampW/2,0);const n=lampGeo.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6)}
+ if(lampImg){const t=new THREE.Texture(lampImg);t.needsUpdate=true;t.anisotropy=nbAniso();lampMat=phong({map:t,alphaTest:.4,color:0x9c9ca4,side:THREE.DoubleSide});lampGeo=new THREE.PlaneGeometry(lampW,lampW).translate(0,lampW/2,0);const n=lampGeo.attributes.normal;for(let i=0;i<n.count;i++)n.setXYZ(i,0,.8,.6)}
  for(const [sx,sy,dir] of PORT_LAMPS){
   const x=sx,z=MP(sy),west=dir<0;if(!land(ground(Math.floor(x),Math.floor(z))))continue;
   if(lampMat){const m=new THREE.Mesh(lampGeo,lampMat);m.scale.y=SQ;if(west)m.scale.x=-1;m.position.set(x,0,z);ROOT.add(m);ao(x,z,.8,.8);W.LSRC.push({col:0xffbb79,base:.9,dist:5.3,x:x+dir*lampW*.17,y:lampW*.62*SQ,z:z+.1,kind:'fire',ph:sx*.71});continue}
@@ -842,7 +843,7 @@ const P3D_TLOAD={};for(const [k,e] of Object.entries(P3D_TRI))P3D_TLOAD[k]=TRI3D
 
 function triReady(n){return TRI3D_ON&&!!P3D_TGEO[n]}
 // cut: sciany i dachy znikaja przed bohaterem (cutaway), jak dotychczasowe sciany domow
-function triMat(n,cut,tone){const id=n+(cut?'|c':'');let m=P3D_TMAT.get(id);if(m)return m;const x=new THREE.TextureLoader().load(P3D_TRI[n].k);x.flipY=false;x.anisotropy=4;
+function triMat(n,cut,tone){const id=n+(cut?'|c':'');let m=P3D_TMAT.get(id);if(m)return m;const x=new THREE.TextureLoader().load(P3D_TRI[n].k);x.flipY=false;x.anisotropy=nbAniso();
  m=phong({map:x,shininess:4,specular:0x080808,side:THREE.DoubleSide});const t=tone||.9;m.color.setRGB(t,t*.98,t*.96);if(cut)cutawayHouse(m);P3D_TMAT.set(id,m);return m}
 // jeden model: srodek podstawy w (cx,cz), skale osi, obrot wokol pionu
 function triMesh(n,cx,cz,sx,sy,sz,ry,cut,tone){const g=P3D_TGEO[n],bb=g.boundingBox,m=new THREE.Mesh(g,triMat(n,cut,tone));
@@ -858,7 +859,7 @@ function triProp(root,n,x,z,W,ry,flip){const g=P3D_TGEO[n];if(!g)return false;co
  const m=triMesh(n,x,z-(bb.max.z-bb.min.z)*s/2,s*(flip?-1:1),s,s,ry,false);m.castShadow=true;m.userData.propAsset=true;root.add(m);return true}
 function meshyFor(ch,k,p){let n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];if(typeof n==='function')n=p?n(p):null;if(Array.isArray(n))n=n[p?groundHash(Math.floor(p.x),Math.floor(p.y))%n.length:0];return n&&P3D_MGEO[n]?n:null}
 const P3D_MMAT=new Map();
-function meshyMat(n){let m=P3D_MMAT.get(n);if(m)return m;const L=new THREE.TextureLoader(),e0=P3D_MESHY[n],e=e0.b?P3D_MESHY[e0.b]:e0,t=u=>{const x=L.load(u);x.flipY=false;x.anisotropy=4;return x};
+function meshyMat(n){let m=P3D_MMAT.get(n);if(m)return m;const L=new THREE.TextureLoader(),e0=P3D_MESHY[n],e=e0.b?P3D_MESHY[e0.b]:e0,t=u=>{const x=L.load(u);x.flipY=false;x.anisotropy=nbAniso();return x};
  m=phong({map:t(e.k),normalMap:e.n?t(e.n):null,shininess:6,specular:0x101010,side:THREE.DoubleSide});const tn=e0.t||P3D_TON[n]||[.92,.9,.88];m.color.setRGB(tn[0],tn[1],tn[2]);if(P3D_LAS.includes(n))cutCircle(m);P3D_MMAT.set(n,m);return m}
 // szerokosc i srodek obrysu malunku (ulamki obrazka): model dostaje szerokosc obrysu, nie calego obrazka
 const P3D_ABOX=new Map();
