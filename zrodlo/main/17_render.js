@@ -294,7 +294,7 @@ function puddleBuild(){for(const m of PUD.list){scene.remove(m.m);if(m.g)scene.r
  for(let i=0;i<34;i++){const m=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:PUD.ringTex,transparent:true,depthWrite:false,opacity:0,fog:false}));m.rotation.x=-Math.PI/2;m.visible=false;scene.add(m);PUD.rings.push({m,t:9})}}
 // 16.11.2026: kropla deszczu pod dachem portu (xz w obrysie budynku z PORT_BUILDINGS, wspolrzedne wielkiej mapy); deszcz nie pada w srodku skladu
 /* 23.11.2026: w chacie Chojraka i domu Heriego nie pada */
-function roofCovered(x,z){const h=W&&(W.chata||W.heriHouse);return !!h&&x>h.x&&x<h.x+h.w&&z>h.y&&z<h.y+h.h}
+function roofCovered(x,z){const L=W&&W.shelters;return !!L&&L.some(h=>x>h.x&&x<h.x+h.w&&z>h.y&&z<h.y+h.h)}
 function portCovered(x,z){return PORT_BUILDINGS.some(([bx,by,w,h])=>x>MP(bx)&&x<MP(bx+w)&&z>MP(by)&&z<MP(by+h))}
 function puddleTick(dt){const wet=(CH===1||CH===PORT)&&!S.dg;if(PUD.w!==W||wet!==(PUD.list.length>0)&&!(wet&&PUD.w===W))puddleBuild();const raining=rain.visible&&!S.dg,vis=wet;
  for(const p of PUD.list){p.m.visible=vis;if(p.g){p.g.visible=vis;p.g.material.opacity=p.g.userData.k*(.38+.1*Math.sin(clock*9+p.x)+.06*Math.sin(clock*23+p.y))}}

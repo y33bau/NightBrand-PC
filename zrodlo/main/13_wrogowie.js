@@ -37,7 +37,7 @@ function portEnemyArt(key){
  portSkins.set(key,skin);return skin;
 }
 /* 22.11.2026 (zgoda autora): zycie mobkow rosnie wolno na poczatku i coraz szybciej po polnocy: x0,6 -> x0,86 (4 min) -> x1,39 (8) -> x2,11 (12) -> x3,0 (16) */function nightHp(){return .6+2.4*Math.pow(Math.min(S.t,NIGHT)/NIGHT,1.6)}
-function spawnEnemy(type,x,y,extra){if(W&&W.heriHouse&&heroOnlyAt(x,y)){const d=W.heriHouse.door;x=(d[0]+.5)*TS;y=(d[1]+1.7)*TS}if((type==='xbow'||type==='monk')&&S.enemies.reduce((n,o)=>n+(!o.dead&&(o.type==='xbow'||o.type==='monk')?1:0),0)>=2)type=type==='monk'?'madman':'bandit';// max 2 strzelców naraz; reszta walczy w zwarciu
+function spawnEnemy(type,x,y,extra){{const s0=W&&shelterAt(x,y);if(s0){const d=s0.door;x=(d[0]+.5)*TS;y=(d[1]+1.7)*TS}}if((type==='xbow'||type==='monk')&&S.enemies.reduce((n,o)=>n+(!o.dead&&(o.type==='xbow'||o.type==='monk')?1:0),0)>=2)type=type==='monk'?'madman':'bandit';// max 2 strzelców naraz; reszta walczy w zwarciu
   const T=ET[type],mul=(BIG.has(type)||type==='collector'?1:nightHp()*(surgeOn()?.45:1))/* 15.11.2026: wzrost zycia liczony od ulamka nocy (koniec nocy = jak dawniej), mobki -20%, w Naporze slabsze */*S.pk.ehp*DF[DIFFK].hp*chapterHp(type);
   const e=Object.assign({type,x,y,hp:T.hp*mul,max:T.hp*mul,spd:T.spd*rnd(.9,1.1),r:T.r,dmg:T.dmg,xp:T.xp,vx:0,vy:0,flash:0,walk:Math.random()*5,s:1,ph:Math.random()*9,leap:0,lcd:2,side:Math.random()<.5?1:-1,
     frozen:0,bleed:0,bleedT:0,rise:type==='bat'?0:.5,atkA:0,slamT:4,atkT:0,dead:false},extra||{});
@@ -160,7 +160,7 @@ function hurtPlayer(dmg,nx,ny,source='night'){if(S.zab&&pl.roll>0&&pl.inv>0&&!S.
   if(S.train&&pl.hp<=0)pl.hp=1;if(pl.hp<=0){if(S.lastCh&&!S.lastChUsed&&!pl2&&!pl.dead){S.lastChUsed=1;pl.hp=1;pl.inv=Math.max(pl.inv,1.5);pl.blinkUntil=clock+1.5;S.flash=.6;shake(.3,.3);play('bless',0);ftInfo(EN?'Last Chance!':'Ostatnia szansa!');return true}if(pl2&&withRb(pl,tryRebirth))return true;{const o=pl===pl2?pl1:pl2;if(o&&!o.dead){pl.hp=0;pl.dead=true;pl.deadT=0;pl.revT=0;padRumble(1,1,450,pl===pl2&&typeof PAD2!=='undefined'?PAD2.g:null);blood(pl.x,pl.y,40,nx,ny,3);play('kill',0);return true}}if(tryRebirth())return true;S.deathCause=deathCauseName(source);S.deathSrc=typeof source==='string'?source:source&&source.type?source.type:'night';loseSecondLife();clearSwordTransient();S.swordTrails=[];pl.hp=0;pl.dead=true;pl.deadT=0;padRumble(1,1,520);blood(pl.x,pl.y,70,nx,ny,3);play('kill',0);S.endT=2.6;pool(pl.x,pl.y,20,8)}return true}
 function updEnemy(e,dt){
   /* 23.11.2026 (autor: bez cheese w drzwiach): gdy bohater jest w schronieniu (dom Heriego, chata Chojraka), wrogowie nie tlocza sie przy drzwiach, tylko odchodza na ok. 8 pol i czekaja */
-  if(W.heroOnly&&pl&&!pl.dead&&heroOnlyAt(pl.x,pl.y)&&!e.dead&&!(e.rise>0)){const h=W.heriHouse||W.chata;if(h){const ox=(h.door[0]+.5)*TS,oy=(h.door[1]+.5)*TS,vx=e.x-ox,vy=e.y-oy,dd=Math.hypot(vx,vy)||1;
+  if(W.heroOnly&&pl&&!pl.dead&&heroOnlyAt(pl.x,pl.y)&&!e.dead&&!(e.rise>0)){const h=shelterAt(pl.x,pl.y);if(h){const ox=(h.door[0]+.5)*TS,oy=(h.door[1]+.5)*TS,vx=e.x-ox,vy=e.y-oy,dd=Math.hypot(vx,vy)||1;
     if(dd<8*TS){const sp=Math.min(70,e.spd||45)*dt;moveBox(e,vx/dd*sp,vy/dd*sp,4,3)}e.vx=0;e.vy=0;return}}
   keepEnemyDistance(e);const ox=e.x,oy=e.y,dx=pl.x-e.x,dy=pl.y-e.y,d=Math.hypot(dx,dy);
   if(d>.001){e.contactNX=dx/d;e.contactNY=dy/d}
@@ -450,7 +450,7 @@ function sightSword(x0,y0,x1,y1){const n=Math.ceil(Math.hypot(x1-x0,y1-y0)/8);fo
 // Wróg, który nie widzi bohatera przez ścianę, idzie po niej: wychodzi z domów drzwiami i obchodzi przeszkody.
 const NAV={d:null,q:null,t:0};
 function navUpdate(dt){NAV.t-=dt;if(NAV.t>0||!pl)return;NAV.t=.35;const n=MW*MH;if(!NAV.d||NAV.d.length!==n){NAV.d=new Int16Array(n);NAV.q=new Int32Array(n)}
-  const D=NAV.d,Q=NAV.q,tx=Math.floor(pl.x/TS),ty=Math.floor(pl.y/TS);D.fill(-1);if(tx<0||ty<0||tx>=MW||ty>=MH)return;const HO=W.heroOnly,pin=!!HO&&HO.has(ty*MW+tx);if(pin&&!S.sanctMsg){S.sanctMsg=1;say(EN?'A safe roof. Here your blade stays sheathed, and the night waits outside.':'Bezpieczny dach. Tu broń milczy, a noc czeka na zewnątrz.')}else if(!pin)S.sanctMsg=0;let h=0,t=0;D[ty*MW+tx]=0;Q[t++]=ty*MW+tx;
+  const D=NAV.d,Q=NAV.q,tx=Math.floor(pl.x/TS),ty=Math.floor(pl.y/TS);D.fill(-1);if(tx<0||ty<0||tx>=MW||ty>=MH)return;const HO=W.heroOnly,pin=!!HO&&HO.has(ty*MW+tx);if(pin&&!S.sanctMsg&&(shelterAt(pl.x,pl.y)||{}).kind!=='shop'){S.sanctMsg=1;say(EN?'A safe roof. Here your blade stays sheathed, and the night waits outside.':'Bezpieczny dach. Tu broń milczy, a noc czeka na zewnątrz.')}else if(!pin)S.sanctMsg=0;let h=0,t=0;D[ty*MW+tx]=0;Q[t++]=ty*MW+tx;
   while(h<t){const c=Q[h++],cx=c%MW,cy=(c/MW)|0,v=D[c]+1;
     if(cx>0&&D[c-1]<0&&!SOLID.has(tileAt(cx-1,cy))&&!(HO&&!pin&&HO.has(c-1))){D[c-1]=v;Q[t++]=c-1}
     if(cx<MW-1&&D[c+1]<0&&!SOLID.has(tileAt(cx+1,cy))&&!(HO&&!pin&&HO.has(c+1))){D[c+1]=v;Q[t++]=c+1}
@@ -570,7 +570,7 @@ function events(){
     ev('el',S.t>62&&N.elder.state==='alive',()=>{N.elder.state='dead';N.elder.deadAt=S.t;const n=W.npcs[0];pool(n.x,n.y,14,6)});
     ev('er',N.elder.state==='dead'&&S.t>(N.elder.deadAt||1e9)+14&&!!A.rotknight,()=>{N.elder.state='risen';const n=W.npcs[0];spawnEnemy('rotknight',n.x,n.y+2,{elder:true,rise:1.2,hp:220,max:220});play('rise',0);S.flash=1;shake(.12,.6);say((EN?'The old man from the well rises in rusted armour. Rot pours out from under his visor.':'Starzec spod studni wstaje w zardzewiałej zbroi. Zgnilizna wylewa się spod przyłbicy.'))});
     ev('k',S.t>(S.firstNight?110:70),()=>0);
-    ev('mg',S.t>100&&N.marga.state==='alive',()=>{N.marga.state='gone';say((EN?'The trader\'s lantern goes out in the rain.':'Latarnia handlarki gaśnie w deszczu.'))});
+    ev('mg',S.t>100&&N.marga.state==='alive'&&!(W.shelters&&W.shelters.some(s=>s.kind==='shop')),()=>{N.marga.state='gone';say((EN?'The trader\'s lantern goes out in the rain.':'Latarnia handlarki gaśnie w deszczu.'))});
     ev('w',S.t>150&&N.wit.state==='alive',()=>{N.wit.state='dead';const n=W.npcs[2];pool(n.x,n.y+1,20,8);say((EN?'The screams from the stocks suddenly fall silent.':'Krzyki od strony dybów nagle ucichły.'))});
     return}
   if(CH===5){

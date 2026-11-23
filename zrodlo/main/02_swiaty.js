@@ -10,6 +10,8 @@ const tileAt=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?21:map[y*MW+x];
 const solidAt=(px,py)=>SOLID.has(tileAt(Math.floor(px/TS),Math.floor(py/TS)));
 // 23.11.2026 (autor: do Heriego wchodzi tylko bohater): kafle W.heroOnly sa zamkniete dla wrogow i przywolancow
 const heroOnlyAt=(px,py)=>{const h=W&&W.heroOnly;return !!h&&h.has(Math.floor(py/TS)*MW+Math.floor(px/TS))};
+// schronienia (dom Heriego, chata Chojraka, sklep Margi): {x,y,w,h,door,tiles,kind,closed}
+const shelterAt=(px,py)=>{const L=W&&W.shelters;if(!L)return null;const i=Math.floor(py/TS)*MW+Math.floor(px/TS);for(const s of L)if(s.tiles.has(i))return s;return null};
 // nearest spot whose 3x3 surroundings are walkable (codes in ok) and free of props; used to place NPCs
 function freeNear(map,PROPS,ok,x,y){for(let r=0;r<12;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;const X=x+dx,Y=y+dy;let good=X>2&&Y>2&&X<GW-3&&Y<GH-3;
   for(let j=-1;j<=1&&good;j++)for(let i=-1;i<=1;i++)if(!ok.includes(map[(Y+j)*GW+X+i])){good=false;break}

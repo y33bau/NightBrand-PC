@@ -141,7 +141,7 @@ const WIT_ECHO={elder:{spared:(EN?'Is Wit still sitting there? Good. Let him sit
   nawoj:{spared:(EN?'From the hill you can hear somebody counting. It matches my list.':'Z wzgórza słychać, jak ktoś liczy. Zgadza się z moją listą.'),dead:(EN?'They added one more name to the list. Not mine, not yours. Not yet.':'Dopisali jedno imię do listy. Nie moje, nie twoje. Jeszcze.')}};
 const npcLines=n=>{const e=WIT_ECHO[n.id]?.[S.npc.wit?.state];return e?[...n.lines.slice(0,-1),e,n.lines[n.lines.length-1]]:n.lines};
 const NL=n=>n.id==='chojrak'?chojPages(S.chojMode||'first'):n.id==='mila'&&S.npc.mila.retry?MILA_RETRY:n.id==='wolch'&&S.npc.wolch.state==='offered'?WOLCH_ACCEPT:npcLines(n);
-function openDialog(n){S.witChoice=false;$('witChoices').hidden=true;document.querySelector('#dialog .next').hidden=false;resetInput();
+function openDialog(n){if(n.id==='marga'&&S.inShop){openShop('ash');return}S.witChoice=false;$('witChoices').hidden=true;document.querySelector('#dialog .next').hidden=false;resetInput();
   // pion: rozmowa jako pasek (imię + pierwsza kwestia), gra się nie zatrzymuje, nagroda naliczana od razu; Wit i Żerca (wybór/układ) zostają w oknie
   if(isPort()&&n.id!=='wit'&&n.id!=='wolch'&&n.id!=='chojrak'){const L=NL(n),line=n.name.split(',')[0]+': '+L[0];S.dialog=n;S.dlg=L.length-1;if(n.id==='mila'){advanceDialog();say(line,'story')}else{say(line,'story');advanceDialog()}return}
   if(n.id==='chojrak')S.chojMode=S.npc.chojrak.state==='alive'?'first':'repeat';
@@ -216,13 +216,13 @@ function nearbyEnemies(e){const a=[],x=Math.floor(e.x/CELL),y=Math.floor(e.y/CEL
 function update(dt){if(S&&S.exec>0){S.exec-=dt;dt*=S.exec>.35?.2:.5}
   if(S&&S.phase==='play')bannerTick(dt);
   if(S&&S.intro){introTick(dt);return}
-  if(S&&S.phase==='play')pumpNotice();if(!S||S.phase!=='play'||S.notice||S.choosing||S.shop||S.paused)return;
+  if(S&&S.phase==='play')pumpNotice();if(S&&S.phase==='play'&&S.shop&&S.shopMode==='ash'&&!S.paused)ashShopUiTick(dt);if(!S||S.phase!=='play'||S.notice||S.choosing||S.shop||S.paused)return;
   // 14.11.2026: noc rusza dopiero po pierwszym ruchu lub przycisku gracza (najpóźniej po 4 s), żeby zegar nie biegł, zanim gracz zobaczy bohatera
   if(!S.go){S.goT=(S.goT||0)+dt;let any=!!(S.dg||S.train||S.goT>=4||mouseL||mouseR||tAtk||tBlock||tj.x||tj.y||rollPress||heavyPress||PAD.atk||PAD.blk||PAD.x||PAD.y);if(!any)for(const k in keys)if(keys[k]){any=true;break}if(!any)return;S.go=1}
   if(TRN.god&&!pl.dead){pl.hp=pl.max;pl.sta=pl.staMax;pl.mana=pl.manaMax}if(S.train&&!pl.dead){pl.hp=Math.min(pl.max,pl.hp+pl.max*.12*dt);if(pl.manaMax)pl.mana=Math.min(pl.manaMax,(pl.mana||0)+pl.manaMax*.25*dt)}
   if(S.hitstop>0){S.hitstop-=dt;if(rollPress)S.bufRoll=1;return}
   if(S.dialog){if(talkPress||rollPress)advanceDialog();return}
-  if(S.stage!=='break'&&S.stage!=='collector'&&!S.dg&&!S.train&&!allDead()){S.t+=dt;if(!allDead()){S.surv=(S.surv||0)+dt;if(S.surv>=SL.coinSurvive){S.surv-=SL.coinSurvive;S.coins++;play('coin',.02)}}}
+  if(S.stage!=='break'&&S.stage!=='collector'&&!S.dg&&!S.train&&!allDead()&&!S.inShop){S.t+=dt;if(!allDead()){S.surv=(S.surv||0)+dt;if(S.surv>=SL.coinSurvive){S.surv-=SL.coinSurvive;S.coins++;play('coin',.02)}}}
   stageTick(dt);try{nightEventTick(dt)}catch(er){quietErr('nightEvent',er)}if(S.notice)return;if(S.dg)dungeonTick(dt);if(S.notice)return;
   if(selectedNpcAction){const q=selectedNpcAction,n=q.npc;if(q.state!==S||pl.dead||!W.npcs.includes(n)||!npcTalk(n))selectedNpcAction=null;else if(Math.hypot(pl.x-n.x,pl.y-n.y)<30){selectedNpcAction=null;openDialog(n);return}}
   const nm=nearMerchant();if(talkPress&&nm){openShop();return}

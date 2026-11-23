@@ -24,6 +24,9 @@ const _otx=new Map();function osadaTex(u){let t=_otx.get(u);if(!t){t=new THREE.T
    wk: 0 bez, 1 miasto (przebarwienia, zacieki, brud przy ziemi), 2 port/wies (+ mech, mocniejszy brud), 3 spalone (+ sadza ku gorze). */
 const NB_WEATHER='float nbH(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}float nbN(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(nbH(i),nbH(i+vec2(1.,0.)),f.x),mix(nbH(i+vec2(0.,1.)),nbH(i+vec2(1.,1.)),f.x),f.y);}float nbF(vec2 p){return nbN(p)*.55+nbN(p*2.13+3.1)*.3+nbN(p*4.7+7.7)*.15;}';
 const nbWeather=wk=>wk?`{float wk=${wk.toFixed(1)};bool wall=abs(nW0.y)<.5;float al=abs(nW0.x)>.5?vWW.z:vWW.x;vec3 c=diffuseColor.rgb;float lum=dot(c,vec3(.3,.59,.11));
+ c=mix(vec3(lum),c,1.22);c=mix(c,c*c*(3.-2.*c),.4);c=mix(c,floor(c*9.+.5)/9.,.3);
+ float br=wall?mix(nbN(vec2(al*.8,vWW.y*6.5)),nbN(vec2(al*6.,vWW.y*.8)),.5):nbN(vWW.xz*vec2(.9,6.));c*=mix(.9,1.09,br);
+ float tw=nbF(vWW.xz*.12+vec2(0.,vWW.y*.05));c*=mix(vec3(.9,.95,1.06),vec3(1.07,.99,.86),tw);lum=dot(c,vec3(.3,.59,.11));
  float bl=nbF(vWW.xz*.33+vec2(vWW.y*.21,0.));c*=mix(.72,1.12,bl);c=mix(c,vec3(lum)*vec3(1.04,1.,.92),.18);
  if(wall){float st=nbN(vec2(al*2.7,vWW.y*.18+nbN(vec2(al*.5,0.))*2.));float sk=smoothstep(.5,.9,st)*(.55+.45*nbN(vec2(al*.9,vWW.y*.6)));c*=1.-.42*sk;
   float gh=1.4+.8*nbN(vec2(al*.7,3.))+(wk>1.5?.4:0.);float g=1.-smoothstep(0.,gh,vWW.y);c=mix(c,c*vec3(.58,.55,.47),g*(.55+.2*wk));

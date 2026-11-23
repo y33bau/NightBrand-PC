@@ -188,6 +188,18 @@ function chojrakSpot(w){const st=w.start,bad=t=>SOLID.has(t)||VOID.has(t)||t===2
   for(let r=4;r<=10;r++)for(let k=0;k<8*r;k++){const a=k/(8*r)*Math.PI*2+r,X=Math.round(cx+Math.cos(a)*r),Y=Math.round(cy+Math.sin(a)*r);if(open(X,Y)&&!(w.clearways&&w.clearways.has(Y*MW+X)))return[(X+.5)*TS,(Y+.4)*TS]}
   return null}
 // 23.11.2026 (autor): dom Heriego w slumsach Zlotogrodu. Mury dookola, jedno waskie wejscie od frontu (poludnie); do srodka wchodzi tylko bohater (W.heroOnly)
+function addShelter(w,sh){(w.shelters||(w.shelters=[])).push(sh);if(!w.heroOnly)w.heroOnly=new Set();for(const i of sh.tiles)w.heroOnly.add(i)}
+// 23.11.2026 (autor): sklep Margi w Osadzie powiekszony o 3 pola na polnoc, sciany domkniete; zostaje szeroki front sklepu. Potwory nie wchodza.
+// Przed polnoca dziala za Popioly (zegar nocy stoi, lacznie 60 s w srodku), o polnocy kram za monety jak dotad.
+function margaHouse(w){if(!w.roofs||!w.roofs.length)return;const r=w.roofs.reduce((b,q)=>(!b||q.w/q.h>b.w/b.h)?q:b,null),n=w.npcs.find(q=>q.id==='marga');if(!r||!n)return;
+ const ext=3,y0=r.y-ext,y1=r.y+r.h-1,fl=w.map[Math.floor(n.y/TS)*MW+Math.floor(n.x/TS)];
+ let best=[-1,-1],run=-1;for(let x=r.x+1;x<=r.x+r.w-1;x++){const open=x<r.x+r.w-1&&w.map[y1*MW+x]!==48;if(open&&run<0)run=x;if(!open&&run>=0){if(x-run>best[1]-best[0])best=[run,x];run=-1}}
+ if(best[0]<0)return;const ho=new Set();
+ for(let k=w.PROPS.length-1;k>=0;k--){const p=w.PROPS[k];if(p.x>=r.x&&p.x<r.x+r.w&&p.y>=y0&&p.y<r.y)w.PROPS.splice(k,1)}
+ for(let y=y0;y<=y1;y++)for(let x=r.x;x<r.x+r.w;x++){const i=y*MW+x,ring=x===r.x||x===r.x+r.w-1||y===y0||y===y1,front=y===y1&&x>=best[0]&&x<best[1];
+  if(ring&&!front)w.map[i]=48;else{w.map[i]=fl;if(w.under)w.under[i]=0;ho.add(i)}}
+ if(w.clearways)for(const i of ho)w.clearways.delete(i);
+ r.y=y0;r.h+=ext;r.marga=true;addShelter(w,{x:r.x,y:r.y,w:r.w,h:r.h,door:[Math.floor((best[0]+best[1])/2),y1],tiles:ho,kind:'shop'})}
 function heriHouse(w){const n=w.npcs.find(q=>q.id==='heri');if(!n)return;const hx=Math.floor(n.x/TS),hy=Math.floor(n.y/TS);
  const x0=hx-3,y0=hy-1,x1=hx+6,y1=hy+3,dx=hx+2;if(x0<1||y0<1||x1>=MW-1||y1>=MH-1)return;const ho=new Set();
  for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const i=y*MW+x,ring=x===x0||x===x1||y===y0||y===y1,door=x===dx&&y===y1;
@@ -196,7 +208,7 @@ function heriHouse(w){const n=w.npcs.find(q=>q.id==='heri');if(!n)return;const h
  if(w.clearways)for(const i of ho)w.clearways.delete(i);
  /* buda przed fasada zaslaniala front domu: znika (kafle na bloto slumsow, bez dachu w buildStolica) */
  w.heriClear=[];SHACKS.forEach((B,k)=>{const R=SR({x:B[0],y:B[1],w:B[2],h:B[3]});if(R.x<=x1+1&&R.x+R.w>=x0-1&&R.y<=y1+3&&R.y+R.h>y1){w.heriClear.push(k);for(let y=R.y;y<R.y+R.h;y++)for(let x=R.x;x<R.x+R.w;x++){const i=y*MW+x;if(w.map[i]===59)w.map[i]=53}}});
- w.heroOnly=ho;w.heriHouse={x:x0,y:y0,w:x1-x0+1,h:y1-y0+1,door:[dx,y1]}}
+ w.heriHouse={x:x0,y:y0,w:x1-x0+1,h:y1-y0+1,door:[dx,y1]};addShelter(w,Object.assign({tiles:ho,kind:'heri'},w.heriHouse))}
 // 23.11.2026 (autor): chata Chojraka w Spalonej Osadzie. Jego dom domkniety murem z bali, jedne waskie drzwi od frontu (poludnie), do srodka wchodzi tylko bohater
 function chojrakHouse(w){const n=w.npcs.find(q=>q.id==='chojrak');if(!n||!w.roofs)return;const hx=Math.floor(n.x/TS),hy=Math.floor(n.y/TS);
  const r=w.roofs.find(R=>hx>=R.x&&hx<R.x+R.w&&hy>=R.y&&hy<R.y+R.h);if(!r)return;const fl=w.map[hy*MW+hx],dx=Math.floor(r.x+r.w/2),dy=r.y+r.h-1,ho=new Set();
@@ -206,7 +218,7 @@ function chojrakHouse(w){const n=w.npcs.find(q=>q.id==='chojrak');if(!n||!w.roof
  for(let y=dy-1;y>r.y;y--){const i=y*MW+dx;if(w.map[i]===48)w.map[i]=fl;else break}
  for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++){const i=y*MW+x;if(w.map[i]!==48)ho.add(i)}
  if(w.clearways)for(const i of ho)w.clearways.delete(i);
- r.chata=true;r.pad=3;w.heroOnly=ho;w.chata={x:r.x,y:r.y,w:r.w,h:r.h,door:[dx,dy],r}}
+ r.chata=true;r.pad=3;w.chata={x:r.x,y:r.y,w:r.w,h:r.h,door:[dx,dy],r};addShelter(w,{x:r.x,y:r.y,w:r.w,h:r.h,door:[dx,dy],tiles:ho,kind:'chata'})}
 function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast losowania przy kazdym uruchomieniu; Czarnobor: ziarno 1349 (z 12 sprawdzonych: ciemny las, malo wysokich sosen), Cytadela: ziarno nie zmienia ukladu. Powrot do losowania: (Math.random()*2147483647)|0 */if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefined)WORLD_SEEDS[ch]=1349;
   const w=upscaleWorld(ch===1?genBrzeznica():ch===2?genDolne():ch===3?genStolica():ch===9?genDungeon((Math.random()*2147483647)|0):ch===PORT?genSolneNabrzeze():ch===5?genCytadela(WORLD_SEEDS[ch]):genCzarnobor(WORLD_SEEDS[ch]));if(ch<4)enrich(w,ch);
   if(ch===9)w.rooms=w.rooms.map(R=>Object.assign(SR(R),{k:R.k}));
@@ -231,7 +243,7 @@ function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast lo
   // 15.11.2026 (prosba autora): wejscie do krypty wysrodkowane w przeswicie miedzy chatami (o 1 pole w prawo), razem z kolizja
   if(ch===1){const cs=w.PROPS.find(p=>p.k==='crypt_stairs');if(cs&&Math.abs(cs.x-76.4)<.3){const y=Math.floor(cs.y),L=y*MW+Math.floor(cs.x)-4,R=y*MW+Math.floor(cs.x)+2;if(w.map[L]===31){w.map[L]=(w.under&&w.under[L])||41}if(w.map[R]!==31&&!SOLID.has(w.map[R])){if(w.under)w.under[R]=w.map[R];w.map[R]=31}cs.x+=1}}
   if(ch===2)layoutPatch2(w);
-  if(ch===1&&nbParam('chojrak')!=='0')chojrakHouse(w);
+  if(ch===1&&nbParam('chojrak')!=='0')chojrakHouse(w);if(ch===1&&nbParam('sklepmarga')!=='0')margaHouse(w);
   scene.add(w.group);
   const ta=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?21:w.map[y*MW+x];
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=ta(x,y);

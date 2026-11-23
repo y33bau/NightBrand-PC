@@ -33,7 +33,7 @@ function solneTick(){
  if(st.bossDead&&!st.open.every(Boolean)&&!st.told2){st.told2=true;say((EN?'The Harbour Master is dead. The ferry is still held by a chain.':'Bosman nie żyje. Prom jeszcze trzyma łańcuch.'))}
 }
 
-function stageTick(dt){if(CH===PORT)solneTick();
+function stageTick(dt){if(CH===PORT)solneTick();if(CH===1&&W.shelters)margaShopTick(dt);
   if(S.stage==='p1'&&S.t>=BREAK_AT&&!S.dg&&!S.endless){S.stage='collector';S.collT=2.5;dissolveAll((EN?'Midnight. The dead retreat into the darkness.':'Północ. Martwi cofają się w ciemność.'))}
   const m=S.merchant;
   if(m){if(m.state==='in'){m.t-=dt*1.5;if(m.t<=0)m.state='here'}
@@ -51,19 +51,31 @@ function stageTick(dt){if(CH===PORT)solneTick();
 }
 function nearMerchant(){const m=S&&S.merchant;return m&&m.state==='here'&&!pl.dead&&Math.hypot(pl.x-m.x,pl.y-m.y)<34?m:null}
 function leaveMerchant(){const m=S.merchant;if(!m||m.state==='out')return;m.state='out';m.t=1;for(let i=0;i<26;i++)S.parts.push({k:'a',x:m.x+rnd(-8,8),y:m.y,z:rnd(0,20),vx:rnd(-8,8),vy:0,vz:rnd(8,20),c:'#3d4a3a',life:rnd(1,2)})}
+/* 23.11.2026 (autor): sklep Margi w Osadzie przed polnoca za Popioly. Cena = polowa ceny w monetach (z tym samym wzrostem po kazdym zakupie i tymi samymi limitami na noc),
+   najmniej 5. Przy ok. 60-100 Popiolach z jednej nocy: Serce 22, Oselka 18, Amulet 30, Zwoj 20, Wywar 10, Kamien 12; ulepszenie stale w obozie kosztuje 50/120/250. */
+const priceAsh=it=>Math.max(5,Math.round(price(it)*.5));
+const MARGA_SHOP_T=60;
+function margaShopTick(dt){const sh=W.shelters&&W.shelters.find(s=>s.kind==='shop');if(!sh)return;if(S.shopT===undefined)S.shopT=MARGA_SHOP_T;
+  const open=S.stage==='p1'&&S.shopT>0&&!S.dg&&!S.endless;sh.closed=!(open||S.stage==='break');
+  const inside=p=>p&&!p.dead&&shelterAt(p.x,p.y)===sh,inn=inside(pl1||pl)||inside(pl2);S.inShop=!!(inn&&open);
+  if(S.inShop){S.shopT=Math.max(0,S.shopT-dt);if(!S.shopIn){S.shopIn=1;say(EN?`Marga's shop. The night's clock stands still while you are inside: ${Math.ceil(S.shopT)} s left in total. She takes Ashes.`:`Sklep Margi. Gdy jesteś w środku, zegar nocy stoi: zostało łącznie ${Math.ceil(S.shopT)} s. Marga bierze Popioły.`)}}else S.shopIn=0;
+  if(sh.closed)for(const p of [pl1||pl,pl2])if(inside(p)){p.x=(sh.door[0]+.5)*TS;p.y=(sh.door[1]+1.8)*TS;if(!S.shopOut){S.shopOut=1;say(S.stage==='p1'?(EN?'Marga pushes you over the threshold. Your minute is up.':'Marga wypycha cię za próg. Twoja minuta minęła.'):(EN?'Marga bars the door. She will trade again at the stall.':'Marga zamyka drzwi. Handluje dalej tylko przy kramie.'))}}
+  if(!sh.closed)S.shopOut=0}
+function ashShopUiTick(dt){if(!S.inShop)return;S.shopT=Math.max(0,S.shopT-dt);if(S.shopT<=0){closeShop();return}const kk=document.querySelector('#shop .kicker');if(kk)kk.textContent=EN?`Before midnight · the clock stands still · ${Math.ceil(S.shopT)} s`:`Przed północą · zegar stoi · ${Math.ceil(S.shopT)} s`}
 function shopMaxed(it){return it.id==='amulet'&&pl.staMax>=180||!!it.lim&&(S.bought[it.id]||0)>=it.lim}
 const heartHp=()=>Math.round(20*(S&&S.pk&&S.pk.hpMul||1));
 function shopDesc(it){if(it.id==='heart'&&S&&S.pk&&S.pk.hpMul<1)return(EN?`+${heartHp()} maximum health (your perk lowers it).`:`+${heartHp()} do maksymalnego życia (perk to obniża).`)+(EN?` (at most ${it.lim} per night)`:` (najwyżej ${it.lim} na noc)`);return it.id==='amulet'?(EN?'+20 maximum stamina (up to 180; attributes can give more).':'+20 do maksymalnej staminy (do 180; cechy mogą dać więcej).'):it.d+(it.lim?(EN?` (at most ${it.lim} per night)`:` (najwyżej ${it.lim} na noc)`):'')}
-function renderShop(){$('shopCoins').textContent=S.coins;const box=$('shopCards');box.innerHTML='';
-  SHOP.forEach((it,i)=>{const pr=price(it),maxed=shopMaxed(it),b=document.createElement('button');b.type='button';b.className='card';b.id='shop'+i;b.disabled=maxed||S.coins<pr;
-    b.innerHTML=(EN?`<span class="ck">Item ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Sold out':pr+' coins'}</span><span class="cd">${shopDesc(it)}</span>`:`<span class="ck">Towar ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Wyprzedane':pr+' monet'}</span><span class="cd">${shopDesc(it)}</span>`);b.addEventListener('click',()=>buy(i));box.appendChild(b)})}
-function openShop(){resetInput();S.shop=true;play('shopIn',0);pl.swingT=0;renderShop();$('shop').hidden=false;setTimeout(()=>{const f=$('shopClose');f&&f.focus()},30)}
-function buy(i){const it=SHOP[i];if(!it||!S.shop)return;const pr=price(it);if(S.coins<pr||shopMaxed(it)){play('empty',0);return}
-  S.coins-=pr;S.bought[it.id]=(S.bought[it.id]||0)+1;uiSnd('buy');
+function renderShop(){const ash=S.shopMode==='ash',kk=document.querySelector('#shop .kicker'),hh=document.querySelector('#shop .lvlhead h2');if(kk){if(kk.dataset.org===undefined){kk.dataset.org=kk.textContent;hh.dataset.org=hh.textContent}kk.textContent=ash?(EN?`Before midnight · the clock stands still · ${Math.ceil(S.shopT)} s`:`Przed północą · zegar stoi · ${Math.ceil(S.shopT)} s`):kk.dataset.org;hh.textContent=ash?(EN?'Marga\'s Shop · for Ashes':'Sklep Margi · za Popioły'):hh.dataset.org}
+  $('shopCoins').classList.toggle('coin',!ash);$('shopCoins').textContent=ash?(EN?`Ashes ${EMB.e}`:`Popioły ${EMB.e}`):S.coins;const box=$('shopCards');box.innerHTML='';const wallet=ash?EMB.e:S.coins;
+  SHOP.forEach((it,i)=>{const pr=ash?priceAsh(it):price(it),maxed=shopMaxed(it),b=document.createElement('button');b.type='button';b.className='card';b.id='shop'+i;b.disabled=maxed||wallet<pr;
+    b.innerHTML=(EN?`<span class="ck">Item ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Sold out':pr+(ash?' Ashes':' coins')}</span><span class="cd">${shopDesc(it)}</span>`:`<span class="ck">Towar ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Wyprzedane':pr+(ash?' Popiołów':' monet')}</span><span class="cd">${shopDesc(it)}</span>`);b.addEventListener('click',()=>buy(i));box.appendChild(b)})}
+function openShop(mode){S.shopMode=mode==='ash'?'ash':'coin';resetInput();S.shop=true;play('shopIn',0);pl.swingT=0;renderShop();$('shop').hidden=false;setTimeout(()=>{const f=$('shopClose');f&&f.focus()},30)}
+function buy(i){const it=SHOP[i];if(!it||!S.shop)return;const ash=S.shopMode==='ash',pr=ash?priceAsh(it):price(it);if((ash?EMB.e:S.coins)<pr||shopMaxed(it)){play('empty',0);return}
+  if(ash){EMB.e-=pr;saveEmb()}else S.coins-=pr;S.bought[it.id]=(S.bought[it.id]||0)+1;uiSnd('buy');
   if(it.id==='brew')pl.hp=pl.max;else if(it.id==='heart'){const hv=heartHp();pl.max+=hv;heal(hv)}else if(it.id==='whet')S.whet++;else if(it.id==='amulet'){pl.staMax=Math.min(180,pl.staMax+20);pl.sta=pl.staMax}
   else if(it.id==='scroll'){S.lvl++;S.need=xpNeed(S.lvl);S.pendLv++}else if(it.id==='magnet')S.magnet+=.4;
   renderShop()}
-function closeShop(){if(!S||!S.shop)return;S.shop=false;uiSnd('back');$('shop').hidden=true;const mdg=S.merchant&&S.merchant.dg;leaveMerchant();say(mdg?(EN?'Marga: "The stairs lead up. The night will wait for you."':'Marga: „Schody prowadzą na górę. Noc na ciebie poczeka”.'):(EN?'Marga: "Careful. The Order Collector has caught the scent of your gold."':'Marga: „Uważaj. Poborca Zakonu zwęszył twoje złoto”.'));if(S.pendLv>0)openLevelUp()}
+function closeShop(){if(!S||!S.shop)return;S.shop=false;uiSnd('back');$('shop').hidden=true;if(S.shopMode==='ash'){S.shopMode='coin';say(S.shopT>0?(EN?'Marga: "Come back before midnight. After that, I only take coin."':'Marga: „Wróć przed północą. Potem biorę już tylko monety”.'):(EN?'Marga: "Your minute is up. Out you go, the night won\'t wait."':'Marga: „Twoja minuta minęła. Wynocha, noc nie poczeka”.'));if(S.pendLv>0)openLevelUp();return}const mdg=S.merchant&&S.merchant.dg;leaveMerchant();say(mdg?(EN?'Marga: "The stairs lead up. The night will wait for you."':'Marga: „Schody prowadzą na górę. Noc na ciebie poczeka”.'):(EN?'Marga: "Careful. The Order Collector has caught the scent of your gold."':'Marga: „Uważaj. Poborca Zakonu zwęszył twoje złoto”.'));if(S.pendLv>0)openLevelUp()}
 
 // 9.11.2026: jedno losowe zdarzenie w środku nocy (nie w krypcie, nie przy bossach, nie w pierwszej nocy)
 const NEV={krew:{d:45,mob:1.4,coin:2},mgla:{d:40,fog:.022},lowy:{d:30,coins:40}};

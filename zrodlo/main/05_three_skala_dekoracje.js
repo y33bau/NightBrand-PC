@@ -203,13 +203,16 @@ function margaShop(r,wall,put,box,acc,mesh){
  const rw=Math.min(6,r.w-5);for(const x of [cx-rw/2,cx+rw/2,cx])put(A.wood,box,x,.95,zi,.1,1.9,.38);
  for(const y of [.45,1.0,1.55])put(A.wood,box,cx,y,zi,rw+.1,.05,.42);
  let k=0;for(const y of [.47,1.02,1.57])for(let i=0;i<8;i++){const px=cx-rw/2+.4+i*(rw-.8)/7;if((i+k)%5===4)continue;goods(px,zi,y,(i*3+k)%6)}k++;
+ // powiekszona izba: stoly z towarem po bokach regalu, beczki w rogach
+ if(r.marga)for(const sx of [-1,1]){const tx=cx+sx*(rw/2+2.1),tz=r.y+3.0;put(A.wood,box,tx,.78,tz,1.6,.08,.9);for(const [a2,b2] of [[-.7,-.38],[.7,-.38],[-.7,.38],[.7,.38]])put(A.wood,box,tx+a2,.38,tz+b2,.08,.76,.08);
+  for(let i=0;i<5;i++)goods(tx-.6+i*.3,tz+(i%2?.18:-.18),.82,(i*2+(sx>0?1:0))%6);put(A.wood,cyl,r.x+1.7+(sx>0?r.w-3.4:0),.42,r.y+1.7,.6,.84,.6);put(A.iron,cyl,r.x+1.7+(sx>0?r.w-3.4:0),.69,r.y+1.7,.62,.05,.62)}
  // skrzynie, beczki i kosz z koscmi przy scianie, z obu stron wejscia
  const crate=(x,z,s,rot)=>{put(A.wood,box,x,s/2,z,s,s,s,0,rot,0);put(A.dark,box,x,s+.01,z,s+.03,.03,.1,0,rot,0)};
  const barrel=(x,z)=>{put(A.wood,cyl,x,.42,z,.5,.84,.5);for(const y of [.15,.69])put(A.iron,cyl,x,y,z,.52,.05,.52)};
  crate(xa-.9,z0+.45,.6,.2);crate(xa-.85,z0+.45,.42,-.3);put(A.wood,box,xa-.85,.6+.21,z0+.45,.42,.42,.42,0,-.3,0);barrel(xa-1.7,z0+.5);
  barrel(xb+1.0,z0+.48);crate(xb+1.8,z0+.5,.55,.5);put(A.dark,cyl,xb+1.0,.86,z0+.48,.46,.04,.46);goods(xb+1.0,z0+.48,.88,0);goods(xb+.92,z0+.4,.88,4);
  const M=(c,o)=>cutaway(phong(Object.assign({color:c},o||{})));
- const mats={wood:worldSurfN(cutaway(phong({color:0xe0d4c8})),'t2_belka',1.1,1),dark:M(0x4a3c32),clA:M(0x3e1612,{side:THREE.DoubleSide}),clB:M(0x4e463c,{side:THREE.DoubleSide}),
+ const mats={wood:worldSurfN(cutaway(phong({color:0xe0d4c8})),'t2_belka',1.1,1),dark:M(0x4a3c32),clA:new THREE.MeshBasicMaterial({color:0x5a1c16,side:THREE.DoubleSide}),clB:new THREE.MeshBasicMaterial({color:0x6c6252,side:THREE.DoubleSide})/* plotno bez swiatla: swiatlo bohatera tuz nad daszkiem przepalalo kolory */,
   bone:M(0xd8cab0,{specular:0x222018,shininess:8}),glass:M(0x223a2c,{emissive:0x0e3a1c,specular:0x88aa99,shininess:60}),glassR:M(0x3a1414,{emissive:0x4a0e0a,specular:0xaa8888,shininess:60}),
   fl:phong({color:0xffe0a0,emissive:0xffa040}),gold:M(0xb89040,{emissive:0x2a1c06,specular:0x806020,shininess:30}),iron:M(0x2e2a28,{specular:0x222222,shininess:20}),lamp:phong({color:0xffd090,emissive:0xd07020})};
  for(const key in A)if(A[key].p.length)mesh(A[key],mats[key])}
@@ -220,9 +223,9 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
  const acc=()=>({p:[],n:[]}),put=(a,geo,px,py,pz,sx,sy,sz,rx,ry,rz)=>{E.set(rx||0,ry||0,rz||0);Q.setFromEuler(E);M.compose(Vp.set(px,py,pz),Q,Vs.set(sx,sy,sz));
    const g=geo.clone().applyMatrix4(M),P=g.attributes.position.array,N=g.attributes.normal.array;for(let i=0;i<P.length;i++){a.p.push(P[i]);a.n.push(N[i])}g.dispose()};
  const mesh=(a,mat)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(a.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(a.n,3));const m=new THREE.Mesh(g,mat);m.castShadow=true;m.receiveShadow=true;w.group.add(m);return m};
- const holes=acc(),glow=acc(),chim=acc(),cyl=new THREE.CylinderGeometry(.5,.5,1,8).toNonIndexed(),posts=acc(),floors=acc(),margaR=rs.reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null);
+ const holes=acc(),glow=acc(),chim=acc(),cyl=new THREE.CylinderGeometry(.5,.5,1,8).toNonIndexed(),posts=acc(),floors=acc(),margaR=rs.find(r=>r.marga)||rs.reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null);
  for(const r of rs){if(r.chata)continue;const h=(i=>{const x=Math.sin((r.x*12.9898+r.y*78.233+i*37.7))*43758.5453;return x-Math.floor(x)});let hi=0;const rnd=()=>h(hi++);
-  const marga=r===margaR&&r.w/r.h>1.6;
+  const marga=r===margaR&&(r.marga||r.w/r.h>1.6);
   const alongX=r.w>=r.h,L=alongX?r.w:r.h,D=alongX?r.h:r.w,cx=r.x+r.w/2,cz=r.y+r.h/2,eave=NT&&nbParam('osada2')!=='0'?2.4:1.9,rise=Math.min(2.3,D*.34),ov=.35,half=D/2+ov,slope=Math.atan2(rise,half),sl=Math.hypot(half,rise);
   // dla osi wzdluz Z zamieniamy x<->z przy skladaniu
   const P=(a,u,y,v,su,sy,sv,rU,rY,rV)=>alongX?put(a,box,cx+u,y,cz+v,su,sy,sv,rV||0,rY||0,rU||0):put(a,box,cx+v,y,cz+u,sv,sy,su,rU||0,rY||0,-(rV||0));
@@ -263,7 +266,7 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
   const woodM=NT?worldSurfN(phong({color:0xe8dcd0,transparent:true,opacity:1}),'t2_belka',1.3,1.2):worldSurf(phong({color:0x8c7868,transparent:true,opacity:1}),wood,1.3,'a');
   const g=new THREE.Group();g.add(mesh(wood_,woodM));if(roof.p.length)g.add(mesh(roof,roofM));w.group.add(g);
   r.mats=[woodM,roofM];r.mesh=g;r.a=1}
- if(margaR&&margaR.w/margaR.h>1.6&&NT&&nbParam('sklep')!=='0')margaShop(margaR,wall,put,box,acc,mesh);// 23.11.2026 (autor: sklep bardziej sklepowy)
+ if(margaR&&(margaR.marga||margaR.w/margaR.h>1.6)&&NT&&nbParam('sklep')!=='0')margaShop(margaR,wall,put,box,acc,mesh);// 23.11.2026 (autor: sklep bardziej sklepowy)
  if(holes.p.length)mesh(holes,cutaway(phong({color:0x0e0b09})));if(glow.p.length)mesh(glow,phong({color:0x1a0a04,emissive:0x5a1c06}));if(chim.p.length)mesh(chim,worldSurfN(cutaway(phong({color:0xb8aca4})),'t4_podmurowka',1.6,1.9,3));
  if(posts.p.length)mesh(posts,postM);if(floors.p.length){const f=mesh(floors,worldSurfN(phong({color:0x8c847c}),'t5_podloga',2.6,1.1));f.castShadow=false}}
 function buildRoofs(w){if(!w.roofs||!w.group)return;if(w.ch===1&&IMGS.wl_palecap&&nbParam('spalone')!=='0'){burntHouses(w);return}const rm=[];

@@ -755,6 +755,8 @@ const tileAt=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?21:map[y*MW+x];
 const solidAt=(px,py)=>SOLID.has(tileAt(Math.floor(px/TS),Math.floor(py/TS)));
 // 23.11.2026 (autor: do Heriego wchodzi tylko bohater): kafle W.heroOnly sa zamkniete dla wrogow i przywolancow
 const heroOnlyAt=(px,py)=>{const h=W&&W.heroOnly;return !!h&&h.has(Math.floor(py/TS)*MW+Math.floor(px/TS))};
+// schronienia (dom Heriego, chata Chojraka, sklep Margi): {x,y,w,h,door,tiles,kind,closed}
+const shelterAt=(px,py)=>{const L=W&&W.shelters;if(!L)return null;const i=Math.floor(py/TS)*MW+Math.floor(px/TS);for(const s of L)if(s.tiles.has(i))return s;return null};
 // nearest spot whose 3x3 surroundings are walkable (codes in ok) and free of props; used to place NPCs
 function freeNear(map,PROPS,ok,x,y){for(let r=0;r<12;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;const X=x+dx,Y=y+dy;let good=X>2&&Y>2&&X<GW-3&&Y<GH-3;
   for(let j=-1;j<=1&&good;j++)for(let i=-1;i<=1;i++)if(!ok.includes(map[(Y+j)*GW+X+i])){good=false;break}
@@ -1621,6 +1623,9 @@ const _otx=new Map();function osadaTex(u){let t=_otx.get(u);if(!t){t=new THREE.T
    wk: 0 bez, 1 miasto (przebarwienia, zacieki, brud przy ziemi), 2 port/wies (+ mech, mocniejszy brud), 3 spalone (+ sadza ku gorze). */
 const NB_WEATHER='float nbH(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}float nbN(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(nbH(i),nbH(i+vec2(1.,0.)),f.x),mix(nbH(i+vec2(0.,1.)),nbH(i+vec2(1.,1.)),f.x),f.y);}float nbF(vec2 p){return nbN(p)*.55+nbN(p*2.13+3.1)*.3+nbN(p*4.7+7.7)*.15;}';
 const nbWeather=wk=>wk?`{float wk=${wk.toFixed(1)};bool wall=abs(nW0.y)<.5;float al=abs(nW0.x)>.5?vWW.z:vWW.x;vec3 c=diffuseColor.rgb;float lum=dot(c,vec3(.3,.59,.11));
+ c=mix(vec3(lum),c,1.22);c=mix(c,c*c*(3.-2.*c),.4);c=mix(c,floor(c*9.+.5)/9.,.3);
+ float br=wall?mix(nbN(vec2(al*.8,vWW.y*6.5)),nbN(vec2(al*6.,vWW.y*.8)),.5):nbN(vWW.xz*vec2(.9,6.));c*=mix(.9,1.09,br);
+ float tw=nbF(vWW.xz*.12+vec2(0.,vWW.y*.05));c*=mix(vec3(.9,.95,1.06),vec3(1.07,.99,.86),tw);lum=dot(c,vec3(.3,.59,.11));
  float bl=nbF(vWW.xz*.33+vec2(vWW.y*.21,0.));c*=mix(.72,1.12,bl);c=mix(c,vec3(lum)*vec3(1.04,1.,.92),.18);
  if(wall){float st=nbN(vec2(al*2.7,vWW.y*.18+nbN(vec2(al*.5,0.))*2.));float sk=smoothstep(.5,.9,st)*(.55+.45*nbN(vec2(al*.9,vWW.y*.6)));c*=1.-.42*sk;
   float gh=1.4+.8*nbN(vec2(al*.7,3.))+(wk>1.5?.4:0.);float g=1.-smoothstep(0.,gh,vWW.y);c=mix(c,c*vec3(.58,.55,.47),g*(.55+.2*wk));
@@ -1925,13 +1930,16 @@ function margaShop(r,wall,put,box,acc,mesh){
  const rw=Math.min(6,r.w-5);for(const x of [cx-rw/2,cx+rw/2,cx])put(A.wood,box,x,.95,zi,.1,1.9,.38);
  for(const y of [.45,1.0,1.55])put(A.wood,box,cx,y,zi,rw+.1,.05,.42);
  let k=0;for(const y of [.47,1.02,1.57])for(let i=0;i<8;i++){const px=cx-rw/2+.4+i*(rw-.8)/7;if((i+k)%5===4)continue;goods(px,zi,y,(i*3+k)%6)}k++;
+ // powiekszona izba: stoly z towarem po bokach regalu, beczki w rogach
+ if(r.marga)for(const sx of [-1,1]){const tx=cx+sx*(rw/2+2.1),tz=r.y+3.0;put(A.wood,box,tx,.78,tz,1.6,.08,.9);for(const [a2,b2] of [[-.7,-.38],[.7,-.38],[-.7,.38],[.7,.38]])put(A.wood,box,tx+a2,.38,tz+b2,.08,.76,.08);
+  for(let i=0;i<5;i++)goods(tx-.6+i*.3,tz+(i%2?.18:-.18),.82,(i*2+(sx>0?1:0))%6);put(A.wood,cyl,r.x+1.7+(sx>0?r.w-3.4:0),.42,r.y+1.7,.6,.84,.6);put(A.iron,cyl,r.x+1.7+(sx>0?r.w-3.4:0),.69,r.y+1.7,.62,.05,.62)}
  // skrzynie, beczki i kosz z koscmi przy scianie, z obu stron wejscia
  const crate=(x,z,s,rot)=>{put(A.wood,box,x,s/2,z,s,s,s,0,rot,0);put(A.dark,box,x,s+.01,z,s+.03,.03,.1,0,rot,0)};
  const barrel=(x,z)=>{put(A.wood,cyl,x,.42,z,.5,.84,.5);for(const y of [.15,.69])put(A.iron,cyl,x,y,z,.52,.05,.52)};
  crate(xa-.9,z0+.45,.6,.2);crate(xa-.85,z0+.45,.42,-.3);put(A.wood,box,xa-.85,.6+.21,z0+.45,.42,.42,.42,0,-.3,0);barrel(xa-1.7,z0+.5);
  barrel(xb+1.0,z0+.48);crate(xb+1.8,z0+.5,.55,.5);put(A.dark,cyl,xb+1.0,.86,z0+.48,.46,.04,.46);goods(xb+1.0,z0+.48,.88,0);goods(xb+.92,z0+.4,.88,4);
  const M=(c,o)=>cutaway(phong(Object.assign({color:c},o||{})));
- const mats={wood:worldSurfN(cutaway(phong({color:0xe0d4c8})),'t2_belka',1.1,1),dark:M(0x4a3c32),clA:M(0x3e1612,{side:THREE.DoubleSide}),clB:M(0x4e463c,{side:THREE.DoubleSide}),
+ const mats={wood:worldSurfN(cutaway(phong({color:0xe0d4c8})),'t2_belka',1.1,1),dark:M(0x4a3c32),clA:new THREE.MeshBasicMaterial({color:0x5a1c16,side:THREE.DoubleSide}),clB:new THREE.MeshBasicMaterial({color:0x6c6252,side:THREE.DoubleSide})/* plotno bez swiatla: swiatlo bohatera tuz nad daszkiem przepalalo kolory */,
   bone:M(0xd8cab0,{specular:0x222018,shininess:8}),glass:M(0x223a2c,{emissive:0x0e3a1c,specular:0x88aa99,shininess:60}),glassR:M(0x3a1414,{emissive:0x4a0e0a,specular:0xaa8888,shininess:60}),
   fl:phong({color:0xffe0a0,emissive:0xffa040}),gold:M(0xb89040,{emissive:0x2a1c06,specular:0x806020,shininess:30}),iron:M(0x2e2a28,{specular:0x222222,shininess:20}),lamp:phong({color:0xffd090,emissive:0xd07020})};
  for(const key in A)if(A[key].p.length)mesh(A[key],mats[key])}
@@ -1942,9 +1950,9 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
  const acc=()=>({p:[],n:[]}),put=(a,geo,px,py,pz,sx,sy,sz,rx,ry,rz)=>{E.set(rx||0,ry||0,rz||0);Q.setFromEuler(E);M.compose(Vp.set(px,py,pz),Q,Vs.set(sx,sy,sz));
    const g=geo.clone().applyMatrix4(M),P=g.attributes.position.array,N=g.attributes.normal.array;for(let i=0;i<P.length;i++){a.p.push(P[i]);a.n.push(N[i])}g.dispose()};
  const mesh=(a,mat)=>{const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(a.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(a.n,3));const m=new THREE.Mesh(g,mat);m.castShadow=true;m.receiveShadow=true;w.group.add(m);return m};
- const holes=acc(),glow=acc(),chim=acc(),cyl=new THREE.CylinderGeometry(.5,.5,1,8).toNonIndexed(),posts=acc(),floors=acc(),margaR=rs.reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null);
+ const holes=acc(),glow=acc(),chim=acc(),cyl=new THREE.CylinderGeometry(.5,.5,1,8).toNonIndexed(),posts=acc(),floors=acc(),margaR=rs.find(r=>r.marga)||rs.reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null);
  for(const r of rs){if(r.chata)continue;const h=(i=>{const x=Math.sin((r.x*12.9898+r.y*78.233+i*37.7))*43758.5453;return x-Math.floor(x)});let hi=0;const rnd=()=>h(hi++);
-  const marga=r===margaR&&r.w/r.h>1.6;
+  const marga=r===margaR&&(r.marga||r.w/r.h>1.6);
   const alongX=r.w>=r.h,L=alongX?r.w:r.h,D=alongX?r.h:r.w,cx=r.x+r.w/2,cz=r.y+r.h/2,eave=NT&&nbParam('osada2')!=='0'?2.4:1.9,rise=Math.min(2.3,D*.34),ov=.35,half=D/2+ov,slope=Math.atan2(rise,half),sl=Math.hypot(half,rise);
   // dla osi wzdluz Z zamieniamy x<->z przy skladaniu
   const P=(a,u,y,v,su,sy,sv,rU,rY,rV)=>alongX?put(a,box,cx+u,y,cz+v,su,sy,sv,rV||0,rY||0,rU||0):put(a,box,cx+v,y,cz+u,sv,sy,su,rU||0,rY||0,-(rV||0));
@@ -1985,7 +1993,7 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
   const woodM=NT?worldSurfN(phong({color:0xe8dcd0,transparent:true,opacity:1}),'t2_belka',1.3,1.2):worldSurf(phong({color:0x8c7868,transparent:true,opacity:1}),wood,1.3,'a');
   const g=new THREE.Group();g.add(mesh(wood_,woodM));if(roof.p.length)g.add(mesh(roof,roofM));w.group.add(g);
   r.mats=[woodM,roofM];r.mesh=g;r.a=1}
- if(margaR&&margaR.w/margaR.h>1.6&&NT&&nbParam('sklep')!=='0')margaShop(margaR,wall,put,box,acc,mesh);// 23.11.2026 (autor: sklep bardziej sklepowy)
+ if(margaR&&(margaR.marga||margaR.w/margaR.h>1.6)&&NT&&nbParam('sklep')!=='0')margaShop(margaR,wall,put,box,acc,mesh);// 23.11.2026 (autor: sklep bardziej sklepowy)
  if(holes.p.length)mesh(holes,cutaway(phong({color:0x0e0b09})));if(glow.p.length)mesh(glow,phong({color:0x1a0a04,emissive:0x5a1c06}));if(chim.p.length)mesh(chim,worldSurfN(cutaway(phong({color:0xb8aca4})),'t4_podmurowka',1.6,1.9,3));
  if(posts.p.length)mesh(posts,postM);if(floors.p.length){const f=mesh(floors,worldSurfN(phong({color:0x8c847c}),'t5_podloga',2.6,1.1));f.castShadow=false}}
 function buildRoofs(w){if(!w.roofs||!w.group)return;if(w.ch===1&&IMGS.wl_palecap&&nbParam('spalone')!=='0'){burntHouses(w);return}const rm=[];
@@ -2952,7 +2960,7 @@ function buildBrzeznica(I){
   for(const [x,y,t] of walls){if(inCh(x,y))continue;if(t===48)gH[(x*7+y*3)%4].push([x,y]);else gP[(x+y)&1].push([x,y])}
   if(CH_)chojrakChata(CH_);
   gP.forEach((list,i)=>{if(!list.length)return;const side=HD1?worldSurf(cutaway(phong({color:i?0xd4ccc4:0xc8c0b8})),I.wl_palisada,3,'a'):cutaway(phong({map:pal[i]}));depthWall(palGeo,side,1);instanced(palGeo,[side,side,capMat,capMat,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))});
-  const OS=nbParam('spalone')!=='0',margaR=(W.roofs||[]).reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null),inMarga=(x,y)=>margaR&&margaR.w/margaR.h>1.6&&x>=margaR.x&&x<margaR.x+margaR.w&&y>=margaR.y&&y<margaR.y+margaR.h;
+  const OS=nbParam('spalone')!=='0',margaR=(W.roofs||[]).find(r=>r.marga)||(W.roofs||[]).reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null),inMarga=(x,y)=>margaR&&(margaR.marga||margaR.w/margaR.h>1.6)&&x>=margaR.x&&x<margaR.x+margaR.w&&y>=margaR.y&&y<margaR.y+margaR.h;
   const houseCap=OS?worldSurfN(cutaway(phong({color:0xd8ccc0})),'t2_belka',1.4,1.8,3):I.p1_roof_burnt?worldSurf(cutaway(phong({color:0xffffff})),I.p1_roof_burnt,2.5,'a'):capMat;
   /* 23.11.2026: podmurowka z kamienia pod scianami domow (tekstura autora) */
   if(OS){const all=gH.flat();if(all.length){const fg=new THREE.BoxGeometry(1.08,.42,1.08);fg.translate(0,.21,0);instanced(fg,worldSurfN(cutaway(phong({color:0xe0d6cc})),'t4_podmurowka',2.2,1.9,3),all,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))}}
@@ -3729,6 +3737,18 @@ function chojrakSpot(w){const st=w.start,bad=t=>SOLID.has(t)||VOID.has(t)||t===2
   for(let r=4;r<=10;r++)for(let k=0;k<8*r;k++){const a=k/(8*r)*Math.PI*2+r,X=Math.round(cx+Math.cos(a)*r),Y=Math.round(cy+Math.sin(a)*r);if(open(X,Y)&&!(w.clearways&&w.clearways.has(Y*MW+X)))return[(X+.5)*TS,(Y+.4)*TS]}
   return null}
 // 23.11.2026 (autor): dom Heriego w slumsach Zlotogrodu. Mury dookola, jedno waskie wejscie od frontu (poludnie); do srodka wchodzi tylko bohater (W.heroOnly)
+function addShelter(w,sh){(w.shelters||(w.shelters=[])).push(sh);if(!w.heroOnly)w.heroOnly=new Set();for(const i of sh.tiles)w.heroOnly.add(i)}
+// 23.11.2026 (autor): sklep Margi w Osadzie powiekszony o 3 pola na polnoc, sciany domkniete; zostaje szeroki front sklepu. Potwory nie wchodza.
+// Przed polnoca dziala za Popioly (zegar nocy stoi, lacznie 60 s w srodku), o polnocy kram za monety jak dotad.
+function margaHouse(w){if(!w.roofs||!w.roofs.length)return;const r=w.roofs.reduce((b,q)=>(!b||q.w/q.h>b.w/b.h)?q:b,null),n=w.npcs.find(q=>q.id==='marga');if(!r||!n)return;
+ const ext=3,y0=r.y-ext,y1=r.y+r.h-1,fl=w.map[Math.floor(n.y/TS)*MW+Math.floor(n.x/TS)];
+ let best=[-1,-1],run=-1;for(let x=r.x+1;x<=r.x+r.w-1;x++){const open=x<r.x+r.w-1&&w.map[y1*MW+x]!==48;if(open&&run<0)run=x;if(!open&&run>=0){if(x-run>best[1]-best[0])best=[run,x];run=-1}}
+ if(best[0]<0)return;const ho=new Set();
+ for(let k=w.PROPS.length-1;k>=0;k--){const p=w.PROPS[k];if(p.x>=r.x&&p.x<r.x+r.w&&p.y>=y0&&p.y<r.y)w.PROPS.splice(k,1)}
+ for(let y=y0;y<=y1;y++)for(let x=r.x;x<r.x+r.w;x++){const i=y*MW+x,ring=x===r.x||x===r.x+r.w-1||y===y0||y===y1,front=y===y1&&x>=best[0]&&x<best[1];
+  if(ring&&!front)w.map[i]=48;else{w.map[i]=fl;if(w.under)w.under[i]=0;ho.add(i)}}
+ if(w.clearways)for(const i of ho)w.clearways.delete(i);
+ r.y=y0;r.h+=ext;r.marga=true;addShelter(w,{x:r.x,y:r.y,w:r.w,h:r.h,door:[Math.floor((best[0]+best[1])/2),y1],tiles:ho,kind:'shop'})}
 function heriHouse(w){const n=w.npcs.find(q=>q.id==='heri');if(!n)return;const hx=Math.floor(n.x/TS),hy=Math.floor(n.y/TS);
  const x0=hx-3,y0=hy-1,x1=hx+6,y1=hy+3,dx=hx+2;if(x0<1||y0<1||x1>=MW-1||y1>=MH-1)return;const ho=new Set();
  for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const i=y*MW+x,ring=x===x0||x===x1||y===y0||y===y1,door=x===dx&&y===y1;
@@ -3737,7 +3757,7 @@ function heriHouse(w){const n=w.npcs.find(q=>q.id==='heri');if(!n)return;const h
  if(w.clearways)for(const i of ho)w.clearways.delete(i);
  /* buda przed fasada zaslaniala front domu: znika (kafle na bloto slumsow, bez dachu w buildStolica) */
  w.heriClear=[];SHACKS.forEach((B,k)=>{const R=SR({x:B[0],y:B[1],w:B[2],h:B[3]});if(R.x<=x1+1&&R.x+R.w>=x0-1&&R.y<=y1+3&&R.y+R.h>y1){w.heriClear.push(k);for(let y=R.y;y<R.y+R.h;y++)for(let x=R.x;x<R.x+R.w;x++){const i=y*MW+x;if(w.map[i]===59)w.map[i]=53}}});
- w.heroOnly=ho;w.heriHouse={x:x0,y:y0,w:x1-x0+1,h:y1-y0+1,door:[dx,y1]}}
+ w.heriHouse={x:x0,y:y0,w:x1-x0+1,h:y1-y0+1,door:[dx,y1]};addShelter(w,Object.assign({tiles:ho,kind:'heri'},w.heriHouse))}
 // 23.11.2026 (autor): chata Chojraka w Spalonej Osadzie. Jego dom domkniety murem z bali, jedne waskie drzwi od frontu (poludnie), do srodka wchodzi tylko bohater
 function chojrakHouse(w){const n=w.npcs.find(q=>q.id==='chojrak');if(!n||!w.roofs)return;const hx=Math.floor(n.x/TS),hy=Math.floor(n.y/TS);
  const r=w.roofs.find(R=>hx>=R.x&&hx<R.x+R.w&&hy>=R.y&&hy<R.y+R.h);if(!r)return;const fl=w.map[hy*MW+hx],dx=Math.floor(r.x+r.w/2),dy=r.y+r.h-1,ho=new Set();
@@ -3747,7 +3767,7 @@ function chojrakHouse(w){const n=w.npcs.find(q=>q.id==='chojrak');if(!n||!w.roof
  for(let y=dy-1;y>r.y;y--){const i=y*MW+dx;if(w.map[i]===48)w.map[i]=fl;else break}
  for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++){const i=y*MW+x;if(w.map[i]!==48)ho.add(i)}
  if(w.clearways)for(const i of ho)w.clearways.delete(i);
- r.chata=true;r.pad=3;w.heroOnly=ho;w.chata={x:r.x,y:r.y,w:r.w,h:r.h,door:[dx,dy],r}}
+ r.chata=true;r.pad=3;w.chata={x:r.x,y:r.y,w:r.w,h:r.h,door:[dx,dy],r};addShelter(w,{x:r.x,y:r.y,w:r.w,h:r.h,door:[dx,dy],tiles:ho,kind:'chata'})}
 function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast losowania przy kazdym uruchomieniu; Czarnobor: ziarno 1349 (z 12 sprawdzonych: ciemny las, malo wysokich sosen), Cytadela: ziarno nie zmienia ukladu. Powrot do losowania: (Math.random()*2147483647)|0 */if((ch===4||ch===5)&&WORLD_SEEDS[ch]===undefined)WORLD_SEEDS[ch]=1349;
   const w=upscaleWorld(ch===1?genBrzeznica():ch===2?genDolne():ch===3?genStolica():ch===9?genDungeon((Math.random()*2147483647)|0):ch===PORT?genSolneNabrzeze():ch===5?genCytadela(WORLD_SEEDS[ch]):genCzarnobor(WORLD_SEEDS[ch]));if(ch<4)enrich(w,ch);
   if(ch===9)w.rooms=w.rooms.map(R=>Object.assign(SR(R),{k:R.k}));
@@ -3772,7 +3792,7 @@ function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast lo
   // 15.11.2026 (prosba autora): wejscie do krypty wysrodkowane w przeswicie miedzy chatami (o 1 pole w prawo), razem z kolizja
   if(ch===1){const cs=w.PROPS.find(p=>p.k==='crypt_stairs');if(cs&&Math.abs(cs.x-76.4)<.3){const y=Math.floor(cs.y),L=y*MW+Math.floor(cs.x)-4,R=y*MW+Math.floor(cs.x)+2;if(w.map[L]===31){w.map[L]=(w.under&&w.under[L])||41}if(w.map[R]!==31&&!SOLID.has(w.map[R])){if(w.under)w.under[R]=w.map[R];w.map[R]=31}cs.x+=1}}
   if(ch===2)layoutPatch2(w);
-  if(ch===1&&nbParam('chojrak')!=='0')chojrakHouse(w);
+  if(ch===1&&nbParam('chojrak')!=='0')chojrakHouse(w);if(ch===1&&nbParam('sklepmarga')!=='0')margaHouse(w);
   scene.add(w.group);
   const ta=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?21:w.map[y*MW+x];
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){const t=ta(x,y);
@@ -4581,7 +4601,7 @@ function enemyBody(e){return !e.dead&&e.rise<=0&&e.type!=='wisp'&&e.mode!=='merg
 const contactGap=e=>e.r+(BIG.has(e.type)?4:['drowner','zmora','wraith'].includes(e.type)?6:8);
 function playerBodyBlocked(x,y,ox,oy){if(!S||!pl||pl.dead||pl.roll>0)return false;
   for(const e of S.enemies){if(!enemyBody(e))continue;const r=contactGap(e),next=Math.hypot(x-e.x,y-e.y),before=Math.hypot(ox-e.x,oy-e.y);if(next<r-.01&&next<before-.001)return true}return false}
-function moveBox(o,dx,dy,hw,hh,passBodies=false){const mob=W&&W.heroOnly&&o!==pl&&o!==pl1&&o!==pl2,free=(x,y)=>!boxSolid(x,y,hw,hh)&&(o!==pl||passBodies||!playerBodyBlocked(x,y,o.x,o.y))&&!(mob&&(heroOnlyAt(x-hw,y-hh)||heroOnlyAt(x+hw,y-hh)||heroOnlyAt(x-hw,y)||heroOnlyAt(x+hw,y)));if(dx){const nx=o.x+dx;if(free(nx,o.y))o.x=nx}if(dy){const ny=o.y+dy;if(free(o.x,ny))o.y=ny}}
+function moveBox(o,dx,dy,hw,hh,passBodies=false){const mob=W&&W.heroOnly&&o!==pl&&o!==pl1&&o!==pl2,shut=!mob&&W&&W.shelters&&W.shelters.some(s=>s.closed),cl=(x,y)=>{const s=shelterAt(x,y);return !!s&&s.closed},free=(x,y)=>!boxSolid(x,y,hw,hh)&&(o!==pl||passBodies||!playerBodyBlocked(x,y,o.x,o.y))&&!(mob&&(heroOnlyAt(x-hw,y-hh)||heroOnlyAt(x+hw,y-hh)||heroOnlyAt(x-hw,y)||heroOnlyAt(x+hw,y)))&&!(shut&&(cl(x-hw,y-hh)||cl(x+hw,y-hh)||cl(x-hw,y)||cl(x+hw,y)));if(dx){const nx=o.x+dx;if(free(nx,o.y))o.x=nx}if(dy){const ny=o.y+dy;if(free(o.x,ny))o.y=ny}}
 function keepEnemyDistance(e,ox=e.x,oy=e.y){if(!pl||pl.dead||pl.roll>0||!enemyBody(e))return;
   const gap=contactGap(e),vx=e.x-ox,vy=e.y-oy,px=ox-pl.x,py=oy-pl.y,a=vx*vx+vy*vy,b=2*(px*vx+py*vy),c=px*px+py*py-gap*gap;
   // Clip a movement segment at the hero's body, including a fast leap or charge.
@@ -5547,7 +5567,7 @@ function portEnemyArt(key){
  portSkins.set(key,skin);return skin;
 }
 /* 22.11.2026 (zgoda autora): zycie mobkow rosnie wolno na poczatku i coraz szybciej po polnocy: x0,6 -> x0,86 (4 min) -> x1,39 (8) -> x2,11 (12) -> x3,0 (16) */function nightHp(){return .6+2.4*Math.pow(Math.min(S.t,NIGHT)/NIGHT,1.6)}
-function spawnEnemy(type,x,y,extra){if(W&&W.heriHouse&&heroOnlyAt(x,y)){const d=W.heriHouse.door;x=(d[0]+.5)*TS;y=(d[1]+1.7)*TS}if((type==='xbow'||type==='monk')&&S.enemies.reduce((n,o)=>n+(!o.dead&&(o.type==='xbow'||o.type==='monk')?1:0),0)>=2)type=type==='monk'?'madman':'bandit';// max 2 strzelców naraz; reszta walczy w zwarciu
+function spawnEnemy(type,x,y,extra){{const s0=W&&shelterAt(x,y);if(s0){const d=s0.door;x=(d[0]+.5)*TS;y=(d[1]+1.7)*TS}}if((type==='xbow'||type==='monk')&&S.enemies.reduce((n,o)=>n+(!o.dead&&(o.type==='xbow'||o.type==='monk')?1:0),0)>=2)type=type==='monk'?'madman':'bandit';// max 2 strzelców naraz; reszta walczy w zwarciu
   const T=ET[type],mul=(BIG.has(type)||type==='collector'?1:nightHp()*(surgeOn()?.45:1))/* 15.11.2026: wzrost zycia liczony od ulamka nocy (koniec nocy = jak dawniej), mobki -20%, w Naporze slabsze */*S.pk.ehp*DF[DIFFK].hp*chapterHp(type);
   const e=Object.assign({type,x,y,hp:T.hp*mul,max:T.hp*mul,spd:T.spd*rnd(.9,1.1),r:T.r,dmg:T.dmg,xp:T.xp,vx:0,vy:0,flash:0,walk:Math.random()*5,s:1,ph:Math.random()*9,leap:0,lcd:2,side:Math.random()<.5?1:-1,
     frozen:0,bleed:0,bleedT:0,rise:type==='bat'?0:.5,atkA:0,slamT:4,atkT:0,dead:false},extra||{});
@@ -5670,7 +5690,7 @@ function hurtPlayer(dmg,nx,ny,source='night'){if(S.zab&&pl.roll>0&&pl.inv>0&&!S.
   if(S.train&&pl.hp<=0)pl.hp=1;if(pl.hp<=0){if(S.lastCh&&!S.lastChUsed&&!pl2&&!pl.dead){S.lastChUsed=1;pl.hp=1;pl.inv=Math.max(pl.inv,1.5);pl.blinkUntil=clock+1.5;S.flash=.6;shake(.3,.3);play('bless',0);ftInfo(EN?'Last Chance!':'Ostatnia szansa!');return true}if(pl2&&withRb(pl,tryRebirth))return true;{const o=pl===pl2?pl1:pl2;if(o&&!o.dead){pl.hp=0;pl.dead=true;pl.deadT=0;pl.revT=0;padRumble(1,1,450,pl===pl2&&typeof PAD2!=='undefined'?PAD2.g:null);blood(pl.x,pl.y,40,nx,ny,3);play('kill',0);return true}}if(tryRebirth())return true;S.deathCause=deathCauseName(source);S.deathSrc=typeof source==='string'?source:source&&source.type?source.type:'night';loseSecondLife();clearSwordTransient();S.swordTrails=[];pl.hp=0;pl.dead=true;pl.deadT=0;padRumble(1,1,520);blood(pl.x,pl.y,70,nx,ny,3);play('kill',0);S.endT=2.6;pool(pl.x,pl.y,20,8)}return true}
 function updEnemy(e,dt){
   /* 23.11.2026 (autor: bez cheese w drzwiach): gdy bohater jest w schronieniu (dom Heriego, chata Chojraka), wrogowie nie tlocza sie przy drzwiach, tylko odchodza na ok. 8 pol i czekaja */
-  if(W.heroOnly&&pl&&!pl.dead&&heroOnlyAt(pl.x,pl.y)&&!e.dead&&!(e.rise>0)){const h=W.heriHouse||W.chata;if(h){const ox=(h.door[0]+.5)*TS,oy=(h.door[1]+.5)*TS,vx=e.x-ox,vy=e.y-oy,dd=Math.hypot(vx,vy)||1;
+  if(W.heroOnly&&pl&&!pl.dead&&heroOnlyAt(pl.x,pl.y)&&!e.dead&&!(e.rise>0)){const h=shelterAt(pl.x,pl.y);if(h){const ox=(h.door[0]+.5)*TS,oy=(h.door[1]+.5)*TS,vx=e.x-ox,vy=e.y-oy,dd=Math.hypot(vx,vy)||1;
     if(dd<8*TS){const sp=Math.min(70,e.spd||45)*dt;moveBox(e,vx/dd*sp,vy/dd*sp,4,3)}e.vx=0;e.vy=0;return}}
   keepEnemyDistance(e);const ox=e.x,oy=e.y,dx=pl.x-e.x,dy=pl.y-e.y,d=Math.hypot(dx,dy);
   if(d>.001){e.contactNX=dx/d;e.contactNY=dy/d}
@@ -5960,7 +5980,7 @@ function sightSword(x0,y0,x1,y1){const n=Math.ceil(Math.hypot(x1-x0,y1-y0)/8);fo
 // Wróg, który nie widzi bohatera przez ścianę, idzie po niej: wychodzi z domów drzwiami i obchodzi przeszkody.
 const NAV={d:null,q:null,t:0};
 function navUpdate(dt){NAV.t-=dt;if(NAV.t>0||!pl)return;NAV.t=.35;const n=MW*MH;if(!NAV.d||NAV.d.length!==n){NAV.d=new Int16Array(n);NAV.q=new Int32Array(n)}
-  const D=NAV.d,Q=NAV.q,tx=Math.floor(pl.x/TS),ty=Math.floor(pl.y/TS);D.fill(-1);if(tx<0||ty<0||tx>=MW||ty>=MH)return;const HO=W.heroOnly,pin=!!HO&&HO.has(ty*MW+tx);if(pin&&!S.sanctMsg){S.sanctMsg=1;say(EN?'A safe roof. Here your blade stays sheathed, and the night waits outside.':'Bezpieczny dach. Tu broń milczy, a noc czeka na zewnątrz.')}else if(!pin)S.sanctMsg=0;let h=0,t=0;D[ty*MW+tx]=0;Q[t++]=ty*MW+tx;
+  const D=NAV.d,Q=NAV.q,tx=Math.floor(pl.x/TS),ty=Math.floor(pl.y/TS);D.fill(-1);if(tx<0||ty<0||tx>=MW||ty>=MH)return;const HO=W.heroOnly,pin=!!HO&&HO.has(ty*MW+tx);if(pin&&!S.sanctMsg&&(shelterAt(pl.x,pl.y)||{}).kind!=='shop'){S.sanctMsg=1;say(EN?'A safe roof. Here your blade stays sheathed, and the night waits outside.':'Bezpieczny dach. Tu broń milczy, a noc czeka na zewnątrz.')}else if(!pin)S.sanctMsg=0;let h=0,t=0;D[ty*MW+tx]=0;Q[t++]=ty*MW+tx;
   while(h<t){const c=Q[h++],cx=c%MW,cy=(c/MW)|0,v=D[c]+1;
     if(cx>0&&D[c-1]<0&&!SOLID.has(tileAt(cx-1,cy))&&!(HO&&!pin&&HO.has(c-1))){D[c-1]=v;Q[t++]=c-1}
     if(cx<MW-1&&D[c+1]<0&&!SOLID.has(tileAt(cx+1,cy))&&!(HO&&!pin&&HO.has(c+1))){D[c+1]=v;Q[t++]=c+1}
@@ -6080,7 +6100,7 @@ function events(){
     ev('el',S.t>62&&N.elder.state==='alive',()=>{N.elder.state='dead';N.elder.deadAt=S.t;const n=W.npcs[0];pool(n.x,n.y,14,6)});
     ev('er',N.elder.state==='dead'&&S.t>(N.elder.deadAt||1e9)+14&&!!A.rotknight,()=>{N.elder.state='risen';const n=W.npcs[0];spawnEnemy('rotknight',n.x,n.y+2,{elder:true,rise:1.2,hp:220,max:220});play('rise',0);S.flash=1;shake(.12,.6);say((EN?'The old man from the well rises in rusted armour. Rot pours out from under his visor.':'Starzec spod studni wstaje w zardzewiałej zbroi. Zgnilizna wylewa się spod przyłbicy.'))});
     ev('k',S.t>(S.firstNight?110:70),()=>0);
-    ev('mg',S.t>100&&N.marga.state==='alive',()=>{N.marga.state='gone';say((EN?'The trader\'s lantern goes out in the rain.':'Latarnia handlarki gaśnie w deszczu.'))});
+    ev('mg',S.t>100&&N.marga.state==='alive'&&!(W.shelters&&W.shelters.some(s=>s.kind==='shop')),()=>{N.marga.state='gone';say((EN?'The trader\'s lantern goes out in the rain.':'Latarnia handlarki gaśnie w deszczu.'))});
     ev('w',S.t>150&&N.wit.state==='alive',()=>{N.wit.state='dead';const n=W.npcs[2];pool(n.x,n.y+1,20,8);say((EN?'The screams from the stocks suddenly fall silent.':'Krzyki od strony dybów nagle ucichły.'))});
     return}
   if(CH===5){
@@ -6277,7 +6297,7 @@ const WIT_ECHO={elder:{spared:(EN?'Is Wit still sitting there? Good. Let him sit
   nawoj:{spared:(EN?'From the hill you can hear somebody counting. It matches my list.':'Z wzgórza słychać, jak ktoś liczy. Zgadza się z moją listą.'),dead:(EN?'They added one more name to the list. Not mine, not yours. Not yet.':'Dopisali jedno imię do listy. Nie moje, nie twoje. Jeszcze.')}};
 const npcLines=n=>{const e=WIT_ECHO[n.id]?.[S.npc.wit?.state];return e?[...n.lines.slice(0,-1),e,n.lines[n.lines.length-1]]:n.lines};
 const NL=n=>n.id==='chojrak'?chojPages(S.chojMode||'first'):n.id==='mila'&&S.npc.mila.retry?MILA_RETRY:n.id==='wolch'&&S.npc.wolch.state==='offered'?WOLCH_ACCEPT:npcLines(n);
-function openDialog(n){S.witChoice=false;$('witChoices').hidden=true;document.querySelector('#dialog .next').hidden=false;resetInput();
+function openDialog(n){if(n.id==='marga'&&S.inShop){openShop('ash');return}S.witChoice=false;$('witChoices').hidden=true;document.querySelector('#dialog .next').hidden=false;resetInput();
   // pion: rozmowa jako pasek (imię + pierwsza kwestia), gra się nie zatrzymuje, nagroda naliczana od razu; Wit i Żerca (wybór/układ) zostają w oknie
   if(isPort()&&n.id!=='wit'&&n.id!=='wolch'&&n.id!=='chojrak'){const L=NL(n),line=n.name.split(',')[0]+': '+L[0];S.dialog=n;S.dlg=L.length-1;if(n.id==='mila'){advanceDialog();say(line,'story')}else{say(line,'story');advanceDialog()}return}
   if(n.id==='chojrak')S.chojMode=S.npc.chojrak.state==='alive'?'first':'repeat';
@@ -6352,13 +6372,13 @@ function nearbyEnemies(e){const a=[],x=Math.floor(e.x/CELL),y=Math.floor(e.y/CEL
 function update(dt){if(S&&S.exec>0){S.exec-=dt;dt*=S.exec>.35?.2:.5}
   if(S&&S.phase==='play')bannerTick(dt);
   if(S&&S.intro){introTick(dt);return}
-  if(S&&S.phase==='play')pumpNotice();if(!S||S.phase!=='play'||S.notice||S.choosing||S.shop||S.paused)return;
+  if(S&&S.phase==='play')pumpNotice();if(S&&S.phase==='play'&&S.shop&&S.shopMode==='ash'&&!S.paused)ashShopUiTick(dt);if(!S||S.phase!=='play'||S.notice||S.choosing||S.shop||S.paused)return;
   // 14.11.2026: noc rusza dopiero po pierwszym ruchu lub przycisku gracza (najpóźniej po 4 s), żeby zegar nie biegł, zanim gracz zobaczy bohatera
   if(!S.go){S.goT=(S.goT||0)+dt;let any=!!(S.dg||S.train||S.goT>=4||mouseL||mouseR||tAtk||tBlock||tj.x||tj.y||rollPress||heavyPress||PAD.atk||PAD.blk||PAD.x||PAD.y);if(!any)for(const k in keys)if(keys[k]){any=true;break}if(!any)return;S.go=1}
   if(TRN.god&&!pl.dead){pl.hp=pl.max;pl.sta=pl.staMax;pl.mana=pl.manaMax}if(S.train&&!pl.dead){pl.hp=Math.min(pl.max,pl.hp+pl.max*.12*dt);if(pl.manaMax)pl.mana=Math.min(pl.manaMax,(pl.mana||0)+pl.manaMax*.25*dt)}
   if(S.hitstop>0){S.hitstop-=dt;if(rollPress)S.bufRoll=1;return}
   if(S.dialog){if(talkPress||rollPress)advanceDialog();return}
-  if(S.stage!=='break'&&S.stage!=='collector'&&!S.dg&&!S.train&&!allDead()){S.t+=dt;if(!allDead()){S.surv=(S.surv||0)+dt;if(S.surv>=SL.coinSurvive){S.surv-=SL.coinSurvive;S.coins++;play('coin',.02)}}}
+  if(S.stage!=='break'&&S.stage!=='collector'&&!S.dg&&!S.train&&!allDead()&&!S.inShop){S.t+=dt;if(!allDead()){S.surv=(S.surv||0)+dt;if(S.surv>=SL.coinSurvive){S.surv-=SL.coinSurvive;S.coins++;play('coin',.02)}}}
   stageTick(dt);try{nightEventTick(dt)}catch(er){quietErr('nightEvent',er)}if(S.notice)return;if(S.dg)dungeonTick(dt);if(S.notice)return;
   if(selectedNpcAction){const q=selectedNpcAction,n=q.npc;if(q.state!==S||pl.dead||!W.npcs.includes(n)||!npcTalk(n))selectedNpcAction=null;else if(Math.hypot(pl.x-n.x,pl.y-n.y)<30){selectedNpcAction=null;openDialog(n);return}}
   const nm=nearMerchant();if(talkPress&&nm){openShop();return}
@@ -6434,7 +6454,7 @@ function solneTick(){
  if(st.bossDead&&!st.open.every(Boolean)&&!st.told2){st.told2=true;say((EN?'The Harbour Master is dead. The ferry is still held by a chain.':'Bosman nie żyje. Prom jeszcze trzyma łańcuch.'))}
 }
 
-function stageTick(dt){if(CH===PORT)solneTick();
+function stageTick(dt){if(CH===PORT)solneTick();if(CH===1&&W.shelters)margaShopTick(dt);
   if(S.stage==='p1'&&S.t>=BREAK_AT&&!S.dg&&!S.endless){S.stage='collector';S.collT=2.5;dissolveAll((EN?'Midnight. The dead retreat into the darkness.':'Północ. Martwi cofają się w ciemność.'))}
   const m=S.merchant;
   if(m){if(m.state==='in'){m.t-=dt*1.5;if(m.t<=0)m.state='here'}
@@ -6452,19 +6472,31 @@ function stageTick(dt){if(CH===PORT)solneTick();
 }
 function nearMerchant(){const m=S&&S.merchant;return m&&m.state==='here'&&!pl.dead&&Math.hypot(pl.x-m.x,pl.y-m.y)<34?m:null}
 function leaveMerchant(){const m=S.merchant;if(!m||m.state==='out')return;m.state='out';m.t=1;for(let i=0;i<26;i++)S.parts.push({k:'a',x:m.x+rnd(-8,8),y:m.y,z:rnd(0,20),vx:rnd(-8,8),vy:0,vz:rnd(8,20),c:'#3d4a3a',life:rnd(1,2)})}
+/* 23.11.2026 (autor): sklep Margi w Osadzie przed polnoca za Popioly. Cena = polowa ceny w monetach (z tym samym wzrostem po kazdym zakupie i tymi samymi limitami na noc),
+   najmniej 5. Przy ok. 60-100 Popiolach z jednej nocy: Serce 22, Oselka 18, Amulet 30, Zwoj 20, Wywar 10, Kamien 12; ulepszenie stale w obozie kosztuje 50/120/250. */
+const priceAsh=it=>Math.max(5,Math.round(price(it)*.5));
+const MARGA_SHOP_T=60;
+function margaShopTick(dt){const sh=W.shelters&&W.shelters.find(s=>s.kind==='shop');if(!sh)return;if(S.shopT===undefined)S.shopT=MARGA_SHOP_T;
+  const open=S.stage==='p1'&&S.shopT>0&&!S.dg&&!S.endless;sh.closed=!(open||S.stage==='break');
+  const inside=p=>p&&!p.dead&&shelterAt(p.x,p.y)===sh,inn=inside(pl1||pl)||inside(pl2);S.inShop=!!(inn&&open);
+  if(S.inShop){S.shopT=Math.max(0,S.shopT-dt);if(!S.shopIn){S.shopIn=1;say(EN?`Marga's shop. The night's clock stands still while you are inside: ${Math.ceil(S.shopT)} s left in total. She takes Ashes.`:`Sklep Margi. Gdy jesteś w środku, zegar nocy stoi: zostało łącznie ${Math.ceil(S.shopT)} s. Marga bierze Popioły.`)}}else S.shopIn=0;
+  if(sh.closed)for(const p of [pl1||pl,pl2])if(inside(p)){p.x=(sh.door[0]+.5)*TS;p.y=(sh.door[1]+1.8)*TS;if(!S.shopOut){S.shopOut=1;say(S.stage==='p1'?(EN?'Marga pushes you over the threshold. Your minute is up.':'Marga wypycha cię za próg. Twoja minuta minęła.'):(EN?'Marga bars the door. She will trade again at the stall.':'Marga zamyka drzwi. Handluje dalej tylko przy kramie.'))}}
+  if(!sh.closed)S.shopOut=0}
+function ashShopUiTick(dt){if(!S.inShop)return;S.shopT=Math.max(0,S.shopT-dt);if(S.shopT<=0){closeShop();return}const kk=document.querySelector('#shop .kicker');if(kk)kk.textContent=EN?`Before midnight · the clock stands still · ${Math.ceil(S.shopT)} s`:`Przed północą · zegar stoi · ${Math.ceil(S.shopT)} s`}
 function shopMaxed(it){return it.id==='amulet'&&pl.staMax>=180||!!it.lim&&(S.bought[it.id]||0)>=it.lim}
 const heartHp=()=>Math.round(20*(S&&S.pk&&S.pk.hpMul||1));
 function shopDesc(it){if(it.id==='heart'&&S&&S.pk&&S.pk.hpMul<1)return(EN?`+${heartHp()} maximum health (your perk lowers it).`:`+${heartHp()} do maksymalnego życia (perk to obniża).`)+(EN?` (at most ${it.lim} per night)`:` (najwyżej ${it.lim} na noc)`);return it.id==='amulet'?(EN?'+20 maximum stamina (up to 180; attributes can give more).':'+20 do maksymalnej staminy (do 180; cechy mogą dać więcej).'):it.d+(it.lim?(EN?` (at most ${it.lim} per night)`:` (najwyżej ${it.lim} na noc)`):'')}
-function renderShop(){$('shopCoins').textContent=S.coins;const box=$('shopCards');box.innerHTML='';
-  SHOP.forEach((it,i)=>{const pr=price(it),maxed=shopMaxed(it),b=document.createElement('button');b.type='button';b.className='card';b.id='shop'+i;b.disabled=maxed||S.coins<pr;
-    b.innerHTML=(EN?`<span class="ck">Item ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Sold out':pr+' coins'}</span><span class="cd">${shopDesc(it)}</span>`:`<span class="ck">Towar ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Wyprzedane':pr+' monet'}</span><span class="cd">${shopDesc(it)}</span>`);b.addEventListener('click',()=>buy(i));box.appendChild(b)})}
-function openShop(){resetInput();S.shop=true;play('shopIn',0);pl.swingT=0;renderShop();$('shop').hidden=false;setTimeout(()=>{const f=$('shopClose');f&&f.focus()},30)}
-function buy(i){const it=SHOP[i];if(!it||!S.shop)return;const pr=price(it);if(S.coins<pr||shopMaxed(it)){play('empty',0);return}
-  S.coins-=pr;S.bought[it.id]=(S.bought[it.id]||0)+1;uiSnd('buy');
+function renderShop(){const ash=S.shopMode==='ash',kk=document.querySelector('#shop .kicker'),hh=document.querySelector('#shop .lvlhead h2');if(kk){if(kk.dataset.org===undefined){kk.dataset.org=kk.textContent;hh.dataset.org=hh.textContent}kk.textContent=ash?(EN?`Before midnight · the clock stands still · ${Math.ceil(S.shopT)} s`:`Przed północą · zegar stoi · ${Math.ceil(S.shopT)} s`):kk.dataset.org;hh.textContent=ash?(EN?'Marga\'s Shop · for Ashes':'Sklep Margi · za Popioły'):hh.dataset.org}
+  $('shopCoins').classList.toggle('coin',!ash);$('shopCoins').textContent=ash?(EN?`Ashes ${EMB.e}`:`Popioły ${EMB.e}`):S.coins;const box=$('shopCards');box.innerHTML='';const wallet=ash?EMB.e:S.coins;
+  SHOP.forEach((it,i)=>{const pr=ash?priceAsh(it):price(it),maxed=shopMaxed(it),b=document.createElement('button');b.type='button';b.className='card';b.id='shop'+i;b.disabled=maxed||wallet<pr;
+    b.innerHTML=(EN?`<span class="ck">Item ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Sold out':pr+(ash?' Ashes':' coins')}</span><span class="cd">${shopDesc(it)}</span>`:`<span class="ck">Towar ${i+1}</span><span class="cn"><i class="ic ic-${{brew:'brew',heart:'ashheart',whet:'whet',amulet:'amulet',scroll:'scroll',magnet:'magnet'}[it.id]}"></i>${it.name}</span><span class="cl coin">${maxed?'Wyprzedane':pr+(ash?' Popiołów':' monet')}</span><span class="cd">${shopDesc(it)}</span>`);b.addEventListener('click',()=>buy(i));box.appendChild(b)})}
+function openShop(mode){S.shopMode=mode==='ash'?'ash':'coin';resetInput();S.shop=true;play('shopIn',0);pl.swingT=0;renderShop();$('shop').hidden=false;setTimeout(()=>{const f=$('shopClose');f&&f.focus()},30)}
+function buy(i){const it=SHOP[i];if(!it||!S.shop)return;const ash=S.shopMode==='ash',pr=ash?priceAsh(it):price(it);if((ash?EMB.e:S.coins)<pr||shopMaxed(it)){play('empty',0);return}
+  if(ash){EMB.e-=pr;saveEmb()}else S.coins-=pr;S.bought[it.id]=(S.bought[it.id]||0)+1;uiSnd('buy');
   if(it.id==='brew')pl.hp=pl.max;else if(it.id==='heart'){const hv=heartHp();pl.max+=hv;heal(hv)}else if(it.id==='whet')S.whet++;else if(it.id==='amulet'){pl.staMax=Math.min(180,pl.staMax+20);pl.sta=pl.staMax}
   else if(it.id==='scroll'){S.lvl++;S.need=xpNeed(S.lvl);S.pendLv++}else if(it.id==='magnet')S.magnet+=.4;
   renderShop()}
-function closeShop(){if(!S||!S.shop)return;S.shop=false;uiSnd('back');$('shop').hidden=true;const mdg=S.merchant&&S.merchant.dg;leaveMerchant();say(mdg?(EN?'Marga: "The stairs lead up. The night will wait for you."':'Marga: „Schody prowadzą na górę. Noc na ciebie poczeka”.'):(EN?'Marga: "Careful. The Order Collector has caught the scent of your gold."':'Marga: „Uważaj. Poborca Zakonu zwęszył twoje złoto”.'));if(S.pendLv>0)openLevelUp()}
+function closeShop(){if(!S||!S.shop)return;S.shop=false;uiSnd('back');$('shop').hidden=true;if(S.shopMode==='ash'){S.shopMode='coin';say(S.shopT>0?(EN?'Marga: "Come back before midnight. After that, I only take coin."':'Marga: „Wróć przed północą. Potem biorę już tylko monety”.'):(EN?'Marga: "Your minute is up. Out you go, the night won\'t wait."':'Marga: „Twoja minuta minęła. Wynocha, noc nie poczeka”.'));if(S.pendLv>0)openLevelUp();return}const mdg=S.merchant&&S.merchant.dg;leaveMerchant();say(mdg?(EN?'Marga: "The stairs lead up. The night will wait for you."':'Marga: „Schody prowadzą na górę. Noc na ciebie poczeka”.'):(EN?'Marga: "Careful. The Order Collector has caught the scent of your gold."':'Marga: „Uważaj. Poborca Zakonu zwęszył twoje złoto”.'));if(S.pendLv>0)openLevelUp()}
 
 // 9.11.2026: jedno losowe zdarzenie w środku nocy (nie w krypcie, nie przy bossach, nie w pierwszej nocy)
 const NEV={krew:{d:45,mob:1.4,coin:2},mgla:{d:40,fog:.022},lowy:{d:30,coins:40}};
@@ -6872,7 +6904,7 @@ function puddleBuild(){for(const m of PUD.list){scene.remove(m.m);if(m.g)scene.r
  for(let i=0;i<34;i++){const m=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:PUD.ringTex,transparent:true,depthWrite:false,opacity:0,fog:false}));m.rotation.x=-Math.PI/2;m.visible=false;scene.add(m);PUD.rings.push({m,t:9})}}
 // 16.11.2026: kropla deszczu pod dachem portu (xz w obrysie budynku z PORT_BUILDINGS, wspolrzedne wielkiej mapy); deszcz nie pada w srodku skladu
 /* 23.11.2026: w chacie Chojraka i domu Heriego nie pada */
-function roofCovered(x,z){const h=W&&(W.chata||W.heriHouse);return !!h&&x>h.x&&x<h.x+h.w&&z>h.y&&z<h.y+h.h}
+function roofCovered(x,z){const L=W&&W.shelters;return !!L&&L.some(h=>x>h.x&&x<h.x+h.w&&z>h.y&&z<h.y+h.h)}
 function portCovered(x,z){return PORT_BUILDINGS.some(([bx,by,w,h])=>x>MP(bx)&&x<MP(bx+w)&&z>MP(by)&&z<MP(by+h))}
 function puddleTick(dt){const wet=(CH===1||CH===PORT)&&!S.dg;if(PUD.w!==W||wet!==(PUD.list.length>0)&&!(wet&&PUD.w===W))puddleBuild();const raining=rain.visible&&!S.dg,vis=wet;
  for(const p of PUD.list){p.m.visible=vis;if(p.g){p.g.visible=vis;p.g.material.opacity=p.g.userData.k*(.38+.1*Math.sin(clock*9+p.x)+.06*Math.sin(clock*23+p.y))}}
@@ -7168,9 +7200,9 @@ let lastBuffs=null;
 function hud(){renderActiveHud();if(!S)return;drawMini(1/60);const left=S.endless?S.t:Math.max(0,(S.stage==='p1'?BREAK_AT:NIGHT)-S.t),m=Math.floor(left/60),s=Math.floor(left%60);
   let bBig=null,bCol=null,bAny=null;for(const e of S.enemies){if(e.rise>0)continue;const big=BIG.has(e.type);if(!(big||e.type==='glizzard'||e.type==='collector'||e.type==='boginka'))continue;if(!bAny)bAny=e;if(big&&!bBig)bBig=e;if(e.type==='collector'&&!bCol)bCol=e}
   const boss=bBig||bCol||bAny;
-  const key=`${pl.hp|0}|${pl.max}|${S.xp}|${S.need}|${S.lvl}|${m}:${s}|${S.kills}|${S.coins}|${boss?boss.hp|0:-1}|${S.stage}|${S.solne?(S.solne.bossDead?4:0)+(S.solne.open[0]?1:0)+(S.solne.open[1]?2:0):0}|${boss&&boss.stolen||0}|${S.merchant?S.merchant.wait|0:0}|${S.dg?(S.dg.done?2:1):0}`;
+  const key=`${pl.hp|0}|${pl.max}|${S.xp}|${S.need}|${S.lvl}|${m}:${s}|${S.kills}|${S.coins}|${boss?boss.hp|0:-1}|${S.stage}|${S.solne?(S.solne.bossDead?4:0)+(S.solne.open[0]?1:0)+(S.solne.open[1]?2:0):0}|${boss&&boss.stolen||0}|${S.merchant?S.merchant.wait|0:0}|${S.dg?(S.dg.done?2:1):0}|${S.inShop?Math.ceil(S.shopT):-1}`;
   if(key!==lastHud){lastHud=key;$('hp').style.width=$('hpg').style.width=(Math.max(0,pl.hp)/pl.max*100)+'%';$('hpbar').classList.toggle('low',pl.hp<pl.max*.3);$('hpbar').classList.toggle('q4',!!SETT.flash&&pl.hp>0&&pl.hp<=pl.max*.25);$('xp').style.width=Math.min(100,S.xp/S.need*100)+'%';$('lvlTag').innerHTML=(EN?`<i class="ic ic-wisp"></i>Level ${S.lvl}`:`<i class="ic ic-wisp"></i>Poziom ${S.lvl}`);
-    const mmss=`${m}:${String(s).padStart(2,'0')}`,tic=S.stage==='p1'||S.stage==='break'?'hourglass':S.stage==='p2'?'sun':'bossskull';$('time').innerHTML=`<i class="ic ic-${S.dg?'bossskull':tic}"></i>`+(S.dg?(S.dg.done?(EN?'Crypt cleansed':'Krypta oczyszczona'):(EN?'Crypt beneath the cemetery':'Krypta pod cmentarzem')):S.endless&&(S.stage==='p1'||S.stage==='p2')?(EN?`Endless night ${mmss}`:`Noc bez końca ${mmss}`):S.stage==='p1'?(EN?`Until midnight ${mmss}`:`Do północy ${mmss}`):S.stage==='break'?(EN?`Break · Marga's stall${S.merchant&&S.merchant.state==='here'?' '+Math.ceil(S.merchant.wait)+' s':''}`:`Przerwa · kram Margi${S.merchant&&S.merchant.state==='here'?' '+Math.ceil(S.merchant.wait)+' s':''}`):S.stage==='collector'?(CH===4&&A.leszy?(EN?'Leshy, Lord of the Wilds!':'Leszy, Pan Kniei!'):CH===5?(EN?'Arch-Judge Reckoner!':'Arcysędzia Rachmistrz!'):(EN?'Order Collector!':'Poborca Zakonu!')):S.stage==='final'?(CH===PORT?(S.solne&&S.solne.bossDead?(S.solne.open.every(Boolean)?(EN?'Board the ferry':'Wejdź na prom'):(EN?'Release the ferry chains':'Zwolnij łańcuchy promu')):(EN?'Defeat the Harbour Master':'Pokonaj Bosmana')):CH===3?(EN?'Defeat Morhad':'Pokonaj Morhada'):CH===4&&A.strzyga?(EN?'Defeat the Striga':'Pokonaj Strzygę'):CH===5?(EN?'Defeat the Creditor':'Pokonaj Wierzyciela'):CH===2&&A.cumlin?(EN?'Defeat Cumlin':'Pokonaj Cumlina'):(EN?'Defeat the Conjoined':'Pokonaj Zrosta')):(EN?`${CH===2?'Until the gates open':CH===PORT?'Until the ebb tide':'Until dawn'} ${mmss}`:`${CH===2?'Do otwarcia wrót':CH===PORT?'Do odpływu':'Do świtu'} ${mmss}`));$('kills').innerHTML=(EN?`<i class="ic ic-skull"></i>Kills: ${S.kills}`:`<i class="ic ic-skull"></i>Zabici: ${S.kills}`);$('coins').textContent=S.coins;
+    const mmss=`${m}:${String(s).padStart(2,'0')}`,tic=S.stage==='p1'||S.stage==='break'?'hourglass':S.stage==='p2'?'sun':'bossskull';$('time').innerHTML=`<i class="ic ic-${S.dg?'bossskull':tic}"></i>`+(S.dg?(S.dg.done?(EN?'Crypt cleansed':'Krypta oczyszczona'):(EN?'Crypt beneath the cemetery':'Krypta pod cmentarzem')):S.endless&&(S.stage==='p1'||S.stage==='p2')?(EN?`Endless night ${mmss}`:`Noc bez końca ${mmss}`):S.stage==='p1'&&S.inShop?(EN?`Marga's shop · clock stopped · ${Math.ceil(S.shopT)} s`:`Sklep Margi · zegar stoi · ${Math.ceil(S.shopT)} s`):S.stage==='p1'?(EN?`Until midnight ${mmss}`:`Do północy ${mmss}`):S.stage==='break'?(EN?`Break · Marga's stall${S.merchant&&S.merchant.state==='here'?' '+Math.ceil(S.merchant.wait)+' s':''}`:`Przerwa · kram Margi${S.merchant&&S.merchant.state==='here'?' '+Math.ceil(S.merchant.wait)+' s':''}`):S.stage==='collector'?(CH===4&&A.leszy?(EN?'Leshy, Lord of the Wilds!':'Leszy, Pan Kniei!'):CH===5?(EN?'Arch-Judge Reckoner!':'Arcysędzia Rachmistrz!'):(EN?'Order Collector!':'Poborca Zakonu!')):S.stage==='final'?(CH===PORT?(S.solne&&S.solne.bossDead?(S.solne.open.every(Boolean)?(EN?'Board the ferry':'Wejdź na prom'):(EN?'Release the ferry chains':'Zwolnij łańcuchy promu')):(EN?'Defeat the Harbour Master':'Pokonaj Bosmana')):CH===3?(EN?'Defeat Morhad':'Pokonaj Morhada'):CH===4&&A.strzyga?(EN?'Defeat the Striga':'Pokonaj Strzygę'):CH===5?(EN?'Defeat the Creditor':'Pokonaj Wierzyciela'):CH===2&&A.cumlin?(EN?'Defeat Cumlin':'Pokonaj Cumlina'):(EN?'Defeat the Conjoined':'Pokonaj Zrosta')):(EN?`${CH===2?'Until the gates open':CH===PORT?'Until the ebb tide':'Until dawn'} ${mmss}`:`${CH===2?'Do otwarcia wrót':CH===PORT?'Do odpływu':'Do świtu'} ${mmss}`));$('kills').innerHTML=(EN?`<i class="ic ic-skull"></i>Kills: ${S.kills}`:`<i class="ic ic-skull"></i>Zabici: ${S.kills}`);$('coins').textContent=S.coins;
     $('boss').hidden=!boss;if(boss){$('bossName').innerHTML='<i class="ic ic-bossskull"></i>'+(boss.type==='glizzard'?(EN?'Glizard, The Glizzy G-Lord':'Glizzard, Wielki Paruwiak'):boss.type==='collector'?(EN?`${CH===5?'Arch-Judge Reckoner':'Order Collector'} · stole ${boss.stolen} coins`:`${CH===5?'Arcysędzia Rachmistrz':'Poborca Zakonu'} · zabrał ${boss.stolen} monet`):boss.type==='beast'?(EN?'Morhad, Beast of a Thousand Slaughters':'Morhad, Bestia Tysiąca Rzezi'):boss.type==='leszy'?(EN?'Leshy, Lord of the Wilds':'Leszy, Pan Kniei'):boss.type==='strzyga'?(boss.phase===2?(EN?'Mother Striga · The Second Soul':'Strzyga Matka · druga dusza'):(EN?'Mother Striga, Queen of the Barrows':'Strzyga Matka, Królowa Kurhanów')):boss.type==='cumlin'?(EN?'Cumlin, the Possessed Dwarf King':'Cumlin, Opętany Król Krasnoludów'):boss.type==='boginka'?(EN?'The Lady of the Forest':'Pani Lasu'):boss.portBoss?(EN?'The Harbour Master, Lord of the Chains':'Bosman, Pan Łańcuchów'):CH===5?(EN?'The Creditor':'Wierzyciel'):(EN?'The Conjoined':'Zrost'));$('bossHp').style.width=Math.max(0,boss.hp/boss.max*100)+'%';$('bossPoise').style.width=Math.min(100,(boss.poise||0)/140*100)+'%';$('bossPoiseB').classList.toggle('brk',boss.stun>.3)}}
   const st=$('stam'),nseg=1;if(st.childElementCount!==nseg){st.innerHTML=('<div class="seg fb st"><span class="trk"><i></i></span><b class=\"l\"></b><b class=\"m\"></b><b class=\"r\"></b></div>').repeat(nseg)}
   setW(st,Math.min(100,pl.staMax/1.8)+'%');

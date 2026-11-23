@@ -923,7 +923,7 @@ function buildBrzeznica(I){
   for(const [x,y,t] of walls){if(inCh(x,y))continue;if(t===48)gH[(x*7+y*3)%4].push([x,y]);else gP[(x+y)&1].push([x,y])}
   if(CH_)chojrakChata(CH_);
   gP.forEach((list,i)=>{if(!list.length)return;const side=HD1?worldSurf(cutaway(phong({color:i?0xd4ccc4:0xc8c0b8})),I.wl_palisada,3,'a'):cutaway(phong({map:pal[i]}));depthWall(palGeo,side,1);instanced(palGeo,[side,side,capMat,capMat,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))});
-  const OS=nbParam('spalone')!=='0',margaR=(W.roofs||[]).reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null),inMarga=(x,y)=>margaR&&margaR.w/margaR.h>1.6&&x>=margaR.x&&x<margaR.x+margaR.w&&y>=margaR.y&&y<margaR.y+margaR.h;
+  const OS=nbParam('spalone')!=='0',margaR=(W.roofs||[]).find(r=>r.marga)||(W.roofs||[]).reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null),inMarga=(x,y)=>margaR&&(margaR.marga||margaR.w/margaR.h>1.6)&&x>=margaR.x&&x<margaR.x+margaR.w&&y>=margaR.y&&y<margaR.y+margaR.h;
   const houseCap=OS?worldSurfN(cutaway(phong({color:0xd8ccc0})),'t2_belka',1.4,1.8,3):I.p1_roof_burnt?worldSurf(cutaway(phong({color:0xffffff})),I.p1_roof_burnt,2.5,'a'):capMat;
   /* 23.11.2026: podmurowka z kamienia pod scianami domow (tekstura autora) */
   if(OS){const all=gH.flat();if(all.length){const fg=new THREE.BoxGeometry(1.08,.42,1.08);fg.translate(0,.21,0);instanced(fg,worldSurfN(cutaway(phong({color:0xe0d6cc})),'t4_podmurowka',2.2,1.9,3),all,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))}}
