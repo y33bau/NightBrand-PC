@@ -215,6 +215,8 @@ function genBrzeznica(){
 const CATH={x:24,y:14,w:16,h:10},PALACE={x:18,y:2,w:28,h:4},CHAPEL={x:8,y:41,w:5,h:4};
 const SHACKS=[[3,37,4,3],[15,37,3,3],[20,39,4,2],[24,36,3,3],[3,46,3,3],[15,44,3,3],[20,47,3,3],[24,42,3,2],[37,38,4,3],[44,37,3,3],[50,38,4,2],[56,37,4,3],[38,45,3,3],[45,44,4,3],[52,46,3,3],[57,43,3,3],[8,50,4,2],[47,50,4,2],[24,50,3,2],[54,51,4,2]];
 const HOUSES=[[3,3,7,6],[11,3,6,6],[3,12,7,6],[12,12,8,6],[3,22,7,6],[13,22,7,5],[47,3,6,6],[55,3,6,7]];
+// 23.11.2026 (autor: nowe moduly Zlotogrodu): [x,y,w,h,rodzaj,front] w kaflach generatora; front = strona ulicy (S/N/E/W). Bryly mozna przestawiac i obracac zmieniajac tylko ten wpis
+const ZL_NOWE=[[51,10,4,3,'wykusz','S'],[57,10,3,3,'podcien','S'],[13,19,5,3,'naroznik','S'],[3,32,5,3,'kaplica','E']];
 const DOMES=[[32,19,3.6,'c'],[26.5,15.6,1.4,'c'],[37.5,15.6,1.4,'c'],[14,6,1.7,'h'],[16,15,1.8,'h'],[6.5,25,1.7,'h'],[50,6,1.7,'h'],[10.5,43,1.6,'s'],[32,3.9,1.6,'p']];
 function genStolica(){
   const {map,under,PROPS,set,fill,prop,reserve,clearways}=mapKit(21,GONE_PROPS);const r=rng(4242);const at=(x,y)=>map[y*GW+x];
@@ -277,6 +279,10 @@ function genStolica(){
   prop('healing_shrine',41.5,28.92,[[41,28]],{shrine:0});prop('healing_shrine',13.5,45.92,[[13,45]],{shrine:1});
   // the city gate we came up through from the Lower City
   prop('gate',32,54.92,[[30,54],[31,54],[32,54],[33,54]],{sheet:'trans',still:'gate_open'});
+  // 23.11.2026: nowe kamienice i kaplica stawiane na koncu (bez wplywu na losowanie reszty miasta); rekwizyty z ich pola znikaja, podcien zostaje przechodni
+  if(nbParam('zlnowe')!=='0')for(const [x,y,w,h,k,f] of ZL_NOWE){const prev=[];for(let yy=y;yy<y+h;yy++)for(let xx=x;xx<x+w;xx++)prev.push([xx,yy,at(xx,yy)]);fill(x,y,w,h,58);
+    for(let i=PROPS.length-1;i>=0;i--){const q=PROPS[i];if(q.x>=x&&q.x<x+w&&q.y>=y&&q.y<y+h+.95)PROPS.splice(i,1)}
+    if(k==='podcien'){const row=[];for(const [xx,yy,t] of prev){const edge=f==='S'?yy===y+h-1:f==='N'?yy===y:f==='E'?xx===x+w-1:xx===x;const end=f==='S'||f==='N'?xx===x||xx===x+w-1:yy===y||yy===y+h-1;if(edge&&!end)set(xx,yy,t===58?50:t)}}}
   return{map,under,PROPS,clearways,gates:[[32*TS,24.5*TS],[32*TS,6.5*TS]],start:{x:32*TS,y:51*TS+8},shrines:[{x:41*TS+8,y:29*TS+12},{x:13*TS+8,y:46*TS+12}],
     region:(x,y)=>y>=35?'slums':x>=43&&y>=14&&y<=32?'monastery':'city',
     npcs:[{id:'izolda',art:'izolda',name:(EN?'Countess Isolda of Vermar':'Hrabina Izolda z Vermarów'),x:6.5*TS,y:18.4*TS,lines:IZOLDA_LINES},
