@@ -1607,7 +1607,7 @@ function worldSurf(mat,img,scale,kind){mat.map=wallTex(img);mat.emissiveMap=null
   mat.customProgramCacheKey=()=>'nbws'+kind+scale;return mat}
 /* 23.11.2026 (runda 869): tekstury Osady od autora (ChatGPT, kafelkujace) z mapa wypuklosci (normal mapa liczona z jasnosci).
    Mapowanie jak worldSurf (wspolrzedne swiata), dodatkowo normalna zaburzana z normal mapy: pekniecia, szpary i kamienie lapia swiatlo ognisk. */
-const OSADA_TX={"t1_bale":["assets/tekstury/2c9f35c7a538c56ee9432b84d1b60af0f9a83e316d8338da90c3ce1544726c6b.webp","assets/tekstury/671955c448fa17fd2c30bc2d772cf731adea2f49b7de3cd5092b0b8887d6456e.webp"],"t2_belka":["assets/tekstury/61145e2bd5289f172b6b854411e17f9f55b4ecbb7581cc5164877acc89cfd6d7.webp","assets/tekstury/1164aadb35207f12807844e563feb6bbc27963118e3ae40da45d98d6845c37b0.webp"],"t3_poszycie":["assets/tekstury/245b59670ba9eedeaf48bc550a55cd7b1a3e576e63f9a5bd1b7056f980404d35.webp","assets/tekstury/ac5e27500105480abf207e5c40c3fbe91efb712b6e1c13b5ac9b942160e061c0.webp"],"t4_podmurowka":["assets/tekstury/c79861c2e29ce1156c4a338b1d87c33f485c8823a125dd845b75a906447d0932.webp","assets/tekstury/410f4155525cd00e88e6e4fb97dcd27eaf8e28f55ae1b44887bcf0422213468a.webp"],"t5_podloga":["assets/tekstury/09e91cfa71e0096732d0c4d7147b66b057e1ba2c20f9314d49381f350e461830.webp","assets/tekstury/71bb24e31dcf2a92a59be53ca50f7466cdd70829aad9db5933ece155f692b90a.webp"],"t6_dachowka":["assets/tekstury/40b3642aff786b5a639c7eb54064c8ae4326e3194e99268ea8d2949151784e69.webp","assets/tekstury/cdc86566f8dcedd8bdda8103ba6fc00572d8f1019d0ec13d081b6816a1dd7636.webp"]};
+const OSADA_TX={"t1_bale":["assets/tekstury/2c9f35c7a538c56ee9432b84d1b60af0f9a83e316d8338da90c3ce1544726c6b.webp","assets/tekstury/671955c448fa17fd2c30bc2d772cf731adea2f49b7de3cd5092b0b8887d6456e.webp"],"t2_belka":["assets/tekstury/61145e2bd5289f172b6b854411e17f9f55b4ecbb7581cc5164877acc89cfd6d7.webp","assets/tekstury/1164aadb35207f12807844e563feb6bbc27963118e3ae40da45d98d6845c37b0.webp"],"t3_poszycie":["assets/tekstury/245b59670ba9eedeaf48bc550a55cd7b1a3e576e63f9a5bd1b7056f980404d35.webp","assets/tekstury/ac5e27500105480abf207e5c40c3fbe91efb712b6e1c13b5ac9b942160e061c0.webp"],"t4_podmurowka":["assets/tekstury/c79861c2e29ce1156c4a338b1d87c33f485c8823a125dd845b75a906447d0932.webp","assets/tekstury/410f4155525cd00e88e6e4fb97dcd27eaf8e28f55ae1b44887bcf0422213468a.webp"],"t5_podloga":["assets/tekstury/09e91cfa71e0096732d0c4d7147b66b057e1ba2c20f9314d49381f350e461830.webp","assets/tekstury/71bb24e31dcf2a92a59be53ca50f7466cdd70829aad9db5933ece155f692b90a.webp"],"t6_dachowka":["assets/tekstury/40b3642aff786b5a639c7eb54064c8ae4326e3194e99268ea8d2949151784e69.webp","assets/tekstury/cdc86566f8dcedd8bdda8103ba6fc00572d8f1019d0ec13d081b6816a1dd7636.webp"],"t3a_poszycie_lekkie":["assets/tekstury/5b9e69b90b867d56347f2437159eb3012f488c10c1d1a19a380c184449963423.webp","assets/tekstury/2823beea45c89ec5d192af74ddca0ce1f3794f6039f3537a4edfd4cbc6122890.webp"],"t3c_poszycie_ciezkie":["assets/tekstury/b0fb782c0d3c16f58b7ceaf448c897ceb825b790b1ca92934253409ebda6d1c2.webp","assets/tekstury/7ad30cf53fb77ab19782f97f1abb0575ecca1949539e19977d8d7c9e63528b8f.webp"]};
 const _otx=new Map();function osadaTex(u){let t=_otx.get(u);if(!t){t=new THREE.TextureLoader().load(u);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());_otx.set(u,t)}return t}
 function worldSurfN(mat,key,scale,str){const e=OSADA_TX[key];mat.map=osadaTex(e[0]);mat.emissiveMap=null;mat.bumpMap=null;const nt=osadaTex(e[1]),prev=mat.onBeforeCompile,sc=scale.toFixed(2),st=(str||1).toFixed(2);
   mat.onBeforeCompile=sh=>{if(prev)prev.call(mat,sh);sh.uniforms.uNrm={value:nt};
@@ -1885,17 +1885,16 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
   const P=(a,u,y,v,su,sy,sv,rU,rY,rV)=>alongX?put(a,box,cx+u,y,cz+v,su,sy,sv,rV||0,rY||0,rU||0):put(a,box,cx+v,y,cz+u,sv,sy,su,rU||0,rY||0,-(rV||0));
   const roof=acc(),wood_=acc();
   // kalenica (czasem przelamana) i platwie na scianach
-  const ridgeBreak=!marga&&rnd()<.45?(rnd()-.5)*L*.5:null;
+  const ridgeBreak=null,burn=marga?'t6_dachowka':['t3a_poszycie_lekkie','t3_poszycie','t3c_poszycie_ciezkie'][Math.floor(rnd()*3)];
   if(ridgeBreak===null)P(wood_,0,eave+rise,0,L+.5,.24,.24);else{const a=(L+.5)/2+ridgeBreak;P(wood_,-(L+.5)/2+a/2,eave+rise,0,a-.3,.24,.24);P(wood_,(L+.5)/2-((L+.5)-a)/2+.2,eave+rise-.45,0,(L+.5)-a-.6,.22,.22,0,0,.0)}
   for(const s of [-1,1])P(wood_,0,eave+.08,s*(D/2-.15),L+.3,.2,.26);
   // krokwie co ok. 1.15, czesc brakuje, czesc skrocona
-  const n=Math.max(3,Math.round(L/1.15));for(let i=0;i<=n;i++){const u=-L/2+.2+i*(L-.4)/n;for(const s of [-1,1]){const k=marga?1:rnd();if(k<.22)continue;const len=k<.4?sl*(.45+rnd()*.3):sl,mid=len/2;
+  const n=Math.max(3,Math.round(L/1.15));for(let i=0;i<=n;i++){const u=-L/2+.2+i*(L-.4)/n;for(const s of [-1,1]){const k=marga?1:rnd();if(k<.08)continue;const len=sl,mid=len/2;
     // od okapu w gore
     const vy=eave+Math.sin(slope)*mid,vv=s*(half-Math.cos(slope)*mid);P(wood_,u,vy,vv,.17,.17,len,0,0,s*slope)}}
   // resztki poszycia: odcinki wzdluz kalenicy, na obu polaciach osobno, ok. 40% zostaje (przy szczytach czesciej)
-  const seg=Math.max(2,Math.round(L/2.2));for(let i=0;i<seg;i++){const u0=-L/2-.25+i*(L+.5)/seg,ul=(L+.5)/seg,edge=i===0||i===seg-1;
-   for(const s of [-1,1]){if(!marga&&rnd()>(edge?.55:.28))continue;const part=marga?1:.45+rnd()*.55,len=sl*part,mid=sl-len/2;// od kalenicy w dol
-    const vy=eave+Math.sin(slope)*(sl-mid)+.1,vv=s*(half-Math.cos(slope)*(sl-mid));P(roof,u0+ul/2,vy,vv,marga?ul*1.03:ul*(.8+rnd()*.15),.05,len,0,0,s*slope)}}
+  /* 23.11.2026 (autor): pelne polacie bez przerw; dziury tylko z tekstury wypalonych gontow (lekko/srednio/mocno spalone) */
+  for(const s of [-1,1]){const mid=sl/2,vy=eave+Math.sin(slope)*mid+.1,vv=s*(half-Math.cos(slope)*mid);P(roof,0,vy,vv,L+.5,.05,sl,0,0,s*slope)}
   // zawalone belki w srodku
   if(!marga)for(let i=0;i<2+(rnd()<.5?1:0);i++){const len=1.6+rnd()*2.2,u=(rnd()-.5)*(L-2.5),v=(rnd()-.5)*(D-2.5);P(wood_,u,.22+rnd()*.25,v,len,.2,.2,0,(rnd()-.5)*2.4,(rnd()-.5)*.35)}
   // podloga z desek pod popiolem (wnetrze bez scian)
@@ -1905,7 +1904,7 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
   for(const yy of [r.y,r.y+r.h-1]){let a=-1;for(let x=r.x;x<=r.x+r.w;x++){const open=x<r.x+r.w&&!wall.has(yy*MW+x)&&wall.has(yy*MW+r.x)===true||false;const isOpen=x<r.x+r.w&&!wall.has(yy*MW+x);
     if(isOpen&&a<0)a=x;if((!isOpen||x===r.x+r.w)&&a>=0){const b=x;if(b-a>=2&&b-a<=6&&a>r.x&&b<r.x+r.w){const zz=yy+.5;for(const xx of [a,b])put(posts,box,xx,1.05,zz,.26,2.1,.32);if(rnd()<.7)put(posts,box,(a+b)/2,2.05,zz,b-a+.5,.24,.3)}a=-1}}}
   const fadeR=phong({color:0xffffff,transparent:true,opacity:1,side:THREE.DoubleSide,alphaTest:marga?0:.5});
-  const roofM=NT?worldSurfN(fadeR,marga?'t6_dachowka':'t3_poszycie',marga?2.2:2.6,1.2):worldSurf(fadeR,wood,.9,'a');roofM.color.setHex(NT?(marga?0xf0e4dc:0xfff4ec):0x9a8474);/* poszycie: gonty z dziurami, dom Margi: dachowka */
+  const roofM=NT?worldSurfN(fadeR,burn,marga?2.6:3.6,1.2):worldSurf(fadeR,wood,.9,'a');roofM.color.setHex(NT?(marga?0xf0e4dc:0xfff4ec):0x9a8474);/* poszycie: gonty z dziurami, dom Margi: dachowka */
   const woodM=NT?worldSurfN(phong({color:0xe8dcd0,transparent:true,opacity:1}),'t2_belka',1.3,1.2):worldSurf(phong({color:0x8c7868,transparent:true,opacity:1}),wood,1.3,'a');
   const g=new THREE.Group();g.add(mesh(wood_,woodM));if(roof.p.length)g.add(mesh(roof,roofM));w.group.add(g);
   r.mats=[woodM,roofM];r.mesh=g;r.a=1}

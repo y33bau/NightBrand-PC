@@ -182,17 +182,16 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
   const P=(a,u,y,v,su,sy,sv,rU,rY,rV)=>alongX?put(a,box,cx+u,y,cz+v,su,sy,sv,rV||0,rY||0,rU||0):put(a,box,cx+v,y,cz+u,sv,sy,su,rU||0,rY||0,-(rV||0));
   const roof=acc(),wood_=acc();
   // kalenica (czasem przelamana) i platwie na scianach
-  const ridgeBreak=!marga&&rnd()<.45?(rnd()-.5)*L*.5:null;
+  const ridgeBreak=null,burn=marga?'t6_dachowka':['t3a_poszycie_lekkie','t3_poszycie','t3c_poszycie_ciezkie'][Math.floor(rnd()*3)];
   if(ridgeBreak===null)P(wood_,0,eave+rise,0,L+.5,.24,.24);else{const a=(L+.5)/2+ridgeBreak;P(wood_,-(L+.5)/2+a/2,eave+rise,0,a-.3,.24,.24);P(wood_,(L+.5)/2-((L+.5)-a)/2+.2,eave+rise-.45,0,(L+.5)-a-.6,.22,.22,0,0,.0)}
   for(const s of [-1,1])P(wood_,0,eave+.08,s*(D/2-.15),L+.3,.2,.26);
   // krokwie co ok. 1.15, czesc brakuje, czesc skrocona
-  const n=Math.max(3,Math.round(L/1.15));for(let i=0;i<=n;i++){const u=-L/2+.2+i*(L-.4)/n;for(const s of [-1,1]){const k=marga?1:rnd();if(k<.22)continue;const len=k<.4?sl*(.45+rnd()*.3):sl,mid=len/2;
+  const n=Math.max(3,Math.round(L/1.15));for(let i=0;i<=n;i++){const u=-L/2+.2+i*(L-.4)/n;for(const s of [-1,1]){const k=marga?1:rnd();if(k<.08)continue;const len=sl,mid=len/2;
     // od okapu w gore
     const vy=eave+Math.sin(slope)*mid,vv=s*(half-Math.cos(slope)*mid);P(wood_,u,vy,vv,.17,.17,len,0,0,s*slope)}}
   // resztki poszycia: odcinki wzdluz kalenicy, na obu polaciach osobno, ok. 40% zostaje (przy szczytach czesciej)
-  const seg=Math.max(2,Math.round(L/2.2));for(let i=0;i<seg;i++){const u0=-L/2-.25+i*(L+.5)/seg,ul=(L+.5)/seg,edge=i===0||i===seg-1;
-   for(const s of [-1,1]){if(!marga&&rnd()>(edge?.55:.28))continue;const part=marga?1:.45+rnd()*.55,len=sl*part,mid=sl-len/2;// od kalenicy w dol
-    const vy=eave+Math.sin(slope)*(sl-mid)+.1,vv=s*(half-Math.cos(slope)*(sl-mid));P(roof,u0+ul/2,vy,vv,marga?ul*1.03:ul*(.8+rnd()*.15),.05,len,0,0,s*slope)}}
+  /* 23.11.2026 (autor): pelne polacie bez przerw; dziury tylko z tekstury wypalonych gontow (lekko/srednio/mocno spalone) */
+  for(const s of [-1,1]){const mid=sl/2,vy=eave+Math.sin(slope)*mid+.1,vv=s*(half-Math.cos(slope)*mid);P(roof,0,vy,vv,L+.5,.05,sl,0,0,s*slope)}
   // zawalone belki w srodku
   if(!marga)for(let i=0;i<2+(rnd()<.5?1:0);i++){const len=1.6+rnd()*2.2,u=(rnd()-.5)*(L-2.5),v=(rnd()-.5)*(D-2.5);P(wood_,u,.22+rnd()*.25,v,len,.2,.2,0,(rnd()-.5)*2.4,(rnd()-.5)*.35)}
   // podloga z desek pod popiolem (wnetrze bez scian)
@@ -202,7 +201,7 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
   for(const yy of [r.y,r.y+r.h-1]){let a=-1;for(let x=r.x;x<=r.x+r.w;x++){const open=x<r.x+r.w&&!wall.has(yy*MW+x)&&wall.has(yy*MW+r.x)===true||false;const isOpen=x<r.x+r.w&&!wall.has(yy*MW+x);
     if(isOpen&&a<0)a=x;if((!isOpen||x===r.x+r.w)&&a>=0){const b=x;if(b-a>=2&&b-a<=6&&a>r.x&&b<r.x+r.w){const zz=yy+.5;for(const xx of [a,b])put(posts,box,xx,1.05,zz,.26,2.1,.32);if(rnd()<.7)put(posts,box,(a+b)/2,2.05,zz,b-a+.5,.24,.3)}a=-1}}}
   const fadeR=phong({color:0xffffff,transparent:true,opacity:1,side:THREE.DoubleSide,alphaTest:marga?0:.5});
-  const roofM=NT?worldSurfN(fadeR,marga?'t6_dachowka':'t3_poszycie',marga?2.2:2.6,1.2):worldSurf(fadeR,wood,.9,'a');roofM.color.setHex(NT?(marga?0xf0e4dc:0xfff4ec):0x9a8474);/* poszycie: gonty z dziurami, dom Margi: dachowka */
+  const roofM=NT?worldSurfN(fadeR,burn,marga?2.6:3.6,1.2):worldSurf(fadeR,wood,.9,'a');roofM.color.setHex(NT?(marga?0xf0e4dc:0xfff4ec):0x9a8474);/* poszycie: gonty z dziurami, dom Margi: dachowka */
   const woodM=NT?worldSurfN(phong({color:0xe8dcd0,transparent:true,opacity:1}),'t2_belka',1.3,1.2):worldSurf(phong({color:0x8c7868,transparent:true,opacity:1}),wood,1.3,'a');
   const g=new THREE.Group();g.add(mesh(wood_,woodM));if(roof.p.length)g.add(mesh(roof,roofM));w.group.add(g);
   r.mats=[woodM,roofM];r.mesh=g;r.a=1}

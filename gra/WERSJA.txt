@@ -942,3 +942,4 @@ cache866 · Goscie z innych rozdzialow w falach (I: obłąkani, krasnoludy; II: 
 cache867 · Modele 3D (TripoSG, MIT) z teksturami z malunkow: 4 domy portu (szopy, kantor, karczma), 8 spalonych domow Osady i dom Margi, 15 rekwizytow portu; waskie wycinanie scian przed bohaterem; propFoot odporny na brak obrazka. Nie sprawdzono: FPS u autora, pad, itch.io, walka przy domach
 cache868 · Osada: domy z modeli wycofane, spalone domy z kodu (wiezba, resztki poszycia, slupy, rama drzwi, zawalone belki, nierowne korony scian); port z modelami bez zmian. Nie sprawdzono: FPS u autora, pad, itch.io
 cache869 · Osada: tekstury autora (bale, belki, gonty z dziurami, podmurowka, podloga z popiolem, dachowka Margi) z mapami wypuklosci; korony scian nierowne, dom Margi caly. Nie sprawdzono: FPS u autora, pad, itch.io
+cache870 · Osada: pelne dachy bez przerw, dziury tylko z tekstur wypalonych gontow (lekkie/srednie/ciezkie). Nie sprawdzono: FPS u autora, pad, itch.io
