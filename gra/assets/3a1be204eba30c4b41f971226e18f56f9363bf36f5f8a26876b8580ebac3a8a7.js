@@ -1617,13 +1617,24 @@ function worldSurf(mat,img,scale,kind){mat.map=wallTex(img);mat.emissiveMap=null
    Mapowanie jak worldSurf (wspolrzedne swiata), dodatkowo normalna zaburzana z normal mapy: pekniecia, szpary i kamienie lapia swiatlo ognisk. */
 const OSADA_TX={"t1_bale":["assets/tekstury/2c9f35c7a538c56ee9432b84d1b60af0f9a83e316d8338da90c3ce1544726c6b.webp","assets/tekstury/671955c448fa17fd2c30bc2d772cf731adea2f49b7de3cd5092b0b8887d6456e.webp"],"t2_belka":["assets/tekstury/61145e2bd5289f172b6b854411e17f9f55b4ecbb7581cc5164877acc89cfd6d7.webp","assets/tekstury/1164aadb35207f12807844e563feb6bbc27963118e3ae40da45d98d6845c37b0.webp"],"t3_poszycie":["assets/tekstury/245b59670ba9eedeaf48bc550a55cd7b1a3e576e63f9a5bd1b7056f980404d35.webp","assets/tekstury/ac5e27500105480abf207e5c40c3fbe91efb712b6e1c13b5ac9b942160e061c0.webp"],"t4_podmurowka":["assets/tekstury/c79861c2e29ce1156c4a338b1d87c33f485c8823a125dd845b75a906447d0932.webp","assets/tekstury/410f4155525cd00e88e6e4fb97dcd27eaf8e28f55ae1b44887bcf0422213468a.webp"],"t5_podloga":["assets/tekstury/09e91cfa71e0096732d0c4d7147b66b057e1ba2c20f9314d49381f350e461830.webp","assets/tekstury/71bb24e31dcf2a92a59be53ca50f7466cdd70829aad9db5933ece155f692b90a.webp"],"t6_dachowka":["assets/tekstury/40b3642aff786b5a639c7eb54064c8ae4326e3194e99268ea8d2949151784e69.webp","assets/tekstury/cdc86566f8dcedd8bdda8103ba6fc00572d8f1019d0ec13d081b6816a1dd7636.webp"],"t3a_poszycie_lekkie":["assets/tekstury/5b9e69b90b867d56347f2437159eb3012f488c10c1d1a19a380c184449963423.webp","assets/tekstury/2823beea45c89ec5d192af74ddca0ce1f3794f6039f3537a4edfd4cbc6122890.webp"],"t3c_poszycie_ciezkie":["assets/tekstury/b0fb782c0d3c16f58b7ceaf448c897ceb825b790b1ca92934253409ebda6d1c2.webp","assets/tekstury/7ad30cf53fb77ab19782f97f1abb0575ecca1949539e19977d8d7c9e63528b8f.webp"],"tcz1_drewno_palisady":["assets/tekstury/9b41870e5032671be40144db82b792f22205da5b9a74b5ccaff865694fe12e19.webp","assets/tekstury/6061108918eca3263881324870c5c00ef7f45bf11dab980ffcd3f85e62d9c4d2.webp"],"tgm1_tynk_wapienny":["assets/tekstury/211af41efbe9c0b23966ab0fc8c58f6af09bff3ab786a7d5a4e2584442785f7e.webp","assets/tekstury/d17e8107c454daa95d86724b44cc1ada2f4de6c71cbc84e485fa860d72437479.webp"],"tgm2_mur_kamienny":["assets/tekstury/5ab51e7294be03c817f75bcf93199aa6ca9b5fbc1f0e4320e3df9993385a99c0.webp","assets/tekstury/66b1ce18df037ed1a4cc2883656b412a042403496453b39e4450e038acc817a6.webp"],"tgm3_dachowka_gliniana":["assets/tekstury/b16c5d1404d0699ef45ee4414d187dbfc4eb4145922b582723049eca1dcbe8d6.webp","assets/tekstury/cbc0dae1fc68a97f1ee250f09ebcc1c5ffd8717d646011e11c88a7b3c6996c19.webp"],"tsn1_dab_portowy":["assets/tekstury/46c85357ff65b766656c86fcacbe024cf51847c60bea72f92aa96a14c8f0c6bb.webp","assets/tekstury/c916dd38b13aa4ad49e3f7f5b332fc0e156011a55634df0bc207f294e328147b.webp"],"tsn2_konopie_skrecane":["assets/tekstury/e5b65659baddcd9bd9b8c144025fc2b4e1560733313dc7e358a136f54db93539.webp","assets/tekstury/b9d76a6bc85d970e965ffca6954b8fe744bcea4330ffbad477f0d40d1bae0025.webp"],"tzl1_miedz_patynowana":["assets/tekstury/e90a41bcd72bda689d13a067144be316926a08c533bade809d0ccc8049fccbde.webp","assets/tekstury/f41dccb4e88d08c168a2c595ed222a9dff285024b6545fbc34c37f8c4e1d11d0.webp"],"tzl2_zloto_patynowane":["assets/tekstury/c184e695619b5db0317b2a9b9a432bf0d0c717856ddc4a0c8fb2de91c5c7b923.webp","assets/tekstury/62a243b85573ac182e890deef093f4dce5903fa342f76c9d2aa116bab0fc3292.webp"],"m_buda":["assets/rekwizyty/dce3205f6f0b13cc61f03fe22cf84c19970c1e57e99164ea0e030b6e1aad9eea.webp","assets/tekstury/40978edb95bc8804dfe6996592574356a18b2e8dab450ec6fccd4be50d03aeb6.webp"]};
 const _otx=new Map();function osadaTex(u){let t=_otx.get(u);if(!t){t=new THREE.TextureLoader().load(u);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());_otx.set(u,t)}return t}
-function worldSurfN(mat,key,scale,str){const e=OSADA_TX[key];mat.map=osadaTex(e[0]);mat.emissiveMap=null;mat.bumpMap=null;const nt=osadaTex(e[1]),prev=mat.onBeforeCompile,sc=scale.toFixed(2),st=(str||1).toFixed(2);
+/* 23.11.2026 (autor: "zeby byly w stylu gry, a nie jak surowe bryly"): patyna liczona z polozenia w swiecie, bez powtorzen kafla.
+   wk: 0 bez, 1 miasto (przebarwienia, zacieki, brud przy ziemi), 2 port/wies (+ mech, mocniejszy brud), 3 spalone (+ sadza ku gorze). */
+const NB_WEATHER='float nbH(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}float nbN(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(nbH(i),nbH(i+vec2(1.,0.)),f.x),mix(nbH(i+vec2(0.,1.)),nbH(i+vec2(1.,1.)),f.x),f.y);}float nbF(vec2 p){return nbN(p)*.55+nbN(p*2.13+3.1)*.3+nbN(p*4.7+7.7)*.15;}';
+const nbWeather=wk=>wk?`{float wk=${wk.toFixed(1)};bool wall=abs(nW0.y)<.5;float al=abs(nW0.x)>.5?vWW.z:vWW.x;vec3 c=diffuseColor.rgb;float lum=dot(c,vec3(.3,.59,.11));
+ float bl=nbF(vWW.xz*.33+vec2(vWW.y*.21,0.));c*=mix(.72,1.12,bl);c=mix(c,vec3(lum)*vec3(1.04,1.,.92),.18);
+ if(wall){float st=nbN(vec2(al*2.7,vWW.y*.18+nbN(vec2(al*.5,0.))*2.));float sk=smoothstep(.5,.9,st)*(.55+.45*nbN(vec2(al*.9,vWW.y*.6)));c*=1.-.42*sk;
+  float gh=1.4+.8*nbN(vec2(al*.7,3.))+(wk>1.5?.4:0.);float g=1.-smoothstep(0.,gh,vWW.y);c=mix(c,c*vec3(.58,.55,.47),g*(.55+.2*wk));
+  if(wk>1.5){float ms=smoothstep(.5,.85,nbF(vec2(al*.8,vWW.y*.9)))*(1.-smoothstep(.2,1.4,vWW.y));c=mix(c,vec3(.24,.3,.17)*(.6+lum),ms*.55);}
+  if(wk>2.5){float so=smoothstep(.7,2.4,vWW.y)*(.45+.55*nbF(vec2(al*1.3,vWW.y*.8)));c=mix(c,c*vec3(.22,.2,.19),so*.8);}}
+ else{float ms=smoothstep(.55,.85,nbF(vWW.xz*.45));c=mix(c,c*vec3(.62,.66,.48),ms*(.25+.12*wk));if(wk>2.5)c=mix(c,c*vec3(.35,.32,.3),nbF(vWW.xz*.8)*.5);}
+ diffuseColor.rgb=c;}`:'';
+function worldSurfN(mat,key,scale,str,wk){const e=OSADA_TX[key];wk=wk||0;mat.map=osadaTex(e[0]);mat.emissiveMap=null;mat.bumpMap=null;const nt=osadaTex(e[1]),prev=mat.onBeforeCompile,sc=scale.toFixed(2),st=(str||1).toFixed(2);
   mat.onBeforeCompile=sh=>{if(prev)prev.call(mat,sh);sh.uniforms.uNrm={value:nt};
     sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWW;varying vec3 vWN;').replace('#include <project_vertex>','#include <project_vertex>\nvec4 wwp=vec4(transformed,1.0);\n#ifdef USE_INSTANCING\nwwp=instanceMatrix*wwp;\n#endif\nvWW=(modelMatrix*wwp).xyz;vWN=normalize(mat3(modelMatrix)*objectNormal);');
-    sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vWW;varying vec3 vWN;uniform sampler2D uNrm;')
-     .replace('#include <map_fragment>','vec3 nW0=normalize(vWN);vec2 wuv=abs(nW0.y)>.5?vWW.xz:(abs(nW0.x)>.5?vec2(vWW.z,vWW.y):vec2(vWW.x,vWW.y));wuv/='+sc+';vec4 sampledDiffuseColor=texture2D(map,wuv);diffuseColor*=sampledDiffuseColor;')
+    sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vWW;varying vec3 vWN;uniform sampler2D uNrm;'+(wk?NB_WEATHER:''))
+     .replace('#include <map_fragment>','vec3 nW0=normalize(vWN);vec2 wuv=abs(nW0.y)>.5?vWW.xz:(abs(nW0.x)>.5?vec2(vWW.z,vWW.y):vec2(vWW.x,vWW.y));wuv/='+sc+';vec4 sampledDiffuseColor=texture2D(map,wuv);diffuseColor*=sampledDiffuseColor;'+nbWeather(wk))
      .replace('#include <normal_fragment_maps>','#include <normal_fragment_maps>\n{vec3 T,B;if(abs(nW0.y)>.5){T=vec3(1.,0.,0.);B=vec3(0.,0.,-sign(nW0.y));}else if(abs(nW0.x)>.5){T=vec3(0.,0.,-sign(nW0.x));B=vec3(0.,1.,0.);}else{T=vec3(sign(nW0.z),0.,0.);B=vec3(0.,1.,0.);}vec3 tn=texture2D(uNrm,wuv).xyz*2.-1.;tn.xy*='+st+';vec3 pw=normalize(T*tn.x+B*tn.y+nW0*max(tn.z,.2));normal=normalize((viewMatrix*vec4(pw,0.)).xyz);}')};
-  mat.customProgramCacheKey=()=>'nbwsn'+sc+st+(prev?'c'+String(prev).length:'');return mat}
+  mat.customProgramCacheKey=()=>'nbwsn'+sc+st+'w'+wk+(prev?'c'+String(prev).length:'');return mat}
 const M4=new THREE.Matrix4(),Q=new THREE.Quaternion(),V=new THREE.Vector3(),SC=new THREE.Vector3(1,1,1),UP=new THREE.Vector3(0,1,0);
 let ROOT=scene;
 function instanced(geo,mat,list,fn,cast=true,recv=true){const im=new THREE.InstancedMesh(geo,mat,Math.max(1,list.length));list.forEach((p,i)=>{fn(p);im.setMatrixAt(i,M4)});im.count=list.length;im.castShadow=cast;im.receiveShadow=recv;ROOT.add(im);return im}
@@ -1901,7 +1912,8 @@ function margaShop(r,wall,put,box,acc,mesh){
  put(A.bone,sph,sx,sy+.04,zp+.07,.17,.17,.1);put(A.dark,box,sx-.04,sy+.05,zp+.12,.04,.04,.02);put(A.dark,box,sx+.04,sy+.05,zp+.12,.04,.04,.02);
  for(const a of [.7,-.7])put(A.bone,cyl,sx,sy-.06,zp+.06,.025,.42,.025,0,0,a);
  // lada za wejsciem z towarem
- const zc=z0-1.25,cl=span-.8;put(A.wood,box,cx,.42,zc,cl,.84,.5);put(A.dark,box,cx,.87,zc,cl+.14,.06,.62);
+ const zc=z0-2.7,cl=Math.min(span+1,r.w-6);put(A.wood,box,cx,.42,zc,cl,.84,.5);put(A.dark,box,cx,.87,zc,cl+.14,.06,.62);/* lada w glebi izby, z bocznymi ramionami do tylu */
+ for(const sx of [-1,1]){put(A.wood,box,cx+sx*(cl/2-.25),.42,zc-.7,.5,.84,.9);put(A.dark,box,cx+sx*(cl/2-.25),.87,zc-.7,.62,.06,1.02)}
  const goods=(px,pz,y,k)=>{if(k===0){put(A.bone,sph,px,y+.1,pz,.2,.18,.18);put(A.bone,box,px,y+.03,pz+.05,.1,.06,.08)}
   else if(k===1){put(A.glass,cyl,px,y+.13,pz,.14,.26,.14);put(A.dark,cyl,px,y+.28,pz,.09,.05,.09)}
   else if(k===2){put(A.glassR,sph,px,y+.08,pz,.15,.15,.15);put(A.dark,cyl,px,y+.18,pz,.04,.08,.04)}
@@ -1925,7 +1937,7 @@ function margaShop(r,wall,put,box,acc,mesh){
  for(const key in A)if(A[key].p.length)mesh(A[key],mats[key])}
 function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[2]===48).map(([x,y])=>y*MW+x));
  const wood=BURNT_TEX.beam||IMGS.wl_palecap||IMGS.wl_chata,roofIm=BURNT_TEX.roof||IMGS.p1_roof_burnt||IMGS.wl_chata;
- const NT=typeof OSADA_TX!=='undefined',postM=NT?worldSurfN(cutaway(phong({color:0xe8dcd0})),'t2_belka',1.3,1.2):worldSurf(cutaway(phong({color:0x8c7868})),wood,1.3,'a');
+ const NT=typeof OSADA_TX!=='undefined',postM=NT?worldSurfN(cutaway(phong({color:0xe8dcd0})),'t2_belka',1.3,1.9,3):worldSurf(cutaway(phong({color:0x8c7868})),wood,1.3,'a');
  const box=new THREE.BoxGeometry(1,1,1).toNonIndexed(),M=new THREE.Matrix4(),Q=new THREE.Quaternion(),E=new THREE.Euler(),Vs=new THREE.Vector3(),Vp=new THREE.Vector3();
  const acc=()=>({p:[],n:[]}),put=(a,geo,px,py,pz,sx,sy,sz,rx,ry,rz)=>{E.set(rx||0,ry||0,rz||0);Q.setFromEuler(E);M.compose(Vp.set(px,py,pz),Q,Vs.set(sx,sy,sz));
    const g=geo.clone().applyMatrix4(M),P=g.attributes.position.array,N=g.attributes.normal.array;for(let i=0;i<P.length;i++){a.p.push(P[i]);a.n.push(N[i])}g.dispose()};
@@ -1933,7 +1945,7 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
  const holes=acc(),glow=acc(),chim=acc(),cyl=new THREE.CylinderGeometry(.5,.5,1,8).toNonIndexed(),posts=acc(),floors=acc(),margaR=rs.reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null);
  for(const r of rs){if(r.chata)continue;const h=(i=>{const x=Math.sin((r.x*12.9898+r.y*78.233+i*37.7))*43758.5453;return x-Math.floor(x)});let hi=0;const rnd=()=>h(hi++);
   const marga=r===margaR&&r.w/r.h>1.6;
-  const alongX=r.w>=r.h,L=alongX?r.w:r.h,D=alongX?r.h:r.w,cx=r.x+r.w/2,cz=r.y+r.h/2,eave=1.9,rise=Math.min(2.3,D*.34),ov=.35,half=D/2+ov,slope=Math.atan2(rise,half),sl=Math.hypot(half,rise);
+  const alongX=r.w>=r.h,L=alongX?r.w:r.h,D=alongX?r.h:r.w,cx=r.x+r.w/2,cz=r.y+r.h/2,eave=NT&&nbParam('osada2')!=='0'?2.4:1.9,rise=Math.min(2.3,D*.34),ov=.35,half=D/2+ov,slope=Math.atan2(rise,half),sl=Math.hypot(half,rise);
   // dla osi wzdluz Z zamieniamy x<->z przy skladaniu
   const P=(a,u,y,v,su,sy,sv,rU,rY,rV)=>alongX?put(a,box,cx+u,y,cz+v,su,sy,sv,rV||0,rY||0,rU||0):put(a,box,cx+v,y,cz+u,sv,sy,su,rU||0,rY||0,-(rV||0));
   const roof=acc(),wood_=acc();
@@ -1953,28 +1965,28 @@ function burntHouses(w){const rs=w.roofs,wall=new Set((w.walls||[]).filter(t=>t[
   // podloga z desek pod popiolem (wnetrze bez scian)
   if(NT&&!marga)put(floors,box,cx,.012,cz,r.w-2,.02,r.h-2);
   // slupy narozne (wyzsze od scian, zweglone szczyty) i rama drzwi
-  for(const [ux,vz] of [[-1,-1],[1,-1],[-1,1],[1,1]])P(posts,ux*(L/2-.2),1.15+rnd()*.15,vz*(D/2-.2),.34,2.3+rnd()*.3,.34);
+  for(const [ux,vz] of [[-1,-1],[1,-1],[-1,1],[1,1]])P(posts,ux*(L/2-.2),(eave+.4)/2+rnd()*.15,vz*(D/2-.2),.34,eave+.4+rnd()*.3,.34);
   for(const yy of [r.y,r.y+r.h-1]){let a=-1;for(let x=r.x;x<=r.x+r.w;x++){const open=x<r.x+r.w&&!wall.has(yy*MW+x)&&wall.has(yy*MW+r.x)===true||false;const isOpen=x<r.x+r.w&&!wall.has(yy*MW+x);
-    if(isOpen&&a<0)a=x;if((!isOpen||x===r.x+r.w)&&a>=0){const b=x;if(b-a>=2&&b-a<=6&&a>r.x&&b<r.x+r.w){const zz=yy+.5;for(const xx of [a,b])put(posts,box,xx,1.05,zz,.26,2.1,.32);if(rnd()<.7)put(posts,box,(a+b)/2,2.05,zz,b-a+.5,.24,.3)}a=-1}}}
+    if(isOpen&&a<0)a=x;if((!isOpen||x===r.x+r.w)&&a>=0){const b=x;if(b-a>=2&&b-a<=6&&a>r.x&&b<r.x+r.w){const zz=yy+.5;for(const xx of [a,b])put(posts,box,xx,(eave-.3)/2,zz,.26,eave-.3,.32);if(rnd()<.7)put(posts,box,(a+b)/2,eave-.35,zz,b-a+.5,.24,.3)}a=-1}}}
   /* 23.11.2026 (autor: domy Osady w nowym standardzie): okna z ramami i okiennicami w pelnych odcinkach scian, wystajace konce bali na narozach, murowane kominy */
-  if(NT&&nbParam('osada2')!=='0'){const full=(x,y)=>{if(marga)return true;const k=Math.sin(x*12.9898+y*78.233)*43758.5453,f=k-Math.floor(k);return f>=.38};
+  if(NT&&nbParam('osada2')!=='0'){const full=(x,y)=>{if(marga)return true;const k=Math.sin(x*12.9898+y*78.233)*43758.5453,f=k-Math.floor(k);return f>=(eave>2?.25:.38)};
    const sides=[{n:r.w,at:i=>[r.x+i,r.y],face:(i)=>[r.x+i+.5,r.y-.03],ry:0,out:-1},{n:r.w,at:i=>[r.x+i,r.y+r.h-1],face:i=>[r.x+i+.5,r.y+r.h+.03],ry:0,out:1},
     {n:r.h,at:i=>[r.x,r.y+i],face:i=>[r.x-.03,r.y+i+.5],ry:Math.PI/2,out:-1},{n:r.h,at:i=>[r.x+r.w-1,r.y+i],face:i=>[r.x+r.w+.03,r.y+i+.5],ry:Math.PI/2,out:1}];
    for(const S of sides){let run=0;for(let i=2;i<S.n-2;i++){const [tx,ty]=S.at(i),ok=wall.has(ty*MW+tx)&&full(tx,ty);run=ok?run+1:0;if(!ok||run%3!==2)continue;
-     const [px,pz]=S.face(i),a=S.ry,ax=Math.cos(a),az=-Math.sin(a),o=S.out,ox=S.ry?o:0,oz=S.ry?0:o,y=1.18;
+     const [px,pz]=S.face(i),a=S.ry,ax=Math.cos(a),az=-Math.sin(a),o=S.out,ox=S.ry?o:0,oz=S.ry?0:o,y=eave*.56;
      put(holes,box,px,y,pz,.62,.56,.06,0,a,0);if(rnd()<.35)put(glow,box,px-ox*.02,y,pz-oz*.02,.5,.44,.04,0,a,0);
      for(const sy of [-1,1])put(posts,box,px+ox*.03,y+sy*.33,pz+oz*.03,.86,.1,.14,0,a,0);for(const sx of [-1,1])put(posts,box,px+ax*sx*.38+ox*.03,y,pz+az*sx*.38+oz*.03,.1,.76,.14,0,a,0);
      if(rnd()<.75){const sx=rnd()<.5?-1:1,hang=rnd()<.3;put(posts,box,px+ax*sx*.62+ox*.12,y-(hang?.12:0),pz+az*sx*.62+oz*.12,.3,.62,.04,0,a+sx*o*(hang?.5:1.2),hang?sx*.4:0)}}}
-   for(const [cx0,cz0,sx,sz] of [[r.x,r.y,-1,-1],[r.x+r.w,r.y,1,-1],[r.x,r.y+r.h,-1,1],[r.x+r.w,r.y+r.h,1,1]])for(let i=0;i<6;i++){const y=.6+i*.22;
+   for(const [cx0,cz0,sx,sz] of [[r.x,r.y,-1,-1],[r.x+r.w,r.y,1,-1],[r.x,r.y+r.h,-1,1],[r.x+r.w,r.y+r.h,1,1]])for(let i=0;i<(eave>2?8:6);i++){const y=.6+i*.22;
      if(i%2)put(posts,cyl,cx0+sx*.16,y,cz0-sz*.5,.24,.62,.24,0,0,Math.PI/2);else put(posts,cyl,cx0-sx*.5,y,cz0+sz*.16,.24,.62,.24,Math.PI/2,0,0)}
    if(!marga&&rnd()<.6){const east=rnd()<.5,tx=east?r.x+r.w-1:r.x,ty=r.y+Math.floor(r.h/2);if(wall.has(ty*MW+tx)){const H=eave+rise+.9;put(chim,box,tx+.5,H/2,ty+.5,1.0,H,1.0);put(chim,box,tx+.5,H+.08,ty+.5,1.2,.16,1.2);put(holes,box,tx+.5,H+.17,ty+.5,.55,.04,.55)}}}
   const fadeR=phong({color:0xffffff,transparent:true,opacity:1,side:THREE.DoubleSide,alphaTest:marga?0:.5});
-  const roofM=NT?worldSurfN(fadeR,burn,marga?2.6:3.6,1.2):worldSurf(fadeR,wood,.9,'a');roofM.color.setHex(NT?(marga?0xf0e4dc:0xfff4ec):0x9a8474);/* poszycie: gonty z dziurami, dom Margi: dachowka */
+  const roofM=NT?worldSurfN(fadeR,burn,marga?2.6:3.6,1.8,3):worldSurf(fadeR,wood,.9,'a');roofM.color.setHex(NT?(marga?0xf0e4dc:0xfff4ec):0x9a8474);/* poszycie: gonty z dziurami, dom Margi: dachowka */
   const woodM=NT?worldSurfN(phong({color:0xe8dcd0,transparent:true,opacity:1}),'t2_belka',1.3,1.2):worldSurf(phong({color:0x8c7868,transparent:true,opacity:1}),wood,1.3,'a');
   const g=new THREE.Group();g.add(mesh(wood_,woodM));if(roof.p.length)g.add(mesh(roof,roofM));w.group.add(g);
   r.mats=[woodM,roofM];r.mesh=g;r.a=1}
  if(margaR&&margaR.w/margaR.h>1.6&&NT&&nbParam('sklep')!=='0')margaShop(margaR,wall,put,box,acc,mesh);// 23.11.2026 (autor: sklep bardziej sklepowy)
- if(holes.p.length)mesh(holes,cutaway(phong({color:0x0e0b09})));if(glow.p.length)mesh(glow,phong({color:0x1a0a04,emissive:0x5a1c06}));if(chim.p.length)mesh(chim,worldSurfN(cutaway(phong({color:0xb8aca4})),'t4_podmurowka',1.6,1.2));
+ if(holes.p.length)mesh(holes,cutaway(phong({color:0x0e0b09})));if(glow.p.length)mesh(glow,phong({color:0x1a0a04,emissive:0x5a1c06}));if(chim.p.length)mesh(chim,worldSurfN(cutaway(phong({color:0xb8aca4})),'t4_podmurowka',1.6,1.9,3));
  if(posts.p.length)mesh(posts,postM);if(floors.p.length){const f=mesh(floors,worldSurfN(phong({color:0x8c847c}),'t5_podloga',2.6,1.1));f.castShadow=false}}
 function buildRoofs(w){if(!w.roofs||!w.group)return;if(w.ch===1&&IMGS.wl_palecap&&nbParam('spalone')!=='0'){burntHouses(w);return}const rm=[];
  for(const r of w.roofs){if(r.tri||r.mesh)continue;/* 23.11.2026: dom z modelu ma wlasny dach */const W=r.w+.7,D=r.h+.7,rise=Math.min(2.1,Math.min(r.w,r.h)*.3);
@@ -2284,6 +2296,69 @@ function portRopeRail(ground,wood){
  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(nor,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));
  const rope=new THREE.Mesh(g,phong({map:osadaTex(OSADA_TX.tsn2_konopie_skrecane[0]),color:0xe0d8cc,shininess:4,side:THREE.DoubleSide}));// 23.11.2026: skrecane konopie autorarope.castShadow=true;ROOT.add(rope);
 }
+/* 23.11.2026 (autor: budynki mapy III w tym samym stylu co Zlotogrod): szopy z debowych desek, celnica z kamienia i muru pruskiego, tawerna z nadwieszonym pietrem i szyldem,
+   sklad przechodni z bramami; tekstury autora z patyna portu (wk 2). Kolizje bez zmian (kafle 48, przejscie skladu otwarte). */
+function portKit(kind,gx,bx,bz,bw,bd,ao){
+ const N=(k,sc,col,o)=>worldSurfN(cutaway(phong(Object.assign({color:col},o||{}))),k,sc,1.9,2);
+ const oak=N('tsn1_dab_portowy',1.3,0xd0c4b8),oakD=N('tsn1_dab_portowy',.9,0x8a7a6c),plaster=N('tgm1_tynk_wapienny',1.7,0xeee8dc),stone=N('tgm2_mur_kamienny',1.2,0xd8d2c8),
+  stoneD=N('tgm2_mur_kamienny',.9,0xa8a096),tiles=N('tgm3_dachowka_gliniana',1.1,0xd4c4b6,{side:THREE.DoubleSide}),ropeM=N('tsn2_konopie_skrecane',.7,0xe0d8cc),
+  copper=N('tzl1_miedz_patynowana',1.4,0xf4f8f6,{side:THREE.DoubleSide,specular:0x5a7a70,shininess:24}),glassL=cutaway(phong({color:0x1a120a,emissive:0x8a4a14})),glassD=cutaway(phong({color:0x10141a,specular:0x555555,shininess:50})),
+  iron=cutaway(phong({color:0x34302c,specular:0x333333,shininess:30})),salt=cutaway(phong({color:0xe8e4da})),gold=cutaway(phong({color:0xb08a40,emissive:0x2a1c06,specular:0x806020,shininess:30}));
+ const g=new THREE.Group(),cover=new THREE.Group();ROOT.add(g);
+ const add=(geo,m,x,y,z,rx,ry,rz,par)=>{const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);o.rotation.set(rx||0,ry||0,rz||0);o.castShadow=o.receiveShadow=true;(par||g).add(o);return o};
+ const B=(w,h,d,m,x,y0,z,ry,par)=>add(new THREE.BoxGeometry(w,h,d),m,x,y0+h/2,z,0,ry||0,0,par);
+ const cx=bx+bw/2,cz=bz+bd/2,front=bz+bd;
+ const tri=(arr,a,b,c,want)=>{const u=[b[0]-a[0],b[1]-a[1],b[2]-a[2]],v=[c[0]-a[0],c[1]-a[1],c[2]-a[2]],n=[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]];if(n[0]*want[0]+n[1]*want[1]+n[2]*want[2]<0)arr.push(...a,...c,...b);else arr.push(...a,...b,...c)};
+ const mesh=(arr,m,par)=>{const q=new THREE.BufferGeometry();q.setAttribute('position',new THREE.Float32BufferAttribute(arr,3));q.computeVertexNormals();const o=new THREE.Mesh(q,m);o.castShadow=o.receiveShadow=true;(par||g).add(o);return o};
+ // dach dwuspadowy, kalenica wzdluz z (szczyt od ulicy), szczyty z materialu sciany
+ const gableZ=(x0,x1,z0,z1,E,rise,roofM,wallM,oh,par)=>{const c=(x0+x1)/2,hw=(x1-x0)/2,dy=oh*rise/hw,pts=[],gp=[];for(const s of [1,-1]){const r0=[c,E+rise,z0-oh],r1=[c,E+rise,z1+oh],e0=[c+s*(hw+oh),E-dy,z0-oh],e1=[c+s*(hw+oh),E-dy,z1+oh];tri(pts,r0,e0,e1,[s,1,0]);tri(pts,r0,e1,r1,[s,1,0])}
+  for(const [z,sg] of [[z0,-1],[z1,1]])tri(gp,[x0,E,z],[x1,E,z],[c,E+rise,z],[0,0,sg]);mesh(pts,roofM,par);mesh(gp,wallM,par);B(.18,.18,z1-z0+oh*2+.1,oakD,c,E+rise-.04,(z0+z1)/2,0,par);
+  for(const s of [1,-1])for(const z of [z0-oh,z1+oh]){const L=Math.hypot(hw+oh,rise+dy),o=add(new THREE.BoxGeometry(.1,.24,L),oakD,c+s*(hw+oh)/2,E+(rise-dy)/2,z+(z<z0?-.03:.03),0,0,0,par);o.lookAt(c,E+rise,z+(z<z0?-.03:.03))}};
+ const hip=(x0,x1,z0,z1,E,rise,roofM,oh)=>{const a=(x1-x0)/2+oh,b=(z1-z0)/2+oh,c=[(x0+x1)/2,(z0+z1)/2],k=Math.max(0,b-a),T=E+rise,y0=E-oh*rise/Math.min(a,b),pts=[];
+  const r0=[c[0],T,c[1]-k],r1=[c[0],T,c[1]+k],C0=[c[0]-a,y0,c[1]-b],C1=[c[0]+a,y0,c[1]-b],C2=[c[0]+a,y0,c[1]+b],C3=[c[0]-a,y0,c[1]+b];
+  tri(pts,r0,C0,C3,[-1,1,0]);tri(pts,r0,C3,r1,[-1,1,0]);tri(pts,r1,C2,C1,[1,1,0]);tri(pts,r1,C1,r0,[1,1,0]);tri(pts,r0,C1,C0,[0,1,-1]);tri(pts,r1,C3,C2,[0,1,1]);mesh(pts,roofM)};
+ const win=(x,y,z,ry,lit,w=.62,h=.72)=>{const q=new THREE.Group();q.position.set(x,y,z);q.rotation.y=ry||0;g.add(q);const m=(geo,mat,px,py,pz,r)=>{const o=new THREE.Mesh(geo,mat);o.position.set(px,py,pz);if(r)o.rotation.y=r;o.castShadow=true;q.add(o)};
+  m(new THREE.BoxGeometry(w,h,.06),lit?glassL:glassD,0,0,.02);for(const sy of [-1,1])m(new THREE.BoxGeometry(w+.26,.1,.15),oakD,0,sy*(h/2+.05),.06);for(const sx of [-1,1])m(new THREE.BoxGeometry(.1,h+.2,.15),oakD,sx*(w/2+.05),0,.06);
+  m(new THREE.BoxGeometry(.05,h,.05),oakD,0,0,.08);m(new THREE.BoxGeometry(w,.05,.05),oakD,0,0,.08);for(const sx of [-1,1])m(new THREE.BoxGeometry(w*.52,h+.06,.04),oak,sx*(w*.8),0,.12,sx*.45)};
+ const lantern=(x,y,z)=>{B(.05,.05,.45,iron,x,y+.25,z-.2);B(.03,.16,.03,iron,x,y+.1,z);B(.2,.28,.2,glassL,x,y-.2,z);B(.24,.05,.24,iron,x,y+.08,z)};
+ // mur pruski: belki na scianie (slupy, rygiel, zastrzaly na skrajach)
+ const timber=(len,h0,h1,pos,ry)=>{const n=Math.max(2,Math.round(len/1.3)),t=.13;for(const y of [h0,h1])B(len+.04,t,t,oakD,...[pos(0)[0],y-t/2,pos(0)[1]],ry);for(let k=0;k<=n;k++){const [x,z]=pos(-len/2+len*k/n);B(t,h1-h0,t,oakD,x,h0,z,ry)}
+  const sw=len/n;for(const [k,sg] of [[0,1],[n-1,-1]]){const [x,z]=pos(-len/2+sw*(k+.5)),L=Math.hypot(sw,h1-h0),o=add(new THREE.BoxGeometry(t,L,t),oakD,x,(h0+h1)/2,z,0,ry||0,0);o.rotateZ(sg*Math.atan2(sw,h1-h0))}};
+ const Fp=(t)=>[cx+t,front+.07],Bp=(t)=>[cx-t,bz-.07],Rp=(t)=>[bx+bw+.07,cz-t],Lp=(t)=>[bx-.07,cz+t];
+ if(kind==='shed'){const E=2.9,net=gx<30;B(bw,.5,bd,stoneD,cx,0,cz);B(bw-.06,E-.5,bd-.06,oak,cx,.5,cz);for(const sx of [-1,1])for(const sz of [-1,1])B(.24,E+.05,.24,oakD,cx+sx*(bw/2-.06),0,cz+sz*(bd/2-.06));
+  B(bw+.12,.18,bd+.12,oakD,cx,E-.1,cz);gableZ(bx,bx+bw,bz,front,E,bw*.34,tiles,oak,.35);
+  for(const sx of [-1,1]){const lf=B(.98,2.25,.08,oakD,cx+sx*.5,0,front+.05);const br=add(new THREE.BoxGeometry(.08,1.9,.05),oak,cx+sx*.5,1.12,front+.1);br.rotation.z=sx*.42}B(2.3,.2,.16,oakD,cx,2.25,front+.06);
+  B(.8,.7,.06,oakD,cx,E+.4,front+.04);for(const z of [bz+bd*.3,bz+bd*.7]){win(bx-.06,1.6,z,-Math.PI/2,false,.5,.5);win(bx+bw+.06,1.6,z,Math.PI/2,false,.5,.5)}lantern(cx+1.45,2.2,front+.3);
+  if(net){for(let i=0;i<3;i++){const z=bz+1.2+i*bd*.3;B(.04,1.5,1.4,ropeM,bx+bw+.1,.7,z);B(.06,.06,1.5,oakD,bx+bw+.14,2.2,z)}for(let i=0;i<2;i++){const o=add(new THREE.BoxGeometry(.08,.08,2.6),oakD,bx-.25,1.1,cz-1+i*.4);o.rotation.x=1.1}
+   add(new THREE.TorusGeometry(.32,.1,6,14),ropeM,cx-1.6,.12,front+.55,Math.PI/2,0,0);add(new THREE.TorusGeometry(.2,.08,6,12),ropeM,cx-1.6,.3,front+.55,Math.PI/2,0,0)}
+  else{for(let i=0;i<6;i++){const sx=i%3,sy=(i/3)|0;add(new THREE.BoxGeometry(.6,.36,.42),salt,cx-1.8-sx*.05,.2+sy*.36,front+.5+sx*.45,0,(i*1.3)%1-.5,0)}B(.8,.8,.8,oakD,cx+1.9,0,front+.6,.3)}
+  ao(cx,cz,bw*1.45+1,bd*1.45+1)}
+ else if(kind==='office'){const E=3.7,F1=1.85;B(bw,F1,bd,stone,cx,0,cz);B(bw+.08,.16,bd+.08,stoneD,cx,F1-.08,cz);B(bw-.06,E-F1,bd-.06,plaster,cx,F1,cz);
+  timber(bw,F1+.05,E-.05,Fp,0);timber(bw,F1+.05,E-.05,Bp,Math.PI);timber(bd,F1+.05,E-.05,Rp,Math.PI/2);timber(bd,F1+.05,E-.05,Lp,-Math.PI/2);B(bw+.2,.2,bd+.2,oakD,cx,E-.02,cz);
+  hip(bx,bx+bw,bz,front,E+.15,2.0,tiles,.38);B(1.0,.9,1.0,plaster,cx,E+1.4,cz);add(new THREE.ConeGeometry(.82,.9,4),copper,cx,E+2.75,cz,0,Math.PI/4,0);B(.03,.9,.03,iron,cx,E+3.2,cz);B(.45,.28,.02,cutaway(phong({color:0x5a1e1a,side:THREE.DoubleSide})),cx+.24,E+3.45,cz);
+  for(const sx of [-1,1])win(cx+sx*bw*.3,1.1,front+.04,0,true,.6,.7);for(const x of [-bw*.3,0,bw*.3])win(cx+x,2.8,front+.1,0,true,.55,.65);for(const z of [-bd*.25,bd*.25]){win(bx-.06,2.8,cz+z,-Math.PI/2,false,.55,.65);win(bx+bw+.06,2.8,cz+z,Math.PI/2,true,.55,.65)}
+  B(1.4,2.1,.2,stoneD,cx,0,front+.04);B(1.0,1.9,.08,oakD,cx,0,front+.12);B(1.3,.5,.06,cutaway(phong({color:0x2a3a4a})),cx,F1+.12,front+.12);B(1.1,.06,.03,gold,cx,F1+.33,front+.16);for(let i=0;i<2;i++)B(1.8-i*.4,.14,.5,stoneD,cx,i*.14,front+.35+(1-i)*.4);
+  ao(cx,cz,bw*1.45+1,bd*1.45+1)}
+ else if(kind==='inn'){const E=3.6,F1=1.6,J=.45;B(bw,F1,bd,stone,cx,0,cz);B(bw-.06,E-F1,bd+J-.06,plaster,cx,F1,cz+J/2);B(bw+.1,.2,.3,oakD,cx,F1-.1,front+J-.1);
+  timber(bw,F1+.06,E-.05,t=>[cx+t,front+J+.07],0);timber(bd+J,F1+.06,E-.05,t=>[bx+bw+.07,cz+J/2-t],Math.PI/2);timber(bd+J,F1+.06,E-.05,t=>[bx-.07,cz+J/2+t],-Math.PI/2);B(bw+.18,.2,bd+J+.18,oakD,cx,E-.02,cz+J/2);
+  for(const sx of [-1,1]){const o=add(new THREE.BoxGeometry(.12,.12,.7),oakD,cx+sx*(bw/2-.2),F1-.35,front+.2);o.rotation.x=-.6}
+  gableZ(bx,bx+bw,bz,front+J,E,bw*.42,tiles,plaster,.32);
+  win(cx-bw*.25,1.0,front+.04,0,true,.9,.7);win(cx+bw*.28,2.65,front+J+.1,0,true,.55,.65);win(cx-bw*.28,2.65,front+J+.1,0,true,.55,.65);win(cx,E+.7,front+J+.05,0,true,.4,.45);win(bx-.06,2.6,cz,-Math.PI/2,true,.55,.65);win(bx+bw+.06,1.0,cz,Math.PI/2,true,.7,.6);
+  B(1.0,1.95,.08,oakD,cx+bw*.22,0,front+.06);B(1.25,.14,.14,oakD,cx+bw*.22,1.95,front+.08);
+  {const sx=cx+bw/2+.55,sy=2.2;B(.9,.05,.05,iron,cx+bw/2+.25,sy+.45,front+J);B(.02,.2,.02,iron,sx-.25,sy+.32,front+J);B(.02,.2,.02,iron,sx+.25,sy+.32,front+J);B(.7,.55,.06,oakD,sx,sy-.28,front+J);add(new THREE.CylinderGeometry(.13,.11,.28,12),gold,sx,sy,front+J+.06);add(new THREE.TorusGeometry(.08,.025,6,10),gold,sx+.16,sy,front+J+.06)}
+  lantern(cx-.55,2.0,front+.25);B(1.6,.08,.4,oakD,cx-bw*.22,.45,front+.5);for(const s2 of [-1,1])B(.08,.45,.34,oakD,cx-bw*.22+s2*.65,0,front+.5);
+  for(const [x,z] of [[bx+bw+.45,front-.4],[bx+bw+.5,front-1.1]])add(new THREE.CylinderGeometry(.3,.3,.75,12),oakD,x,.38,z);
+  ao(cx,cz,bw*1.45+1,bd*1.45+1)}
+ else if(kind==='store'){const left=FT(gx+1),right=FT(gx+3),E=2.9;
+  for(const [a,b] of [[bx,left],[right,bx+bw]]){const c=(a+b)/2,w=b-a;B(w,.5,bd,stoneD,c,0,cz);B(w-.06,E-.5,bd-.06,oak,c,.5,cz);for(const z of [bz,front])B(.26,E+.05,.26,oakD,a<left-.1?a+.08:b-.08,0,z);
+   for(const zz of [bz+bd*.3,bz+bd*.7])win(a<cx?a-.06:b+.06,1.6,zz,a<cx?-Math.PI/2:Math.PI/2,false,.5,.5);
+   for(const f of [.25,.5,.75]){const inner=a<cx?b:a,sgn=a<cx?-1:1;B(.7,.7,.7,oakD,inner+sgn*.45,0,bz+f*bd,.2);if(f!==.5)add(new THREE.CylinderGeometry(.3,.3,.75,12),oakD,inner+sgn*.45,1.1,bz+f*bd)}}
+  for(const z of [bz,front]){for(const x of [left,right])B(.3,E+.4,.3,oakD,x,0,z);B(right-left+.6,.3,.34,oakD,(left+right)/2,E+.1,z);for(const sx of [-1,1]){const o=add(new THREE.BoxGeometry(.12,1.0,.12),oakD,(sx<0?left:right)-sx*.35,E-.25,z);o.rotation.z=sx*.75}B(right-left,.06,.4,stoneD,(left+right)/2,0,z)}
+  B(right-left-.2,.02,bd,N('tsn1_dab_portowy',1.1,0x9a8e82),(left+right)/2,0,cz);
+  gableZ(bx,bx+bw,bz,front,E+.3,bw*.34,tiles,oak,.35,cover);B(bw+.12,.18,bd+.12,oakD,cx,E+.2,cz,0,cover);ROOT.add(cover);
+  W.portRoom={cover,left:bx,right:bx+bw,north:bz,south:front};W.LSRC.push({col:0xffcaaa,base:.7,dist:5,x:left+.1,y:1.5,z:cz,kind:'fire',ph:0});ao(cx,cz,bw*1.4+1,bd*1.4+1)}
+ if(kind==='office'||kind==='inn')for(const side of [-1,1])W.LSRC.push({col:0xffb866,base:.75,dist:4.6,x:cx+side*bw*.32,y:1.5,z:front+.7,kind:'fire',ph:cx+side});
+}
 function buildSolneNabrzeze(I){
  const random=rng(60139);const P3=PORT3D_ON?port3dBuild(I,ROOT):null;
  const ground=(x,y)=>{if(x<0||y<0||x>=MW||y>=MH)return 45;const i=y*MW+x,t=map[i];return t===31||t===27?(W.under[i]||40):t};
@@ -2419,11 +2494,12 @@ function buildSolneNabrzeze(I){
   g.setIndex(side>0?[0,2,1,0,3,2]:[0,1,2,0,2,3]);g.computeVertexNormals();const m=new THREE.Mesh(g,mat);m.castShadow=true;m.receiveShadow=true;ROOT.add(m)};
  const unit=new THREE.BoxGeometry(1,1,1),parts=new Map();
  const part=(mat,x,h,z,w,height,depth,angle=0)=>{if(!parts.has(mat))parts.set(mat,[]);parts.get(mat).push([x,h,z,w,height,depth,angle])};
- const inBuilding=new Set();
+ const inBuilding=new Set(),PKIT=nbParam('portnowe')!=='0'&&typeof OSADA_TX!=='undefined';
  for(const [x,y,w,h,kind] of PORT_BUILDINGS){
   for(let Y=FT(y);Y<FT(y+h);Y++)for(let X=FT(x);X<FT(x+w);X++)inBuilding.add(Y*MW+X);
   const bx=MP(x),bz=MP(y),bw=MP(x+w)-bx,bd=MP(y+h)-bz;
   const cx=bx+bw/2,cz=bz+bd/2,front=bz+bd,eave=kind==='inn'?2.5:kind==='office'?2.9:2.72,half=bw/2+.22,pitch=.37;
+  if(PKIT){portKit(kind,x,bx,bz,bw,bd,ao);continue}
   if(kind==='store'){
    // sklad przechodni: dwie bramy leza dokladnie na polach otwartych w siatce kolizji; dach znika, gdy bohater jest w srodku
    const left=FT(x+1),right=FT(x+3),room=new THREE.Group(),cover=new THREE.Group();
@@ -2793,7 +2869,7 @@ function paint3dFinish(w){if(!REK3D_ON||(!P3D_MAP[w.ch]&&!P3D_MMAP[w.ch]))return
 /* 23.11.2026 (autor: "Chojrakowi dojebana chata"): cala, niespalona chata z bali w Spalonej Osadzie. Podmurowka, zamki bali na narozach, okna z okiennicami,
    waskie drzwi pod daszkiem, tarcza Zakonu i choragiew przy wejsciu, komin, drewno pod sciana; w srodku podloga, prycza ze skora, stol, oltarzyk, zbroja na stojaku, miecze, skrzynia, palenisko.
    Dach (dachowka autora) znika, gdy bohater jest blisko (roofTick, r.pad). */
-function chojrakChata(C){const N=(k,sc,col,o)=>worldSurfN(cutaway(phong(Object.assign({color:col},o||{}))),k,sc,1.1);
+function chojrakChata(C){const N=(k,sc,col,o)=>worldSurfN(cutaway(phong(Object.assign({color:col},o||{}))),k,sc,1.9,2);
  const logs=N('t1_bale',2.1,0xfff4ea),beam=N('t2_belka',1.2,0xeee2d6),stone=N('t4_podmurowka',2.0,0xe4dad0),floorM=worldSurfN(phong({color:0xd0c6bc}),'t5_podloga',2.4,1.1),
   glassL=cutaway(phong({color:0x1a120a,emissive:0x8a4a14})),iron=cutaway(phong({color:0x3a3634,specular:0x333333,shininess:30})),red=cutaway(phong({color:0x6e1a16,side:THREE.DoubleSide})),
   gold=cutaway(phong({color:0xb89040,emissive:0x2a1c06,specular:0x806020,shininess:30})),fur=cutaway(phong({color:0x6a5a48})),green=cutaway(phong({color:0x3a4a36})),flame=phong({color:0xffe0a0,emissive:0xffa040}),
@@ -2868,7 +2944,7 @@ function buildBrzeznica(I){
   // palisade (row 7) on the border, charred log walls on stone footings (rows 0-2) for the houses; wooden caps from row 4
   const HD1=!!(I.wl_palisada&&I.wl_chata&&I.wl_palecap);const capMat=HD1?worldSurf(cutaway(phong({color:0xc8bcb0})),I.wl_palecap,3,'a'):cutaway(phong({map:texFrom(tcut(Wl,1,4),true)}));
   const palGeo=new THREE.BoxGeometry(1,2.4,1);palGeo.translate(0,1.2,0);
-  const houseGeo=new THREE.BoxGeometry(1,1.9,1);houseGeo.translate(0,.95,0);
+  const HH=nbParam('spalone')!=='0'&&nbParam('osada2')!=='0'&&typeof OSADA_TX!=='undefined'?2.4:1.9;/* 23.11.2026: domy Osady pelnej wysokosci (styl jak chata Chojraka) */const houseGeo=new THREE.BoxGeometry(1,HH,1);houseGeo.translate(0,HH/2,0);
   const pal=[0,1].map(i=>stackTex(Wl,[[i*3,7],[i*3+1,7],[i*3+2,7]]));
   const logs=[0,1,2,3].map(i=>stackTex(Wl,[[(i*2)%8,1],[(i*3+1)%8,0],[(i*5+2)%8,2]]));
   const gP=[[],[]],gH=[[],[],[],[]];
@@ -2877,10 +2953,10 @@ function buildBrzeznica(I){
   if(CH_)chojrakChata(CH_);
   gP.forEach((list,i)=>{if(!list.length)return;const side=HD1?worldSurf(cutaway(phong({color:i?0xd4ccc4:0xc8c0b8})),I.wl_palisada,3,'a'):cutaway(phong({map:pal[i]}));depthWall(palGeo,side,1);instanced(palGeo,[side,side,capMat,capMat,side,side],list,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))});
   const OS=nbParam('spalone')!=='0',margaR=(W.roofs||[]).reduce((b,r)=>(!b||r.w/r.h>b.w/b.h)?r:b,null),inMarga=(x,y)=>margaR&&margaR.w/margaR.h>1.6&&x>=margaR.x&&x<margaR.x+margaR.w&&y>=margaR.y&&y<margaR.y+margaR.h;
-  const houseCap=OS?worldSurfN(cutaway(phong({color:0xd8ccc0})),'t2_belka',1.4,1):I.p1_roof_burnt?worldSurf(cutaway(phong({color:0xffffff})),I.p1_roof_burnt,2.5,'a'):capMat;
+  const houseCap=OS?worldSurfN(cutaway(phong({color:0xd8ccc0})),'t2_belka',1.4,1.8,3):I.p1_roof_burnt?worldSurf(cutaway(phong({color:0xffffff})),I.p1_roof_burnt,2.5,'a'):capMat;
   /* 23.11.2026: podmurowka z kamienia pod scianami domow (tekstura autora) */
-  if(OS){const all=gH.flat();if(all.length){const fg=new THREE.BoxGeometry(1.08,.42,1.08);fg.translate(0,.21,0);instanced(fg,worldSurfN(cutaway(phong({color:0xe0d6cc})),'t4_podmurowka',2.2,1.2),all,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))}}
-  gH.forEach((list,i)=>{if(!list.length)return;const side=OS?worldSurfN(cutaway(phong({color:[0xfff4ea,0xf4eae0,0xfff8f0,0xece2d8][i]})),'t1_bale',2.1,1.1):HD1?worldSurf(cutaway(phong({color:[0xd0c4b8,0xc8bcb0,0xd4c8bc,0xccc0b4][i]})),I.wl_chata,3,'a'):cutaway(phong({map:logs[i]}));depthWall(houseGeo,side,1);instanced(houseGeo,[side,side,houseCap,houseCap,side,side],list,([x,y])=>{/* 23.11.2026: nierowne, nadpalone korony scian (narozniki i otwory pelne) */const k=Math.sin(x*12.9898+y*78.233)*43758.5453,f=k-Math.floor(k),n=(dx,dy)=>tileAt(x+dx,y+dy)===48,corner=(n(1,0)||n(-1,0))&&(n(0,1)||n(0,-1)),edgeOpen=!n(1,0)&&!n(-1,0)||!n(0,1)&&!n(0,-1);const s=corner||!OS||inMarga(x,y)?1:f<.38?.5+f*.9:f<.6?.86:1;return M4.makeScale(1,s,1).setPosition(x+.5,0,y+.5)})});
+  if(OS){const all=gH.flat();if(all.length){const fg=new THREE.BoxGeometry(1.08,.42,1.08);fg.translate(0,.21,0);instanced(fg,worldSurfN(cutaway(phong({color:0xe0d6cc})),'t4_podmurowka',2.2,1.9,3),all,([x,y])=>M4.makeTranslation(x+.5,0,y+.5))}}
+  gH.forEach((list,i)=>{if(!list.length)return;const side=OS?worldSurfN(cutaway(phong({color:[0xfff4ea,0xf4eae0,0xfff8f0,0xece2d8][i]})),'t1_bale',2.1,1.9,3):HD1?worldSurf(cutaway(phong({color:[0xd0c4b8,0xc8bcb0,0xd4c8bc,0xccc0b4][i]})),I.wl_chata,3,'a'):cutaway(phong({map:logs[i]}));depthWall(houseGeo,side,1);instanced(houseGeo,[side,side,houseCap,houseCap,side,side],list,([x,y])=>{/* 23.11.2026: nierowne, nadpalone korony scian (narozniki i otwory pelne) */const k=Math.sin(x*12.9898+y*78.233)*43758.5453,f=k-Math.floor(k),n=(dx,dy)=>tileAt(x+dx,y+dy)===48,corner=(n(1,0)||n(-1,0))&&(n(0,1)||n(0,-1)),edgeOpen=!n(1,0)&&!n(-1,0)||!n(0,1)&&!n(0,-1);const s=corner||!OS||inMarga(x,y)?1:HH>2?(f<.25?.74+f*.8:1):f<.38?.5+f*.9:f<.6?.86:1;return M4.makeScale(1,s,1).setPosition(x+.5,0,y+.5)})});
   // stagnant pond (row 5 animated)
   waterFrames=[0,1,2,3].map(i=>tcut(F,i,5));
   const wGeo=new THREE.PlaneGeometry(1,1);wGeo.rotateX(-Math.PI/2);
@@ -2911,9 +2987,9 @@ function cutCircle(mat){mat.onBeforeCompile=sh=>{sh.uniforms.uCut=CUT;sh.uniform
 /* 23.11.2026 (autor: nowe moduly Zlotogrodu): waska kamienica z podcieniem, narozna kamienica ze schodami, kamienica z wykuszem, mala kaplica.
    Kazda bryla budowana w ukladzie lokalnym (front = +z) i obracana wg ZL_NOWE; tekstury autora: tynk wapienny, mur kamienny, dachowka, miedz, stare zlocenie. */
 function zlNoweBuild(){const WR=W;
- const M=(k,sc,col,o)=>worldSurfN(cutCircle(phong(Object.assign({color:col},o||{}))),k,sc,1);
- const plaster=M('tgm1_tynk_wapienny',2.6,0xe6ddd0),stone=M('tgm2_mur_kamienny',1.5,0xd4ccc0),stoneD=M('tgm2_mur_kamienny',1.1,0xa89e92),
-  tiles=M('tgm3_dachowka_gliniana',1.3,0xc4b4a6,{side:THREE.DoubleSide}),copper=M('tzl1_miedz_patynowana',1.5,0xf4f8f6,{side:THREE.DoubleSide,specular:0x5a7a70,shininess:26}),
+ const M=(k,sc,col,o)=>worldSurfN(cutCircle(phong(Object.assign({color:col},o||{}))),k,sc,1.9,1);/* 23.11.2026 (autor: obklej mocniej): mocniejsza wypuklosc */
+ const plaster=M('tgm1_tynk_wapienny',1.7,0xf0e8dc),stone=M('tgm2_mur_kamienny',1.3,0xe0d8cc),stoneD=M('tgm2_mur_kamienny',1.0,0xb0a698),
+  tiles=M('tgm3_dachowka_gliniana',1.1,0xd8c8ba,{side:THREE.DoubleSide}),copper=M('tzl1_miedz_patynowana',1.5,0xf4f8f6,{side:THREE.DoubleSide,specular:0x5a7a70,shininess:26}),
   gold=M('tzl2_zloto_patynowane',1.2,0xa09078,{specular:0x3a3020,shininess:14}),wood=M('t2_belka',1.2,0x8c7c6c),
   glassL=cutCircle(phong({color:0x17120e,emissive:0x6a3c12,specular:0x333333,shininess:40})),glassD=cutCircle(phong({color:0x121418,specular:0x444444,shininess:50})),
   iron=cutCircle(phong({color:0x34302c,specular:0x222222,shininess:20})),oak=M('tsn1_dab_portowy',1.3,0xb8aca0),patch=M('m_buda',2.2,0xd0c4b8,{side:THREE.DoubleSide}),
@@ -3000,7 +3076,7 @@ function zlNoweBuild(){const WR=W;
    if(rnd()<.6){const pw=.6+rnd()*.8;box(pw,.5+rnd()*.5,.05,wood,(rnd()-.5)*(W-1.4),.5+rnd()*.8,-D/2-.02)}
    const along=W>=D;gable(W,D,E,1.0+rnd()*.3,!along,patch,oak,.28);
    if(rnd()<.5)box(.55,.55,.55,wood,W/2-.5,0,D/2+.5,.3);
-  }else if(kind==='kamienica'){const E=4.6;box(W,.9,D,stone,0,0,0);box(W-.1,E-.9,D-.1,plaster,0,.9,0);cornice(W,D,E-.1);
+  }else if(kind==='kamienica'){const E=4.6;box(W,1.45,D,stone,0,0,0);box(W+.06,.16,D+.06,stoneD,0,1.4,0);box(W-.1,E-1.45,D-.1,plaster,0,1.45,0);cornice(W,D,E-.1);
    for(const sx of [-1,1])for(const sz of [-1,1])for(let i=0;i<5;i++){const big=i%2===0;box(big?.6:.42,.4,big?.42:.6,stoneD,sx*(W/2-.17),1.0+i*.72,sz*(D/2-.17))}
    const faceW=(len,pos,ry,front)=>{const k=Math.max(2,Math.round(len/1.8));for(let i=0;i<k;i++){const t=-len/2+len*(i+.5)/k;
      if(i>0){const [px,pz]=pos(-len/2+len*i/k,.04);box(.32,E-1.0,.12,stoneD,px,.9,pz,ry)}
@@ -5520,7 +5596,7 @@ function guardFeedback(kind,nx,ny,projectile){let dx=-nx,dy=-ny,d=Math.hypot(dx,
 function hitSpark(e,nx,ny){const length=Math.hypot(nx,ny)||1,dx=nx/length,dy=ny/length,armour=steelEnemy(e),amplitude=BIG.has(e.type)?.35:e.type==='collector'?.55:ftHeavy?1.3:ftCrit?1.1:.75;
   if(!emitCombatEffect(ftHeavy?'heavy':'light',e.x-dx*Math.min(e.r*.55,5),e.y-dy*Math.min(e.r*.55,5),ftHeavy?1.35:.9,0,armour?'steel':'flesh'))contactSparks(e.x-dx*Math.min(e.r*.55,5),e.y-dy*Math.min(e.r*.55,5),dx,dy,armour?'steel':'flesh',ftCrit?8:ftHeavy?6:4);
   const life=COMBAT_POLISH_ON?(ftHeavy?.23:.18):.15,power=COMBAT_POLISH_ON?amplitude*(armour?2.1:2.8):amplitude;e.visualHit={t:life,life,dx,dy,amplitude:power,heavy:ftHeavy};}
-function damageEnemy(e,dmg,nx,ny,kb=1,src){if(e.dead||e.trans>0||e.inv>0)return false;if(TRN.ohk)dmg=Math.max(dmg,e.hp+1);if(e.hookMark>0)dmg*=1.25;if(src&&src.startsWith('sk:'))dmg*=skStatusMul(e,src);if(e.type==='shieldman'&&ftMelee&&!ftHeavy&&!ftCrit&&!(e.stun>0))dmg*=.5;if(e.affix==='pancerz'&&ftMelee&&!ftHeavy&&!ftCrit&&!(e.stun>0)){dmg*=.55;try{play('afxArmor',.18)}catch(_){}};// tarcza: lekkie ciecia zadaja polowe; ciezki atak, krytyk i ogluszenie po paradzie przebijaja
+function damageEnemy(e,dmg,nx,ny,kb=1,src){if(e.dead||e.trans>0||e.inv>0)return false;if(W.heroOnly&&pl&&heroOnlyAt(pl.x,pl.y))return false;/* 23.11.2026: ze schronienia nie da sie bic */if(TRN.ohk)dmg=Math.max(dmg,e.hp+1);if(e.hookMark>0)dmg*=1.25;if(src&&src.startsWith('sk:'))dmg*=skStatusMul(e,src);if(e.type==='shieldman'&&ftMelee&&!ftHeavy&&!ftCrit&&!(e.stun>0))dmg*=.5;if(e.affix==='pancerz'&&ftMelee&&!ftHeavy&&!ftCrit&&!(e.stun>0)){dmg*=.55;try{play('afxArmor',.18)}catch(_){}};// tarcza: lekkie ciecia zadaja polowe; ciezki atak, krytyk i ogluszenie po paradzie przebijaja
   if(S.zab&&e.mini&&e.fhT==null)e.fhT=S.t;if(dmg>=.5&&Math.hypot(e.x-pl.x,e.y-pl.y)<190)ftx(dmg,e.x,e.y,ftEntH(e),ftCrit?'c':'d',e);// Kat: Guillotine perk finishes regular enemies; hit counter for 'One Verdict'
   if(S.pk.kExec&&ftHeavy&&ftMelee&&!e.mini&&!BIG.has(e.type)&&e.type!=='collector'&&e.hp-dmg>0&&e.hp-dmg<e.max*.35)dmg=e.hp;
   e.hN=(e.hN||0)+1;S.dealt=(S.dealt||0)+dmg;if(src!=='trn'){const sk=typeof src==='string'&&src.slice(0,3)==='sk:'?src.slice(3):'',D=S.dsrc||(S.dsrc={}),k=src==='parry'?'p':src==='dot'?'d':sk?'s':DSRC||'s';D[k]=(D[k]||0)+dmg;if(sk){const Q=S.dsk||(S.dsk={});Q[sk]=(Q[sk]||0)+dmg}}if(dmg>(S.bigHit||0))S.bigHit=dmg;e.hp-=dmg;if(!e.ph2&&e.hp>0&&e.hp<=e.max*.5&&!e.mini&&(BIG.has(e.type)||e.type==='collector'||e.type==='boginka'))bossPhase2(e);e.flash=ftCrit?.17:ftHeavy?.12:.08;if(ftMelee&&dmg>=.5)hitSpark(e,nx,ny);else if(COMBAT_POLISH_ON&&dmg>=.5&&src!=='dot'&&src!=='trn'){const len=Math.hypot(nx,ny)||1;e.visualHit={t:.17,life:.17,dx:nx/len,dy:ny/len,amplitude:BIG.has(e.type)?.3:1.2,heavy:false}}if(e.type==='collector'&&!(e.hurtCd>0)&&dmg>=20){e.hurtA=.3;e.hurtCd=2.5}const k=(BIG.has(e.type)?.05:e.type==='collector'?.15:(e.type==='warden'||e.type==='knight'||e.type==='rotknight'||e.type==='wight'||e.type==='bies'||e.type==='boginka'||e.type==='marauder'||e.type==='cursed'||e.type==='arbiter')?.35:1)*110*kb;if(e.frozen<=0){e.vx+=nx*k;e.vy+=ny*k}
@@ -5593,6 +5669,9 @@ function hurtPlayer(dmg,nx,ny,source='night'){if(S.zab&&pl.roll>0&&pl.inv>0&&!S.
   S.combatLock=4;S.hitsT++;S.streak=0;(S.hitLog=S.hitLog||[]).push({n:deathCauseName(source),d:Math.max(1,Math.round(dmg))});if(S.hitLog.length>3)S.hitLog.shift();pl.hp-=dmg;if(S.zab){S.zCombo=0;S.zT=0;S.zFull=0}padRumble(.8,.5,200);pl.inv=.45;pl.blinkUntil=clock+.45;pl.hurtT=.22;S.hurt=.3;shake(.25,.18);blood(pl.x,pl.y,10,nx,ny);play('hurt',.1);
   if(S.train&&pl.hp<=0)pl.hp=1;if(pl.hp<=0){if(S.lastCh&&!S.lastChUsed&&!pl2&&!pl.dead){S.lastChUsed=1;pl.hp=1;pl.inv=Math.max(pl.inv,1.5);pl.blinkUntil=clock+1.5;S.flash=.6;shake(.3,.3);play('bless',0);ftInfo(EN?'Last Chance!':'Ostatnia szansa!');return true}if(pl2&&withRb(pl,tryRebirth))return true;{const o=pl===pl2?pl1:pl2;if(o&&!o.dead){pl.hp=0;pl.dead=true;pl.deadT=0;pl.revT=0;padRumble(1,1,450,pl===pl2&&typeof PAD2!=='undefined'?PAD2.g:null);blood(pl.x,pl.y,40,nx,ny,3);play('kill',0);return true}}if(tryRebirth())return true;S.deathCause=deathCauseName(source);S.deathSrc=typeof source==='string'?source:source&&source.type?source.type:'night';loseSecondLife();clearSwordTransient();S.swordTrails=[];pl.hp=0;pl.dead=true;pl.deadT=0;padRumble(1,1,520);blood(pl.x,pl.y,70,nx,ny,3);play('kill',0);S.endT=2.6;pool(pl.x,pl.y,20,8)}return true}
 function updEnemy(e,dt){
+  /* 23.11.2026 (autor: bez cheese w drzwiach): gdy bohater jest w schronieniu (dom Heriego, chata Chojraka), wrogowie nie tlocza sie przy drzwiach, tylko odchodza na ok. 8 pol i czekaja */
+  if(W.heroOnly&&pl&&!pl.dead&&heroOnlyAt(pl.x,pl.y)&&!e.dead&&!(e.rise>0)){const h=W.heriHouse||W.chata;if(h){const ox=(h.door[0]+.5)*TS,oy=(h.door[1]+.5)*TS,vx=e.x-ox,vy=e.y-oy,dd=Math.hypot(vx,vy)||1;
+    if(dd<8*TS){const sp=Math.min(70,e.spd||45)*dt;moveBox(e,vx/dd*sp,vy/dd*sp,4,3)}e.vx=0;e.vy=0;return}}
   keepEnemyDistance(e);const ox=e.x,oy=e.y,dx=pl.x-e.x,dy=pl.y-e.y,d=Math.hypot(dx,dy);
   if(d>.001){e.contactNX=dx/d;e.contactNY=dy/d}
   const lock=attackCue(e)!==null&&e.mode!=='up',mode=e.mode;
@@ -5881,7 +5960,7 @@ function sightSword(x0,y0,x1,y1){const n=Math.ceil(Math.hypot(x1-x0,y1-y0)/8);fo
 // Wróg, który nie widzi bohatera przez ścianę, idzie po niej: wychodzi z domów drzwiami i obchodzi przeszkody.
 const NAV={d:null,q:null,t:0};
 function navUpdate(dt){NAV.t-=dt;if(NAV.t>0||!pl)return;NAV.t=.35;const n=MW*MH;if(!NAV.d||NAV.d.length!==n){NAV.d=new Int16Array(n);NAV.q=new Int32Array(n)}
-  const D=NAV.d,Q=NAV.q,tx=Math.floor(pl.x/TS),ty=Math.floor(pl.y/TS);D.fill(-1);if(tx<0||ty<0||tx>=MW||ty>=MH)return;const HO=W.heroOnly,pin=!!HO&&HO.has(ty*MW+tx);let h=0,t=0;D[ty*MW+tx]=0;Q[t++]=ty*MW+tx;
+  const D=NAV.d,Q=NAV.q,tx=Math.floor(pl.x/TS),ty=Math.floor(pl.y/TS);D.fill(-1);if(tx<0||ty<0||tx>=MW||ty>=MH)return;const HO=W.heroOnly,pin=!!HO&&HO.has(ty*MW+tx);if(pin&&!S.sanctMsg){S.sanctMsg=1;say(EN?'A safe roof. Here your blade stays sheathed, and the night waits outside.':'Bezpieczny dach. Tu broń milczy, a noc czeka na zewnątrz.')}else if(!pin)S.sanctMsg=0;let h=0,t=0;D[ty*MW+tx]=0;Q[t++]=ty*MW+tx;
   while(h<t){const c=Q[h++],cx=c%MW,cy=(c/MW)|0,v=D[c]+1;
     if(cx>0&&D[c-1]<0&&!SOLID.has(tileAt(cx-1,cy))&&!(HO&&!pin&&HO.has(c-1))){D[c-1]=v;Q[t++]=c-1}
     if(cx<MW-1&&D[c+1]<0&&!SOLID.has(tileAt(cx+1,cy))&&!(HO&&!pin&&HO.has(c+1))){D[c+1]=v;Q[t++]=c+1}
@@ -6643,7 +6722,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{stIconsTick
   amb.intensity=AT.ai+fl*1.4+dawn*.9;hemi.intensity=AT.hi+fl*.8+dawn*.5;if(dawn>0){TMPC.setHex(AT.amb);amb.color.copy(TMPC.lerp(DAWN,dawn))}else amb.color.setHex(AT.amb);nb3dNight();
   postMat.uniforms.flash.value=fl*.3;postMat.uniforms.haze.value=CH===2&&S&&S.phase==='play'&&!S.dg&&SETT.quality!=='low'?1:0;postMat.uniforms.tm.value=clock%600;postMat.uniforms.grain.value=SETT.quality==='low'?0:chapterArt()?.015:.03;postMat.uniforms.gtm.value=SETT.flash?clock%600:0;postMat.uniforms.sharp.value=S&&S.shakeT>0?1:Math.max(0,postMat.uniforms.sharp.value-dt*4);
   rain.visible=(CH===1||CH===PORT)&&!(NB3D_ON&&GFX.fx>0&&!(S&&S.dg));if(rain.visible){rain.material.opacity=(CH===PORT?.13:CH1_ART_ON?.20:.32)*(1-dawn*.7);for(let i=0;i<RAIN_N;i++){const d=DROPS[i];d.y-=d.s*dt;d.x-=d.s*.12*dt;if(d.y<0){d.y+=12;d.x=rnd(-15,15);d.z=rnd(-10,10);if(S&&dt>0&&i%9===0)S.parts.push({k:'d',x:(camTarget.x+d.x)*16,y:(camTarget.z+d.z)*16,z:1,vx:rnd(-6,6),vy:rnd(-3,3),vz:rnd(8,14),c:'#6a7a96',life:.25})}
-    const x=camTarget.x+d.x,z=camTarget.z+d.z,o=i*6,hid=CH===PORT&&portCovered(x,z);rainPos[o]=x;rainPos[o+1]=hid?-99:d.y;rainPos[o+2]=z;rainPos[o+3]=x+.07;rainPos[o+4]=hid?-99:d.y-.55;rainPos[o+5]=z}rainGeo.attributes.position.needsUpdate=true}
+    const x=camTarget.x+d.x,z=camTarget.z+d.z,o=i*6,hid=CH===PORT&&portCovered(x,z)||roofCovered(x,z);rainPos[o]=x;rainPos[o+1]=hid?-99:d.y;rainPos[o+2]=z;rainPos[o+3]=x+.07;rainPos[o+4]=hid?-99:d.y-.55;rainPos[o+5]=z}rainGeo.attributes.position.needsUpdate=true}
   for(const o of propObjs){let f;
     if(o.kind==='gate')f=o.frames[!S||!S.opening?0:S.opening>2.4?1:2];
     else if(o.kind==='shrine')f=at(o.frames,clock+o.ph,6);
@@ -6792,6 +6871,8 @@ function puddleBuild(){for(const m of PUD.list){scene.remove(m.m);if(m.g)scene.r
   PUD.list.push({m,g:gm,x,y,s});n++}
  for(let i=0;i<34;i++){const m=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:PUD.ringTex,transparent:true,depthWrite:false,opacity:0,fog:false}));m.rotation.x=-Math.PI/2;m.visible=false;scene.add(m);PUD.rings.push({m,t:9})}}
 // 16.11.2026: kropla deszczu pod dachem portu (xz w obrysie budynku z PORT_BUILDINGS, wspolrzedne wielkiej mapy); deszcz nie pada w srodku skladu
+/* 23.11.2026: w chacie Chojraka i domu Heriego nie pada */
+function roofCovered(x,z){const h=W&&(W.chata||W.heriHouse);return !!h&&x>h.x&&x<h.x+h.w&&z>h.y&&z<h.y+h.h}
 function portCovered(x,z){return PORT_BUILDINGS.some(([bx,by,w,h])=>x>MP(bx)&&x<MP(bx+w)&&z>MP(by)&&z<MP(by+h))}
 function puddleTick(dt){const wet=(CH===1||CH===PORT)&&!S.dg;if(PUD.w!==W||wet!==(PUD.list.length>0)&&!(wet&&PUD.w===W))puddleBuild();const raining=rain.visible&&!S.dg,vis=wet;
  for(const p of PUD.list){p.m.visible=vis;if(p.g){p.g.visible=vis;p.g.material.opacity=p.g.userData.k*(.38+.1*Math.sin(clock*9+p.x)+.06*Math.sin(clock*23+p.y))}}
