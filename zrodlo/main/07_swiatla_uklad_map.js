@@ -144,6 +144,7 @@ const MAP_STD={1:{k:/^(covered_corpses|burnt_hay|wheel|barrel|dead_horse)$/,R:3,
 function mapStandard(w,ch){const cfg=MAP_STD[ch];if(!cfg||nbParam('std')==='0')return;const P=w.PROPS,M=w.map,U=w.under,N=MW*MH,D=new Uint8Array(N).fill(99),q=[];
  for(let i=0;i<N;i++){const t=M[i];if(SOLID.has(t)&&t!==31&&!cfg.edge.has(t)){D[i]=0;q.push(i)}}
  for(let h=0;h<q.length;h++){const i=q[h],x=i%MW,y=(i/MW)|0;if(D[i]>=cfg.R)continue;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const X=x+a,Y=y+b;if(X<0||Y<0||X>=MW||Y>=MH)continue;const j=Y*MW+X;if(D[j]>D[i]+1){D[j]=D[i]+1;q.push(j)}}}
+ if(ch===3){const f=P.find(q=>q.k==='queen_fountain');if(f)f.x=52.5}/* fontanna na osi alei i posagow */
  const keep=new Set(P.filter(p=>p.stone!==undefined||p.shrine!==undefined||p.keepStd));
  for(const p of P.slice()){if(!cfg.k.test(p.k)||keep.has(p))continue;const x=Math.floor(p.x),y=Math.floor(p.y);if(D[y*MW+x]<=cfg.R)continue;
   P.splice(P.indexOf(p),1);for(let dx=-1;dx<=1;dx++){const X=x+dx,j=y*MW+X;if(M[j]===31&&!P.some(o=>Math.abs(o.x-X-.5)<1.6&&Math.floor(o.y)===y)&&!(w.npcs||[]).some(n=>n.solid&&n.solid[0]===X&&n.solid[1]===y)){let v=U[j];if(!v||v===31||SOLID.has(v))v=ch===1?42:50;M[j]=v}}}
