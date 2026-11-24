@@ -140,14 +140,16 @@ function sensDecor(w,ch){const P=w.PROPS,M=w.map,U=w.under,T=(x,y)=>(x<0||y<0||x
 // 24.11.2026 (grafik, autor: "przerabiaj mapy wedle normalnego standardu"; wzory: Tristram, Oboz Lotrzyc, Lut Gholein, Rynek w Krakowie):
 // drobiazgi (ciala, beczki, wozy, kola, ogniska z gruzu) stoja przy scianach i budynkach jak przy pierzejach; srodki placow, pol i ulic zostaja puste.
 // Obiekty zadan (stone, shrine), NPC, kocioki i trasy bez zmian; usuwane sa tylko obiekty luzem, ich pola kolizji wracaja do podloza.
-const MAP_STD={1:{k:/^(covered_corpses|burnt_hay|wheel|barrel|dead_horse)$/,R:3,edge:new Set([21])},3:{k:/^(beggar_bodies|barrel|plague_cart|wheel|dead_horse)$/,R:2,edge:new Set()}};
+const MAP_STD={1:{k:/^(covered_corpses|burnt_hay|wheel|barrel|dead_horse)$/,R:3,edge:new Set([21])},3:{k:/^(beggar_bodies|barrel|plague_cart|wheel|dead_horse)$/,R:2,edge:new Set()},
+ 6:{k:/^(barrel|cargo|salt|skrzynia|beczka_ryby|wheel|dead_horse|covered_corpses|burnt_hay)$/,R:3,only:new Set([48]),water:45,RW:2}};/* port: ladunek pod magazynami albo na skraju nabrzeza (zaladunek), nie na srodku placu */
 function mapStandard(w,ch){const cfg=MAP_STD[ch];if(!cfg||nbParam('std')==='0')return;const P=w.PROPS,M=w.map,U=w.under,N=MW*MH,D=new Uint8Array(N).fill(99),q=[];
- for(let i=0;i<N;i++){const t=M[i];if(SOLID.has(t)&&t!==31&&!cfg.edge.has(t)){D[i]=0;q.push(i)}}
+ for(let i=0;i<N;i++){const t=M[i];if(cfg.only?cfg.only.has(t):(SOLID.has(t)&&t!==31&&!cfg.edge.has(t))){D[i]=0;q.push(i)}}
  for(let h=0;h<q.length;h++){const i=q[h],x=i%MW,y=(i/MW)|0;if(D[i]>=cfg.R)continue;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const X=x+a,Y=y+b;if(X<0||Y<0||X>=MW||Y>=MH)continue;const j=Y*MW+X;if(D[j]>D[i]+1){D[j]=D[i]+1;q.push(j)}}}
  if(ch===3){const f=P.find(q=>q.k==='queen_fountain');if(f)f.x=52.5}/* fontanna na osi alei i posagow */
+ const DW=new Uint8Array(N).fill(99);if(cfg.water!==undefined){const qw=[];for(let i=0;i<N;i++)if(M[i]===cfg.water){DW[i]=0;qw.push(i)}for(let h=0;h<qw.length;h++){const i=qw[h],x=i%MW,y=(i/MW)|0;if(DW[i]>=cfg.RW)continue;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const X=x+a,Y=y+b;if(X<0||Y<0||X>=MW||Y>=MH)continue;const j=Y*MW+X;if(DW[j]>DW[i]+1){DW[j]=DW[i]+1;qw.push(j)}}}}
  const keep=new Set(P.filter(p=>p.stone!==undefined||p.shrine!==undefined||p.keepStd));
- for(const p of P.slice()){if(!cfg.k.test(p.k)||keep.has(p))continue;const x=Math.floor(p.x),y=Math.floor(p.y);if(D[y*MW+x]<=cfg.R)continue;
-  P.splice(P.indexOf(p),1);for(let dx=-1;dx<=1;dx++){const X=x+dx,j=y*MW+X;if(M[j]===31&&!P.some(o=>Math.abs(o.x-X-.5)<1.6&&Math.floor(o.y)===y)&&!(w.npcs||[]).some(n=>n.solid&&n.solid[0]===X&&n.solid[1]===y)){let v=U[j];if(!v||v===31||SOLID.has(v))v=ch===1?42:50;M[j]=v}}}
+ for(const p of P.slice()){if(!cfg.k.test(p.k)||keep.has(p))continue;const x=Math.floor(p.x),y=Math.floor(p.y);if(D[y*MW+x]<=cfg.R||DW[y*MW+x]<=cfg.RW)continue;
+  P.splice(P.indexOf(p),1);for(let dx=-1;dx<=1;dx++){const X=x+dx,j=y*MW+X;if(M[j]===31&&!P.some(o=>Math.abs(o.x-X-.5)<1.6&&Math.floor(o.y)===y)&&!(w.npcs||[]).some(n=>n.solid&&n.solid[0]===X&&n.solid[1]===y)){let v=U[j];if(!v||v===31||SOLID.has(v))v=ch===1?42:ch===6?40:50;M[j]=v}}}
 }
 function decorFill(w,ch){const L=DECOR[ch];if(!L)return;const r=rng(ch*104729+77),M=w.map,P=w.PROPS,keep=w.clearways||new Set(),NO=new Set([23,24,25,43,45,54,64,65,90,91]);
  const T=(x,y)=>(x<1||y<1||x>=MW-1||y>=MH-1)?21:M[y*MW+x],st=w.start||{x:-999,y:-999},others=[...(w.npcs||[]),...(w.shrines||[])];
@@ -268,7 +270,7 @@ function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast lo
   {const M3=w.map,U3=w.under,P3=w.PROPS,sh3=w.shrines||[];if(sh3.length)for(let k=P3.length-1;k>=0;k--){const p=P3[k];if(p.shrine!==undefined)continue;if(!(p.fire||/debris_fire|cz_fire|pyre|bonfire/.test(p.k||'')))continue;
    if(!sh3.some(s=>Math.hypot(s.x/16-p.x,s.y/16-p.y)<6))continue;P3.splice(k,1);const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;
    if(M3[i]===31&&!P3.some(q=>Math.floor(q.y)===y&&Math.abs(q.x-(x+.5))<1.2)){let v=U3&&U3[i];if(!v||v===31||v===27||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=M3[(y+b)*MW+x+a];if(!SOLID.has(t)&&t!==27&&t!==24&&t!==54){v=t;break}}}M3[i]=v||20}}}
-  if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}if(ch===1||ch===3){sensDecor(w,ch);mapStandard(w,ch)}
+  if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}if(ch===1||ch===3){sensDecor(w,ch);mapStandard(w,ch)}if(ch===PORT)mapStandard(w,ch);
   // 15.11.2026 (prosba autora): wejscie do krypty wysrodkowane w przeswicie miedzy chatami (o 1 pole w prawo), razem z kolizja
   if(ch===1){const cs=w.PROPS.find(p=>p.k==='crypt_stairs');if(cs&&Math.abs(cs.x-76.4)<.3){const y=Math.floor(cs.y),L=y*MW+Math.floor(cs.x)-4,R=y*MW+Math.floor(cs.x)+2;if(w.map[L]===31){w.map[L]=(w.under&&w.under[L])||41}if(w.map[R]!==31&&!SOLID.has(w.map[R])){if(w.under)w.under[R]=w.map[R];w.map[R]=31}cs.x+=1;/* 23.11.2026 (883): po przesunieciu schodow dwa pola na lewo od obrazka zostawaly zablokowane (niewidzialna sciana) */for(const dx of [-4,-3]){const i=y*MW+Math.floor(cs.x)+dx;if(w.map[i]===31)w.map[i]=(w.under&&w.under[i])||41}}}
   /* 23.11.2026 (884, autor): w magazynie portu (skladzie przechodnim) bez kolizji skrzyn i beczek - przejscie wolne, rzeczy zostaja */
