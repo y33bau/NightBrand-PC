@@ -13,6 +13,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 | Rozmiar gra/ | ok. 306 MB (limit 500 MB); zip itch.io 962 pliki / 1000 (MAŁO ZAPASU: 28 wolnych miejsc) |
 
 ## Decyzje autora (najnowsze)
+- 24.11: STYL 2,5D, bajkowy dark fantasy. 3D = malowane obiekty (struktury, obiekty, assety, rekwizyty z naszych malunków); postacie, NPC i animacje chodu zostają w 2D (piloty 3D Rycerza i NPC wstrzymane). Zasady zebrane w `docs/ZASADY_SWIATA_MODELI_POSTACI.md`.
 - 23.11: ZASADA – usterki znalezione przy sprawdzaniu naprawiać od razu, bez pytania (balans i publikacja nadal za zgodą). Nowe obiekty na mapach: rola grafik (+ koncepciarz do propozycji). Wystrój z propozycji 1–4 wdrożony (884); magazyn portu bez kolizji; nowy HUD w każdym oknie.
 - 23.11: usunąć zapasy plików (881); faza 2 rodzin modeli w grze (882); po wszystkim sprzątanie: stary HUD w węższych oknach, obrazki pod modelami.
 - 23.11: rodziny modeli 3D (neutralne modele + kolor z kodu), faza 1 w grze (880); faza 2 dopiero po zgodzie autora (zostało ok. 70 plików w zipie).
