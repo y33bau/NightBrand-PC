@@ -1834,7 +1834,7 @@ function plantLayout(w,list){const fr={},geo=new THREE.PlaneGeometry(4,4).transl
 function dressNeutral(w){const cfg=NP_CFG[w.ch];if(!cfg||!IMGS.p0_np_grass)return;if(w.ch===1)return; // rozdz. I: rosliny z MAP1_PLANTS (dressSettlementsHD)
  const T=[['np_grass',.13],['np_tall',.2],['np_fern',.2],['np_thistle',.14]],fr=T.map(([k])=>{const f=procFrame(IMGS['p0_'+k],0,0,64,64,'prop');cutCircle(f.n);return f});
  const rr=rng(9100+w.ch),used=[],L=T.map(()=>[]);
- const free=(x,y)=>{const ix=Math.floor(x),iy=Math.floor(y);if(ix<1||iy<1||ix>=MW-1||iy>=MH-1)return false;const i=iy*MW+ix,t=tileAt(ix,iy);if(SOLID.has(t)||VOID.has(t)||t===90||t===64||t===65||t===54||t===43||(w.ch===1&&t===40)||w.clearways?.has(i)||w.groundPlan?.road?.[i])return false;
+ const free=(x,y)=>{const ix=Math.floor(x),iy=Math.floor(y);if(ix<1||iy<1||ix>=MW-1||iy>=MH-1)return false;const i=iy*MW+ix,t=tileAt(ix,iy);if(SOLID.has(t)||VOID.has(t)||t===90||t===64||t===65||t===54||t===43||(w.ch===1&&t===40)||(w.ch===3&&t!==56&&t!==53)||w.clearways?.has(i)||w.groundPlan?.road?.[i])return false;
   if(w.npcs.some(a=>Math.hypot(a.x/TS-x,a.y/TS-y)<3)||w.shrines.some(s=>Math.hypot(s.x/TS-x,s.y/TS-y)<3)||Math.hypot(w.start.x/TS-x,w.start.y/TS-y)<4)return false;
   return !w.PROPS.some(a=>Math.hypot(a.x-x,a.y-y)<1.2)&&!used.some(a=>Math.hypot(a.x-x,a.y-y)<.8)};
  let clumps=0;for(let a=0;a<8000&&clumps<cfg.n;a++){const cx=3+rr()*(MW-6),cy=3+rr()*(MH-6);if(!free(cx,cy))continue;clumps++;
@@ -2892,7 +2892,9 @@ const P8_C=[[1,'burnt_hay','p8_strach_na_wroble',1.6,.6,1,0,2],[1,'grave_cross',
  [4,'cz_beehive','p8_grzyby_zolte',1.2,.6,.6,0,3],[4,'cz_wagon','p8_worek_beczka',-1.8,.5,1,0,2],[4,'cz_firewood','p8_pomost',2,.5,1.8,0,1],
  [5,'cage','p8_loze_tortur',2.2,.6,1.8,1,1],[5,'rack','p8_rama_kajdany',-2,.2,1.6,1,2],[5,'vault','p8_kufer',-2.2,.6,1.2,1,2],[5,'bookcase_a','p8_stol_ksiegi',0,1.6,1.6,1,2],[5,'throne','p8_relikwiarz',2.4,.4,1.2,1,2],
  [5,'statue_b','p8_drzwi_krypty',2.2,-.4,1.8,1,1],[5,'armour','p8_kosz_dzbany',1.5,.5,1,0,2],[5,'lectern','p8_ksiegi',-1.2,.6,.9,0,2]];
-function p8Decor(w,near,put){const ile={};for(const [ch,k,n,ox,oy,W,blk,max] of P8_C){if(w.ch!==ch)continue;const id=k+'|'+n;near(k,p=>{if((ile[id]||0)>=max)return;const fl=p.x>MW/2;put(n,p.x+(fl?-ox:ox),p.y+oy,W,fl,blk);ile[id]=(ile[id]||0)+1})}}
+/* 24.11.2026 (grafik, autor: "dokad prowadzi ta brama?!"): bez doklejek, ktore luzem na bruku nie maja sensu (architektura bez budynku, drugi posag, dzwon przy fontannie) */
+const P8_BEZ_SENSU=new Set(['1|p8_ruina_chaty','1|p8_buda','1|p8_drewutnia','2|p8_brama_krasnoludzka','2|p8_zejscie_krypty','2|p8_schody_kosci','3|p8_brama_krolewska','3|p8_posag_swietej','3|p8_dzwon','3|p8_kaplica_fasada','3|p8_drzwi_krypty','3|p8_kareta','4|p8_pomost','5|p8_drzwi_krypty']);
+function p8Decor(w,near,put){const ile={};for(const [ch,k,n,ox,oy,W,blk,max] of P8_C){if(w.ch!==ch||(P8_BEZ_SENSU.has(ch+'|'+n)&&nbParam('p8sens')!=='0'))continue;const id=k+'|'+n;near(k,p=>{if((ile[id]||0)>=max)return;const fl=p.x>MW/2;put(n,p.x+(fl?-ox:ox),p.y+oy,W,fl,blk);ile[id]=(ile[id]||0)+1})}}
 function r7Decor(w){if(!w||!w.PROPS)return;/* 893: bez R7_ON put() nic nie stawia (brak modeli), zostaja tylko kolizje */const P=w.PROPS,it=[];
  const free=(x,y)=>{const t=w.map&&w.map[Math.floor(y)*MW+Math.floor(x)];return t!==undefined&&!SOLID.has(t)&&!(typeof VOID!=='undefined'&&VOID.has(t))&&!P.some(p=>Math.hypot(p.x-x,p.y-y)<.6)&&!it.some(q=>Math.hypot(q.x-x,q.z-y)<.5)};
  const put=(n,x,y,W,flip,blk)=>{if(!R7_ON&&P8_ON&&n[0]==='r'){const q=P8_ZA[n];if(!q)return;n=q[0];W*=q[1]}if(!P3D_MGEO[n]||!free(x,y))return;it.push({n,x,z:y,W,flip:!!flip});if(blk){const i=Math.floor(y-.3)*MW+Math.floor(x),rd=w.groundPlan&&w.groundPlan.road&&w.groundPlan.road[i];if(!rd&&!SOLID.has(w.map[i])){if(w.under)w.under[i]=w.map[i];w.map[i]=31}}},near=(k,fn)=>{for(const p of P)if(p.k===k)fn(p)};
@@ -3795,7 +3797,10 @@ function sensDecor(w,ch){const P=w.PROPS,M=w.map,U=w.under,T=(x,y)=>(x<0||y<0||x
  const near=(x,y,R,set)=>{for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++)if(set.has(T(x+dx,y+dy)))return true;return false};
  if(ch===1){const fires=P.filter(q=>q.k==='order_bonfire');for(const p of P.filter(q=>q.k==='order_banner'))if(!fires.some(f=>Math.hypot(f.x-p.x,f.y-p.y)<=6.5))free(p,true);
   const scene=new Set([40,46,48]);for(const p of P.filter(q=>q.decor&&/covered_corpses|burnt_hay|wheel/.test(q.k)))if(!near(Math.floor(p.x),Math.floor(p.y),3,scene))free(p,false)}
- if(ch===3){const rb=P.filter(q=>q.k==='royal_banner');for(const p of rb)if(!rb.some(o=>o!==p&&Math.abs(o.y-p.y)<.6&&Math.abs(o.x-p.x)<40))free(p,true)}}
+ if(ch===3){const wall=new Set([...SOLID].filter(t=>t!==31)),garden=new Set([56]);
+  for(const p of P.filter(q=>q.k==='dead_tree'))if(!near(Math.floor(p.x),Math.floor(p.y),1,garden))free(p,true);/* drzewa tylko w ogrodach, nie z bruku */
+  for(const p of P.filter(q=>q.decor&&q.k==='beggar_bodies'))if(!near(Math.floor(p.x),Math.floor(p.y),2,wall))free(p,false);/* zebracy pod murami, nie na srodku placu */
+  const rb=P.filter(q=>q.k==='royal_banner');for(const p of rb)if(!rb.some(o=>o!==p&&Math.abs(o.y-p.y)<.6&&Math.abs(o.x-p.x)<40))free(p,true)}}
 function decorFill(w,ch){const L=DECOR[ch];if(!L)return;const r=rng(ch*104729+77),M=w.map,P=w.PROPS,keep=w.clearways||new Set(),NO=new Set([23,24,25,43,45,54,64,65,90,91]);
  const T=(x,y)=>(x<1||y<1||x>=MW-1||y>=MH-1)?21:M[y*MW+x],st=w.start||{x:-999,y:-999},others=[...(w.npcs||[]),...(w.shrines||[])];
  const ok=(x,y)=>{const t=T(x,y);if(NO.has(t)||SOLID.has(t))return false;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const u=T(x+dx,y+dy);if(SOLID.has(u)||NO.has(u))return false}

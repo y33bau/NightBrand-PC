@@ -133,7 +133,10 @@ function sensDecor(w,ch){const P=w.PROPS,M=w.map,U=w.under,T=(x,y)=>(x<0||y<0||x
  const near=(x,y,R,set)=>{for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++)if(set.has(T(x+dx,y+dy)))return true;return false};
  if(ch===1){const fires=P.filter(q=>q.k==='order_bonfire');for(const p of P.filter(q=>q.k==='order_banner'))if(!fires.some(f=>Math.hypot(f.x-p.x,f.y-p.y)<=6.5))free(p,true);
   const scene=new Set([40,46,48]);for(const p of P.filter(q=>q.decor&&/covered_corpses|burnt_hay|wheel/.test(q.k)))if(!near(Math.floor(p.x),Math.floor(p.y),3,scene))free(p,false)}
- if(ch===3){const rb=P.filter(q=>q.k==='royal_banner');for(const p of rb)if(!rb.some(o=>o!==p&&Math.abs(o.y-p.y)<.6&&Math.abs(o.x-p.x)<40))free(p,true)}}
+ if(ch===3){const wall=new Set([...SOLID].filter(t=>t!==31)),garden=new Set([56]);
+  for(const p of P.filter(q=>q.k==='dead_tree'))if(!near(Math.floor(p.x),Math.floor(p.y),1,garden))free(p,true);/* drzewa tylko w ogrodach, nie z bruku */
+  for(const p of P.filter(q=>q.decor&&q.k==='beggar_bodies'))if(!near(Math.floor(p.x),Math.floor(p.y),2,wall))free(p,false);/* zebracy pod murami, nie na srodku placu */
+  const rb=P.filter(q=>q.k==='royal_banner');for(const p of rb)if(!rb.some(o=>o!==p&&Math.abs(o.y-p.y)<.6&&Math.abs(o.x-p.x)<40))free(p,true)}}
 function decorFill(w,ch){const L=DECOR[ch];if(!L)return;const r=rng(ch*104729+77),M=w.map,P=w.PROPS,keep=w.clearways||new Set(),NO=new Set([23,24,25,43,45,54,64,65,90,91]);
  const T=(x,y)=>(x<1||y<1||x>=MW-1||y>=MH-1)?21:M[y*MW+x],st=w.start||{x:-999,y:-999},others=[...(w.npcs||[]),...(w.shrines||[])];
  const ok=(x,y)=>{const t=T(x,y);if(NO.has(t)||SOLID.has(t))return false;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const u=T(x+dx,y+dy);if(SOLID.has(u)||NO.has(u))return false}

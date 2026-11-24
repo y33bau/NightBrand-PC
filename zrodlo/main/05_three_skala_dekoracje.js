@@ -102,7 +102,7 @@ function plantLayout(w,list){const fr={},geo=new THREE.PlaneGeometry(4,4).transl
 function dressNeutral(w){const cfg=NP_CFG[w.ch];if(!cfg||!IMGS.p0_np_grass)return;if(w.ch===1)return; // rozdz. I: rosliny z MAP1_PLANTS (dressSettlementsHD)
  const T=[['np_grass',.13],['np_tall',.2],['np_fern',.2],['np_thistle',.14]],fr=T.map(([k])=>{const f=procFrame(IMGS['p0_'+k],0,0,64,64,'prop');cutCircle(f.n);return f});
  const rr=rng(9100+w.ch),used=[],L=T.map(()=>[]);
- const free=(x,y)=>{const ix=Math.floor(x),iy=Math.floor(y);if(ix<1||iy<1||ix>=MW-1||iy>=MH-1)return false;const i=iy*MW+ix,t=tileAt(ix,iy);if(SOLID.has(t)||VOID.has(t)||t===90||t===64||t===65||t===54||t===43||(w.ch===1&&t===40)||w.clearways?.has(i)||w.groundPlan?.road?.[i])return false;
+ const free=(x,y)=>{const ix=Math.floor(x),iy=Math.floor(y);if(ix<1||iy<1||ix>=MW-1||iy>=MH-1)return false;const i=iy*MW+ix,t=tileAt(ix,iy);if(SOLID.has(t)||VOID.has(t)||t===90||t===64||t===65||t===54||t===43||(w.ch===1&&t===40)||(w.ch===3&&t!==56&&t!==53)||w.clearways?.has(i)||w.groundPlan?.road?.[i])return false;
   if(w.npcs.some(a=>Math.hypot(a.x/TS-x,a.y/TS-y)<3)||w.shrines.some(s=>Math.hypot(s.x/TS-x,s.y/TS-y)<3)||Math.hypot(w.start.x/TS-x,w.start.y/TS-y)<4)return false;
   return !w.PROPS.some(a=>Math.hypot(a.x-x,a.y-y)<1.2)&&!used.some(a=>Math.hypot(a.x-x,a.y-y)<.8)};
  let clumps=0;for(let a=0;a<8000&&clumps<cfg.n;a++){const cx=3+rr()*(MW-6),cy=3+rr()*(MH-6);if(!free(cx,cy))continue;clumps++;
