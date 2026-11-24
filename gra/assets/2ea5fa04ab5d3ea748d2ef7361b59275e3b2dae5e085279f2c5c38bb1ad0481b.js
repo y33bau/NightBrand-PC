@@ -3299,7 +3299,7 @@ function buildStolica(I){planGround(3);
   groundDetails(fg);
   const floor=new THREE.Mesh(floorGeo,groundMaterial(phong({map:surfaceTex(fc),alphaTest:.5,color:0x9a8e90})));floor.position.set(MW/2,0,MH/2);floor.receiveShadow=true;ROOT.add(floor);
   // animated rot sludge on top of the pools (Z1 row 4, frames 0-3), faintly glowing
-  W.rotTex=null;if(!lavaHD(I.cc0_lava,W.rots,.014,4,{color:0xc22a3a,emissive:0x6e0e1e,h:[.5,.035,.08],spd:.45,shin:70,spec:0x7a2030,soft:true})){
+  W.rotTex=null;if(!lavaHD(I.cc0_lava,W.rots,.014,4,{color:0x7a2a2c,emissive:0x2e070e,h:[.5,.035,.08],spd:.45,shin:70,spec:0x5a2028,soft:true}/* 24.11.2026 (grafik): zgnilizna jak ciemna, mokra posoka zamiast neonowej plamy */)){
   W.rotFrames=[0,1,2,3].map(i=>tcut(ZG,i,4));W.rotC=canvas(64,64);W.rotG=W.rotC.getContext('2d');W.rotTex=texFrom(W.rotC,true);W.rotF=-1;
   const rGeo=new THREE.PlaneGeometry(1,1);rGeo.rotateX(-Math.PI/2);
   instanced(rGeo,liquidMat({map:W.rotTex,emissiveMap:W.rotTex,emissive:0x5a2a18,shininess:22,specular:0x30221a},1),W.rots,([x,y])=>M4.makeTranslation(x+.5,.012,y+.5),false,true)}
@@ -3946,7 +3946,7 @@ function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast lo
   }else if(ch===3){
     w.braziers.forEach(([x,y])=>lsrc(0xff7a2a,1.6,8,x+.5,1.7,y+.6,'fire'));
     for(const p of w.PROPS){if(p.fire)lsrc(0xff6a1a,p.big?2.6:1.6,p.big?11:7,p.x,1.3,p.y-.2,'fire');if(p.k==='street_lantern')lsrc(0xffb060,1,5,p.x,1.5,p.y-.1,'fire')}
-    for(const [x,y] of w.rots)if((x*13+y*7)%11===0)lsrc(0xc01838,.8,3.5,x+.5,.4,y+.5,'rot');
+    for(const [x,y] of w.rots)if((x*13+y*7)%11===0)lsrc(0xa01830,.35,3,x+.5,.4,y+.5,'rot');
     w.shrines.forEach((s,i)=>lsrc(0x5fb0ff,1.2,5,s.x/16,1.2,s.y/16+.6,'shrine',{si:i}));
     for(const n of w.npcs)lsrc(0xffc070,n.id==='chojrak'?.3:.7,4.5,n.x/16,1.3,n.y/16-.4,'npc',{npc:n.id});
     lsrc(0xffcf70,2.4,16,MP(32),7,MP(19),'dome');lsrc(0xffb860,1.1,9,MP(32),2.2,MP(24.6),'dome'); // 15.11.2026: bazylika jako punkt centralny: mocniejsza poswiata kopuly i cieple swiatlo na fasadzie

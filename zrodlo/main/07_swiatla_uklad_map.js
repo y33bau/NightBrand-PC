@@ -284,7 +284,7 @@ function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast lo
   }else if(ch===3){
     w.braziers.forEach(([x,y])=>lsrc(0xff7a2a,1.6,8,x+.5,1.7,y+.6,'fire'));
     for(const p of w.PROPS){if(p.fire)lsrc(0xff6a1a,p.big?2.6:1.6,p.big?11:7,p.x,1.3,p.y-.2,'fire');if(p.k==='street_lantern')lsrc(0xffb060,1,5,p.x,1.5,p.y-.1,'fire')}
-    for(const [x,y] of w.rots)if((x*13+y*7)%11===0)lsrc(0xc01838,.8,3.5,x+.5,.4,y+.5,'rot');
+    for(const [x,y] of w.rots)if((x*13+y*7)%11===0)lsrc(0xa01830,.35,3,x+.5,.4,y+.5,'rot');
     w.shrines.forEach((s,i)=>lsrc(0x5fb0ff,1.2,5,s.x/16,1.2,s.y/16+.6,'shrine',{si:i}));
     for(const n of w.npcs)lsrc(0xffc070,n.id==='chojrak'?.3:.7,4.5,n.x/16,1.3,n.y/16-.4,'npc',{npc:n.id});
     lsrc(0xffcf70,2.4,16,MP(32),7,MP(19),'dome');lsrc(0xffb860,1.1,9,MP(32),2.2,MP(24.6),'dome'); // 15.11.2026: bazylika jako punkt centralny: mocniejsza poswiata kopuly i cieple swiatlo na fasadzie

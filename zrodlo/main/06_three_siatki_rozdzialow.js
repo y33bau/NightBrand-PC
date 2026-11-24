@@ -1242,7 +1242,7 @@ function buildStolica(I){planGround(3);
   groundDetails(fg);
   const floor=new THREE.Mesh(floorGeo,groundMaterial(phong({map:surfaceTex(fc),alphaTest:.5,color:0x9a8e90})));floor.position.set(MW/2,0,MH/2);floor.receiveShadow=true;ROOT.add(floor);
   // animated rot sludge on top of the pools (Z1 row 4, frames 0-3), faintly glowing
-  W.rotTex=null;if(!lavaHD(I.cc0_lava,W.rots,.014,4,{color:0xc22a3a,emissive:0x6e0e1e,h:[.5,.035,.08],spd:.45,shin:70,spec:0x7a2030,soft:true})){
+  W.rotTex=null;if(!lavaHD(I.cc0_lava,W.rots,.014,4,{color:0x7a2a2c,emissive:0x2e070e,h:[.5,.035,.08],spd:.45,shin:70,spec:0x5a2028,soft:true}/* 24.11.2026 (grafik): zgnilizna jak ciemna, mokra posoka zamiast neonowej plamy */)){
   W.rotFrames=[0,1,2,3].map(i=>tcut(ZG,i,4));W.rotC=canvas(64,64);W.rotG=W.rotC.getContext('2d');W.rotTex=texFrom(W.rotC,true);W.rotF=-1;
   const rGeo=new THREE.PlaneGeometry(1,1);rGeo.rotateX(-Math.PI/2);
   instanced(rGeo,liquidMat({map:W.rotTex,emissiveMap:W.rotTex,emissive:0x5a2a18,shininess:22,specular:0x30221a},1),W.rots,([x,y])=>M4.makeTranslation(x+.5,.012,y+.5),false,true)}

@@ -972,3 +972,4 @@ cache896 · trzecia kamera Szeroka (38 st., szerszy kat, ok. 10% wiecej pola), O
 cache897 · partia 8: 66 modeli z malunkow (wystroj, ogniska z plomieniem z kodu, rekwizyty tematyczne), 17 atlasow; usuniete stare arkusze bohaterow x1 (49 plikow, ?bohx2=0 juz nie dziala); nie sprawdzono: wyglad i ustawienie w rozdzialach II-VI, FPS, pad
 cache898 · Szlif map na bazie 897: sol w Solnym Nabrzezu z tekstura, sciana misy lawy z wariacja jasnosci (nie sprawdzono: pad, dzwiek, FPS, itch.io)
 cache899 · Sens map: sztandary Zakonu tylko przy ognisku obozu (Osada), sztandary krolewskie tylko parami (Zlotogrod), losowe drobiazgi w Osadzie tylko przy drodze/chacie/cmentarzu (nie sprawdzono: pad, dzwiek, FPS, itch.io)
+cache900 · Estetyka: zgnilizna w Zlotogrodzie ciemna zamiast neonowej, slabsza czerwona poswiata (nie sprawdzono: pad, dzwiek, FPS, itch.io)
