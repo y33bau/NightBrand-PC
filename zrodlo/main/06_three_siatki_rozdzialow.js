@@ -274,7 +274,7 @@ function portKit(kind,gx,bx,bz,bw,bd,ao){
  const oak=N('tsn1_dab_portowy',1.3,0xd0c4b8),oakD=N('tsn1_dab_portowy',.9,0x8a7a6c),plaster=N('tgm1_tynk_wapienny',1.7,0xeee8dc),stone=N('tgm2_mur_kamienny',1.2,0xd8d2c8),
   stoneD=N('tm03_ciosy',.9,0xa8a096),tiles=N('tgm3_dachowka_gliniana',1.1,0xd4c4b6,{side:THREE.DoubleSide}),ropeM=N('tsn2_konopie_skrecane',.7,0xe0d8cc),
   copper=N('tzl1_miedz_patynowana',1.4,0xf4f8f6,{side:THREE.DoubleSide,specular:0x5a7a70,shininess:24}),glassL=winGlass(cutaway(phong({color:0x1a120a,emissive:0x8a4a14})),1,2),glassD=winGlass(cutaway(phong({color:0x10141a,specular:0x555555,shininess:50})),0,2),
-  iron=cutaway(phong({color:0x34302c,specular:0x333333,shininess:30})),salt=cutaway(phong({color:0xe8e4da})),gold=cutaway(phong({color:0xb08a40,emissive:0x2a1c06,specular:0x806020,shininess:30}));
+  iron=cutaway(phong({color:0x34302c,specular:0x333333,shininess:30})),salt=N('tgm1_tynk_wapienny',2.2,0xa6aeb0,{specular:0x1a1e20,shininess:8}),gold=cutaway(phong({color:0xb08a40,emissive:0x2a1c06,specular:0x806020,shininess:30}));
  const g=new THREE.Group(),cover=new THREE.Group();ROOT.add(g);
  const add=(geo,m,x,y,z,rx,ry,rz,par)=>{const o=new THREE.Mesh(geo,m);o.position.set(x,y,z);o.rotation.set(rx||0,ry||0,rz||0);o.castShadow=o.receiveShadow=true;(par||g).add(o);return o};
  const B=(w,h,d,m,x,y0,z,ry,par)=>add(new THREE.BoxGeometry(w,h,d),m,x,y0+h/2,z,0,ry||0,0,par);
