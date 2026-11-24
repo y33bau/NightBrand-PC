@@ -142,6 +142,16 @@ function sensDecor(w,ch){const P=w.PROPS,M=w.map,U=w.under,T=(x,y)=>(x<0||y<0||x
 // Obiekty zadan (stone, shrine), NPC, kocioki i trasy bez zmian; usuwane sa tylko obiekty luzem, ich pola kolizji wracaja do podloza.
 const MAP_STD={1:{k:/^(covered_corpses|burnt_hay|wheel|barrel|dead_horse)$/,R:3,edge:new Set([21])},3:{k:/^(beggar_bodies|barrel|plague_cart|wheel|dead_horse)$/,R:2,edge:new Set()},
  6:{k:/^(barrel|cargo|salt|skrzynia|beczka_ryby|wheel|dead_horse|covered_corpses|burnt_hay)$/,R:3,only:new Set([48]),water:45,RW:2}};/* port: ladunek pod magazynami albo na skraju nabrzeza (zaladunek), nie na srodku placu */
+/* 24.11.2026 (grafik, wzor: Valewood): Czarnobor - drzewa w kepach zamiast pojedynczo, polany miedzy nimi; samotne drzewo dostaje 1-2 drzewa tego samego gatunku obok,
+   tylko na otwartym terenie (5x5 wolne), z dala od NPC, kociolkow i startu, wiec zadne przejscie sie nie zweza; kosci i krzaki z czaszkami tylko przy drzewach, kamieniach i kurhanach */
+function forestStandard(w){if(nbParam('std')==='0')return;const P=w.PROPS,M=w.map,U=w.under,T=new Set(['spruce','dead_oak','birch','dead_spruce','tall_pine']),OPEN=new Set([60,62,63,66,67]);
+ const trees=P.filter(p=>T.has(p.k)),st=w.start,away=[...(w.npcs||[]).map(n=>[n.x/TS,n.y/TS]),...(w.shrines||[]).map(n=>[n.x/TS,n.y/TS]),[st.x/TS,st.y/TS]];
+ const open5=(x,y,px,py)=>{for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){const X=x+dx,Y=y+dy;if(X===px&&Y===py)continue;if(X<2||Y<2||X>=MW-2||Y>=MH-2||!OPEN.has(M[Y*MW+X]))return false}return true};
+ let added=0;for(const t of trees){if(trees.some(o=>o!==t&&Math.hypot(o.x-t.x,o.y-t.y)<3.5))continue;let n=0;const h=Math.abs(Math.sin(t.x*12.9898+t.y*78.233)*43758.5)%1,want=h<.5?1:2;
+  for(const [dx,dy] of [[2,1],[-2,1],[1,-2],[-1,2],[2,-1],[-2,-1]]){if(n>=want)break;const x=Math.floor(t.x)+dx,y=Math.floor(t.y)+dy;if(!open5(x,y,Math.floor(t.x),Math.floor(t.y)))continue;if(away.some(([a,b])=>Math.hypot(a-x,b-y)<5))continue;if(P.some(o=>Math.hypot(o.x-x-.5,o.y-y-.9)<1.6))continue;
+   const i=y*MW+x;U[i]=M[i];M[i]=31;const q={k:t.k,x:x+.5,y:y+.92,tree:1,flip:((x*7+y*3)&1)===1,keepStd:1};P.push(q);trees.push(q);n++;added++}}
+ const anc=P.filter(p=>T.has(p.k)||/mossy_boulder|standing_stone|burial_mound|cz_tent|cz_wagon|drowned_cart|cz_shrine|cz_idol|hanging_tree|sacred_oak|reeds/.test(p.k));
+ for(const p of P.slice())if(p.decor&&(p.k==='cz_bones'||p.k==='wolf_skull_bush')&&!anc.some(a=>Math.hypot(a.x-p.x,a.y-p.y)<2.5))P.splice(P.indexOf(p),1);w.forestAdded=added}
 function mapStandard(w,ch){const cfg=MAP_STD[ch];if(!cfg||nbParam('std')==='0')return;const P=w.PROPS,M=w.map,U=w.under,N=MW*MH,D=new Uint8Array(N).fill(99),q=[];
  for(let i=0;i<N;i++){const t=M[i];if(cfg.only?cfg.only.has(t):(SOLID.has(t)&&t!==31&&!cfg.edge.has(t))){D[i]=0;q.push(i)}}
  for(let h=0;h<q.length;h++){const i=q[h],x=i%MW,y=(i/MW)|0;if(D[i]>=cfg.R)continue;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const X=x+a,Y=y+b;if(X<0||Y<0||X>=MW||Y>=MH)continue;const j=Y*MW+X;if(D[j]>D[i]+1){D[j]=D[i]+1;q.push(j)}}}
@@ -270,7 +280,7 @@ function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast lo
   {const M3=w.map,U3=w.under,P3=w.PROPS,sh3=w.shrines||[];if(sh3.length)for(let k=P3.length-1;k>=0;k--){const p=P3[k];if(p.shrine!==undefined)continue;if(!(p.fire||/debris_fire|cz_fire|pyre|bonfire/.test(p.k||'')))continue;
    if(!sh3.some(s=>Math.hypot(s.x/16-p.x,s.y/16-p.y)<6))continue;P3.splice(k,1);const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;
    if(M3[i]===31&&!P3.some(q=>Math.floor(q.y)===y&&Math.abs(q.x-(x+.5))<1.2)){let v=U3&&U3[i];if(!v||v===31||v===27||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=M3[(y+b)*MW+x+a];if(!SOLID.has(t)&&t!==27&&t!==24&&t!==54){v=t;break}}}M3[i]=v||20}}}
-  if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}if(ch===1||ch===3){sensDecor(w,ch);mapStandard(w,ch)}if(ch===PORT)mapStandard(w,ch);
+  if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}if(ch===1||ch===3){sensDecor(w,ch);mapStandard(w,ch)}if(ch===PORT)mapStandard(w,ch);if(ch===4)forestStandard(w);
   // 15.11.2026 (prosba autora): wejscie do krypty wysrodkowane w przeswicie miedzy chatami (o 1 pole w prawo), razem z kolizja
   if(ch===1){const cs=w.PROPS.find(p=>p.k==='crypt_stairs');if(cs&&Math.abs(cs.x-76.4)<.3){const y=Math.floor(cs.y),L=y*MW+Math.floor(cs.x)-4,R=y*MW+Math.floor(cs.x)+2;if(w.map[L]===31){w.map[L]=(w.under&&w.under[L])||41}if(w.map[R]!==31&&!SOLID.has(w.map[R])){if(w.under)w.under[R]=w.map[R];w.map[R]=31}cs.x+=1;/* 23.11.2026 (883): po przesunieciu schodow dwa pola na lewo od obrazka zostawaly zablokowane (niewidzialna sciana) */for(const dx of [-4,-3]){const i=y*MW+Math.floor(cs.x)+dx;if(w.map[i]===31)w.map[i]=(w.under&&w.under[i])||41}}}
   /* 23.11.2026 (884, autor): w magazynie portu (skladzie przechodnim) bez kolizji skrzyn i beczek - przejscie wolne, rzeczy zostaja */

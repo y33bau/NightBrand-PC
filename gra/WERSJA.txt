@@ -979,3 +979,4 @@ cache903 · Standard map: Dolne Miasto - groby przodkow pod zachodnim murem, zbr
 cache904 · Dolne Miasto: nawa wielkiej sali i droga przez most wylozone duzymi ciosami z kraweznikiem (tekstury tm03_ciosy, tgm2), porownanie ?std=0 (nie sprawdzono: pad, dzwiek, FPS, itch.io)
 cache905 · Posadzki z tekstur autora: Dolne Miasto nawa z granitowych plyt, Zlotogrod rynek z jasnych ciosow, okrag wokol fontanny, wszystko na osi alei (porownanie ?std=0; nie sprawdzono: pad, dzwiek, FPS, itch.io)
 cache906 · Port: ladunek tylko pod magazynami albo na skraju nabrzeza (porownanie ?std=0; nie sprawdzono: pad, dzwiek, FPS, itch.io)
+cache907 · Czarnobor: drzewa w kepach (46 drzew dosadzonych przy samotnych, tylko na otwartym terenie), kosci i krzaki z czaszkami przy drzewach i kamieniach (porownanie ?std=0; nie sprawdzono: pad, dzwiek, FPS, itch.io)
