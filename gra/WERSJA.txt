@@ -969,3 +969,4 @@ cache893 · caly wystroj z bryl Blendera zdjety z gry; malowane obiekty zostaja;
 cache894 · latwiej: Normalny HP .85 obrazenia .85 liczba .92 (+pierwsze 3 min -10%), Latwy HP .65 obrazenia .6; stamina 115 (+15%), regeneracja 35 (+10%); nie sprawdzono: odczucie w grze, pad, itch.io
 cache895 · strzelcy (kusznicy, mnisi): pociski slabsze (4 i 5 zamiast 6 i 7), rzadsze strzaly, przerwa miedzy strzalami 2 s, cofaja sie z bliska i o polowe wolniej; nie sprawdzono: odczucie w grze, pad
 cache896 · trzecia kamera Szeroka (38 st., szerszy kat, ok. 10% wiecej pola), Opcje > Grafika; EN niezatwierdzone; nie sprawdzono: wyglad brzegow map, pad
+cache897 · partia 8: 66 modeli z malunkow (wystroj, ogniska z plomieniem z kodu, rekwizyty tematyczne), 17 atlasow; usuniete stare arkusze bohaterow x1 (49 plikow, ?bohx2=0 juz nie dziala); nie sprawdzono: wyglad i ustawienie w rozdzialach II-VI, FPS, pad
