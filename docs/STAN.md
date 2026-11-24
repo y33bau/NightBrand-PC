@@ -1,4 +1,4 @@
-Stan na 2026-11-24, cache 898 (opublikowane), rola agent główny
+Stan na 2026-11-24, cache 911 (opublikowane), rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,13 +6,14 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 898, opublikowane 24.11.2026 (log `docs/logi/LOG_SESJI_2026-11-24.md`) |
-| Gałęzie czekające na „publikuj” | brak (886–898 opublikowane 24.11) |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 898 |
-| Zip itch.io | `NightBrand_itch_898.zip` na pulpicie autora w `NIGHTBRAND` |
-| Rozmiar gra/ | ok. 306 MB (limit 500 MB); zip itch.io 962 pliki / 1000 (MAŁO ZAPASU: 28 wolnych miejsc) |
+| main | cache 911, opublikowane 24.11.2026 (log `docs/logi/LOG_SESJI_2026-11-24.md`) |
+| Gałęzie czekające na „publikuj” | brak (899–911 opublikowane 24.11) |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 911 |
+| Zip itch.io | `NightBrand_itch_911.zip` na pulpicie autora w `NIGHTBRAND` |
+| Rozmiar gra/ | ok. 306 MB (limit 500 MB); zip itch.io 966 plików / 1000 (MAŁO ZAPASU: 34 wolne miejsca, strażnik od 991) |
 
 ## Decyzje autora (najnowsze)
+- 24.11: mapy „jak w najlepszych grach typu Diablo, super klimat”; zgoda na zmiany tras, kolizji, rozmieszczenia wrogów i balansu map w rundzie przeglądu map. Runda 911: ciemniej poza światłem, mocniejsza winieta, zestawy przy tylnych ścianach (lokalnie `?klimat=0`). Następny polecany krok: stacje NPC (kosz z ogniem, ciepłe światło, 2–3 rzeczy) i ścieżki z płotkami w Osadzie.
 - 24.11: STYL 2,5D, bajkowy dark fantasy. 3D = malowane obiekty (struktury, obiekty, assety, rekwizyty z naszych malunków); postacie, NPC i animacje chodu zostają w 2D (piloty 3D Rycerza i NPC wstrzymane). Zasady zebrane w `docs/ZASADY_SWIATA_MODELI_POSTACI.md`.
 - 23.11: ZASADA – usterki znalezione przy sprawdzaniu naprawiać od razu, bez pytania (balans i publikacja nadal za zgodą). Nowe obiekty na mapach: rola grafik (+ koncepciarz do propozycji). Wystrój z propozycji 1–4 wdrożony (884); magazyn portu bez kolizji; nowy HUD w każdym oknie.
 - 23.11: usunąć zapasy plików (881); faza 2 rodzin modeli w grze (882); po wszystkim sprzątanie: stary HUD w węższych oknach, obrazki pod modelami.
