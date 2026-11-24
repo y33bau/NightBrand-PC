@@ -970,3 +970,4 @@ cache894 · latwiej: Normalny HP .85 obrazenia .85 liczba .92 (+pierwsze 3 min -
 cache895 · strzelcy (kusznicy, mnisi): pociski slabsze (4 i 5 zamiast 6 i 7), rzadsze strzaly, przerwa miedzy strzalami 2 s, cofaja sie z bliska i o polowe wolniej; nie sprawdzono: odczucie w grze, pad
 cache896 · trzecia kamera Szeroka (38 st., szerszy kat, ok. 10% wiecej pola), Opcje > Grafika; EN niezatwierdzone; nie sprawdzono: wyglad brzegow map, pad
 cache897 · partia 8: 66 modeli z malunkow (wystroj, ogniska z plomieniem z kodu, rekwizyty tematyczne), 17 atlasow; usuniete stare arkusze bohaterow x1 (49 plikow, ?bohx2=0 juz nie dziala); nie sprawdzono: wyglad i ustawienie w rozdzialach II-VI, FPS, pad
+cache898 · Szlif map na bazie 897: sol w Solnym Nabrzezu z tekstura, sciana misy lawy z wariacja jasnosci (nie sprawdzono: pad, dzwiek, FPS, itch.io)
