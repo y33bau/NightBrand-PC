@@ -3906,7 +3906,7 @@ function enrich(w,ch){
     for(let i=0;i<1;i++)building(6+((r()*3)|0),5+((r()*2)|0),58,50,false,(x,y)=>y<MH*.55);
     scatter('beggar_bodies',5,false,2);scatter('plague_cart',2);scatter('gibbet',2);scatter('barrel',3);scatter('royal_banner',2);scatter('dead_tree',2,true,2.5,(x,y)=>T(x,y)===57||y<MH*.6);
     scatter('rot_bloom',6,false,2.5,null,{anim:'bloom'});
-    for(let i=0;i<4;i++){const s=spot(quad(i),4);if(s)add('offering_bowl',s[0],s[1],true,{stone:i})}
+    for(let i=0;i<4;i++){const s=spot(quad(i),4)||spot(quad(i),2.5)||spot(quad(i),1.5);if(s)add('offering_bowl',s[0],s[1],true,{stone:i})}/* 24.11.2026: w gestym miescie stawiala sie 1 misa z 4 (zadanie nie do ukonczenia); mniejszy odstep, gdy brak miejsca */
     w.altar={col:0xffcf70,pc:'#ffd27a',hint:(EN?'Bowls stand in four districts. Defeat enemies beside them. Avoid the rot flowers; they burst underfoot.':'W czterech dzielnicach stoją misy. Pokonuj przy nich wrogów. Omijaj kwiaty zgnilizny, pękają pod stopami.'),
       one:n=>(EN?`An offering bowl fills with golden light. Full: ${n} of 4.`:`Misa ofiarna napełnia się złotym światłem. Pełne: ${n} z 4.`),all:(EN?'The golden bowls overflow. Your wounds heal, and you gather 30 coins.':'Złote misy przelewają się. Rany się goją, a ty zbierasz 30 monet.')};
     w.wave={msg:(EN?'A procession of fire leaves the monastery. Monks lead a mob of madmen.':'Z klasztoru wychodzi procesja ognia. Mnisi prowadzą tłum szaleńców.'),list:[['monk',5],['madman',8]]}}
