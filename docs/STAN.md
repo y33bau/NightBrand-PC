@@ -1,4 +1,4 @@
-Stan na 2026-11-23, cache 885 (opublikowane), rola agent główny
+Stan na 2026-11-24, cache 898 (opublikowane), rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,11 +6,11 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 885 (commit 3073119), opublikowane 23.11.2026 (log `docs/logi/LOG_SESJI_2026-11-23.md`) |
-| Gałęzie czekające na „publikuj” | brak (876–885 opublikowane 23.11) |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 885 |
-| Zip itch.io | `NightBrand_itch_885.zip` na pulpicie autora w `NIGHTBRAND` |
-| Rozmiar gra/ | ok. 219 MB (limit 500 MB); zip itch.io 873 pliki / 1000 (każdy model = 2–3 pliki) |
+| main | cache 898, opublikowane 24.11.2026 (log `docs/logi/LOG_SESJI_2026-11-24.md`) |
+| Gałęzie czekające na „publikuj” | brak (886–898 opublikowane 24.11) |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 898 |
+| Zip itch.io | `NightBrand_itch_898.zip` na pulpicie autora w `NIGHTBRAND` |
+| Rozmiar gra/ | ok. 306 MB (limit 500 MB); zip itch.io 962 pliki / 1000 (MAŁO ZAPASU: 28 wolnych miejsc) |
 
 ## Decyzje autora (najnowsze)
 - 23.11: ZASADA – usterki znalezione przy sprawdzaniu naprawiać od razu, bez pytania (balans i publikacja nadal za zgodą). Nowe obiekty na mapach: rola grafik (+ koncepciarz do propozycji). Wystrój z propozycji 1–4 wdrożony (884); magazyn portu bez kolizji; nowy HUD w każdym oknie.
