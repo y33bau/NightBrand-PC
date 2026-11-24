@@ -6,7 +6,7 @@ const chWon=c=>!!((SETT.save['s'+c]&&SETT.save['s'+c].win)||(SETT.save['a'+c]&&S
 // kampania: 1,2,6(port),3,4,5. Rozdzial jest otwarty po wygraniu poprzedniego; kto gral Zlotogrod przed dodaniem portu, zachowuje do niego dostep.
 const chLocked=c=>{if(!STORYMODE||c===1)return false;if(chWon(chPrev(c))||chWon(c))return false;return !(c===3&&(SETT.save.s3||SETT.save.a3||chWon(2)&&[4,5].some(chWon)))};
 let heavyPress=false,signPress=false,mouseL=false,mouseR=false,mouseX=0,mouseY=0,mouseT=-99,tAtk=false,tBlock=false;
-const SL={regen:32,delay:.55,roll:20,blockRegen:.25,stepCost:8,
+const SL={regen:35/* 24.11.2026 (autor): +10% regeneracji staminy, bylo 32 */,delay:.55,roll:20,blockRegen:.25,stepCost:8,
   mana:{max:60,regen:2.5,delay:.75,onHit:1,onParry:0,onKill:0,hitGap:.5},
   shot:{iceDmg:16,perL:2,targets:[3,4,6],iceR:8,fireDmg:[30,36,42],fireR:[34,38,42],fireHit:9,splash:.5},
   guard:{dmg:[15,17,20,22,29],hits:[2,3,4,5,5],gap:2,hitR:90,dur:10,hp:[.8,.9,1,1.1,1.2],taunt:[96,104,112,120,128],bossTaunt:5,spd:42,r:7,leash:140,inv:.3},parry:.18,blockMul:1.2,guardBreak:.8,riposte:1.5,cap:28,ramp:.12,bossHp:.45,enemyWind:.5,enemyRec:.5,enemyHit:1.6,staggerGap:.9,coinDrop:.45,coinStrong:2,coinSurvive:15,projDiv:900,dmgDiv:800,shotGap:1.3,aim:.55,
