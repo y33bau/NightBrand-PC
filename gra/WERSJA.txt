@@ -966,3 +966,4 @@ cache890 · wystroj z rodzin (menhiry, lawy itd.) przywrocony; ogniska, stosy, k
 cache891 · przywrocone wszystkie modele rodzin jak w 888 (menhiry, lawy, czaszki, jezyny, ogniska, kolumny); nie sprawdzono: wyglad w grze, pad, itch.io
 cache892 · przywrocone obiekty sprzed rodzin z Blendera (ogniska Zakonu, stosy z obrazkami, kosze, ogniska Czarnoboru, kolumna z Meshy, kolumny Cytadeli, jezyny); wystroj 882-884 zostaje; nie sprawdzono: wyglad w grze, pad, itch.io
 cache893 · caly wystroj z bryl Blendera zdjety z gry; malowane obiekty zostaja; nie sprawdzono: wyglad w grze, pad, itch.io
+cache894 · latwiej: Normalny HP .85 obrazenia .85 liczba .92 (+pierwsze 3 min -10%), Latwy HP .65 obrazenia .6; stamina 115 (+15%), regeneracja 35 (+10%); nie sprawdzono: odczucie w grze, pad, itch.io
