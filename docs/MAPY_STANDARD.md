@@ -23,6 +23,10 @@ Stan na 2026-11-24, cache 908, rola grafik
 - Port: ladunek (beczki, skrzynie, worki soli) tylko pod magazynami (R3) albo na skraju nabrzeza (R2 od wody).
 - Czarnobor: samotne drzewa dostaja 1-2 drzewa tego samego gatunku (tylko na terenie wolnym 5x5, z dala od NPC/kociolkow/startu), kosci i krzaki z czaszkami tylko przy drzewach i kamieniach.
 
+## Wdrozone 911 (galaz runda-klimat-map-911, porownanie lokalnie ?klimat=0)
+- Klimat Diablo: swiatlo ogolne i niebo nizej (I/VI port x0,7, II/V x0,76-0,78, III x0,8, IV x0,84, krypta x0,8), mgla gestsza (port rzadsza, ciemniejsza), mocniejszy kontrast; swiatlo bohatera cieplejsze, zasieg +10-18%; winieta mocniejsza (.56 zamiast .72). Kod: blok KLIMAT_ON w czesci 03, winieta w 08.
+- Zestawy pod tylnymi scianami (klimatDress, czesc 06): Osada (worki, kosze, kloda, wiadro), Dolne Miasto (beczki, smola, kamien runiczny), Cytadela (kufry, stol z ksiegami, relikwiarz; bez pasow x15-24 i x55-64). Tylko pod ciagla sciana, poza drogami, przejsciami i 4,5 pola od NPC/kociolkow/startu; wieksze z kolizja. Dojscie do NPC i kociolkow sprawdzone (BFS).
+
 ## Wnioski z prob (czego NIE robic)
 - Latarnie dokladane na alei Zlotogrodu dublowaly kosze z ogniem - wycofane.
 - Material posadzki w Dolnym Miescie: atlas ma tylko zwykly kamien (0,3), zlote zylki (1, autor krytykowal jako "linie techniczne") i lawe (5, mylace) - bez nowej tekstury nie da sie zrobic nawy/dywanu.

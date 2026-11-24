@@ -338,7 +338,7 @@ const postMat=new THREE.ShaderMaterial({uniforms:{tD:{value:rt.texture},uSh:{val
     if(hq>.5&&useB<.5){vec3 bl=vec3(0.);for(int k=0;k<16;k++){float a=float(k)*.3927;float rr=(k<8?3.5:8.)*u;vec3 s=texture2D(tD,vUv+vec2(cos(a),sin(a))*rr/res).rgb;bl+=max(s-vec3(.5),vec3(0.))*(k<8?1.:.7);}c+=bl/13.6*.34;}
     c+=sk*.07;float l=dot(c,vec3(.2126,.7152,.0722));c*=mix(mix(vec3(1.),cold,.5),mix(vec3(1.),warm,.35),smoothstep(.08,.65,l));
     c=pow(max(c,vec3(0.)),vec3(.97));c=c*(1.05+.15*c)/(1.+.25*c);{float l2=dot(c,vec3(.2126,.7152,.0722));c=mix(vec3(l2),c,gSat);c*=mix(gSh,gHi,smoothstep(.04,.5,l2));c=max((c-.18)*gCon+.18,vec3(0.));}
-    float vignette=1.-smoothstep(.36,.82,length((vUv-.5)*vec2(1.05,.95)));c*=mix(.72,1.,vignette);if(grain>0.){float gn=fract(sin(dot(gl_FragCoord.xy+floor(gtm*24.)*vec2(17.13,9.71),vec2(12.9898,78.233)))*43758.5453)-.5;c+=gn*grain*(.4+.6*smoothstep(0.,.45,dot(c,vec3(.333))));}
+    float vignette=1.-smoothstep(${KLIMAT_ON?'.3,.8':'.36,.82'},length((vUv-.5)*vec2(1.05,.95)));c*=mix(${KLIMAT_ON?'.56':'.72'},1.,vignette);if(grain>0.){float gn=fract(sin(dot(gl_FragCoord.xy+floor(gtm*24.)*vec2(17.13,9.71),vec2(12.9898,78.233)))*43758.5453)-.5;c+=gn*grain*(.4+.6*smoothstep(0.,.45,dot(c,vec3(.333))));}
     c=mix(c,vec3(c.r*1.2+.15,c.g*.5,c.b*.5),hurt);c=mix(c,c*2.4+vec3(.16,.19,.27),flash);
     if(hq>.5)c+=(fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453)-.5)/255.;gl_FragColor=vec4(c*bri,1.);}`});
 filmUniforms=postMat.uniforms;

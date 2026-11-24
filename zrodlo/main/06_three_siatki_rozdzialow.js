@@ -838,6 +838,24 @@ const P8_C=[[1,'burnt_hay','p8_strach_na_wroble',1.6,.6,1,0,2],[1,'grave_cross',
 /* 24.11.2026 (grafik, autor: "dokad prowadzi ta brama?!"): bez doklejek, ktore luzem na bruku nie maja sensu (architektura bez budynku, drugi posag, dzwon przy fontannie) */
 const P8_BEZ_SENSU=new Set(['1|p8_ruina_chaty','1|p8_buda','1|p8_drewutnia','2|p8_brama_krasnoludzka','2|p8_zejscie_krypty','2|p8_schody_kosci','3|p8_brama_krolewska','3|p8_posag_swietej','3|p8_dzwon','3|p8_kaplica_fasada','3|p8_drzwi_krypty','3|p8_kareta','4|p8_pomost','5|p8_drzwi_krypty']);
 function p8Decor(w,near,put){const ile={};for(const [ch,k,n,ox,oy,W,blk,max] of P8_C){if(w.ch!==ch||(P8_BEZ_SENSU.has(ch+'|'+n)&&nbParam('p8sens')!=='0'))continue;const id=k+'|'+n;near(k,p=>{if((ile[id]||0)>=max)return;const fl=p.x>MW/2;put(n,p.x+(fl?-ox:ox),p.y+oy,W,fl,blk);ile[id]=(ile[id]||0)+1})}}
+/* 911 (autor 24.11: "mapy jak w Diablo"): zestawy rzeczy pod tylnymi scianami (jak w lochach i osadach Diablo), z malowanych modeli partii 8.
+   Tylko pod ciagla sciana (nie przy drzwiach), poza drogami, przejsciami, NPC, kociolkami i startem. Wieksze rzeczy z kolizja. Porownanie lokalnie ?klimat=0 */
+const KL_SCIANY={1:{L:[['p8_worki_zboze',1.15,1],['p8_kosz_dzbany',.95,0],['p8_kloda',1.6,1],['p8_wiadro_lina',.7,0]],step:9,max:16},
+ 2:{L:[['p8_beczki_lina',1.35,1],['p8_beczka_smoly',.85,1],['p8_kamien_runiczny',.95,1],['p8_worek_beczka',1.05,1]],step:7,max:26},
+ 5:{L:[['p8_kufer',1.15,1],['p8_stol_ksiegi',1.55,1],['p8_kosz_dzbany',.95,0],['p8_relikwiarz',1.15,1]],step:8,max:18}};
+function klimatDress(w,put,it){const c=KL_SCIANY[w.ch];if(!c||nbParam('klimat')==='0')return;const M=w.map,T=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?21:M[y*MW+x],
+ rd=w.groundPlan&&w.groundPlan.road,keep=w.clearways,roofs=w.ch===1?(w.roofs||[]):[],
+ f1=(x,y)=>typeof MAP1_FLOOR==='undefined'||y<0||y>=MAP1_FLOOR.length?-1:MAP1_FLOOR[y].charCodeAt(x)-48,
+ away=[...(w.npcs||[]).map(n=>[n.x/TS,n.y/TS]),...(w.shrines||[]).map(q=>[q.x/TS,q.y/TS]),[w.start.x/TS,w.start.y/TS]];
+ let n=0;for(let y=2;y<MH-3&&n<c.max;y++){let last=-99;for(let x=3;x<MW-3&&n<c.max;x++){const i=y*MW+x;
+  if(x-last<c.step)continue;let ok=true;for(let d=-2;d<=2&&ok;d++)if(!WALLC.has(T(x+d,y-1))||SOLID.has(T(x+d,y))||VOID.has(T(x+d,y)))ok=false;if(!ok)continue;
+  if(SOLID.has(T(x,y+1))||SOLID.has(T(x,y+2))||VOID.has(T(x,y+1)))continue;
+  if((rd&&(rd[i]>=2||rd[i+MW]>=2))||(keep&&(keep.has(i)||keep.has(i+MW)))||(w.ch===1&&f1(x,y)===0))continue;
+  if(away.some(([ax,ay])=>Math.hypot(ax-x,ay-y)<4.5))continue;
+  if(roofs.some(r=>x>=r.x-1&&x<=r.x+r.w&&y>=r.y-1&&y<=r.y+r.h))continue;
+  if(w.ch===5&&((x>=15&&x<=24)||(x>=55&&x<=64)))continue;
+  const h=((x*73856093)^(y*19349663))>>>0,e=c.L[h%c.L.length],n0=it.length;put(e[0],x+.5,y+.95,e[1],h&2,e[2]);
+  if(it.length>n0){n++;last=x;if(h&4){const e2=c.L[(h>>>3)%c.L.length];put(e2[0],x+(h&8?1.6:-.6),y+1.1,e2[1]*.85,!(h&2),0)}}}}}
 function r7Decor(w){if(!w||!w.PROPS)return;/* 893: bez R7_ON put() nic nie stawia (brak modeli), zostaja tylko kolizje */const P=w.PROPS,it=[];
  const free=(x,y)=>{const t=w.map&&w.map[Math.floor(y)*MW+Math.floor(x)];return t!==undefined&&!SOLID.has(t)&&!(typeof VOID!=='undefined'&&VOID.has(t))&&!P.some(p=>Math.hypot(p.x-x,p.y-y)<.6)&&!it.some(q=>Math.hypot(q.x-x,q.z-y)<.5)};
  const put=(n,x,y,W,flip,blk)=>{if(!R7_ON&&P8_ON&&n[0]==='r'){const q=P8_ZA[n];if(!q)return;n=q[0];W*=q[1]}if(!P3D_MGEO[n]||!free(x,y))return;it.push({n,x,z:y,W,flip:!!flip});if(blk){const i=Math.floor(y-.3)*MW+Math.floor(x),rd=w.groundPlan&&w.groundPlan.road&&w.groundPlan.road[i];if(!rd&&!SOLID.has(w.map[i])){if(w.under)w.under[i]=w.map[i];w.map[i]=31}}},near=(k,fn)=>{for(const p of P)if(p.k===k)fn(p)};
@@ -857,6 +875,7 @@ function r7Decor(w){if(!w||!w.PROPS)return;/* 893: bez R7_ON put() nic nie stawi
  if(w.ch===5){near('bookcase_a',p=>put('r9_ksiega',p.x+1.2,p.y+.5,.42));near('bookcase_b',p=>put('r9_ksiega',p.x-1.2,p.y+.5,.42,1))}
  if(w.ch===4){near('cz_idol',p=>{put('r8_pal',p.x-1.7,p.y+.3,.3,0,1);put('r8_pal',p.x+1.8,p.y+.4,.3,1,1);put('r8_czaszka',p.x-1,p.y+.9,.26);put('r8_czaszka',p.x+.9,p.y+1,.24,1)});}
  if(P8_ON&&!R7_ON)p8Decor(w,near,put);
+ if(P8_ON&&!R7_ON)klimatDress(w,put,it);
  if(it.length)meshyEmit(w.group,it)}
 // plomien z kodu (pionowa plaszczyzna zwrocona do kamery, szum przesuwany w gore, addytywnie); czas: NB_WIN_T
 let NB_FLAME_M=null;

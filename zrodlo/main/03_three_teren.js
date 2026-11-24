@@ -58,6 +58,20 @@ if(ART_ON){
   GRADE[6]=[[.84,.98,1.09],[1.03,1.02,.99],.91,1.05];
   ART_LIGHT[6]=[0xd3e0e5,1.28,8.5];
 }
+/* 24.11.2026 (911, autor: "mapy jak w najlepszych grach typu Diablo, super klimat"): ciemniej poza plamami swiatla,
+   cieplejsze swiatlo bohatera o wiekszym zasiegu, glebsza mgla i mocniejszy kontrast obrazu. Porownanie lokalnie ?klimat=0 */
+const KLIMAT_ON=nbParam('klimat')!=='0';
+if(KLIMAT_ON){
+ // [mnoznik swiatla ogolnego, mnoznik nieba, mnoznik gestosci mgly, +kontrast, +nasycenie, mnoznik zasiegu swiatla bohatera]
+ const K={1:[.7,.74,1.15,.07,.03,1.18],2:[.76,.78,1.1,.06,.03,1.15],3:[.8,.8,1.08,.05,.03,1.12],4:[.84,.84,1.05,.05,.02,1.1],5:[.76,.78,1.12,.07,.04,1.18],6:[.7,.72,.9,.07,.05,1.18],9:[.8,.82,1.1,.06,.03,1.14]};
+ for(const c of Object.keys(K)){const a=ATM[c],k=K[c];if(!a)continue;a.ai*=k[0];a.hi*=k[1];a.fd*=k[2];
+  const g=GRADE[c];if(g){g[3]+=k[3];g[2]+=k[4];g[1]=[g[1][0]*1.02,g[1][1],g[1][2]*.97];g[0]=[g[0][0]*.98,g[0][1],g[0][2]*1.02]}
+  const l=ART_LIGHT[c];if(l){l[2]*=k[5];l[1]*=1.06}}
+ // port: zimna, ciezka mgla znad wody zamiast jasnej mlecznej (obraz byl splaszczony)
+ ATM[6].fog=0x1c2c37;ATM[6].clear=0x0e171e;ATM[6].amb=0x6f7f8e;
+ // Cytadela: kamien mniej sinoszary, swiece i ogniska Zakonu cieplej
+ ATM[5].amb=0x6e6a74;ATM[5].warm=0xf6dcc0;
+}
 function applyAtmos(){const a=ATM[CH],dp=depthOn();amb.color.setHex(a.amb);amb.intensity=a.ai*(dp?dp[0]:1);hemi.color.setHex(a.hs);hemi.groundColor.setHex(a.hg);hemi.intensity=a.hi*(dp?dp[1]:1);scene.fog.color.setHex(a.fog);scene.fog.density=a.fd;renderer.setClearColor(a.clear);moon.intensity=a.mi||0;if(a.mc)moon.color.setHex(a.mc);RIMU.k.value=RIM_K*(.5+(a.mi||0)*3);RIMU.col.value.setHex(a.mc||0x9ebbea);if(filmUniforms){filmUniforms.cold.value.setHex(a.cold);filmUniforms.warm.value.setHex(a.warm);const g=GRADE[CH]||GRADE[9],gk=nbParam('oprawa3d')!=='0'?1.8:1,sc=v=>1+(v-1)*gk;/* 19.11.2026: filmowe kolory rozdzialow mocniej (autor) */filmUniforms.gSh.value.set(...g[0].map(sc));filmUniforms.gHi.value.set(...g[1].map(sc));filmUniforms.gSat.value=sc(g[2]);filmUniforms.gCon.value=sc(g[3])}if(typeof setAmbience==='function')setAmbience()}
 // moon rim light on sprites: figure pixels whose screen-left neighbour is empty get a cold edge glow (flips with the sprite mirroring)
 const RIM_K=.55;
