@@ -5059,7 +5059,7 @@ let heavyPress=false,signPress=false,mouseL=false,mouseR=false,mouseX=0,mouseY=0
 const SL={regen:35/* 24.11.2026 (autor): +10% regeneracji staminy, bylo 32 */,delay:.55,roll:20,blockRegen:.25,stepCost:8,
   mana:{max:60,regen:2.5,delay:.75,onHit:1,onParry:0,onKill:0,hitGap:.5},
   shot:{iceDmg:16,perL:2,targets:[3,4,6],iceR:8,fireDmg:[30,36,42],fireR:[34,38,42],fireHit:9,splash:.5},
-  guard:{dmg:[15,17,20,22,29],hits:[2,3,4,5,5],gap:2,hitR:90,dur:10,hp:[.8,.9,1,1.1,1.2],taunt:[96,104,112,120,128],bossTaunt:5,spd:42,r:7,leash:140,inv:.3},parry:.18,blockMul:1.2,guardBreak:.8,riposte:1.5,cap:28,ramp:.12,bossHp:.45,enemyWind:.5,enemyRec:.5,enemyHit:1.6,staggerGap:.9,coinDrop:.45,coinStrong:2,coinSurvive:15,projDiv:900,dmgDiv:800,shotGap:1.3,aim:.55,
+  guard:{dmg:[15,17,20,22,29],hits:[2,3,4,5,5],gap:2,hitR:90,dur:10,hp:[.8,.9,1,1.1,1.2],taunt:[96,104,112,120,128],bossTaunt:5,spd:42,r:7,leash:140,inv:.3},parry:.18,blockMul:1.2,guardBreak:.8,riposte:1.5,cap:28,ramp:.12,bossHp:.45,enemyWind:.5,enemyRec:.5,enemyHit:1.6,staggerGap:.9,coinDrop:.45,coinStrong:2,coinSurvive:15,projDiv:900,dmgDiv:800,shotGap:2.0/* 24.11.2026 (autor): strzelcy rzadziej, bylo 1.3 */,aim:.55,
   wave:{l:{dmg:.54,speed:230,life:.62,r:13,size:1.25},h:{dmg:.63,speed:250,life:.75,r:19,size:1.8},stun:.4},
   light:{cost:14,dmg:[17,19,28],wind:.108,act:.09,rec:.243,range:30,arc:1.05,stun:[.18,.18,.3],lunge:[30,30,55]},
   heavy:{cost:36,dmg:48,charge:.42,wind:.52,act:.12,rec:.3,range:37,arc:1.5,stun:.7,lunge:70}};
@@ -5834,10 +5834,10 @@ function stepEnemyAI(e,dt){
   if(e.type==='beast'&&beastAI(e,dx,dy,d,dt))return;
   if(CZAI[e.type]&&CZAI[e.type](e,dx,dy,d,dt,hw))return;
   if(e.type==='monk'){e.cast=(e.cast===undefined?rnd(1,2.5):e.cast)-dt;
-    const mFire=()=>{e.atkA=.35;S.eproj.push({source:{type:e.type,chapter:CH},x:e.x,y:e.y,vx:dx/d*74,vy:dy/d*74,life:2.6,ph:Math.random(),mesh:A.fireball?(()=>{const m=new THREE.Mesh(geoC,A.fireball[0].n);scene.add(m);return m})():null});play('fire',.2)};
+    const mFire=()=>{e.atkA=.35;S.eproj.push({source:{type:e.type,chapter:CH},x:e.x,y:e.y,vx:dx/d*74,vy:dy/d*74,life:2.6,dm:5/* 24.11.2026 (autor: strzelcy za mocni): bylo 7 */,ph:Math.random(),mesh:A.fireball?(()=>{const m=new THREE.Mesh(geoC,A.fireball[0].n);scene.add(m);return m})():null});play('fire',.2)};
     if(e.aim>0){e.aim-=dt;if(e.aim<=0&&d>1&&sight(e.x,e.y,T.x,T.y))mFire()}
-    else if(d<140&&e.cast<=0&&sight(e.x,e.y,T.x,T.y)&&(S.enemyShotCd||0)<=0){e.aim=SL.aim;e.cast=rnd(4,5);S.enemyShotCd=SL.shotGap+SL.aim;telegraph(e)}
-    if(d<64){moveBox(e,-dx/d*e.spd*dt,-dy/d*e.spd*dt,hw,3);e.walk+=dt;return}if(d<110){e.walk+=dt*.3;return}}
+    else if(d<140&&e.cast<=0&&sight(e.x,e.y,T.x,T.y)&&(S.enemyShotCd||0)<=0){e.aim=SL.aim;e.cast=rnd(6,7)/* 24.11.2026: rzadziej, bylo 4-5 s */;S.enemyShotCd=SL.shotGap+SL.aim;telegraph(e)}
+    /* 24.11.2026 (autor: uciekaja, nie da sie dogonic): cofa sie dopiero z bliska i o polowe wolniej (bylo: od 64 pelna predkoscia) */if(d<40){moveBox(e,-dx/d*e.spd*.5*dt,-dy/d*e.spd*.5*dt,hw,3);e.walk+=dt*.5;return}if(d<110){e.walk+=dt*.3;return}}
   if(!BIG.has(e.type)&&e.type!=='collector'&&e.type!=='glizzard'&&e.type!=='wisp'&&e.dmg>0&&e.leap<=0){if(slashEnemy(e,dx,dy,d,dt)){e.walk+=dt*.2;return}}
   else if(d<e.r+6&&e.dmg>0&&e.type!=='collector'&&BIG.has(e.type)){
     if(BIG.has(e.type)){if(!(e.ctw>0)&&!(e.ccd>0)){e.ctw=.4;for(let k=0;k<3;k++)telegraph(e)}}// boss: zapowiedź .4 s, potem przerwa 1,4 s (unik w tym czasie ratuje)
@@ -5955,9 +5955,9 @@ function beastAI(e,dx,dy,d,dt){
 const CZAI={
   // crossbowman keeps his distance and shoots bolts
   xbow(e,dx,dy,d,dt,hw){e.cast=(e.cast===undefined?rnd(1,2.5):e.cast)-dt;
-    if(e.aim>0){e.aim-=dt;if(e.aim<=0&&d>1&&sight(e.x,e.y,e.x+dx,e.y+dy)){e.atkA=.35;S.eproj.push({source:{type:e.type,chapter:CH},x:e.x,y:e.y,vx:dx/d*110,vy:dy/d*110,life:2.2,bolt:1});play('swing',.2)}}
-    else if(d<170&&e.cast<=0&&sight(e.x,e.y,e.x+dx,e.y+dy)&&(S.enemyShotCd||0)<=0){e.aim=SL.aim;e.cast=rnd(5,6);S.enemyShotCd=SL.shotGap+SL.aim;telegraph(e)}
-    if(d<45){moveBox(e,-dx/d*e.spd*dt,-dy/d*e.spd*dt,hw,3);e.walk+=dt;return true}if(d<125){e.walk+=dt*.3;return true}return false},
+    if(e.aim>0){e.aim-=dt;if(e.aim<=0&&d>1&&sight(e.x,e.y,e.x+dx,e.y+dy)){e.atkA=.35;S.eproj.push({source:{type:e.type,chapter:CH},x:e.x,y:e.y,vx:dx/d*110,vy:dy/d*110,life:2.2,bolt:1,dm:4/* 24.11.2026 (autor): bylo 6 */});play('swing',.2)}}
+    else if(d<170&&e.cast<=0&&sight(e.x,e.y,e.x+dx,e.y+dy)&&(S.enemyShotCd||0)<=0){e.aim=SL.aim;e.cast=rnd(7,8.5)/* 24.11.2026: rzadziej, bylo 5-6 s */;S.enemyShotCd=SL.shotGap+SL.aim;telegraph(e)}
+    /* 24.11.2026 (autor): cofa sie dopiero z bliska i o polowe wolniej (bylo: od 45 pelna predkoscia) */if(d<32){moveBox(e,-dx/d*e.spd*.5*dt,-dy/d*e.spd*.5*dt,hw,3);e.walk+=dt*.5;return true}if(d<125){e.walk+=dt*.3;return true}return false},
   // chapter V: the scribe shoots like the crossbowman, the account wraith drains coins on touch
   // chapter V: the debtor throws a chain and drags the hero to him
   debtor(e,dx,dy,d,dt){e.chCd=(e.chCd===undefined?rnd(3,6):e.chCd)-dt;
