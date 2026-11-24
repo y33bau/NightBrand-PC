@@ -3788,6 +3788,14 @@ function clearCryptSurrounds(w){const boxes=[[67,4.5,71.5,8.6],[78,4.5,86.5,8.6]
  for(const [x0,y0,x1,y1] of boxes){
   for(let k=w.PROPS.length-1;k>=0;k--){const p=w.PROPS[k];if(p.k==='crypt_stairs'||p.k==='gallows'||p.shrine!==undefined)continue;if(p.x>=x0&&p.x<=x1&&p.y>=y0&&p.y<=y1+.5)w.PROPS.splice(k,1)}
   for(let y=Math.floor(y0);y<=Math.floor(y1);y++)for(let x=Math.floor(x0);x<=Math.floor(x1);x++){const i=y*MW+x;if(w.map[i]===31&&w.under&&w.under[i])w.map[i]=w.under[i];keep.add(i)}}}
+// 24.11.2026 (grafik, autor: "kazda mapa ma miec spojny sens"): obiekty bez sceny znikaja po wygenerowaniu mapy (losowanie nietkniete):
+// sztandary Zakonu tylko przy ognisku obozu, sztandary krolewskie tylko parami (brama), drobiazgi z decorFill w Osadzie tylko przy drodze, chacie albo cmentarzu
+function sensDecor(w,ch){const P=w.PROPS,M=w.map,U=w.under,T=(x,y)=>(x<0||y<0||x>=MW||y>=MH)?21:M[y*MW+x];
+ const free=(p,solid)=>{const i=P.indexOf(p);if(i<0)return;P.splice(i,1);if(!solid)return;const tx=Math.floor(p.x),ty=Math.floor(p.y);for(let dx=-1;dx<=1;dx++){const x=tx+dx,j=ty*MW+x;if(M[j]===31&&!P.some(q=>Math.abs(q.x-x-.5)<1.6&&Math.abs(Math.floor(q.y)-ty)<1)&&!(w.npcs||[]).some(n=>n.solid&&n.solid[0]===x&&n.solid[1]===ty)){let v=U[j];if(!v||v===31||SOLID.has(v))v=ch===1?42:ch===3?50:v;if(v)M[j]=v}}};/* caly slad obiektu (do 3 pol w rzedzie), bez niewidzialnych scian */
+ const near=(x,y,R,set)=>{for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++)if(set.has(T(x+dx,y+dy)))return true;return false};
+ if(ch===1){const fires=P.filter(q=>q.k==='order_bonfire');for(const p of P.filter(q=>q.k==='order_banner'))if(!fires.some(f=>Math.hypot(f.x-p.x,f.y-p.y)<=6.5))free(p,true);
+  const scene=new Set([40,46,48]);for(const p of P.filter(q=>q.decor&&/covered_corpses|burnt_hay|wheel/.test(q.k)))if(!near(Math.floor(p.x),Math.floor(p.y),3,scene))free(p,false)}
+ if(ch===3){const rb=P.filter(q=>q.k==='royal_banner');for(const p of rb)if(!rb.some(o=>o!==p&&Math.abs(o.y-p.y)<.6&&Math.abs(o.x-p.x)<40))free(p,true)}}
 function decorFill(w,ch){const L=DECOR[ch];if(!L)return;const r=rng(ch*104729+77),M=w.map,P=w.PROPS,keep=w.clearways||new Set(),NO=new Set([23,24,25,43,45,54,64,65,90,91]);
  const T=(x,y)=>(x<1||y<1||x>=MW-1||y>=MH-1)?21:M[y*MW+x],st=w.start||{x:-999,y:-999},others=[...(w.npcs||[]),...(w.shrines||[])];
  const ok=(x,y)=>{const t=T(x,y);if(NO.has(t)||SOLID.has(t))return false;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const u=T(x+dx,y+dy);if(SOLID.has(u)||NO.has(u))return false}
@@ -3907,7 +3915,7 @@ function initWorld(ch){setGrid(ch);/* 22.11.2026 (autor): staly uklad zamiast lo
   {const M3=w.map,U3=w.under,P3=w.PROPS,sh3=w.shrines||[];if(sh3.length)for(let k=P3.length-1;k>=0;k--){const p=P3[k];if(p.shrine!==undefined)continue;if(!(p.fire||/debris_fire|cz_fire|pyre|bonfire/.test(p.k||'')))continue;
    if(!sh3.some(s=>Math.hypot(s.x/16-p.x,s.y/16-p.y)<6))continue;P3.splice(k,1);const x=Math.floor(p.x),y=Math.floor(p.y),i=y*MW+x;
    if(M3[i]===31&&!P3.some(q=>Math.floor(q.y)===y&&Math.abs(q.x-(x+.5))<1.2)){let v=U3&&U3[i];if(!v||v===31||v===27||SOLID.has(v)){v=0;for(const [a,b] of [[1,0],[-1,0],[0,1],[0,-1]]){const t=M3[(y+b)*MW+x+a];if(!SOLID.has(t)&&t!==27&&t!==24&&t!==54){v=t;break}}}M3[i]=v||20}}}
-  if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}
+  if(ch===1){layoutPatch1(w);layoutPatch1b(w);layoutPatch1c(w);unblockRoads1(w)}if(ch===1||ch===3)sensDecor(w,ch);
   // 15.11.2026 (prosba autora): wejscie do krypty wysrodkowane w przeswicie miedzy chatami (o 1 pole w prawo), razem z kolizja
   if(ch===1){const cs=w.PROPS.find(p=>p.k==='crypt_stairs');if(cs&&Math.abs(cs.x-76.4)<.3){const y=Math.floor(cs.y),L=y*MW+Math.floor(cs.x)-4,R=y*MW+Math.floor(cs.x)+2;if(w.map[L]===31){w.map[L]=(w.under&&w.under[L])||41}if(w.map[R]!==31&&!SOLID.has(w.map[R])){if(w.under)w.under[R]=w.map[R];w.map[R]=31}cs.x+=1;/* 23.11.2026 (883): po przesunieciu schodow dwa pola na lewo od obrazka zostawaly zablokowane (niewidzialna sciana) */for(const dx of [-4,-3]){const i=y*MW+Math.floor(cs.x)+dx;if(w.map[i]===31)w.map[i]=(w.under&&w.under[i])||41}}}
   /* 23.11.2026 (884, autor): w magazynie portu (skladzie przechodnim) bez kolizji skrzyn i beczek - przejscie wolne, rzeczy zostaja */
