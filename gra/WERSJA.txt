@@ -975,3 +975,4 @@ cache899 · Sens map: sztandary Zakonu tylko przy ognisku obozu (Osada), sztanda
 cache900 · Estetyka: zgnilizna w Zlotogrodzie ciemna zamiast neonowej, slabsza czerwona poswiata (nie sprawdzono: pad, dzwiek, FPS, itch.io)
 cache901 · Sens map: bez doklejek partii 8 bez sensu (bramy, fasady, drzwi krypt, schody, ruiny, dzwon, drugie posagi, pomost) we wszystkich rozdzialach; Zlotogrod bez drzew i trawy na bruku, zebracy pod murami (nie sprawdzono: pad, dzwiek, FPS, itch.io)
 cache902 · Standard map (Osada, Zlotogrod): drobiazgi tylko przy scianach i budynkach, srodki placow i pol puste; porownanie lokalnie ?std=0 (nie sprawdzono: pad, dzwiek, FPS, itch.io)
+cache903 · Standard map: Dolne Miasto - groby przodkow pod zachodnim murem, zbrojownia wzdluz przepasci (nie sprawdzono: pad, dzwiek, FPS, itch.io)

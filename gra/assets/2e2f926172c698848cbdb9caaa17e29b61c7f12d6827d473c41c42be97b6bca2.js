@@ -752,6 +752,9 @@ function genDolne(){
   const W1=(k,x,y,ex)=>prop(k,x+.5,y+.92,[[x,y]],ex);
   // sala: sztandary i zbrojownia przy polnocnej i poludniowej scianie, zwalony filar w rogu
   for(const y of [8,39]){for(const x of [6,15,21,33])W1('clan_banner',x,y,{flip:x>18});for(const x of [8,31])W1('pickaxe_rack',x,y);prop('fallen_pillar',29,y+.92,[[28,y],[29,y]])}
+  // 24.11.2026 (grafik, standard map): nawy boczne wielkiej sali jako sceny przy krawedziach, nawa glowna wolna do walki:
+  // pod zachodnim murem rzad grobow przodkow (sarkofagi jeden przy drugim), wzdluz krawedzi przepasci zbrojownia klanu (stojaki w linii jak balustrada)
+  if(nbParam('std')!=='0'){for(const y of [13,15,17,30,32,34])W1('sarcophagus',4,y);for(const y of [12,14,16,31,33,35])W1('pickaxe_rack',33,y)}
   W1('rune_lantern',4,9,{stone:0});W1('rune_lantern',9,38,{stone:2});W1('chains',3,12);W1('chains',33,34);
   for(const [x,y] of [[34,21],[34,26],[40,21],[40,26]])W1('rune_lantern',x,y);
   // kuznia: piece z miechami przy polnocnej scianie, kowadla na brzegach lawy, wozki i stojaki przy wschodniej scianie
