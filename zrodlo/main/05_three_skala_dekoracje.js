@@ -305,7 +305,7 @@ function softenProps(w){// 12.11.2026: Akt I - rekwizyty bez twardego cienia z s
 /* 24.11.2026: posadzki z tekstur autora (folder NOWE MODELE): granitowe plyty twierdzy (nawa Dolnego Miasta), jasne ciosy Zlotogrodu (rynek); mapa wypuklosci z jasnosci */
 if(typeof OSADA_TX!=='undefined')Object.assign(OSADA_TX,{tp_granit:['assets/tekstury/cf1e6103bcf384647417ad293bdb0d7dae4cbba2a7b398d88901426555188305.webp','assets/tekstury/57fa4c19db19a68385353bc82c0dc245557a3ff04cbb6b4f8ee984464a9de597.webp'],
  tp_ciosy_jasne:['assets/tekstury/e9bb129136df616c30ed25d56ddde7ea266567e8c0ee5d092145e16414f0c241.webp','assets/tekstury/d5b53c75692c438292386a55ab36270acc1edacf90b6661092a0dc067e73b672.webp']});
-function naveFloor(w){if(w.ch===3)return rynekFloor(w);if(w.ch!==2||nbParam('std')==='0'||typeof OSADA_TX==='undefined')return;const M=w.map,ok=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&!SOLID.has(M[y*MW+x])||M[y*MW+x]===22||M[y*MW+x]===27;
+function naveFloor(w){if(w.ch===3)return rynekFloor(w);if(w.ch===5)return laneFloor(w);if(w.ch!==2||nbParam('std')==='0'||typeof OSADA_TX==='undefined')return;const M=w.map,ok=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&!SOLID.has(M[y*MW+x])||M[y*MW+x]===22||M[y*MW+x]===27;
  const inN=(x,y)=>(x>=MP(16.5)&&x<MP(20.5)&&y>=MP(8)&&y<MP(41))||(y>=MP(22.6)&&y<MP(25.4)&&x>=MP(3)&&x<MP(35));
  const pos=[],edge=[];for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(!inN(x,y)||!ok(x,y))continue;const border=!inN(x-1,y)||!inN(x+1,y)||!inN(x,y-1)||!inN(x,y+1);const arr=border?edge:pos;arr.push(x,.008,y,x+1,.008,y,x,.008,y+1,x+1,.008,y,x+1,.008,y+1,x,.008,y+1)}
  const mk=(arr,key,sc,col)=>{if(!arr.length)return;const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(arr,3));g.computeVertexNormals();
@@ -314,6 +314,14 @@ function naveFloor(w){if(w.ch===3)return rynekFloor(w);if(w.ch!==2||nbParam('std
  mk(pos,'tp_granit',4,0xd2ced2);mk(edge,'tgm2_mur_kamienny',1.1,0x9a9298)}
 /* 24.11.2026 (grafik, wzor: Rynek w Krakowie): Zlotogrod - plac przed bazylika wylozony plytami z obramowaniem, kamienny pierscien wokol fontanny,
    aleja od bramy do placu z kraweznikiem; srodek placu pusty. Tylko oprawa, kolizje bez zmian. Porownanie lokalnie ?std=0 */
+/* 24.11.2026 (grafik): Cytadela - dwa korytarze od dziedzinca do sali tronowej wylozone granitowymi plytami z kraweznikiem (czytelna trasa), srodki sal bez zmian */
+function laneFloor(w){if(nbParam('std')==='0'||typeof OSADA_TX==='undefined')return;const M=w.map,ok=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&!SOLID.has(M[y*MW+x]);
+ const L=CY.lanes.map(([a,b])=>[MP(a+.5),MP(b+.5)]),inA=(x,y)=>y>=MP(3)&&y<MP(67)&&L.some(([a,b])=>x+.5>=a&&x+.5<b)&&ok(x,y);
+ const pos=[],edge=[],q=(arr,x,y)=>arr.push(x,.008,y,x+1,.008,y,x,.008,y+1,x+1,.008,y,x+1,.008,y+1,x,.008,y+1);
+ for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(!inA(x,y))continue;const border=!L.some(([a,b])=>x-1+.5>=a&&x-1+.5<b)||!L.some(([a,b])=>x+1+.5>=a&&x+1+.5<b);q(border?edge:pos,x,y)}
+ const mk=(arr,key,sc,col)=>{if(!arr.length)return;const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(arr,3));g.computeVertexNormals();
+  const m=new THREE.Mesh(g,worldSurfN(phong({color:col,side:THREE.DoubleSide,shininess:14,specular:0x181818}),key,sc,1.4));m.receiveShadow=true;w.group.add(m)};
+ mk(pos,'tp_granit',4,0xc8c4cc);mk(edge,'tgm2_mur_kamienny',1.1,0x8a8490)}
 function rynekFloor(w){if(nbParam('std')==='0'||typeof OSADA_TX==='undefined')return;const M=w.map,ok=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&(!SOLID.has(M[y*MW+x])||M[y*MW+x]===31);
  const fx=52.5,fy=49.4,inA=(x,y)=>(x>=40&&x<=64&&y>=42&&y<=56)||(x>=51&&x<=53&&y>56&&y<90)/* os placu = os alei i posagow (x 52,5); rama symetryczna wokol fontanny */;
  const pos=[],edge=[],q=(arr,x,y)=>arr.push(x,.008,y,x+1,.008,y,x,.008,y+1,x+1,.008,y,x+1,.008,y+1,x,.008,y+1);

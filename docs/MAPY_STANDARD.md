@@ -1,4 +1,4 @@
-Stan na 2026-11-24, cache 903, rola grafik
+Stan na 2026-11-24, cache 908, rola grafik
 
 # Standard map NightBrand (wzorce: Tristram, Oboz Lotrzyc, Lut Gholein, Doki Kurastu, Athkatla, Valewood, Rynek w Krakowie)
 
@@ -17,13 +17,20 @@ Stan na 2026-11-24, cache 903, rola grafik
 - Zgnilizna w Zlotogrodzie ciemna zamiast neonowej.
 - Dolne Miasto: nawy boczne wielkiej sali - rzad grobow pod zachodnim murem, zbrojownia wzdluz krawedzi przepasci.
 
+## Wdrozone 904-908 (galaz runda-mapy-standard-902)
+- Posadzki z tekstur autora (folder NOWE MODELE): tp_granit ("Chlodny granitowy bruk twierdzy"), tp_ciosy_jasne (zl_ciosy_jasne); mapa wypuklosci z jasnosci. Kod: naveFloor/rynekFloor/laneFloor (czesc 05), skala worldSurfN = jednostki swiata na powtorzenie (4 = duze plyty).
+- Dolne Miasto: nawa i droga przez most z granitu z kraweznikiem. Zlotogrod: rynek z jasnych ciosow, okrag wokol fontanny, wszystko na osi x 52,5 (fontanna przesunieta). Cytadela: dwa korytarze z granitu od dziedzinca do tronu.
+- Port: ladunek (beczki, skrzynie, worki soli) tylko pod magazynami (R3) albo na skraju nabrzeza (R2 od wody).
+- Czarnobor: samotne drzewa dostaja 1-2 drzewa tego samego gatunku (tylko na terenie wolnym 5x5, z dala od NPC/kociolkow/startu), kosci i krzaki z czaszkami tylko przy drzewach i kamieniach.
+
 ## Wnioski z prob (czego NIE robic)
 - Latarnie dokladane na alei Zlotogrodu dublowaly kosze z ogniem - wycofane.
 - Material posadzki w Dolnym Miescie: atlas ma tylko zwykly kamien (0,3), zlote zylki (1, autor krytykowal jako "linie techniczne") i lawe (5, mylace) - bez nowej tekstury nie da sie zrobic nawy/dywanu.
 - Dodatkowe filary (kafel 22) rysuja sie losowo jako ulamane kikuty - nie uzywac do kolumnad.
 
 ## Do zrobienia (kolejnosc)
-1. Dolne Miasto: skala - hale 52x52 pol, rekwizyty 1 pole. Potrzebne duze obiekty (stoly klanowe, trony, piece) albo podzial hal scianami; nowa tekstura posadzki nawy (prompt Gemini).
+1. Osada: stacje NPC jak w Obozie Lotrzyc (zestaw rekwizytow + swiatlo przy postaci).
+2. Dolne Miasto: skala - hale 52x52 pol, rekwizyty 1 pole. Potrzebne duze obiekty (stoly klanowe, trony, piece) albo podzial hal scianami; nowa tekstura posadzki nawy (prompt Gemini).
 2. Solne Nabrzeze: skrzynie/beczki przy magazynach i kei, statek przy kei, latarnia jako punkt orientacyjny.
 3. Czarnobor: drzewa kepami, skaly jako sciany, polany z jedna scena.
 4. Cytadela: wyposazenie przy scianach wg funkcji sali (srodek wolny - decyzja autora 15.11).
