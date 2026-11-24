@@ -10,7 +10,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 | Gałęzie czekające na „publikuj” | brak (899–911 opublikowane 24.11) |
 | Kopia zapasowa | y33bau/nightbrand-backup = kopia 911 |
 | Zip itch.io | `NightBrand_itch_911.zip` na pulpicie autora w `NIGHTBRAND` |
-| Rozmiar gra/ | ok. 306 MB (limit 500 MB); zip itch.io 966 plików / 1000 (MAŁO ZAPASU: 34 wolne miejsca, strażnik od 991) |
+| Rozmiar gra/ | ok. 306 MB (limit 500 MB); zip itch.io 966 plików / 1000 (MAŁO ZAPASU: wg wydaj.py 24 wolne miejsca do strażnika) |
 
 ## Decyzje autora (najnowsze)
 - 24.11: mapy „jak w najlepszych grach typu Diablo, super klimat”; zgoda na zmiany tras, kolizji, rozmieszczenia wrogów i balansu map w rundzie przeglądu map. Runda 911: ciemniej poza światłem, mocniejsza winieta, zestawy przy tylnych ścianach (lokalnie `?klimat=0`). Następny polecany krok: stacje NPC (kosz z ogniem, ciepłe światło, 2–3 rzeczy) i ścieżki z płotkami w Osadzie.
