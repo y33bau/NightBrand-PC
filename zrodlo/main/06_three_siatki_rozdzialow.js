@@ -303,7 +303,7 @@ function portKit(kind,gx,bx,bz,bw,bd,ao){
   B(.8,.7,.06,oakD,cx,E+.4,front+.04);for(const z of [bz+bd*.3,bz+bd*.7]){win(bx-.06,1.6,z,-Math.PI/2,false,.5,.5);win(bx+bw+.06,1.6,z,Math.PI/2,false,.5,.5)}lantern(cx+1.45,2.2,front+.3);
   if(net){for(let i=0;i<3;i++){const z=bz+1.2+i*bd*.3;B(.04,1.5,1.4,ropeM,bx+bw+.1,.7,z);B(.06,.06,1.5,oakD,bx+bw+.14,2.2,z)}for(let i=0;i<2;i++){const o=add(new THREE.BoxGeometry(.08,.08,2.6),oakD,bx-.25,1.1,cz-1+i*.4);o.rotation.x=1.1}
    add(new THREE.TorusGeometry(.32,.1,6,14),ropeM,cx-1.6,.12,front+.55,Math.PI/2,0,0);add(new THREE.TorusGeometry(.2,.08,6,12),ropeM,cx-1.6,.3,front+.55,Math.PI/2,0,0)}
-  else{for(let i=0;i<6;i++){const sx=i%3,sy=(i/3)|0;add(new THREE.BoxGeometry(.6,.36,.42),salt,cx-1.8-sx*.05,.2+sy*.36,front+.5+sx*.45,0,(i*1.3)%1-.5,0)}B(.8,.8,.8,oakD,cx+1.9,0,front+.6,.3)}
+  /* 24.11.2026: prowizoryczny stos soli i ciemna skrzynia z bryl (bez tekstury) przy drzwiach szopy usuniete; sol i skrzynie w porcie sa modelami 3D */
   ao(cx,cz,bw*1.45+1,bd*1.45+1)}
  else if(kind==='office'){const E=3.7,F1=1.85;B(bw,F1,bd,stone,cx,0,cz);B(bw+.08,.16,bd+.08,stoneD,cx,F1-.08,cz);B(bw-.06,E-F1,bd-.06,plaster,cx,F1,cz);
   timber(bw,F1+.05,E-.05,Fp,0);timber(bw,F1+.05,E-.05,Bp,Math.PI);timber(bd,F1+.05,E-.05,Rp,Math.PI/2);timber(bd,F1+.05,E-.05,Lp,-Math.PI/2);B(bw+.2,.2,bd+.2,oakD,cx,E-.02,cz);
@@ -892,6 +892,8 @@ function triHouse(root,n,x0,z0,w,d,door,hk,flip,tone){const g=P3D_TGEO[n];if(!g)
 const TRI_FILL={pale:.74,pacholek_cumowniczy:.7,ladunek:.85,pacholek:.85};
 function triProp(root,n,x,z,W,ry,flip){const g=P3D_TGEO[n];if(!g)return false;const bb=g.boundingBox,ex=bb.max.x-bb.min.x||1,s=W*(TRI_FILL[n]||.88)/ex;
  const m=triMesh(n,x,z-(bb.max.z-bb.min.z)*s/2,s*(flip?-1:1),s,s,ry,false);m.castShadow=true;m.userData.propAsset=true;root.add(m);return true}
+/* 24.11.2026 (autor: "mamy te sztandary w 3D!"): port nie mial przypisanych modeli, wiec wspolne rekwizyty z Osady rysowaly sie starymi plaskimi obrazkami */
+P3D_MMAP[6]=Object.assign(P3D_MMAP[6]||{},{order_banner:'p1_order_banner',gallows:'p1_gallows',marga_cart:'p1_marga_cart',shop_sign:'p1_shop_sign',dead_horse:'p1_dead_horse',crow_post:'p1_crow_post',well:'p1_well',stocks:'p1_stocks',barrel:'p1_barrel',burnt_hay:'p1_burnt_hay',wheel:'p1_wheel'});
 function meshyFor(ch,k,p){let n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];if(typeof n==='function')n=p?n(p):null;if(Array.isArray(n))n=n[p?groundHash(Math.floor(p.x),Math.floor(p.y))%n.length:0];return n&&P3D_MGEO[n]?n:null}
 const P3D_MMAT=new Map();
 const P3D_TXC=new Map();/* 897: wspolna tekstura dla modeli z jednego atlasu (jedna kopia w karcie) */

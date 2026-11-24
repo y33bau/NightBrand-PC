@@ -754,7 +754,7 @@ function genDolne(){
   for(const y of [8,39]){for(const x of [6,15,21,33])W1('clan_banner',x,y,{flip:x>18});for(const x of [8,31])W1('pickaxe_rack',x,y);prop('fallen_pillar',29,y+.92,[[28,y],[29,y]])}
   // 24.11.2026 (grafik, standard map): nawy boczne wielkiej sali jako sceny przy krawedziach, nawa glowna wolna do walki:
   // pod zachodnim murem rzad grobow przodkow (sarkofagi jeden przy drugim), wzdluz krawedzi przepasci zbrojownia klanu (stojaki w linii jak balustrada)
-  if(nbParam('std')!=='0'){for(const y of [13,15,17,30,32,34])W1('sarcophagus',4,y);for(const y of [12,14,16,31,33,35])W1('pickaxe_rack',33,y)}
+  if(nbParam('std')!=='0'){fill(16,7,5,1,20);fill(16,40,5,1,20);/* przejscia w osi nawy do obu krypt: nawa prowadzi do centralnego sarkofagu przodka, nie w sciane */for(const y of [13,15,17,30,32,34])W1('sarcophagus',4,y);for(const y of [12,14,16,31,33,35])W1('pickaxe_rack',33,y)}
   W1('rune_lantern',4,9,{stone:0});W1('rune_lantern',9,38,{stone:2});W1('chains',3,12);W1('chains',33,34);
   for(const [x,y] of [[34,21],[34,26],[40,21],[40,26]])W1('rune_lantern',x,y);
   // kuznia: piece z miechami przy polnocnej scianie, kowadla na brzegach lawy, wozki i stojaki przy wschodniej scianie
@@ -2041,12 +2041,12 @@ function softenProps(w){// 12.11.2026: Akt I - rekwizyty bez twardego cienia z s
 if(typeof OSADA_TX!=='undefined')Object.assign(OSADA_TX,{tp_granit:['assets/tekstury/cf1e6103bcf384647417ad293bdb0d7dae4cbba2a7b398d88901426555188305.webp','assets/tekstury/57fa4c19db19a68385353bc82c0dc245557a3ff04cbb6b4f8ee984464a9de597.webp'],
  tp_ciosy_jasne:['assets/tekstury/e9bb129136df616c30ed25d56ddde7ea266567e8c0ee5d092145e16414f0c241.webp','assets/tekstury/d5b53c75692c438292386a55ab36270acc1edacf90b6661092a0dc067e73b672.webp']});
 function naveFloor(w){if(w.ch===3)return rynekFloor(w);if(w.ch===5)return laneFloor(w);if(w.ch!==2||nbParam('std')==='0'||typeof OSADA_TX==='undefined')return;const M=w.map,ok=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&!SOLID.has(M[y*MW+x])||M[y*MW+x]===22||M[y*MW+x]===27;
- const inN=(x,y)=>(x>=MP(16.5)&&x<MP(20.5)&&y>=MP(8)&&y<MP(41))||(y>=MP(22.6)&&y<MP(25.4)&&x>=MP(3)&&x<MP(35));
+ const inN=(x,y)=>(x>=MP(16.5)&&x<MP(20.5)&&y>=MP(5.2)&&y<MP(44))||(y>=MP(22.6)&&y<MP(25.4)&&x>=MP(3)&&x<MP(35));
  const pos=[],edge=[];for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(!inN(x,y)||!ok(x,y))continue;const border=!inN(x-1,y)||!inN(x+1,y)||!inN(x,y-1)||!inN(x,y+1);const arr=border?edge:pos;arr.push(x,.008,y,x+1,.008,y,x,.008,y+1,x+1,.008,y,x+1,.008,y+1,x,.008,y+1)}
  const mk=(arr,key,sc,col)=>{if(!arr.length)return;const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(arr,3));g.computeVertexNormals();
   const uv=[];for(let i=0;i<arr.length;i+=3)uv.push(arr[i],arr[i+2]);g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
   const m=new THREE.Mesh(g,worldSurfN(phong({color:col,side:THREE.DoubleSide,shininess:10,specular:0x111111}),key,sc,1.4));m.receiveShadow=true;m.renderOrder=0;w.group.add(m)};
- mk(pos,'tp_granit',4,0xd2ced2);mk(edge,'tgm2_mur_kamienny',1.1,0x9a9298)}
+ mk(pos,'tp_granit',4,0xb8b4bc);mk(edge,'tp_granit',1.6,0x8e8a94)/* kraweznik z tego samego granitu, drobniejsze plyty: mniejszy kontrast */}
 /* 24.11.2026 (grafik, wzor: Rynek w Krakowie): Zlotogrod - plac przed bazylika wylozony plytami z obramowaniem, kamienny pierscien wokol fontanny,
    aleja od bramy do placu z kraweznikiem; srodek placu pusty. Tylko oprawa, kolizje bez zmian. Porownanie lokalnie ?std=0 */
 /* 24.11.2026 (grafik): Cytadela - dwa korytarze od dziedzinca do sali tronowej wylozone granitowymi plytami z kraweznikiem (czytelna trasa), srodki sal bez zmian */
@@ -2056,16 +2056,16 @@ function laneFloor(w){if(nbParam('std')==='0'||typeof OSADA_TX==='undefined')ret
  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(!inA(x,y))continue;const border=!L.some(([a,b])=>x-1+.5>=a&&x-1+.5<b)||!L.some(([a,b])=>x+1+.5>=a&&x+1+.5<b);q(border?edge:pos,x,y)}
  const mk=(arr,key,sc,col)=>{if(!arr.length)return;const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(arr,3));g.computeVertexNormals();
   const m=new THREE.Mesh(g,worldSurfN(phong({color:col,side:THREE.DoubleSide,shininess:14,specular:0x181818}),key,sc,1.4));m.receiveShadow=true;w.group.add(m)};
- mk(pos,'tp_granit',4,0xc8c4cc);mk(edge,'tgm2_mur_kamienny',1.1,0x8a8490)}
+ mk(pos,'tp_granit',4,0xb4b0b8);mk(edge,'tp_granit',1.6,0x8a8690)}
 function rynekFloor(w){if(nbParam('std')==='0'||typeof OSADA_TX==='undefined')return;const M=w.map,ok=(x,y)=>x>=0&&y>=0&&x<MW&&y<MH&&(!SOLID.has(M[y*MW+x])||M[y*MW+x]===31);
- const fx=52.5,fy=49.4,inA=(x,y)=>(x>=40&&x<=64&&y>=42&&y<=56)||(x>=51&&x<=53&&y>56&&y<90)/* os placu = os alei i posagow (x 52,5); rama symetryczna wokol fontanny */;
+ const fx=52.5,fy=49.4,inA=(x,y)=>(x>=40&&x<=64&&y>=42&&y<=56)/* os placu = os alei i posagow (x 52,5); rama symetryczna wokol fontanny */;
  const pos=[],edge=[],q=(arr,x,y)=>arr.push(x,.008,y,x+1,.008,y,x,.008,y+1,x+1,.008,y,x+1,.008,y+1,x,.008,y+1);
  for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(!inA(x,y)||!ok(x,y))continue;const d=Math.hypot(x+.5-fx,y+.5-fy);
   const border=!inA(x-1,y)||!inA(x+1,y)||!inA(x,y-1)||!inA(x,y+1);q(border?edge:pos,x,y)}
  const mk=(arr,key,sc,col)=>{if(!arr.length)return;const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(arr,3));g.computeVertexNormals();
   const m=new THREE.Mesh(g,worldSurfN(phong({color:col,side:THREE.DoubleSide,shininess:10,specular:0x111111}),key,sc,1.4));m.receiveShadow=true;w.group.add(m)};
- mk(pos,'tp_ciosy_jasne',4,0xb4a898);mk(edge,'tgm2_mur_kamienny',1.1,0x9e9284);
- const rg=new THREE.RingGeometry(MP(2.3),MP(2.3)+1,64).rotateX(-Math.PI/2).translate(fx,.011,fy),rm=new THREE.Mesh(rg,worldSurfN(phong({color:0x9e9284,side:THREE.DoubleSide,shininess:10,specular:0x111111}),'tgm2_mur_kamienny',1.1,1.4));rm.receiveShadow=true;w.group.add(rm)}
+ mk(pos,'tp_ciosy_jasne',4,0xb4a898);mk(edge,'tp_ciosy_jasne',1.6,0x968a7c);
+ const rg=new THREE.RingGeometry(MP(2.3),MP(2.3)+1,64).rotateX(-Math.PI/2).translate(fx,.011,fy),rm=new THREE.Mesh(rg,worldSurfN(phong({color:0x968a7c,side:THREE.DoubleSide,shininess:10,specular:0x111111}),'tp_ciosy_jasne',1.6,1.4));rm.receiveShadow=true;w.group.add(rm)}
 function finishWorldArt(w){naveFloor(w);if(depthOn(w.ch))depthApron(w);buildRoofs(w);preparePowerFires(w);if(w.ch!==PORT)composeWorldProps(w);paint3dFinish(w);r7Decor(w);dressSettlementsHD(w);dressNeutral(w);settleWorldProps(w);if(w.ch===1&&depthOn(1))softenProps(w);const flat=new Set(['dwarf_bones','covered_corpses','beggar_bodies','doorway_bones','wheel','burnt_hay','cz_bones','cz_pelts','cz_walk','cz_wisp','cz_crow','mushrooms','ferns','brambles','reeds','wd0','sp0','wd1','sp1','wd2','sp2','wd3','sp3','wd4','sp4','wd5','sp5','wd6','sp6','wd7','sp7','wd8','sp8','wd9','sp9','wd10','sp10','wd11','sp11','scroll','book','pages','keys','seal','purse','shackles','skull']);
   const props=w.PROPS.filter(p=>!flat.has(p.k)&&!VOID.has(tileAt(Math.floor(p.x),Math.floor(p.y-.2))));
   w.groundShadows=instanced(groundFxGeo,groundShadowMat,props,p=>{const m=p.obj&&p.obj.mesh,s=p.k==='sacred_oak'?2.2:p.tree?.8:(!m&&p.port&&PORT_PROP_SIZE[p.k])?Math.min(2,PORT_PROP_SIZE[p.k][0]*.62):m?Math.min(2,Math.max(.3,m.geometry.parameters.width*Math.abs(m.scale.x)*.5)):.65;return M4.compose(V.set(p.x,.024,p.y-.1),Q.identity(),SC.set(s*1.1,1,s*.6))},false,false);
@@ -2394,7 +2394,7 @@ function portKit(kind,gx,bx,bz,bw,bd,ao){
   B(.8,.7,.06,oakD,cx,E+.4,front+.04);for(const z of [bz+bd*.3,bz+bd*.7]){win(bx-.06,1.6,z,-Math.PI/2,false,.5,.5);win(bx+bw+.06,1.6,z,Math.PI/2,false,.5,.5)}lantern(cx+1.45,2.2,front+.3);
   if(net){for(let i=0;i<3;i++){const z=bz+1.2+i*bd*.3;B(.04,1.5,1.4,ropeM,bx+bw+.1,.7,z);B(.06,.06,1.5,oakD,bx+bw+.14,2.2,z)}for(let i=0;i<2;i++){const o=add(new THREE.BoxGeometry(.08,.08,2.6),oakD,bx-.25,1.1,cz-1+i*.4);o.rotation.x=1.1}
    add(new THREE.TorusGeometry(.32,.1,6,14),ropeM,cx-1.6,.12,front+.55,Math.PI/2,0,0);add(new THREE.TorusGeometry(.2,.08,6,12),ropeM,cx-1.6,.3,front+.55,Math.PI/2,0,0)}
-  else{for(let i=0;i<6;i++){const sx=i%3,sy=(i/3)|0;add(new THREE.BoxGeometry(.6,.36,.42),salt,cx-1.8-sx*.05,.2+sy*.36,front+.5+sx*.45,0,(i*1.3)%1-.5,0)}B(.8,.8,.8,oakD,cx+1.9,0,front+.6,.3)}
+  /* 24.11.2026: prowizoryczny stos soli i ciemna skrzynia z bryl (bez tekstury) przy drzwiach szopy usuniete; sol i skrzynie w porcie sa modelami 3D */
   ao(cx,cz,bw*1.45+1,bd*1.45+1)}
  else if(kind==='office'){const E=3.7,F1=1.85;B(bw,F1,bd,stone,cx,0,cz);B(bw+.08,.16,bd+.08,stoneD,cx,F1-.08,cz);B(bw-.06,E-F1,bd-.06,plaster,cx,F1,cz);
   timber(bw,F1+.05,E-.05,Fp,0);timber(bw,F1+.05,E-.05,Bp,Math.PI);timber(bd,F1+.05,E-.05,Rp,Math.PI/2);timber(bd,F1+.05,E-.05,Lp,-Math.PI/2);B(bw+.2,.2,bd+.2,oakD,cx,E-.02,cz);
@@ -2983,6 +2983,8 @@ function triHouse(root,n,x0,z0,w,d,door,hk,flip,tone){const g=P3D_TGEO[n];if(!g)
 const TRI_FILL={pale:.74,pacholek_cumowniczy:.7,ladunek:.85,pacholek:.85};
 function triProp(root,n,x,z,W,ry,flip){const g=P3D_TGEO[n];if(!g)return false;const bb=g.boundingBox,ex=bb.max.x-bb.min.x||1,s=W*(TRI_FILL[n]||.88)/ex;
  const m=triMesh(n,x,z-(bb.max.z-bb.min.z)*s/2,s*(flip?-1:1),s,s,ry,false);m.castShadow=true;m.userData.propAsset=true;root.add(m);return true}
+/* 24.11.2026 (autor: "mamy te sztandary w 3D!"): port nie mial przypisanych modeli, wiec wspolne rekwizyty z Osady rysowaly sie starymi plaskimi obrazkami */
+P3D_MMAP[6]=Object.assign(P3D_MMAP[6]||{},{order_banner:'p1_order_banner',gallows:'p1_gallows',marga_cart:'p1_marga_cart',shop_sign:'p1_shop_sign',dead_horse:'p1_dead_horse',crow_post:'p1_crow_post',well:'p1_well',stocks:'p1_stocks',barrel:'p1_barrel',burnt_hay:'p1_burnt_hay',wheel:'p1_wheel'});
 function meshyFor(ch,k,p){let n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];if(typeof n==='function')n=p?n(p):null;if(Array.isArray(n))n=n[p?groundHash(Math.floor(p.x),Math.floor(p.y))%n.length:0];return n&&P3D_MGEO[n]?n:null}
 const P3D_MMAT=new Map();
 const P3D_TXC=new Map();/* 897: wspolna tekstura dla modeli z jednego atlasu (jedna kopia w karcie) */
