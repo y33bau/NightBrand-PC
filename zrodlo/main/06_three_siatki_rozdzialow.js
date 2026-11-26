@@ -49,16 +49,7 @@ function buildDolne(I){planGround(2);
     const mat=liquidMat({map:lt,emissiveMap:lt,emissive:0xff7a30,emissiveIntensity:.75},1),mesh=new THREE.Mesh(g,mat);mesh.castShadow=false;mesh.receiveShadow=false;ROOT.add(mesh);LAVA_HD={tex:lt,mat}}
   else{const lavaGeo=new THREE.PlaneGeometry(1,1);lavaGeo.rotateX(-Math.PI/2);
   instanced(lavaGeo,liquidMat({map:lavaTex,emissiveMap:lavaTex,emissive:0xff8a46,emissiveIntensity:.65},1),lavas,([x,y])=>M4.makeTranslation(x+.5,-.32,y+.5),false,false)}}
-  /* 26.11.2026 (921, autor: popraw lawe w Dolnym Miescie): misy lawy mialy proste, prostokatne brzegi. Wzdluz brzegu nieregularne bloki bazaltu
-     (nagrzane od spodu), lawa jasniejsza. Tylko wyglad: kolizje i balans bez zmian. Lokalnie ?dolne921=0 = jak przed. */
-  if(DOL921&&lavas.length){const L=new Set(lavas.map(([x,y])=>x+','+y)),rocks=[];
-   for(const [x,y] of lavas)for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){if(L.has((x+dx)+','+(y+dy)))continue;
-    for(let k=0;k<3;k++){const h=groundHash(x*3+dx+k*11,y*3+dy+k*7),r1=(h%1000)/1000,r2=((h>>10)%1000)/1000,r3=((h>>20)%1000)/1000;
-     const along=[.15,.5,.85][k]+(r1-.5)*.16,cx=dx?x+.5+dx*(.5+(r2-.35)*.3):x+along,cz=dy?y+.5+dy*(.5+(r2-.35)*.3):y+along;rocks.push([cx,cz,.42+r3*.46,h])}}
-   const rg=new THREE.DodecahedronGeometry(.5,0),rm=phong({color:0x3a2e28,specular:0x2a1808,shininess:10,emissive:0x6a2008,emissiveIntensity:.45,flatShading:true}),E=new THREE.Euler(),Q=new THREE.Quaternion(),V=new THREE.Vector3(),S3=new THREE.Vector3();
-   instanced(rg,rm,rocks,([cx,cz,sc,h])=>{E.set((h%7)*.3,(h%13)*.48,(h%5)*.25);Q.setFromEuler(E);S3.set(sc*1.3,sc*.62,sc);V.set(cx,-.05+sc*.12,cz);M4.compose(V,Q,S3)},true,true);
-   for(const o of LAVA_ALL)if(o.ch===CH)o.ek=1.45}
-  if(I.cc0_lava){const ac=[];for(let x=FT(35);x<FT(40);x++)for(let y=0;y<MH;y++)ac.push([x,y]);{const o=lavaHD(I.cc0_lava,ac,-9.4,5,{keep:true,h:[0,0,0],spd:.6});if(DOL921&&o)o.ek=1.45}}
+  if(I.cc0_lava){const ac=[];for(let x=FT(35);x<FT(40);x++)for(let y=0;y<MH;y++)ac.push([x,y]);lavaHD(I.cc0_lava,ac,-9.4,5,{keep:true,h:[0,0,0],spd:.6})}
   // 15.11.2026: Wielka Waga (kanon: przy niej Poborca wazy urobek) wyrasta z przepasci lawy miedzy halami, na polnoc od mostu; stoi wylacznie nad lawa, sale i most bez zmian
   {const x=MP(37.5),z=MP(14.5),w=7.2,base=-3.9;// obraz: dm_wielka_waga (ChatGPT 15.11.2026); kolumna ucieta dolem, dalej ciemny trzon do lawy
    if(!DOL921){nbLandmark('assets/rekwizyty/0635cccc967fe045f642756e28989e1c2985e5df565060c54e5e0799454bef6f.webp',{x,z,w,aspect:1536/1022,base,em:0x2a1608});
@@ -84,7 +75,7 @@ function buildDolne(I){planGround(2);
      const ore=new THREE.Mesh(new THREE.SphereGeometry(1.12,7,4,0,Math.PI*2,0,Math.PI/2),gold);ore.scale.y=.32;ore.position.y=-2.4;pan.add(ore)}
     G.position.set(x-.12,0,z-.25);G.traverse(m=>{if(m.isMesh){m.castShadow=false;m.receiveShadow=false}});ROOT.add(G);
     }
-   const H=w*1536/1022*SQ;W.LSRC.push({col:0xff8a3a,base:1.25,dist:7,x:x+w*.31,y:base+H*.4,z:z+.6,kind:'fire',ph:1.3});W.LSRC.push({col:0xffa060,base:.5,dist:5,x,y:base+H*.75,z:z+.6,kind:'fire',ph:3.1})}
+   const H=w*1536/1022*SQ;W.LSRC.push({col:0xff8a3a,base:1.25,dist:7,x:x+w*.31,y:base+H*.4,z:z+.6,kind:DOL921?'lava':'fire',ph:1.3});W.LSRC.push({col:0xffa060,base:.5,dist:5,x,y:base+H*.75,z:z+.6,kind:DOL921?'lava':'fire',ph:3.1})}
   let abT;{const ai=I.cc0_abyss||(IMGS&&IMGS.cc0_abyss);if(ai){abT=new THREE.Texture(ai);abT.wrapS=abT.wrapT=THREE.RepeatWrapping;abT.generateMipmaps=true;abT.minFilter=THREE.LinearMipmapLinearFilter;abT.magFilter=THREE.LinearFilter;abT.needsUpdate=true;abT.repeat.set((FT(40)-FT(35))/4,MH/4)}else{abT=texFrom(tcut(F,3,6),true);abT.repeat.set(5*MK,MH)}}
   const abyss=new THREE.Mesh(new THREE.PlaneGeometry(FT(40)-FT(35),MH),new THREE.MeshBasicMaterial({map:abT,color:0x8a6a6a}));abyss.rotation.x=-Math.PI/2;abyss.position.set((FT(35)+FT(40))/2,-10,MH/2);ROOT.add(abyss);
   const brT=texFrom(tcut(F,2,4),true);brT.repeat.set(5,2);

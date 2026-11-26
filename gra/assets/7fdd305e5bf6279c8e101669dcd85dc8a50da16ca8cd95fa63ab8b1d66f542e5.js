@@ -647,7 +647,7 @@ const $=id=>document.getElementById(id);
 const NB_LOKALNIE=location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname),nbParam=k=>NB_LOKALNIE?new URLSearchParams(location.search).get(k):null;
 /* 26.11 autor: swiatlo ogolne i ksiezyc -10% wzgledem 912 (stala wczesnie, bez TDZ) */const SPOJ_SKY=nbParam('spojnosc')==='0'?1:.9;
 /* 26.11 autor: walka ma byc tancem - plynna walka (zamrozenia przy trafieniu skrocone o 3/4 - decyzja autora, cios od razu po wcisnieciu, ruch i unik w trakcie ciosu); ?plynna=0 lokalnie = jak przed */const PLYN=nbParam('plynna')!=='0';
-/* 26.11 (921) Dolne Miasto: brzeg lawy z bazaltu, jasniejsza lawa, Wielka Waga z bryl; ?dolne921=0 lokalnie = jak przed */const DOL921=nbParam('dolne921')!=='0';
+/* 26.11 (921) Dolne Miasto: Wielka Waga z bryl, swiatla bez migotania; ?dolne921=0 lokalnie = jak przed */const DOL921=nbParam('dolne921')!=='0';
 // ---- język: EN/PL (pn_lang); bez zapisu domyślnie według przeglądarki. Zmiana języka przeładowuje grę ----
 const LANG=(()=>{let v=null;try{v=localStorage.getItem('pn_lang')}catch(e){}return v==='en'||v==='pl'?v:(/^pl\b/i.test(navigator.language||'')?'pl':'en')})(),EN=LANG==='en';
 document.documentElement.lang=LANG;
@@ -2157,16 +2157,7 @@ function buildDolne(I){planGround(2);
     const mat=liquidMat({map:lt,emissiveMap:lt,emissive:0xff7a30,emissiveIntensity:.75},1),mesh=new THREE.Mesh(g,mat);mesh.castShadow=false;mesh.receiveShadow=false;ROOT.add(mesh);LAVA_HD={tex:lt,mat}}
   else{const lavaGeo=new THREE.PlaneGeometry(1,1);lavaGeo.rotateX(-Math.PI/2);
   instanced(lavaGeo,liquidMat({map:lavaTex,emissiveMap:lavaTex,emissive:0xff8a46,emissiveIntensity:.65},1),lavas,([x,y])=>M4.makeTranslation(x+.5,-.32,y+.5),false,false)}}
-  /* 26.11.2026 (921, autor: popraw lawe w Dolnym Miescie): misy lawy mialy proste, prostokatne brzegi. Wzdluz brzegu nieregularne bloki bazaltu
-     (nagrzane od spodu), lawa jasniejsza. Tylko wyglad: kolizje i balans bez zmian. Lokalnie ?dolne921=0 = jak przed. */
-  if(DOL921&&lavas.length){const L=new Set(lavas.map(([x,y])=>x+','+y)),rocks=[];
-   for(const [x,y] of lavas)for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){if(L.has((x+dx)+','+(y+dy)))continue;
-    for(let k=0;k<3;k++){const h=groundHash(x*3+dx+k*11,y*3+dy+k*7),r1=(h%1000)/1000,r2=((h>>10)%1000)/1000,r3=((h>>20)%1000)/1000;
-     const along=[.15,.5,.85][k]+(r1-.5)*.16,cx=dx?x+.5+dx*(.5+(r2-.35)*.3):x+along,cz=dy?y+.5+dy*(.5+(r2-.35)*.3):y+along;rocks.push([cx,cz,.42+r3*.46,h])}}
-   const rg=new THREE.DodecahedronGeometry(.5,0),rm=phong({color:0x3a2e28,specular:0x2a1808,shininess:10,emissive:0x6a2008,emissiveIntensity:.45,flatShading:true}),E=new THREE.Euler(),Q=new THREE.Quaternion(),V=new THREE.Vector3(),S3=new THREE.Vector3();
-   instanced(rg,rm,rocks,([cx,cz,sc,h])=>{E.set((h%7)*.3,(h%13)*.48,(h%5)*.25);Q.setFromEuler(E);S3.set(sc*1.3,sc*.62,sc);V.set(cx,-.05+sc*.12,cz);M4.compose(V,Q,S3)},true,true);
-   for(const o of LAVA_ALL)if(o.ch===CH)o.ek=1.45}
-  if(I.cc0_lava){const ac=[];for(let x=FT(35);x<FT(40);x++)for(let y=0;y<MH;y++)ac.push([x,y]);{const o=lavaHD(I.cc0_lava,ac,-9.4,5,{keep:true,h:[0,0,0],spd:.6});if(DOL921&&o)o.ek=1.45}}
+  if(I.cc0_lava){const ac=[];for(let x=FT(35);x<FT(40);x++)for(let y=0;y<MH;y++)ac.push([x,y]);lavaHD(I.cc0_lava,ac,-9.4,5,{keep:true,h:[0,0,0],spd:.6})}
   // 15.11.2026: Wielka Waga (kanon: przy niej Poborca wazy urobek) wyrasta z przepasci lawy miedzy halami, na polnoc od mostu; stoi wylacznie nad lawa, sale i most bez zmian
   {const x=MP(37.5),z=MP(14.5),w=7.2,base=-3.9;// obraz: dm_wielka_waga (ChatGPT 15.11.2026); kolumna ucieta dolem, dalej ciemny trzon do lawy
    if(!DOL921){nbLandmark('assets/rekwizyty/0635cccc967fe045f642756e28989e1c2985e5df565060c54e5e0799454bef6f.webp',{x,z,w,aspect:1536/1022,base,em:0x2a1608});
@@ -2192,7 +2183,7 @@ function buildDolne(I){planGround(2);
      const ore=new THREE.Mesh(new THREE.SphereGeometry(1.12,7,4,0,Math.PI*2,0,Math.PI/2),gold);ore.scale.y=.32;ore.position.y=-2.4;pan.add(ore)}
     G.position.set(x-.12,0,z-.25);G.traverse(m=>{if(m.isMesh){m.castShadow=false;m.receiveShadow=false}});ROOT.add(G);
     }
-   const H=w*1536/1022*SQ;W.LSRC.push({col:0xff8a3a,base:1.25,dist:7,x:x+w*.31,y:base+H*.4,z:z+.6,kind:'fire',ph:1.3});W.LSRC.push({col:0xffa060,base:.5,dist:5,x,y:base+H*.75,z:z+.6,kind:'fire',ph:3.1})}
+   const H=w*1536/1022*SQ;W.LSRC.push({col:0xff8a3a,base:1.25,dist:7,x:x+w*.31,y:base+H*.4,z:z+.6,kind:DOL921?'lava':'fire',ph:1.3});W.LSRC.push({col:0xffa060,base:.5,dist:5,x,y:base+H*.75,z:z+.6,kind:DOL921?'lava':'fire',ph:3.1})}
   let abT;{const ai=I.cc0_abyss||(IMGS&&IMGS.cc0_abyss);if(ai){abT=new THREE.Texture(ai);abT.wrapS=abT.wrapT=THREE.RepeatWrapping;abT.generateMipmaps=true;abT.minFilter=THREE.LinearMipmapLinearFilter;abT.magFilter=THREE.LinearFilter;abT.needsUpdate=true;abT.repeat.set((FT(40)-FT(35))/4,MH/4)}else{abT=texFrom(tcut(F,3,6),true);abT.repeat.set(5*MK,MH)}}
   const abyss=new THREE.Mesh(new THREE.PlaneGeometry(FT(40)-FT(35),MH),new THREE.MeshBasicMaterial({map:abT,color:0x8a6a6a}));abyss.rotation.x=-Math.PI/2;abyss.position.set((FT(35)+FT(40))/2,-10,MH/2);ROOT.add(abyss);
   const brT=texFrom(tcut(F,2,4),true);brT.repeat.set(5,2);
@@ -7015,7 +7006,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{stIconsTick
   const EZ=(S&&S.exec>0&&SETT.shake?1-.16*Math.min(1,S.exec/.3):1)*nb3dZoom(dt)*cineZ;cam.position.set(camTarget.x+sx,Math.sin(PITCH)*DIST*EZ,camTarget.z+Math.cos(PITCH)*DIST*EZ+sz);cam.lookAt(camTarget.x+sx,.8,camTarget.z+sz);syncSwordGlow();syncCombatEffects(dt);syncWhirlVisual(dt);syncBloodHD(dt);
   const z0=S&&S.zones[0];if(z0){W.zoneLight.x=z0.x/16;W.zoneLight.z=z0.y/16}
   for(const L of LSRC){let k=L.base;
-    if(L.kind==='fire')k*=.85+Math.sin(clock*13+L.ph)*.08+Math.random()*.12;else if(L.kind==='lava'||L.kind==='rot')k*=.9+Math.sin(clock*1.7+L.ph)*.1;else if(L.kind==='rune')k*=.75+.25*Math.sin(clock*2+L.ph);
+    if(L.kind==='fire')k*=DOL921?.91+Math.sin(clock*5.3+L.ph)*.05+Math.sin(clock*8.7+L.ph*2.3)*.03:.85+Math.sin(clock*13+L.ph)*.08+Math.random()*.12;/* 26.11 autor: sciany migaly; plynne migotanie ognia */else if(L.kind==='lava'||L.kind==='rot')k*=.9+Math.sin(clock*1.7+L.ph)*.1;else if(L.kind==='rune')k*=.75+.25*Math.sin(clock*2+L.ph);
     else if(L.kind==='shrine')k*=.3+.7*(S?S.shr[L.si]/60:1);else if(L.kind==='stone')k=S&&S.stones&&S.stones[L.si]>=STONE_N?L.base*(.8+.2*Math.sin(clock*2.4+L.ph)):0;else if(L.kind==='gate')k=S&&S.opening?2.8*Math.min(1,(3.4-S.opening)/1.4):0;
     else if(L.kind==='npc'){const st=S?S.npc[L.npc]:{state:'alive'};k=st.state==='alive'||st.state==='talked'||st.state==='trial'||st.state==='offered'?L.base*(.8+.2*Math.sin(clock*3+L.ph)):st.state==='fading'?L.base*Math.max(0,st.t/1.5):0}
     else if(L.kind==='merchant')k=S&&S.merchant?L.base*(.85+.15*Math.sin(clock*4)):0;else if(L.kind==='zone')k=z0?1.6*Math.min(1,z0.life)*(.85+Math.random()*.2):0;
@@ -7027,7 +7018,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{stIconsTick
   if(S&&S.t>0&&Math.random()<dt*22*GFX.parts){const a=Math.random()*Math.PI*2,d=Math.random()*200;S.parts.push(CH===4?(Math.random()<.35?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(4,26),vx:rnd(-4,4),vy:rnd(-2,2),vz:rnd(-1.5,1.5),c:Math.random()<.5?'#c8e070':'#7fffd0',life:rnd(1.5,3.5)}:{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(1,8),vx:rnd(-5,-1),vy:rnd(-1,1),vz:rnd(-.5,.5),c:Math.random()<.6?'#4a5660':'#5e6a72',life:rnd(3,6)}):CH===3?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(30,70),vx:rnd(-3,3),vy:rnd(-1,1),vz:rnd(-5,-2),c:Math.random()<.6?'#c8a040':'#7a6030',life:rnd(4,7)}:CH===PORT?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(1,9),vx:rnd(-6,-2),vy:rnd(-1,1),vz:rnd(-.4,.6),c:Math.random()<.6?'#5d6f7c':'#8496a0',life:rnd(3,6)}:CH===1?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(30,70),vx:rnd(-6,2),vy:rnd(-1,1),vz:rnd(-9,-5),c:Math.random()<.6?'#6a6670':'#8a8490',life:rnd(3,6)}:{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(4,40),vx:rnd(-3,3),vy:rnd(-2,2),vz:rnd(-1,2),c:Math.random()<.7?'#5c5566':'#7d6a58',life:rnd(2,4)})}
   if(S&&CH===2&&Math.abs(pl.x/16-MP(37.5))<16&&Math.random()<dt*14)S.parts.push({k:'e',x:rnd(MP(35.2),MP(39.8))*16,y:(camTarget.z+rnd(-7,7))*16,z:-rnd(20,90),vx:rnd(-2,2),vy:0,vz:rnd(14,30),c:Math.random()<.6?'#ff6a1a':'#ffb347',life:rnd(2,4)});
   for(const o of WATER_ALL)if(o.ch===CH)o.tex.offset.set(clock*(o.deep?.0022:.004),clock*(o.deep?.0015:.0028));
-  for(const o of LAVA_ALL){if(o.ch!==CH)continue;{const sp=o.spd||1;o.tex.offset.set(clock*.008*sp,clock*.005*sp);o.etex.offset.set(.37-clock*.006*sp,.61+clock*.009*sp)}const p=Math.sin(clock*1.7)*.5+Math.sin(clock*.63+1.3)*.35+Math.sin(clock*4.1)*.15;o.mat.emissiveIntensity=(.78+.22*p)*(o.ek||1);if(o.halo)o.halo.material.opacity=.45+.2*p}
+  for(const o of LAVA_ALL){if(o.ch!==CH)continue;{const sp=o.spd||1;o.tex.offset.set(clock*.008*sp,clock*.005*sp);o.etex.offset.set(.37-clock*.006*sp,.61+clock*.009*sp)}const p=Math.sin(clock*1.7)*.5+Math.sin(clock*.63+1.3)*.35+Math.sin(clock*4.1)*.15;o.mat.emissiveIntensity=.78+.22*p;if(o.halo)o.halo.material.opacity=.45+.2*p}
   const lf=((clock*5)|0)%4;if(CH===2&&!LAVA_HD&&lf!==lavaFrame&&lavaFrames.length){lavaFrame=lf;lavaG.clearRect(0,0,64,64);lavaG.drawImage(lavaFrames[lf],0,0);lavaTex.needsUpdate=true}
   if(CH===3&&W.rotTex){const rf=((clock*2.5)|0)%4;if(rf!==W.rotF){W.rotF=rf;W.rotG.clearRect(0,0,64,64);W.rotG.drawImage(W.rotFrames[rf],0,0);W.rotTex.needsUpdate=true}}
   if(CH===4&&W.water){const f4=((clock*4)|0)%4;for(const o of W.water)if(o.f!==f4){o.f=f4;o.g.clearRect(0,0,64,64);o.g.drawImage(o.frames[f4],0,0);o.tex.needsUpdate=true}
