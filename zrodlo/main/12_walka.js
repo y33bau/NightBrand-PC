@@ -73,7 +73,7 @@ function attackHit(a){const P=a.kind==='h'?SL.heavy:SL.light,R=P.range*(S.zab&&a
   {const en=ENCH.filter(k=>S.sk[k]);if(en.length)for(let i=0;i<16;i++){const t=ang+rnd(-arc,arc),rr=rnd(10,R),k=en[i%en.length];S.parts.push({k:'e',x:pl.x+Math.cos(t)*rr,y:pl.y+Math.sin(t)*rr,z:rnd(8,18),vx:0,vy:0,vz:rnd(4,12),c:Math.random()<.6?ENC[k].col:ENC[k].col2,life:rnd(.2,.45)})}}
   if(crit){pl.riposte=0;const wdp=waveDmg*.8,wg=new Set();launchWave(a,ang,wdp,0,wg);const ec=sk('echo');if(ec>=1){launchWave(a,ang-.28,wdp*(ec>=3?1.2:1),1,wg);if(ec>=2)launchWave(a,ang+.28,wdp*(ec>=3?1.2:1),1,wg)}if(hits)ftInfo((EN?'Critical hit!':'Cios krytyczny!'))}
   else if(hits&&a.kind==='l'&&sk('zryw')){S.hitN=(S.hitN||0)+1;if(S.hitN>=ZRYW_N[sk('zryw')]){S.hitN=0;launchWave(a,ang,waveDmg)}}
-  if(hits){S.hitstop=PLYN?(a.kind==='h'?.0225:crit?.03:.011):(a.kind==='h'?.09:crit?.12:.045);shake(a.kind==='h'?.25:.1,.1);if(crit)play('katana',0)}
+  if(hits){S.hitstop=PLYN?0:(a.kind==='h'?.09:crit?.12:.045);shake(a.kind==='h'?.25:.1,.1);if(crit)play('katana',0)}
   if(a.wick>0)milStrip(a.wick,ang);
   if(a.echo)dzwEcho(a,twinBase,ang)}
 // fala cięcia: nagroda za parowanie, leci przed siebie i przebija wszystkich wrogów na swojej drodze (raz każdego)
@@ -287,7 +287,7 @@ function lungeHits(a){const dmg=skDmg(SL.light.dmg[0])*LUNGE.mul[a.L-1],tx=pl.x+
   if(along<-14||along>20||side>LUNGE.hitR+e.r)continue;a.hit.add(e);const big=BIG.has(e.type)||e.type==='collector',sx=ex*a.dy-ey*a.dx>=0?1:-1,kx=big?a.dx:a.dx*.55+a.dy*sx*.85,ky=big?a.dy:a.dy*.55-a.dx*sx*.85;
   if(!damageEnemy(e,dmg,kx,ky,big?.3:LUNGE.knock,'sk:wypad'))continue;n++;if(!a.st.has(e)){a.st.add(e);supportEnchant(e,a,false);applyEnchants(e,a,false)}
   if(!e.dead){if(big)breakPoise(e,8);else slashStagger(e,.45,true)}swordSparks(e.x,e.y,'#ffd2a0',10);blood(e.x,e.y,6,a.dx,a.dy)}}finally{ftMelee=oldM;ftHeavy=oldH;ftCrit=oldC}
- if(n){play('bladeHeavy',.05);shake(.1,.12);if(!a.hitStop){a.hitStop=1;S.hitstop=Math.max(S.hitstop||0,PLYN?.011:.045)}}}
+ if(n){play('bladeHeavy',.05);shake(.1,.12);if(!a.hitStop){a.hitStop=1;S.hitstop=Math.max(S.hitstop||0,PLYN?0:.045)}}}
 function lungeTick(dt){const a=pl.atk;if(pl.dead||pl.broken>0){endSk('wypad');return}skTickCommon(dt);
  if(a.stage==='wind'){a.t-=dt;if(a.t<=0){a.stage='dash';a.at=0;play('swing',0);skAdd('r_wypad',.32,pl.x+a.dx*LUNGE.dist*.5,pl.y+a.dy*LUNGE.dist*.5,.7,LUNGE.dist/29.4,'bill',-screenAng(a.dx,a.dy));for(let i=0;i<10;i++)S.parts.push({k:'d',x:pl.x-a.dx*4+rnd(-4,4),y:pl.y-a.dy*4+rnd(-2,2),z:rnd(0,3),vx:-a.dx*rnd(20,60)+rnd(-12,12),vy:0,vz:rnd(4,14),c:'#8a7a66',life:rnd(.3,.6)})}return}
  if(a.stage==='dash'){a.at+=dt;moveBox(pl,a.dx*LUNGE.dist/LUNGE.dur*dt,a.dy*LUNGE.dist/LUNGE.dur*dt,4,3,true);lungeHits(a);

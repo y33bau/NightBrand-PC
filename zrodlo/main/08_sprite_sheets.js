@@ -300,10 +300,10 @@ function attackCue(e){if(e.dead||e.rise>0||e.stun>0||e.frozen>0||e.trans>0)retur
   return enemyWinding(e)?(e.sw>0&&e.red?(SETT.contrast?'y':'r'):'w'):null}
 function setFrame(mesh,fr,mode){if(!fr)return;
   if(mode==='p2'&&!fr.p2){const m=fr.n.clone();if(fr.n.map){m.map=recolorTex(fr.n.map);if(m.emissiveMap)m.emissiveMap=m.map}fr.p2=m}
-  const STT={sg:[0x8aff5a,.55],so:[0xff9a40,.6],sb:[0xe03048,.4],sc:[0x9adcff,.5],sh:[0x7a62d8,.45],se:[0xa8d8cf,.5]};if(STT[mode]&&!fr[mode]){const m=fr.n.clone(),s=STT[mode];m.color.setHex(s[0]);if(m.emissive){m.emissive.setHex(s[0]);m.emissiveMap=fr.n.map;m.emissiveIntensity=s[1]}if(mode==='sh'||mode==='se'){m.transparent=true;m.opacity=mode==='se'?.72:.6;m.depthWrite=false}fr[mode]=m}
+  const STT={sg:[0x8aff5a,.55],so:[0xff9a40,.6],sb:[0xe03048,.4],sc:[0x9adcff,.5],sh:[0x7a62d8,.45],se:[0xa8d8cf,.5]};if(STT[mode]&&!fr[mode]){const m=fr.n.clone(),s=STT[mode];m.color.setHex(s[0]);if(m.emissive){m.emissive.setHex(s[0]);if(!PLYN)m.emissiveMap=fr.n.map;m.emissiveIntensity=PLYN?s[1]*.5:s[1]}if(mode==='sh'||mode==='se'){m.transparent=true;m.opacity=mode==='se'?.72:.6;m.depthWrite=false}fr[mode]=m}
   if((mode==='w'||mode==='r'||mode==='y')&&!fr[mode]){const m=fr.n.clone(),color=mode==='r'?0xff694b:mode==='y'?0xffdf62:0xffe1b0;
-    m.color.setHex(color);if(m.emissive){m.emissive.setHex(color);m.emissiveMap=fr.n.map;m.emissiveIntensity=mode==='w'?.7:.85}m.fog=false;fr[mode]=m}
-  if(mode==='impact'&&!fr.impact){void fr.f;const m=combatVisualBuild(()=>fr.n.clone());m.color.setHex(0xffd9be);if(m.emissive){m.emissive.setHex(0x7a3020);m.emissiveIntensity=.38;m.emissiveMap=fr.n.map}fr.impact=m}
+    m.color.setHex(color);if(m.emissive){m.emissive.setHex(color);if(!PLYN)m.emissiveMap=fr.n.map;m.emissiveIntensity=PLYN?(mode==='w'?.32:.42):mode==='w'?.7:.85}if(!PLYN)m.fog=false;fr[mode]=m}/* 26.11 (autor: przyciecia przed atakami): z PLYN podswietlenie nie zmienia mgly ani map, wiec karta nie kompiluje nowego shadera w walce */
+  if(mode==='impact'&&!fr.impact){void fr.f;const m=combatVisualBuild(()=>fr.n.clone());m.color.setHex(0xffd9be);if(m.emissive){m.emissive.setHex(0x7a3020);m.emissiveIntensity=PLYN?.2:.38;if(!PLYN)m.emissiveMap=fr.n.map}fr.impact=m}
   mesh.material=(mode&&fr[mode])||fr.n;if(mesh.userData.groundContact)settleProp(mesh);if(fr.d)mesh.customDistanceMaterial=fr.d}
 
 const at=(anim,t,fps,loop=true)=>anim[loop?Math.floor(t*fps)%anim.length:Math.min(anim.length-1,Math.floor(t*fps))];

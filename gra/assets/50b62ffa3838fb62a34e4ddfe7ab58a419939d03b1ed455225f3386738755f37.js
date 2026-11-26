@@ -4400,10 +4400,10 @@ function attackCue(e){if(e.dead||e.rise>0||e.stun>0||e.frozen>0||e.trans>0)retur
   return enemyWinding(e)?(e.sw>0&&e.red?(SETT.contrast?'y':'r'):'w'):null}
 function setFrame(mesh,fr,mode){if(!fr)return;
   if(mode==='p2'&&!fr.p2){const m=fr.n.clone();if(fr.n.map){m.map=recolorTex(fr.n.map);if(m.emissiveMap)m.emissiveMap=m.map}fr.p2=m}
-  const STT={sg:[0x8aff5a,.55],so:[0xff9a40,.6],sb:[0xe03048,.4],sc:[0x9adcff,.5],sh:[0x7a62d8,.45],se:[0xa8d8cf,.5]};if(STT[mode]&&!fr[mode]){const m=fr.n.clone(),s=STT[mode];m.color.setHex(s[0]);if(m.emissive){m.emissive.setHex(s[0]);m.emissiveMap=fr.n.map;m.emissiveIntensity=s[1]}if(mode==='sh'||mode==='se'){m.transparent=true;m.opacity=mode==='se'?.72:.6;m.depthWrite=false}fr[mode]=m}
+  const STT={sg:[0x8aff5a,.55],so:[0xff9a40,.6],sb:[0xe03048,.4],sc:[0x9adcff,.5],sh:[0x7a62d8,.45],se:[0xa8d8cf,.5]};if(STT[mode]&&!fr[mode]){const m=fr.n.clone(),s=STT[mode];m.color.setHex(s[0]);if(m.emissive){m.emissive.setHex(s[0]);if(!PLYN)m.emissiveMap=fr.n.map;m.emissiveIntensity=PLYN?s[1]*.5:s[1]}if(mode==='sh'||mode==='se'){m.transparent=true;m.opacity=mode==='se'?.72:.6;m.depthWrite=false}fr[mode]=m}
   if((mode==='w'||mode==='r'||mode==='y')&&!fr[mode]){const m=fr.n.clone(),color=mode==='r'?0xff694b:mode==='y'?0xffdf62:0xffe1b0;
-    m.color.setHex(color);if(m.emissive){m.emissive.setHex(color);m.emissiveMap=fr.n.map;m.emissiveIntensity=mode==='w'?.7:.85}m.fog=false;fr[mode]=m}
-  if(mode==='impact'&&!fr.impact){void fr.f;const m=combatVisualBuild(()=>fr.n.clone());m.color.setHex(0xffd9be);if(m.emissive){m.emissive.setHex(0x7a3020);m.emissiveIntensity=.38;m.emissiveMap=fr.n.map}fr.impact=m}
+    m.color.setHex(color);if(m.emissive){m.emissive.setHex(color);if(!PLYN)m.emissiveMap=fr.n.map;m.emissiveIntensity=PLYN?(mode==='w'?.32:.42):mode==='w'?.7:.85}if(!PLYN)m.fog=false;fr[mode]=m}/* 26.11 (autor: przyciecia przed atakami): z PLYN podswietlenie nie zmienia mgly ani map, wiec karta nie kompiluje nowego shadera w walce */
+  if(mode==='impact'&&!fr.impact){void fr.f;const m=combatVisualBuild(()=>fr.n.clone());m.color.setHex(0xffd9be);if(m.emissive){m.emissive.setHex(0x7a3020);m.emissiveIntensity=PLYN?.2:.38;if(!PLYN)m.emissiveMap=fr.n.map}fr.impact=m}
   mesh.material=(mode&&fr[mode])||fr.n;if(mesh.userData.groundContact)settleProp(mesh);if(fr.d)mesh.customDistanceMaterial=fr.d}
 
 const at=(anim,t,fps,loop=true)=>anim[loop?Math.floor(t*fps)%anim.length:Math.min(anim.length-1,Math.floor(t*fps))];
@@ -5273,7 +5273,7 @@ function attackHit(a){const P=a.kind==='h'?SL.heavy:SL.light,R=P.range*(S.zab&&a
   {const en=ENCH.filter(k=>S.sk[k]);if(en.length)for(let i=0;i<16;i++){const t=ang+rnd(-arc,arc),rr=rnd(10,R),k=en[i%en.length];S.parts.push({k:'e',x:pl.x+Math.cos(t)*rr,y:pl.y+Math.sin(t)*rr,z:rnd(8,18),vx:0,vy:0,vz:rnd(4,12),c:Math.random()<.6?ENC[k].col:ENC[k].col2,life:rnd(.2,.45)})}}
   if(crit){pl.riposte=0;const wdp=waveDmg*.8,wg=new Set();launchWave(a,ang,wdp,0,wg);const ec=sk('echo');if(ec>=1){launchWave(a,ang-.28,wdp*(ec>=3?1.2:1),1,wg);if(ec>=2)launchWave(a,ang+.28,wdp*(ec>=3?1.2:1),1,wg)}if(hits)ftInfo((EN?'Critical hit!':'Cios krytyczny!'))}
   else if(hits&&a.kind==='l'&&sk('zryw')){S.hitN=(S.hitN||0)+1;if(S.hitN>=ZRYW_N[sk('zryw')]){S.hitN=0;launchWave(a,ang,waveDmg)}}
-  if(hits){S.hitstop=PLYN?(a.kind==='h'?.0225:crit?.03:.011):(a.kind==='h'?.09:crit?.12:.045);shake(a.kind==='h'?.25:.1,.1);if(crit)play('katana',0)}
+  if(hits){S.hitstop=PLYN?0:(a.kind==='h'?.09:crit?.12:.045);shake(a.kind==='h'?.25:.1,.1);if(crit)play('katana',0)}
   if(a.wick>0)milStrip(a.wick,ang);
   if(a.echo)dzwEcho(a,twinBase,ang)}
 // fala cięcia: nagroda za parowanie, leci przed siebie i przebija wszystkich wrogów na swojej drodze (raz każdego)
@@ -5487,7 +5487,7 @@ function lungeHits(a){const dmg=skDmg(SL.light.dmg[0])*LUNGE.mul[a.L-1],tx=pl.x+
   if(along<-14||along>20||side>LUNGE.hitR+e.r)continue;a.hit.add(e);const big=BIG.has(e.type)||e.type==='collector',sx=ex*a.dy-ey*a.dx>=0?1:-1,kx=big?a.dx:a.dx*.55+a.dy*sx*.85,ky=big?a.dy:a.dy*.55-a.dx*sx*.85;
   if(!damageEnemy(e,dmg,kx,ky,big?.3:LUNGE.knock,'sk:wypad'))continue;n++;if(!a.st.has(e)){a.st.add(e);supportEnchant(e,a,false);applyEnchants(e,a,false)}
   if(!e.dead){if(big)breakPoise(e,8);else slashStagger(e,.45,true)}swordSparks(e.x,e.y,'#ffd2a0',10);blood(e.x,e.y,6,a.dx,a.dy)}}finally{ftMelee=oldM;ftHeavy=oldH;ftCrit=oldC}
- if(n){play('bladeHeavy',.05);shake(.1,.12);if(!a.hitStop){a.hitStop=1;S.hitstop=Math.max(S.hitstop||0,PLYN?.011:.045)}}}
+ if(n){play('bladeHeavy',.05);shake(.1,.12);if(!a.hitStop){a.hitStop=1;S.hitstop=Math.max(S.hitstop||0,PLYN?0:.045)}}}
 function lungeTick(dt){const a=pl.atk;if(pl.dead||pl.broken>0){endSk('wypad');return}skTickCommon(dt);
  if(a.stage==='wind'){a.t-=dt;if(a.t<=0){a.stage='dash';a.at=0;play('swing',0);skAdd('r_wypad',.32,pl.x+a.dx*LUNGE.dist*.5,pl.y+a.dy*LUNGE.dist*.5,.7,LUNGE.dist/29.4,'bill',-screenAng(a.dx,a.dy));for(let i=0;i<10;i++)S.parts.push({k:'d',x:pl.x-a.dx*4+rnd(-4,4),y:pl.y-a.dy*4+rnd(-2,2),z:rnd(0,3),vx:-a.dx*rnd(20,60)+rnd(-12,12),vy:0,vz:rnd(4,14),c:'#8a7a66',life:rnd(.3,.6)})}return}
  if(a.stage==='dash'){a.at+=dt;moveBox(pl,a.dx*LUNGE.dist/LUNGE.dur*dt,a.dy*LUNGE.dist/LUNGE.dur*dt,4,3,true);lungeHits(a);
@@ -5882,7 +5882,7 @@ function bossPhase2(e){e.ph2=1;if(e.spd)e.spd*=1.2;if(e.dmg)e.dmg*=1.15;e.flash=
   ftInfo(EN?'Second phase!':'Druga faza!');say((ENAME[e.type]||(EN?'The boss':'Boss'))+(EN?' flies into a rage.':' wpada w szał.'),'event');
   const pool=S.enemies.filter(x=>!x.dead&&!x.mini&&!BIG.has(x.type)&&x.type!=='collector'&&x.type!=='boginka'&&x.type!=='glizzard'),t=pool.length?pool[0].type:null;
   if(t)for(const s of [-1,1]){try{const a=spawnEnemy(t,e.x+s*34,e.y+8);if(a)a.rise=Math.max(a.rise||0,.6)}catch(err){quietErr('bossAdd',err)}}}
-function killEnemy(e,nx,ny){if(e.mini||BIG.has(e.type)){S.hitstop=Math.max(S.hitstop||0,PLYN?.025:.1);shake(.3,.22)}if(bossBar(e)){slowMo(1.4,.22);shockAt(e.x,e.y,1)}else if(e.mini){slowMo(.5,.45);shockAt(e.x,e.y,.55)}swordOnKill(e);try{rxInfect(e)}catch(_){}try{affixDeath(e)}catch(_){}e.dead=true;nb3dKill(e);S.kills++;S.streak=(S.streak||0)+1;if(S.streak>(S.bestStreak||0))S.bestStreak=S.streak;metaKill(e);
+function killEnemy(e,nx,ny){if(e.mini||BIG.has(e.type)){S.hitstop=Math.max(S.hitstop||0,PLYN?0:.1);shake(.3,.22)}if(bossBar(e)){slowMo(1.4,.22);shockAt(e.x,e.y,1)}else if(e.mini){slowMo(.5,.45);shockAt(e.x,e.y,.55)}swordOnKill(e);try{rxInfect(e)}catch(_){}try{affixDeath(e)}catch(_){}e.dead=true;nb3dKill(e);S.kills++;S.streak=(S.streak||0)+1;if(S.streak>(S.bestStreak||0))S.bestStreak=S.streak;metaKill(e);
   // 8.11.2026 execution: slow motion + camera push-in + extra blood on the killing blow of an elite or a boss
   if(ftMelee&&!pl.dead&&(e.mini||BIG.has(e.type)||e.type==='collector'||e.type==='boginka'||e.type==='glizzard')){S.exec=BIG.has(e.type)||e.type==='collector'||e.type==='boginka'||e.type==='glizzard'?1.1:.75;S.execX=e.x;S.execY=e.y;blood(e.x,e.y,BIG.has(e.type)?42:26,e.x-pl.x,e.y-pl.y,1.6);play('hitH',0);padRumble(1,.8,260)}if(S.zab){if(S.zTag==='x')S.zCrossK++;else if(S.zTag==='s')S.zSlideK++;else if(S.zTag==='w')S.zWhirlN++;if(e.mini&&e.fhT!=null&&S.t-e.fhT<=15)S.zEliteFast=1}if(e.mini&&S.eliteLoot){dropPick('c',e.x+rnd(-6,6),e.y+rnd(-4,4),25);dropPick('h',e.x+rnd(-8,8),e.y+rnd(-4,4))}if(e.mini){S.eliteK=1;S.eliteN=(S.eliteN||0)+1;if(S.t-(e.bornT??-99)<=20)S.eliteFast=1}if(ftHeavy&&ftMelee)S.hvK=(S.hvK||0)+1;
   if(S.mil&&e.mini&&ftHeavy&&ftMelee&&pl.atk&&pl.atk.wick>=MIL.wick.max)S.mEliteK=(S.mEliteK||0)+1;
@@ -5926,7 +5926,7 @@ function hurtPlayer(dmg,nx,ny,source='night'){if(S.zab&&pl.roll>0&&pl.inv>0&&!S.
   if(S.attacker)[nx,ny]=incomingMelee(S.attacker,nx,ny);
   if(S.redHit&&pl.block)ftInfo((EN?'Heavy blow — dodge!':'Ciężki cios — unik!'));
   if(!S.redHit&&pl.block&&-(pl.fx*nx+pl.fy*ny)>.3){
-    if(pl.blockT<parryWin()&&S.attacker&&!S.attacker.dead&&!S.redHit){const e=S.attacker;e.stun=S.kat?2:S.dzw?1.7:1.4;if(S.kat)S.kStun=(S.kStun||0)+1;e.sw=0;e.recov=0;onParry();pl.parryT=.45;S.hitstop=PLYN?.03:.12;padRumble(.6,.3,140);guardFeedback('parry',nx,ny);shake(.15,.15);ftInfo((EN?'Parry!':'Parowanie!'));return}
+    if(pl.blockT<parryWin()&&S.attacker&&!S.attacker.dead&&!S.redHit){const e=S.attacker;e.stun=S.kat?2:S.dzw?1.7:1.4;if(S.kat)S.kStun=(S.kStun||0)+1;e.sw=0;e.recov=0;onParry();pl.parryT=.45;S.hitstop=PLYN?0:.12;padRumble(.6,.3,140);guardFeedback('parry',nx,ny);shake(.15,.15);ftInfo((EN?'Parry!':'Parowanie!'));return}
     if(S.redHit&&pl.blockT<parryWin()+.1)ftInfo((EN?'Unparryable':'Nie do sparowania'));pl.sta-=dmg*blockMulX()*S.pk.blockSta*(S.redHit?2.2:1);pl.staDelay=SL.delay;pl.gHitT=.25;guardFeedback('block',nx,ny);
     if(pl.sta>=0){if(S.pk.leak&&!pl.dead)pl.hp=Math.max(1,pl.hp-dmg*S.pk.leak);pl.inv=.18;moveBox(pl,nx*6,ny*4,4,3);return}
     pl.sta=0;pl.broken=SL.guardBreak;S.dBroken=1;pl.block=false;dmg*=.5;play('empty',0);ftInfo((EN?'Guard broken':'Garda przełamana'))}
@@ -6213,7 +6213,7 @@ function updEprojX(dt){S.enemyShotCd=Math.max(0,(S.enemyShotCd||0)-dt);for(let i
     if(!gone)continue}
   {const G=S.swordGuardian;if(!gone&&G&&!G.gone&&Math.hypot(G.x-f.x,G.y-f.y)<SL.guard.r+3){golemHurt(G,enemyDamage(f.dm||(f.bolt?6:7),SL.projDiv));gone=true}}
   if(!gone&&!pl.dead&&Math.hypot(pl.x-f.x,pl.y-f.y)<8){const sp=Math.hypot(f.vx,f.vy)||1,nx=f.vx/sp,ny=f.vy/sp;
-    if(pl.block&&pl.inv<=0&&-(pl.fx*nx+pl.fy*ny)>.3&&pl.blockT<parryWin()){onParry();pl.parryT=.45;S.hitstop=PLYN?.03:.12;padRumble(.6,.3,140);guardFeedback('parry',nx,ny,f);shake(.15,.15);ftInfo((EN?'Deflected!':'Odbicie!'));
+    if(pl.block&&pl.inv<=0&&-(pl.fx*nx+pl.fy*ny)>.3&&pl.blockT<parryWin()){onParry();pl.parryT=.45;S.hitstop=PLYN?0:.12;padRumble(.6,.3,140);guardFeedback('parry',nx,ny,f);shake(.15,.15);ftInfo((EN?'Deflected!':'Odbicie!'));
       const tg=nearestFoe(f.x,f.y);if(tg){f.ref=1;f.tgt=tg;f.spd=Math.max(240,sp*1.4);f.dmg=SL.light.dmg[0]*lvlMul()*(S.str||1)*might()*riMul();f.life=5;f.x=pl.x;f.y=pl.y;if(f.vfe){f.vfe.t=f.vfe.dur;f.vfe=null}}}
     else hurtPlayer(enemyDamage(f.dm||(f.bolt?6:7),SL.projDiv),nx,ny,f.source||(f.bolt?'night':'fire'));gone=!f.ref}
   if(gone&&f.bolt){if(f.vfe)f.vfe.t=f.vfe.dur;if(f.source&&(f.source.type==='xbow'||f.source.type==='scribe'))skAdd('boltHit',.3,f.x,f.y,.5,.7,'bill');for(let k=0;k<5;k++)S.parts.push({k:'d',x:f.x,y:f.y,z:8,vx:rnd(-30,30),vy:rnd(-15,15),vz:rnd(5,20),c:'#9d9584',life:.3});S.eproj.splice(i,1);continue}
