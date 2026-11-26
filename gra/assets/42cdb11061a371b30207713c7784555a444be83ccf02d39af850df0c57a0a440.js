@@ -647,6 +647,7 @@ const $=id=>document.getElementById(id);
 const NB_LOKALNIE=location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname),nbParam=k=>NB_LOKALNIE?new URLSearchParams(location.search).get(k):null;
 /* 26.11 autor: swiatlo ogolne i ksiezyc -10% wzgledem 912 (stala wczesnie, bez TDZ) */const SPOJ_SKY=nbParam('spojnosc')==='0'?1:.9;
 /* 26.11 autor: walka ma byc tancem - plynna walka (zamrozenia przy trafieniu skrocone o 3/4 - decyzja autora, cios od razu po wcisnieciu, ruch i unik w trakcie ciosu); ?plynna=0 lokalnie = jak przed */const PLYN=nbParam('plynna')!=='0';
+/* 26.11 (921) Dolne Miasto: brzeg lawy z bazaltu, jasniejsza lawa, Wielka Waga z bryl; ?dolne921=0 lokalnie = jak przed */const DOL921=nbParam('dolne921')!=='0';
 // ---- język: EN/PL (pn_lang); bez zapisu domyślnie według przeglądarki. Zmiana języka przeładowuje grę ----
 const LANG=(()=>{let v=null;try{v=localStorage.getItem('pn_lang')}catch(e){}return v==='en'||v==='pl'?v:(/^pl\b/i.test(navigator.language||'')?'pl':'en')})(),EN=LANG==='en';
 document.documentElement.lang=LANG;
@@ -2156,11 +2157,41 @@ function buildDolne(I){planGround(2);
     const mat=liquidMat({map:lt,emissiveMap:lt,emissive:0xff7a30,emissiveIntensity:.75},1),mesh=new THREE.Mesh(g,mat);mesh.castShadow=false;mesh.receiveShadow=false;ROOT.add(mesh);LAVA_HD={tex:lt,mat}}
   else{const lavaGeo=new THREE.PlaneGeometry(1,1);lavaGeo.rotateX(-Math.PI/2);
   instanced(lavaGeo,liquidMat({map:lavaTex,emissiveMap:lavaTex,emissive:0xff8a46,emissiveIntensity:.65},1),lavas,([x,y])=>M4.makeTranslation(x+.5,-.32,y+.5),false,false)}}
-  if(I.cc0_lava){const ac=[];for(let x=FT(35);x<FT(40);x++)for(let y=0;y<MH;y++)ac.push([x,y]);lavaHD(I.cc0_lava,ac,-9.4,5,{keep:true,h:[0,0,0],spd:.6})}
+  /* 26.11.2026 (921, autor: popraw lawe w Dolnym Miescie): misy lawy mialy proste, prostokatne brzegi. Wzdluz brzegu nieregularne bloki bazaltu
+     (nagrzane od spodu), lawa jasniejsza. Tylko wyglad: kolizje i balans bez zmian. Lokalnie ?dolne921=0 = jak przed. */
+  if(DOL921&&lavas.length){const L=new Set(lavas.map(([x,y])=>x+','+y)),rocks=[];
+   for(const [x,y] of lavas)for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){if(L.has((x+dx)+','+(y+dy)))continue;
+    for(let k=0;k<3;k++){const h=groundHash(x*3+dx+k*11,y*3+dy+k*7),r1=(h%1000)/1000,r2=((h>>10)%1000)/1000,r3=((h>>20)%1000)/1000;
+     const along=[.15,.5,.85][k]+(r1-.5)*.16,cx=dx?x+.5+dx*(.5+(r2-.35)*.3):x+along,cz=dy?y+.5+dy*(.5+(r2-.35)*.3):y+along;rocks.push([cx,cz,.42+r3*.46,h])}}
+   const rg=new THREE.DodecahedronGeometry(.5,0),rm=phong({color:0x3a2e28,specular:0x2a1808,shininess:10,emissive:0x6a2008,emissiveIntensity:.45,flatShading:true}),E=new THREE.Euler(),Q=new THREE.Quaternion(),V=new THREE.Vector3(),S3=new THREE.Vector3();
+   instanced(rg,rm,rocks,([cx,cz,sc,h])=>{E.set((h%7)*.3,(h%13)*.48,(h%5)*.25);Q.setFromEuler(E);S3.set(sc*1.3,sc*.62,sc);V.set(cx,-.05+sc*.12,cz);M4.compose(V,Q,S3)},true,true);
+   for(const o of LAVA_ALL)if(o.ch===CH)o.ek=1.45}
+  if(I.cc0_lava){const ac=[];for(let x=FT(35);x<FT(40);x++)for(let y=0;y<MH;y++)ac.push([x,y]);{const o=lavaHD(I.cc0_lava,ac,-9.4,5,{keep:true,h:[0,0,0],spd:.6});if(DOL921&&o)o.ek=1.45}}
   // 15.11.2026: Wielka Waga (kanon: przy niej Poborca wazy urobek) wyrasta z przepasci lawy miedzy halami, na polnoc od mostu; stoi wylacznie nad lawa, sale i most bez zmian
   {const x=MP(37.5),z=MP(14.5),w=7.2,base=-3.9;// obraz: dm_wielka_waga (ChatGPT 15.11.2026); kolumna ucieta dolem, dalej ciemny trzon do lawy
-   nbLandmark('assets/rekwizyty/0635cccc967fe045f642756e28989e1c2985e5df565060c54e5e0799454bef6f.webp',{x,z,w,aspect:1536/1022,base,em:0x2a1608});
-   const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.62,.7,base+9.4+.3,10),phong({color:0x221e1e,specular:0x3a2a20,shininess:20}));shaft.position.set(x-.12,(base-9.4)/2+.15,z-.25);ROOT.add(shaft);
+   if(!DOL921){nbLandmark('assets/rekwizyty/0635cccc967fe045f642756e28989e1c2985e5df565060c54e5e0799454bef6f.webp',{x,z,w,aspect:1536/1022,base,em:0x2a1608});
+   const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.62,.7,base+9.4+.3,10),phong({color:0x221e1e,specular:0x3a2a20,shininess:20}));shaft.position.set(x-.12,(base-9.4)/2+.15,z-.25);ROOT.add(shaft);}
+   else{/* 26.11.2026 (921, autor: nowa waga, stara wygladala zle): Wielka Waga z bryl - zelazny slup z mosieznymi obreczami, belka z przeciwwagami,
+      lancuchy i dwie misy pelne zarzacego sie urobku; lekko przechylona (jedna szala ciezsza). Stoi nad lawa w tym samym miejscu. */
+    const iron=phong({color:0x2b2523,specular:0x5a4630,shininess:28}),bronze=phong({color:0x6a4c26,specular:0xc89a50,shininess:46,emissive:0x2a1406,emissiveIntensity:.12}),
+     gold=phong({color:0x6a4420,emissive:0xff5a10,emissiveIntensity:.26,specular:0xc08040,shininess:30,flatShading:true}),G=new THREE.Group(),add=(geo,mat,px,py,pz,rx=0,ry=0,rz=0)=>{const m=new THREE.Mesh(geo,mat);m.position.set(px,py,pz);m.rotation.set(rx,ry,rz);m.castShadow=false;G.add(m);return m};
+    const top=base+6.4;
+    add(new THREE.CylinderGeometry(.5,.66,top+9.4,12),iron,0,(top-9.4)/2,0);
+    for(const yy of [base+.4,base+3.2,base+6.1])add(new THREE.CylinderGeometry(.68,.68,.28,12),bronze,0,yy,0);
+    add(new THREE.CylinderGeometry(.85,.55,.6,12),bronze,0,top+.1,0);
+    add(new THREE.ConeGeometry(.42,1.1,8),bronze,0,top+1.05,0);
+    const arm=new THREE.Group();arm.position.set(0,top+.45,0);arm.rotation.z=.07;arm.scale.setScalar(1.1);G.add(arm);
+    const am=(geo,mat,px,py,pz,rx=0,ry=0,rz=0)=>{const m=new THREE.Mesh(geo,mat);m.position.set(px,py,pz);m.rotation.set(rx,ry,rz);arm.add(m);return m};
+    am(new THREE.BoxGeometry(6.4,.34,.42),iron,0,0,0);am(new THREE.BoxGeometry(6.0,.1,.5),bronze,0,.2,0);
+    for(const sx of [-1,1]){am(new THREE.SphereGeometry(.3,10,8),bronze,sx*3.2,0,0);
+     const pan=new THREE.Group();pan.position.set(sx*3.05,0,0);arm.add(pan);pan.rotation.z=-.07;
+     for(let i=0;i<3;i++){const a=i*2.094+.5,cx=Math.cos(a)*1.05,cz=Math.sin(a)*1.05,ln=2.25,D=new THREE.Vector3(cx,-ln,cz),L=D.length(),ch=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,L,4),iron);
+      ch.position.set(cx/2,-ln/2,cz/2);ch.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),D.normalize());pan.add(ch)}
+     const bowl=new THREE.Mesh(new THREE.CylinderGeometry(1.3,.85,.42,16,1,true),bronze);bowl.position.y=-2.45;bowl.material.side=THREE.DoubleSide;pan.add(bowl);
+     const bot=new THREE.Mesh(new THREE.CylinderGeometry(.85,.85,.06,16),bronze);bot.position.y=-2.66;pan.add(bot);
+     const ore=new THREE.Mesh(new THREE.SphereGeometry(1.12,7,4,0,Math.PI*2,0,Math.PI/2),gold);ore.scale.y=.32;ore.position.y=-2.4;pan.add(ore)}
+    G.position.set(x-.12,0,z-.25);G.traverse(m=>{if(m.isMesh){m.castShadow=false;m.receiveShadow=false}});ROOT.add(G);
+    }
    const H=w*1536/1022*SQ;W.LSRC.push({col:0xff8a3a,base:1.25,dist:7,x:x+w*.31,y:base+H*.4,z:z+.6,kind:'fire',ph:1.3});W.LSRC.push({col:0xffa060,base:.5,dist:5,x,y:base+H*.75,z:z+.6,kind:'fire',ph:3.1})}
   let abT;{const ai=I.cc0_abyss||(IMGS&&IMGS.cc0_abyss);if(ai){abT=new THREE.Texture(ai);abT.wrapS=abT.wrapT=THREE.RepeatWrapping;abT.generateMipmaps=true;abT.minFilter=THREE.LinearMipmapLinearFilter;abT.magFilter=THREE.LinearFilter;abT.needsUpdate=true;abT.repeat.set((FT(40)-FT(35))/4,MH/4)}else{abT=texFrom(tcut(F,3,6),true);abT.repeat.set(5*MK,MH)}}
   const abyss=new THREE.Mesh(new THREE.PlaneGeometry(FT(40)-FT(35),MH),new THREE.MeshBasicMaterial({map:abT,color:0x8a6a6a}));abyss.rotation.x=-Math.PI/2;abyss.position.set((FT(35)+FT(40))/2,-10,MH/2);ROOT.add(abyss);
@@ -6996,7 +7027,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{stIconsTick
   if(S&&S.t>0&&Math.random()<dt*22*GFX.parts){const a=Math.random()*Math.PI*2,d=Math.random()*200;S.parts.push(CH===4?(Math.random()<.35?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(4,26),vx:rnd(-4,4),vy:rnd(-2,2),vz:rnd(-1.5,1.5),c:Math.random()<.5?'#c8e070':'#7fffd0',life:rnd(1.5,3.5)}:{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(1,8),vx:rnd(-5,-1),vy:rnd(-1,1),vz:rnd(-.5,.5),c:Math.random()<.6?'#4a5660':'#5e6a72',life:rnd(3,6)}):CH===3?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(30,70),vx:rnd(-3,3),vy:rnd(-1,1),vz:rnd(-5,-2),c:Math.random()<.6?'#c8a040':'#7a6030',life:rnd(4,7)}:CH===PORT?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(1,9),vx:rnd(-6,-2),vy:rnd(-1,1),vz:rnd(-.4,.6),c:Math.random()<.6?'#5d6f7c':'#8496a0',life:rnd(3,6)}:CH===1?{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(30,70),vx:rnd(-6,2),vy:rnd(-1,1),vz:rnd(-9,-5),c:Math.random()<.6?'#6a6670':'#8a8490',life:rnd(3,6)}:{k:'m',x:pl.x+Math.cos(a)*d,y:pl.y+Math.sin(a)*d*.6,z:rnd(4,40),vx:rnd(-3,3),vy:rnd(-2,2),vz:rnd(-1,2),c:Math.random()<.7?'#5c5566':'#7d6a58',life:rnd(2,4)})}
   if(S&&CH===2&&Math.abs(pl.x/16-MP(37.5))<16&&Math.random()<dt*14)S.parts.push({k:'e',x:rnd(MP(35.2),MP(39.8))*16,y:(camTarget.z+rnd(-7,7))*16,z:-rnd(20,90),vx:rnd(-2,2),vy:0,vz:rnd(14,30),c:Math.random()<.6?'#ff6a1a':'#ffb347',life:rnd(2,4)});
   for(const o of WATER_ALL)if(o.ch===CH)o.tex.offset.set(clock*(o.deep?.0022:.004),clock*(o.deep?.0015:.0028));
-  for(const o of LAVA_ALL){if(o.ch!==CH)continue;{const sp=o.spd||1;o.tex.offset.set(clock*.008*sp,clock*.005*sp);o.etex.offset.set(.37-clock*.006*sp,.61+clock*.009*sp)}const p=Math.sin(clock*1.7)*.5+Math.sin(clock*.63+1.3)*.35+Math.sin(clock*4.1)*.15;o.mat.emissiveIntensity=.78+.22*p;if(o.halo)o.halo.material.opacity=.45+.2*p}
+  for(const o of LAVA_ALL){if(o.ch!==CH)continue;{const sp=o.spd||1;o.tex.offset.set(clock*.008*sp,clock*.005*sp);o.etex.offset.set(.37-clock*.006*sp,.61+clock*.009*sp)}const p=Math.sin(clock*1.7)*.5+Math.sin(clock*.63+1.3)*.35+Math.sin(clock*4.1)*.15;o.mat.emissiveIntensity=(.78+.22*p)*(o.ek||1);if(o.halo)o.halo.material.opacity=.45+.2*p}
   const lf=((clock*5)|0)%4;if(CH===2&&!LAVA_HD&&lf!==lavaFrame&&lavaFrames.length){lavaFrame=lf;lavaG.clearRect(0,0,64,64);lavaG.drawImage(lavaFrames[lf],0,0);lavaTex.needsUpdate=true}
   if(CH===3&&W.rotTex){const rf=((clock*2.5)|0)%4;if(rf!==W.rotF){W.rotF=rf;W.rotG.clearRect(0,0,64,64);W.rotG.drawImage(W.rotFrames[rf],0,0);W.rotTex.needsUpdate=true}}
   if(CH===4&&W.water){const f4=((clock*4)|0)%4;for(const o of W.water)if(o.f!==f4){o.f=f4;o.g.clearRect(0,0,64,64);o.g.drawImage(o.frames[f4],0,0);o.tex.needsUpdate=true}
