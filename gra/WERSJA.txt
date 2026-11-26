@@ -992,3 +992,4 @@ cache916 · 916: zamrozenie przy trafieniu = 0 (autor); podswietlenie zamachu wr
 cache917 · 917: mocny cios z przytrzymania naprawiony (ladowanie od wcisniecia, takze w trakcie lekkiego ciosu; mocny przerywa powrot lekkiego); ciemniejsze podswietlenia postaci przy akcjach; nie sprawdzono: gra na zywo, pad, wszystkie klasy
 cache918 · 918: diagnostyka przyciec - przy wlaczonym liczniku FPS lista ostatnich 5 skokow klatki (>40 ms) z przyczyna (shader, tekstury, bryly, logika, rysowanie, przegladarka); nie sprawdzono: gra na zywo
 cache919 · 919: slabsze blyski - blyski ekranu (blyskawice, fazy bossow, wybuchy) x0,45, czerwony blysk przy otrzymaniu ciosu x0,6, blysk trafienia na wrogu ciemniejszy; nie sprawdzono: gra na zywo
+cache920 · 920: podswietlenie wrogow przy zamachu +20% (autor); nie sprawdzono: gra na zywo
