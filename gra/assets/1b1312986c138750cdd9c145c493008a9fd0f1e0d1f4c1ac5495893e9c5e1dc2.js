@@ -4400,10 +4400,10 @@ function attackCue(e){if(e.dead||e.rise>0||e.stun>0||e.frozen>0||e.trans>0)retur
   return enemyWinding(e)?(e.sw>0&&e.red?(SETT.contrast?'y':'r'):'w'):null}
 function setFrame(mesh,fr,mode){if(!fr)return;
   if(mode==='p2'&&!fr.p2){const m=fr.n.clone();if(fr.n.map){m.map=recolorTex(fr.n.map);if(m.emissiveMap)m.emissiveMap=m.map}fr.p2=m}
-  const STT={sg:[0x8aff5a,.55],so:[0xff9a40,.6],sb:[0xe03048,.4],sc:[0x9adcff,.5],sh:[0x7a62d8,.45],se:[0xa8d8cf,.5]};if(STT[mode]&&!fr[mode]){const m=fr.n.clone(),s=STT[mode];m.color.setHex(s[0]);if(m.emissive){m.emissive.setHex(s[0]);if(!PLYN)m.emissiveMap=fr.n.map;m.emissiveIntensity=PLYN?s[1]*.5:s[1]}if(mode==='sh'||mode==='se'){m.transparent=true;m.opacity=mode==='se'?.72:.6;m.depthWrite=false}fr[mode]=m}
+  const STT={sg:[0x8aff5a,.55],so:[0xff9a40,.6],sb:[0xe03048,.4],sc:[0x9adcff,.5],sh:[0x7a62d8,.45],se:[0xa8d8cf,.5]};if(STT[mode]&&!fr[mode]){const m=fr.n.clone(),s=STT[mode];m.color.setHex(s[0]);if(m.emissive){m.emissive.setHex(s[0]);if(!PLYN)m.emissiveMap=fr.n.map;m.emissiveIntensity=PLYN?s[1]*.35:s[1]}if(mode==='sh'||mode==='se'){m.transparent=true;m.opacity=mode==='se'?.72:.6;m.depthWrite=false}fr[mode]=m}
   if((mode==='w'||mode==='r'||mode==='y')&&!fr[mode]){const m=fr.n.clone(),color=mode==='r'?0xff694b:mode==='y'?0xffdf62:0xffe1b0;
-    m.color.setHex(color);if(m.emissive){m.emissive.setHex(color);if(!PLYN)m.emissiveMap=fr.n.map;m.emissiveIntensity=PLYN?(mode==='w'?.32:.42):mode==='w'?.7:.85}if(!PLYN)m.fog=false;fr[mode]=m}/* 26.11 (autor: przyciecia przed atakami): z PLYN podswietlenie nie zmienia mgly ani map, wiec karta nie kompiluje nowego shadera w walce */
-  if(mode==='impact'&&!fr.impact){void fr.f;const m=combatVisualBuild(()=>fr.n.clone());m.color.setHex(0xffd9be);if(m.emissive){m.emissive.setHex(0x7a3020);m.emissiveIntensity=PLYN?.2:.38;if(!PLYN)m.emissiveMap=fr.n.map}fr.impact=m}
+    m.color.setHex(color);if(m.emissive){m.emissive.setHex(color);if(!PLYN)m.emissiveMap=fr.n.map;m.emissiveIntensity=PLYN?(mode==='w'?.2:.3):mode==='w'?.7:.85}if(!PLYN)m.fog=false;fr[mode]=m}/* 26.11 (autor: przyciecia przed atakami): z PLYN podswietlenie nie zmienia mgly ani map, wiec karta nie kompiluje nowego shadera w walce */
+  if(mode==='impact'&&!fr.impact){void fr.f;const m=combatVisualBuild(()=>fr.n.clone());m.color.setHex(0xffd9be);if(m.emissive){m.emissive.setHex(0x7a3020);m.emissiveIntensity=PLYN?.12:.38;if(!PLYN)m.emissiveMap=fr.n.map}fr.impact=m}
   mesh.material=(mode&&fr[mode])||fr.n;if(mesh.userData.groundContact)settleProp(mesh);if(fr.d)mesh.customDistanceMaterial=fr.d}
 
 const at=(anim,t,fps,loop=true)=>anim[loop?Math.floor(t*fps)%anim.length:Math.min(anim.length-1,Math.floor(t*fps))];
@@ -5304,9 +5304,9 @@ function slashUpdate(dt,p2){
   if(heavyPress){heavyPress=false;if(!pl.atk&&!pl.block&&!(pl.broken>0))startAttack('h')}
   const held=keys.j||mouseL||tAtk||PAD.atk,cc=true;
   if(held&&!pl.atkHeld){pl.atkHeld=true;pl.charge=0;if(PLYN){pl.pressHit=0;if(pl.atk){if(pl.atk.kind==='l')pl.queue=true;pl.pressHit=1}else if(!pl.block&&!(pl.broken>0)){startAttack('l',pl.comboT>0?pl.nextCombo:0);pl.pressHit=1}}}
-  if(pl.atkHeld){if(held){if(!pl.atk&&!pl.block)pl.charge+=dt;pl.charging=cc&&pl.charge>.18&&!pl.atk&&!pl.block;
+  if(pl.atkHeld){if(held){const lt=PLYN&&pl.atk&&pl.atk.kind==='l';if((!pl.atk||lt)&&!pl.block)pl.charge+=dt;pl.charging=cc&&pl.charge>.18&&(!pl.atk||lt)&&!pl.block;
       if(pl.charging&&Math.random()<dt*30)S.parts.push({k:'e',x:pl.x+rnd(-8,8),y:pl.y+rnd(-3,3),z:rnd(6,20),vx:0,vy:0,vz:rnd(6,14),c:pl.charge>=hvCharge()?'#ffb347':'#d8cfb8',life:.3});
-      if(cc&&pl.charge>=hvCharge()&&!pl.atk&&!pl.block){pl.atkHeld=false;pl.charging=false;startAttack('h',0,true)}}
+      if(cc&&pl.charge>=hvCharge()&&!pl.block&&(!pl.atk||(lt&&pl.atk.stage==='rec'))){pl.atkHeld=false;pl.charging=false;pl.queue=false;pl.pressHit=0;pl.atk=null;startAttack('h',0,true)}}
     else{pl.atkHeld=false;pl.charging=false;if(PLYN&&pl.pressHit){pl.pressHit=0}else if(pl.atk){if(pl.atk.kind==='l'&&(PLYN||pl.atk.stage!=='wind'))pl.queue=true}else if(!pl.block)startAttack('l',pl.comboT>0?pl.nextCombo:0)}}
   if(SETT.oneHand&&!pl.atk&&!pl.block&&!pl.charging&&nearest(pl.x,pl.y,SL.light.range+8)&&pl.sta>=attackCost('l'))startAttack('l',pl.comboT>0?pl.nextCombo:0);
   if(pl.comboT>0)pl.comboT-=dt;

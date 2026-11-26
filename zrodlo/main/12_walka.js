@@ -104,9 +104,9 @@ function slashUpdate(dt,p2){
   if(heavyPress){heavyPress=false;if(!pl.atk&&!pl.block&&!(pl.broken>0))startAttack('h')}
   const held=keys.j||mouseL||tAtk||PAD.atk,cc=true;
   if(held&&!pl.atkHeld){pl.atkHeld=true;pl.charge=0;if(PLYN){pl.pressHit=0;if(pl.atk){if(pl.atk.kind==='l')pl.queue=true;pl.pressHit=1}else if(!pl.block&&!(pl.broken>0)){startAttack('l',pl.comboT>0?pl.nextCombo:0);pl.pressHit=1}}}
-  if(pl.atkHeld){if(held){if(!pl.atk&&!pl.block)pl.charge+=dt;pl.charging=cc&&pl.charge>.18&&!pl.atk&&!pl.block;
+  if(pl.atkHeld){if(held){const lt=PLYN&&pl.atk&&pl.atk.kind==='l';if((!pl.atk||lt)&&!pl.block)pl.charge+=dt;pl.charging=cc&&pl.charge>.18&&(!pl.atk||lt)&&!pl.block;
       if(pl.charging&&Math.random()<dt*30)S.parts.push({k:'e',x:pl.x+rnd(-8,8),y:pl.y+rnd(-3,3),z:rnd(6,20),vx:0,vy:0,vz:rnd(6,14),c:pl.charge>=hvCharge()?'#ffb347':'#d8cfb8',life:.3});
-      if(cc&&pl.charge>=hvCharge()&&!pl.atk&&!pl.block){pl.atkHeld=false;pl.charging=false;startAttack('h',0,true)}}
+      if(cc&&pl.charge>=hvCharge()&&!pl.block&&(!pl.atk||(lt&&pl.atk.stage==='rec'))){pl.atkHeld=false;pl.charging=false;pl.queue=false;pl.pressHit=0;pl.atk=null;startAttack('h',0,true)}}
     else{pl.atkHeld=false;pl.charging=false;if(PLYN&&pl.pressHit){pl.pressHit=0}else if(pl.atk){if(pl.atk.kind==='l'&&(PLYN||pl.atk.stage!=='wind'))pl.queue=true}else if(!pl.block)startAttack('l',pl.comboT>0?pl.nextCombo:0)}}
   if(SETT.oneHand&&!pl.atk&&!pl.block&&!pl.charging&&nearest(pl.x,pl.y,SL.light.range+8)&&pl.sta>=attackCost('l'))startAttack('l',pl.comboT>0?pl.nextCombo:0);
   if(pl.comboT>0)pl.comboT-=dt;
