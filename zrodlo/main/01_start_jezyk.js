@@ -4,6 +4,7 @@ const $=id=>document.getElementById(id);
 // Narzedzia autora tylko lokalnie (decyzja 14.11.2026): JEDYNE miejsce tego warunku; czesc 27 ma alias LOKALNIE.
 const NB_LOKALNIE=location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname),nbParam=k=>NB_LOKALNIE?new URLSearchParams(location.search).get(k):null;
 /* 26.11 autor: swiatlo ogolne i ksiezyc -10% wzgledem 912 (stala wczesnie, bez TDZ) */const SPOJ_SKY=nbParam('spojnosc')==='0'?1:.9;
+/* 26.11 autor: walka ma byc tancem - plynna walka (zamrozenia przy trafieniu skrocone o 3/4 - decyzja autora, cios od razu po wcisnieciu, ruch i unik w trakcie ciosu); ?plynna=0 lokalnie = jak przed */const PLYN=nbParam('plynna')!=='0';
 // ---- język: EN/PL (pn_lang); bez zapisu domyślnie według przeglądarki. Zmiana języka przeładowuje grę ----
 const LANG=(()=>{let v=null;try{v=localStorage.getItem('pn_lang')}catch(e){}return v==='en'||v==='pl'?v:(/^pl\b/i.test(navigator.language||'')?'pl':'en')})(),EN=LANG==='en';
 document.documentElement.lang=LANG;

@@ -517,6 +517,6 @@ function nb3dTick4(dt){const fx=NB3D_ON&&GFX.fx>0;
  for(let i=NB3D_DL.length-1;i>=0;i--){const d=NB3D_DL[i];d.t+=dt;if(d.t>1.6)NB3D_DL.splice(i,1)}
  for(let i=0;i<4;i++){const d=NB3D_DL[i],v=NB3D_DIST.value[i];if(d){const f=Math.sin(Math.min(1,d.t/1.6)*Math.PI);v.set(d.x,d.z,d.r*(.6+d.t*.5),d.k*f)}else v.set(-99,-99,1,0)}
  // aberracja przy mocnych trafieniach
- NB3D_FX.ca=Math.max(0,NB3D_FX.ca-dt*2.6);if(S&&S.hitstop>0&&SETT.shake)NB3D_FX.ca=Math.max(NB3D_FX.ca,.45);
+ NB3D_FX.ca=Math.max(0,NB3D_FX.ca-dt*2.6);if(!PLYN&&S&&S.hitstop>0&&SETT.shake)NB3D_FX.ca=Math.max(NB3D_FX.ca,.45);
  // piana fal
  if(W&&W.foam)W.foam.material.uniforms.uT.value=clock%1000}

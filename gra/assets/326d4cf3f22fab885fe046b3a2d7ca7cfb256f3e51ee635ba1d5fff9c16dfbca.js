@@ -646,6 +646,7 @@ const $=id=>document.getElementById(id);
 // Narzedzia autora tylko lokalnie (decyzja 14.11.2026): JEDYNE miejsce tego warunku; czesc 27 ma alias LOKALNIE.
 const NB_LOKALNIE=location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname),nbParam=k=>NB_LOKALNIE?new URLSearchParams(location.search).get(k):null;
 /* 26.11 autor: swiatlo ogolne i ksiezyc -10% wzgledem 912 (stala wczesnie, bez TDZ) */const SPOJ_SKY=nbParam('spojnosc')==='0'?1:.9;
+/* 26.11 autor: walka ma byc tancem - plynna walka (zamrozenia przy trafieniu skrocone o 3/4 - decyzja autora, cios od razu po wcisnieciu, ruch i unik w trakcie ciosu); ?plynna=0 lokalnie = jak przed */const PLYN=nbParam('plynna')!=='0';
 // ---- język: EN/PL (pn_lang); bez zapisu domyślnie według przeglądarki. Zmiana języka przeładowuje grę ----
 const LANG=(()=>{let v=null;try{v=localStorage.getItem('pn_lang')}catch(e){}return v==='en'||v==='pl'?v:(/^pl\b/i.test(navigator.language||'')?'pl':'en')})(),EN=LANG==='en';
 document.documentElement.lang=LANG;
@@ -5272,7 +5273,7 @@ function attackHit(a){const P=a.kind==='h'?SL.heavy:SL.light,R=P.range*(S.zab&&a
   {const en=ENCH.filter(k=>S.sk[k]);if(en.length)for(let i=0;i<16;i++){const t=ang+rnd(-arc,arc),rr=rnd(10,R),k=en[i%en.length];S.parts.push({k:'e',x:pl.x+Math.cos(t)*rr,y:pl.y+Math.sin(t)*rr,z:rnd(8,18),vx:0,vy:0,vz:rnd(4,12),c:Math.random()<.6?ENC[k].col:ENC[k].col2,life:rnd(.2,.45)})}}
   if(crit){pl.riposte=0;const wdp=waveDmg*.8,wg=new Set();launchWave(a,ang,wdp,0,wg);const ec=sk('echo');if(ec>=1){launchWave(a,ang-.28,wdp*(ec>=3?1.2:1),1,wg);if(ec>=2)launchWave(a,ang+.28,wdp*(ec>=3?1.2:1),1,wg)}if(hits)ftInfo((EN?'Critical hit!':'Cios krytyczny!'))}
   else if(hits&&a.kind==='l'&&sk('zryw')){S.hitN=(S.hitN||0)+1;if(S.hitN>=ZRYW_N[sk('zryw')]){S.hitN=0;launchWave(a,ang,waveDmg)}}
-  if(hits){S.hitstop=a.kind==='h'?.09:crit?.12:.045;shake(a.kind==='h'?.25:.1,.1);if(crit)play('katana',0)}
+  if(hits){S.hitstop=PLYN?(a.kind==='h'?.0225:crit?.03:.011):(a.kind==='h'?.09:crit?.12:.045);shake(a.kind==='h'?.25:.1,.1);if(crit)play('katana',0)}
   if(a.wick>0)milStrip(a.wick,ang);
   if(a.echo)dzwEcho(a,twinBase,ang)}
 // fala cięcia: nagroda za parowanie, leci przed siebie i przebija wszystkich wrogów na swojej drodze (raz każdego)
@@ -5302,11 +5303,11 @@ function slashUpdate(dt,p2){
   // attack button: a tap is a light blow (chains into a combo of three), holding it charges a heavy blow
   if(heavyPress){heavyPress=false;if(!pl.atk&&!pl.block&&!(pl.broken>0))startAttack('h')}
   const held=keys.j||mouseL||tAtk||PAD.atk,cc=true;
-  if(held&&!pl.atkHeld){pl.atkHeld=true;pl.charge=0}
+  if(held&&!pl.atkHeld){pl.atkHeld=true;pl.charge=0;if(PLYN){pl.pressHit=0;if(pl.atk){if(pl.atk.kind==='l')pl.queue=true;pl.pressHit=1}else if(!pl.block&&!(pl.broken>0)){startAttack('l',pl.comboT>0?pl.nextCombo:0);pl.pressHit=1}}}
   if(pl.atkHeld){if(held){if(!pl.atk&&!pl.block)pl.charge+=dt;pl.charging=cc&&pl.charge>.18&&!pl.atk&&!pl.block;
       if(pl.charging&&Math.random()<dt*30)S.parts.push({k:'e',x:pl.x+rnd(-8,8),y:pl.y+rnd(-3,3),z:rnd(6,20),vx:0,vy:0,vz:rnd(6,14),c:pl.charge>=hvCharge()?'#ffb347':'#d8cfb8',life:.3});
       if(cc&&pl.charge>=hvCharge()&&!pl.atk&&!pl.block){pl.atkHeld=false;pl.charging=false;startAttack('h',0,true)}}
-    else{pl.atkHeld=false;pl.charging=false;if(pl.atk){if(pl.atk.kind==='l'&&pl.atk.stage!=='wind')pl.queue=true}else if(!pl.block)startAttack('l',pl.comboT>0?pl.nextCombo:0)}}
+    else{pl.atkHeld=false;pl.charging=false;if(PLYN&&pl.pressHit){pl.pressHit=0}else if(pl.atk){if(pl.atk.kind==='l'&&(PLYN||pl.atk.stage!=='wind'))pl.queue=true}else if(!pl.block)startAttack('l',pl.comboT>0?pl.nextCombo:0)}}
   if(SETT.oneHand&&!pl.atk&&!pl.block&&!pl.charging&&nearest(pl.x,pl.y,SL.light.range+8)&&pl.sta>=attackCost('l'))startAttack('l',pl.comboT>0?pl.nextCombo:0);
   if(pl.comboT>0)pl.comboT-=dt;
   const a=pl.atk;if(!a)return;const P=a.kind==='h'?SL.heavy:SL.light;a.t-=dt*atkRate(a);
@@ -5486,7 +5487,7 @@ function lungeHits(a){const dmg=skDmg(SL.light.dmg[0])*LUNGE.mul[a.L-1],tx=pl.x+
   if(along<-14||along>20||side>LUNGE.hitR+e.r)continue;a.hit.add(e);const big=BIG.has(e.type)||e.type==='collector',sx=ex*a.dy-ey*a.dx>=0?1:-1,kx=big?a.dx:a.dx*.55+a.dy*sx*.85,ky=big?a.dy:a.dy*.55-a.dx*sx*.85;
   if(!damageEnemy(e,dmg,kx,ky,big?.3:LUNGE.knock,'sk:wypad'))continue;n++;if(!a.st.has(e)){a.st.add(e);supportEnchant(e,a,false);applyEnchants(e,a,false)}
   if(!e.dead){if(big)breakPoise(e,8);else slashStagger(e,.45,true)}swordSparks(e.x,e.y,'#ffd2a0',10);blood(e.x,e.y,6,a.dx,a.dy)}}finally{ftMelee=oldM;ftHeavy=oldH;ftCrit=oldC}
- if(n){play('bladeHeavy',.05);shake(.1,.12);if(!a.hitStop){a.hitStop=1;S.hitstop=Math.max(S.hitstop||0,.045)}}}
+ if(n){play('bladeHeavy',.05);shake(.1,.12);if(!a.hitStop){a.hitStop=1;S.hitstop=Math.max(S.hitstop||0,PLYN?.011:.045)}}}
 function lungeTick(dt){const a=pl.atk;if(pl.dead||pl.broken>0){endSk('wypad');return}skTickCommon(dt);
  if(a.stage==='wind'){a.t-=dt;if(a.t<=0){a.stage='dash';a.at=0;play('swing',0);skAdd('r_wypad',.32,pl.x+a.dx*LUNGE.dist*.5,pl.y+a.dy*LUNGE.dist*.5,.7,LUNGE.dist/29.4,'bill',-screenAng(a.dx,a.dy));for(let i=0;i<10;i++)S.parts.push({k:'d',x:pl.x-a.dx*4+rnd(-4,4),y:pl.y-a.dy*4+rnd(-2,2),z:rnd(0,3),vx:-a.dx*rnd(20,60)+rnd(-12,12),vy:0,vz:rnd(4,14),c:'#8a7a66',life:rnd(.3,.6)})}return}
  if(a.stage==='dash'){a.at+=dt;moveBox(pl,a.dx*LUNGE.dist/LUNGE.dur*dt,a.dy*LUNGE.dist/LUNGE.dur*dt,4,3,true);lungeHits(a);
@@ -5881,7 +5882,7 @@ function bossPhase2(e){e.ph2=1;if(e.spd)e.spd*=1.2;if(e.dmg)e.dmg*=1.15;e.flash=
   ftInfo(EN?'Second phase!':'Druga faza!');say((ENAME[e.type]||(EN?'The boss':'Boss'))+(EN?' flies into a rage.':' wpada w szał.'),'event');
   const pool=S.enemies.filter(x=>!x.dead&&!x.mini&&!BIG.has(x.type)&&x.type!=='collector'&&x.type!=='boginka'&&x.type!=='glizzard'),t=pool.length?pool[0].type:null;
   if(t)for(const s of [-1,1]){try{const a=spawnEnemy(t,e.x+s*34,e.y+8);if(a)a.rise=Math.max(a.rise||0,.6)}catch(err){quietErr('bossAdd',err)}}}
-function killEnemy(e,nx,ny){if(e.mini||BIG.has(e.type)){S.hitstop=Math.max(S.hitstop||0,.1);shake(.3,.22)}if(bossBar(e)){slowMo(1.4,.22);shockAt(e.x,e.y,1)}else if(e.mini){slowMo(.5,.45);shockAt(e.x,e.y,.55)}swordOnKill(e);try{rxInfect(e)}catch(_){}try{affixDeath(e)}catch(_){}e.dead=true;nb3dKill(e);S.kills++;S.streak=(S.streak||0)+1;if(S.streak>(S.bestStreak||0))S.bestStreak=S.streak;metaKill(e);
+function killEnemy(e,nx,ny){if(e.mini||BIG.has(e.type)){S.hitstop=Math.max(S.hitstop||0,PLYN?.025:.1);shake(.3,.22)}if(bossBar(e)){slowMo(1.4,.22);shockAt(e.x,e.y,1)}else if(e.mini){slowMo(.5,.45);shockAt(e.x,e.y,.55)}swordOnKill(e);try{rxInfect(e)}catch(_){}try{affixDeath(e)}catch(_){}e.dead=true;nb3dKill(e);S.kills++;S.streak=(S.streak||0)+1;if(S.streak>(S.bestStreak||0))S.bestStreak=S.streak;metaKill(e);
   // 8.11.2026 execution: slow motion + camera push-in + extra blood on the killing blow of an elite or a boss
   if(ftMelee&&!pl.dead&&(e.mini||BIG.has(e.type)||e.type==='collector'||e.type==='boginka'||e.type==='glizzard')){S.exec=BIG.has(e.type)||e.type==='collector'||e.type==='boginka'||e.type==='glizzard'?1.1:.75;S.execX=e.x;S.execY=e.y;blood(e.x,e.y,BIG.has(e.type)?42:26,e.x-pl.x,e.y-pl.y,1.6);play('hitH',0);padRumble(1,.8,260)}if(S.zab){if(S.zTag==='x')S.zCrossK++;else if(S.zTag==='s')S.zSlideK++;else if(S.zTag==='w')S.zWhirlN++;if(e.mini&&e.fhT!=null&&S.t-e.fhT<=15)S.zEliteFast=1}if(e.mini&&S.eliteLoot){dropPick('c',e.x+rnd(-6,6),e.y+rnd(-4,4),25);dropPick('h',e.x+rnd(-8,8),e.y+rnd(-4,4))}if(e.mini){S.eliteK=1;S.eliteN=(S.eliteN||0)+1;if(S.t-(e.bornT??-99)<=20)S.eliteFast=1}if(ftHeavy&&ftMelee)S.hvK=(S.hvK||0)+1;
   if(S.mil&&e.mini&&ftHeavy&&ftMelee&&pl.atk&&pl.atk.wick>=MIL.wick.max)S.mEliteK=(S.mEliteK||0)+1;
@@ -5925,7 +5926,7 @@ function hurtPlayer(dmg,nx,ny,source='night'){if(S.zab&&pl.roll>0&&pl.inv>0&&!S.
   if(S.attacker)[nx,ny]=incomingMelee(S.attacker,nx,ny);
   if(S.redHit&&pl.block)ftInfo((EN?'Heavy blow — dodge!':'Ciężki cios — unik!'));
   if(!S.redHit&&pl.block&&-(pl.fx*nx+pl.fy*ny)>.3){
-    if(pl.blockT<parryWin()&&S.attacker&&!S.attacker.dead&&!S.redHit){const e=S.attacker;e.stun=S.kat?2:S.dzw?1.7:1.4;if(S.kat)S.kStun=(S.kStun||0)+1;e.sw=0;e.recov=0;onParry();pl.parryT=.45;S.hitstop=.12;padRumble(.6,.3,140);guardFeedback('parry',nx,ny);shake(.15,.15);ftInfo((EN?'Parry!':'Parowanie!'));return}
+    if(pl.blockT<parryWin()&&S.attacker&&!S.attacker.dead&&!S.redHit){const e=S.attacker;e.stun=S.kat?2:S.dzw?1.7:1.4;if(S.kat)S.kStun=(S.kStun||0)+1;e.sw=0;e.recov=0;onParry();pl.parryT=.45;S.hitstop=PLYN?.03:.12;padRumble(.6,.3,140);guardFeedback('parry',nx,ny);shake(.15,.15);ftInfo((EN?'Parry!':'Parowanie!'));return}
     if(S.redHit&&pl.blockT<parryWin()+.1)ftInfo((EN?'Unparryable':'Nie do sparowania'));pl.sta-=dmg*blockMulX()*S.pk.blockSta*(S.redHit?2.2:1);pl.staDelay=SL.delay;pl.gHitT=.25;guardFeedback('block',nx,ny);
     if(pl.sta>=0){if(S.pk.leak&&!pl.dead)pl.hp=Math.max(1,pl.hp-dmg*S.pk.leak);pl.inv=.18;moveBox(pl,nx*6,ny*4,4,3);return}
     pl.sta=0;pl.broken=SL.guardBreak;S.dBroken=1;pl.block=false;dmg*=.5;play('empty',0);ftInfo((EN?'Guard broken':'Garda przełamana'))}
@@ -6212,7 +6213,7 @@ function updEprojX(dt){S.enemyShotCd=Math.max(0,(S.enemyShotCd||0)-dt);for(let i
     if(!gone)continue}
   {const G=S.swordGuardian;if(!gone&&G&&!G.gone&&Math.hypot(G.x-f.x,G.y-f.y)<SL.guard.r+3){golemHurt(G,enemyDamage(f.dm||(f.bolt?6:7),SL.projDiv));gone=true}}
   if(!gone&&!pl.dead&&Math.hypot(pl.x-f.x,pl.y-f.y)<8){const sp=Math.hypot(f.vx,f.vy)||1,nx=f.vx/sp,ny=f.vy/sp;
-    if(pl.block&&pl.inv<=0&&-(pl.fx*nx+pl.fy*ny)>.3&&pl.blockT<parryWin()){onParry();pl.parryT=.45;S.hitstop=.12;padRumble(.6,.3,140);guardFeedback('parry',nx,ny,f);shake(.15,.15);ftInfo((EN?'Deflected!':'Odbicie!'));
+    if(pl.block&&pl.inv<=0&&-(pl.fx*nx+pl.fy*ny)>.3&&pl.blockT<parryWin()){onParry();pl.parryT=.45;S.hitstop=PLYN?.03:.12;padRumble(.6,.3,140);guardFeedback('parry',nx,ny,f);shake(.15,.15);ftInfo((EN?'Deflected!':'Odbicie!'));
       const tg=nearestFoe(f.x,f.y);if(tg){f.ref=1;f.tgt=tg;f.spd=Math.max(240,sp*1.4);f.dmg=SL.light.dmg[0]*lvlMul()*(S.str||1)*might()*riMul();f.life=5;f.x=pl.x;f.y=pl.y;if(f.vfe){f.vfe.t=f.vfe.dur;f.vfe=null}}}
     else hurtPlayer(enemyDamage(f.dm||(f.bolt?6:7),SL.projDiv),nx,ny,f.source||(f.bolt?'night':'fire'));gone=!f.ref}
   if(gone&&f.bolt){if(f.vfe)f.vfe.t=f.vfe.dur;if(f.source&&(f.source.type==='xbow'||f.source.type==='scribe'))skAdd('boltHit',.3,f.x,f.y,.5,.7,'bill');for(let k=0;k<5;k++)S.parts.push({k:'d',x:f.x,y:f.y,z:8,vx:rnd(-30,30),vy:rnd(-15,15),vz:rnd(5,20),c:'#9d9584',life:.3});S.eproj.splice(i,1);continue}
@@ -6582,11 +6583,11 @@ function updPlayer(dt){
   if(pl.visualGuard)pl.visualGuard.t=Math.max(0,pl.visualGuard.t-dt);pl.inv=Math.max(0,pl.inv-dt);pl.swingT=Math.max(0,pl.swingT-dt);pl.hurtT=Math.max(0,pl.hurtT-dt);pl.parryT=Math.max(0,(pl.parryT||0)-dt);pl.gHitT=Math.max(0,(pl.gHitT||0)-dt);
   if(pl.roll>0){pl.roll-=dt;pl.rollT+=dt;moveBox(pl,pl.rvx*dt,pl.rvy*dt,4,3,true);return}
   pl.rollCd-=dt;
-  if(rollPress){if(pl.sta+1e-8>=rollCostNow()&&!(pl.broken>0)&&!(pl.atk&&pl.atk.stage!=='rec')&&pl.rollCd<=0){{pl.sta=Math.max(0,pl.sta-rollCostNow());pl.dance=sk('taniec')?.8:0;if(sk('fireblade')>=3){S.swordTrails.push({x:pl.x,y:pl.y,t:1.2,hit:new Set()});}pl.staDelay=SL.delay;pl.atk=null;pl.block=false;pl.swingT=0}let dx=pl.fx,dy=pl.fy;if(ml>.1){dx=mx/ml;dy=my/ml}S.actions.dodge++;if(S.t>=NIGHT-90)S.lateDodge=1;if(S.t<BREAK_AT)S.kDodge=1;pl.roll=.3;pl.rollT=0;pl.rvx=dx*215*S.pk.roll;pl.rvy=dy*215*S.pk.roll;pl.s=dx>=0?1:-1;pl.inv=Math.max(pl.inv,S.kat?.42:.34);pl.rollCd=.28;pl.swingT=0;play('roll',0);return}
+  if(rollPress){if(pl.sta+1e-8>=rollCostNow()&&!(pl.broken>0)&&!(pl.atk&&pl.atk.stage!=='rec'&&!(PLYN&&pl.atk.stage==='wind'))&&pl.rollCd<=0){{pl.sta=Math.max(0,pl.sta-rollCostNow());pl.dance=sk('taniec')?.8:0;if(sk('fireblade')>=3){S.swordTrails.push({x:pl.x,y:pl.y,t:1.2,hit:new Set()});}pl.staDelay=SL.delay;pl.atk=null;pl.block=false;pl.swingT=0}let dx=pl.fx,dy=pl.fy;if(ml>.1){dx=mx/ml;dy=my/ml}S.actions.dodge++;if(S.t>=NIGHT-90)S.lateDodge=1;if(S.t<BREAK_AT)S.kDodge=1;pl.roll=.3;pl.rollT=0;pl.rvx=dx*215*S.pk.roll;pl.rvy=dy*215*S.pk.roll;pl.s=dx>=0?1:-1;pl.inv=Math.max(pl.inv,S.kat?.42:.34);pl.rollCd=.28;pl.swingT=0;play('roll',0);return}
     if(pl.atk?.kind!=='whirl'&&pl.sta<rollCostNow()){S.stamFlash=.45;play('empty',.25)}}
   const slow=(SLOWT[tileAt(Math.floor(pl.x/TS),Math.floor(pl.y/TS))]||1)*(S.zab&&S.pk.zSurge&&pl.sta<pl.staMax*.35?1.2:1);
-  const hold=(S.snare>0?.3:1)*(S.slowT>0?.6:1)*(pl.atk?.kind==='whirl'&&pl.atk.stage==='act'?WHIRL.speed:pl.atk||pl.broken>0?0:pl.block?.45:pl.charging?.5:1);
-  if(ml>.1&&hold>0){if(!(pl.block||pl.charging)){pl.fx=mx/ml;pl.fy=my/ml}const ox=pl.x,oy=pl.y;moveBox(pl,mx*66.7*slow*hold*S.pk.spd*(1+.1*sk('buty'))*dt,my*66.7*slow*hold*S.pk.spd*(1+.1*sk('buty'))*dt,4,3);const distance=Math.hypot(pl.x-ox,pl.y-oy);const st0=Math.floor(pl.walk*2);pl.walk+=distance/72;pl.moving=distance>.001;if(Math.floor(pl.walk*2)!==st0&&!(pl.roll>0))play('step',0)}else pl.moving=false;
+  const hold=(S.snare>0?.3:1)*(S.slowT>0?.6:1)*(pl.atk?.kind==='whirl'&&pl.atk.stage==='act'?WHIRL.speed:pl.broken>0?0:pl.atk?(PLYN&&pl.atk.kind!=='whirl'?(pl.atk.stage==='act'?0:pl.atk.stage==='wind'?.4:.6):0):pl.block?.45:pl.charging?.5:1);
+  if(ml>.1&&hold>0){if(!(pl.block||pl.charging||(PLYN&&pl.atk))){pl.fx=mx/ml;pl.fy=my/ml}const ox=pl.x,oy=pl.y;moveBox(pl,mx*66.7*slow*hold*S.pk.spd*(1+.1*sk('buty'))*dt,my*66.7*slow*hold*S.pk.spd*(1+.1*sk('buty'))*dt,4,3);const distance=Math.hypot(pl.x-ox,pl.y-oy);const st0=Math.floor(pl.walk*2);pl.walk+=distance/72;pl.moving=distance>.001;if(Math.floor(pl.walk*2)!==st0&&!(pl.roll>0))play('step',0)}else pl.moving=false;
   if(Math.abs(pl.fx)>Math.abs(pl.fy)){pl.dir=2;pl.s=pl.fx>0?1:-1}else{pl.dir=pl.fy>0?0:1}
   for(let si=0;si<SHRINES.length;si++){const sh=SHRINES[si],sd=Math.hypot(pl.x-sh.x,pl.y-sh.y);
   const pk=CH+':'+si;if(!S.pot)S.pot={};if(S.pot[pk]==null)S.pot[pk]=DF[DIFFK].pot;const left=S.pot[pk];if(sd<26&&pl.hp<pl.max&&left<=0){pl.potEmptyT=(pl.potEmptyT||0)-dt;if(pl.potEmptyT<=0){pl.potEmptyT=4;ftInfo(EN?'The cauldron is empty':'Kociołek jest pusty')}}if(sd<26&&pl.hp<pl.max&&left>0){const hh=heal(Math.min(pl.max*(DIFFK==='e'?.12:DIFFK==='h'?.08:.1)*dt/*17.11.2026: Łatwy 12%, Normalny 10%, Trudny 8% maks. HP/s (decyzja autora)*/,pl.max-pl.hp,left));S.pot[pk]=Math.max(0,left-hh);if(!sfxBuffers.has('Kociolek'))play('heal',.6);S.potHealT=clock;S.fxHeal=clock;S.fxHealIdx=si;pl.healAcc=(pl.healAcc||0)+hh;pl.healT=(pl.healT||0)+dt;if(pl.healT>=.9){pl.healT=0;if(pl.healAcc>=1)ftInfo('+'+Math.round(pl.healAcc)+' HP · '+(EN?'cauldron ':'kociołek ')+Math.round(S.pot[pk]/DF[DIFFK].pot*100)+'%');pl.healAcc=0}if(Math.random()<dt*46)S.parts.push({k:'i',x:pl.x+rnd(-6,6),y:pl.y+rnd(-2,2),z:rnd(0,8),vx:0,vy:0,vz:rnd(16,34),c:Math.random()<.5?'#7dffb0':'#d8ffe8',life:rnd(.7,1.2)})}}
@@ -7380,7 +7381,7 @@ function nb3dTick4(dt){const fx=NB3D_ON&&GFX.fx>0;
  for(let i=NB3D_DL.length-1;i>=0;i--){const d=NB3D_DL[i];d.t+=dt;if(d.t>1.6)NB3D_DL.splice(i,1)}
  for(let i=0;i<4;i++){const d=NB3D_DL[i],v=NB3D_DIST.value[i];if(d){const f=Math.sin(Math.min(1,d.t/1.6)*Math.PI);v.set(d.x,d.z,d.r*(.6+d.t*.5),d.k*f)}else v.set(-99,-99,1,0)}
  // aberracja przy mocnych trafieniach
- NB3D_FX.ca=Math.max(0,NB3D_FX.ca-dt*2.6);if(S&&S.hitstop>0&&SETT.shake)NB3D_FX.ca=Math.max(NB3D_FX.ca,.45);
+ NB3D_FX.ca=Math.max(0,NB3D_FX.ca-dt*2.6);if(!PLYN&&S&&S.hitstop>0&&SETT.shake)NB3D_FX.ca=Math.max(NB3D_FX.ca,.45);
  // piana fal
  if(W&&W.foam)W.foam.material.uniforms.uT.value=clock%1000}
 /* ============ MINIMAP ============ */
