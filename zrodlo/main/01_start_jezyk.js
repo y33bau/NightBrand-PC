@@ -3,6 +3,7 @@ const $=id=>document.getElementById(id);
 // 17.11.2026: przełączniki w adresie (?art=0, ?pcmenu=0, ?mp=1 itd.) działają tylko u autora (127.0.0.1 / localhost / [::1] / file:); u graczy (itch.io) zawsze null = wartości domyślne
 // Narzedzia autora tylko lokalnie (decyzja 14.11.2026): JEDYNE miejsce tego warunku; czesc 27 ma alias LOKALNIE.
 const NB_LOKALNIE=location.protocol==='file:'||/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname),nbParam=k=>NB_LOKALNIE?new URLSearchParams(location.search).get(k):null;
+/* 26.11 autor: swiatlo ogolne i ksiezyc -10% wzgledem 912 (stala wczesnie, bez TDZ) */const SPOJ_SKY=nbParam('spojnosc')==='0'?1:.9;
 // ---- język: EN/PL (pn_lang); bez zapisu domyślnie według przeglądarki. Zmiana języka przeładowuje grę ----
 const LANG=(()=>{let v=null;try{v=localStorage.getItem('pn_lang')}catch(e){}return v==='en'||v==='pl'?v:(/^pl\b/i.test(navigator.language||'')?'pl':'en')})(),EN=LANG==='en';
 document.documentElement.lang=LANG;

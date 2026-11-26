@@ -70,17 +70,12 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - Ogólnie: pad na nowych ekranach, kooperacja, menu po angielsku, itch.io na żywo.
 
 ## Zgłoszone autorowi, czekają na decyzję
-- Ceny sklepu Margi w Popiołach (10–30) po teście autora.
-- Modele TripoSG portu nieużywane przy `portKit` (zapas pod `?portnowe=0`): zostawić czy usunąć (`wydaj.py usun`).
 - Tekstury 877: m09 bale i m06 złoto najsłabsze (do wymiany?); gęste powtórzenie tynku na fasadzie pałacu (zwiększyć skalę?).
 - Raport o grafice i UI 22.11 (Claude Docs „NightBrand: raport o stanie grafiki i UI”): w 849 zrobione szybkie poprawki; czekają rundy 2–5 (modele z malunków + port, drzewa HQ, Cytadela i Dolne Miasto, porządki UI).
 - 851: Cytadela (szachownica kancelarii drobniejsza i matowa, chodniki w kancelarii i skarbcu, sztandary przy ścianach, kandelabry przy wadze), Dolne Miasto (płyty −30%, 4 środkowe filary sali → koksowniki). Do zrobienia: druga posadzka w halach II i proste brzegi lawy (wymagają nowych tekstur lub zmiany kształtu lawy), detal ścian Cytadeli (nowa tekstura).
 - 850 (decyzje autora 22.11): Opcje → Dźwięk i pauza: głośność ogólna (`pn_master`) i „Wycisz w tle” (`pn_bgmute`, domyślnie wył.); paprocie przy cmentarzu rozrzucone; Czarnobór ze stałym ziarnem 1349 (wcześniej losowany przy każdym uruchomieniu), Cytadela i tak miała stały układ.
 - Przegląd 810 (`docs/przeglady/PRZEGLAD_810_2026-11-17.md`): otwarte zostały tylko „trzy warstwy menu” (WAŻNE 1, osobna runda porządkowa) i nazwa gałęzi stylu „Zabójca” obok klasy Miry (DROBNE 13). Reszta naprawiona do 848 (przegląd `docs/przeglady/PRZEGLAD_848_2026-11-22.md`).
-- Światła ×0.7 (847) działają na lampy i ogniska, nie na księżyc i światło ogólne sceny: czy przyciemnić też je.
 - Schematy sterowania (obrazki PL/EN, klawiatura i pad): od 848 pod obrazkiem jest dopisek o slotach 5 i 6; docelowo nowe obrazki od autora.
-- Rozmowy NPC: kłamstwo Izoldy (40 monet) płaci więcej niż prawda (30 + pół paska); siła upiorów Skryby i Ottokara; wypłata warty 70 monet.
-- Przygotowanie: czy przywrócić łączny mnożnik Popiołów w „Tej nocy”.
 - `docs/PLAN_ELECTRON_WINDOWS.md` nie istnieje: napisać plan albo czekać (autor: „jeszcze poczekamy”).
 
 ## Do wdrożenia (za zgodą autora)
