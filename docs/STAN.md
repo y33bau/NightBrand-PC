@@ -6,13 +6,14 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 914, opublikowane 26.11.2026 (log `docs/logi/LOG_SESJI_2026-11-26.md`) |
+| main | cache 920, opublikowane 26.11.2026 (log `docs/logi/LOG_SESJI_2026-11-26.md`) |
 | Gałęzie czekające na „publikuj” | brak (899–911 opublikowane 24.11) |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 914 |
-| Zip itch.io | `NightBrand_itch_914.zip` na pulpicie autora w `NIGHTBRAND` |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 920 |
+| Zip itch.io | `NightBrand_itch_920.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 306 MB (limit 500 MB); zip itch.io 966 plików / 1000 (MAŁO ZAPASU: wg wydaj.py 24 wolne miejsca do strażnika) |
 
 ## Decyzje autora (najnowsze)
+- 26.11: **walka ma być tańcem**: bez zatrzymania przy trafieniu (hitstop = 0), cios na wciśnięcie, ruch i unik w trakcie ciosu, słabsze błyski, podświetlenia w walce bez nowych shaderów (915–920, stała `PLYN`, lokalnie `?plynna=0`). Autor: „jest ok”.
 - 26.11: **standard wizualny UI = arkusz** `docs/standard_wizualny/` (portrety, tła rozdziałów, ikony, ramy, przyciski, Piętno). Wzór ekranu: Przygotowanie do nocy i ekran powitalny 914.
 - 26.11: **premiera 1.0 w niedzielę 21.12.2026.** Lista „skończone” i decyzje z sesji tak/nie: `docs/PLAN_1_0.md`. Do premiery tylko punkty z listy, nowe pomysły do „Po premierze”.
 - 26.11: **WZORZEC STYLU = cache 912** (runda spójność: modele 3D w palecie rozdziału, słabsze promienie, księżyc, mgła i deszcz, jeden styl drzew). Autor: „Wygląda świetnie. Trzymajmy się dokładnie tego stylu”. Szczegóły i liczby: `docs/ZASADY_SWIATA_MODELI_POSTACI.md` §0a. Gałąź `runda-spojnosc` czeka na „publikuj”.
@@ -40,6 +41,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 915–920 (płynna walka): autor grał 26.11 („jest ok”). Nie sprawdzono: wszystkie klasy (wir Tancerki, mocny cios Kata z przytrzymania), pad, boss. Licznik FPS pokazuje „skoki:” z przyczyną (918) – użyć, gdy wrócą przycięcia.
 - 914 (ekran powitalny w nowym standardzie, 6 kart): angielska wersja ekranu, pad, ekrany inne niż 16:9; EN niezatwierdzone.
 - 913 (Izolda, mnożnik Popiołów, księżyc −10%, upiory ×1,5, warta 50, rozgrzewka efektów): czy riposta przycina mniej (autor 26.11: „nadal lekkie przycięcie”), zacięcie ok. 0,5 s przed falą (przyczyna nieznana), teksty EN Izoldy i mnożnika.
 - 912 (spójność): autor obejrzał 26.11 („wygląda świetnie”). Nie sprawdzono: FPS, pad, rozdziały II–VI z bliska, itch.io.
