@@ -2877,7 +2877,7 @@ const P3D_MESHY={
 const P3D_LAS=['p4_dead_oak','p4_spruce','p4_birch','p4_dead_spruce','p4_tall_pine','p1_dead_tree','p3_dead_tree','p4_sacred_oak','p4_hanging_tree'];
 const P3D_TON={p4_sacred_oak:[.62,.62,.6]};// święty dąb stoi w zielonym blasku: bez przygaszenia prześwietla się
 // rozdz. I: drzewa mają warianty (patrz dressSettlementsHD); głaz i paprocie zostają malunkiem
-const P3D_DRZ1=p=>{const h=groundHash(Math.floor(p.x),Math.floor(p.y)),tk=p.variant||['dead_oak','dead_spruce','dead_oak'][h%3];return tk==='dead_oak'?(h%2?'p1_dead_tree':'p4_dead_oak'):({dead_spruce:'p4_dead_spruce',spruce:'p4_spruce',birch:'p4_birch'}[tk]||null)};
+const P3D_DRZ1=p=>{const h=groundHash(Math.floor(p.x),Math.floor(p.y)),tk=p.variant||['dead_oak','dead_spruce','dead_oak'][h%3];return tk==='dead_oak'?(h%2?'p1_dead_tree':'p4_dead_oak'):({dead_spruce:'p4_dead_spruce',spruce:'p4_spruce',birch:'p4_birch'}[tk]||'p1_dead_tree')};/* 26.11 spojnosc: nieznany wariant tez jako model, bez malunku 2D obok drzew 3D */
 // 22.11.2026 (przeglad grafiki): do czasu przerobki z malunku wracaja obrazki 2D: zwloki (I, port), sztandar klanu i przewrocona kolumna (II),
 // ciala zebrakow i latarnia (IV/CH3), klatka (VI/CH5). Modele zostaja w P3D_MESHY; powrot = dopisanie klucza tutaj.
 const P3D_MMAP={1:{dead_tree:P3D_DRZ1,barrel:'p1_barrel',grave_cross:'p1_grave_cross',burnt_hay:'p1_burnt_hay',wheel:'p1_wheel',order_banner:'p1_order_banner',tombstone:'p1_tombstone',gallows:'p1_gallows',marga_cart:'p1_marga_cart',shop_sign:'p1_shop_sign',dead_horse:'p1_dead_horse',crow_post:'p1_crow_post',well:'p1_well',stocks:'p1_stocks'},
@@ -3021,8 +3021,11 @@ P3D_MMAP[6]=Object.assign(P3D_MMAP[6]||{},{order_banner:'p1_order_banner',gallow
 function meshyFor(ch,k,p){let n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];if(typeof n==='function')n=p?n(p):null;if(Array.isArray(n))n=n[p?groundHash(Math.floor(p.x),Math.floor(p.y))%n.length:0];return n&&P3D_MGEO[n]?n:null}
 const P3D_MMAT=new Map();
 const P3D_TXC=new Map();/* 897: wspolna tekstura dla modeli z jednego atlasu (jedna kopia w karcie) */
-function meshyMat(n){let m=P3D_MMAT.get(n);if(m)return m;const L=new THREE.TextureLoader(),e0=P3D_MESHY[n],e=e0.b?P3D_MESHY[e0.b]:e0,t=u=>{let x=P3D_TXC.get(u);if(x)return x;x=L.load(u);x.flipY=false;x.anisotropy=nbAniso();P3D_TXC.set(u,x);return x};
- m=phong({map:t(e.k),normalMap:e.n?t(e.n):null,shininess:6,specular:0x101010,side:THREE.DoubleSide});const tn=e0.t||P3D_TON[n]||[.92,.9,.88];m.color.setRGB(tn[0],tn[1],tn[2]);if(P3D_LAS.includes(n))cutCircle(m);P3D_MMAT.set(n,m);return m}
+/* 26.11.2026 runda spojnosc (autor: gra wyglada na niedopracowana): modele 3D dobarwione do palety rozdzialu, ciemniej i mniej nasycenia jak malunki menu; ?spojnosc=0 lokalnie = jak przed */
+const SPOJ_ON=nbParam('spojnosc')!=='0';
+const SPOJ_TINT={1:[.84,.76,.70],2:[.84,.75,.68],3:[.82,.76,.82],4:[.70,.77,.80],5:[.78,.74,.76],6:[.74,.77,.82],9:[.74,.70,.68]};
+function meshyMat(n){const mk=n+'|'+(SPOJ_ON?CH:0);let m=P3D_MMAT.get(mk);if(m)return m;const L=new THREE.TextureLoader(),e0=P3D_MESHY[n],e=e0.b?P3D_MESHY[e0.b]:e0,t=u=>{let x=P3D_TXC.get(u);if(x)return x;x=L.load(u);x.flipY=false;x.anisotropy=nbAniso();P3D_TXC.set(u,x);return x};
+ m=phong({map:t(e.k),normalMap:e.n?t(e.n):null,shininess:6,specular:0x101010,side:THREE.DoubleSide});const tn=e0.t||P3D_TON[n]||[.92,.9,.88];const sp=SPOJ_ON&&SPOJ_TINT[CH]||[1,1,1];m.color.setRGB(tn[0]*sp[0],tn[1]*sp[1],tn[2]*sp[2]);if(P3D_LAS.includes(n))cutCircle(m);P3D_MMAT.set(mk,m);return m}
 // szerokosc i srodek obrysu malunku (ulamki obrazka): model dostaje szerokosc obrysu, nie calego obrazka
 const P3D_ABOX=new Map();
 /* 23.11.2026 (885, sprzatanie): obrysy malunkow rekwizytow zastapionych modelami, zmierzone na obrazkach przed ich usunieciem (77 plikow mniej w grze) */
@@ -7163,6 +7166,8 @@ function shockTick(dt){SHOCK.t+=dt;const u=postMat.uniforms.shock.value;if(SHOCK
 // 4) kamera w walce: lekkie oddalenie przy bossie i w czasie naporu. Wszystko TYLKO wyglad: nie zmienia pozycji, zasiegow, trafien ani balansu.
 // ?oprawa3d=0 (tylko lokalnie) = porownanie przed. Na jakosci Srednia/Niska promienie sa wylaczone (GFX.fx=0).
 const NB3D_ON=nbParam('oprawa3d')!=='0',FIRE_DIM=.48;
+/* 26.11.2026 runda spojnosc: dieta efektow (promienie, smugi ksiezyca, mgla, deszcz slabsze); ?spojnosc=0 lokalnie = jak przed */
+const SPOJ_FX=nbParam('spojnosc')!=='0'?{shaft:.6,moon:.45,fog:.6,rain:.55}:{shaft:1,moon:1,fog:1,rain:1};
 const NB3D={dyn:[],pool:[],pi:0,bursts:[],lights:[],si:0,zoom:1,zt:0,bossNear:false,max:56,moonCells:[]};
 const NB3D_VS=`varying vec3 vP;varying vec3 vN;varying vec3 vV;varying vec3 vC;varying vec3 vW;
  void main(){vec4 lp=vec4(position,1.);vec3 n=normal;
@@ -7184,8 +7189,8 @@ const NB3D_FS=`uniform float uT;uniform float uI;uniform float uE;varying vec3 v
   float a=edge*fall*dust*uI;gl_FragColor=vec4(vC*a,1.);}`;
 const nb3dShaftMat=(k,e=1.8)=>new THREE.ShaderMaterial({uniforms:{uT:{value:0},uI:{value:k},uE:{value:e}},vertexShader:NB3D_VS,fragmentShader:NB3D_FS,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,fog:false});
 const NB3D_CONE=(()=>{const g=new THREE.CylinderGeometry(.16,1,1,20,4,true);g.translate(0,-.5,0);return g})();
-const NB3D_SHAFTS=(()=>{const m=new THREE.InstancedMesh(NB3D_CONE,nb3dShaftMat(.62),NB3D.max);m.frustumCulled=false;m.renderOrder=6;for(let i=0;i<NB3D.max;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
-const NB3D_MOON=(()=>{const m=new THREE.InstancedMesh(NB3D_CONE,nb3dShaftMat(1.25,3.),12);m.frustumCulled=false;m.renderOrder=6;for(let i=0;i<12;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
+const NB3D_SHAFTS=(()=>{const m=new THREE.InstancedMesh(NB3D_CONE,nb3dShaftMat(.62*SPOJ_FX.shaft),NB3D.max);m.frustumCulled=false;m.renderOrder=6;for(let i=0;i<NB3D.max;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
+const NB3D_MOON=(()=>{const m=new THREE.InstancedMesh(NB3D_CONE,nb3dShaftMat(1.25*SPOJ_FX.moon,3.),12);m.frustumCulled=false;m.renderOrder=6;for(let i=0;i<12;i++)m.setColorAt(i,WHITE_C);m.count=0;scene.add(m);return m})();
 // cien od swiatla: pas wychodzacy od stop w strone przeciwna do ognia; uv.y=0 przy stopach, 1 na koncu
 const NB3D_LSH=(()=>{const g=new THREE.PlaneGeometry(1,1);g.translate(0,.5,0);g.rotateX(-Math.PI/2);
  const mat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,fog:false,uniforms:{},vertexShader:`varying vec2 vU;varying float vO;void main(){vU=uv;vO=1.;
@@ -7290,7 +7295,7 @@ function nb3dTick2(dt){{const a=S&&pl&&!pl.dead?pl:null,b=S&&pl2&&!pl2.dead?pl2:
  // wiatr
  NB3D2.windK.value+=((NB3D_ON?(S&&surgeOn()?.13:.055):0)-NB3D2.windK.value)*Math.min(1,dt*.8);
  // mgla i chmury
- const fk=fx?(NB3D_FOGK[S&&S.dg?9:CH]||0):0,ck=fx&&!(S&&S.dg)?(NB3D_CLOUDK[CH]||0):0;
+ const fk=fx?(NB3D_FOGK[S&&S.dg?9:CH]||0)*SPOJ_FX.fog:0,ck=fx&&!(S&&S.dg)?(NB3D_CLOUDK[CH]||0):0;
  for(const m of NB3D_FOG){m.visible=fk>0;if(!m.visible)continue;m.position.x=cen.x;m.position.z=cen.z;const u=m.material.uniforms;u.uT.value=T;u.uA.value=fk;u.uCen.value.set(cen.x,cen.z);u.uC.value.copy(scene.fog.color).lerp(TMPC.setHex(ATM[CH]?ATM[CH].mc||0xb8c4dd:0xb8c4dd),.55).multiplyScalar(1.15)}
  NB3D_CLOUD.visible=ck>0;if(ck>0){NB3D_CLOUD.position.x=cen.x;NB3D_CLOUD.position.z=cen.z;const u=NB3D_CLOUD.material.uniforms;u.uT.value=T;u.uA.value=ck;u.uCen.value.set(cen.x,cen.z)}
  // odbicia swiatel (deszcz: rozdzial I i port)
@@ -7359,7 +7364,7 @@ function nb3dFoam(list){if(!NB3D_ON||!list||!list.length)return null;const g=new
  list.forEach(([x,z,ang],i)=>{Q.setFromAxisAngle(UP,ang);M.compose(new THREE.Vector3(x,-.165,z),Q,new THREE.Vector3(1.02,1,.75));m.setMatrixAt(i,M)});m.frustumCulled=false;m.renderOrder=9;return m}
 function nb3dTick4(dt){const fx=NB3D_ON&&GFX.fx>0;
  // deszcz 3D
- const rk=fx&&!(S&&S.dg)&&(CH===1||CH===PORT)?(CH===PORT?.55:.7):0;NB3D_RAIN.visible=rk>0;if(rk>0){const u=NB3D_RAIN.material.uniforms;u.uT.value=clock%600;u.uCam.value.copy(camTarget);u.uA.value=rk}
+ const rk=fx&&!(S&&S.dg)&&(CH===1||CH===PORT)?(CH===PORT?.55:.7)*SPOJ_FX.rain:0;NB3D_RAIN.visible=rk>0;if(rk>0){const u=NB3D_RAIN.material.uniforms;u.uT.value=clock%600;u.uCam.value.copy(camTarget);u.uA.value=rk}
  // mgla: zaklocenia (ciosy, przewroty, wybuchy) wygasaja w ok. 1,5 s
  for(const p of [pl,pl2])if(p&&!p.dead&&S&&p.roll>0&&Math.random()<dt*14)nb3dDisturb(p.x/16,p.y/16,1.7,.8);
  for(let i=NB3D_DL.length-1;i>=0;i--){const d=NB3D_DL[i];d.t+=dt;if(d.t>1.6)NB3D_DL.splice(i,1)}

@@ -772,7 +772,7 @@ const P3D_MESHY={
 const P3D_LAS=['p4_dead_oak','p4_spruce','p4_birch','p4_dead_spruce','p4_tall_pine','p1_dead_tree','p3_dead_tree','p4_sacred_oak','p4_hanging_tree'];
 const P3D_TON={p4_sacred_oak:[.62,.62,.6]};// święty dąb stoi w zielonym blasku: bez przygaszenia prześwietla się
 // rozdz. I: drzewa mają warianty (patrz dressSettlementsHD); głaz i paprocie zostają malunkiem
-const P3D_DRZ1=p=>{const h=groundHash(Math.floor(p.x),Math.floor(p.y)),tk=p.variant||['dead_oak','dead_spruce','dead_oak'][h%3];return tk==='dead_oak'?(h%2?'p1_dead_tree':'p4_dead_oak'):({dead_spruce:'p4_dead_spruce',spruce:'p4_spruce',birch:'p4_birch'}[tk]||null)};
+const P3D_DRZ1=p=>{const h=groundHash(Math.floor(p.x),Math.floor(p.y)),tk=p.variant||['dead_oak','dead_spruce','dead_oak'][h%3];return tk==='dead_oak'?(h%2?'p1_dead_tree':'p4_dead_oak'):({dead_spruce:'p4_dead_spruce',spruce:'p4_spruce',birch:'p4_birch'}[tk]||'p1_dead_tree')};/* 26.11 spojnosc: nieznany wariant tez jako model, bez malunku 2D obok drzew 3D */
 // 22.11.2026 (przeglad grafiki): do czasu przerobki z malunku wracaja obrazki 2D: zwloki (I, port), sztandar klanu i przewrocona kolumna (II),
 // ciala zebrakow i latarnia (IV/CH3), klatka (VI/CH5). Modele zostaja w P3D_MESHY; powrot = dopisanie klucza tutaj.
 const P3D_MMAP={1:{dead_tree:P3D_DRZ1,barrel:'p1_barrel',grave_cross:'p1_grave_cross',burnt_hay:'p1_burnt_hay',wheel:'p1_wheel',order_banner:'p1_order_banner',tombstone:'p1_tombstone',gallows:'p1_gallows',marga_cart:'p1_marga_cart',shop_sign:'p1_shop_sign',dead_horse:'p1_dead_horse',crow_post:'p1_crow_post',well:'p1_well',stocks:'p1_stocks'},
@@ -916,8 +916,11 @@ P3D_MMAP[6]=Object.assign(P3D_MMAP[6]||{},{order_banner:'p1_order_banner',gallow
 function meshyFor(ch,k,p){let n=REK3D_ON&&P3D_MMAP[ch]&&P3D_MMAP[ch][k];if(typeof n==='function')n=p?n(p):null;if(Array.isArray(n))n=n[p?groundHash(Math.floor(p.x),Math.floor(p.y))%n.length:0];return n&&P3D_MGEO[n]?n:null}
 const P3D_MMAT=new Map();
 const P3D_TXC=new Map();/* 897: wspolna tekstura dla modeli z jednego atlasu (jedna kopia w karcie) */
-function meshyMat(n){let m=P3D_MMAT.get(n);if(m)return m;const L=new THREE.TextureLoader(),e0=P3D_MESHY[n],e=e0.b?P3D_MESHY[e0.b]:e0,t=u=>{let x=P3D_TXC.get(u);if(x)return x;x=L.load(u);x.flipY=false;x.anisotropy=nbAniso();P3D_TXC.set(u,x);return x};
- m=phong({map:t(e.k),normalMap:e.n?t(e.n):null,shininess:6,specular:0x101010,side:THREE.DoubleSide});const tn=e0.t||P3D_TON[n]||[.92,.9,.88];m.color.setRGB(tn[0],tn[1],tn[2]);if(P3D_LAS.includes(n))cutCircle(m);P3D_MMAT.set(n,m);return m}
+/* 26.11.2026 runda spojnosc (autor: gra wyglada na niedopracowana): modele 3D dobarwione do palety rozdzialu, ciemniej i mniej nasycenia jak malunki menu; ?spojnosc=0 lokalnie = jak przed */
+const SPOJ_ON=nbParam('spojnosc')!=='0';
+const SPOJ_TINT={1:[.84,.76,.70],2:[.84,.75,.68],3:[.82,.76,.82],4:[.70,.77,.80],5:[.78,.74,.76],6:[.74,.77,.82],9:[.74,.70,.68]};
+function meshyMat(n){const mk=n+'|'+(SPOJ_ON?CH:0);let m=P3D_MMAT.get(mk);if(m)return m;const L=new THREE.TextureLoader(),e0=P3D_MESHY[n],e=e0.b?P3D_MESHY[e0.b]:e0,t=u=>{let x=P3D_TXC.get(u);if(x)return x;x=L.load(u);x.flipY=false;x.anisotropy=nbAniso();P3D_TXC.set(u,x);return x};
+ m=phong({map:t(e.k),normalMap:e.n?t(e.n):null,shininess:6,specular:0x101010,side:THREE.DoubleSide});const tn=e0.t||P3D_TON[n]||[.92,.9,.88];const sp=SPOJ_ON&&SPOJ_TINT[CH]||[1,1,1];m.color.setRGB(tn[0]*sp[0],tn[1]*sp[1],tn[2]*sp[2]);if(P3D_LAS.includes(n))cutCircle(m);P3D_MMAT.set(mk,m);return m}
 // szerokosc i srodek obrysu malunku (ulamki obrazka): model dostaje szerokosc obrysu, nie calego obrazka
 const P3D_ABOX=new Map();
 /* 23.11.2026 (885, sprzatanie): obrysy malunkow rekwizytow zastapionych modelami, zmierzone na obrazkach przed ich usunieciem (77 plikow mniej w grze) */
