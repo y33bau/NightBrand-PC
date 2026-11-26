@@ -6,10 +6,10 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 912, opublikowane 26.11.2026 (log `docs/logi/LOG_SESJI_2026-11-26.md`) |
+| main | cache 914, opublikowane 26.11.2026 (log `docs/logi/LOG_SESJI_2026-11-26.md`) |
 | Gałęzie czekające na „publikuj” | brak (899–911 opublikowane 24.11) |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 912 |
-| Zip itch.io | `NightBrand_itch_912.zip` na pulpicie autora w `NIGHTBRAND` |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 914 |
+| Zip itch.io | `NightBrand_itch_914.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 306 MB (limit 500 MB); zip itch.io 966 plików / 1000 (MAŁO ZAPASU: wg wydaj.py 24 wolne miejsca do strażnika) |
 
 ## Decyzje autora (najnowsze)
@@ -40,6 +40,8 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 - 14.11: narzędzia autora tylko lokalnie (`LOKALNIE`).
 
 ## Do testu u autora (nic nie było sprawdzone na żywo)
+- 914 (ekran powitalny w nowym standardzie, 6 kart): angielska wersja ekranu, pad, ekrany inne niż 16:9; EN niezatwierdzone.
+- 913 (Izolda, mnożnik Popiołów, księżyc −10%, upiory ×1,5, warta 50, rozgrzewka efektów): czy riposta przycina mniej (autor 26.11: „nadal lekkie przycięcie”), zacięcie ok. 0,5 s przed falą (przyczyna nieznana), teksty EN Izoldy i mnożnika.
 - 912 (spójność): autor obejrzał 26.11 („wygląda świetnie”). Nie sprawdzono: FPS, pad, rozdziały II–VI z bliska, itch.io.
 - 885: usunięte obrazki pod modelami – modele powinny wyglądać i stać jak w 884 (porównane w przeglądarce).
 - 883–884: brak niewidzialnych kolizji, HUD w oknie, wystrój Osady, Dolnego Miasta, Czarnoboru i Cytadeli, magazyn portu.
