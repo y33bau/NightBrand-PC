@@ -11,6 +11,7 @@ Od 912 każda zmiana oprawy ma pasować do tego wyglądu. Nie zmieniaj tych licz
 - **Jeden styl dla jednego rodzaju obiektu na mapie:** nie stawiaj malunku 2D obok modelu 3D tego samego rodzaju (np. drzewa). Nieznany wariant drzewa w Osadzie = model `p1_dead_tree`.
 - **Mrok jak w menu:** ciemno poza światłem, wyraźne plamy światła przy ogniskach i latarniach, kolory przygaszone, bez „wyprania”. Wzorem nastroju są ekran główny i Przygotowanie do nocy.
 - Porównanie z wyglądem sprzed 912: lokalnie `?spojnosc=0`.
+- **UI i menu:** standard wizualny w `docs/standard_wizualny/STANDARD_WIZUALNY.md` (arkusz zatwierdzony przez autora 26.11).
 
 ## 0. Decyzje autora z 24.11
 - **Styl: 2,5D, bajkowy dark fantasy.** Postacie to sprite'y 2D w świecie 3D. To nadrzędna zasada wyglądu.

@@ -13,6 +13,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 | Rozmiar gra/ | ok. 306 MB (limit 500 MB); zip itch.io 966 plików / 1000 (MAŁO ZAPASU: wg wydaj.py 24 wolne miejsca do strażnika) |
 
 ## Decyzje autora (najnowsze)
+- 26.11: **standard wizualny UI = arkusz** `docs/standard_wizualny/` (portrety, tła rozdziałów, ikony, ramy, przyciski, Piętno). Wzór ekranu: Przygotowanie do nocy i ekran powitalny 914.
 - 26.11: **premiera 1.0 w niedzielę 21.12.2026.** Lista „skończone” i decyzje z sesji tak/nie: `docs/PLAN_1_0.md`. Do premiery tylko punkty z listy, nowe pomysły do „Po premierze”.
 - 26.11: **WZORZEC STYLU = cache 912** (runda spójność: modele 3D w palecie rozdziału, słabsze promienie, księżyc, mgła i deszcz, jeden styl drzew). Autor: „Wygląda świetnie. Trzymajmy się dokładnie tego stylu”. Szczegóły i liczby: `docs/ZASADY_SWIATA_MODELI_POSTACI.md` §0a. Gałąź `runda-spojnosc` czeka na „publikuj”.
 - 24.11: mapy „jak w najlepszych grach typu Diablo, super klimat”; zgoda na zmiany tras, kolizji, rozmieszczenia wrogów i balansu map w rundzie przeglądu map. Runda 911: ciemniej poza światłem, mocniejsza winieta, zestawy przy tylnych ścianach (lokalnie `?klimat=0`). Następny polecany krok: stacje NPC (kosz z ogniem, ciepłe światło, 2–3 rzeczy) i ścieżki z płotkami w Osadzie.
