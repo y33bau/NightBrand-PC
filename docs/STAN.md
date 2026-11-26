@@ -13,6 +13,7 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 | Rozmiar gra/ | ok. 306 MB (limit 500 MB); zip itch.io 966 plików / 1000 (MAŁO ZAPASU: wg wydaj.py 24 wolne miejsca do strażnika) |
 
 ## Decyzje autora (najnowsze)
+- 26.11: idziemy do premiery 1.0. Szkic listy „skończone” (10 punktów, zamrożenie nowych mechanik): `docs/PLAN_1_0.md`, czeka na TAK/NIE/PÓŹNIEJ autora i datę.
 - 26.11: **WZORZEC STYLU = cache 912** (runda spójność: modele 3D w palecie rozdziału, słabsze promienie, księżyc, mgła i deszcz, jeden styl drzew). Autor: „Wygląda świetnie. Trzymajmy się dokładnie tego stylu”. Szczegóły i liczby: `docs/ZASADY_SWIATA_MODELI_POSTACI.md` §0a. Gałąź `runda-spojnosc` czeka na „publikuj”.
 - 24.11: mapy „jak w najlepszych grach typu Diablo, super klimat”; zgoda na zmiany tras, kolizji, rozmieszczenia wrogów i balansu map w rundzie przeglądu map. Runda 911: ciemniej poza światłem, mocniejsza winieta, zestawy przy tylnych ścianach (lokalnie `?klimat=0`). Następny polecany krok: stacje NPC (kosz z ogniem, ciepłe światło, 2–3 rzeczy) i ścieżki z płotkami w Osadzie.
 - 24.11: STYL 2,5D, bajkowy dark fantasy. 3D = malowane obiekty (struktury, obiekty, assety, rekwizyty z naszych malunków); postacie, NPC i animacje chodu zostają w 2D (piloty 3D Rycerza i NPC wstrzymane). Zasady zebrane w `docs/ZASADY_SWIATA_MODELI_POSTACI.md`.
