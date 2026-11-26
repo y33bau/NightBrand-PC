@@ -1,4 +1,4 @@
-Stan na 2026-11-24, cache 911 (opublikowane), rola agent główny
+Stan na 2026-11-27, cache 924 (opublikowane), rola agent główny
 
 # NightBrand: bieżący stan i lista spraw
 Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/logi/`). Stan zawsze potwierdź komendami: `git log -3`, cache w `gra/sw.js`.
@@ -6,13 +6,14 @@ Aktualizuj ten plik po każdej publikacji (w tym samym commicie co log w `docs/l
 ## Stan
 | Co | Wartość |
 |---|---|
-| main | cache 920, opublikowane 26.11.2026 (log `docs/logi/LOG_SESJI_2026-11-26.md`) |
+| main | cache 924, opublikowane 27.11.2026 (log `docs/logi/LOG_SESJI_2026-11-26.md`) |
 | Gałęzie czekające na „publikuj” | brak (899–911 opublikowane 24.11) |
-| Kopia zapasowa | y33bau/nightbrand-backup = kopia 920 |
-| Zip itch.io | `NightBrand_itch_920.zip` na pulpicie autora w `NIGHTBRAND` |
+| Kopia zapasowa | y33bau/nightbrand-backup = kopia 924 |
+| Zip itch.io | `NightBrand_itch_924.zip` na pulpicie autora w `NIGHTBRAND` |
 | Rozmiar gra/ | ok. 306 MB (limit 500 MB); zip itch.io 966 plików / 1000 (MAŁO ZAPASU: wg wydaj.py 24 wolne miejsca do strażnika) |
 
 ## Decyzje autora (najnowsze)
+- 26.11: **Dolne Miasto**: reszta mapy zostaje; poprawić tylko lawę i Wielką Wagę. Brzegi mis lawy usunięte („ładne zrobimy innego dnia”). Waga z brył w grze (921, lokalnie `?dolne921=0`); docelowo model z Meshy robiony przez Claude Code na komputerze autora (zlecenie `ZLECENIE_DLA_CODE_WAGA_MESHY_2026-11-26.md` na pulpicie). Migotanie ścian przepaści: z-fighting ze skałą urwiska, usunięte w 924.
 - 26.11: **walka ma być tańcem**: bez zatrzymania przy trafieniu (hitstop = 0), cios na wciśnięcie, ruch i unik w trakcie ciosu, słabsze błyski, podświetlenia w walce bez nowych shaderów (915–920, stała `PLYN`, lokalnie `?plynna=0`). Autor: „jest ok”.
 - 26.11: **standard wizualny UI = arkusz** `docs/standard_wizualny/` (portrety, tła rozdziałów, ikony, ramy, przyciski, Piętno). Wzór ekranu: Przygotowanie do nocy i ekran powitalny 914.
 - 26.11: **premiera 1.0 w niedzielę 21.12.2026.** Lista „skończone” i decyzje z sesji tak/nie: `docs/PLAN_1_0.md`. Do premiery tylko punkty z listy, nowe pomysły do „Po premierze”.
