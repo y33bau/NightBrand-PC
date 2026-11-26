@@ -4403,7 +4403,7 @@ function setFrame(mesh,fr,mode){if(!fr)return;
   const STT={sg:[0x8aff5a,.55],so:[0xff9a40,.6],sb:[0xe03048,.4],sc:[0x9adcff,.5],sh:[0x7a62d8,.45],se:[0xa8d8cf,.5]};if(STT[mode]&&!fr[mode]){const m=fr.n.clone(),s=STT[mode];m.color.setHex(s[0]);if(m.emissive){m.emissive.setHex(s[0]);if(!PLYN)m.emissiveMap=fr.n.map;m.emissiveIntensity=PLYN?s[1]*.35:s[1]}if(mode==='sh'||mode==='se'){m.transparent=true;m.opacity=mode==='se'?.72:.6;m.depthWrite=false}fr[mode]=m}
   if((mode==='w'||mode==='r'||mode==='y')&&!fr[mode]){const m=fr.n.clone(),color=mode==='r'?0xff694b:mode==='y'?0xffdf62:0xffe1b0;
     m.color.setHex(color);if(m.emissive){m.emissive.setHex(color);if(!PLYN)m.emissiveMap=fr.n.map;m.emissiveIntensity=PLYN?(mode==='w'?.2:.3):mode==='w'?.7:.85}if(!PLYN)m.fog=false;fr[mode]=m}/* 26.11 (autor: przyciecia przed atakami): z PLYN podswietlenie nie zmienia mgly ani map, wiec karta nie kompiluje nowego shadera w walce */
-  if(mode==='impact'&&!fr.impact){void fr.f;const m=combatVisualBuild(()=>fr.n.clone());m.color.setHex(0xffd9be);if(m.emissive){m.emissive.setHex(0x7a3020);m.emissiveIntensity=PLYN?.12:.38;if(!PLYN)m.emissiveMap=fr.n.map}fr.impact=m}
+  if(mode==='impact'&&!fr.impact){void fr.f;const m=combatVisualBuild(()=>fr.n.clone());m.color.setHex(PLYN?0xd8bca4:0xffd9be);if(m.emissive){m.emissive.setHex(0x7a3020);m.emissiveIntensity=PLYN?.12:.38;if(!PLYN)m.emissiveMap=fr.n.map}fr.impact=m}
   mesh.material=(mode&&fr[mode])||fr.n;if(mesh.userData.groundContact)settleProp(mesh);if(fr.d)mesh.customDistanceMaterial=fr.d}
 
 const at=(anim,t,fps,loop=true)=>anim[loop?Math.floor(t*fps)%anim.length:Math.min(anim.length-1,Math.floor(t*fps))];
@@ -7004,7 +7004,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{stIconsTick
   {const kr=!!(S&&S.nev&&S.nev.k==='krew'&&S.nev.t>0&&S.phase==='play');if(kr!==document.body.classList.contains('nb-krew'))document.body.classList.toggle('nb-krew',kr);const ef=S&&S.phase==='play'&&S.evFog||0;if(CH!==4&&ATM[CH]){scene.fog.density=ATM[CH].fd+ef;scene.fog.color.setHex(ATM[CH].fog)}else if(CH===4)scene.fog.density+=ef;if(ef>0)scene.fog.color.lerp(TMPC.setHex(0x59606a),Math.min(.75,ef/.022*.75))}
   const wf=((clock*3)|0)%4;if(CH===1&&wf!==waterFrame&&waterFrames.length){waterFrame=wf;waterG.clearRect(0,0,64,64);waterG.drawImage(waterFrames[wf],0,0);waterTex.needsUpdate=true}
   // weather and dawn (chapter I)
-  const fl=SETT.flash&&S?S.flash:0,dawn=CH!==2&&S&&S.opening?Math.min(1,(3.4-S.opening)/2.4):0,AT=ATM[CH];
+  const fl=SETT.flash&&S?S.flash*(PLYN?.45:1):0,/* 26.11 autor: blyski za intensywne */dawn=CH!==2&&S&&S.opening?Math.min(1,(3.4-S.opening)/2.4):0,AT=ATM[CH];
   amb.intensity=AT.ai+fl*1.4+dawn*.9;hemi.intensity=AT.hi+fl*.8+dawn*.5;if(dawn>0){TMPC.setHex(AT.amb);amb.color.copy(TMPC.lerp(DAWN,dawn))}else amb.color.setHex(AT.amb);nb3dNight();/* 26.11 autor: swiatlo ogolne sceny -10% wzgledem 912 */if(SPOJ_SKY<1){amb.intensity*=SPOJ_SKY;hemi.intensity*=SPOJ_SKY}
   postMat.uniforms.flash.value=fl*.3;postMat.uniforms.haze.value=CH===2&&S&&S.phase==='play'&&!S.dg&&SETT.quality!=='low'?1:0;postMat.uniforms.tm.value=clock%600;NB_WIN_T.value=clock%600;postMat.uniforms.grain.value=SETT.quality==='low'?0:chapterArt()?.015:.03;postMat.uniforms.gtm.value=SETT.flash?clock%600:0;postMat.uniforms.sharp.value=S&&S.shakeT>0?1:Math.max(0,postMat.uniforms.sharp.value-dt*4);
   rain.visible=(CH===1||CH===PORT)&&!(NB3D_ON&&GFX.fx>0&&!(S&&S.dg));if(rain.visible){rain.material.opacity=(CH===PORT?.13:CH1_ART_ON?.20:.32)*(1-dawn*.7);for(let i=0;i<RAIN_N;i++){const d=DROPS[i];d.y-=d.s*dt;d.x-=d.s*.12*dt;if(d.y<0){d.y+=12;d.x=rnd(-15,15);d.z=rnd(-10,10);if(S&&dt>0&&i%9===0)S.parts.push({k:'d',x:(camTarget.x+d.x)*16,y:(camTarget.z+d.z)*16,z:1,vx:rnd(-6,6),vy:rnd(-3,3),vz:rnd(8,14),c:'#6a7a96',life:.25})}
@@ -7086,7 +7086,7 @@ function syncScene(dt){SURFACE_TIME.value=clock;SWAY.value=clock;try{stIconsTick
       else{f.mesh.position.set((f.x+wx)/16,f.weaponAspect?weaponFloorLift(f,fr):f.h+(f.mode==='bill'&&f.h===0?f.size*.42:0),(f.y+wy)/16);f.mesh.quaternion.copy(cam.quaternion);if(f.rot)f.mesh.rotateZ(f.rot);f.mesh.scale.set(f.size,f.size*(f.weaponAspect||1),1)}}
     let n=0;for(const p of S.parts){if(p.bloodHD)continue;if(n>=MAXP)break;pPos[n*3]=p.x/16;pPos[n*3+1]=p.z/16+.02;pPos[n*3+2]=p.y/16;const c=col(p.c);let a=p.life!==undefined?Math.max(0,Math.min(1,p.life)):1;pCol[n*3]=c.r*a;pCol[n*3+1]=c.g*a;pCol[n*3+2]=c.b*a;n++}
     pGeo.setDrawRange(0,n);pGeo.attributes.position.needsUpdate=true;pGeo.attributes.color.needsUpdate=true;
-    postMat.uniforms.hurt.value=SETT.flash?Math.max(S.hurt*1.2,pl.dead?.25:0,(!pl.dead&&pl.hp<pl.max*.3)?(.12+.08*Math.sin(clock*5)):0):pl.dead?.18:pl.hp<pl.max*.3?.1:0;
+    postMat.uniforms.hurt.value=SETT.flash?Math.max(S.hurt*(PLYN?.7:1.2),pl.dead?.25:0,(!pl.dead&&pl.hp<pl.max*.3)?(.12+.08*Math.sin(clock*5)):0):pl.dead?.18:pl.hp<pl.max*.3?.1:0;
   }else{heroMesh.visible=false;if(mesh2)mesh2.visible=false;if(mpTotLast)mpTotLast.visible=false;mpHudTick();pGeo.setDrawRange(0,0);postMat.uniforms.hurt.value=0}
   blobs.count=bi;blobs.instanceMatrix.needsUpdate=true;nb3dShadowEnd();try{nb3dRefl()}catch(e){quietErr('nb3dRefl',e)}
   decalT-=dt;if(decalDirty&&decalT<=0){decalTex.needsUpdate=true;decalDirty=false;decalT=.15}
