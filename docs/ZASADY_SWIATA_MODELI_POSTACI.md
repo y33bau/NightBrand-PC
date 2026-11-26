@@ -4,7 +4,15 @@ Stan na 2026-11-24, cache 898, rola agent główny
 
 Zebrane z `claude/ZASADY_SWIATA.md`, `ZASADY_MAP_2026-11-12.md`, `SKALA_I_ASSETY.md`, instrukcji projektu, `docs/STAN.md` i rozmowy z autorem 24.11. Przy sprzeczności wygrywa: instrukcje projektu > `AGENTS.md` > `docs/STAN.md` > ten plik. Nie czytano w całości `PODRECZNIK_AGENTA.md`: mogą tam być drobniejsze reguły.
 
-## 0. Decyzje autora z 24.11 (najnowsze)
+## 0a. WZORZEC STYLU: cache 912 (decyzja autora 26.11.2026: „Wygląda świetnie. Trzymajmy się dokładnie tego stylu”)
+Od 912 każda zmiana oprawy ma pasować do tego wyglądu. Nie zmieniaj tych liczb bez zgody autora.
+- **Paleta rozdziału na modelach 3D:** `SPOJ_TINT` w części 06 (`meshyMat`), mnożnik koloru modelu: I [.84,.76,.70], II [.84,.75,.68], III Złotogród [.82,.76,.82], IV Czarnobór [.70,.77,.80], V Cytadela [.78,.74,.76], Port [.74,.77,.82], Krypta [.74,.70,.68]. Każdy nowy model 3D przechodzi przez `meshyMat`, więc dostaje paletę automatycznie. Nie omijaj tego własnym materiałem.
+- **Dieta efektów:** `SPOJ_FX` w części 17: promienie ×0,6, smugi księżyca ×0,45, mgła ×0,6, deszcz ×0,55. Nowy efekt tylko za zgodą autora i nie mocniej niż obecne.
+- **Jeden styl dla jednego rodzaju obiektu na mapie:** nie stawiaj malunku 2D obok modelu 3D tego samego rodzaju (np. drzewa). Nieznany wariant drzewa w Osadzie = model `p1_dead_tree`.
+- **Mrok jak w menu:** ciemno poza światłem, wyraźne plamy światła przy ogniskach i latarniach, kolory przygaszone, bez „wyprania”. Wzorem nastroju są ekran główny i Przygotowanie do nocy.
+- Porównanie z wyglądem sprzed 912: lokalnie `?spojnosc=0`.
+
+## 0. Decyzje autora z 24.11
 - **Styl: 2,5D, bajkowy dark fantasy.** Postacie to sprite'y 2D w świecie 3D. To nadrzędna zasada wyglądu.
 - **3D robimy: struktury, obiekty, assety, rekwizyty.** To są **malowane obiekty 3D**: bryła z naszego malunku, tekstura z malunku. Zakaz: bryły z Blendera, modele z galerii i Poly Haven, szare i neutralne tekstury, modele z opisu tekstowego.
 - **2D zostaje: postacie, NPC, animacje chodu.** Nie robimy bohaterów ani NPC w 3D na razie (pilot Rycerza i NPC w 3D wstrzymany).
