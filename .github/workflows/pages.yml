@@ -1,0 +1,34 @@
+# Stan na 2026-11-27, cache 924, rola agent glowny
+# Publikuje folder gra/ (bez edytor-map/) jako strone gry pod adresem glownym GitHub Pages.
+name: Strona gry (GitHub Pages)
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Przygotuj strone (gra/ bez narzedzi autora)
+        run: |
+          mkdir _site
+          cp -r gra/. _site/
+          rm -rf _site/edytor-map
+          touch _site/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
